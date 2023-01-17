@@ -144,7 +144,7 @@ pub fn create_canonical_request(
         // <CanonicalQueryString>\n
         let encoded_query_strings = {
             let mut qs = <SmallVec<[(String, String); 16]>>::new();
-            for &(ref n, ref v) in query_strings {
+            for (n, v) in query_strings {
                 let name = uri_encode_string(n.as_ref(), true);
                 let value = uri_encode_string(v.as_ref(), true);
                 qs.push((name, value));
@@ -155,12 +155,12 @@ pub fn create_canonical_request(
 
         if let Some((first, remain)) = encoded_query_strings.split_first() {
             {
-                let &(ref name, ref value) = first;
+                let (name, value) = first;
                 ans.push_str(name);
                 ans.push('=');
                 ans.push_str(value);
             }
-            for &(ref name, ref value) in remain {
+            for (name, value) in remain {
                 ans.push('&');
                 ans.push_str(name);
                 ans.push('=');
@@ -336,7 +336,7 @@ pub fn create_presigned_canonical_request(
         // <CanonicalQueryString>\n
         let encoded_query_strings = {
             let mut qs = <SmallVec<[(String, String); 16]>>::new();
-            for &(ref n, ref v) in query_strings {
+            for (n, v) in query_strings {
                 if is_skipped_query_string(n.as_ref()) {
                     continue;
                 }
@@ -350,12 +350,12 @@ pub fn create_presigned_canonical_request(
 
         if let Some((first, remain)) = encoded_query_strings.split_first() {
             {
-                let &(ref name, ref value) = first;
+                let (name, value) = first;
                 ans.push_str(name);
                 ans.push('=');
                 ans.push_str(value);
             }
-            for &(ref name, ref value) in remain {
+            for (name, value) in remain {
                 ans.push('&');
                 ans.push_str(name);
                 ans.push('=');

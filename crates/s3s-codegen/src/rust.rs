@@ -173,6 +173,6 @@ pub fn codegen_doc(doc: Option<&str>, g: &mut Codegen) {
             line = line.replace("OK</code>", "OK");
         }
 
-        g.ln(f!("/// {}", line));
+        g.ln(f!("/// {line}"));
     }
 }

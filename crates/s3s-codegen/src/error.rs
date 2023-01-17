@@ -133,13 +133,13 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
             let status = &err.status[0];
 
             if let Some(ref desc) = desc {
-                g.ln(f!("/// {}", desc));
+                g.ln(f!("/// {desc}"));
             }
             if let Some(ref status) = status {
                 if desc.is_some() {
                     g.ln("///");
                 }
-                g.ln(f!("/// HTTP Status Code: {}", status));
+                g.ln(f!("/// HTTP Status Code: {status}"));
             }
             if desc.is_some() || status.is_some() {
                 g.ln("///");

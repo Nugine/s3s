@@ -240,17 +240,17 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                             g.ln(f!("let iter = &self.{};", field.name));
                         }
                         if field.xml_flattened {
-                            g.ln(f!("s.flattened_list(\"{}\", iter)?;", xml_name));
+                            g.ln(f!("s.flattened_list(\"{xml_name}\", iter)?;"));
                         } else {
                             let member_xml_name = list_ty.member.xml_name.as_deref().unwrap();
-                            g.ln(f!("s.list(\"{}\", \"{}\", iter)?;", xml_name, member_xml_name));
+                            g.ln(f!("s.list(\"{xml_name}\", \"{member_xml_name}\", iter)?;"));
                         }
                         g.ln("}");
                     } else if let rust::Type::Timestamp(ts_ty) = field_ty {
                         let fmt = ts_ty.format.as_deref().unwrap_or("DateTime");
                         if field.option_type {
                             g.ln(f!("if let Some(ref val) = self.{} {{", field.name));
-                            g.ln(f!("s.timestamp(\"{}\", val, TimestampFormat::{})?;", xml_name, fmt));
+                            g.ln(f!("s.timestamp(\"{xml_name}\", val, TimestampFormat::{fmt})?;"));
                             g.ln("}");
                         } else {
                             g.ln(f!(
@@ -262,7 +262,7 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                         }
                     } else if field.option_type {
                         g.ln(f!("if let Some(ref val) = self.{} {{", field.name));
-                        g.ln(f!("s.content(\"{}\", val)?;", xml_name));
+                        g.ln(f!("s.content(\"{xml_name}\", val)?;"));
                         g.ln("}");
                     } else {
                         g.ln(f!("s.content(\"{}\", &self.{})?;", xml_name, field.name));
@@ -633,7 +633,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                 g.ln("let mut res = http::Response::default();");
 
                 let code_name = status_code_name(op.http_code);
-                g.ln(f!("*res.status_mut() = http::StatusCode::{};", code_name));
+                g.ln(f!("*res.status_mut() = http::StatusCode::{code_name};"));
 
                 g.ln("res");
             }
@@ -641,7 +641,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
             g.ln("}");
         }
         rust::Type::Struct(ty) => {
-            g.ln(f!("pub fn serialize_http(x: {}) -> S3Result<http::Response> {{", output));
+            g.ln(f!("pub fn serialize_http(x: {output}) -> S3Result<http::Response> {{"));
 
             assert!(ty.fields.is_empty().not());
             for field in &ty.fields {
@@ -652,7 +652,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
 
             if op.http_code != 200 {
                 let code_name = status_code_name(op.http_code);
-                g.ln(f!("*res.status_mut() = http::StatusCode::{};", code_name));
+                g.ln(f!("*res.status_mut() = http::StatusCode::{code_name};"));
             }
 
             if is_xml_output(ty) {
@@ -730,10 +730,7 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) {
             assert_eq!(ty.name, "Unit");
         }
         rust::Type::Struct(ty) => {
-            g.ln(f!(
-                "pub fn deserialize_http(req: &mut http::Request) -> S3Result<{}> {{",
-                input
-            ));
+            g.ln(f!("pub fn deserialize_http(req: &mut http::Request) -> S3Result<{input}> {{"));
 
             if op.name == "PutObject" {
                 // POST object
@@ -898,7 +895,7 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) {
                 g.lf();
             }
 
-            g.ln(f!("Ok({} {{", input));
+            g.ln(f!("Ok({input} {{"));
             for field in &ty.fields {
                 match field.position.as_str() {
                     "bucket" | "key" | "query" | "header" | "metadata" | "payload" => {
@@ -1024,9 +1021,9 @@ fn codegen_op_http_call(op: &Operation, g: &mut Codegen) {
 
     if op.input != "Unit" {
         g.ln("let input = Self::deserialize_http(req)?;");
-        g.ln(f!("let result = s3.{}(input).await;", method));
+        g.ln(f!("let result = s3.{method}(input).await;"));
     } else {
-        g.ln(f!("let result = s3.{}().await;", method));
+        g.ln(f!("let result = s3.{method}().await;"));
     }
 
     g.ln("let res = match result {");
@@ -1210,7 +1207,7 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
 
     g.ln("match req.method().clone() {");
     for &method in &methods {
-        g.ln(f!("hyper::Method::{} => match s3_path {{", method));
+        g.ln(f!("hyper::Method::{method} => match s3_path {{"));
 
         for pattern in [PathPattern::Root, PathPattern::Bucket, PathPattern::Object] {
             let s3_path_pattern = match pattern {

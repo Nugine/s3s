@@ -78,7 +78,7 @@ fn check_len(actual: u64, limit: u64) -> S3Result<()> {
     if actual > limit {
         return Err(S3Error::with_message(
             S3ErrorCode::InvalidRequest,
-            format!("body too large: actual={}, limit={}", actual, limit),
+            format!("body too large: actual={actual}, limit={limit}"),
         ));
     }
     Ok(())

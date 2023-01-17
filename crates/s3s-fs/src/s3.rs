@@ -66,7 +66,7 @@ impl S3 for FileSystem {
         let md5_sum = self.get_md5_sum(bucket, key).await?;
 
         let mut copy_object_result = CopyObjectResult::default();
-        copy_object_result.e_tag = Some(format!("\"{}\"", md5_sum));
+        copy_object_result.e_tag = Some(format!("\"{md5_sum}\""));
         copy_object_result.last_modified = Some(last_modified);
 
         let mut output = CopyObjectOutput::default();
@@ -189,7 +189,7 @@ impl S3 for FileSystem {
         output.content_length = try_!(i64::try_from(content_length));
         output.last_modified = Some(last_modified);
         output.metadata = object_metadata;
-        output.e_tag = Some(format!("\"{}\"", md5_sum));
+        output.e_tag = Some(format!("\"{md5_sum}\""));
         Ok(output)
     }
 
@@ -387,7 +387,7 @@ impl S3 for FileSystem {
         }
 
         let mut output = PutObjectOutput::default();
-        output.e_tag = Some(format!("\"{}\"", md5_sum));
+        output.e_tag = Some(format!("\"{md5_sum}\""));
         // TODO: other fields?
 
         Ok(output)
@@ -420,7 +420,7 @@ impl S3 for FileSystem {
             return Err(s3_error!(InvalidRequest));
         }
 
-        let file_path_str = format!(".upload_id-{}.part-{}", upload_id, part_number);
+        let file_path_str = format!(".upload_id-{upload_id}.part-{part_number}");
         let file_path = try_!(Path::new(&file_path_str).absolutize_virtually(&self.root));
 
         let mut md5_hash = Md5::new();
@@ -435,7 +435,7 @@ impl S3 for FileSystem {
         debug!(path = %file_path.display(), ?size, %md5_sum, "write file");
 
         let mut output = UploadPartOutput::default();
-        output.e_tag = Some(format!("\"{}\"", md5_sum));
+        output.e_tag = Some(format!("\"{md5_sum}\""));
         Ok(output)
     }
 
@@ -467,7 +467,7 @@ impl S3 for FileSystem {
                 return Err(s3_error!(InvalidRequest));
             }
 
-            let part_path_str = format!(".upload_id-{}.part-{}", upload_id, part_number);
+            let part_path_str = format!(".upload_id-{upload_id}.part-{part_number}");
             let part_path = try_!(Path::new(&part_path_str).absolutize_virtually(&self.root));
 
             let mut reader = try_!(fs::File::open(&part_path).await);
@@ -486,7 +486,7 @@ impl S3 for FileSystem {
         let mut output = CompleteMultipartUploadOutput::default();
         output.bucket = Some(bucket);
         output.key = Some(key);
-        output.e_tag = Some(format!("\"{}\"", md5_sum));
+        output.e_tag = Some(format!("\"{md5_sum}\""));
         Ok(output)
     }
 }
