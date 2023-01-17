@@ -1,0 +1,140 @@
+//! timestamp
+
+use std::io;
+use std::num::ParseIntError;
+use std::time::SystemTime;
+
+use time::format_description::well_known::Rfc3339;
+use time::format_description::FormatItem;
+use time::macros::format_description;
+
+#[derive(Debug)]
+pub struct Timestamp(time::OffsetDateTime);
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TimestampFormat {
+    DateTime,
+    HttpDate,
+    EpochSeconds,
+}
+
+impl From<time::OffsetDateTime> for Timestamp {
+    fn from(value: time::OffsetDateTime) -> Self {
+        Self(value)
+    }
+}
+
+impl From<Timestamp> for time::OffsetDateTime {
+    fn from(value: Timestamp) -> Self {
+        value.0
+    }
+}
+
+impl From<SystemTime> for Timestamp {
+    fn from(value: SystemTime) -> Self {
+        Self(time::OffsetDateTime::from(value))
+    }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum ParseTimestampError {
+    #[error("time: {0}")]
+    Time(#[from] time::error::Parse),
+    #[error("int: {0}")]
+    Int(#[from] ParseIntError),
+    #[error("time overflow")]
+    Overflow,
+    #[error("component range: {0}")]
+    ComponentRange(#[from] time::error::ComponentRange),
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum FormatTimestampError {
+    #[error("time: {0}")]
+    Time(#[from] time::error::Format),
+    #[error("io: {0}")]
+    Io(#[from] io::Error),
+}
+
+/// See <https://github.com/time-rs/time/issues/498>
+const RFC1123: &[FormatItem<'_>] =
+    format_description!("[weekday repr:short], [day] [month repr:short] [year] [hour]:[minute]:[second] GMT");
+
+impl Timestamp {
+    pub fn parse(format: TimestampFormat, s: &str) -> Result<Self, ParseTimestampError> {
+        let ans = match format {
+            TimestampFormat::DateTime => time::OffsetDateTime::parse(s, &Rfc3339)?,
+            TimestampFormat::HttpDate => time::PrimitiveDateTime::parse(s, RFC1123)?.assume_utc(),
+            TimestampFormat::EpochSeconds => match s.split_once('.') {
+                Some((secs, frac)) => {
+                    let secs: i64 = secs.parse::<u64>()?.try_into().map_err(|_| ParseTimestampError::Overflow)?;
+                    let val: u32 = frac.parse::<u32>()?;
+                    let mul: u32 = match frac.len() {
+                        1 => 100000000,
+                        2 => 10000000,
+                        3 => 1000000,
+                        4 => 100000,
+                        5 => 10000,
+                        6 => 1000,
+                        7 => 100,
+                        8 => 10,
+                        9 => 1,
+                        _ => return Err(ParseTimestampError::Overflow),
+                    };
+                    let nanos = secs as i128 * 1_000_000_000 + (val * mul) as i128;
+                    time::OffsetDateTime::from_unix_timestamp_nanos(nanos)?
+                }
+                None => {
+                    let secs: i64 = s.parse::<u64>()?.try_into().map_err(|_| ParseTimestampError::Overflow)?;
+                    time::OffsetDateTime::from_unix_timestamp(secs)?
+                }
+            },
+        };
+        Ok(Self(ans))
+    }
+
+    pub fn format(&self, format: TimestampFormat, w: &mut impl io::Write) -> Result<(), FormatTimestampError> {
+        match format {
+            TimestampFormat::DateTime => {
+                self.0.format_into(w, &Rfc3339)?;
+            }
+            TimestampFormat::HttpDate => {
+                self.0.format_into(w, RFC1123)?;
+            }
+            TimestampFormat::EpochSeconds => {
+                let val = self.0.unix_timestamp_nanos();
+                let secs = (val / 1_000_000_000) as f64;
+                let nanos = (val % 1_000_000_000) as f64 / 1_000_000_000.0;
+                let ts = secs + nanos;
+                write!(w, "{}", ts)?;
+            }
+        }
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn text_repr() {
+        let cases = [
+            (TimestampFormat::DateTime, "1985-04-12T23:20:50.52Z"),
+            (TimestampFormat::HttpDate, "Tue, 29 Apr 2014 18:30:38 GMT"),
+            (TimestampFormat::HttpDate, "Wed, 21 Oct 2015 07:28:00 GMT"),
+            // (TimestampFormat::HttpDate, "Sun, 02 Jan 2000 20:34:56.000 GMT"), // FIXME: optional fractional seconds
+            (TimestampFormat::EpochSeconds, "1515531081.1234"),
+        ];
+
+        for (fmt, expected) in cases {
+            let time = Timestamp::parse(fmt, expected).unwrap();
+
+            let mut buf = Vec::new();
+            time.format(fmt, &mut buf).unwrap();
+            let text = String::from_utf8(buf).unwrap();
+
+            assert_eq!(expected, text);
+        }
+    }
+}
