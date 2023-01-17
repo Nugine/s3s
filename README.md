@@ -1,9 +1,12 @@
 # s3s
 
 [![Apache 2.0 licensed][license-badge]][license-url]
+[![Unsafe Forbidden][unsafe-forbidden-badge]][unsafe-forbidden-url]
 
 [license-badge]: https://img.shields.io/badge/license-Apache--2.0-blue.svg
 [license-url]: ./LICENSE
+[unsafe-forbidden-badge]: https://img.shields.io/badge/unsafe-forbidden-success.svg
+[unsafe-forbidden-url]: https://github.com/rust-secure-code/safety-dance/
 
 S3 Service Adapter
 
