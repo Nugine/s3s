@@ -6,6 +6,7 @@ use crate::xml;
 use std::borrow::Cow;
 use std::fmt;
 use std::io::Write;
+use std::str::FromStr;
 
 pub type S3Result<T = (), E = S3Error> = std::result::Result<T, E>;
 
@@ -148,4 +149,16 @@ macro_rules! s3_error {
     ($code:ident, $fmt:literal, $($arg:tt)+) => {
         $crate::S3Error::with_message($crate::S3ErrorCode::$code, format!($fmt, $($arg)+))
     };
+}
+
+#[derive(Debug, thiserror::Error)]
+#[error("Unknown S3 Error Code")]
+pub struct ParseS3ErrorCodeError(());
+
+impl FromStr for S3ErrorCode {
+    type Err = ParseS3ErrorCodeError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Self::from_bytes(s.as_bytes()).ok_or(ParseS3ErrorCodeError(()))
+    }
 }
