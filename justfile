@@ -30,6 +30,6 @@ install:
     cargo install --offline --path crates/s3s-fs --features binary
 
 sync-version:
-    cargo set-version -p s3s            0.1.0
+    cargo set-version -p s3s            0.2.0-dev
     cargo set-version -p s3s-codegen    0.0.0
-    cargo set-version -p s3s-fs         0.1.0
+    cargo set-version -p s3s-fs         0.2.0-dev
