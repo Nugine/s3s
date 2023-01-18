@@ -516,6 +516,8 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         g.ln(f!("impl<'xml> xml::Deserialize<'xml> for {} {{", ty.name));
         g.ln("fn deserialize(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {");
 
+        assert!(ty.xml_name.is_none()); // canary for <https://github.com/Nugine/s3s/issues/2>
+
         let xml_name = xml_name.or(ty.xml_name.as_deref()).unwrap_or(&ty.name);
         g.ln(f!("d.named_element(\"{xml_name}\", |d|d.content())"));
 

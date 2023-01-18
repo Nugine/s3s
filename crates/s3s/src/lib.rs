@@ -21,3 +21,8 @@ pub mod service;
 pub use self::auth::*;
 pub use self::error::*;
 pub use self::ops::S3;
+
+#[cfg(test)]
+mod tests {
+    mod xml;
+}
