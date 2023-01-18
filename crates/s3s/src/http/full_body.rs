@@ -9,7 +9,7 @@ use hyper::Body;
 
 pub struct LengthLimit(pub u64);
 
-pub const DEFAULT_LENGTH_LIMIT: u64 = 64 * 1024;
+pub const DEFAULT_LENGTH_LIMIT: u64 = 2 * 1024 * 1024;
 
 pub struct FullBody(pub Bytes);
 

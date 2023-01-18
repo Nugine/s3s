@@ -15,15 +15,24 @@ use tracing::debug;
 pub struct S3Service {
     s3: Box<dyn S3>,
     auth: Option<Box<dyn S3Auth>>,
+    full_body_limit: u64,
 }
 
 impl S3Service {
     pub fn new(s3: Box<dyn S3>) -> Self {
-        Self { s3, auth: None }
+        Self {
+            s3,
+            auth: None,
+            full_body_limit: crate::http::DEFAULT_LENGTH_LIMIT,
+        }
     }
 
     pub fn set_auth(&mut self, auth: Box<dyn S3Auth>) {
         self.auth = Some(auth);
+    }
+
+    pub fn set_full_body_limit(&mut self, length_limit: u64) {
+        self.full_body_limit = length_limit;
     }
 
     #[tracing::instrument(
@@ -33,6 +42,11 @@ impl S3Service {
     )]
     pub async fn call(&self, mut req: http::Request) -> S3Result<http::Response> {
         debug!(?req);
+
+        if self.full_body_limit > 0 {
+            req.extensions_mut().insert(crate::http::LengthLimit(self.full_body_limit));
+        }
+
         let result = crate::ops::call(&*self.s3, self.auth.as_deref(), &mut req).await;
 
         match result {
