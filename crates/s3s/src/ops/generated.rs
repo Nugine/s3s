@@ -11471,7 +11471,7 @@ impl<'xml> xml::Deserialize<'xml> for AnalyticsConfiguration {
 
 impl<'xml> xml::Deserialize<'xml> for BucketLifecycleConfiguration {
     fn deserialize(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.named_element("BucketLifecycleConfiguration", |d| d.content())
+        d.named_element("LifecycleConfiguration", |d| d.content())
     }
 }
 
@@ -11489,7 +11489,7 @@ impl<'xml> xml::Deserialize<'xml> for CORSConfiguration {
 
 impl<'xml> xml::Deserialize<'xml> for CompletedMultipartUpload {
     fn deserialize(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.named_element("CompletedMultipartUpload", |d| d.content())
+        d.named_element("CompleteMultipartUpload", |d| d.content())
     }
 }
 
@@ -11537,13 +11537,13 @@ impl<'xml> xml::Deserialize<'xml> for ObjectLockConfiguration {
 
 impl<'xml> xml::Deserialize<'xml> for ObjectLockLegalHold {
     fn deserialize(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.named_element("ObjectLockLegalHold", |d| d.content())
+        d.named_element("LegalHold", |d| d.content())
     }
 }
 
 impl<'xml> xml::Deserialize<'xml> for ObjectLockRetention {
     fn deserialize(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.named_element("ObjectLockRetention", |d| d.content())
+        d.named_element("Retention", |d| d.content())
     }
 }
 

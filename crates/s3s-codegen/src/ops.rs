@@ -332,7 +332,7 @@ fn default_value_literal(v: &Value) -> &dyn fmt::Display {
 }
 
 fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
-    let mut root_type_names: BTreeSet<&str> = default();
+    let mut root_type_names: BTreeMap<&str, Option<&str>> = default();
     let mut field_type_names: BTreeSet<&str> = default();
 
     let mut q: VecDeque<&str> = default();
@@ -350,7 +350,7 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         let mut payload_count = 0;
         for field in &ty.fields {
             if is_xml_payload(field) {
-                root_type_names.insert(&field.type_);
+                root_type_names.insert(&field.type_, field.xml_name.as_deref());
                 field_type_names.insert(&field.type_);
                 q.push_back(&field.type_);
                 payload_count += 1;
@@ -510,13 +510,13 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         g.lf();
     }
 
-    for rust_type in root_type_names.iter().map(|&name| &rust_types[name]) {
+    for (rust_type, xml_name) in root_type_names.iter().map(|(&name, xml_name)| (&rust_types[name], xml_name)) {
         let rust::Type::Struct(ty) = rust_type else { panic!("{rust_type:#?}") };
 
         g.ln(f!("impl<'xml> xml::Deserialize<'xml> for {} {{", ty.name));
         g.ln("fn deserialize(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {");
 
-        let xml_name = ty.xml_name.as_ref().unwrap_or(&ty.name);
+        let xml_name = xml_name.or(ty.xml_name.as_deref()).unwrap_or(&ty.name);
         g.ln(f!("d.named_element(\"{xml_name}\", |d|d.content())"));
 
         g.ln("}");
