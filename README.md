@@ -20,7 +20,19 @@ This experimental project intends to offer an ergonomic adapter for building S3-
 
 `s3s` implements Amazon S3 REST API in the form of a generic [hyper](https://github.com/hyperium/hyper) service. S3-compatible services can focus on the S3 API itself and don't have to care about the HTTP layer.
 
-`s3s-fs` implements the S3 API based on file system. It is designed for integration testing. DO NOT USE IT IN PRODUCTION.
+`s3s-fs` implements the S3 API based on file system, as a sample implementation. It is designed for integration testing. DO NOT USE IT IN PRODUCTION.
+
+## How it works
+
+![architecture diagram](docs/arch/arch.svg)
+
+The diagram above shows how `s3s` works. 
+
+`s3s` converts HTTP requests to operation inputs before calling the user-defined service. 
+
+`s3s` converts operation outputs or errors to HTTP responses after calling the user-defined service.
+
+The data types, serialization and deserialization are generated from the smithy model in [aws-sdk-rust](https://github.com/awslabs/aws-sdk-rust) repository, with some manual hacks.
 
 ## Develop
 
