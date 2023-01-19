@@ -46,9 +46,14 @@ fn extract_s3_path(req: &mut Request, base_domain: Option<&str>) -> S3Result<S3P
         (Some(base_domain), Some(val)) => {
             let on_err = |e| s3_error!(e, InvalidRequest, "invalid header: Host: {val:?}");
             let host = val.to_str().map_err(on_err)?;
+
+            debug!(?base_domain, ?host, ?uri_path, "parsing virtual-hosted-style request");
             crate::path::parse_virtual_hosted_style(base_domain, host, &uri_path)
         }
-        _ => crate::path::parse_path_style(&uri_path),
+        _ => {
+            debug!(?uri_path, "parsing path-style request");
+            crate::path::parse_path_style(&uri_path)
+        }
     };
 
     result.map_err(|err| match err {
@@ -196,6 +201,7 @@ impl SignatureContext<'_> {
         if self.req.method() == Method::POST {
             if let Some(ref mime) = self.mime {
                 if mime.type_() == mime::MULTIPART && mime.subtype() == mime::FORM_DATA {
+                    debug!("checking post signature");
                     return self.check_post_signature().await;
                 }
             }
@@ -204,11 +210,13 @@ impl SignatureContext<'_> {
         // query auth
         if let Some(qs) = self.qs {
             if qs.has("X-Amz-Signature") {
+                debug!("checking presigned url");
                 return self.check_presigned_url().await;
             }
         }
 
         // header auth
+        debug!("checking header auth");
         self.check_header_auth().await
     }
 
@@ -351,7 +359,6 @@ impl SignatureContext<'_> {
 
             let region = authorization.credential.aws_region;
             let string_to_sign = signature_v4::create_string_to_sign(&canonical_request, &amz_date, region);
-
             signature_v4::calculate_signature(&string_to_sign, &secret_key, &amz_date, region)
         };
 
