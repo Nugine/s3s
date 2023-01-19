@@ -10,7 +10,7 @@ use std::task::{Context, Poll};
 
 use futures::future::BoxFuture;
 use hyper::service::Service;
-use tracing::debug;
+use tracing::{debug, error};
 
 pub struct S3Service {
     s3: Box<dyn S3>,
@@ -60,7 +60,7 @@ impl S3Service {
 
         match result {
             Ok(ref res) => debug!(?res),
-            Err(ref err) => debug!(?err),
+            Err(ref err) => error!(?err),
         }
 
         result

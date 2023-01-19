@@ -112,8 +112,14 @@ fn extract_amz_date(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<AmzDate>> {
         Err(e) => Err(invalid_request!(e, "invalid header: x-amz-date")),
     }
 }
-
 pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<Response> {
+    match call_inner(req, s3, auth, base_domain).await {
+        Ok(res) => Ok(res),
+        Err(err) => serialize_error(err),
+    }
+}
+
+async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<Response> {
     let s3_path = extract_s3_path(req, base_domain)?;
     let qs = extract_qs(req)?;
 
