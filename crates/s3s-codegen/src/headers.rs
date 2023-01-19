@@ -25,9 +25,11 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
         headers.insert("x-amz-content-sha256");
         headers.insert("x-amz-date");
         headers.insert("authorization");
+        headers.insert("host");
     }
 
     let prelude = [
+        "//! Auto generated header name definitions",
         "#![allow(clippy::declare_interior_mutable_const)]",
         "",
         "use hyper::header::HeaderName;",

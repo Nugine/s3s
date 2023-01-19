@@ -28,6 +28,9 @@ struct Opt {
     #[clap(long, requires("access-key"))]
     secret_key: Option<String>,
 
+    #[clap(long)]
+    domain_name: Option<String>,
+
     root: PathBuf,
 }
 
@@ -43,18 +46,25 @@ fn setup_tracing() {
 #[tokio::main]
 async fn main() -> Result {
     setup_tracing();
-
     let opt = Opt::parse();
 
+    // Setup S3 service
     let fs = FileSystem::new(opt.root)?;
     let mut service = S3Service::new(Box::new(fs));
 
+    // Enable authentication
     if let (Some(ak), Some(sk)) = (opt.access_key, opt.secret_key) {
         let mut auth = SimpleAuth::new();
         auth.register(ak, sk);
         service.set_auth(Box::new(auth));
     }
 
+    // Enable parsing virtual-hosted-style requests
+    if let Some(domain_name) = opt.domain_name {
+        service.set_base_domain(domain_name);
+    }
+
+    // Run server
     let listener = TcpListener::bind((opt.host.as_str(), opt.port))?;
     let server = Server::from_tcp(listener)?.serve(service.into_shared().into_make_service());
 

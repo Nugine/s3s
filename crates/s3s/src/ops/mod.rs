@@ -39,14 +39,23 @@ fn serialize_error(x: S3Error) -> S3Result<Response> {
     Ok(res)
 }
 
-fn extract_s3_path(req: &mut Request) -> S3Result<S3Path> {
-    let path = urlencoding::decode(req.uri().path()).map_err(|_| S3ErrorCode::InvalidURI)?;
-    let ans = crate::path::parse_path_style(&path).map_err(|err| match err {
-        ParseS3PathError::InvalidPath => S3ErrorCode::InvalidURI,
-        ParseS3PathError::InvalidBucketName => S3ErrorCode::InvalidBucketName,
-        ParseS3PathError::KeyTooLong => S3ErrorCode::KeyTooLongError,
-    })?;
-    Ok(ans)
+fn extract_s3_path(req: &mut Request, base_domain: Option<&str>) -> S3Result<S3Path> {
+    let uri_path = urlencoding::decode(req.uri().path()).map_err(|_| S3ErrorCode::InvalidURI)?;
+
+    let result = match (base_domain, req.headers().get(crate::header::names::HOST)) {
+        (Some(base_domain), Some(val)) => {
+            let on_err = |e| s3_error!(e, InvalidRequest, "invalid header: Host: {val:?}");
+            let host = val.to_str().map_err(on_err)?;
+            crate::path::parse_virtual_hosted_style(base_domain, host, &uri_path)
+        }
+        _ => crate::path::parse_path_style(&uri_path),
+    };
+
+    result.map_err(|err| match err {
+        ParseS3PathError::InvalidPath => s3_error!(InvalidURI),
+        ParseS3PathError::InvalidBucketName => s3_error!(InvalidBucketName),
+        ParseS3PathError::KeyTooLong => s3_error!(KeyTooLongError),
+    })
 }
 
 fn extract_qs(req: &mut Request) -> S3Result<Option<OrderedQs>> {
@@ -104,8 +113,8 @@ fn extract_amz_date(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<AmzDate>> {
     }
 }
 
-pub async fn call(s3: &dyn S3, auth: Option<&dyn S3Auth>, req: &mut Request) -> S3Result<Response> {
-    let s3_path = extract_s3_path(req)?;
+pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<Response> {
+    let s3_path = extract_s3_path(req, base_domain)?;
     let qs = extract_qs(req)?;
 
     // check signature

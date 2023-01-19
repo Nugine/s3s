@@ -16,6 +16,7 @@ pub struct S3Service {
     s3: Box<dyn S3>,
     auth: Option<Box<dyn S3Auth>>,
     full_body_limit: u64,
+    base_domain: Option<String>,
 }
 
 impl S3Service {
@@ -24,6 +25,7 @@ impl S3Service {
             s3,
             auth: None,
             full_body_limit: crate::http::DEFAULT_LENGTH_LIMIT,
+            base_domain: None,
         }
     }
 
@@ -33,6 +35,10 @@ impl S3Service {
 
     pub fn set_full_body_limit(&mut self, length_limit: u64) {
         self.full_body_limit = length_limit;
+    }
+
+    pub fn set_base_domain(&mut self, base_domain: impl Into<String>) {
+        self.base_domain = Some(base_domain.into());
     }
 
     #[tracing::instrument(
@@ -47,7 +53,10 @@ impl S3Service {
             req.extensions_mut().insert(crate::http::LengthLimit(self.full_body_limit));
         }
 
-        let result = crate::ops::call(&*self.s3, self.auth.as_deref(), &mut req).await;
+        let s3 = &*self.s3;
+        let auth = self.auth.as_deref();
+        let base_domain = self.base_domain.as_deref();
+        let result = crate::ops::call(&mut req, s3, auth, base_domain).await;
 
         match result {
             Ok(ref res) => debug!(?res),

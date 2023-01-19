@@ -1,3 +1,4 @@
+//! Auto generated header name definitions
 #![allow(clippy::declare_interior_mutable_const)]
 
 use hyper::header::HeaderName;
@@ -39,6 +40,8 @@ pub use hyper::header::RANGE;
 pub use hyper::header::ACCEPT_RANGES;
 
 pub use hyper::header::AUTHORIZATION;
+
+pub use hyper::header::HOST;
 
 pub const X_AMZ_ABORT_DATE: HeaderName = HeaderName::from_static("x-amz-abort-date");
 
