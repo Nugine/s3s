@@ -6,6 +6,8 @@ description = "An experimental S3 server based on file system"
 license = "Apache-2.0"
 readme = "../../README.md"
 repository = "https://github.com/Nugine/s3s"
+keywords = ["s3"]
+categories = ["web-programming", "web-programming::http-server"]
 
 [[bin]]
 name = "s3s-fs"

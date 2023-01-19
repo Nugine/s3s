@@ -6,6 +6,8 @@ description = "S3 service adapter integrated with aws-sdk-s3"
 license = "Apache-2.0"
 readme = "../../README.md"
 repository = "https://github.com/Nugine/s3s"
+keywords = ["s3"]
+categories = ["web-programming", "web-programming::http-server"]
 
 [dependencies]
 aws-smithy-http = "0.53.1"

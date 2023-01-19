@@ -2,6 +2,7 @@
 #![deny(
     clippy::all, //
     clippy::must_use_candidate, //
+    clippy::cargo, //
 )]
 
 #[macro_use]

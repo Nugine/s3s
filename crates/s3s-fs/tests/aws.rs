@@ -1,3 +1,9 @@
+#![forbid(unsafe_code)]
+#![deny(
+    clippy::all, //
+    clippy::must_use_candidate, //
+)]
+
 use s3s::service::S3Service;
 
 use std::fs;
