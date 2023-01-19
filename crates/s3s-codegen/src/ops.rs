@@ -87,7 +87,6 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     codegen_async_trait(ops, g);
 
     for op in ops.values() {
-        codegen_doc(op.doc.as_deref(), g);
         g.ln(f!("pub struct {};", op.name));
         g.ln("")
     }
@@ -99,10 +98,13 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
 }
 
 fn codegen_async_trait(ops: &Operations, g: &mut Codegen) {
+    g.ln("/// An async trait which represents the S3 API");
     g.ln("#[async_trait::async_trait]");
     g.ln("pub trait S3: Send + Sync + 'static {");
 
     for op in ops.values() {
+        codegen_doc(op.doc.as_deref(), g);
+
         let method_name = op.name.to_snake_case();
 
         let input_is_unit = op.input == "Unit";
