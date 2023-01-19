@@ -8,3 +8,8 @@ readme = "../../README.md"
 repository = "https://github.com/Nugine/s3s"
 
 [dependencies]
+aws-smithy-http = "0.53.1"
+aws-smithy-types = "0.53.1"
+futures = { version = "0.3.25", default-features = false, features = ["std"] }
+hyper = "0.14.23"
+s3s = { version = "0.1.1", path = "../s3s" }
