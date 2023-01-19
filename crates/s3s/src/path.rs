@@ -47,50 +47,6 @@ pub enum ParseS3PathError {
     KeyTooLong,
 }
 
-impl S3Path {
-    /// Parses a path-style request
-    /// # Errors
-    /// Returns an `Err` if the s3 path is invalid
-    pub fn parse(path: &str) -> Result<Self, ParseS3PathError> {
-        S3PathRef::parse(path).map(Into::into)
-    }
-}
-
-impl<'a> S3PathRef<'a> {
-    pub fn parse(path: &'a str) -> Result<Self, ParseS3PathError> {
-        let path = if let Some(("", x)) = path.split_once('/') {
-            x
-        } else {
-            return Err(ParseS3PathError::InvalidPath);
-        };
-
-        if path.is_empty() {
-            return Ok(Self::Root);
-        }
-
-        let (bucket, key) = match path.split_once('/') {
-            None => (path, None),
-            Some((x, "")) => (x, None),
-            Some((bucket, key)) => (bucket, Some(key)),
-        };
-
-        if !check_bucket_name(bucket) {
-            return Err(ParseS3PathError::InvalidBucketName);
-        }
-
-        let key = match key {
-            None => return Ok(Self::Bucket { bucket }),
-            Some(k) => k,
-        };
-
-        if !check_key(key) {
-            return Err(ParseS3PathError::KeyTooLong);
-        }
-
-        Ok(Self::Object { bucket, key })
-    }
-}
-
 impl From<S3PathRef<'_>> for S3Path {
     fn from(val: S3PathRef<'_>) -> Self {
         match val {
@@ -145,34 +101,70 @@ pub const fn check_key(key: &str) -> bool {
     key.len() <= 1024
 }
 
+/// Parses a path-style request
+/// # Errors
+/// Returns an `Err` if the s3 path is invalid
+pub fn parse_path_style(uri_path: &str) -> Result<S3PathRef, ParseS3PathError> {
+    let path = if let Some(("", x)) = uri_path.split_once('/') {
+        x
+    } else {
+        return Err(ParseS3PathError::InvalidPath);
+    };
+
+    if path.is_empty() {
+        return Ok(S3PathRef::Root);
+    }
+
+    let (bucket, key) = match path.split_once('/') {
+        None => (path, None),
+        Some((x, "")) => (x, None),
+        Some((bucket, key)) => (bucket, Some(key)),
+    };
+
+    if !check_bucket_name(bucket) {
+        return Err(ParseS3PathError::InvalidBucketName);
+    }
+
+    let key = match key {
+        None => return Ok(S3PathRef::Bucket { bucket }),
+        Some(k) => k,
+    };
+
+    if !check_key(key) {
+        return Err(ParseS3PathError::KeyTooLong);
+    }
+
+    Ok(S3PathRef::Object { bucket, key })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn parse_s3_path() {
-        assert_eq!(S3Path::parse("/"), Ok(S3Path::Root));
+    fn path_style() {
+        assert_eq!(parse_path_style("/"), Ok(S3PathRef::Root));
 
-        assert_eq!(S3Path::parse("/bucket"), Ok(S3Path::Bucket { bucket: "bucket".into() }));
+        assert_eq!(parse_path_style("/bucket"), Ok(S3PathRef::Bucket { bucket: "bucket" }));
 
-        assert_eq!(S3Path::parse("/bucket/"), Ok(S3Path::Bucket { bucket: "bucket".into() }));
+        assert_eq!(parse_path_style("/bucket/"), Ok(S3PathRef::Bucket { bucket: "bucket" }));
 
         assert_eq!(
-            S3Path::parse("/bucket/dir/object"),
-            Ok(S3Path::Object {
-                bucket: "bucket".into(),
-                key: "dir/object".into(),
+            parse_path_style("/bucket/dir/object"),
+            Ok(S3PathRef::Object {
+                bucket: "bucket",
+                key: "dir/object",
             })
         );
 
-        assert_eq!(S3Path::parse("asd").unwrap_err(), ParseS3PathError::InvalidPath);
+        assert_eq!(parse_path_style("asd").unwrap_err(), ParseS3PathError::InvalidPath);
 
-        assert_eq!(S3Path::parse("a/").unwrap_err(), ParseS3PathError::InvalidPath);
+        assert_eq!(parse_path_style("a/").unwrap_err(), ParseS3PathError::InvalidPath);
 
-        assert_eq!(S3Path::parse("/*").unwrap_err(), ParseS3PathError::InvalidBucketName);
+        assert_eq!(parse_path_style("/*").unwrap_err(), ParseS3PathError::InvalidBucketName);
 
         let too_long_path = format!("/{}/{}", "asd", "b".repeat(2048).as_str());
 
-        assert_eq!(S3Path::parse(&too_long_path).unwrap_err(), ParseS3PathError::KeyTooLong);
+        assert_eq!(parse_path_style(&too_long_path).unwrap_err(), ParseS3PathError::KeyTooLong);
     }
 }

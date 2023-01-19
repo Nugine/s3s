@@ -40,22 +40,16 @@ fn serialize_error(x: S3Error) -> S3Result<Response> {
 }
 
 fn extract_s3_path(req: &mut Request) -> S3Result<S3Path> {
-    if let Some(path) = req.extensions_mut().remove::<S3Path>() {
-        return Ok(path);
-    }
     let path = urlencoding::decode(req.uri().path()).map_err(|_| S3ErrorCode::InvalidURI)?;
-    let ans = S3Path::parse(&path).map_err(|err| match err {
+    let ans = crate::path::parse_path_style(&path).map_err(|err| match err {
         ParseS3PathError::InvalidPath => S3ErrorCode::InvalidURI,
         ParseS3PathError::InvalidBucketName => S3ErrorCode::InvalidBucketName,
         ParseS3PathError::KeyTooLong => S3ErrorCode::KeyTooLongError,
     })?;
-    Ok(ans)
+    Ok(ans.into())
 }
 
 fn extract_qs(req: &mut Request) -> S3Result<Option<OrderedQs>> {
-    if let Some(qs) = req.extensions_mut().remove::<OrderedQs>() {
-        return Ok(Some(qs));
-    }
     let Some(query) = req.uri().query() else { return Ok(None) };
     match OrderedQs::parse(query) {
         Ok(ans) => Ok(Some(ans)),
