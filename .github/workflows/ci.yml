@@ -30,3 +30,6 @@ jobs:
       - run: cargo fmt --all -- --check
       - run: cargo clippy -- -D warnings
       - run: cargo test --all-features
+      - run: |
+          ./scripts/codegen.sh
+          [[ -z $(git status -s) ]] # Fail if changed. See https://stackoverflow.com/a/9393642

@@ -10,21 +10,10 @@ doc:
     cargo doc --open --no-deps --all-features
 
 download-model:
-    #!/bin/bash -e
-    mkdir -p target
-    F="target/s3.json"
-    COMMIT=2e49e06ecb041afaf3fbed5a4a4f6c6afbb052fa
-    URL=https://github.com/awslabs/aws-sdk-rust/raw/$COMMIT/aws-models/s3.json
-    wget --output-document $F $URL
+    ./scripts/download-model.sh
 
 codegen:
-    #!/bin/bash -e
-    F="target/s3.json"
-    if [ ! -f $F ]; then
-        just download-model
-    fi
-    cargo run -p s3s-codegen -- $F
-    cargo fmt
+    ./scripts/codegen.sh
 
 install:
     cargo install --offline --path crates/s3s-fs --features binary
