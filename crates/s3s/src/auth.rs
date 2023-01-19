@@ -25,6 +25,12 @@ impl SimpleAuth {
         Self { map: HashMap::new() }
     }
 
+    #[must_use]
+    pub fn from_single(access_key: impl Into<String>, secret_key: impl Into<String>) -> Self {
+        let map = [(access_key.into(), secret_key.into())].into_iter().collect();
+        Self { map }
+    }
+
     /// register a credential
     pub fn register(&mut self, access_key: String, secret_key: String) -> Option<String> {
         self.map.insert(access_key, secret_key)

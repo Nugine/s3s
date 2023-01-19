@@ -54,8 +54,7 @@ async fn main() -> Result {
 
     // Enable authentication
     if let (Some(ak), Some(sk)) = (opt.access_key, opt.secret_key) {
-        let mut auth = SimpleAuth::new();
-        auth.register(ak, sk);
+        let auth = SimpleAuth::from_single(ak, sk);
         service.set_auth(Box::new(auth));
     }
 
