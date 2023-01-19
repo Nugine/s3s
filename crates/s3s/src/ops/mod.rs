@@ -46,7 +46,7 @@ fn extract_s3_path(req: &mut Request) -> S3Result<S3Path> {
         ParseS3PathError::InvalidBucketName => S3ErrorCode::InvalidBucketName,
         ParseS3PathError::KeyTooLong => S3ErrorCode::KeyTooLongError,
     })?;
-    Ok(ans.into())
+    Ok(ans)
 }
 
 fn extract_qs(req: &mut Request) -> S3Result<Option<OrderedQs>> {

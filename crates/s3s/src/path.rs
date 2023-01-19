@@ -1,3 +1,5 @@
+#![deny(missing_docs)]
+
 //! A path in the S3 storage.
 //!
 //! + [Request styles](https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAPI.html#virtual-hosted-path-style-requests)
@@ -24,13 +26,6 @@ pub enum S3Path {
     },
 }
 
-#[derive(Debug, PartialEq, Eq)]
-pub enum S3PathRef<'a> {
-    Root,
-    Bucket { bucket: &'a str },
-    Object { bucket: &'a str, key: &'a str },
-}
-
 /// An error which can be returned when parsing a s3 path
 #[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
 pub enum ParseS3PathError {
@@ -45,19 +40,6 @@ pub enum ParseS3PathError {
     /// The object key is too long
     #[error("The object key is too long")]
     KeyTooLong,
-}
-
-impl From<S3PathRef<'_>> for S3Path {
-    fn from(val: S3PathRef<'_>) -> Self {
-        match val {
-            S3PathRef::Root => S3Path::Root,
-            S3PathRef::Bucket { bucket } => S3Path::Bucket { bucket: bucket.into() },
-            S3PathRef::Object { bucket, key } => S3Path::Object {
-                bucket: bucket.into(),
-                key: key.into(),
-            },
-        }
-    }
 }
 
 /// See [bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html#bucketnamingrules)
@@ -104,15 +86,11 @@ pub const fn check_key(key: &str) -> bool {
 /// Parses a path-style request
 /// # Errors
 /// Returns an `Err` if the s3 path is invalid
-pub fn parse_path_style(uri_path: &str) -> Result<S3PathRef, ParseS3PathError> {
-    let path = if let Some(("", x)) = uri_path.split_once('/') {
-        x
-    } else {
-        return Err(ParseS3PathError::InvalidPath);
-    };
+pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
+    let Some(path) = uri_path.strip_prefix('/') else { return Err(ParseS3PathError::InvalidPath) };
 
     if path.is_empty() {
-        return Ok(S3PathRef::Root);
+        return Ok(S3Path::Root);
     }
 
     let (bucket, key) = match path.split_once('/') {
@@ -126,7 +104,7 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3PathRef, ParseS3PathError> {
     }
 
     let key = match key {
-        None => return Ok(S3PathRef::Bucket { bucket }),
+        None => return Ok(S3Path::Bucket { bucket: bucket.into() }),
         Some(k) => k,
     };
 
@@ -134,37 +112,116 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3PathRef, ParseS3PathError> {
         return Err(ParseS3PathError::KeyTooLong);
     }
 
-    Ok(S3PathRef::Object { bucket, key })
+    Ok(S3Path::Object {
+        bucket: bucket.into(),
+        key: key.into(),
+    })
+}
+
+/// Parses a virtual-hosted-style request
+/// # Errors
+/// Returns an `Err` if the s3 path is invalid
+pub fn parse_virtual_hosted_style<'a>(base_domain: &str, host: &'a str, uri_path: &'a str) -> Result<S3Path, ParseS3PathError> {
+    if host == base_domain {
+        return parse_path_style(uri_path);
+    }
+
+    let Some(key) = uri_path.strip_prefix('/') else { return Err(ParseS3PathError::InvalidPath) };
+
+    let bucket = match host.strip_suffix(base_domain).and_then(|h| h.strip_suffix('.')) {
+        Some(b) => b.to_owned(),
+        None => host.to_ascii_lowercase(),
+    };
+
+    if !check_bucket_name(&bucket) {
+        return Err(ParseS3PathError::InvalidBucketName);
+    }
+
+    if key.is_empty() {
+        return Ok(S3Path::Bucket { bucket: bucket.into() });
+    }
+
+    if !check_key(key) {
+        return Err(ParseS3PathError::KeyTooLong);
+    }
+
+    Ok(S3Path::Object {
+        bucket: bucket.into(),
+        key: key.into(),
+    })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    fn bucket(bucket: &str) -> S3Path {
+        S3Path::Bucket { bucket: bucket.into() }
+    }
+
+    fn object(bucket: &str, key: &str) -> S3Path {
+        S3Path::Object {
+            bucket: bucket.into(),
+            key: key.into(),
+        }
+    }
+
     #[test]
     fn path_style() {
-        assert_eq!(parse_path_style("/"), Ok(S3PathRef::Root));
-
-        assert_eq!(parse_path_style("/bucket"), Ok(S3PathRef::Bucket { bucket: "bucket" }));
-
-        assert_eq!(parse_path_style("/bucket/"), Ok(S3PathRef::Bucket { bucket: "bucket" }));
-
-        assert_eq!(
-            parse_path_style("/bucket/dir/object"),
-            Ok(S3PathRef::Object {
-                bucket: "bucket",
-                key: "dir/object",
-            })
-        );
-
-        assert_eq!(parse_path_style("asd").unwrap_err(), ParseS3PathError::InvalidPath);
-
-        assert_eq!(parse_path_style("a/").unwrap_err(), ParseS3PathError::InvalidPath);
-
-        assert_eq!(parse_path_style("/*").unwrap_err(), ParseS3PathError::InvalidBucketName);
-
         let too_long_path = format!("/{}/{}", "asd", "b".repeat(2048).as_str());
 
-        assert_eq!(parse_path_style(&too_long_path).unwrap_err(), ParseS3PathError::KeyTooLong);
+        let cases = [
+            ("/", Ok(S3Path::Root)),
+            ("/bucket", Ok(bucket("bucket"))),
+            ("/bucket/", Ok(bucket("bucket"))),
+            ("/bucket/dir/object", Ok(object("bucket", "dir/object"))),
+            ("asd", Err(ParseS3PathError::InvalidPath)),
+            ("a/", Err(ParseS3PathError::InvalidPath)),
+            ("/*", Err(ParseS3PathError::InvalidBucketName)),
+            (too_long_path.as_str(), Err(ParseS3PathError::KeyTooLong)),
+        ];
+
+        for (uri_path, expected) in cases {
+            assert_eq!(parse_path_style(uri_path), expected);
+        }
+    }
+
+    #[test]
+    fn virtual_hosted_style() {
+        {
+            let base_domain = "s3.us-east-1.amazonaws.com";
+            let host = "s3.us-east-1.amazonaws.com";
+            let uri_path = "/example.com/homepage.html";
+            let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
+            let expected = Ok(object("example.com", "homepage.html"));
+            assert_eq!(ans, expected);
+        }
+
+        {
+            let base_domain = "s3.eu-west-1.amazonaws.com";
+            let host = "doc-example-bucket1.eu.s3.eu-west-1.amazonaws.com";
+            let uri_path = "/homepage.html";
+            let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
+            let expected = Ok(object("doc-example-bucket1.eu", "homepage.html"));
+            assert_eq!(ans, expected);
+        }
+
+        {
+            let base_domain = "s3.eu-west-1.amazonaws.com";
+            let host = "doc-example-bucket1.eu.s3.eu-west-1.amazonaws.com";
+            let uri_path = "/";
+            let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
+            let expected = Ok(bucket("doc-example-bucket1.eu"));
+            assert_eq!(ans, expected);
+        }
+
+        {
+            let base_domain = "s3.us-east-1.amazonaws.com";
+            let host = "example.com";
+            let uri_path = "/homepage.html";
+            let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
+            let expected = Ok(object("example.com", "homepage.html"));
+            assert_eq!(ans, expected);
+        }
     }
 }
