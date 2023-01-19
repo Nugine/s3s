@@ -5,7 +5,6 @@ use s3s::dto::*;
 use s3s::s3_error;
 use s3s::S3Result;
 use s3s::S3;
-use tokio::io::BufWriter;
 
 use std::collections::VecDeque;
 use std::io;
@@ -16,6 +15,7 @@ use std::path::PathBuf;
 
 use tokio::fs;
 use tokio::io::AsyncSeekExt;
+use tokio::io::BufWriter;
 use tokio_util::io::ReaderStream;
 
 use futures::TryStreamExt;
@@ -49,6 +49,10 @@ impl S3 for FileSystem {
 
         let src_path = self.get_object_path(bucket, key)?;
         let dst_path = self.get_object_path(&input.bucket, &input.key)?;
+
+        if src_path.exists().not() {
+            return Err(s3_error!(NoSuchKey));
+        }
 
         let file_metadata = try_!(fs::metadata(&src_path).await);
         let last_modified = Timestamp::from(try_!(file_metadata.modified()));
@@ -278,6 +282,10 @@ impl S3 for FileSystem {
     #[tracing::instrument]
     async fn list_objects_v2(&self, input: ListObjectsV2Request) -> S3Result<ListObjectsV2Output> {
         let path = self.get_bucket_path(&input.bucket)?;
+
+        if path.exists().not() {
+            return Err(s3_error!(NoSuchBucket));
+        }
 
         let mut objects: Vec<Object> = Default::default();
         let mut dir_queue: VecDeque<PathBuf> = Default::default();
