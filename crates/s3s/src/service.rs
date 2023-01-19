@@ -20,6 +20,7 @@ pub struct S3Service {
 }
 
 impl S3Service {
+    #[must_use]
     pub fn new(s3: Box<dyn S3>) -> Self {
         Self {
             s3,
@@ -66,6 +67,7 @@ impl S3Service {
         result
     }
 
+    #[must_use]
     pub fn into_shared(self) -> SharedS3Service {
         SharedS3Service(Arc::new(self))
     }
@@ -75,6 +77,7 @@ impl S3Service {
 pub struct SharedS3Service(Arc<S3Service>);
 
 impl SharedS3Service {
+    #[must_use]
     pub fn into_make_service(self) -> MakeService<Self> {
         MakeService(self)
     }

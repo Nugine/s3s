@@ -13,6 +13,7 @@ pub struct Error {
 pub type Result<T = (), E = Error> = std::result::Result<T, E>;
 
 impl Error {
+    #[must_use]
     #[track_caller]
     pub fn new(source: Box<dyn std::error::Error + Send + Sync + 'static>) -> Self {
         log(&*source);

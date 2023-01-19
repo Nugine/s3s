@@ -1,5 +1,8 @@
 #![forbid(unsafe_code)]
-#![deny(clippy::all)]
+#![deny(
+    clippy::all, //
+    clippy::must_use_candidate, //
+)]
 
 use s3s::service::SharedS3Service;
 use s3s::{S3Error, S3Result};

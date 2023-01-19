@@ -42,6 +42,7 @@ impl S3Error {
         }
     }
 
+    #[must_use]
     pub fn with_source(code: S3ErrorCode, source: Box<dyn std::error::Error + Send + Sync + 'static>) -> Self {
         Self {
             code,
@@ -64,10 +65,12 @@ impl S3Error {
         self.source = Some(val);
     }
 
+    #[must_use]
     pub fn code(&self) -> S3ErrorCode {
         self.code
     }
 
+    #[must_use]
     pub fn message(&self) -> Option<&str> {
         self.message.as_deref()
     }

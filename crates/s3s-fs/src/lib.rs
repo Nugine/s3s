@@ -1,5 +1,8 @@
 #![forbid(unsafe_code)]
-#![deny(clippy::all)]
+#![deny(
+    clippy::all, //
+    clippy::must_use_candidate, //
+)]
 
 #[macro_use]
 mod error;
