@@ -7,3 +7,6 @@
 
 mod connector;
 pub use self::connector::Connector;
+
+mod proxy;
+pub use self::proxy::Proxy;
