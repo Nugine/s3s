@@ -1,3 +1,6 @@
+use std::fs::File;
+use std::io;
+use std::io::BufWriter;
 use std::io::Write;
 
 pub struct Codegen {
@@ -9,6 +12,11 @@ impl Codegen {
         Self {
             writer: Box::new(writer),
         }
+    }
+
+    pub fn create_file(path: &str) -> io::Result<Self> {
+        let file = File::create(path)?;
+        Ok(Self::new(BufWriter::with_capacity(1024 * 1024, file)))
     }
 }
 

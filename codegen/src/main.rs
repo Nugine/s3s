@@ -17,8 +17,6 @@ mod ops;
 use crate::gen::Codegen;
 
 use std::format as f;
-use std::fs::File;
-use std::io::{BufReader, BufWriter};
 
 fn o<T: ToOwned + ?Sized>(x: &T) -> T::Owned {
     x.to_owned()
@@ -31,8 +29,8 @@ fn default<T: Default>() -> T {
 fn main() {
     let model: smithy::Model = {
         let json_path = std::env::args().nth(1).unwrap();
-        let json_file = BufReader::new(File::open(json_path).unwrap());
-        serde_json::from_reader(json_file).unwrap()
+        let json_file = std::fs::read(json_path).unwrap();
+        serde_json::from_slice(&json_file).unwrap()
     };
     assert!(model.smithy == "2.0");
 
@@ -41,25 +39,25 @@ fn main() {
 
     {
         let path = "crates/s3s/src/dto/generated.rs";
-        let mut gen = Codegen::new(BufWriter::new(File::create(path).unwrap()));
+        let mut gen = Codegen::create_file(path).unwrap();
         dto::codegen(&rust_types, &ops, &mut gen);
     }
 
     {
         let path = "crates/s3s/src/header/names.rs";
-        let mut gen = Codegen::new(BufWriter::new(File::create(path).unwrap()));
+        let mut gen = Codegen::create_file(path).unwrap();
         headers::codegen(&model, &mut gen);
     }
 
     {
         let path = "crates/s3s/src/error/generated.rs";
-        let mut gen = Codegen::new(BufWriter::new(File::create(path).unwrap()));
+        let mut gen = Codegen::create_file(path).unwrap();
         error::codegen(&model, &mut gen);
     }
 
     {
         let path = "crates/s3s/src/ops/generated.rs";
-        let mut gen = Codegen::new(BufWriter::new(File::create(path).unwrap()));
+        let mut gen = Codegen::create_file(path).unwrap();
         ops::codegen(&ops, &rust_types, &mut gen);
     }
 }
