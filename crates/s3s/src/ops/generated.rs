@@ -52,7 +52,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn abort_multipart_upload(&self, _input: AbortMultipartUploadRequest) -> S3Result<AbortMultipartUploadOutput> {
+    async fn abort_multipart_upload(&self, _input: AbortMultipartUploadInput) -> S3Result<AbortMultipartUploadOutput> {
         Err(s3_error!(NotImplemented, "AbortMultipartUpload is not implemented yet"))
     }
 
@@ -170,7 +170,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn complete_multipart_upload(&self, _input: CompleteMultipartUploadRequest) -> S3Result<CompleteMultipartUploadOutput> {
+    async fn complete_multipart_upload(&self, _input: CompleteMultipartUploadInput) -> S3Result<CompleteMultipartUploadOutput> {
         Err(s3_error!(NotImplemented, "CompleteMultipartUpload is not implemented yet"))
     }
 
@@ -360,7 +360,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjectsExamples.html">Copying
     /// Objects</a>.</p>
-    async fn copy_object(&self, _input: CopyObjectRequest) -> S3Result<CopyObjectOutput> {
+    async fn copy_object(&self, _input: CopyObjectInput) -> S3Result<CopyObjectOutput> {
         Err(s3_error!(NotImplemented, "CopyObject is not implemented yet"))
     }
 
@@ -511,7 +511,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn create_bucket(&self, _input: CreateBucketRequest) -> S3Result<CreateBucketOutput> {
+    async fn create_bucket(&self, _input: CreateBucketInput) -> S3Result<CreateBucketOutput> {
         Err(s3_error!(NotImplemented, "CreateBucket is not implemented yet"))
     }
 
@@ -795,7 +795,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn create_multipart_upload(&self, _input: CreateMultipartUploadRequest) -> S3Result<CreateMultipartUploadOutput> {
+    async fn create_multipart_upload(&self, _input: CreateMultipartUploadInput) -> S3Result<CreateMultipartUploadOutput> {
         Err(s3_error!(NotImplemented, "CreateMultipartUpload is not implemented yet"))
     }
 
@@ -817,7 +817,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket(&self, _input: DeleteBucketRequest) -> S3Result {
+    async fn delete_bucket(&self, _input: DeleteBucketInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeleteBucket is not implemented yet"))
     }
 
@@ -851,7 +851,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_analytics_configuration(&self, _input: DeleteBucketAnalyticsConfigurationRequest) -> S3Result {
+    async fn delete_bucket_analytics_configuration(&self, _input: DeleteBucketAnalyticsConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketAnalyticsConfiguration is not implemented yet"
@@ -880,7 +880,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_cors(&self, _input: DeleteBucketCorsRequest) -> S3Result {
+    async fn delete_bucket_cors(&self, _input: DeleteBucketCorsInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeleteBucketCors is not implemented yet"))
     }
 
@@ -908,7 +908,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_encryption(&self, _input: DeleteBucketEncryptionRequest) -> S3Result {
+    async fn delete_bucket_encryption(&self, _input: DeleteBucketEncryptionInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeleteBucketEncryption is not implemented yet"))
     }
 
@@ -937,7 +937,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn delete_bucket_intelligent_tiering_configuration(
         &self,
-        _input: DeleteBucketIntelligentTieringConfigurationRequest,
+        _input: DeleteBucketIntelligentTieringConfigurationInput,
     ) -> S3Result {
         Err(s3_error!(
             NotImplemented,
@@ -971,7 +971,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_inventory_configuration(&self, _input: DeleteBucketInventoryConfigurationRequest) -> S3Result {
+    async fn delete_bucket_inventory_configuration(&self, _input: DeleteBucketInventoryConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketInventoryConfiguration is not implemented yet"
@@ -1004,7 +1004,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_lifecycle(&self, _input: DeleteBucketLifecycleRequest) -> S3Result {
+    async fn delete_bucket_lifecycle(&self, _input: DeleteBucketLifecycleInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeleteBucketLifecycle is not implemented yet"))
     }
 
@@ -1044,7 +1044,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_metrics_configuration(&self, _input: DeleteBucketMetricsConfigurationRequest) -> S3Result {
+    async fn delete_bucket_metrics_configuration(&self, _input: DeleteBucketMetricsConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketMetricsConfiguration is not implemented yet"
@@ -1070,7 +1070,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_ownership_controls(&self, _input: DeleteBucketOwnershipControlsRequest) -> S3Result {
+    async fn delete_bucket_ownership_controls(&self, _input: DeleteBucketOwnershipControlsInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketOwnershipControls is not implemented yet"
@@ -1110,7 +1110,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_policy(&self, _input: DeleteBucketPolicyRequest) -> S3Result {
+    async fn delete_bucket_policy(&self, _input: DeleteBucketPolicyInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeleteBucketPolicy is not implemented yet"))
     }
 
@@ -1140,7 +1140,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_replication(&self, _input: DeleteBucketReplicationRequest) -> S3Result {
+    async fn delete_bucket_replication(&self, _input: DeleteBucketReplicationInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeleteBucketReplication is not implemented yet"))
     }
 
@@ -1162,7 +1162,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_tagging(&self, _input: DeleteBucketTaggingRequest) -> S3Result {
+    async fn delete_bucket_tagging(&self, _input: DeleteBucketTaggingInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeleteBucketTagging is not implemented yet"))
     }
 
@@ -1193,7 +1193,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_website(&self, _input: DeleteBucketWebsiteRequest) -> S3Result {
+    async fn delete_bucket_website(&self, _input: DeleteBucketWebsiteInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeleteBucketWebsite is not implemented yet"))
     }
 
@@ -1228,7 +1228,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_object(&self, _input: DeleteObjectRequest) -> S3Result<DeleteObjectOutput> {
+    async fn delete_object(&self, _input: DeleteObjectInput) -> S3Result<DeleteObjectOutput> {
         Err(s3_error!(NotImplemented, "DeleteObject is not implemented yet"))
     }
 
@@ -1257,7 +1257,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_object_tagging(&self, _input: DeleteObjectTaggingRequest) -> S3Result<DeleteObjectTaggingOutput> {
+    async fn delete_object_tagging(&self, _input: DeleteObjectTaggingInput) -> S3Result<DeleteObjectTaggingOutput> {
         Err(s3_error!(NotImplemented, "DeleteObjectTagging is not implemented yet"))
     }
 
@@ -1318,7 +1318,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_objects(&self, _input: DeleteObjectsRequest) -> S3Result<DeleteObjectsOutput> {
+    async fn delete_objects(&self, _input: DeleteObjectsInput) -> S3Result<DeleteObjectsOutput> {
         Err(s3_error!(NotImplemented, "DeleteObjects is not implemented yet"))
     }
 
@@ -1351,7 +1351,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_public_access_block(&self, _input: DeletePublicAccessBlockRequest) -> S3Result {
+    async fn delete_public_access_block(&self, _input: DeletePublicAccessBlockInput) -> S3Result {
         Err(s3_error!(NotImplemented, "DeletePublicAccessBlock is not implemented yet"))
     }
 
@@ -1384,7 +1384,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_bucket_accelerate_configuration(
         &self,
-        _input: GetBucketAccelerateConfigurationRequest,
+        _input: GetBucketAccelerateConfigurationInput,
     ) -> S3Result<GetBucketAccelerateConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -1415,7 +1415,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_acl(&self, _input: GetBucketAclRequest) -> S3Result<GetBucketAclOutput> {
+    async fn get_bucket_acl(&self, _input: GetBucketAclInput) -> S3Result<GetBucketAclOutput> {
         Err(s3_error!(NotImplemented, "GetBucketAcl is not implemented yet"))
     }
 
@@ -1451,7 +1451,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_bucket_analytics_configuration(
         &self,
-        _input: GetBucketAnalyticsConfigurationRequest,
+        _input: GetBucketAnalyticsConfigurationInput,
     ) -> S3Result<GetBucketAnalyticsConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -1482,7 +1482,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_cors(&self, _input: GetBucketCorsRequest) -> S3Result<GetBucketCorsOutput> {
+    async fn get_bucket_cors(&self, _input: GetBucketCorsInput) -> S3Result<GetBucketCorsOutput> {
         Err(s3_error!(NotImplemented, "GetBucketCors is not implemented yet"))
     }
 
@@ -1508,7 +1508,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_encryption(&self, _input: GetBucketEncryptionRequest) -> S3Result<GetBucketEncryptionOutput> {
+    async fn get_bucket_encryption(&self, _input: GetBucketEncryptionInput) -> S3Result<GetBucketEncryptionOutput> {
         Err(s3_error!(NotImplemented, "GetBucketEncryption is not implemented yet"))
     }
 
@@ -1537,7 +1537,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_bucket_intelligent_tiering_configuration(
         &self,
-        _input: GetBucketIntelligentTieringConfigurationRequest,
+        _input: GetBucketIntelligentTieringConfigurationInput,
     ) -> S3Result<GetBucketIntelligentTieringConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -1577,7 +1577,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_bucket_inventory_configuration(
         &self,
-        _input: GetBucketInventoryConfigurationRequest,
+        _input: GetBucketInventoryConfigurationInput,
     ) -> S3Result<GetBucketInventoryConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -1643,7 +1643,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_bucket_lifecycle_configuration(
         &self,
-        _input: GetBucketLifecycleConfigurationRequest,
+        _input: GetBucketLifecycleConfigurationInput,
     ) -> S3Result<GetBucketLifecycleConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -1672,7 +1672,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_location(&self, _input: GetBucketLocationRequest) -> S3Result<GetBucketLocationOutput> {
+    async fn get_bucket_location(&self, _input: GetBucketLocationInput) -> S3Result<GetBucketLocationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketLocation is not implemented yet"))
     }
 
@@ -1692,7 +1692,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_logging(&self, _input: GetBucketLoggingRequest) -> S3Result<GetBucketLoggingOutput> {
+    async fn get_bucket_logging(&self, _input: GetBucketLoggingInput) -> S3Result<GetBucketLoggingOutput> {
         Err(s3_error!(NotImplemented, "GetBucketLogging is not implemented yet"))
     }
 
@@ -1735,7 +1735,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_bucket_metrics_configuration(
         &self,
-        _input: GetBucketMetricsConfigurationRequest,
+        _input: GetBucketMetricsConfigurationInput,
     ) -> S3Result<GetBucketMetricsConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -1766,7 +1766,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_bucket_notification_configuration(
         &self,
-        _input: GetBucketNotificationConfigurationRequest,
+        _input: GetBucketNotificationConfigurationInput,
     ) -> S3Result<NotificationConfiguration> {
         Err(s3_error!(
             NotImplemented,
@@ -1794,7 +1794,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_bucket_ownership_controls(
         &self,
-        _input: GetBucketOwnershipControlsRequest,
+        _input: GetBucketOwnershipControlsInput,
     ) -> S3Result<GetBucketOwnershipControlsOutput> {
         Err(s3_error!(NotImplemented, "GetBucketOwnershipControls is not implemented yet"))
     }
@@ -1826,7 +1826,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_policy(&self, _input: GetBucketPolicyRequest) -> S3Result<GetBucketPolicyOutput> {
+    async fn get_bucket_policy(&self, _input: GetBucketPolicyInput) -> S3Result<GetBucketPolicyOutput> {
         Err(s3_error!(NotImplemented, "GetBucketPolicy is not implemented yet"))
     }
 
@@ -1861,7 +1861,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_policy_status(&self, _input: GetBucketPolicyStatusRequest) -> S3Result<GetBucketPolicyStatusOutput> {
+    async fn get_bucket_policy_status(&self, _input: GetBucketPolicyStatusInput) -> S3Result<GetBucketPolicyStatusOutput> {
         Err(s3_error!(NotImplemented, "GetBucketPolicyStatus is not implemented yet"))
     }
 
@@ -1900,7 +1900,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_replication(&self, _input: GetBucketReplicationRequest) -> S3Result<GetBucketReplicationOutput> {
+    async fn get_bucket_replication(&self, _input: GetBucketReplicationInput) -> S3Result<GetBucketReplicationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketReplication is not implemented yet"))
     }
 
@@ -1915,10 +1915,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_request_payment(
-        &self,
-        _input: GetBucketRequestPaymentRequest,
-    ) -> S3Result<GetBucketRequestPaymentOutput> {
+    async fn get_bucket_request_payment(&self, _input: GetBucketRequestPaymentInput) -> S3Result<GetBucketRequestPaymentOutput> {
         Err(s3_error!(NotImplemented, "GetBucketRequestPayment is not implemented yet"))
     }
 
@@ -1954,7 +1951,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_tagging(&self, _input: GetBucketTaggingRequest) -> S3Result<GetBucketTaggingOutput> {
+    async fn get_bucket_tagging(&self, _input: GetBucketTaggingInput) -> S3Result<GetBucketTaggingOutput> {
         Err(s3_error!(NotImplemented, "GetBucketTagging is not implemented yet"))
     }
 
@@ -1983,7 +1980,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_versioning(&self, _input: GetBucketVersioningRequest) -> S3Result<GetBucketVersioningOutput> {
+    async fn get_bucket_versioning(&self, _input: GetBucketVersioningInput) -> S3Result<GetBucketVersioningOutput> {
         Err(s3_error!(NotImplemented, "GetBucketVersioning is not implemented yet"))
     }
 
@@ -2008,7 +2005,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_website(&self, _input: GetBucketWebsiteRequest) -> S3Result<GetBucketWebsiteOutput> {
+    async fn get_bucket_website(&self, _input: GetBucketWebsiteInput) -> S3Result<GetBucketWebsiteOutput> {
         Err(s3_error!(NotImplemented, "GetBucketWebsite is not implemented yet"))
     }
 
@@ -2194,7 +2191,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object(&self, _input: GetObjectRequest) -> S3Result<GetObjectOutput> {
+    async fn get_object(&self, _input: GetObjectInput) -> S3Result<GetObjectOutput> {
         Err(s3_error!(NotImplemented, "GetObject is not implemented yet"))
     }
 
@@ -2239,7 +2236,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_acl(&self, _input: GetObjectAclRequest) -> S3Result<GetObjectAclOutput> {
+    async fn get_object_acl(&self, _input: GetObjectAclInput) -> S3Result<GetObjectAclOutput> {
         Err(s3_error!(NotImplemented, "GetObjectAcl is not implemented yet"))
     }
 
@@ -2399,7 +2396,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_attributes(&self, _input: GetObjectAttributesRequest) -> S3Result<GetObjectAttributesOutput> {
+    async fn get_object_attributes(&self, _input: GetObjectAttributesInput) -> S3Result<GetObjectAttributesOutput> {
         Err(s3_error!(NotImplemented, "GetObjectAttributes is not implemented yet"))
     }
 
@@ -2415,7 +2412,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_legal_hold(&self, _input: GetObjectLegalHoldRequest) -> S3Result<GetObjectLegalHoldOutput> {
+    async fn get_object_legal_hold(&self, _input: GetObjectLegalHoldInput) -> S3Result<GetObjectLegalHoldOutput> {
         Err(s3_error!(NotImplemented, "GetObjectLegalHold is not implemented yet"))
     }
 
@@ -2434,7 +2431,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn get_object_lock_configuration(
         &self,
-        _input: GetObjectLockConfigurationRequest,
+        _input: GetObjectLockConfigurationInput,
     ) -> S3Result<GetObjectLockConfigurationOutput> {
         Err(s3_error!(NotImplemented, "GetObjectLockConfiguration is not implemented yet"))
     }
@@ -2450,7 +2447,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_retention(&self, _input: GetObjectRetentionRequest) -> S3Result<GetObjectRetentionOutput> {
+    async fn get_object_retention(&self, _input: GetObjectRetentionInput) -> S3Result<GetObjectRetentionOutput> {
         Err(s3_error!(NotImplemented, "GetObjectRetention is not implemented yet"))
     }
 
@@ -2487,7 +2484,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_tagging(&self, _input: GetObjectTaggingRequest) -> S3Result<GetObjectTaggingOutput> {
+    async fn get_object_tagging(&self, _input: GetObjectTaggingInput) -> S3Result<GetObjectTaggingOutput> {
         Err(s3_error!(NotImplemented, "GetObjectTagging is not implemented yet"))
     }
 
@@ -2508,7 +2505,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_torrent(&self, _input: GetObjectTorrentRequest) -> S3Result<GetObjectTorrentOutput> {
+    async fn get_object_torrent(&self, _input: GetObjectTorrentInput) -> S3Result<GetObjectTorrentOutput> {
         Err(s3_error!(NotImplemented, "GetObjectTorrent is not implemented yet"))
     }
 
@@ -2552,7 +2549,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_public_access_block(&self, _input: GetPublicAccessBlockRequest) -> S3Result<GetPublicAccessBlockOutput> {
+    async fn get_public_access_block(&self, _input: GetPublicAccessBlockInput) -> S3Result<GetPublicAccessBlockOutput> {
         Err(s3_error!(NotImplemented, "GetPublicAccessBlock is not implemented yet"))
     }
 
@@ -2572,7 +2569,7 @@ pub trait S3: Send + Sync + 'static {
     ///
     ///
     /// <p>To use this API against an access point, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form AccessPointName-AccountId.s3-accesspoint.Region.amazonaws.com. When using the Amazon Web Services SDKs, you provide the ARN in place of the bucket name. For more information see, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a>.</p>
-    async fn head_bucket(&self, _input: HeadBucketRequest) -> S3Result {
+    async fn head_bucket(&self, _input: HeadBucketInput) -> S3Result {
         Err(s3_error!(NotImplemented, "HeadBucket is not implemented yet"))
     }
 
@@ -2693,7 +2690,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn head_object(&self, _input: HeadObjectRequest) -> S3Result<HeadObjectOutput> {
+    async fn head_object(&self, _input: HeadObjectInput) -> S3Result<HeadObjectOutput> {
         Err(s3_error!(NotImplemented, "HeadObject is not implemented yet"))
     }
 
@@ -2739,7 +2736,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn list_bucket_analytics_configurations(
         &self,
-        _input: ListBucketAnalyticsConfigurationsRequest,
+        _input: ListBucketAnalyticsConfigurationsInput,
     ) -> S3Result<ListBucketAnalyticsConfigurationsOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -2772,7 +2769,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn list_bucket_intelligent_tiering_configurations(
         &self,
-        _input: ListBucketIntelligentTieringConfigurationsRequest,
+        _input: ListBucketIntelligentTieringConfigurationsInput,
     ) -> S3Result<ListBucketIntelligentTieringConfigurationsOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -2821,7 +2818,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn list_bucket_inventory_configurations(
         &self,
-        _input: ListBucketInventoryConfigurationsRequest,
+        _input: ListBucketInventoryConfigurationsInput,
     ) -> S3Result<ListBucketInventoryConfigurationsOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -2872,7 +2869,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn list_bucket_metrics_configurations(
         &self,
-        _input: ListBucketMetricsConfigurationsRequest,
+        _input: ListBucketMetricsConfigurationsInput,
     ) -> S3Result<ListBucketMetricsConfigurationsOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -2937,7 +2934,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_multipart_uploads(&self, _input: ListMultipartUploadsRequest) -> S3Result<ListMultipartUploadsOutput> {
+    async fn list_multipart_uploads(&self, _input: ListMultipartUploadsInput) -> S3Result<ListMultipartUploadsOutput> {
         Err(s3_error!(NotImplemented, "ListMultipartUploads is not implemented yet"))
     }
 
@@ -2980,7 +2977,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_object_versions(&self, _input: ListObjectVersionsRequest) -> S3Result<ListObjectVersionsOutput> {
+    async fn list_object_versions(&self, _input: ListObjectVersionsInput) -> S3Result<ListObjectVersionsOutput> {
         Err(s3_error!(NotImplemented, "ListObjectVersions is not implemented yet"))
     }
 
@@ -3022,7 +3019,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_objects(&self, _input: ListObjectsRequest) -> S3Result<ListObjectsOutput> {
+    async fn list_objects(&self, _input: ListObjectsInput) -> S3Result<ListObjectsOutput> {
         Err(s3_error!(NotImplemented, "ListObjects is not implemented yet"))
     }
 
@@ -3068,7 +3065,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_objects_v2(&self, _input: ListObjectsV2Request) -> S3Result<ListObjectsV2Output> {
+    async fn list_objects_v2(&self, _input: ListObjectsV2Input) -> S3Result<ListObjectsV2Output> {
         Err(s3_error!(NotImplemented, "ListObjectsV2 is not implemented yet"))
     }
 
@@ -3125,7 +3122,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_parts(&self, _input: ListPartsRequest) -> S3Result<ListPartsOutput> {
+    async fn list_parts(&self, _input: ListPartsInput) -> S3Result<ListPartsOutput> {
         Err(s3_error!(NotImplemented, "ListParts is not implemented yet"))
     }
 
@@ -3175,7 +3172,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_accelerate_configuration(&self, _input: PutBucketAccelerateConfigurationRequest) -> S3Result {
+    async fn put_bucket_accelerate_configuration(&self, _input: PutBucketAccelerateConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "PutBucketAccelerateConfiguration is not implemented yet"
@@ -3378,7 +3375,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_acl(&self, _input: PutBucketAclRequest) -> S3Result {
+    async fn put_bucket_acl(&self, _input: PutBucketAclInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketAcl is not implemented yet"))
     }
 
@@ -3498,7 +3495,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_analytics_configuration(&self, _input: PutBucketAnalyticsConfigurationRequest) -> S3Result {
+    async fn put_bucket_analytics_configuration(&self, _input: PutBucketAnalyticsConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "PutBucketAnalyticsConfiguration is not implemented yet"
@@ -3562,7 +3559,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_cors(&self, _input: PutBucketCorsRequest) -> S3Result {
+    async fn put_bucket_cors(&self, _input: PutBucketCorsInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketCors is not implemented yet"))
     }
 
@@ -3601,7 +3598,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_encryption(&self, _input: PutBucketEncryptionRequest) -> S3Result {
+    async fn put_bucket_encryption(&self, _input: PutBucketEncryptionInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketEncryption is not implemented yet"))
     }
 
@@ -3690,7 +3687,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     async fn put_bucket_intelligent_tiering_configuration(
         &self,
-        _input: PutBucketIntelligentTieringConfigurationRequest,
+        _input: PutBucketIntelligentTieringConfigurationInput,
     ) -> S3Result {
         Err(s3_error!(
             NotImplemented,
@@ -3799,7 +3796,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_inventory_configuration(&self, _input: PutBucketInventoryConfigurationRequest) -> S3Result {
+    async fn put_bucket_inventory_configuration(&self, _input: PutBucketInventoryConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "PutBucketInventoryConfiguration is not implemented yet"
@@ -3909,7 +3906,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_lifecycle_configuration(&self, _input: PutBucketLifecycleConfigurationRequest) -> S3Result {
+    async fn put_bucket_lifecycle_configuration(&self, _input: PutBucketLifecycleConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "PutBucketLifecycleConfiguration is not implemented yet"
@@ -4001,7 +3998,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_logging(&self, _input: PutBucketLoggingRequest) -> S3Result {
+    async fn put_bucket_logging(&self, _input: PutBucketLoggingInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketLogging is not implemented yet"))
     }
 
@@ -4056,7 +4053,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     /// </li>
     /// </ul>
-    async fn put_bucket_metrics_configuration(&self, _input: PutBucketMetricsConfigurationRequest) -> S3Result {
+    async fn put_bucket_metrics_configuration(&self, _input: PutBucketMetricsConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "PutBucketMetricsConfiguration is not implemented yet"
@@ -4126,7 +4123,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_notification_configuration(&self, _input: PutBucketNotificationConfigurationRequest) -> S3Result {
+    async fn put_bucket_notification_configuration(&self, _input: PutBucketNotificationConfigurationInput) -> S3Result {
         Err(s3_error!(
             NotImplemented,
             "PutBucketNotificationConfiguration is not implemented yet"
@@ -4150,7 +4147,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_ownership_controls(&self, _input: PutBucketOwnershipControlsRequest) -> S3Result {
+    async fn put_bucket_ownership_controls(&self, _input: PutBucketOwnershipControlsInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketOwnershipControls is not implemented yet"))
     }
 
@@ -4184,7 +4181,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_policy(&self, _input: PutBucketPolicyRequest) -> S3Result {
+    async fn put_bucket_policy(&self, _input: PutBucketPolicyInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketPolicy is not implemented yet"))
     }
 
@@ -4258,7 +4255,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_replication(&self, _input: PutBucketReplicationRequest) -> S3Result {
+    async fn put_bucket_replication(&self, _input: PutBucketReplicationInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketReplication is not implemented yet"))
     }
 
@@ -4281,7 +4278,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_request_payment(&self, _input: PutBucketRequestPaymentRequest) -> S3Result {
+    async fn put_bucket_request_payment(&self, _input: PutBucketRequestPaymentInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketRequestPayment is not implemented yet"))
     }
 
@@ -4364,7 +4361,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_tagging(&self, _input: PutBucketTaggingRequest) -> S3Result {
+    async fn put_bucket_tagging(&self, _input: PutBucketTaggingInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketTagging is not implemented yet"))
     }
 
@@ -4417,7 +4414,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_versioning(&self, _input: PutBucketVersioningRequest) -> S3Result {
+    async fn put_bucket_versioning(&self, _input: PutBucketVersioningInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketVersioning is not implemented yet"))
     }
 
@@ -4547,7 +4544,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Amazon S3 has a limitation of 50 routing rules per website configuration. If you require more
     /// than 50 routing rules, you can use object redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html">Configuring an
     /// Object Redirect</a> in the <i>Amazon S3 User Guide</i>.</p>
-    async fn put_bucket_website(&self, _input: PutBucketWebsiteRequest) -> S3Result {
+    async fn put_bucket_website(&self, _input: PutBucketWebsiteInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutBucketWebsite is not implemented yet"))
     }
 
@@ -4658,7 +4655,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_object(&self, _input: PutObjectRequest) -> S3Result<PutObjectOutput> {
+    async fn put_object(&self, _input: PutObjectInput) -> S3Result<PutObjectOutput> {
         Err(s3_error!(NotImplemented, "PutObject is not implemented yet"))
     }
 
@@ -4844,7 +4841,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_object_acl(&self, _input: PutObjectAclRequest) -> S3Result<PutObjectAclOutput> {
+    async fn put_object_acl(&self, _input: PutObjectAclInput) -> S3Result<PutObjectAclOutput> {
         Err(s3_error!(NotImplemented, "PutObjectAcl is not implemented yet"))
     }
 
@@ -4852,7 +4849,7 @@ pub trait S3: Send + Sync + 'static {
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking
     /// Objects</a>.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
-    async fn put_object_legal_hold(&self, _input: PutObjectLegalHoldRequest) -> S3Result<PutObjectLegalHoldOutput> {
+    async fn put_object_legal_hold(&self, _input: PutObjectLegalHoldInput) -> S3Result<PutObjectLegalHoldOutput> {
         Err(s3_error!(NotImplemented, "PutObjectLegalHold is not implemented yet"))
     }
 
@@ -4879,7 +4876,7 @@ pub trait S3: Send + Sync + 'static {
     /// </note>
     async fn put_object_lock_configuration(
         &self,
-        _input: PutObjectLockConfigurationRequest,
+        _input: PutObjectLockConfigurationInput,
     ) -> S3Result<PutObjectLockConfigurationOutput> {
         Err(s3_error!(NotImplemented, "PutObjectLockConfiguration is not implemented yet"))
     }
@@ -4890,7 +4887,7 @@ pub trait S3: Send + Sync + 'static {
     /// requires the <code>s3:BypassGovernanceRetention</code> permission.
     /// </p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
-    async fn put_object_retention(&self, _input: PutObjectRetentionRequest) -> S3Result<PutObjectRetentionOutput> {
+    async fn put_object_retention(&self, _input: PutObjectRetentionInput) -> S3Result<PutObjectRetentionOutput> {
         Err(s3_error!(NotImplemented, "PutObjectRetention is not implemented yet"))
     }
 
@@ -4998,7 +4995,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_object_tagging(&self, _input: PutObjectTaggingRequest) -> S3Result<PutObjectTaggingOutput> {
+    async fn put_object_tagging(&self, _input: PutObjectTaggingInput) -> S3Result<PutObjectTaggingOutput> {
         Err(s3_error!(NotImplemented, "PutObjectTagging is not implemented yet"))
     }
 
@@ -5047,7 +5044,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_public_access_block(&self, _input: PutPublicAccessBlockRequest) -> S3Result {
+    async fn put_public_access_block(&self, _input: PutPublicAccessBlockInput) -> S3Result {
         Err(s3_error!(NotImplemented, "PutPublicAccessBlock is not implemented yet"))
     }
 
@@ -5336,7 +5333,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn restore_object(&self, _input: RestoreObjectRequest) -> S3Result<RestoreObjectOutput> {
+    async fn restore_object(&self, _input: RestoreObjectInput) -> S3Result<RestoreObjectOutput> {
         Err(s3_error!(NotImplemented, "RestoreObject is not implemented yet"))
     }
 
@@ -5478,7 +5475,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn upload_part(&self, _input: UploadPartRequest) -> S3Result<UploadPartOutput> {
+    async fn upload_part(&self, _input: UploadPartInput) -> S3Result<UploadPartOutput> {
         Err(s3_error!(NotImplemented, "UploadPart is not implemented yet"))
     }
 
@@ -5659,7 +5656,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn upload_part_copy(&self, _input: UploadPartCopyRequest) -> S3Result<UploadPartCopyOutput> {
+    async fn upload_part_copy(&self, _input: UploadPartCopyInput) -> S3Result<UploadPartCopyOutput> {
         Err(s3_error!(NotImplemented, "UploadPartCopy is not implemented yet"))
     }
 
@@ -5686,7 +5683,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Example 2: PII Redaction - This Lambda function uses Amazon Comprehend, a natural language processing (NLP) service using machine learning to find insights and relationships in text. It automatically redacts personally identifiable information (PII) such as names, addresses, dates, credit card numbers, and social security numbers from documents in your Amazon S3 bucket. </p>
     /// <p>Example 3: Decompression - The Lambda function S3ObjectLambdaDecompression, is equipped to decompress objects stored in S3 in one of six compressed file formats including bzip2, gzip, snappy, zlib, zstandard and ZIP. </p>
     /// <p>For information on how to view and use these functions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-examples.html">Using Amazon Web Services built Lambda functions</a> in the <i>Amazon S3 User Guide</i>.</p>
-    async fn write_get_object_response(&self, _input: WriteGetObjectResponseRequest) -> S3Result {
+    async fn write_get_object_response(&self, _input: WriteGetObjectResponseInput) -> S3Result {
         Err(s3_error!(NotImplemented, "WriteGetObjectResponse is not implemented yet"))
     }
 }
@@ -11894,7 +11891,7 @@ impl http::TryFromHeaderValue for TaggingDirective {
 }
 
 impl AbortMultipartUpload {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<AbortMultipartUploadRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<AbortMultipartUploadInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -11903,7 +11900,7 @@ impl AbortMultipartUpload {
 
         let upload_id: MultipartUploadId = http::parse_query(req, "uploadId")?;
 
-        Ok(AbortMultipartUploadRequest {
+        Ok(AbortMultipartUploadInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -11921,7 +11918,7 @@ impl AbortMultipartUpload {
 }
 
 impl CompleteMultipartUpload {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CompleteMultipartUploadRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CompleteMultipartUploadInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let checksum_crc32: Option<ChecksumCRC32> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC32)?;
@@ -11948,7 +11945,7 @@ impl CompleteMultipartUpload {
 
         let upload_id: MultipartUploadId = http::parse_query(req, "uploadId")?;
 
-        Ok(CompleteMultipartUploadRequest {
+        Ok(CompleteMultipartUploadInput {
             bucket,
             checksum_crc32,
             checksum_crc32c,
@@ -11983,7 +11980,7 @@ impl CompleteMultipartUpload {
 }
 
 impl CopyObject {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CopyObjectRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CopyObjectInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let acl: Option<ObjectCannedACL> = http::parse_opt_header(req, &X_AMZ_ACL)?;
@@ -12077,7 +12074,7 @@ impl CopyObject {
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_opt_header(req, &X_AMZ_WEBSITE_REDIRECT_LOCATION)?;
 
-        Ok(CopyObjectRequest {
+        Ok(CopyObjectInput {
             acl,
             bucket,
             bucket_key_enabled,
@@ -12154,7 +12151,7 @@ impl CopyObject {
 }
 
 impl CreateBucket {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CreateBucketRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CreateBucketInput> {
         let bucket = http::unwrap_bucket(req);
 
         let acl: Option<BucketCannedACL> = http::parse_opt_header(req, &X_AMZ_ACL)?;
@@ -12176,7 +12173,7 @@ impl CreateBucket {
 
         let object_ownership: Option<ObjectOwnership> = http::parse_opt_header(req, &X_AMZ_OBJECT_OWNERSHIP)?;
 
-        Ok(CreateBucketRequest {
+        Ok(CreateBucketInput {
             acl,
             bucket,
             create_bucket_configuration,
@@ -12198,7 +12195,7 @@ impl CreateBucket {
 }
 
 impl CreateMultipartUpload {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CreateMultipartUploadRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CreateMultipartUploadInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let acl: Option<ObjectCannedACL> = http::parse_opt_header(req, &X_AMZ_ACL)?;
@@ -12264,7 +12261,7 @@ impl CreateMultipartUpload {
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_opt_header(req, &X_AMZ_WEBSITE_REDIRECT_LOCATION)?;
 
-        Ok(CreateMultipartUploadRequest {
+        Ok(CreateMultipartUploadInput {
             acl,
             bucket,
             bucket_key_enabled,
@@ -12328,12 +12325,12 @@ impl CreateMultipartUpload {
 }
 
 impl DeleteBucket {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketRequest {
+        Ok(DeleteBucketInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12347,14 +12344,14 @@ impl DeleteBucket {
 }
 
 impl DeleteBucketAnalyticsConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketAnalyticsConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketAnalyticsConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
         let id: AnalyticsId = http::parse_query(req, "id")?;
 
-        Ok(DeleteBucketAnalyticsConfigurationRequest {
+        Ok(DeleteBucketAnalyticsConfigurationInput {
             bucket,
             expected_bucket_owner,
             id,
@@ -12369,12 +12366,12 @@ impl DeleteBucketAnalyticsConfiguration {
 }
 
 impl DeleteBucketCors {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketCorsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketCorsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketCorsRequest {
+        Ok(DeleteBucketCorsInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12388,12 +12385,12 @@ impl DeleteBucketCors {
 }
 
 impl DeleteBucketEncryption {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketEncryptionRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketEncryptionInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketEncryptionRequest {
+        Ok(DeleteBucketEncryptionInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12407,12 +12404,12 @@ impl DeleteBucketEncryption {
 }
 
 impl DeleteBucketIntelligentTieringConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketIntelligentTieringConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketIntelligentTieringConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let id: IntelligentTieringId = http::parse_query(req, "id")?;
 
-        Ok(DeleteBucketIntelligentTieringConfigurationRequest { bucket, id })
+        Ok(DeleteBucketIntelligentTieringConfigurationInput { bucket, id })
     }
 
     pub fn serialize_http() -> http::Response {
@@ -12423,14 +12420,14 @@ impl DeleteBucketIntelligentTieringConfiguration {
 }
 
 impl DeleteBucketInventoryConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketInventoryConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketInventoryConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
         let id: InventoryId = http::parse_query(req, "id")?;
 
-        Ok(DeleteBucketInventoryConfigurationRequest {
+        Ok(DeleteBucketInventoryConfigurationInput {
             bucket,
             expected_bucket_owner,
             id,
@@ -12445,12 +12442,12 @@ impl DeleteBucketInventoryConfiguration {
 }
 
 impl DeleteBucketLifecycle {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketLifecycleRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketLifecycleInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketLifecycleRequest {
+        Ok(DeleteBucketLifecycleInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12464,14 +12461,14 @@ impl DeleteBucketLifecycle {
 }
 
 impl DeleteBucketMetricsConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketMetricsConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketMetricsConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
         let id: MetricsId = http::parse_query(req, "id")?;
 
-        Ok(DeleteBucketMetricsConfigurationRequest {
+        Ok(DeleteBucketMetricsConfigurationInput {
             bucket,
             expected_bucket_owner,
             id,
@@ -12486,12 +12483,12 @@ impl DeleteBucketMetricsConfiguration {
 }
 
 impl DeleteBucketOwnershipControls {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketOwnershipControlsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketOwnershipControlsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketOwnershipControlsRequest {
+        Ok(DeleteBucketOwnershipControlsInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12505,12 +12502,12 @@ impl DeleteBucketOwnershipControls {
 }
 
 impl DeleteBucketPolicy {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketPolicyRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketPolicyInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketPolicyRequest {
+        Ok(DeleteBucketPolicyInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12524,12 +12521,12 @@ impl DeleteBucketPolicy {
 }
 
 impl DeleteBucketReplication {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketReplicationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketReplicationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketReplicationRequest {
+        Ok(DeleteBucketReplicationInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12543,12 +12540,12 @@ impl DeleteBucketReplication {
 }
 
 impl DeleteBucketTagging {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketTaggingRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketTaggingInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketTaggingRequest {
+        Ok(DeleteBucketTaggingInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12562,12 +12559,12 @@ impl DeleteBucketTagging {
 }
 
 impl DeleteBucketWebsite {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketWebsiteRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketWebsiteInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeleteBucketWebsiteRequest {
+        Ok(DeleteBucketWebsiteInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12581,7 +12578,7 @@ impl DeleteBucketWebsite {
 }
 
 impl DeleteObject {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let bypass_governance_retention: BypassGovernanceRetention =
@@ -12595,7 +12592,7 @@ impl DeleteObject {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(DeleteObjectRequest {
+        Ok(DeleteObjectInput {
             bucket,
             bypass_governance_retention,
             expected_bucket_owner,
@@ -12617,14 +12614,14 @@ impl DeleteObject {
 }
 
 impl DeleteObjectTagging {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectTaggingRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectTaggingInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(DeleteObjectTaggingRequest {
+        Ok(DeleteObjectTaggingInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -12641,7 +12638,7 @@ impl DeleteObjectTagging {
 }
 
 impl DeleteObjects {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let bypass_governance_retention: BypassGovernanceRetention =
@@ -12657,7 +12654,7 @@ impl DeleteObjects {
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
 
-        Ok(DeleteObjectsRequest {
+        Ok(DeleteObjectsInput {
             bucket,
             bypass_governance_retention,
             checksum_algorithm,
@@ -12677,12 +12674,12 @@ impl DeleteObjects {
 }
 
 impl DeletePublicAccessBlock {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeletePublicAccessBlockRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeletePublicAccessBlockInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(DeletePublicAccessBlockRequest {
+        Ok(DeletePublicAccessBlockInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12696,12 +12693,12 @@ impl DeletePublicAccessBlock {
 }
 
 impl GetBucketAccelerateConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAccelerateConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAccelerateConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketAccelerateConfigurationRequest {
+        Ok(GetBucketAccelerateConfigurationInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12715,12 +12712,12 @@ impl GetBucketAccelerateConfiguration {
 }
 
 impl GetBucketAcl {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAclRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAclInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketAclRequest {
+        Ok(GetBucketAclInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12734,14 +12731,14 @@ impl GetBucketAcl {
 }
 
 impl GetBucketAnalyticsConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAnalyticsConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAnalyticsConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
         let id: AnalyticsId = http::parse_query(req, "id")?;
 
-        Ok(GetBucketAnalyticsConfigurationRequest {
+        Ok(GetBucketAnalyticsConfigurationInput {
             bucket,
             expected_bucket_owner,
             id,
@@ -12758,12 +12755,12 @@ impl GetBucketAnalyticsConfiguration {
 }
 
 impl GetBucketCors {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketCorsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketCorsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketCorsRequest {
+        Ok(GetBucketCorsInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12777,12 +12774,12 @@ impl GetBucketCors {
 }
 
 impl GetBucketEncryption {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketEncryptionRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketEncryptionInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketEncryptionRequest {
+        Ok(GetBucketEncryptionInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12798,12 +12795,12 @@ impl GetBucketEncryption {
 }
 
 impl GetBucketIntelligentTieringConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketIntelligentTieringConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketIntelligentTieringConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let id: IntelligentTieringId = http::parse_query(req, "id")?;
 
-        Ok(GetBucketIntelligentTieringConfigurationRequest { bucket, id })
+        Ok(GetBucketIntelligentTieringConfigurationInput { bucket, id })
     }
 
     pub fn serialize_http(x: GetBucketIntelligentTieringConfigurationOutput) -> S3Result<http::Response> {
@@ -12816,14 +12813,14 @@ impl GetBucketIntelligentTieringConfiguration {
 }
 
 impl GetBucketInventoryConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketInventoryConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketInventoryConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
         let id: InventoryId = http::parse_query(req, "id")?;
 
-        Ok(GetBucketInventoryConfigurationRequest {
+        Ok(GetBucketInventoryConfigurationInput {
             bucket,
             expected_bucket_owner,
             id,
@@ -12840,12 +12837,12 @@ impl GetBucketInventoryConfiguration {
 }
 
 impl GetBucketLifecycleConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLifecycleConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLifecycleConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketLifecycleConfigurationRequest {
+        Ok(GetBucketLifecycleConfigurationInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12859,12 +12856,12 @@ impl GetBucketLifecycleConfiguration {
 }
 
 impl GetBucketLocation {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLocationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLocationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketLocationRequest {
+        Ok(GetBucketLocationInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12878,12 +12875,12 @@ impl GetBucketLocation {
 }
 
 impl GetBucketLogging {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLoggingRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLoggingInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketLoggingRequest {
+        Ok(GetBucketLoggingInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12897,14 +12894,14 @@ impl GetBucketLogging {
 }
 
 impl GetBucketMetricsConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketMetricsConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketMetricsConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
         let id: MetricsId = http::parse_query(req, "id")?;
 
-        Ok(GetBucketMetricsConfigurationRequest {
+        Ok(GetBucketMetricsConfigurationInput {
             bucket,
             expected_bucket_owner,
             id,
@@ -12921,12 +12918,12 @@ impl GetBucketMetricsConfiguration {
 }
 
 impl GetBucketNotificationConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketNotificationConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketNotificationConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketNotificationConfigurationRequest {
+        Ok(GetBucketNotificationConfigurationInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12940,12 +12937,12 @@ impl GetBucketNotificationConfiguration {
 }
 
 impl GetBucketOwnershipControls {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketOwnershipControlsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketOwnershipControlsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketOwnershipControlsRequest {
+        Ok(GetBucketOwnershipControlsInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12961,12 +12958,12 @@ impl GetBucketOwnershipControls {
 }
 
 impl GetBucketPolicy {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketPolicyRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketPolicyInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketPolicyRequest {
+        Ok(GetBucketPolicyInput {
             bucket,
             expected_bucket_owner,
         })
@@ -12982,12 +12979,12 @@ impl GetBucketPolicy {
 }
 
 impl GetBucketPolicyStatus {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketPolicyStatusRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketPolicyStatusInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketPolicyStatusRequest {
+        Ok(GetBucketPolicyStatusInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13003,12 +13000,12 @@ impl GetBucketPolicyStatus {
 }
 
 impl GetBucketReplication {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketReplicationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketReplicationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketReplicationRequest {
+        Ok(GetBucketReplicationInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13024,12 +13021,12 @@ impl GetBucketReplication {
 }
 
 impl GetBucketRequestPayment {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketRequestPaymentRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketRequestPaymentInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketRequestPaymentRequest {
+        Ok(GetBucketRequestPaymentInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13043,12 +13040,12 @@ impl GetBucketRequestPayment {
 }
 
 impl GetBucketTagging {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketTaggingRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketTaggingInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketTaggingRequest {
+        Ok(GetBucketTaggingInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13062,12 +13059,12 @@ impl GetBucketTagging {
 }
 
 impl GetBucketVersioning {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketVersioningRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketVersioningInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketVersioningRequest {
+        Ok(GetBucketVersioningInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13081,12 +13078,12 @@ impl GetBucketVersioning {
 }
 
 impl GetBucketWebsite {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketWebsiteRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketWebsiteInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetBucketWebsiteRequest {
+        Ok(GetBucketWebsiteInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13100,7 +13097,7 @@ impl GetBucketWebsite {
 }
 
 impl GetObject {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let checksum_mode: Option<ChecksumMode> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_MODE)?;
@@ -13147,7 +13144,7 @@ impl GetObject {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(GetObjectRequest {
+        Ok(GetObjectInput {
             bucket,
             checksum_mode,
             expected_bucket_owner,
@@ -13234,7 +13231,7 @@ impl GetObject {
 }
 
 impl GetObjectAcl {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectAclRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectAclInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -13243,7 +13240,7 @@ impl GetObjectAcl {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(GetObjectAclRequest {
+        Ok(GetObjectAclInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -13261,7 +13258,7 @@ impl GetObjectAcl {
 }
 
 impl GetObjectAttributes {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectAttributesRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectAttributesInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -13284,7 +13281,7 @@ impl GetObjectAttributes {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(GetObjectAttributesRequest {
+        Ok(GetObjectAttributesInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -13311,7 +13308,7 @@ impl GetObjectAttributes {
 }
 
 impl GetObjectLegalHold {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectLegalHoldRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectLegalHoldInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -13320,7 +13317,7 @@ impl GetObjectLegalHold {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(GetObjectLegalHoldRequest {
+        Ok(GetObjectLegalHoldInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -13339,12 +13336,12 @@ impl GetObjectLegalHold {
 }
 
 impl GetObjectLockConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectLockConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectLockConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetObjectLockConfigurationRequest {
+        Ok(GetObjectLockConfigurationInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13360,7 +13357,7 @@ impl GetObjectLockConfiguration {
 }
 
 impl GetObjectRetention {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectRetentionRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectRetentionInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -13369,7 +13366,7 @@ impl GetObjectRetention {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(GetObjectRetentionRequest {
+        Ok(GetObjectRetentionInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -13388,7 +13385,7 @@ impl GetObjectRetention {
 }
 
 impl GetObjectTagging {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectTaggingRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectTaggingInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -13397,7 +13394,7 @@ impl GetObjectTagging {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(GetObjectTaggingRequest {
+        Ok(GetObjectTaggingInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -13415,14 +13412,14 @@ impl GetObjectTagging {
 }
 
 impl GetObjectTorrent {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectTorrentRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectTorrentInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
 
-        Ok(GetObjectTorrentRequest {
+        Ok(GetObjectTorrentInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -13441,12 +13438,12 @@ impl GetObjectTorrent {
 }
 
 impl GetPublicAccessBlock {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetPublicAccessBlockRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetPublicAccessBlockInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(GetPublicAccessBlockRequest {
+        Ok(GetPublicAccessBlockInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13462,12 +13459,12 @@ impl GetPublicAccessBlock {
 }
 
 impl HeadBucket {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<HeadBucketRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<HeadBucketInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(HeadBucketRequest {
+        Ok(HeadBucketInput {
             bucket,
             expected_bucket_owner,
         })
@@ -13479,7 +13476,7 @@ impl HeadBucket {
 }
 
 impl HeadObject {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<HeadObjectRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<HeadObjectInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let checksum_mode: Option<ChecksumMode> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_MODE)?;
@@ -13512,7 +13509,7 @@ impl HeadObject {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(HeadObjectRequest {
+        Ok(HeadObjectInput {
             bucket,
             checksum_mode,
             expected_bucket_owner,
@@ -13589,14 +13586,14 @@ impl HeadObject {
 }
 
 impl ListBucketAnalyticsConfigurations {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketAnalyticsConfigurationsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketAnalyticsConfigurationsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let continuation_token: Option<Token> = http::parse_opt_query(req, "continuation-token")?;
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(ListBucketAnalyticsConfigurationsRequest {
+        Ok(ListBucketAnalyticsConfigurationsInput {
             bucket,
             continuation_token,
             expected_bucket_owner,
@@ -13611,12 +13608,12 @@ impl ListBucketAnalyticsConfigurations {
 }
 
 impl ListBucketIntelligentTieringConfigurations {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketIntelligentTieringConfigurationsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketIntelligentTieringConfigurationsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let continuation_token: Option<Token> = http::parse_opt_query(req, "continuation-token")?;
 
-        Ok(ListBucketIntelligentTieringConfigurationsRequest {
+        Ok(ListBucketIntelligentTieringConfigurationsInput {
             bucket,
             continuation_token,
         })
@@ -13630,14 +13627,14 @@ impl ListBucketIntelligentTieringConfigurations {
 }
 
 impl ListBucketInventoryConfigurations {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketInventoryConfigurationsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketInventoryConfigurationsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let continuation_token: Option<Token> = http::parse_opt_query(req, "continuation-token")?;
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(ListBucketInventoryConfigurationsRequest {
+        Ok(ListBucketInventoryConfigurationsInput {
             bucket,
             continuation_token,
             expected_bucket_owner,
@@ -13652,14 +13649,14 @@ impl ListBucketInventoryConfigurations {
 }
 
 impl ListBucketMetricsConfigurations {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketMetricsConfigurationsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketMetricsConfigurationsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let continuation_token: Option<Token> = http::parse_opt_query(req, "continuation-token")?;
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(ListBucketMetricsConfigurationsRequest {
+        Ok(ListBucketMetricsConfigurationsInput {
             bucket,
             continuation_token,
             expected_bucket_owner,
@@ -13682,7 +13679,7 @@ impl ListBuckets {
 }
 
 impl ListMultipartUploads {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListMultipartUploadsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListMultipartUploadsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let delimiter: Option<Delimiter> = http::parse_opt_query(req, "delimiter")?;
@@ -13699,7 +13696,7 @@ impl ListMultipartUploads {
 
         let upload_id_marker: Option<UploadIdMarker> = http::parse_opt_query(req, "upload-id-marker")?;
 
-        Ok(ListMultipartUploadsRequest {
+        Ok(ListMultipartUploadsInput {
             bucket,
             delimiter,
             encoding_type,
@@ -13719,7 +13716,7 @@ impl ListMultipartUploads {
 }
 
 impl ListObjectVersions {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectVersionsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectVersionsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let delimiter: Option<Delimiter> = http::parse_opt_query(req, "delimiter")?;
@@ -13736,7 +13733,7 @@ impl ListObjectVersions {
 
         let version_id_marker: Option<VersionIdMarker> = http::parse_opt_query(req, "version-id-marker")?;
 
-        Ok(ListObjectVersionsRequest {
+        Ok(ListObjectVersionsInput {
             bucket,
             delimiter,
             encoding_type,
@@ -13756,7 +13753,7 @@ impl ListObjectVersions {
 }
 
 impl ListObjects {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let delimiter: Option<Delimiter> = http::parse_opt_query(req, "delimiter")?;
@@ -13773,7 +13770,7 @@ impl ListObjects {
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
 
-        Ok(ListObjectsRequest {
+        Ok(ListObjectsInput {
             bucket,
             delimiter,
             encoding_type,
@@ -13793,7 +13790,7 @@ impl ListObjects {
 }
 
 impl ListObjectsV2 {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectsV2Request> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectsV2Input> {
         let bucket = http::unwrap_bucket(req);
 
         let continuation_token: Option<Token> = http::parse_opt_query(req, "continuation-token")?;
@@ -13814,7 +13811,7 @@ impl ListObjectsV2 {
 
         let start_after: Option<StartAfter> = http::parse_opt_query(req, "start-after")?;
 
-        Ok(ListObjectsV2Request {
+        Ok(ListObjectsV2Input {
             bucket,
             continuation_token,
             delimiter,
@@ -13836,7 +13833,7 @@ impl ListObjectsV2 {
 }
 
 impl ListParts {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListPartsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListPartsInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -13857,7 +13854,7 @@ impl ListParts {
 
         let upload_id: MultipartUploadId = http::parse_query(req, "uploadId")?;
 
-        Ok(ListPartsRequest {
+        Ok(ListPartsInput {
             bucket,
             expected_bucket_owner,
             key,
@@ -13882,7 +13879,7 @@ impl ListParts {
 }
 
 impl PutBucketAccelerateConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAccelerateConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAccelerateConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let accelerate_configuration: AccelerateConfiguration = http::take_xml_body(req)?;
@@ -13891,7 +13888,7 @@ impl PutBucketAccelerateConfiguration {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(PutBucketAccelerateConfigurationRequest {
+        Ok(PutBucketAccelerateConfigurationInput {
             accelerate_configuration,
             bucket,
             checksum_algorithm,
@@ -13905,7 +13902,7 @@ impl PutBucketAccelerateConfiguration {
 }
 
 impl PutBucketAcl {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAclRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAclInput> {
         let bucket = http::unwrap_bucket(req);
 
         let acl: Option<BucketCannedACL> = http::parse_opt_header(req, &X_AMZ_ACL)?;
@@ -13928,7 +13925,7 @@ impl PutBucketAcl {
 
         let grant_write_acp: Option<GrantWriteACP> = http::parse_opt_header(req, &X_AMZ_GRANT_WRITE_ACP)?;
 
-        Ok(PutBucketAclRequest {
+        Ok(PutBucketAclInput {
             acl,
             access_control_policy,
             bucket,
@@ -13949,7 +13946,7 @@ impl PutBucketAcl {
 }
 
 impl PutBucketAnalyticsConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAnalyticsConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAnalyticsConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let analytics_configuration: AnalyticsConfiguration = http::take_xml_body(req)?;
@@ -13958,7 +13955,7 @@ impl PutBucketAnalyticsConfiguration {
 
         let id: AnalyticsId = http::parse_query(req, "id")?;
 
-        Ok(PutBucketAnalyticsConfigurationRequest {
+        Ok(PutBucketAnalyticsConfigurationInput {
             analytics_configuration,
             bucket,
             expected_bucket_owner,
@@ -13972,7 +13969,7 @@ impl PutBucketAnalyticsConfiguration {
 }
 
 impl PutBucketCors {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketCorsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketCorsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let cors_configuration: CORSConfiguration = http::take_xml_body(req)?;
@@ -13983,7 +13980,7 @@ impl PutBucketCors {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(PutBucketCorsRequest {
+        Ok(PutBucketCorsInput {
             bucket,
             cors_configuration,
             checksum_algorithm,
@@ -13998,7 +13995,7 @@ impl PutBucketCors {
 }
 
 impl PutBucketEncryption {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketEncryptionRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketEncryptionInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14009,7 +14006,7 @@ impl PutBucketEncryption {
 
         let server_side_encryption_configuration: ServerSideEncryptionConfiguration = http::take_xml_body(req)?;
 
-        Ok(PutBucketEncryptionRequest {
+        Ok(PutBucketEncryptionInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14024,14 +14021,14 @@ impl PutBucketEncryption {
 }
 
 impl PutBucketIntelligentTieringConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketIntelligentTieringConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketIntelligentTieringConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let id: IntelligentTieringId = http::parse_query(req, "id")?;
 
         let intelligent_tiering_configuration: IntelligentTieringConfiguration = http::take_xml_body(req)?;
 
-        Ok(PutBucketIntelligentTieringConfigurationRequest {
+        Ok(PutBucketIntelligentTieringConfigurationInput {
             bucket,
             id,
             intelligent_tiering_configuration,
@@ -14044,7 +14041,7 @@ impl PutBucketIntelligentTieringConfiguration {
 }
 
 impl PutBucketInventoryConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketInventoryConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketInventoryConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -14053,7 +14050,7 @@ impl PutBucketInventoryConfiguration {
 
         let inventory_configuration: InventoryConfiguration = http::take_xml_body(req)?;
 
-        Ok(PutBucketInventoryConfigurationRequest {
+        Ok(PutBucketInventoryConfigurationInput {
             bucket,
             expected_bucket_owner,
             id,
@@ -14067,7 +14064,7 @@ impl PutBucketInventoryConfiguration {
 }
 
 impl PutBucketLifecycleConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketLifecycleConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketLifecycleConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14076,7 +14073,7 @@ impl PutBucketLifecycleConfiguration {
 
         let lifecycle_configuration: Option<BucketLifecycleConfiguration> = http::take_opt_xml_body(req)?;
 
-        Ok(PutBucketLifecycleConfigurationRequest {
+        Ok(PutBucketLifecycleConfigurationInput {
             bucket,
             checksum_algorithm,
             expected_bucket_owner,
@@ -14090,7 +14087,7 @@ impl PutBucketLifecycleConfiguration {
 }
 
 impl PutBucketLogging {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketLoggingRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketLoggingInput> {
         let bucket = http::unwrap_bucket(req);
 
         let bucket_logging_status: BucketLoggingStatus = http::take_xml_body(req)?;
@@ -14101,7 +14098,7 @@ impl PutBucketLogging {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        Ok(PutBucketLoggingRequest {
+        Ok(PutBucketLoggingInput {
             bucket,
             bucket_logging_status,
             checksum_algorithm,
@@ -14116,7 +14113,7 @@ impl PutBucketLogging {
 }
 
 impl PutBucketMetricsConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketMetricsConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketMetricsConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -14125,7 +14122,7 @@ impl PutBucketMetricsConfiguration {
 
         let metrics_configuration: MetricsConfiguration = http::take_xml_body(req)?;
 
-        Ok(PutBucketMetricsConfigurationRequest {
+        Ok(PutBucketMetricsConfigurationInput {
             bucket,
             expected_bucket_owner,
             id,
@@ -14139,7 +14136,7 @@ impl PutBucketMetricsConfiguration {
 }
 
 impl PutBucketNotificationConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketNotificationConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketNotificationConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
@@ -14149,7 +14146,7 @@ impl PutBucketNotificationConfiguration {
         let skip_destination_validation: SkipValidation =
             http::parse_opt_header(req, &X_AMZ_SKIP_DESTINATION_VALIDATION)?.unwrap_or(false);
 
-        Ok(PutBucketNotificationConfigurationRequest {
+        Ok(PutBucketNotificationConfigurationInput {
             bucket,
             expected_bucket_owner,
             notification_configuration,
@@ -14163,7 +14160,7 @@ impl PutBucketNotificationConfiguration {
 }
 
 impl PutBucketOwnershipControls {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketOwnershipControlsRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketOwnershipControlsInput> {
         let bucket = http::unwrap_bucket(req);
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
@@ -14172,7 +14169,7 @@ impl PutBucketOwnershipControls {
 
         let ownership_controls: OwnershipControls = http::take_xml_body(req)?;
 
-        Ok(PutBucketOwnershipControlsRequest {
+        Ok(PutBucketOwnershipControlsInput {
             bucket,
             content_md5,
             expected_bucket_owner,
@@ -14186,7 +14183,7 @@ impl PutBucketOwnershipControls {
 }
 
 impl PutBucketPolicy {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketPolicyRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketPolicyInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14200,7 +14197,7 @@ impl PutBucketPolicy {
 
         let policy: Policy = http::take_string_body(req)?;
 
-        Ok(PutBucketPolicyRequest {
+        Ok(PutBucketPolicyInput {
             bucket,
             checksum_algorithm,
             confirm_remove_self_bucket_access,
@@ -14216,7 +14213,7 @@ impl PutBucketPolicy {
 }
 
 impl PutBucketReplication {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketReplicationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketReplicationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14229,7 +14226,7 @@ impl PutBucketReplication {
 
         let token: Option<ObjectLockToken> = http::parse_opt_header(req, &X_AMZ_BUCKET_OBJECT_LOCK_TOKEN)?;
 
-        Ok(PutBucketReplicationRequest {
+        Ok(PutBucketReplicationInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14245,7 +14242,7 @@ impl PutBucketReplication {
 }
 
 impl PutBucketRequestPayment {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketRequestPaymentRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketRequestPaymentInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14256,7 +14253,7 @@ impl PutBucketRequestPayment {
 
         let request_payment_configuration: RequestPaymentConfiguration = http::take_xml_body(req)?;
 
-        Ok(PutBucketRequestPaymentRequest {
+        Ok(PutBucketRequestPaymentInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14271,7 +14268,7 @@ impl PutBucketRequestPayment {
 }
 
 impl PutBucketTagging {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketTaggingRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketTaggingInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14282,7 +14279,7 @@ impl PutBucketTagging {
 
         let tagging: Tagging = http::take_xml_body(req)?;
 
-        Ok(PutBucketTaggingRequest {
+        Ok(PutBucketTaggingInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14297,7 +14294,7 @@ impl PutBucketTagging {
 }
 
 impl PutBucketVersioning {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketVersioningRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketVersioningInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14310,7 +14307,7 @@ impl PutBucketVersioning {
 
         let versioning_configuration: VersioningConfiguration = http::take_xml_body(req)?;
 
-        Ok(PutBucketVersioningRequest {
+        Ok(PutBucketVersioningInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14326,7 +14323,7 @@ impl PutBucketVersioning {
 }
 
 impl PutBucketWebsite {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketWebsiteRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketWebsiteInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14337,7 +14334,7 @@ impl PutBucketWebsite {
 
         let website_configuration: WebsiteConfiguration = http::take_xml_body(req)?;
 
-        Ok(PutBucketWebsiteRequest {
+        Ok(PutBucketWebsiteInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14352,7 +14349,7 @@ impl PutBucketWebsite {
 }
 
 impl PutObject {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectInput> {
         if let Some(m) = req.extensions_mut().remove::<http::Multipart>() {
             return Self::deserialize_http_multipart(req, m);
         }
@@ -14436,7 +14433,7 @@ impl PutObject {
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_opt_header(req, &X_AMZ_WEBSITE_REDIRECT_LOCATION)?;
 
-        Ok(PutObjectRequest {
+        Ok(PutObjectInput {
             acl,
             body,
             bucket,
@@ -14477,7 +14474,7 @@ impl PutObject {
         })
     }
 
-    pub fn deserialize_http_multipart(req: &mut http::Request, mut m: http::Multipart) -> S3Result<PutObjectRequest> {
+    pub fn deserialize_http_multipart(req: &mut http::Request, mut m: http::Multipart) -> S3Result<PutObjectInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let body: Option<StreamingBlob> = m.take_file_stream().map(StreamingBlob::wrap);
@@ -14572,7 +14569,7 @@ impl PutObject {
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_field_value(&m, "x-amz-website-redirect-location")?;
 
-        Ok(PutObjectRequest {
+        Ok(PutObjectInput {
             acl,
             body,
             bucket,
@@ -14646,7 +14643,7 @@ impl PutObject {
 }
 
 impl PutObjectAcl {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectAclRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectAclInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let acl: Option<ObjectCannedACL> = http::parse_opt_header(req, &X_AMZ_ACL)?;
@@ -14673,7 +14670,7 @@ impl PutObjectAcl {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(PutObjectAclRequest {
+        Ok(PutObjectAclInput {
             acl,
             access_control_policy,
             bucket,
@@ -14699,7 +14696,7 @@ impl PutObjectAcl {
 }
 
 impl PutObjectLegalHold {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectLegalHoldRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectLegalHoldInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14714,7 +14711,7 @@ impl PutObjectLegalHold {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(PutObjectLegalHoldRequest {
+        Ok(PutObjectLegalHoldInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14734,7 +14731,7 @@ impl PutObjectLegalHold {
 }
 
 impl PutObjectLockConfiguration {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectLockConfigurationRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectLockConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14749,7 +14746,7 @@ impl PutObjectLockConfiguration {
 
         let token: Option<ObjectLockToken> = http::parse_opt_header(req, &X_AMZ_BUCKET_OBJECT_LOCK_TOKEN)?;
 
-        Ok(PutObjectLockConfigurationRequest {
+        Ok(PutObjectLockConfigurationInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14768,7 +14765,7 @@ impl PutObjectLockConfiguration {
 }
 
 impl PutObjectRetention {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectRetentionRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectRetentionInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let bypass_governance_retention: BypassGovernanceRetention =
@@ -14786,7 +14783,7 @@ impl PutObjectRetention {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(PutObjectRetentionRequest {
+        Ok(PutObjectRetentionInput {
             bucket,
             bypass_governance_retention,
             checksum_algorithm,
@@ -14807,7 +14804,7 @@ impl PutObjectRetention {
 }
 
 impl PutObjectTagging {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectTaggingRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectTaggingInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14822,7 +14819,7 @@ impl PutObjectTagging {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(PutObjectTaggingRequest {
+        Ok(PutObjectTaggingInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14842,7 +14839,7 @@ impl PutObjectTagging {
 }
 
 impl PutPublicAccessBlock {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutPublicAccessBlockRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutPublicAccessBlockInput> {
         let bucket = http::unwrap_bucket(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14853,7 +14850,7 @@ impl PutPublicAccessBlock {
 
         let public_access_block_configuration: PublicAccessBlockConfiguration = http::take_xml_body(req)?;
 
-        Ok(PutPublicAccessBlockRequest {
+        Ok(PutPublicAccessBlockInput {
             bucket,
             checksum_algorithm,
             content_md5,
@@ -14868,7 +14865,7 @@ impl PutPublicAccessBlock {
 }
 
 impl RestoreObject {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<RestoreObjectRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<RestoreObjectInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
@@ -14881,7 +14878,7 @@ impl RestoreObject {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
 
-        Ok(RestoreObjectRequest {
+        Ok(RestoreObjectInput {
             bucket,
             checksum_algorithm,
             expected_bucket_owner,
@@ -14901,7 +14898,7 @@ impl RestoreObject {
 }
 
 impl UploadPart {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<UploadPartRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<UploadPartInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let body: Option<StreamingBlob> = Some(http::take_stream_body(req));
@@ -14936,7 +14933,7 @@ impl UploadPart {
 
         let upload_id: MultipartUploadId = http::parse_query(req, "uploadId")?;
 
-        Ok(UploadPartRequest {
+        Ok(UploadPartInput {
             body,
             bucket,
             checksum_algorithm,
@@ -14987,7 +14984,7 @@ impl UploadPart {
 }
 
 impl UploadPartCopy {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<UploadPartCopyRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<UploadPartCopyInput> {
         let (bucket, key) = http::unwrap_object(req);
 
         let copy_source: CopySource = http::parse_header(req, &X_AMZ_COPY_SOURCE)?;
@@ -15032,7 +15029,7 @@ impl UploadPartCopy {
 
         let upload_id: MultipartUploadId = http::parse_query(req, "uploadId")?;
 
-        Ok(UploadPartCopyRequest {
+        Ok(UploadPartCopyInput {
             bucket,
             copy_source,
             copy_source_if_match,
@@ -15084,7 +15081,7 @@ impl UploadPartCopy {
 }
 
 impl WriteGetObjectResponse {
-    pub fn deserialize_http(req: &mut http::Request) -> S3Result<WriteGetObjectResponseRequest> {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<WriteGetObjectResponseInput> {
         let accept_ranges: Option<AcceptRanges> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_ACCEPT_RANGES)?;
 
         let body: Option<StreamingBlob> = Some(http::take_stream_body(req));
@@ -15178,7 +15175,7 @@ impl WriteGetObjectResponse {
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_VERSION_ID)?;
 
-        Ok(WriteGetObjectResponseRequest {
+        Ok(WriteGetObjectResponseInput {
             accept_ranges,
             body,
             bucket_key_enabled,

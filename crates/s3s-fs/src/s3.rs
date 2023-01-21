@@ -27,7 +27,7 @@ use tracing::debug;
 #[async_trait::async_trait]
 impl S3 for FileSystem {
     #[tracing::instrument]
-    async fn create_bucket(&self, input: CreateBucketRequest) -> S3Result<CreateBucketOutput> {
+    async fn create_bucket(&self, input: CreateBucketInput) -> S3Result<CreateBucketOutput> {
         let path = self.get_bucket_path(&input.bucket)?;
 
         if path.exists() {
@@ -41,7 +41,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn copy_object(&self, input: CopyObjectRequest) -> S3Result<CopyObjectOutput> {
+    async fn copy_object(&self, input: CopyObjectInput) -> S3Result<CopyObjectOutput> {
         let (bucket, key) = match input.copy_source {
             CopySource::AccessPoint { .. } => return Err(s3_error!(NotImplemented)),
             CopySource::Bucket { ref bucket, ref key, .. } => (bucket, key),
@@ -79,14 +79,14 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn delete_bucket(&self, input: DeleteBucketRequest) -> S3Result {
+    async fn delete_bucket(&self, input: DeleteBucketInput) -> S3Result {
         let path = self.get_bucket_path(&input.bucket)?;
         try_!(fs::remove_dir_all(path).await);
         Ok(())
     }
 
     #[tracing::instrument]
-    async fn delete_object(&self, input: DeleteObjectRequest) -> S3Result<DeleteObjectOutput> {
+    async fn delete_object(&self, input: DeleteObjectInput) -> S3Result<DeleteObjectOutput> {
         let path = self.get_object_path(&input.bucket, &input.key)?;
         if input.key.ends_with('/') {
             let mut dir = try_!(fs::read_dir(&path).await);
@@ -102,7 +102,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn delete_objects(&self, input: DeleteObjectsRequest) -> S3Result<DeleteObjectsOutput> {
+    async fn delete_objects(&self, input: DeleteObjectsInput) -> S3Result<DeleteObjectsOutput> {
         let mut objects: Vec<(PathBuf, String)> = Vec::new();
         for object in input.delete.objects {
             let path = self.get_object_path(&input.bucket, &object.key)?;
@@ -127,7 +127,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn get_bucket_location(&self, input: GetBucketLocationRequest) -> S3Result<GetBucketLocationOutput> {
+    async fn get_bucket_location(&self, input: GetBucketLocationInput) -> S3Result<GetBucketLocationOutput> {
         let path = self.get_bucket_path(&input.bucket)?;
 
         if !path.exists() {
@@ -139,7 +139,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn get_object(&self, input: GetObjectRequest) -> S3Result<GetObjectOutput> {
+    async fn get_object(&self, input: GetObjectInput) -> S3Result<GetObjectOutput> {
         let object_path = self.get_object_path(&input.bucket, &input.key)?;
 
         let mut file = fs::File::open(&object_path).await.map_err(|e| s3_error!(e, NoSuchKey))?;
@@ -198,7 +198,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn head_bucket(&self, input: HeadBucketRequest) -> S3Result {
+    async fn head_bucket(&self, input: HeadBucketInput) -> S3Result {
         let path = self.get_bucket_path(&input.bucket)?;
 
         if !path.exists() {
@@ -209,7 +209,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn head_object(&self, input: HeadObjectRequest) -> S3Result<HeadObjectOutput> {
+    async fn head_object(&self, input: HeadObjectInput) -> S3Result<HeadObjectOutput> {
         let path = self.get_object_path(&input.bucket, &input.key)?;
 
         if !path.exists() {
@@ -266,7 +266,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn list_objects(&self, input: ListObjectsRequest) -> S3Result<ListObjectsOutput> {
+    async fn list_objects(&self, input: ListObjectsInput) -> S3Result<ListObjectsOutput> {
         let v2 = self.list_objects_v2(input.into()).await?;
 
         let mut output = ListObjectsOutput::default();
@@ -280,7 +280,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn list_objects_v2(&self, input: ListObjectsV2Request) -> S3Result<ListObjectsV2Output> {
+    async fn list_objects_v2(&self, input: ListObjectsV2Input) -> S3Result<ListObjectsV2Output> {
         let path = self.get_bucket_path(&input.bucket)?;
 
         if path.exists().not() {
@@ -342,7 +342,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn put_object(&self, input: PutObjectRequest) -> S3Result<PutObjectOutput> {
+    async fn put_object(&self, input: PutObjectInput) -> S3Result<PutObjectOutput> {
         if let Some(ref storage_class) = input.storage_class {
             let is_valid = ["STANDARD", "REDUCED_REDUNDANCY"].contains(&storage_class.as_str());
             if !is_valid {
@@ -350,7 +350,7 @@ impl S3 for FileSystem {
             }
         }
 
-        let PutObjectRequest {
+        let PutObjectInput {
             body,
             bucket,
             key,
@@ -402,7 +402,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn create_multipart_upload(&self, input: CreateMultipartUploadRequest) -> S3Result<CreateMultipartUploadOutput> {
+    async fn create_multipart_upload(&self, input: CreateMultipartUploadInput) -> S3Result<CreateMultipartUploadOutput> {
         let upload_id = uuid::Uuid::new_v4().to_string();
 
         let mut output = CreateMultipartUploadOutput::default();
@@ -414,8 +414,8 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn upload_part(&self, input: UploadPartRequest) -> S3Result<UploadPartOutput> {
-        let UploadPartRequest {
+    async fn upload_part(&self, input: UploadPartInput) -> S3Result<UploadPartOutput> {
+        let UploadPartInput {
             body,
             upload_id,
             part_number,
@@ -448,8 +448,8 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn complete_multipart_upload(&self, input: CompleteMultipartUploadRequest) -> S3Result<CompleteMultipartUploadOutput> {
-        let CompleteMultipartUploadRequest {
+    async fn complete_multipart_upload(&self, input: CompleteMultipartUploadInput) -> S3Result<CompleteMultipartUploadOutput> {
+        let CompleteMultipartUploadInput {
             multipart_upload,
             bucket,
             key,

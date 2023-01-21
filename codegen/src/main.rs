@@ -34,13 +34,13 @@ fn main() {
     };
     assert!(model.smithy == "2.0");
 
-    let rust_types = dto::collect_rust_types(&model);
     let ops = ops::collect_operations(&model);
+    let rust_types = dto::collect_rust_types(&model, &ops);
 
     {
         let path = "crates/s3s/src/dto/generated.rs";
         let mut gen = Codegen::create_file(path).unwrap();
-        dto::codegen(&rust_types, &ops, &mut gen);
+        dto::codegen(&rust_types, &mut gen);
     }
 
     {

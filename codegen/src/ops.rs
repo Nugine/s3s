@@ -37,15 +37,24 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
             continue; // TODO(further): impl SelectObjectContent
         }
 
-        let cvt = |sn| {
+        let input = {
+            let sn = sh.input.target.as_str();
             if sn == "smithy.api#Unit" {
-                "Unit"
+                o("Unit")
             } else {
-                dto::to_type_name(sn)
+                assert_eq!(dto::to_type_name(sn).strip_suffix("Request").unwrap(), name);
+                f!("{name}Input")
             }
         };
-        let input = o(cvt(&sh.input.target));
-        let output = o(cvt(&sh.output.target));
+
+        let output = {
+            let sn = sh.output.target.as_str();
+            if sn == "smithy.api#Unit" {
+                o("Unit")
+            } else {
+                o(dto::to_type_name(sn))
+            }
+        };
 
         let op = Operation {
             name: name.clone(),

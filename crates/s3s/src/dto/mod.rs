@@ -27,9 +27,9 @@ pub type Unit = ();
 #[error("ParseEnumError")]
 pub struct ParseEnumError(());
 
-impl From<ListObjectsRequest> for ListObjectsV2Request {
-    fn from(v1: ListObjectsRequest) -> Self {
-        let ListObjectsRequest {
+impl From<ListObjectsInput> for ListObjectsV2Input {
+    fn from(v1: ListObjectsInput) -> Self {
+        let ListObjectsInput {
             bucket,
             delimiter,
             encoding_type,

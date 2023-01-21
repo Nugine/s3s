@@ -16,7 +16,7 @@ pub fn to_type_name(shape_name: &str) -> &str {
 
 pub type RustTypes = BTreeMap<String, rust::Type>;
 
-pub fn collect_rust_types(model: &smithy::Model) -> RustTypes {
+pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes {
     let mut ans: BTreeMap<String, rust::Type> = default();
     let mut insert = |k: String, v: rust::Type| assert!(ans.insert(k, v).is_none());
 
@@ -119,6 +119,17 @@ pub fn collect_rust_types(model: &smithy::Model) -> RustTypes {
                 insert(name, ty);
             }
             smithy::Shape::Structure(shape) => {
+                let name = match name.strip_suffix("Request") {
+                    Some(op_name) => {
+                        if ops.contains_key(op_name) {
+                            f!("{op_name}Input")
+                        } else {
+                            name
+                        }
+                    }
+                    None => name,
+                };
+
                 let mut fields = Vec::new();
                 for (field_name, field) in &shape.members {
                     let name = if field_name == "Type" {
@@ -220,7 +231,7 @@ pub fn collect_rust_types(model: &smithy::Model) -> RustTypes {
     ans
 }
 
-pub fn codegen(rust_types: &RustTypes, _ops: &Operations, g: &mut Codegen) {
+pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
     let prelude = [
         "//! Auto-generated definitions",
         "#![allow(clippy::empty_structs_with_brackets)]",
