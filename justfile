@@ -7,7 +7,7 @@ dev:
     cargo test
 
 doc:
-    cargo doc --open --no-deps --all-features
+    RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc --open --no-deps --all-features
 
 download-model:
     ./scripts/download-model.sh

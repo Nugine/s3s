@@ -4,6 +4,7 @@
     clippy::must_use_candidate, //
     clippy::cargo, //
 )]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[macro_use]
 mod utils;
@@ -17,6 +18,10 @@ mod http;
 mod ops;
 mod signature_v4;
 mod xml;
+
+#[cfg(feature = "aws")]
+#[cfg_attr(docsrs, doc(cfg(feature = "aws")))]
+pub mod aws;
 
 pub mod dto;
 pub mod path;
