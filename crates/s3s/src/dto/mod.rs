@@ -16,6 +16,9 @@ pub use self::range::Range;
 mod content_type;
 pub use self::content_type::*;
 
+mod event;
+pub use self::event::Event;
+
 pub type List<T> = Vec<T>;
 pub type Map<K, V> = std::collections::HashMap<K, V>;
 

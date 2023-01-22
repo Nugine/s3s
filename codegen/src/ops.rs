@@ -223,7 +223,7 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 }
             }
             rust::Type::Provided(ty) => {
-                assert_eq!(ty.name, "Body");
+                assert!(matches!(ty.name.as_str(), "Body" | "Event"));
             }
             rust::Type::Map(_) => unimplemented!(),
             rust::Type::Timestamp(_) => {}
@@ -405,7 +405,9 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                     q.push_back(variant.type_.as_str());
                 }
             }
-            rust::Type::Provided(_) => unimplemented!(),
+            rust::Type::Provided(ty) => {
+                assert!(matches!(ty.name.as_str(), "Event"));
+            }
             rust::Type::Map(_) => unimplemented!(),
             rust::Type::Timestamp(_) => {}
         }
@@ -513,7 +515,9 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
             }
 
             rust::Type::Alias(_) => {}
-            rust::Type::Provided(_) => panic!(),
+            rust::Type::Provided(ty) => {
+                assert!(matches!(ty.name.as_str(), "Event"));
+            }
             rust::Type::List(_) => panic!(),
             rust::Type::Map(_) => panic!(),
             rust::Type::Timestamp(_) => {}

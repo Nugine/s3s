@@ -3814,9 +3814,6 @@ pub type ErrorMessage = String;
 
 pub type Errors = List<Error>;
 
-/// <p>The bucket event for which to send notifications.</p>
-pub type Event = String;
-
 /// <p>A container for specifying the configuration for Amazon EventBridge.</p>
 #[derive(Debug, Default)]
 pub struct EventBridgeConfiguration {}

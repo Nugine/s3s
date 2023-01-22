@@ -3,7 +3,7 @@
 //! See <https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#xml-shape-serialization>
 //!
 
-use crate::dto::{Timestamp, TimestampFormat};
+use crate::dto::{self, Timestamp, TimestampFormat};
 use crate::utils;
 
 use std::fmt;
@@ -158,6 +158,12 @@ impl SerializeContent for &'_ str {
 impl SerializeContent for String {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         s.event(text(self.as_str()))
+    }
+}
+
+impl SerializeContent for dto::Event {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        self.as_ref().serialize_content(s)
     }
 }
 

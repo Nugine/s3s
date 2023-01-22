@@ -34,6 +34,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
             "CopySource",                     //
             "Range",                          //
             "ContentType",                    //
+            "Event",                          //
         ];
 
         if provided_types.contains(&name.as_str()) {

@@ -3,7 +3,7 @@
 //! See <https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#xml-shape-serialization>
 //!
 
-use crate::dto::{List, Timestamp, TimestampFormat};
+use crate::dto::{self, List, Timestamp, TimestampFormat};
 
 use std::fmt;
 
@@ -355,5 +355,11 @@ impl<'xml> DeserializeContent<'xml> for i32 {
 impl<'xml> DeserializeContent<'xml> for i64 {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         d.text(|t| atoi::atoi::<Self>(t.as_ref()).ok_or(DeError::InvalidContent))
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for dto::Event {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        String::deserialize_content(d).map(Self::from)
     }
 }

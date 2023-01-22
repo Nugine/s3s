@@ -5,7 +5,7 @@ use crate::utils::from_ascii;
 
 /// HTTP Range header
 ///
-/// See <https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35>
+/// See <https://www.rfc-editor.org/rfc/rfc9110.html#section-14.1.2>
 #[allow(clippy::exhaustive_enums, missing_copy_implementations)]
 #[derive(Debug, Clone)]
 pub enum Range {
@@ -76,6 +76,17 @@ impl Range {
         match nom_parse(header) {
             Err(_) => Err(ParseRangeError { _priv: () }),
             Ok((_, ans)) => Ok(ans),
+        }
+    }
+
+    #[must_use]
+    pub fn format_to_string(&self) -> String {
+        match self {
+            Range::Normal { first, last } => match last {
+                Some(last) => format!("bytes={first}-{last}"),
+                None => format!("bytes={first}-"),
+            },
+            Range::Suffix { last } => format!("bytes=-{last}"),
         }
     }
 }

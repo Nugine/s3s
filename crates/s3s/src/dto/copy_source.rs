@@ -3,6 +3,8 @@
 use crate::http;
 use crate::path;
 
+use std::fmt::Write;
+
 /// x-amz-copy-source
 #[derive(Debug)]
 pub enum CopySource {
@@ -54,7 +56,7 @@ impl CopySource {
     pub fn parse(header: &str) -> Result<Self, ParseCopySourceError> {
         let header = urlencoding::decode(header).map_err(|_| ParseCopySourceError::InvalidEncoding)?;
 
-        // TODO: support access point
+        // FIXME: support access point
         match header.split_once('/') {
             None => Err(ParseCopySourceError::PatternMismatch),
             Some((bucket, remaining)) => {
@@ -83,6 +85,23 @@ impl CopySource {
                 })
             }
         }
+    }
+
+    #[must_use]
+    pub fn format_to_string(&self) -> String {
+        let mut buf = String::new();
+        match self {
+            CopySource::Bucket { bucket, key, version_id } => {
+                write!(&mut buf, "{bucket}/{key}").unwrap();
+                if let Some(version_id) = version_id {
+                    write!(&mut buf, "?versionId={version_id}").unwrap();
+                }
+            }
+            CopySource::AccessPoint { .. } => {
+                unimplemented!()
+            }
+        }
+        buf
     }
 }
 
