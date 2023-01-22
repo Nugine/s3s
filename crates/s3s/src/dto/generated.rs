@@ -678,7 +678,7 @@ pub struct Checksum {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ChecksumAlgorithm {
     Crc32,
-    Crc32c,
+    Crc32C,
     Sha1,
     Sha256,
 }
@@ -688,7 +688,7 @@ impl ChecksumAlgorithm {
     pub const fn as_str(&self) -> &'static str {
         match self {
             Self::Crc32 => "CRC32",
-            Self::Crc32c => "CRC32C",
+            Self::Crc32C => "CRC32C",
             Self::Sha1 => "SHA1",
             Self::Sha256 => "SHA256",
         }
@@ -698,7 +698,7 @@ impl ChecksumAlgorithm {
     pub const fn from_bytes(s: &[u8]) -> Option<Self> {
         match s {
             b"CRC32" => Some(Self::Crc32),
-            b"CRC32C" => Some(Self::Crc32c),
+            b"CRC32C" => Some(Self::Crc32C),
             b"SHA1" => Some(Self::Sha1),
             b"SHA256" => Some(Self::Sha256),
             _ => None,

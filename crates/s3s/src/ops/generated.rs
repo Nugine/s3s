@@ -11626,7 +11626,7 @@ impl http::TryIntoHeaderValue for ChecksumAlgorithm {
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
         match self {
             Self::Crc32 => Ok(http::HeaderValue::from_static("{}")),
-            Self::Crc32c => Ok(http::HeaderValue::from_static("{}")),
+            Self::Crc32C => Ok(http::HeaderValue::from_static("{}")),
             Self::Sha1 => Ok(http::HeaderValue::from_static("{}")),
             Self::Sha256 => Ok(http::HeaderValue::from_static("{}")),
         }

@@ -99,7 +99,10 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
             smithy::Shape::Enum(shape) => {
                 let mut variants = Vec::new();
                 for (variant_name, variant) in &shape.members {
-                    let name = variant_name.to_upper_camel_case();
+                    let name = match variant_name.as_str() {
+                        "CRC32C" => o("Crc32C"),
+                        _ => variant_name.to_upper_camel_case(),
+                    };
 
                     let value = variant.traits.enum_value().unwrap().to_owned();
                     assert!(value.is_ascii());
