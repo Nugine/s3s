@@ -2,6 +2,7 @@
 #![deny(
     clippy::all, //
     clippy::must_use_candidate, //
+    clippy::semicolon_if_nothing_returned, //
 )]
 
 mod gen;

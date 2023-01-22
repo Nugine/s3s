@@ -351,7 +351,7 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
                     }
                 }
 
-                g.ln("}")
+                g.ln("}");
             }
             rust::Type::StructEnum(ty) => {
                 codegen_doc(ty.doc.as_deref(), g);
@@ -364,7 +364,7 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
                     g.ln(f!("    {}({}),", variant.name, variant.type_));
                 }
 
-                g.ln("}")
+                g.ln("}");
             }
             rust::Type::Timestamp(ty) => {
                 codegen_doc(ty.doc.as_deref(), g);

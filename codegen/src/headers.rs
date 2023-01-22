@@ -46,7 +46,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
             let value = header.to_ascii_lowercase();
             g.ln(f!("pub const {name}: HeaderName = HeaderName::from_static({value:?});",));
         } else {
-            g.ln(f!("pub use hyper::header::{name};"))
+            g.ln(f!("pub use hyper::header::{name};"));
         }
         g.lf();
     }

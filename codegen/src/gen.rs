@@ -22,10 +22,10 @@ impl Codegen {
 
 impl Codegen {
     pub fn lf(&mut self) {
-        writeln!(self.writer).unwrap()
+        writeln!(self.writer).unwrap();
     }
 
     pub fn ln(&mut self, line: impl AsRef<str>) {
-        writeln!(self.writer, "{}", line.as_ref()).unwrap()
+        writeln!(self.writer, "{}", line.as_ref()).unwrap();
     }
 }

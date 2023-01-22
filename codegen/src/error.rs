@@ -124,7 +124,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
                 assert_eq!(status.as_ref().unwrap(), "400 Bad Request");
             }
             for desc in &err.description {
-                g.ln(f!("/// + {}", desc.as_ref().unwrap()))
+                g.ln(f!("/// + {}", desc.as_ref().unwrap()));
             }
             g.ln("///");
             g.ln("/// HTTP Status Code: 400 Bad Request");

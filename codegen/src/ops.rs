@@ -67,7 +67,7 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
             http_uri: sh.traits.http_uri().unwrap().to_owned(),
             http_code: sh.traits.http_code().unwrap(),
         };
-        insert(name, op)
+        insert(name, op);
     }
 
     operations
@@ -90,14 +90,14 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     ];
 
     for line in prelude {
-        g.ln(line)
+        g.ln(line);
     }
 
     codegen_async_trait(ops, g);
 
     for op in ops.values() {
         g.ln(f!("pub struct {};", op.name));
-        g.ln("")
+        g.lf();
     }
 
     codegen_xml_ser(ops, rust_types, g);
@@ -138,7 +138,7 @@ fn codegen_async_trait(ops: &Operations, g: &mut Codegen) {
 
         g.ln(f!("Err(s3_error!(NotImplemented, \"{} is not implemented yet\"))", op.name));
         g.ln("}");
-        g.ln("")
+        g.lf();
     }
 
     g.ln("}");
@@ -440,7 +440,7 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                         if let rust::Type::List(list_ty) = field_type {
                             if field.xml_flattened {
                                 g.ln(f!("let ans: {} = d.content()?;", list_ty.member.type_));
-                                g.ln(f!("{field_name}.get_or_insert_with(List::new).push(ans);"))
+                                g.ln(f!("{field_name}.get_or_insert_with(List::new).push(ans);"));
                             } else {
                                 g.ln(f!(
                                     "if {field_name}.is_some() {{ return Err(xml::DeError::DuplicateField); }}"
@@ -641,7 +641,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
             g.ln("pub fn serialize_http() -> http::Response {");
 
             if op.http_code == 200 {
-                g.ln("http::Response::default()")
+                g.ln("http::Response::default()");
             } else {
                 g.ln("let mut res = http::Response::default();");
 
@@ -676,13 +676,13 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                         assert!(field.option_type);
                         g.ln(f!("if let Some(val) = x.{} {{", field.name));
                         g.ln("*res.body_mut() = http::Body::from(val);");
-                        g.ln("}")
+                        g.ln("}");
                     }
                     "StreamingBlob" => {
                         if field.option_type {
                             g.ln(f!("if let Some(val) = x.{} {{", field.name));
                             g.ln("http::set_stream_body(&mut res, val);");
-                            g.ln("}")
+                            g.ln("}");
                         } else {
                             g.ln(f!("http::set_stream_body(&mut res, x.{});", field.name));
                         }
@@ -694,7 +694,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                         if field.option_type {
                             g.ln(f!("if let Some(ref val) = x.{} {{", field.name));
                             g.ln("    http::set_xml_body(&mut res, val)?;");
-                            g.ln("}")
+                            g.ln("}");
                         } else {
                             g.ln(f!("http::set_xml_body(&mut res, &x.{})?;", field.name));
                         }
@@ -715,9 +715,9 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                             "http::add_opt_header_timestamp(&mut res, {header_name}, x.{field_name}, TimestampFormat::{fmt})?;"
                         ));
                     } else if field.option_type {
-                        g.ln(f!("http::add_opt_header(&mut res, {header_name}, x.{field_name})?;"))
+                        g.ln(f!("http::add_opt_header(&mut res, {header_name}, x.{field_name})?;"));
                     } else {
-                        g.ln(f!("http::add_header(&mut res, {header_name}, x.{field_name})?;"))
+                        g.ln(f!("http::add_header(&mut res, {header_name}, x.{field_name})?;"));
                     }
                 }
                 if field.position == "metadata" {
@@ -1041,9 +1041,9 @@ fn codegen_op_http_call(op: &Operation, g: &mut Codegen) {
 
     g.ln("let res = match result {");
     if op.output != "Unit" {
-        g.ln("Ok(output) => Self::serialize_http(output)?,")
+        g.ln("Ok(output) => Self::serialize_http(output)?,");
     } else {
-        g.ln("Ok(()) => Self::serialize_http(),")
+        g.ln("Ok(()) => Self::serialize_http(),");
     }
     g.ln("Err(err) => super::serialize_error(err)?,");
     g.ln("};");
@@ -1150,7 +1150,7 @@ fn required_headers<'a>(op: &Operation, rust_types: &'a RustTypes) -> Vec<&'a st
         let is_required = field.option_type.not() && field.default_value.is_none();
         if is_required && field.position == "header" {
             let header = field.http_header.as_deref().unwrap();
-            ans.push(header)
+            ans.push(header);
         }
     }
     ans
@@ -1169,7 +1169,7 @@ fn required_query_strings<'a>(op: &Operation, rust_types: &'a RustTypes) -> Vec<
         let is_required = field.option_type.not() && field.default_value.is_none();
         if is_required && field.position == "query" {
             let header = field.http_query.as_deref().unwrap();
-            ans.push(header)
+            ans.push(header);
         }
     }
     ans
