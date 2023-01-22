@@ -267,6 +267,7 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
             rust::Type::UnitEnum(ty) => {
                 codegen_doc(ty.doc.as_deref(), g);
                 g.ln("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
+                g.ln("#[non_exhaustive]");
                 g.ln(f!("pub enum {} {{", ty.name));
 
                 for variant in &ty.variants {
@@ -342,7 +343,7 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
                 } else {
                     g.ln("#[derive(Debug)]");
                 }
-                g.ln("#[non_exhaustive]");
+                // g.ln("#[non_exhaustive]"); // TODO: builder?
                 g.ln(f!("pub struct {} {{", ty.name));
 
                 for field in &ty.fields {

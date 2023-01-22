@@ -12,7 +12,6 @@ pub type AbortDate = Timestamp;
 /// Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct AbortIncompleteMultipartUpload {
     /// <p>Specifies the number of days after which Amazon S3 aborts an incomplete multipart
     /// upload.</p>
@@ -20,7 +19,6 @@ pub struct AbortIncompleteMultipartUpload {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct AbortMultipartUploadInput {
     /// <p>The bucket name to which the upload was taking place. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -37,7 +35,6 @@ pub struct AbortMultipartUploadInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: Option<RequestCharged>,
 }
@@ -48,7 +45,6 @@ pub type AbortRuleId = String;
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Amazon S3
 /// Transfer Acceleration</a> in the <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct AccelerateConfiguration {
     /// <p>Specifies the transfer acceleration status of the bucket.</p>
     pub status: Option<BucketAccelerateStatus>,
@@ -58,7 +54,6 @@ pub type AcceptRanges = String;
 
 /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct AccessControlPolicy {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -68,7 +63,6 @@ pub struct AccessControlPolicy {
 
 /// <p>A container for information about access control for replicas.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct AccessControlTranslation {
     /// <p>Specifies the replica ownership. For default and valid values, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT bucket
     /// replication</a> in the <i>Amazon S3 API Reference</i>.</p>
@@ -97,7 +91,6 @@ pub type AllowedOrigins = List<AllowedOrigin>;
 /// The operator must have at least two predicates in any combination, and an object must match
 /// all of the predicates for the filter to apply.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct AnalyticsAndOperator {
     /// <p>The prefix to use when evaluating an AND predicate: The prefix that an object must have
     /// to be included in the metrics results.</p>
@@ -108,7 +101,6 @@ pub struct AnalyticsAndOperator {
 
 /// <p>Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct AnalyticsConfiguration {
     /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly
     /// one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided,
@@ -125,7 +117,6 @@ pub type AnalyticsConfigurationList = List<AnalyticsConfiguration>;
 
 /// <p>Where to publish the analytics results.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct AnalyticsExportDestination {
     /// <p>A destination signifying output to an S3 bucket.</p>
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
@@ -150,7 +141,6 @@ pub type AnalyticsId = String;
 
 /// <p>Contains information about where to publish the analytics results.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct AnalyticsS3BucketDestination {
     /// <p>The Amazon Resource Name (ARN) of the bucket to which data is exported.</p>
     pub bucket: BucketName,
@@ -168,6 +158,7 @@ pub struct AnalyticsS3BucketDestination {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum AnalyticsS3ExportFileFormat {
     Csv,
 }
@@ -197,6 +188,7 @@ impl FromStr for AnalyticsS3ExportFileFormat {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ArchiveStatus {
     ArchiveAccess,
     DeepArchiveAccess,
@@ -231,7 +223,6 @@ impl FromStr for ArchiveStatus {
 /// <p> In terms of implementation, a Bucket is a resource. An Amazon S3 bucket name is globally
 /// unique, and the namespace is shared by all Amazon Web Services accounts. </p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Bucket {
     /// <p>Date the bucket was created. This date can change when making changes to your bucket, such as editing its bucket policy.</p>
     pub creation_date: Option<CreationDate>,
@@ -240,6 +231,7 @@ pub struct Bucket {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum BucketAccelerateStatus {
     Enabled,
     Suspended,
@@ -274,7 +266,6 @@ impl FromStr for BucketAccelerateStatus {
 /// <p>The requested bucket name is not available. The bucket namespace is shared by all users
 /// of the system. Select a different name and try again.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct BucketAlreadyExists {}
 
 /// <p>The bucket you tried to create already exists, and you own it. Amazon S3 returns this error
@@ -282,10 +273,10 @@ pub struct BucketAlreadyExists {}
 /// re-create an existing bucket that you already own in the North Virginia Region, Amazon S3
 /// returns 200 OK and resets the bucket access control lists (ACLs).</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct BucketAlreadyOwnedByYou {}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum BucketCannedACL {
     AuthenticatedRead,
     Private,
@@ -329,13 +320,13 @@ pub type BucketKeyEnabled = bool;
 /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>
 /// in the <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct BucketLifecycleConfiguration {
     /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
     pub rules: LifecycleRules,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum BucketLocationConstraint {
     Eu,
     AfSouth1,
@@ -441,12 +432,12 @@ impl FromStr for BucketLocationConstraint {
 
 /// <p>Container for logging status information.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct BucketLoggingStatus {
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum BucketLogsPermission {
     FullControl,
     Read,
@@ -484,6 +475,7 @@ impl FromStr for BucketLogsPermission {
 pub type BucketName = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum BucketVersioningStatus {
     Enabled,
     Suspended,
@@ -529,7 +521,6 @@ pub type BytesScanned = i64;
 /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling
 /// Cross-Origin Resource Sharing</a> in the <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct CORSConfiguration {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add
     /// up to 100 rules to the configuration.</p>
@@ -538,7 +529,6 @@ pub struct CORSConfiguration {
 
 /// <p>Specifies a cross-origin access rule for an Amazon S3 bucket.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct CORSRule {
     /// <p>Headers that are specified in the <code>Access-Control-Request-Headers</code> header.
     /// These headers are allowed in a preflight OPTIONS request. In response to any preflight
@@ -565,7 +555,6 @@ pub type CORSRules = List<CORSRule>;
 /// <p>Describes how an uncompressed comma-separated values (CSV)-formatted input object is
 /// formatted.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CSVInput {
     /// <p>Specifies that CSV field values may contain quoted record delimiters and such records
     /// should be allowed. Default value is FALSE. Setting this value to TRUE may lower
@@ -618,7 +607,6 @@ pub struct CSVInput {
 /// <p>Describes how uncompressed comma-separated values (CSV)-formatted results are
 /// formatted.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CSVOutput {
     /// <p>The value used to separate individual fields in a record. You can specify an arbitrary
     /// delimiter.</p>
@@ -651,7 +639,6 @@ pub type CacheControl = String;
 
 /// <p>Contains all the possible checksum or digest values for an object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Checksum {
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -676,6 +663,7 @@ pub struct Checksum {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ChecksumAlgorithm {
     Crc32,
     Crc32C,
@@ -720,6 +708,7 @@ pub type ChecksumCRC32 = String;
 pub type ChecksumCRC32C = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ChecksumMode {
     Enabled,
 }
@@ -761,7 +750,6 @@ pub type Comments = String;
 /// the directory specified by Prefix. For example, if the prefix is notes/ and the delimiter
 /// is a slash (/) as in notes/summer/july, the common prefix is notes/summer/. </p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CommonPrefix {
     /// <p>Container for the specified common prefix.</p>
     pub prefix: Option<Prefix>,
@@ -770,7 +758,6 @@ pub struct CommonPrefix {
 pub type CommonPrefixList = List<CommonPrefix>;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct CompleteMultipartUploadInput {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -824,7 +811,6 @@ pub struct CompleteMultipartUploadInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CompleteMultipartUploadOutput {
     /// <p>The name of the bucket that contains the newly created object. Does not return the access point ARN or access point alias if used.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -886,7 +872,6 @@ pub struct CompleteMultipartUploadOutput {
 
 /// <p>The container for the completed multipart upload details.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CompletedMultipartUpload {
     /// <p>Array of CompletedPart data types.</p>
     /// <p>If you do not supply a valid <code>Part</code> with your request, the service sends back an HTTP
@@ -896,7 +881,6 @@ pub struct CompletedMultipartUpload {
 
 /// <p>Details of the parts that were uploaded.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CompletedPart {
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -928,6 +912,7 @@ pub struct CompletedPart {
 pub type CompletedPartList = List<CompletedPart>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum CompressionType {
     Bzip2,
     Gzip,
@@ -967,7 +952,6 @@ impl FromStr for CompressionType {
 /// to the <code>/documents</code> folder. 2. If request results in HTTP error 4xx, redirect
 /// request to another host where you might process the error.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Condition {
     /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error
     /// code equals this value, then the specified redirect is applied. Required when parent
@@ -1007,11 +991,9 @@ pub type ContentRange = String;
 
 /// <p></p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ContinuationEvent {}
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct CopyObjectInput {
     /// <p>The canned ACL to apply to the object.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
@@ -1163,7 +1145,6 @@ pub struct CopyObjectInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CopyObjectOutput {
     /// <p>Indicates whether the copied object uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
@@ -1197,7 +1178,6 @@ pub struct CopyObjectOutput {
 
 /// <p>Container for all response elements.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CopyObjectResult {
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -1227,7 +1207,6 @@ pub struct CopyObjectResult {
 
 /// <p>Container for all response elements.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CopyPartResult {
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -1275,7 +1254,6 @@ pub type CopySourceVersionId = String;
 
 /// <p>The configuration information for the bucket.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CreateBucketConfiguration {
     /// <p>Specifies the Region where the bucket will be created. If you don't specify a Region,
     /// the bucket is created in the US East (N. Virginia) Region (us-east-1).</p>
@@ -1283,7 +1261,6 @@ pub struct CreateBucketConfiguration {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct CreateBucketInput {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<BucketCannedACL>,
@@ -1309,14 +1286,12 @@ pub struct CreateBucketInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CreateBucketOutput {
     /// <p>A forward slash followed by the name of the bucket.</p>
     pub location: Option<Location>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct CreateMultipartUploadInput {
     /// <p>The canned ACL to apply to the object.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
@@ -1415,7 +1390,6 @@ pub struct CreateMultipartUploadInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct CreateMultipartUploadOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete
     /// multipart uploads and the prefix in the lifecycle rule matches the object name in the
@@ -1487,7 +1461,6 @@ pub type DaysAfterInitiation = i32;
 /// </ul>
 /// </note>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct DefaultRetention {
     /// <p>The number of days that you want to specify for the default retention period. Must be
     /// used with <code>Mode</code>.</p>
@@ -1502,7 +1475,6 @@ pub struct DefaultRetention {
 
 /// <p>Container for the objects to delete.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct Delete {
     /// <p>The objects to delete.</p>
     pub objects: ObjectIdentifierList,
@@ -1512,7 +1484,6 @@ pub struct Delete {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketAnalyticsConfigurationInput {
     /// <p>The name of the bucket from which an analytics configuration is deleted.</p>
     pub bucket: BucketName,
@@ -1523,7 +1494,6 @@ pub struct DeleteBucketAnalyticsConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketCorsInput {
     /// <p>Specifies the bucket whose <code>cors</code> configuration is being deleted.</p>
     pub bucket: BucketName,
@@ -1532,7 +1502,6 @@ pub struct DeleteBucketCorsInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketEncryptionInput {
     /// <p>The name of the bucket containing the server-side encryption configuration to
     /// delete.</p>
@@ -1542,7 +1511,6 @@ pub struct DeleteBucketEncryptionInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketInput {
     /// <p>Specifies the bucket being deleted.</p>
     pub bucket: BucketName,
@@ -1551,7 +1519,6 @@ pub struct DeleteBucketInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -1560,7 +1527,6 @@ pub struct DeleteBucketIntelligentTieringConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketInventoryConfigurationInput {
     /// <p>The name of the bucket containing the inventory configuration to delete.</p>
     pub bucket: BucketName,
@@ -1571,7 +1537,6 @@ pub struct DeleteBucketInventoryConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketLifecycleInput {
     /// <p>The bucket name of the lifecycle to delete.</p>
     pub bucket: BucketName,
@@ -1580,7 +1545,6 @@ pub struct DeleteBucketLifecycleInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketMetricsConfigurationInput {
     /// <p>The name of the bucket containing the metrics configuration to delete.</p>
     pub bucket: BucketName,
@@ -1591,7 +1555,6 @@ pub struct DeleteBucketMetricsConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketOwnershipControlsInput {
     /// <p>The Amazon S3 bucket whose <code>OwnershipControls</code> you want to delete. </p>
     pub bucket: BucketName,
@@ -1600,7 +1563,6 @@ pub struct DeleteBucketOwnershipControlsInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketPolicyInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -1609,7 +1571,6 @@ pub struct DeleteBucketPolicyInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketReplicationInput {
     /// <p> The bucket name. </p>
     pub bucket: BucketName,
@@ -1618,7 +1579,6 @@ pub struct DeleteBucketReplicationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketTaggingInput {
     /// <p>The bucket that has the tag set to be removed.</p>
     pub bucket: BucketName,
@@ -1627,7 +1587,6 @@ pub struct DeleteBucketTaggingInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteBucketWebsiteInput {
     /// <p>The bucket name for which you want to remove the website configuration. </p>
     pub bucket: BucketName,
@@ -1639,7 +1598,6 @@ pub type DeleteMarker = bool;
 
 /// <p>Information about the delete marker.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct DeleteMarkerEntry {
     /// <p>Specifies whether the object is (true) or is not (false) the latest version of an
     /// object.</p>
@@ -1667,7 +1625,6 @@ pub struct DeleteMarkerEntry {
 /// replication of delete markers differently. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-add-config.html#replication-backward-compat-considerations">Backward Compatibility</a>.</p>
 /// </note>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct DeleteMarkerReplication {
     /// <p>Indicates whether to replicate delete markers.</p>
     /// <note>
@@ -1677,6 +1634,7 @@ pub struct DeleteMarkerReplication {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum DeleteMarkerReplicationStatus {
     Disabled,
     Enabled,
@@ -1713,7 +1671,6 @@ pub type DeleteMarkerVersionId = String;
 pub type DeleteMarkers = List<DeleteMarkerEntry>;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteObjectInput {
     /// <p>The bucket name of the bucket containing the object. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1738,7 +1695,6 @@ pub struct DeleteObjectInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct DeleteObjectOutput {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was
     /// not (false) a delete marker.</p>
@@ -1750,7 +1706,6 @@ pub struct DeleteObjectOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteObjectTaggingInput {
     /// <p>The bucket name containing the objects from which to remove the tags. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1766,14 +1721,12 @@ pub struct DeleteObjectTaggingInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct DeleteObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was removed from.</p>
     pub version_id: Option<ObjectVersionId>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeleteObjectsInput {
     /// <p>The bucket name containing the objects to delete. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1806,7 +1759,6 @@ pub struct DeleteObjectsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct DeleteObjectsOutput {
     /// <p>Container element for a successful delete. It identifies the object that was
     /// successfully deleted.</p>
@@ -1818,7 +1770,6 @@ pub struct DeleteObjectsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct DeletePublicAccessBlockInput {
     /// <p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete.
     /// </p>
@@ -1829,7 +1780,6 @@ pub struct DeletePublicAccessBlockInput {
 
 /// <p>Information about the deleted object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct DeletedObject {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was
     /// not (false) a delete marker. In a simple DELETE, this header indicates whether (true) or
@@ -1854,7 +1804,6 @@ pub type Description = String;
 /// <p>Specifies information about where to publish analysis or configuration results for an
 /// Amazon S3 bucket and S3 Replication Time Control (S3 RTC).</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct Destination {
     /// <p>Specify this only in a cross-account scenario (where source and destination bucket
     /// owners are not the same), and you want to change replica ownership to the Amazon Web Services account that
@@ -1901,6 +1850,7 @@ pub type EnableRequestProgress = bool;
 /// characters that are not supported in XML 1.0, you can add this parameter to request that
 /// Amazon S3 encode the keys in the response.</p>
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum EncodingType {
     Url,
 }
@@ -1931,7 +1881,6 @@ impl FromStr for EncodingType {
 
 /// <p>Contains the type of server-side encryption used.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct Encryption {
     /// <p>The server-side encryption algorithm used when storing job results in Amazon S3 (for example,
     /// AES256, aws:kms).</p>
@@ -1950,7 +1899,6 @@ pub struct Encryption {
 /// <p>Specifies encryption-related information for an Amazon S3 bucket that is a destination for
 /// replicated objects.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct EncryptionConfiguration {
     /// <p>Specifies the ID (Key ARN or Alias ARN) of the customer managed Amazon Web Services KMS key
     /// stored in Amazon Web Services Key Management Service (KMS) for the destination bucket. Amazon S3 uses
@@ -1966,12 +1914,10 @@ pub type End = i64;
 /// should not assume that the request is complete until the client receives an
 /// <code>EndEvent</code>.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct EndEvent {}
 
 /// <p>Container for all error elements.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Error {
     /// <p>The error code is a string that uniquely identifies an error condition. It is meant to
     /// be read and understood by programs that detect and handle errors by type. </p>
@@ -3854,7 +3800,6 @@ pub type ErrorCode = String;
 
 /// <p>The error information.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ErrorDocument {
     /// <p>The object key name to use when a 4XX class error occurs.</p>
     /// <important>
@@ -3874,7 +3819,6 @@ pub type Event = String;
 
 /// <p>A container for specifying the configuration for Amazon EventBridge.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct EventBridgeConfiguration {}
 
 pub type EventList = List<Event>;
@@ -3883,13 +3827,13 @@ pub type EventList = List<Event>;
 /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html#existing-object-replication">Replicating Existing Objects</a> in the <i>Amazon S3 User Guide</i>.
 /// </p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ExistingObjectReplication {
     /// <p></p>
     pub status: ExistingObjectReplicationStatus,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ExistingObjectReplicationStatus {
     Disabled,
     Enabled,
@@ -3924,6 +3868,7 @@ impl FromStr for ExistingObjectReplicationStatus {
 pub type Expiration = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ExpirationStatus {
     Disabled,
     Enabled,
@@ -3966,6 +3911,7 @@ pub type ExposeHeaders = List<ExposeHeader>;
 pub type Expression = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ExpressionType {
     Sql,
 }
@@ -3999,6 +3945,7 @@ pub type FetchOwner = bool;
 pub type FieldDelimiter = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum FileHeaderInfo {
     Ignore,
     None,
@@ -4036,7 +3983,6 @@ impl FromStr for FileHeaderInfo {
 /// <p>Specifies the Amazon S3 object key name to filter on and whether to filter on the suffix or
 /// prefix of the key name.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct FilterRule {
     /// <p>The object key name prefix or suffix identifying one or more objects to which the
     /// filtering rule applies. The maximum length is 1,024 characters. Overlapping prefixes and
@@ -4052,6 +3998,7 @@ pub struct FilterRule {
 pub type FilterRuleList = List<FilterRule>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum FilterRuleName {
     Prefix,
     Suffix,
@@ -4086,7 +4033,6 @@ impl FromStr for FilterRuleName {
 pub type FilterRuleValue = String;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketAccelerateConfigurationInput {
     /// <p>The name of the bucket for which the accelerate configuration is retrieved.</p>
     pub bucket: BucketName,
@@ -4095,14 +4041,12 @@ pub struct GetBucketAccelerateConfigurationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketAccelerateConfigurationOutput {
     /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<BucketAccelerateStatus>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketAclInput {
     /// <p>Specifies the S3 bucket whose ACL is being requested.</p>
     pub bucket: BucketName,
@@ -4111,7 +4055,6 @@ pub struct GetBucketAclInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -4120,7 +4063,6 @@ pub struct GetBucketAclOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketAnalyticsConfigurationInput {
     /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
     pub bucket: BucketName,
@@ -4131,14 +4073,12 @@ pub struct GetBucketAnalyticsConfigurationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketAnalyticsConfigurationOutput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: Option<AnalyticsConfiguration>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketCorsInput {
     /// <p>The bucket name for which to get the cors configuration.</p>
     pub bucket: BucketName,
@@ -4147,7 +4087,6 @@ pub struct GetBucketCorsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketCorsOutput {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add
     /// up to 100 rules to the configuration.</p>
@@ -4155,7 +4094,6 @@ pub struct GetBucketCorsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketEncryptionInput {
     /// <p>The name of the bucket from which the server-side encryption configuration is
     /// retrieved.</p>
@@ -4165,13 +4103,11 @@ pub struct GetBucketEncryptionInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketEncryptionOutput {
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -4180,14 +4116,12 @@ pub struct GetBucketIntelligentTieringConfigurationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketIntelligentTieringConfigurationOutput {
     /// <p>Container for S3 Intelligent-Tiering configuration.</p>
     pub intelligent_tiering_configuration: Option<IntelligentTieringConfiguration>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketInventoryConfigurationInput {
     /// <p>The name of the bucket containing the inventory configuration to retrieve.</p>
     pub bucket: BucketName,
@@ -4198,14 +4132,12 @@ pub struct GetBucketInventoryConfigurationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketInventoryConfigurationOutput {
     /// <p>Specifies the inventory configuration.</p>
     pub inventory_configuration: Option<InventoryConfiguration>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketLifecycleConfigurationInput {
     /// <p>The name of the bucket for which to get the lifecycle information.</p>
     pub bucket: BucketName,
@@ -4214,14 +4146,12 @@ pub struct GetBucketLifecycleConfigurationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketLifecycleConfigurationOutput {
     /// <p>Container for a lifecycle rule.</p>
     pub rules: Option<LifecycleRules>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketLocationInput {
     /// <p>The name of the bucket for which to get the location.</p>
     pub bucket: BucketName,
@@ -4230,7 +4160,6 @@ pub struct GetBucketLocationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketLocationOutput {
     /// <p>Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported
     /// location constraints by Region, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a>.
@@ -4240,7 +4169,6 @@ pub struct GetBucketLocationOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketLoggingInput {
     /// <p>The bucket name for which to get the logging information.</p>
     pub bucket: BucketName,
@@ -4249,13 +4177,11 @@ pub struct GetBucketLoggingInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketLoggingOutput {
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketMetricsConfigurationInput {
     /// <p>The name of the bucket containing the metrics configuration to retrieve.</p>
     pub bucket: BucketName,
@@ -4266,14 +4192,12 @@ pub struct GetBucketMetricsConfigurationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketMetricsConfigurationOutput {
     /// <p>Specifies the metrics configuration.</p>
     pub metrics_configuration: Option<MetricsConfiguration>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketNotificationConfigurationInput {
     /// <p>The name of the bucket for which to get the notification configuration.</p>
     pub bucket: BucketName,
@@ -4282,7 +4206,6 @@ pub struct GetBucketNotificationConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketOwnershipControlsInput {
     /// <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to retrieve.
     /// </p>
@@ -4292,7 +4215,6 @@ pub struct GetBucketOwnershipControlsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketOwnershipControlsOutput {
     /// <p>The <code>OwnershipControls</code> (BucketOwnerEnforced, BucketOwnerPreferred, or ObjectWriter) currently in
     /// effect for this Amazon S3 bucket.</p>
@@ -4300,7 +4222,6 @@ pub struct GetBucketOwnershipControlsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketPolicyInput {
     /// <p>The bucket name for which to get the bucket policy.</p>
     pub bucket: BucketName,
@@ -4309,14 +4230,12 @@ pub struct GetBucketPolicyInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketPolicyOutput {
     /// <p>The bucket policy as a JSON document.</p>
     pub policy: Option<Policy>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketPolicyStatusInput {
     /// <p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>
     pub bucket: BucketName,
@@ -4325,14 +4244,12 @@ pub struct GetBucketPolicyStatusInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketPolicyStatusOutput {
     /// <p>The policy status for the specified bucket.</p>
     pub policy_status: Option<PolicyStatus>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketReplicationInput {
     /// <p>The bucket name for which to get the replication information.</p>
     pub bucket: BucketName,
@@ -4341,13 +4258,11 @@ pub struct GetBucketReplicationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketRequestPaymentInput {
     /// <p>The name of the bucket for which to get the payment request configuration</p>
     pub bucket: BucketName,
@@ -4356,14 +4271,12 @@ pub struct GetBucketRequestPaymentInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketRequestPaymentOutput {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Option<Payer>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketTaggingInput {
     /// <p>The name of the bucket for which to get the tagging information.</p>
     pub bucket: BucketName,
@@ -4372,14 +4285,12 @@ pub struct GetBucketTaggingInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketTaggingOutput {
     /// <p>Contains the tag set.</p>
     pub tag_set: TagSet,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketVersioningInput {
     /// <p>The name of the bucket for which to get the versioning information.</p>
     pub bucket: BucketName,
@@ -4388,7 +4299,6 @@ pub struct GetBucketVersioningInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketVersioningOutput {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This
     /// element is only returned if the bucket has been configured with MFA delete. If the bucket
@@ -4399,7 +4309,6 @@ pub struct GetBucketVersioningOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetBucketWebsiteInput {
     /// <p>The bucket name for which to get the website configuration.</p>
     pub bucket: BucketName,
@@ -4408,7 +4317,6 @@ pub struct GetBucketWebsiteInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetBucketWebsiteOutput {
     /// <p>The object key name of the website error document to use for 4XX class errors.</p>
     pub error_document: Option<ErrorDocument>,
@@ -4423,7 +4331,6 @@ pub struct GetBucketWebsiteOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectAclInput {
     /// <p>The bucket name that contains the object for which to get the ACL information. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4438,7 +4345,6 @@ pub struct GetObjectAclInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetObjectAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -4448,7 +4354,6 @@ pub struct GetObjectAclOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectAttributesInput {
     /// <p>The name of the bucket that contains the object.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4485,7 +4390,6 @@ pub struct GetObjectAttributesInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetObjectAttributesOutput {
     /// <p>The checksum or digest of the object.</p>
     pub checksum: Option<Checksum>,
@@ -4515,7 +4419,6 @@ pub struct GetObjectAttributesOutput {
 
 /// <p>A collection of parts associated with a multipart upload.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetObjectAttributesParts {
     /// <p>Indicates whether the returned list of parts is truncated. A value of
     /// <code>true</code> indicates that the list was truncated. A list can be truncated if the
@@ -4537,7 +4440,6 @@ pub struct GetObjectAttributesParts {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectInput {
     /// <p>The bucket name containing the object. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4604,7 +4506,6 @@ pub struct GetObjectInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectLegalHoldInput {
     /// <p>The bucket name containing the object whose legal hold status you want to retrieve. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4619,14 +4520,12 @@ pub struct GetObjectLegalHoldInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetObjectLegalHoldOutput {
     /// <p>The current legal hold status for the specified object.</p>
     pub legal_hold: Option<ObjectLockLegalHold>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectLockConfigurationInput {
     /// <p>The bucket whose Object Lock configuration you want to retrieve.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4636,14 +4535,12 @@ pub struct GetObjectLockConfigurationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetObjectLockConfigurationOutput {
     /// <p>The specified bucket's Object Lock configuration.</p>
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<AcceptRanges>,
@@ -4755,7 +4652,6 @@ pub struct GetObjectOutput {
 pub type GetObjectResponseStatusCode = i32;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectRetentionInput {
     /// <p>The bucket name containing the object whose retention settings you want to retrieve. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4770,14 +4666,12 @@ pub struct GetObjectRetentionInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetObjectRetentionOutput {
     /// <p>The container element for an object's retention settings.</p>
     pub retention: Option<ObjectLockRetention>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectTaggingInput {
     /// <p>The bucket name containing the object for which to get the tagging information. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4794,7 +4688,6 @@ pub struct GetObjectTaggingInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectTaggingOutput {
     /// <p>Contains the tag set.</p>
     pub tag_set: TagSet,
@@ -4803,7 +4696,6 @@ pub struct GetObjectTaggingOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetObjectTorrentInput {
     /// <p>The name of the bucket containing the object for which to get the torrent files.</p>
     pub bucket: BucketName,
@@ -4815,7 +4707,6 @@ pub struct GetObjectTorrentInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetObjectTorrentOutput {
     /// <p>A Bencoded dictionary as defined by the BitTorrent specification</p>
     pub body: Option<StreamingBlob>,
@@ -4823,7 +4714,6 @@ pub struct GetObjectTorrentOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GetPublicAccessBlockInput {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want
     /// to retrieve. </p>
@@ -4833,7 +4723,6 @@ pub struct GetPublicAccessBlockInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct GetPublicAccessBlockOutput {
     /// <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3
     /// bucket.</p>
@@ -4842,7 +4731,6 @@ pub struct GetPublicAccessBlockOutput {
 
 /// <p>Container for S3 Glacier job parameters.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct GlacierJobParameters {
     /// <p>Retrieval tier at which the restore will be processed.</p>
     pub tier: Tier,
@@ -4850,7 +4738,6 @@ pub struct GlacierJobParameters {
 
 /// <p>Container for grant information.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Grant {
     /// <p>The person being granted permissions.</p>
     pub grantee: Option<Grantee>,
@@ -4870,7 +4757,6 @@ pub type GrantWriteACP = String;
 
 /// <p>Container for the person being granted permissions.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct Grantee {
     /// <p>Screen name of the grantee.</p>
     pub display_name: Option<DisplayName>,
@@ -4917,7 +4803,6 @@ pub struct Grantee {
 pub type Grants = List<Grant>;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct HeadBucketInput {
     /// <p>The bucket name.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4929,7 +4814,6 @@ pub struct HeadBucketInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct HeadObjectInput {
     /// <p>The name of the bucket containing the object.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4982,7 +4866,6 @@ pub struct HeadObjectInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct HeadObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<AcceptRanges>,
@@ -5168,7 +5051,6 @@ pub type IfUnmodifiedSince = Timestamp;
 
 /// <p>Container for the <code>Suffix</code> element.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct IndexDocument {
     /// <p>A suffix that is appended to a request that is for a directory on the website endpoint
     /// (for example,if the suffix is index.html and you make a request to samplebucket/images/ the
@@ -5186,7 +5068,6 @@ pub type Initiated = Timestamp;
 
 /// <p>Container element that identifies who initiated the multipart upload. </p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Initiator {
     /// <p>Name of the Principal.</p>
     pub display_name: Option<DisplayName>,
@@ -5197,7 +5078,6 @@ pub struct Initiator {
 
 /// <p>Describes the serialization format of the object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
     pub csv: Option<CSVInput>,
@@ -5211,6 +5091,7 @@ pub struct InputSerialization {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum IntelligentTieringAccessTier {
     ArchiveAccess,
     DeepArchiveAccess,
@@ -5245,7 +5126,6 @@ impl FromStr for IntelligentTieringAccessTier {
 /// <p>A container for specifying S3 Intelligent-Tiering filters. The filters determine the
 /// subset of objects to which the rule applies.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct IntelligentTieringAndOperator {
     /// <p>An object key name prefix that identifies the subset of objects to which the
     /// configuration applies.</p>
@@ -5259,7 +5139,6 @@ pub struct IntelligentTieringAndOperator {
 /// <p>For information about the S3 Intelligent-Tiering storage class, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for
 /// automatically optimizing frequently and infrequently accessed objects</a>.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct IntelligentTieringConfiguration {
     /// <p>Specifies a bucket filter. The configuration only includes objects that meet the
     /// filter's criteria.</p>
@@ -5279,7 +5158,6 @@ pub type IntelligentTieringDays = i32;
 /// <p>The <code>Filter</code> is used to identify objects that the S3 Intelligent-Tiering
 /// configuration applies to.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct IntelligentTieringFilter {
     /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter.
     /// The operator must have at least two predicates, and an object must match all of the
@@ -5299,6 +5177,7 @@ pub struct IntelligentTieringFilter {
 pub type IntelligentTieringId = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum IntelligentTieringStatus {
     Disabled,
     Enabled,
@@ -5332,7 +5211,6 @@ impl FromStr for IntelligentTieringStatus {
 
 /// <p>Object is archived and inaccessible until restored.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct InvalidObjectState {
     pub access_tier: Option<IntelligentTieringAccessTier>,
     pub storage_class: Option<StorageClass>,
@@ -5342,7 +5220,6 @@ pub struct InvalidObjectState {
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETInventoryConfig.html">GET Bucket inventory</a> in the <i>Amazon S3 API Reference</i>.
 /// </p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct InventoryConfiguration {
     /// <p>Contains information about where to publish the inventory results.</p>
     pub destination: InventoryDestination,
@@ -5371,7 +5248,6 @@ pub type InventoryConfigurationList = List<InventoryConfiguration>;
 
 /// <p>Specifies the inventory configuration for an Amazon S3 bucket.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct InventoryDestination {
     /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional)
     /// where inventory results are published.</p>
@@ -5381,7 +5257,6 @@ pub struct InventoryDestination {
 /// <p>Contains the type of server-side encryption used to encrypt the inventory
 /// results.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct InventoryEncryption {
     /// <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
     pub ssekms: Option<SSEKMS>,
@@ -5392,13 +5267,13 @@ pub struct InventoryEncryption {
 /// <p>Specifies an inventory filter. The inventory only includes objects that meet the
 /// filter's criteria.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct InventoryFilter {
     /// <p>The prefix that an object must have to be included in the inventory results.</p>
     pub prefix: Prefix,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum InventoryFormat {
     Csv,
     Orc,
@@ -5434,6 +5309,7 @@ impl FromStr for InventoryFormat {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum InventoryFrequency {
     Daily,
     Weekly,
@@ -5468,6 +5344,7 @@ impl FromStr for InventoryFrequency {
 pub type InventoryId = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum InventoryIncludedObjectVersions {
     All,
     Current,
@@ -5500,6 +5377,7 @@ impl FromStr for InventoryIncludedObjectVersions {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum InventoryOptionalField {
     BucketKeyStatus,
     ChecksumAlgorithm,
@@ -5569,7 +5447,6 @@ pub type InventoryOptionalFields = List<InventoryOptionalField>;
 /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional)
 /// where inventory results are published.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct InventoryS3BucketDestination {
     /// <p>The account ID that owns the destination S3 bucket. If no account ID is provided, the
     /// owner is not validated before exporting data. </p>
@@ -5592,7 +5469,6 @@ pub struct InventoryS3BucketDestination {
 
 /// <p>Specifies the schedule for generating inventory results.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct InventorySchedule {
     /// <p>Specifies how frequently inventory results are produced.</p>
     pub frequency: InventoryFrequency,
@@ -5608,7 +5484,6 @@ pub type IsTruncated = bool;
 
 /// <p>Specifies JSON as object's input serialization format.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct JSONInput {
     /// <p>The type of JSON. Valid values: Document, Lines.</p>
     pub type_: Option<JSONType>,
@@ -5616,7 +5491,6 @@ pub struct JSONInput {
 
 /// <p>Specifies JSON as request's output serialization format.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct JSONOutput {
     /// <p>The value used to separate individual records in the output. If no value is specified,
     /// Amazon S3 uses a newline character ('\n').</p>
@@ -5624,6 +5498,7 @@ pub struct JSONOutput {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum JSONType {
     Document,
     Lines,
@@ -5667,7 +5542,6 @@ pub type LambdaFunctionArn = String;
 
 /// <p>A container for specifying the configuration for Lambda notifications.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct LambdaFunctionConfiguration {
     /// <p>The Amazon S3 bucket event for which to invoke the Lambda function. For more information,
     /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported
@@ -5686,7 +5560,6 @@ pub type LastModified = Timestamp;
 
 /// <p>Container for the expiration for the lifecycle of the object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct LifecycleExpiration {
     /// <p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601
     /// Format.</p>
@@ -5702,7 +5575,6 @@ pub struct LifecycleExpiration {
 
 /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct LifecycleRule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     /// <p>Specifies the expiration for the lifecycle of the object in the form of date, days and,
@@ -5741,7 +5613,6 @@ pub struct LifecycleRule {
 /// predicates. The Lifecycle Rule will apply to any object matching all of the predicates
 /// configured inside the And operator.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct LifecycleRuleAndOperator {
     /// <p>Minimum object size to which the rule applies.</p>
     pub object_size_greater_than: ObjectSizeGreaterThanBytes,
@@ -5779,7 +5650,6 @@ pub enum LifecycleRuleFilter {
 pub type LifecycleRules = List<LifecycleRule>;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListBucketAnalyticsConfigurationsInput {
     /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
     pub bucket: BucketName,
@@ -5791,7 +5661,6 @@ pub struct ListBucketAnalyticsConfigurationsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     /// <p>The list of analytics configurations for a bucket.</p>
     pub analytics_configuration_list: Option<AnalyticsConfigurationList>,
@@ -5811,7 +5680,6 @@ pub struct ListBucketAnalyticsConfigurationsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListBucketIntelligentTieringConfigurationsInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -5821,7 +5689,6 @@ pub struct ListBucketIntelligentTieringConfigurationsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListBucketIntelligentTieringConfigurationsOutput {
     /// <p>The <code>ContinuationToken</code> that represents a placeholder from where this request
     /// should begin.</p>
@@ -5839,7 +5706,6 @@ pub struct ListBucketIntelligentTieringConfigurationsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListBucketInventoryConfigurationsInput {
     /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
     pub bucket: BucketName,
@@ -5852,7 +5718,6 @@ pub struct ListBucketInventoryConfigurationsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListBucketInventoryConfigurationsOutput {
     /// <p>If sent in the request, the marker that is used as a starting point for this inventory
     /// configuration list response.</p>
@@ -5870,7 +5735,6 @@ pub struct ListBucketInventoryConfigurationsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListBucketMetricsConfigurationsInput {
     /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
     pub bucket: BucketName,
@@ -5884,7 +5748,6 @@ pub struct ListBucketMetricsConfigurationsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListBucketMetricsConfigurationsOutput {
     /// <p>The marker that is used as a starting point for this metrics configuration list
     /// response. This value is present if it was sent in the request.</p>
@@ -5903,7 +5766,6 @@ pub struct ListBucketMetricsConfigurationsOutput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListBucketsOutput {
     /// <p>The list of buckets owned by the requester.</p>
     pub buckets: Option<Buckets>,
@@ -5912,7 +5774,6 @@ pub struct ListBucketsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListMultipartUploadsInput {
     /// <p>The name of the bucket to which the multipart upload was initiated. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -5956,7 +5817,6 @@ pub struct ListMultipartUploadsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListMultipartUploadsOutput {
     /// <p>The name of the bucket to which the multipart upload was initiated. Does not return the access point ARN or access point alias if used.</p>
     pub bucket: Option<BucketName>,
@@ -6002,7 +5862,6 @@ pub struct ListMultipartUploadsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListObjectVersionsInput {
     /// <p>The bucket name that contains the objects. </p>
     pub bucket: BucketName,
@@ -6034,7 +5893,6 @@ pub struct ListObjectVersionsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListObjectVersionsOutput {
     /// <p>All of the keys rolled up into a common prefix count as a single return when calculating
     /// the number of returns.</p>
@@ -6085,7 +5943,6 @@ pub struct ListObjectVersionsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListObjectsInput {
     /// <p>The name of the bucket containing the objects.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -6112,7 +5969,6 @@ pub struct ListObjectsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListObjectsOutput {
     /// <p>All of the keys (up to 1,000) rolled up in a common prefix count as a single return when calculating
     /// the number of returns. </p>
@@ -6161,7 +6017,6 @@ pub struct ListObjectsOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListObjectsV2Input {
     /// <p>Bucket name to list. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -6196,7 +6051,6 @@ pub struct ListObjectsV2Input {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListObjectsV2Output {
     /// <p>All of the keys (up to 1,000) rolled up into a common prefix count as a single return when calculating
     /// the number of returns.</p>
@@ -6265,7 +6119,6 @@ pub struct ListObjectsV2Output {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ListPartsInput {
     /// <p>The name of the bucket to which the parts are being uploaded. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -6302,7 +6155,6 @@ pub struct ListPartsInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ListPartsOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete
     /// multipart uploads and the prefix in the lifecycle rule matches the object name in the
@@ -6365,7 +6217,6 @@ pub type LocationPrefix = String;
 /// for a bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlogging.html">PUT Bucket logging</a> in the
 /// <i>Amazon S3 API Reference</i>.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct LoggingEnabled {
     /// <p>Specifies the bucket where you want Amazon S3 to store server access logs. You can have your
     /// logs delivered to any bucket that you own, including the same bucket that is being logged.
@@ -6387,6 +6238,7 @@ pub struct LoggingEnabled {
 pub type MFA = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum MFADelete {
     Disabled,
     Enabled,
@@ -6419,6 +6271,7 @@ impl FromStr for MFADelete {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum MFADeleteStatus {
     Disabled,
     Enabled,
@@ -6465,6 +6318,7 @@ pub type Message = String;
 pub type Metadata = Map<MetadataKey, MetadataValue>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum MetadataDirective {
     Copy,
     Replace,
@@ -6498,7 +6352,6 @@ impl FromStr for MetadataDirective {
 
 /// <p>A metadata key-value pair to store with an object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct MetadataEntry {
     /// <p>Name of the Object.</p>
     pub name: Option<MetadataKey>,
@@ -6513,7 +6366,6 @@ pub type MetadataValue = String;
 /// <p> A container specifying replication metrics-related settings enabling replication
 /// metrics and events.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct Metrics {
     /// <p> A container specifying the time threshold for emitting the
     /// <code>s3:Replication:OperationMissedThreshold</code> event. </p>
@@ -6526,7 +6378,6 @@ pub struct Metrics {
 /// The operator must have at least two predicates, and an object must match all of the
 /// predicates in order for the filter to apply.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct MetricsAndOperator {
     /// <p>The access point ARN used when evaluating an <code>AND</code> predicate.</p>
     pub access_point_arn: Option<AccessPointArn>,
@@ -6542,7 +6393,6 @@ pub struct MetricsAndOperator {
 /// If you don't include the elements you want to keep, they are erased. For more information,
 /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTMetricConfiguration.html">PutBucketMetricsConfiguration</a>.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct MetricsConfiguration {
     /// <p>Specifies a metrics configuration filter. The metrics configuration will only include
     /// objects that meet the filter's criteria. A filter must be a prefix, an object tag, an access point ARN, or a conjunction
@@ -6575,6 +6425,7 @@ pub enum MetricsFilter {
 pub type MetricsId = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum MetricsStatus {
     Disabled,
     Enabled,
@@ -6612,7 +6463,6 @@ pub type MissingMeta = i32;
 
 /// <p>Container for the <code>MultipartUpload</code> for the Amazon S3 object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct MultipartUpload {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
@@ -6648,17 +6498,14 @@ pub type NextVersionIdMarker = String;
 
 /// <p>The specified bucket does not exist.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct NoSuchBucket {}
 
 /// <p>The specified key does not exist.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct NoSuchKey {}
 
 /// <p>The specified multipart upload does not exist.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct NoSuchUpload {}
 
 /// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently
@@ -6666,7 +6513,6 @@ pub struct NoSuchUpload {}
 /// bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent
 /// object versions at a specific period in the object's lifetime.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct NoncurrentVersionExpiration {
     /// <p>Specifies how many noncurrent versions Amazon S3 will retain. If there are this many more recent
     /// noncurrent versions, Amazon S3 will take the associated action. For more information about noncurrent
@@ -6688,7 +6534,6 @@ pub struct NoncurrentVersionExpiration {
 /// <code>DEEP_ARCHIVE</code> storage class at a specific period in the object's
 /// lifetime.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct NoncurrentVersionTransition {
     /// <p>Specifies how many noncurrent versions Amazon S3 will retain. If there are this many more recent
     /// noncurrent versions, Amazon S3 will take the associated action. For more information about noncurrent
@@ -6708,13 +6553,11 @@ pub type NoncurrentVersionTransitionList = List<NoncurrentVersionTransition>;
 
 /// <p>The specified content does not exist.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct NotFound {}
 
 /// <p>A container for specifying the notification configuration of the bucket. If this element
 /// is empty, notifications are turned off for the bucket.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct NotificationConfiguration {
     /// <p>Enables delivery of events to Amazon EventBridge.</p>
     pub event_bridge_configuration: Option<EventBridgeConfiguration>,
@@ -6733,7 +6576,6 @@ pub struct NotificationConfiguration {
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring
 /// Event Notifications</a> in the <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct NotificationConfigurationFilter {
     pub key: Option<S3KeyFilter>,
 }
@@ -6744,7 +6586,6 @@ pub type NotificationId = String;
 
 /// <p>An object consists of data and its descriptive metadata.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Object {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithmList>,
@@ -6786,10 +6627,10 @@ pub struct Object {
 
 /// <p>This action is not allowed against this storage tier.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ObjectAlreadyInActiveTierError {}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectAttributes {
     Checksum,
     Etag,
@@ -6833,6 +6674,7 @@ impl FromStr for ObjectAttributes {
 pub type ObjectAttributesList = List<ObjectAttributes>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectCannedACL {
     AuthenticatedRead,
     AwsExecRead,
@@ -6881,7 +6723,6 @@ impl FromStr for ObjectCannedACL {
 
 /// <p>Object Identifier is unique value to identify objects.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ObjectIdentifier {
     /// <p>Key name of the object.</p>
     /// <important>
@@ -6902,7 +6743,6 @@ pub type ObjectList = List<Object>;
 
 /// <p>The container element for Object Lock configuration parameters.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ObjectLockConfiguration {
     /// <p>Indicates whether this bucket has an Object Lock configuration enabled.
     /// Enable <code>ObjectLockEnabled</code> when you apply <code>ObjectLockConfiguration</code>
@@ -6916,6 +6756,7 @@ pub struct ObjectLockConfiguration {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectLockEnabled {
     Enabled,
 }
@@ -6948,13 +6789,13 @@ pub type ObjectLockEnabledForBucket = bool;
 
 /// <p>A legal hold configuration for an object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ObjectLockLegalHold {
     /// <p>Indicates whether the specified object has a legal hold in place.</p>
     pub status: Option<ObjectLockLegalHoldStatus>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectLockLegalHoldStatus {
     Off,
     On,
@@ -6987,6 +6828,7 @@ impl FromStr for ObjectLockLegalHoldStatus {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectLockMode {
     Compliance,
     Governance,
@@ -7022,7 +6864,6 @@ pub type ObjectLockRetainUntilDate = Timestamp;
 
 /// <p>A Retention configuration for an object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ObjectLockRetention {
     /// <p>Indicates the Retention mode for the specified object.</p>
     pub mode: Option<ObjectLockRetentionMode>,
@@ -7031,6 +6872,7 @@ pub struct ObjectLockRetention {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectLockRetentionMode {
     Compliance,
     Governance,
@@ -7064,7 +6906,6 @@ impl FromStr for ObjectLockRetentionMode {
 
 /// <p>The container element for an Object Lock rule.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ObjectLockRule {
     /// <p>The default Object Lock retention mode and period that you want to apply to new objects
     /// placed in the specified bucket. Bucket settings require both a mode and a period.
@@ -7078,7 +6919,6 @@ pub type ObjectLockToken = String;
 /// <p>The source object of the COPY action is not in the active tier and is only stored in
 /// Amazon S3 Glacier.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ObjectNotInActiveTierError {}
 
 /// <p>The container element for object ownership for a bucket's ownership controls.</p>
@@ -7093,6 +6933,7 @@ pub struct ObjectNotInActiveTierError {}
 /// ACLs, such as the <code>bucket-owner-full-control</code> canned
 /// ACL or an equivalent form of this ACL expressed in the XML format.</p>
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectOwnership {
     BucketOwnerEnforced,
     BucketOwnerPreferred,
@@ -7129,7 +6970,6 @@ impl FromStr for ObjectOwnership {
 
 /// <p>A container for elements related to an individual part.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ObjectPart {
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
     /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
@@ -7165,6 +7005,7 @@ pub type ObjectSizeGreaterThanBytes = i64;
 pub type ObjectSizeLessThanBytes = i64;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectStorageClass {
     DeepArchive,
     Glacier,
@@ -7219,7 +7060,6 @@ impl FromStr for ObjectStorageClass {
 
 /// <p>The version of an object.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ObjectVersion {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithmList>,
@@ -7247,6 +7087,7 @@ pub type ObjectVersionId = String;
 pub type ObjectVersionList = List<ObjectVersion>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ObjectVersionStorageClass {
     Standard,
 }
@@ -7277,7 +7118,6 @@ impl FromStr for ObjectVersionStorageClass {
 
 /// <p>Describes the location where the restore job's output is stored.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct OutputLocation {
     /// <p>Describes an S3 location that will receive the results of the restore request.</p>
     pub s3: Option<S3Location>,
@@ -7285,7 +7125,6 @@ pub struct OutputLocation {
 
 /// <p>Describes how results of the Select job are serialized.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct OutputSerialization {
     /// <p>Describes the serialization of CSV-encoded Select results.</p>
     pub csv: Option<CSVOutput>,
@@ -7295,7 +7134,6 @@ pub struct OutputSerialization {
 
 /// <p>Container for the owner's display name and ID.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Owner {
     /// <p>Container for the display name of the owner.</p>
     pub display_name: Option<DisplayName>,
@@ -7304,6 +7142,7 @@ pub struct Owner {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum OwnerOverride {
     Destination,
 }
@@ -7334,7 +7173,6 @@ impl FromStr for OwnerOverride {
 
 /// <p>The container element for a bucket's ownership controls.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct OwnershipControls {
     /// <p>The container element for an ownership control rule.</p>
     pub rules: OwnershipControlsRules,
@@ -7342,7 +7180,6 @@ pub struct OwnershipControls {
 
 /// <p>The container element for an ownership control rule.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct OwnershipControlsRule {
     pub object_ownership: ObjectOwnership,
 }
@@ -7351,12 +7188,10 @@ pub type OwnershipControlsRules = List<OwnershipControlsRule>;
 
 /// <p>Container for Parquet.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ParquetInput {}
 
 /// <p>Container for elements related to a part.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Part {
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
     /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
@@ -7400,6 +7235,7 @@ pub type PartsCount = i32;
 pub type PartsList = List<ObjectPart>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Payer {
     BucketOwner,
     Requester,
@@ -7432,6 +7268,7 @@ impl FromStr for Payer {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Permission {
     FullControl,
     Read,
@@ -7476,7 +7313,6 @@ pub type Policy = String;
 
 /// <p>The container element for a bucket's policy status.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct PolicyStatus {
     /// <p>The policy status for this bucket. <code>TRUE</code> indicates that this bucket is
     /// public. <code>FALSE</code> indicates that the bucket is not public.</p>
@@ -7489,7 +7325,6 @@ pub type Priority = i32;
 
 /// <p>This data type contains information about progress of an operation.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Progress {
     /// <p>The current number of uncompressed object bytes processed.</p>
     pub bytes_processed: BytesProcessed,
@@ -7501,13 +7336,13 @@ pub struct Progress {
 
 /// <p>This data type contains information about the progress event of an operation.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ProgressEvent {
     /// <p>The Progress event details.</p>
     pub details: Option<Progress>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Protocol {
     Http,
     Https,
@@ -7543,7 +7378,6 @@ impl FromStr for Protocol {
 /// enable the configuration options in any combination. For more information about when Amazon S3
 /// considers a bucket or object public, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">The Meaning of "Public"</a> in the <i>Amazon S3 User Guide</i>. </p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct PublicAccessBlockConfiguration {
     /// <p>Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket
     /// and objects in this bucket. Setting this element to <code>TRUE</code> causes the following
@@ -7584,7 +7418,6 @@ pub struct PublicAccessBlockConfiguration {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketAccelerateConfigurationInput {
     /// <p>Container for setting the transfer acceleration state.</p>
     pub accelerate_configuration: AccelerateConfiguration,
@@ -7603,7 +7436,6 @@ pub struct PutBucketAccelerateConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketAclInput {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<BucketCannedACL>,
@@ -7643,7 +7475,6 @@ pub struct PutBucketAclInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketAnalyticsConfigurationInput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: AnalyticsConfiguration,
@@ -7656,7 +7487,6 @@ pub struct PutBucketAnalyticsConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketCorsInput {
     /// <p>Specifies the bucket impacted by the <code>cors</code>configuration.</p>
     pub bucket: BucketName,
@@ -7684,7 +7514,6 @@ pub struct PutBucketCorsInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketEncryptionInput {
     /// <p>Specifies default encryption for a bucket using server-side encryption with Amazon S3-managed
     /// keys (SSE-S3) or customer managed keys (SSE-KMS). For information about
@@ -7708,7 +7537,6 @@ pub struct PutBucketEncryptionInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -7719,7 +7547,6 @@ pub struct PutBucketIntelligentTieringConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketInventoryConfigurationInput {
     /// <p>The name of the bucket where the inventory configuration will be stored.</p>
     pub bucket: BucketName,
@@ -7732,7 +7559,6 @@ pub struct PutBucketInventoryConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketLifecycleConfigurationInput {
     /// <p>The name of the bucket for which to set the configuration.</p>
     pub bucket: BucketName,
@@ -7751,7 +7577,6 @@ pub struct PutBucketLifecycleConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketLoggingInput {
     /// <p>The name of the bucket for which to set the logging parameters.</p>
     pub bucket: BucketName,
@@ -7773,7 +7598,6 @@ pub struct PutBucketLoggingInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketMetricsConfigurationInput {
     /// <p>The name of the bucket for which the metrics configuration is set.</p>
     pub bucket: BucketName,
@@ -7786,7 +7610,6 @@ pub struct PutBucketMetricsConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketNotificationConfigurationInput {
     /// <p>The name of the bucket.</p>
     pub bucket: BucketName,
@@ -7798,7 +7621,6 @@ pub struct PutBucketNotificationConfigurationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketOwnershipControlsInput {
     /// <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to set.</p>
     pub bucket: BucketName,
@@ -7813,7 +7635,6 @@ pub struct PutBucketOwnershipControlsInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketPolicyInput {
     /// <p>The name of the bucket.</p>
     pub bucket: BucketName,
@@ -7838,7 +7659,6 @@ pub struct PutBucketPolicyInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketReplicationInput {
     /// <p>The name of the bucket</p>
     pub bucket: BucketName,
@@ -7863,7 +7683,6 @@ pub struct PutBucketReplicationInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketRequestPaymentInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -7888,7 +7707,6 @@ pub struct PutBucketRequestPaymentInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketTaggingInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -7912,7 +7730,6 @@ pub struct PutBucketTaggingInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketVersioningInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -7940,7 +7757,6 @@ pub struct PutBucketVersioningInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutBucketWebsiteInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -7964,7 +7780,6 @@ pub struct PutBucketWebsiteInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutObjectAclInput {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
     pub acl: Option<ObjectCannedACL>,
@@ -8019,13 +7834,11 @@ pub struct PutObjectAclInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct PutObjectAclOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutObjectInput {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned
     /// ACL</a>.</p>
@@ -8188,7 +8001,6 @@ pub struct PutObjectInput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutObjectLegalHoldInput {
     /// <p>The bucket name containing the object that you want to place a legal hold on. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -8217,13 +8029,11 @@ pub struct PutObjectLegalHoldInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct PutObjectLegalHoldOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutObjectLockConfigurationInput {
     /// <p>The bucket whose Object Lock configuration you want to create or replace.</p>
     pub bucket: BucketName,
@@ -8248,13 +8058,11 @@ pub struct PutObjectLockConfigurationInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct PutObjectLockConfigurationOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct PutObjectOutput {
     /// <p>Indicates whether the uploaded object uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
@@ -8311,7 +8119,6 @@ pub struct PutObjectOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutObjectRetentionInput {
     /// <p>The bucket name that contains the object you want to apply this Object Retention
     /// configuration to. </p>
@@ -8344,13 +8151,11 @@ pub struct PutObjectRetentionInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct PutObjectRetentionOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutObjectTaggingInput {
     /// <p>The bucket name containing the object. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -8380,14 +8185,12 @@ pub struct PutObjectTaggingInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct PutObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was added to.</p>
     pub version_id: Option<ObjectVersionId>,
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct PutPublicAccessBlockInput {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want
     /// to set.</p>
@@ -8416,7 +8219,6 @@ pub type QueueArn = String;
 /// <p>Specifies the configuration for publishing messages to an Amazon Simple Queue Service
 /// (Amazon SQS) queue when Amazon S3 detects specified events.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct QueueConfiguration {
     /// <p>A collection of bucket events for which to send notifications</p>
     pub events: EventList,
@@ -8436,6 +8238,7 @@ pub type QuoteCharacter = String;
 pub type QuoteEscapeCharacter = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum QuoteFields {
     Always,
     Asneeded,
@@ -8471,7 +8274,6 @@ pub type RecordDelimiter = String;
 
 /// <p>The container for the records event.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct RecordsEvent {
     /// <p>The byte array of partial, one or more result records.</p>
     pub payload: Option<Body>,
@@ -8480,7 +8282,6 @@ pub struct RecordsEvent {
 /// <p>Specifies how requests are redirected. In the event of an error, you can specify a
 /// different error code to return.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Redirect {
     /// <p>The host name to use in the redirect request.</p>
     pub host_name: Option<HostName>,
@@ -8516,7 +8317,6 @@ pub struct Redirect {
 /// <p>Specifies the redirect behavior of all requests to a website endpoint of an Amazon S3
 /// bucket.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct RedirectAllRequestsTo {
     /// <p>Name of the host where requests are redirected.</p>
     pub host_name: HostName,
@@ -8541,13 +8341,13 @@ pub type ReplicaKmsKeyID = String;
 /// element is not allowed.</p>
 /// </note>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ReplicaModifications {
     /// <p>Specifies whether Amazon S3 replicates modifications on replicas.</p>
     pub status: ReplicaModificationsStatus,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ReplicaModificationsStatus {
     Disabled,
     Enabled,
@@ -8582,7 +8382,6 @@ impl FromStr for ReplicaModificationsStatus {
 /// <p>A container for replication rules. You can add up to 1,000 rules. The maximum size of a
 /// replication configuration is 2 MB.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ReplicationConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the Identity and Access Management (IAM) role that
     /// Amazon S3 assumes when replicating objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-how-setup.html">How to Set Up
@@ -8595,7 +8394,6 @@ pub struct ReplicationConfiguration {
 
 /// <p>Specifies which Amazon S3 objects to replicate and where to store the replicas.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ReplicationRule {
     pub delete_marker_replication: Option<DeleteMarkerReplication>,
     /// <p>A container for information about the replication destination and its configurations
@@ -8647,7 +8445,6 @@ pub struct ReplicationRule {
 /// </li>
 /// </ul>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ReplicationRuleAndOperator {
     /// <p>An object key name prefix that identifies the subset of objects to which the rule
     /// applies.</p>
@@ -8690,6 +8487,7 @@ pub enum ReplicationRuleFilter {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ReplicationRuleStatus {
     Disabled,
     Enabled,
@@ -8724,6 +8522,7 @@ impl FromStr for ReplicationRuleStatus {
 pub type ReplicationRules = List<ReplicationRule>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ReplicationStatus {
     Complete,
     Failed,
@@ -8765,7 +8564,6 @@ impl FromStr for ReplicationStatus {
 /// enabled and the time when all objects and operations on objects must be replicated. Must be
 /// specified together with a <code>Metrics</code> block. </p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ReplicationTime {
     /// <p> Specifies whether the replication time is enabled. </p>
     pub status: ReplicationTimeStatus,
@@ -8775,6 +8573,7 @@ pub struct ReplicationTime {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ReplicationTimeStatus {
     Disabled,
     Enabled,
@@ -8809,7 +8608,6 @@ impl FromStr for ReplicationTimeStatus {
 /// <p> A container specifying the time value for S3 Replication Time Control (S3 RTC) and replication metrics
 /// <code>EventThreshold</code>. </p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ReplicationTimeValue {
     /// <p> Contains an integer specifying time in minutes. </p>
     /// <p> Valid value: 15</p>
@@ -8819,6 +8617,7 @@ pub struct ReplicationTimeValue {
 /// <p>If present, indicates that the requester was successfully charged for the
 /// request.</p>
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum RequestCharged {
     Requester,
 }
@@ -8852,6 +8651,7 @@ impl FromStr for RequestCharged {
 /// objects from Requester Pays buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html">Downloading Objects in
 /// Requester Pays Buckets</a> in the <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum RequestPayer {
     Requester,
 }
@@ -8882,7 +8682,6 @@ impl FromStr for RequestPayer {
 
 /// <p>Container for Payer.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct RequestPaymentConfiguration {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Payer,
@@ -8891,7 +8690,6 @@ pub struct RequestPaymentConfiguration {
 /// <p>Container for specifying if periodic <code>QueryProgress</code> messages should be
 /// sent.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct RequestProgress {
     /// <p>Specifies whether periodic QueryProgress frames should be sent. Valid values: TRUE,
     /// FALSE. Default value: FALSE.</p>
@@ -8917,7 +8715,6 @@ pub type ResponseExpires = Timestamp;
 pub type Restore = String;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct RestoreObjectInput {
     /// <p>The bucket name containing the object to restore. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -8943,7 +8740,6 @@ pub struct RestoreObjectInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct RestoreObjectOutput {
     pub request_charged: Option<RequestCharged>,
     /// <p>Indicates the path in the provided S3 output location where Select results will be
@@ -8955,7 +8751,6 @@ pub type RestoreOutputPath = String;
 
 /// <p>Container for restore job parameters.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct RestoreRequest {
     /// <p>Lifetime of the active copy in days. Do not use with restores that specify
     /// <code>OutputLocation</code>.</p>
@@ -8978,6 +8773,7 @@ pub struct RestoreRequest {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum RestoreRequestType {
     Select,
 }
@@ -9012,7 +8808,6 @@ pub type Role = String;
 /// about routing rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html#advanced-conditional-redirects">Configuring advanced conditional redirects</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct RoutingRule {
     /// <p>A container for describing a condition that must be met for the specified redirect to
     /// apply. For example, 1. If request is for pages in the <code>/docs</code> folder, redirect
@@ -9029,14 +8824,12 @@ pub type RoutingRules = List<RoutingRule>;
 
 /// <p>A container for object key name prefix and suffix filtering rules.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct S3KeyFilter {
     pub filter_rules: Option<FilterRuleList>,
 }
 
 /// <p>Describes an Amazon S3 location that will receive the results of the restore request.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct S3Location {
     /// <p>A list of grants that control access to the staged results.</p>
     pub access_control_list: Option<Grants>,
@@ -9063,7 +8856,6 @@ pub type SSECustomerKeyMD5 = String;
 
 /// <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct SSEKMS {
     /// <p>Specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric customer managed key
     /// to use for encrypting inventory reports.</p>
@@ -9076,7 +8868,6 @@ pub type SSEKMSKeyId = String;
 
 /// <p>Specifies the use of SSE-S3 to encrypt delivered inventory reports.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct SSES3 {}
 
 /// <p>Specifies the byte range of the object to get the records from. A record is processed
@@ -9084,7 +8875,6 @@ pub struct SSES3 {}
 /// specified, it must not be empty. See RFC 2616, Section 14.35.1 about how to specify the
 /// start and end of the range.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ScanRange {
     /// <p>Specifies the end of the byte range. This parameter is optional. Valid values:
     /// non-negative integers. The default value is one less than the size of the object being
@@ -9103,7 +8893,6 @@ pub struct ScanRange {
 
 /// <p>Describes the parameters for Select job types.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct SelectParameters {
     /// <p>The expression that is used to query the object.</p>
     pub expression: Expression,
@@ -9116,6 +8905,7 @@ pub struct SelectParameters {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ServerSideEncryption {
     Aes256,
     AwsKms,
@@ -9154,7 +8944,6 @@ impl FromStr for ServerSideEncryption {
 /// SSE-KMS to a bucket. By default, Amazon S3 uses this KMS key for SSE-KMS. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PUT Bucket encryption</a> in
 /// the <i>Amazon S3 API Reference</i>.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ServerSideEncryptionByDefault {
     /// <p>Amazon Web Services Key Management Service (KMS) customer Amazon Web Services KMS key ID to use for the default
     /// encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
@@ -9188,7 +8977,6 @@ pub struct ServerSideEncryptionByDefault {
 
 /// <p>Specifies the default server-side-encryption configuration.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct ServerSideEncryptionConfiguration {
     /// <p>Container for information about a particular server-side encryption configuration
     /// rule.</p>
@@ -9197,7 +8985,6 @@ pub struct ServerSideEncryptionConfiguration {
 
 /// <p>Specifies the default server-side encryption configuration.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct ServerSideEncryptionRule {
     /// <p>Specifies the default server-side encryption to apply to new objects in the bucket. If a
     /// PUT Object request doesn't specify any server-side encryption, this default encryption will
@@ -9222,7 +9009,6 @@ pub type SkipValidation = bool;
 /// with server-side encryption using a customer managed key stored in Amazon Web Services Key Management
 /// Service (SSE-KMS).</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct SourceSelectionCriteria {
     /// <p>A filter that you can specify for selections for modifications on replicas. Amazon S3 doesn't
     /// replicate replica modifications by default. In the latest version of replication
@@ -9243,7 +9029,6 @@ pub struct SourceSelectionCriteria {
 /// <p>A container for filter information for the selection of S3 objects encrypted with Amazon Web Services
 /// KMS.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct SseKmsEncryptedObjects {
     /// <p>Specifies whether Amazon S3 replicates objects created with server-side encryption using an
     /// Amazon Web Services KMS key stored in Amazon Web Services Key Management Service.</p>
@@ -9251,6 +9036,7 @@ pub struct SseKmsEncryptedObjects {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum SseKmsEncryptedObjectsStatus {
     Disabled,
     Enabled,
@@ -9288,7 +9074,6 @@ pub type StartAfter = String;
 
 /// <p>Container for the stats details.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Stats {
     /// <p>The total number of uncompressed object bytes processed.</p>
     pub bytes_processed: BytesProcessed,
@@ -9300,13 +9085,13 @@ pub struct Stats {
 
 /// <p>Container for the Stats Event.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct StatsEvent {
     /// <p>The Stats event details.</p>
     pub details: Option<Stats>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum StorageClass {
     DeepArchive,
     Glacier,
@@ -9362,7 +9147,6 @@ impl FromStr for StorageClass {
 /// <p>Specifies data related to access patterns to be collected and made available to analyze
 /// the tradeoffs between different storage classes for an Amazon S3 bucket.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct StorageClassAnalysis {
     /// <p>Specifies how data related to the storage class analysis for an Amazon S3 bucket should be
     /// exported.</p>
@@ -9372,7 +9156,6 @@ pub struct StorageClassAnalysis {
 /// <p>Container for data related to the storage class analysis for an Amazon S3 bucket for
 /// export.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct StorageClassAnalysisDataExport {
     /// <p>The place to store the data for an analysis.</p>
     pub destination: AnalyticsExportDestination,
@@ -9382,6 +9165,7 @@ pub struct StorageClassAnalysisDataExport {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum StorageClassAnalysisSchemaVersion {
     V1,
 }
@@ -9414,7 +9198,6 @@ pub type Suffix = String;
 
 /// <p>A container of a key value name pair.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct Tag {
     /// <p>Name of the object key.</p>
     pub key: ObjectKey,
@@ -9428,13 +9211,13 @@ pub type TagSet = List<Tag>;
 
 /// <p>Container for <code>TagSet</code> elements.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct Tagging {
     /// <p>A collection for a set of tags</p>
     pub tag_set: TagSet,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum TaggingDirective {
     Copy,
     Replace,
@@ -9475,7 +9258,6 @@ pub type TargetBucket = String;
 /// Ownership don't support target grants. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html#grant-log-delivery-permissions-general">Permissions server access log delivery</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct TargetGrant {
     /// <p>Container for the person being granted permissions.</p>
     pub grantee: Option<Grantee>,
@@ -9488,6 +9270,7 @@ pub type TargetGrants = List<TargetGrant>;
 pub type TargetPrefix = String;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Tier {
     Bulk,
     Expedited,
@@ -9526,7 +9309,6 @@ impl FromStr for Tier {
 /// automatically moving data to the most cost-effective storage access tier, without
 /// additional operational overhead.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct Tiering {
     /// <p>S3 Intelligent-Tiering access tier. See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for
     /// automatically optimizing frequently and infrequently accessed objects</a> for a list
@@ -9548,7 +9330,6 @@ pub type TopicArn = String;
 /// <p>A container for specifying the configuration for publication of messages to an Amazon
 /// Simple Notification Service (Amazon SNS) topic when Amazon S3 detects specified events.</p>
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct TopicConfiguration {
     /// <p>The Amazon S3 bucket event about which to send notifications. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported
@@ -9567,7 +9348,6 @@ pub type TopicConfigurationList = List<TopicConfiguration>;
 /// about Amazon S3 lifecycle configuration rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-transition-general-considerations.html">Transitioning
 /// Objects Using Amazon S3 Lifecycle</a> in the <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct Transition {
     /// <p>Indicates when objects are transitioned to the specified storage class. The date value
     /// must be in ISO 8601 format. The time is always midnight UTC.</p>
@@ -9582,6 +9362,7 @@ pub struct Transition {
 pub type TransitionList = List<Transition>;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum TransitionStorageClass {
     DeepArchive,
     Glacier,
@@ -9626,6 +9407,7 @@ impl FromStr for TransitionStorageClass {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Type {
     AmazonCustomerByEmail,
     CanonicalUser,
@@ -9665,7 +9447,6 @@ pub type URI = String;
 pub type UploadIdMarker = String;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct UploadPartCopyInput {
     /// <p>The bucket name.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -9748,7 +9529,6 @@ pub struct UploadPartCopyInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct UploadPartCopyOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
@@ -9774,7 +9554,6 @@ pub struct UploadPartCopyOutput {
 }
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct UploadPartInput {
     /// <p>Object data.</p>
     pub body: Option<StreamingBlob>,
@@ -9846,7 +9625,6 @@ pub struct UploadPartInput {
 }
 
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct UploadPartOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
@@ -9899,7 +9677,6 @@ pub type VersionIdMarker = String;
 /// <p>Describes the versioning state of an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html">PUT
 /// Bucket versioning</a> in the <i>Amazon S3 API Reference</i>.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct VersioningConfiguration {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This
     /// element is only returned if the bucket has been configured with MFA delete. If the bucket
@@ -9911,7 +9688,6 @@ pub struct VersioningConfiguration {
 
 /// <p>Specifies website configuration parameters for an Amazon S3 bucket.</p>
 #[derive(Debug, Default)]
-#[non_exhaustive]
 pub struct WebsiteConfiguration {
     /// <p>The name of the error document for the website.</p>
     pub error_document: Option<ErrorDocument>,
@@ -9929,7 +9705,6 @@ pub struct WebsiteConfiguration {
 pub type WebsiteRedirectLocation = String;
 
 #[derive(Debug)]
-#[non_exhaustive]
 pub struct WriteGetObjectResponseInput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<AcceptRanges>,

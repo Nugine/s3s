@@ -69,12 +69,16 @@ impl S3 for FileSystem {
 
         let md5_sum = self.get_md5_sum(bucket, key).await?;
 
-        let mut copy_object_result = CopyObjectResult::default();
-        copy_object_result.e_tag = Some(format!("\"{md5_sum}\""));
-        copy_object_result.last_modified = Some(last_modified);
+        let copy_object_result = CopyObjectResult {
+            e_tag: Some(format!("\"{md5_sum}\"")),
+            last_modified: Some(last_modified),
+            ..Default::default()
+        };
 
-        let mut output = CopyObjectOutput::default();
-        output.copy_object_result = Some(copy_object_result);
+        let output = CopyObjectOutput {
+            copy_object_result: Some(copy_object_result),
+            ..Default::default()
+        };
         Ok(output)
     }
 
@@ -115,14 +119,18 @@ impl S3 for FileSystem {
         for (path, key) in objects {
             try_!(fs::remove_file(path).await);
 
-            let mut deleted_object = DeletedObject::default();
-            deleted_object.key = Some(key);
+            let deleted_object = DeletedObject {
+                key: Some(key),
+                ..Default::default()
+            };
 
             deleted_objects.push(deleted_object);
         }
 
-        let mut output = DeleteObjectsOutput::default();
-        output.deleted = Some(deleted_objects);
+        let output = DeleteObjectsOutput {
+            deleted: Some(deleted_objects),
+            ..Default::default()
+        };
         Ok(output)
     }
 
@@ -188,12 +196,14 @@ impl S3 for FileSystem {
 
         let md5_sum = self.get_md5_sum(&input.bucket, &input.key).await?;
 
-        let mut output = GetObjectOutput::default();
-        output.body = Some(StreamingBlob::wrap(body));
-        output.content_length = try_!(i64::try_from(content_length));
-        output.last_modified = Some(last_modified);
-        output.metadata = object_metadata;
-        output.e_tag = Some(format!("\"{md5_sum}\""));
+        let output = GetObjectOutput {
+            body: Some(StreamingBlob::wrap(body)),
+            content_length: try_!(i64::try_from(content_length)),
+            last_modified: Some(last_modified),
+            metadata: object_metadata,
+            e_tag: Some(format!("\"{md5_sum}\"")),
+            ..Default::default()
+        };
         Ok(output)
     }
 
@@ -225,11 +235,13 @@ impl S3 for FileSystem {
         // TODO: detect content type
         let content_type = mime::APPLICATION_OCTET_STREAM;
 
-        let mut output = HeadObjectOutput::default();
-        output.content_length = try_!(i64::try_from(file_len));
-        output.content_type = Some(content_type);
-        output.last_modified = Some(last_modified);
-        output.metadata = object_metadata;
+        let output = HeadObjectOutput {
+            content_length: try_!(i64::try_from(file_len)),
+            content_type: Some(content_type),
+            last_modified: Some(last_modified),
+            metadata: object_metadata,
+            ..Default::default()
+        };
         Ok(output)
     }
 
@@ -252,16 +264,17 @@ impl S3 for FileSystem {
             let file_meta = try_!(entry.metadata().await);
             let creation_date = Timestamp::from(try_!(file_meta.created()));
 
-            let mut bucket = Bucket::default();
-            bucket.creation_date = Some(creation_date);
-            bucket.name = Some(name.to_owned());
-
+            let bucket = Bucket {
+                creation_date: Some(creation_date),
+                name: Some(name.to_owned()),
+            };
             buckets.push(bucket);
         }
 
-        let mut output = ListBucketsOutput::default();
-        output.buckets = Some(buckets);
-        output.owner = None;
+        let output = ListBucketsOutput {
+            buckets: Some(buckets),
+            owner: None,
+        };
         Ok(output)
     }
 
@@ -269,13 +282,15 @@ impl S3 for FileSystem {
     async fn list_objects(&self, input: ListObjectsInput) -> S3Result<ListObjectsOutput> {
         let v2 = self.list_objects_v2(input.into()).await?;
 
-        let mut output = ListObjectsOutput::default();
-        output.contents = v2.contents;
-        output.delimiter = v2.delimiter;
-        output.encoding_type = v2.encoding_type;
-        output.name = v2.name;
-        output.prefix = v2.prefix;
-        output.max_keys = v2.max_keys;
+        let output = ListObjectsOutput {
+            contents: v2.contents,
+            delimiter: v2.delimiter,
+            encoding_type: v2.encoding_type,
+            name: v2.name,
+            prefix: v2.prefix,
+            max_keys: v2.max_keys,
+            ..Default::default()
+        };
         Ok(output)
     }
 
@@ -312,11 +327,12 @@ impl S3 for FileSystem {
                     let last_modified = Timestamp::from(try_!(metadata.modified()));
                     let size = metadata.len();
 
-                    let mut object = Object::default();
-                    object.key = Some(key.to_owned());
-                    object.last_modified = Some(last_modified);
-                    object.size = try_!(i64::try_from(size));
-
+                    let object = Object {
+                        key: Some(key.to_owned()),
+                        last_modified: Some(last_modified),
+                        size: try_!(i64::try_from(size)),
+                        ..Default::default()
+                    };
                     objects.push(object);
                 }
             }
@@ -330,14 +346,16 @@ impl S3 for FileSystem {
 
         let key_count = try_!(i32::try_from(objects.len()));
 
-        let mut output = ListObjectsV2Output::default();
-        output.key_count = key_count;
-        output.max_keys = key_count;
-        output.contents = Some(objects);
-        output.delimiter = input.delimiter;
-        output.encoding_type = input.encoding_type;
-        output.name = Some(input.bucket);
-        output.prefix = input.prefix;
+        let output = ListObjectsV2Output {
+            key_count,
+            max_keys: key_count,
+            contents: Some(objects),
+            delimiter: input.delimiter,
+            encoding_type: input.encoding_type,
+            name: Some(input.bucket),
+            prefix: input.prefix,
+            ..Default::default()
+        };
         Ok(output)
     }
 
@@ -394,10 +412,10 @@ impl S3 for FileSystem {
             self.save_metadata(&bucket, &key, metadata).await?;
         }
 
-        let mut output = PutObjectOutput::default();
-        output.e_tag = Some(format!("\"{md5_sum}\""));
-        // TODO: other fields?
-
+        let output = PutObjectOutput {
+            e_tag: Some(format!("\"{md5_sum}\"")),
+            ..Default::default()
+        };
         Ok(output)
     }
 
@@ -405,10 +423,12 @@ impl S3 for FileSystem {
     async fn create_multipart_upload(&self, input: CreateMultipartUploadInput) -> S3Result<CreateMultipartUploadOutput> {
         let upload_id = uuid::Uuid::new_v4().to_string();
 
-        let mut output = CreateMultipartUploadOutput::default();
-        output.bucket = Some(input.bucket);
-        output.key = Some(input.key);
-        output.upload_id = Some(upload_id);
+        let output = CreateMultipartUploadOutput {
+            bucket: Some(input.bucket),
+            key: Some(input.key),
+            upload_id: Some(upload_id),
+            ..Default::default()
+        };
 
         Ok(output)
     }
@@ -442,8 +462,10 @@ impl S3 for FileSystem {
 
         debug!(path = %file_path.display(), ?size, %md5_sum, "write file");
 
-        let mut output = UploadPartOutput::default();
-        output.e_tag = Some(format!("\"{md5_sum}\""));
+        let output = UploadPartOutput {
+            e_tag: Some(format!("\"{md5_sum}\"")),
+            ..Default::default()
+        };
         Ok(output)
     }
 
@@ -491,10 +513,12 @@ impl S3 for FileSystem {
 
         debug!(?md5_sum, path = %object_path.display(), size = ?file_size, "file md5 sum");
 
-        let mut output = CompleteMultipartUploadOutput::default();
-        output.bucket = Some(bucket);
-        output.key = Some(key);
-        output.e_tag = Some(format!("\"{md5_sum}\""));
+        let output = CompleteMultipartUploadOutput {
+            bucket: Some(bucket),
+            key: Some(key),
+            e_tag: Some(format!("\"{md5_sum}\"")),
+            ..Default::default()
+        };
         Ok(output)
     }
 }
