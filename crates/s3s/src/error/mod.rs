@@ -61,6 +61,10 @@ impl S3Error {
         self.message = Some(val.into());
     }
 
+    pub fn set_request_id(&mut self, val: impl Into<String>) {
+        self.request_id = Some(val.into());
+    }
+
     pub fn set_source(&mut self, val: Box<dyn std::error::Error + Send + Sync + 'static>) {
         self.source = Some(val);
     }
@@ -73,6 +77,11 @@ impl S3Error {
     #[must_use]
     pub fn message(&self) -> Option<&str> {
         self.message.as_deref()
+    }
+
+    #[must_use]
+    pub fn request_id(&self) -> Option<&str> {
+        self.request_id.as_deref()
     }
 
     #[must_use]
