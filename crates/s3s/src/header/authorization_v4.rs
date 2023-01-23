@@ -211,10 +211,7 @@ mod tests {
             assert_eq!(ans.credential.aws_region, "us-east-1");
             assert_eq!(ans.credential.aws_service, "s3");
             assert_eq!(ans.signed_headers, &["host", "range", "x-amz-date"]);
-            assert_eq!(
-                ans.signature,
-                "fe5f80f77d5fa3beca038a248ff027d0445342fe2855ddc963176630326f1024"
-            );
+            assert_eq!(ans.signature, "fe5f80f77d5fa3beca038a248ff027d0445342fe2855ddc963176630326f1024");
         }
         {
             let auth = r#"AWS4-HMAC-SHA256 
@@ -247,9 +244,6 @@ mod tests {
             ans.signed_headers,
             &["host", "x-amz-content-sha256", "x-amz-date", "x-amz-decoded-content-length"]
         );
-        assert_eq!(
-            ans.signature,
-            "7a7f7778618cadc05f112b44cca218e001a0a020c5c512d8aa2bca2afb713fad"
-        );
+        assert_eq!(ans.signature, "7a7f7778618cadc05f112b44cca218e001a0a020c5c512d8aa2bca2afb713fad");
     }
 }

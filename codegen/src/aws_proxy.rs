@@ -24,9 +24,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         let s3s_output = f!("s3s::dto::{}", op.output);
 
         let arg = if op.smithy_input == "Unit" { "_" } else { "input" };
-        g.ln(f!(
-            "async fn {method_name}(&self, {arg}: {s3s_input}) -> S3Result<{s3s_output}> {{"
-        ));
+        g.ln(f!("async fn {method_name}(&self, {arg}: {s3s_input}) -> S3Result<{s3s_output}> {{"));
 
         if op.smithy_input == "Unit" {
             g.ln(f!("let result = self.0.{method_name}().send().await;"));

@@ -182,9 +182,7 @@ pub fn take_string_body(req: &mut Request) -> S3Result<String> {
 
 pub fn take_stream_body(req: &mut Request) -> StreamingBlob {
     let body = std::mem::take(req.body_mut());
-    StreamingBlob(Box::pin(
-        body.map_err(|err| Box::new(err) as Box<dyn std::error::Error + Send + Sync>),
-    ))
+    StreamingBlob(Box::pin(body.map_err(|err| Box::new(err) as Box<dyn std::error::Error + Send + Sync>)))
 }
 
 pub fn parse_opt_metadata(req: &Request) -> S3Result<Option<Metadata>> {

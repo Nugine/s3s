@@ -131,11 +131,7 @@ fn codegen_async_trait(ops: &Operations, g: &mut Codegen) {
 
         let method_name = op.name.to_snake_case();
 
-        g.ln(f!(
-            "async fn {method_name}(&self, _input: {}) -> S3Result<{}> {{",
-            op.input,
-            op.output
-        ));
+        g.ln(f!("async fn {method_name}(&self, _input: {}) -> S3Result<{}> {{", op.input, op.output));
 
         g.ln(f!("Err(s3_error!(NotImplemented, \"{} is not implemented yet\"))", op.name));
         g.ln("}");
@@ -261,12 +257,7 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                             g.ln(f!("s.timestamp(\"{xml_name}\", val, TimestampFormat::{fmt})?;"));
                             g.ln("}");
                         } else {
-                            g.ln(f!(
-                                "s.timestamp(\"{}\", &self.{}, TimestampFormat::{})?;",
-                                xml_name,
-                                field.name,
-                                fmt
-                            ));
+                            g.ln(f!("s.timestamp(\"{}\", &self.{}, TimestampFormat::{})?;", xml_name, field.name, fmt));
                         }
                     } else if field.option_type {
                         g.ln(f!("if let Some(ref val) = self.{} {{", field.name));
@@ -438,23 +429,17 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                                 g.ln(f!("let ans: {} = d.content()?;", list_ty.member.type_));
                                 g.ln(f!("{field_name}.get_or_insert_with(List::new).push(ans);"));
                             } else {
-                                g.ln(f!(
-                                    "if {field_name}.is_some() {{ return Err(xml::DeError::DuplicateField); }}"
-                                ));
+                                g.ln(f!("if {field_name}.is_some() {{ return Err(xml::DeError::DuplicateField); }}"));
                                 g.ln(f!("{field_name} = Some(d.list_content(\"member\")?);"));
                             }
                         } else if let rust::Type::Timestamp(ts_ty) = field_type {
                             let fmt = ts_ty.format.as_deref().unwrap_or("DateTime");
 
-                            g.ln(f!(
-                                "if {field_name}.is_some() {{ return Err(xml::DeError::DuplicateField); }}"
-                            ));
+                            g.ln(f!("if {field_name}.is_some() {{ return Err(xml::DeError::DuplicateField); }}"));
 
                             g.ln(f!("{field_name} = Some(d.timestamp(TimestampFormat::{fmt})?);"));
                         } else {
-                            g.ln(f!(
-                                "if {field_name}.is_some() {{ return Err(xml::DeError::DuplicateField); }}"
-                            ));
+                            g.ln(f!("if {field_name}.is_some() {{ return Err(xml::DeError::DuplicateField); }}"));
                             g.ln(f!("{field_name} = Some(d.content()?);"));
                         }
 
@@ -826,12 +811,7 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) {
                                     literal,
                                 ));
                             } else {
-                                g.ln(f!(
-                                    "let {}: {} = http::parse_query(req, \"{}\")?;",
-                                    field.name,
-                                    field.type_,
-                                    query,
-                                ));
+                                g.ln(f!("let {}: {} = http::parse_query(req, \"{}\")?;", field.name, field.type_, query,));
                             }
                         }
                         "header" => {
@@ -840,12 +820,7 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) {
 
                             if let rust::Type::List(_) = field_type {
                                 assert!(field.option_type.not());
-                                g.ln(f!(
-                                    "let {}: {} = http::parse_list_header(req, &{})?;",
-                                    field.name,
-                                    field.type_,
-                                    header
-                                ));
+                                g.ln(f!("let {}: {} = http::parse_list_header(req, &{})?;", field.name, field.type_, header));
                             } else if let rust::Type::Timestamp(ts_ty) = field_type {
                                 assert!(field.option_type);
                                 let fmt = ts_ty.format.as_deref().unwrap_or("HttpDate");
@@ -877,21 +852,12 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) {
                                     literal,
                                 ));
                             } else {
-                                g.ln(f!(
-                                    "let {}: {} = http::parse_header(req, &{})?;",
-                                    field.name,
-                                    field.type_,
-                                    header
-                                ));
+                                g.ln(f!("let {}: {} = http::parse_header(req, &{})?;", field.name, field.type_, header));
                             }
                         }
                         "metadata" => {
                             assert!(field.option_type);
-                            g.ln(f!(
-                                "let {}: Option<{}> = http::parse_opt_metadata(req)?;",
-                                field.name,
-                                field.type_
-                            ));
+                            g.ln(f!("let {}: Option<{}> = http::parse_opt_metadata(req)?;", field.name, field.type_));
                         }
                         "payload" => match field.type_.as_str() {
                             "Policy" => {
@@ -900,19 +866,11 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) {
                             }
                             "StreamingBlob" => {
                                 assert!(field.option_type);
-                                g.ln(f!(
-                                    "let {}: Option<{}> = Some(http::take_stream_body(req));",
-                                    field.name,
-                                    field.type_
-                                ));
+                                g.ln(f!("let {}: Option<{}> = Some(http::take_stream_body(req));", field.name, field.type_));
                             }
                             _ => {
                                 if field.option_type {
-                                    g.ln(f!(
-                                        "let {}: Option<{}> = http::take_opt_xml_body(req)?;",
-                                        field.name,
-                                        field.type_
-                                    ));
+                                    g.ln(f!("let {}: Option<{}> = http::take_opt_xml_body(req)?;", field.name, field.type_));
                                 } else {
                                     g.ln(f!("let {}: {} = http::take_xml_body(req)?;", field.name, field.type_));
                                 }
@@ -1206,11 +1164,7 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 route.needs_full_body
             ));
         } else {
-            g.ln(f!(
-                "Ok((&{} as &'static dyn super::Operation, {}))",
-                route.op.name,
-                route.needs_full_body
-            ));
+            g.ln(f!("Ok((&{} as &'static dyn super::Operation, {}))", route.op.name, route.needs_full_body));
         }
     };
 

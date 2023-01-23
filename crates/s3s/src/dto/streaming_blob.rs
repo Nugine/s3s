@@ -17,9 +17,9 @@ impl StreamingBlob {
         S: Stream<Item = Result<Bytes, E>> + Send + 'static,
         E: std::error::Error + Send + Sync + 'static,
     {
-        Self(Box::pin(stream.map(|x| {
-            x.map_err(|e| Box::new(e) as Box<dyn std::error::Error + Send + Sync>)
-        })))
+        Self(Box::pin(
+            stream.map(|x| x.map_err(|e| Box::new(e) as Box<dyn std::error::Error + Send + Sync>)),
+        ))
     }
 }
 

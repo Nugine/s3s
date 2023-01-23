@@ -855,10 +855,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: DeleteBucketAnalyticsConfigurationInput,
     ) -> S3Result<DeleteBucketAnalyticsConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "DeleteBucketAnalyticsConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "DeleteBucketAnalyticsConfiguration is not implemented yet"))
     }
 
     /// <p>Deletes the <code>cors</code> configuration information set for the bucket.</p>
@@ -978,10 +975,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: DeleteBucketInventoryConfigurationInput,
     ) -> S3Result<DeleteBucketInventoryConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "DeleteBucketInventoryConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "DeleteBucketInventoryConfiguration is not implemented yet"))
     }
 
     /// <p>Deletes the lifecycle configuration from the specified bucket. Amazon S3 removes all the
@@ -1054,10 +1048,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: DeleteBucketMetricsConfigurationInput,
     ) -> S3Result<DeleteBucketMetricsConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "DeleteBucketMetricsConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "DeleteBucketMetricsConfiguration is not implemented yet"))
     }
 
     /// <p>Removes <code>OwnershipControls</code> for an Amazon S3 bucket. To use this operation, you
@@ -1083,10 +1074,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: DeleteBucketOwnershipControlsInput,
     ) -> S3Result<DeleteBucketOwnershipControlsOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "DeleteBucketOwnershipControls is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "DeleteBucketOwnershipControls is not implemented yet"))
     }
 
     /// <p>This implementation of the DELETE action uses the policy subresource to delete the
@@ -1398,10 +1386,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: GetBucketAccelerateConfigurationInput,
     ) -> S3Result<GetBucketAccelerateConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "GetBucketAccelerateConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "GetBucketAccelerateConfiguration is not implemented yet"))
     }
 
     /// <p>This implementation of the <code>GET</code> action uses the <code>acl</code>
@@ -1465,10 +1450,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: GetBucketAnalyticsConfigurationInput,
     ) -> S3Result<GetBucketAnalyticsConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "GetBucketAnalyticsConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "GetBucketAnalyticsConfiguration is not implemented yet"))
     }
 
     /// <p>Returns the Cross-Origin Resource Sharing (CORS) configuration information set for the
@@ -1591,10 +1573,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: GetBucketInventoryConfigurationInput,
     ) -> S3Result<GetBucketInventoryConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "GetBucketInventoryConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "GetBucketInventoryConfiguration is not implemented yet"))
     }
 
     /// <note>
@@ -1657,10 +1636,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: GetBucketLifecycleConfigurationInput,
     ) -> S3Result<GetBucketLifecycleConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "GetBucketLifecycleConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "GetBucketLifecycleConfiguration is not implemented yet"))
     }
 
     /// <p>Returns the Region the bucket resides in. You set the bucket's Region using the
@@ -1749,10 +1725,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: GetBucketMetricsConfigurationInput,
     ) -> S3Result<GetBucketMetricsConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "GetBucketMetricsConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "GetBucketMetricsConfiguration is not implemented yet"))
     }
 
     /// <p>Returns the notification configuration of a bucket.</p>
@@ -1780,10 +1753,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: GetBucketNotificationConfigurationInput,
     ) -> S3Result<GetBucketNotificationConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "GetBucketNotificationConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "GetBucketNotificationConfiguration is not implemented yet"))
     }
 
     /// <p>Retrieves <code>OwnershipControls</code> for an Amazon S3 bucket. To use this operation, you
@@ -2750,10 +2720,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: ListBucketAnalyticsConfigurationsInput,
     ) -> S3Result<ListBucketAnalyticsConfigurationsOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "ListBucketAnalyticsConfigurations is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "ListBucketAnalyticsConfigurations is not implemented yet"))
     }
 
     /// <p>Lists the S3 Intelligent-Tiering configuration from the specified bucket.</p>
@@ -2832,10 +2799,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: ListBucketInventoryConfigurationsInput,
     ) -> S3Result<ListBucketInventoryConfigurationsOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "ListBucketInventoryConfigurations is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "ListBucketInventoryConfigurations is not implemented yet"))
     }
 
     /// <p>Lists the metrics configurations for the bucket. The metrics configurations are only for
@@ -2883,10 +2847,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: ListBucketMetricsConfigurationsInput,
     ) -> S3Result<ListBucketMetricsConfigurationsOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "ListBucketMetricsConfigurations is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "ListBucketMetricsConfigurations is not implemented yet"))
     }
 
     /// <p>Returns a list of all buckets owned by the authenticated sender of the request. To use
@@ -3188,10 +3149,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: PutBucketAccelerateConfigurationInput,
     ) -> S3Result<PutBucketAccelerateConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "PutBucketAccelerateConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "PutBucketAccelerateConfiguration is not implemented yet"))
     }
 
     /// <p>Sets the permissions on an existing bucket using access control lists (ACL). For more
@@ -3514,10 +3472,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: PutBucketAnalyticsConfigurationInput,
     ) -> S3Result<PutBucketAnalyticsConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "PutBucketAnalyticsConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "PutBucketAnalyticsConfiguration is not implemented yet"))
     }
 
     /// <p>Sets the <code>cors</code> configuration for your bucket. If the configuration exists,
@@ -3818,10 +3773,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: PutBucketInventoryConfigurationInput,
     ) -> S3Result<PutBucketInventoryConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "PutBucketInventoryConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "PutBucketInventoryConfiguration is not implemented yet"))
     }
 
     /// <p>Creates a new lifecycle configuration for the bucket or replaces an existing lifecycle
@@ -3931,10 +3883,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: PutBucketLifecycleConfigurationInput,
     ) -> S3Result<PutBucketLifecycleConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "PutBucketLifecycleConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "PutBucketLifecycleConfiguration is not implemented yet"))
     }
 
     /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and
@@ -4081,10 +4030,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: PutBucketMetricsConfigurationInput,
     ) -> S3Result<PutBucketMetricsConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "PutBucketMetricsConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "PutBucketMetricsConfiguration is not implemented yet"))
     }
 
     /// <p>Enables notifications of specified events for a bucket. For more information about event
@@ -4154,10 +4100,7 @@ pub trait S3: Send + Sync + 'static {
         &self,
         _input: PutBucketNotificationConfigurationInput,
     ) -> S3Result<PutBucketNotificationConfigurationOutput> {
-        Err(s3_error!(
-            NotImplemented,
-            "PutBucketNotificationConfiguration is not implemented yet"
-        ))
+        Err(s3_error!(NotImplemented, "PutBucketNotificationConfiguration is not implemented yet"))
     }
 
     /// <p>Creates or modifies <code>OwnershipControls</code> for an Amazon S3 bucket. To use this
@@ -11998,11 +11941,7 @@ impl CompleteMultipartUpload {
     pub fn serialize_http(x: CompleteMultipartUploadOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         http::set_xml_body(&mut res, &x)?;
-        http::add_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED,
-            x.bucket_key_enabled,
-        )?;
+        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
@@ -12157,24 +12096,12 @@ impl CopyObject {
         if let Some(ref val) = x.copy_object_result {
             http::set_xml_body(&mut res, val)?;
         }
-        http::add_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED,
-            x.bucket_key_enabled,
-        )?;
+        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_COPY_SOURCE_VERSION_ID, x.copy_source_version_id)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM,
-            x.sse_customer_algorithm,
-        )?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5,
-            x.sse_customer_key_md5,
-        )?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5, x.sse_customer_key_md5)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CONTEXT, x.ssekms_encryption_context)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
@@ -12333,23 +12260,11 @@ impl CreateMultipartUpload {
         http::set_xml_body(&mut res, &x)?;
         http::add_opt_header_timestamp(&mut res, X_AMZ_ABORT_DATE, x.abort_date, TimestampFormat::HttpDate)?;
         http::add_opt_header(&mut res, X_AMZ_ABORT_RULE_ID, x.abort_rule_id)?;
-        http::add_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED,
-            x.bucket_key_enabled,
-        )?;
+        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_ALGORITHM, x.checksum_algorithm)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM,
-            x.sse_customer_algorithm,
-        )?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5,
-            x.sse_customer_key_md5,
-        )?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5, x.sse_customer_key_md5)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CONTEXT, x.ssekms_encryption_context)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
@@ -13208,11 +13123,7 @@ impl GetObject {
             http::set_stream_body(&mut res, val);
         }
         http::add_opt_header(&mut res, ACCEPT_RANGES, x.accept_ranges)?;
-        http::add_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED,
-            x.bucket_key_enabled,
-        )?;
+        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, CACHE_CONTROL, x.cache_control)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
@@ -13243,16 +13154,8 @@ impl GetObject {
         http::add_opt_header(&mut res, X_AMZ_REPLICATION_STATUS, x.replication_status)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_RESTORE, x.restore)?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM,
-            x.sse_customer_algorithm,
-        )?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5,
-            x.sse_customer_key_md5,
-        )?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5, x.sse_customer_key_md5)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
         http::add_opt_header(&mut res, X_AMZ_STORAGE_CLASS, x.storage_class)?;
@@ -13565,11 +13468,7 @@ impl HeadObject {
         let mut res = http::Response::default();
         http::add_opt_header(&mut res, ACCEPT_RANGES, x.accept_ranges)?;
         http::add_opt_header(&mut res, X_AMZ_ARCHIVE_STATUS, x.archive_status)?;
-        http::add_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED,
-            x.bucket_key_enabled,
-        )?;
+        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, CACHE_CONTROL, x.cache_control)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
@@ -13599,16 +13498,8 @@ impl HeadObject {
         http::add_opt_header(&mut res, X_AMZ_REPLICATION_STATUS, x.replication_status)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_RESTORE, x.restore)?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM,
-            x.sse_customer_algorithm,
-        )?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5,
-            x.sse_customer_key_md5,
-        )?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5, x.sse_customer_key_md5)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
         http::add_opt_header(&mut res, X_AMZ_STORAGE_CLASS, x.storage_class)?;
@@ -14649,11 +14540,7 @@ impl PutObject {
 
     pub fn serialize_http(x: PutObjectOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
-        http::add_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED,
-            x.bucket_key_enabled,
-        )?;
+        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA1, x.checksum_sha1)?;
@@ -14661,16 +14548,8 @@ impl PutObject {
         http::add_opt_header(&mut res, ETAG, x.e_tag)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM,
-            x.sse_customer_algorithm,
-        )?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5,
-            x.sse_customer_key_md5,
-        )?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5, x.sse_customer_key_md5)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CONTEXT, x.ssekms_encryption_context)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
@@ -14993,27 +14872,15 @@ impl UploadPart {
 
     pub fn serialize_http(x: UploadPartOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
-        http::add_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED,
-            x.bucket_key_enabled,
-        )?;
+        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA1, x.checksum_sha1)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA256, x.checksum_sha256)?;
         http::add_opt_header(&mut res, ETAG, x.e_tag)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM,
-            x.sse_customer_algorithm,
-        )?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5,
-            x.sse_customer_key_md5,
-        )?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5, x.sse_customer_key_md5)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
         Ok(res)
@@ -15094,23 +14961,11 @@ impl UploadPartCopy {
         if let Some(ref val) = x.copy_part_result {
             http::set_xml_body(&mut res, val)?;
         }
-        http::add_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED,
-            x.bucket_key_enabled,
-        )?;
+        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_COPY_SOURCE_VERSION_ID, x.copy_source_version_id)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM,
-            x.sse_customer_algorithm,
-        )?;
-        http::add_opt_header(
-            &mut res,
-            X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5,
-            x.sse_customer_key_md5,
-        )?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5, x.sse_customer_key_md5)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
         Ok(res)
@@ -16844,10 +16699,7 @@ pub fn resolve_route(
                         return Ok((&GetBucketAnalyticsConfiguration as &'static dyn super::Operation, false));
                     }
                     if qs.has("intelligent-tiering") {
-                        return Ok((
-                            &GetBucketIntelligentTieringConfiguration as &'static dyn super::Operation,
-                            false,
-                        ));
+                        return Ok((&GetBucketIntelligentTieringConfiguration as &'static dyn super::Operation, false));
                     }
                     if qs.has("inventory") {
                         return Ok((&GetBucketInventoryConfiguration as &'static dyn super::Operation, false));
@@ -16913,10 +16765,7 @@ pub fn resolve_route(
                         return Ok((&ListBucketAnalyticsConfigurations as &'static dyn super::Operation, false));
                     }
                     if qs.has("intelligent-tiering") {
-                        return Ok((
-                            &ListBucketIntelligentTieringConfigurations as &'static dyn super::Operation,
-                            false,
-                        ));
+                        return Ok((&ListBucketIntelligentTieringConfigurations as &'static dyn super::Operation, false));
                     }
                     if qs.has("inventory") {
                         return Ok((&ListBucketInventoryConfigurations as &'static dyn super::Operation, false));
@@ -17003,10 +16852,7 @@ pub fn resolve_route(
                         return Ok((&PutBucketAnalyticsConfiguration as &'static dyn super::Operation, true));
                     }
                     if qs.has("intelligent-tiering") {
-                        return Ok((
-                            &PutBucketIntelligentTieringConfiguration as &'static dyn super::Operation,
-                            true,
-                        ));
+                        return Ok((&PutBucketIntelligentTieringConfiguration as &'static dyn super::Operation, true));
                     }
                     if qs.has("inventory") {
                         return Ok((&PutBucketInventoryConfiguration as &'static dyn super::Operation, true));
@@ -17104,10 +16950,7 @@ pub fn resolve_route(
                         return Ok((&DeleteBucketAnalyticsConfiguration as &'static dyn super::Operation, false));
                     }
                     if qs.has("intelligent-tiering") {
-                        return Ok((
-                            &DeleteBucketIntelligentTieringConfiguration as &'static dyn super::Operation,
-                            false,
-                        ));
+                        return Ok((&DeleteBucketIntelligentTieringConfiguration as &'static dyn super::Operation, false));
                     }
                     if qs.has("inventory") {
                         return Ok((&DeleteBucketInventoryConfiguration as &'static dyn super::Operation, false));

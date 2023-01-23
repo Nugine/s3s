@@ -70,9 +70,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                         if field.option_type || field.default_value.is_some() {
                             g.ln(f!("{s3s_field_name}: try_from_aws(x.{aws_field_name})?,"));
                         } else {
-                            g.ln(f!(
-                                "{s3s_field_name}: unwrap_from_aws(x.{aws_field_name}, \"{s3s_field_name}\")?,"
-                            ));
+                            g.ln(f!("{s3s_field_name}: unwrap_from_aws(x.{aws_field_name}, \"{s3s_field_name}\")?,"));
                         }
                     }
                 }

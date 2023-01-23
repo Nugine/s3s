@@ -47,11 +47,7 @@ impl Range {
             };
 
             let normal_parser = map_res(
-                tuple((
-                    map_res(digit1, str::parse::<u64>),
-                    tag("-"),
-                    opt(map_res(digit1, str::parse::<u64>)),
-                )),
+                tuple((map_res(digit1, str::parse::<u64>), tag("-"), opt(map_res(digit1, str::parse::<u64>)))),
                 |ss: (u64, &str, Option<u64>)| {
                     if let (first, Some(last)) = (ss.0, ss.2) {
                         if first > last {
@@ -62,8 +58,8 @@ impl Range {
                 },
             );
 
-            let suffix_parser = map(tuple((tag("-"), map_res(digit1, str::parse::<u64>))), |ss: (&str, u64)| {
-                Range::Suffix { last: ss.1 }
+            let suffix_parser = map(tuple((tag("-"), map_res(digit1, str::parse::<u64>))), |ss: (&str, u64)| Range::Suffix {
+                last: ss.1,
             });
 
             let mut parser = all_consuming(tuple((tag("bytes="), alt((normal_parser, suffix_parser)))));

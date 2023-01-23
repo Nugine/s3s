@@ -425,10 +425,7 @@ mod tests {
         let headers = OrderedHeaders::from_slice_unchecked(&[
             ("host", "examplebucket.s3.amazonaws.com"),
             ("range", "bytes=0-9"),
-            (
-                "x-amz-content-sha256",
-                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-            ),
+            ("x-amz-content-sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
             ("x-amz-date", "20130524T000000Z"),
         ]);
 
@@ -481,10 +478,7 @@ mod tests {
         let headers = OrderedHeaders::from_slice_unchecked(&[
             ("date", "Fri, 24 May 2013 00:00:00 GMT"),
             ("host", "examplebucket.s3.amazonaws.com"),
-            (
-                "x-amz-content-sha256",
-                "44ce7dd67c959e0d3524ffac1771dfbba87d2b6b4b4e99e42034a8b803f8b072",
-            ),
+            ("x-amz-content-sha256", "44ce7dd67c959e0d3524ffac1771dfbba87d2b6b4b4e99e42034a8b803f8b072"),
             ("x-amz-date", "20130524T000000Z"),
             ("x-amz-storage-class", "REDUCED_REDUNDANCY"),
         ]);
@@ -611,10 +605,7 @@ mod tests {
         );
 
         let chunk1_signature = calculate_signature(&chunk1_string_to_sign, secret_access_key, &date, region);
-        assert_eq!(
-            chunk1_signature,
-            "ad80c730a21e5b8d04586a2213dd63b9a0e99e0e2307b0ade35a65485a288648"
-        );
+        assert_eq!(chunk1_signature, "ad80c730a21e5b8d04586a2213dd63b9a0e99e0e2307b0ade35a65485a288648");
 
         let chunk2_string_to_sign =
             create_chunk_string_to_sign(&date, region, &chunk1_signature, &[Bytes::from(vec![b'a'; 1024])]);
@@ -631,10 +622,7 @@ mod tests {
         );
 
         let chunk2_signature = calculate_signature(&chunk2_string_to_sign, secret_access_key, &date, region);
-        assert_eq!(
-            chunk2_signature,
-            "0055627c9e194cb4542bae2aa5492e3c1575bbb81b612b7d234b86a503ef5497"
-        );
+        assert_eq!(chunk2_signature, "0055627c9e194cb4542bae2aa5492e3c1575bbb81b612b7d234b86a503ef5497");
 
         let chunk3_string_to_sign = create_chunk_string_to_sign(&date, region, &chunk2_signature, &[]);
         assert_eq!(
@@ -650,10 +638,7 @@ mod tests {
         );
 
         let chunk3_signature = calculate_signature(&chunk3_string_to_sign, secret_access_key, &date, region);
-        assert_eq!(
-            chunk3_signature,
-            "b6c6ea8a5354eaf15b3cb7646744f4275b71ea724fed81ceb9323e279d449df9"
-        );
+        assert_eq!(chunk3_signature, "b6c6ea8a5354eaf15b3cb7646744f4275b71ea724fed81ceb9323e279d449df9");
     }
 
     #[test]
@@ -667,10 +652,7 @@ mod tests {
 
         let headers = OrderedHeaders::from_slice_unchecked(&[
             ("host", "examplebucket.s3.amazonaws.com"),
-            (
-                "x-amz-content-sha256",
-                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-            ),
+            ("x-amz-content-sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
             ("x-amz-date", "20130524T000000Z"),
         ]);
 
@@ -721,10 +703,7 @@ mod tests {
 
         let headers = OrderedHeaders::from_slice_unchecked(&[
             ("host", "examplebucket.s3.amazonaws.com"),
-            (
-                "x-amz-content-sha256",
-                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-            ),
+            ("x-amz-content-sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
             ("x-amz-date", "20130524T000000Z"),
         ]);
 
@@ -792,10 +771,7 @@ mod tests {
             ("X-Amz-Date", "20130524T000000Z"),
             ("X-Amz-Expires", "86400"),
             ("X-Amz-SignedHeaders", "host"),
-            (
-                "X-Amz-Signature",
-                "aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404",
-            ),
+            ("X-Amz-Signature", "aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404"),
         ];
 
         let qs = OrderedQs::from_vec_unchecked(query_strings.iter().map(|&(n, v)| (n.to_owned(), v.to_owned())).collect());

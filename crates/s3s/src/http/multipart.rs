@@ -422,11 +422,7 @@ fn parse_content_disposition(input: &[u8]) -> nom::IResult<&[u8], ContentDisposi
         sequence::{delimited, preceded, tuple},
     };
 
-    let name_parser = delimited(
-        tag(b"name=\""),
-        map_res(take_till1(|c| c == b'"'), std::str::from_utf8),
-        take(1_usize),
-    );
+    let name_parser = delimited(tag(b"name=\""), map_res(take_till1(|c| c == b'"'), std::str::from_utf8), take(1_usize));
 
     let filename_parser = delimited(
         tag(b"filename=\""),
@@ -541,12 +537,7 @@ mod tests {
             let mut ss = vec![format!("\r\n--{boundary}\r\n")];
             for &(n, v) in &fields {
                 ss.push(format!(
-                    concat!(
-                        "Content-Disposition: form-data; name=\"{}\"\r\n",
-                        "\r\n",
-                        "{}\r\n",
-                        "--{}\r\n",
-                    ),
+                    concat!("Content-Disposition: form-data; name=\"{}\"\r\n", "\r\n", "{}\r\n", "--{}\r\n",),
                     n, v, boundary
                 ));
             }
@@ -561,12 +552,7 @@ mod tests {
                 "file", filename, content_type, file_content, boundary
             ));
             ss.push(format!(
-                concat!(
-                    "Content-Disposition: form-data; name=\"{}\"\r\n",
-                    "\r\n",
-                    "{}\r\n",
-                    "--{}--\r\n",
-                ),
+                concat!("Content-Disposition: form-data; name=\"{}\"\r\n", "\r\n", "{}\r\n", "--{}--\r\n",),
                 other_fields[0].0, other_fields[0].1, boundary
             ));
 
