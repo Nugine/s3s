@@ -25,7 +25,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
             rust::Type::StructEnum(_) => {}
         }
 
-        let s3s_path = f!("crate::dto::{name}");
+        let s3s_path = f!("s3s::dto::{name}");
         let aws_name = aws_ty_name(name);
 
         g.ln(f!("impl AwsConversion for {s3s_path} {{"));
@@ -138,6 +138,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 for variant in &ty.variants {
                     g.ln(f!("Self::{0} => {aws_name}::{0},", variant.name));
                 }
+                g.ln("_ => unreachable!(),");
                 g.ln("})");
             }
             rust::Type::StructEnum(ty) => {
@@ -145,6 +146,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 for variant in &ty.variants {
                     g.ln(f!("Self::{0}(v) => {aws_name}::{0}(try_into_aws(v)?),", variant.name));
                 }
+                g.ln("_ => unreachable!(),");
                 g.ln("})");
             }
             _ => panic!(),

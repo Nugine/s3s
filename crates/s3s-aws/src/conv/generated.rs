@@ -5,7 +5,7 @@ use aws_sdk_s3::input::*;
 use aws_sdk_s3::model::*;
 use aws_sdk_s3::output::*;
 
-impl AwsConversion for crate::dto::AbortIncompleteMultipartUpload {
+impl AwsConversion for s3s::dto::AbortIncompleteMultipartUpload {
     type Target = AbortIncompleteMultipartUpload;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -21,7 +21,7 @@ impl AwsConversion for crate::dto::AbortIncompleteMultipartUpload {
     }
 }
 
-impl AwsConversion for crate::dto::AbortMultipartUploadInput {
+impl AwsConversion for s3s::dto::AbortMultipartUploadInput {
     type Target = AbortMultipartUploadInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -45,7 +45,7 @@ impl AwsConversion for crate::dto::AbortMultipartUploadInput {
     }
 }
 
-impl AwsConversion for crate::dto::AbortMultipartUploadOutput {
+impl AwsConversion for s3s::dto::AbortMultipartUploadOutput {
     type Target = AbortMultipartUploadOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -61,7 +61,7 @@ impl AwsConversion for crate::dto::AbortMultipartUploadOutput {
     }
 }
 
-impl AwsConversion for crate::dto::AccelerateConfiguration {
+impl AwsConversion for s3s::dto::AccelerateConfiguration {
     type Target = AccelerateConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -77,7 +77,7 @@ impl AwsConversion for crate::dto::AccelerateConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::AccessControlPolicy {
+impl AwsConversion for s3s::dto::AccessControlPolicy {
     type Target = AccessControlPolicy;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -95,7 +95,7 @@ impl AwsConversion for crate::dto::AccessControlPolicy {
     }
 }
 
-impl AwsConversion for crate::dto::AccessControlTranslation {
+impl AwsConversion for s3s::dto::AccessControlTranslation {
     type Target = AccessControlTranslation;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -111,7 +111,7 @@ impl AwsConversion for crate::dto::AccessControlTranslation {
     }
 }
 
-impl AwsConversion for crate::dto::AnalyticsAndOperator {
+impl AwsConversion for s3s::dto::AnalyticsAndOperator {
     type Target = AnalyticsAndOperator;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -129,7 +129,7 @@ impl AwsConversion for crate::dto::AnalyticsAndOperator {
     }
 }
 
-impl AwsConversion for crate::dto::AnalyticsConfiguration {
+impl AwsConversion for s3s::dto::AnalyticsConfiguration {
     type Target = AnalyticsConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -149,7 +149,7 @@ impl AwsConversion for crate::dto::AnalyticsConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::AnalyticsExportDestination {
+impl AwsConversion for s3s::dto::AnalyticsExportDestination {
     type Target = AnalyticsExportDestination;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -165,7 +165,7 @@ impl AwsConversion for crate::dto::AnalyticsExportDestination {
     }
 }
 
-impl AwsConversion for crate::dto::AnalyticsFilter {
+impl AwsConversion for s3s::dto::AnalyticsFilter {
     type Target = AnalyticsFilter;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -182,11 +182,12 @@ impl AwsConversion for crate::dto::AnalyticsFilter {
             Self::And(v) => AnalyticsFilter::And(try_into_aws(v)?),
             Self::Prefix(v) => AnalyticsFilter::Prefix(try_into_aws(v)?),
             Self::Tag(v) => AnalyticsFilter::Tag(try_into_aws(v)?),
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::AnalyticsS3BucketDestination {
+impl AwsConversion for s3s::dto::AnalyticsS3BucketDestination {
     type Target = AnalyticsS3BucketDestination;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -208,7 +209,7 @@ impl AwsConversion for crate::dto::AnalyticsS3BucketDestination {
     }
 }
 
-impl AwsConversion for crate::dto::AnalyticsS3ExportFileFormat {
+impl AwsConversion for s3s::dto::AnalyticsS3ExportFileFormat {
     type Target = AnalyticsS3ExportFileFormat;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -221,11 +222,12 @@ impl AwsConversion for crate::dto::AnalyticsS3ExportFileFormat {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Csv => AnalyticsS3ExportFileFormat::Csv,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ArchiveStatus {
+impl AwsConversion for s3s::dto::ArchiveStatus {
     type Target = ArchiveStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -240,11 +242,12 @@ impl AwsConversion for crate::dto::ArchiveStatus {
         Ok(match x {
             Self::ArchiveAccess => ArchiveStatus::ArchiveAccess,
             Self::DeepArchiveAccess => ArchiveStatus::DeepArchiveAccess,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::Bucket {
+impl AwsConversion for s3s::dto::Bucket {
     type Target = Bucket;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -262,7 +265,7 @@ impl AwsConversion for crate::dto::Bucket {
     }
 }
 
-impl AwsConversion for crate::dto::BucketAccelerateStatus {
+impl AwsConversion for s3s::dto::BucketAccelerateStatus {
     type Target = BucketAccelerateStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -277,11 +280,12 @@ impl AwsConversion for crate::dto::BucketAccelerateStatus {
         Ok(match x {
             Self::Enabled => BucketAccelerateStatus::Enabled,
             Self::Suspended => BucketAccelerateStatus::Suspended,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::BucketAlreadyExists {
+impl AwsConversion for s3s::dto::BucketAlreadyExists {
     type Target = BucketAlreadyExists;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -296,7 +300,7 @@ impl AwsConversion for crate::dto::BucketAlreadyExists {
     }
 }
 
-impl AwsConversion for crate::dto::BucketAlreadyOwnedByYou {
+impl AwsConversion for s3s::dto::BucketAlreadyOwnedByYou {
     type Target = BucketAlreadyOwnedByYou;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -311,7 +315,7 @@ impl AwsConversion for crate::dto::BucketAlreadyOwnedByYou {
     }
 }
 
-impl AwsConversion for crate::dto::BucketCannedACL {
+impl AwsConversion for s3s::dto::BucketCannedACL {
     type Target = BucketCannedAcl;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -330,11 +334,12 @@ impl AwsConversion for crate::dto::BucketCannedACL {
             Self::Private => BucketCannedAcl::Private,
             Self::PublicRead => BucketCannedAcl::PublicRead,
             Self::PublicReadWrite => BucketCannedAcl::PublicReadWrite,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::BucketLifecycleConfiguration {
+impl AwsConversion for s3s::dto::BucketLifecycleConfiguration {
     type Target = BucketLifecycleConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -350,7 +355,7 @@ impl AwsConversion for crate::dto::BucketLifecycleConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::BucketLocationConstraint {
+impl AwsConversion for s3s::dto::BucketLocationConstraint {
     type Target = BucketLocationConstraint;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -413,11 +418,12 @@ impl AwsConversion for crate::dto::BucketLocationConstraint {
             Self::UsGovWest1 => BucketLocationConstraint::UsGovWest1,
             Self::UsWest1 => BucketLocationConstraint::UsWest1,
             Self::UsWest2 => BucketLocationConstraint::UsWest2,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::BucketLoggingStatus {
+impl AwsConversion for s3s::dto::BucketLoggingStatus {
     type Target = BucketLoggingStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -433,7 +439,7 @@ impl AwsConversion for crate::dto::BucketLoggingStatus {
     }
 }
 
-impl AwsConversion for crate::dto::BucketLogsPermission {
+impl AwsConversion for s3s::dto::BucketLogsPermission {
     type Target = BucketLogsPermission;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -450,11 +456,12 @@ impl AwsConversion for crate::dto::BucketLogsPermission {
             Self::FullControl => BucketLogsPermission::FullControl,
             Self::Read => BucketLogsPermission::Read,
             Self::Write => BucketLogsPermission::Write,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::BucketVersioningStatus {
+impl AwsConversion for s3s::dto::BucketVersioningStatus {
     type Target = BucketVersioningStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -469,11 +476,12 @@ impl AwsConversion for crate::dto::BucketVersioningStatus {
         Ok(match x {
             Self::Enabled => BucketVersioningStatus::Enabled,
             Self::Suspended => BucketVersioningStatus::Suspended,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::CORSConfiguration {
+impl AwsConversion for s3s::dto::CORSConfiguration {
     type Target = CorsConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -489,7 +497,7 @@ impl AwsConversion for crate::dto::CORSConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::CORSRule {
+impl AwsConversion for s3s::dto::CORSRule {
     type Target = CorsRule;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -515,7 +523,7 @@ impl AwsConversion for crate::dto::CORSRule {
     }
 }
 
-impl AwsConversion for crate::dto::CSVInput {
+impl AwsConversion for s3s::dto::CSVInput {
     type Target = CsvInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -543,7 +551,7 @@ impl AwsConversion for crate::dto::CSVInput {
     }
 }
 
-impl AwsConversion for crate::dto::CSVOutput {
+impl AwsConversion for s3s::dto::CSVOutput {
     type Target = CsvOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -567,7 +575,7 @@ impl AwsConversion for crate::dto::CSVOutput {
     }
 }
 
-impl AwsConversion for crate::dto::Checksum {
+impl AwsConversion for s3s::dto::Checksum {
     type Target = Checksum;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -589,7 +597,7 @@ impl AwsConversion for crate::dto::Checksum {
     }
 }
 
-impl AwsConversion for crate::dto::ChecksumAlgorithm {
+impl AwsConversion for s3s::dto::ChecksumAlgorithm {
     type Target = ChecksumAlgorithm;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -608,11 +616,12 @@ impl AwsConversion for crate::dto::ChecksumAlgorithm {
             Self::Crc32C => ChecksumAlgorithm::Crc32C,
             Self::Sha1 => ChecksumAlgorithm::Sha1,
             Self::Sha256 => ChecksumAlgorithm::Sha256,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ChecksumMode {
+impl AwsConversion for s3s::dto::ChecksumMode {
     type Target = ChecksumMode;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -625,11 +634,12 @@ impl AwsConversion for crate::dto::ChecksumMode {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Enabled => ChecksumMode::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::CommonPrefix {
+impl AwsConversion for s3s::dto::CommonPrefix {
     type Target = CommonPrefix;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -645,7 +655,7 @@ impl AwsConversion for crate::dto::CommonPrefix {
     }
 }
 
-impl AwsConversion for crate::dto::CompleteMultipartUploadInput {
+impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
     type Target = CompleteMultipartUploadInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -685,7 +695,7 @@ impl AwsConversion for crate::dto::CompleteMultipartUploadInput {
     }
 }
 
-impl AwsConversion for crate::dto::CompleteMultipartUploadOutput {
+impl AwsConversion for s3s::dto::CompleteMultipartUploadOutput {
     type Target = CompleteMultipartUploadOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -727,7 +737,7 @@ impl AwsConversion for crate::dto::CompleteMultipartUploadOutput {
     }
 }
 
-impl AwsConversion for crate::dto::CompletedMultipartUpload {
+impl AwsConversion for s3s::dto::CompletedMultipartUpload {
     type Target = CompletedMultipartUpload;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -743,7 +753,7 @@ impl AwsConversion for crate::dto::CompletedMultipartUpload {
     }
 }
 
-impl AwsConversion for crate::dto::CompletedPart {
+impl AwsConversion for s3s::dto::CompletedPart {
     type Target = CompletedPart;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -769,7 +779,7 @@ impl AwsConversion for crate::dto::CompletedPart {
     }
 }
 
-impl AwsConversion for crate::dto::CompressionType {
+impl AwsConversion for s3s::dto::CompressionType {
     type Target = CompressionType;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -786,11 +796,12 @@ impl AwsConversion for crate::dto::CompressionType {
             Self::Bzip2 => CompressionType::Bzip2,
             Self::Gzip => CompressionType::Gzip,
             Self::None => CompressionType::None,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::Condition {
+impl AwsConversion for s3s::dto::Condition {
     type Target = Condition;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -808,7 +819,7 @@ impl AwsConversion for crate::dto::Condition {
     }
 }
 
-impl AwsConversion for crate::dto::ContinuationEvent {
+impl AwsConversion for s3s::dto::ContinuationEvent {
     type Target = ContinuationEvent;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -823,7 +834,7 @@ impl AwsConversion for crate::dto::ContinuationEvent {
     }
 }
 
-impl AwsConversion for crate::dto::CopyObjectInput {
+impl AwsConversion for s3s::dto::CopyObjectInput {
     type Target = CopyObjectInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -919,7 +930,7 @@ impl AwsConversion for crate::dto::CopyObjectInput {
     }
 }
 
-impl AwsConversion for crate::dto::CopyObjectOutput {
+impl AwsConversion for s3s::dto::CopyObjectOutput {
     type Target = CopyObjectOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -955,7 +966,7 @@ impl AwsConversion for crate::dto::CopyObjectOutput {
     }
 }
 
-impl AwsConversion for crate::dto::CopyObjectResult {
+impl AwsConversion for s3s::dto::CopyObjectResult {
     type Target = CopyObjectResult;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -981,7 +992,7 @@ impl AwsConversion for crate::dto::CopyObjectResult {
     }
 }
 
-impl AwsConversion for crate::dto::CopyPartResult {
+impl AwsConversion for s3s::dto::CopyPartResult {
     type Target = CopyPartResult;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1007,7 +1018,7 @@ impl AwsConversion for crate::dto::CopyPartResult {
     }
 }
 
-impl AwsConversion for crate::dto::CreateBucketConfiguration {
+impl AwsConversion for s3s::dto::CreateBucketConfiguration {
     type Target = CreateBucketConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1023,7 +1034,7 @@ impl AwsConversion for crate::dto::CreateBucketConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::CreateBucketInput {
+impl AwsConversion for s3s::dto::CreateBucketInput {
     type Target = CreateBucketInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1057,7 +1068,7 @@ impl AwsConversion for crate::dto::CreateBucketInput {
     }
 }
 
-impl AwsConversion for crate::dto::CreateBucketOutput {
+impl AwsConversion for s3s::dto::CreateBucketOutput {
     type Target = CreateBucketOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1073,7 +1084,7 @@ impl AwsConversion for crate::dto::CreateBucketOutput {
     }
 }
 
-impl AwsConversion for crate::dto::CreateMultipartUploadInput {
+impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
     type Target = CreateMultipartUploadInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1147,7 +1158,7 @@ impl AwsConversion for crate::dto::CreateMultipartUploadInput {
     }
 }
 
-impl AwsConversion for crate::dto::CreateMultipartUploadOutput {
+impl AwsConversion for s3s::dto::CreateMultipartUploadOutput {
     type Target = CreateMultipartUploadOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1187,7 +1198,7 @@ impl AwsConversion for crate::dto::CreateMultipartUploadOutput {
     }
 }
 
-impl AwsConversion for crate::dto::DefaultRetention {
+impl AwsConversion for s3s::dto::DefaultRetention {
     type Target = DefaultRetention;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1207,7 +1218,7 @@ impl AwsConversion for crate::dto::DefaultRetention {
     }
 }
 
-impl AwsConversion for crate::dto::Delete {
+impl AwsConversion for s3s::dto::Delete {
     type Target = Delete;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1225,7 +1236,7 @@ impl AwsConversion for crate::dto::Delete {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketAnalyticsConfigurationInput {
+impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationInput {
     type Target = DeleteBucketAnalyticsConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1245,7 +1256,7 @@ impl AwsConversion for crate::dto::DeleteBucketAnalyticsConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketCorsInput {
+impl AwsConversion for s3s::dto::DeleteBucketCorsInput {
     type Target = DeleteBucketCorsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1263,7 +1274,7 @@ impl AwsConversion for crate::dto::DeleteBucketCorsInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketEncryptionInput {
+impl AwsConversion for s3s::dto::DeleteBucketEncryptionInput {
     type Target = DeleteBucketEncryptionInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1281,7 +1292,7 @@ impl AwsConversion for crate::dto::DeleteBucketEncryptionInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketInput {
+impl AwsConversion for s3s::dto::DeleteBucketInput {
     type Target = DeleteBucketInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1299,7 +1310,7 @@ impl AwsConversion for crate::dto::DeleteBucketInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketIntelligentTieringConfigurationInput {
+impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationInput {
     type Target = DeleteBucketIntelligentTieringConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1317,7 +1328,7 @@ impl AwsConversion for crate::dto::DeleteBucketIntelligentTieringConfigurationIn
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketInventoryConfigurationInput {
+impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationInput {
     type Target = DeleteBucketInventoryConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1337,7 +1348,7 @@ impl AwsConversion for crate::dto::DeleteBucketInventoryConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketLifecycleInput {
+impl AwsConversion for s3s::dto::DeleteBucketLifecycleInput {
     type Target = DeleteBucketLifecycleInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1355,7 +1366,7 @@ impl AwsConversion for crate::dto::DeleteBucketLifecycleInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketMetricsConfigurationInput {
+impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationInput {
     type Target = DeleteBucketMetricsConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1375,7 +1386,7 @@ impl AwsConversion for crate::dto::DeleteBucketMetricsConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketOwnershipControlsInput {
+impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsInput {
     type Target = DeleteBucketOwnershipControlsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1393,7 +1404,7 @@ impl AwsConversion for crate::dto::DeleteBucketOwnershipControlsInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketPolicyInput {
+impl AwsConversion for s3s::dto::DeleteBucketPolicyInput {
     type Target = DeleteBucketPolicyInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1411,7 +1422,7 @@ impl AwsConversion for crate::dto::DeleteBucketPolicyInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketReplicationInput {
+impl AwsConversion for s3s::dto::DeleteBucketReplicationInput {
     type Target = DeleteBucketReplicationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1429,7 +1440,7 @@ impl AwsConversion for crate::dto::DeleteBucketReplicationInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketTaggingInput {
+impl AwsConversion for s3s::dto::DeleteBucketTaggingInput {
     type Target = DeleteBucketTaggingInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1447,7 +1458,7 @@ impl AwsConversion for crate::dto::DeleteBucketTaggingInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteBucketWebsiteInput {
+impl AwsConversion for s3s::dto::DeleteBucketWebsiteInput {
     type Target = DeleteBucketWebsiteInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1465,7 +1476,7 @@ impl AwsConversion for crate::dto::DeleteBucketWebsiteInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteMarkerEntry {
+impl AwsConversion for s3s::dto::DeleteMarkerEntry {
     type Target = DeleteMarkerEntry;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1489,7 +1500,7 @@ impl AwsConversion for crate::dto::DeleteMarkerEntry {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteMarkerReplication {
+impl AwsConversion for s3s::dto::DeleteMarkerReplication {
     type Target = DeleteMarkerReplication;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1505,7 +1516,7 @@ impl AwsConversion for crate::dto::DeleteMarkerReplication {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteMarkerReplicationStatus {
+impl AwsConversion for s3s::dto::DeleteMarkerReplicationStatus {
     type Target = DeleteMarkerReplicationStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1520,11 +1531,12 @@ impl AwsConversion for crate::dto::DeleteMarkerReplicationStatus {
         Ok(match x {
             Self::Disabled => DeleteMarkerReplicationStatus::Disabled,
             Self::Enabled => DeleteMarkerReplicationStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::DeleteObjectInput {
+impl AwsConversion for s3s::dto::DeleteObjectInput {
     type Target = DeleteObjectInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1552,7 +1564,7 @@ impl AwsConversion for crate::dto::DeleteObjectInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteObjectOutput {
+impl AwsConversion for s3s::dto::DeleteObjectOutput {
     type Target = DeleteObjectOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1572,7 +1584,7 @@ impl AwsConversion for crate::dto::DeleteObjectOutput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteObjectTaggingInput {
+impl AwsConversion for s3s::dto::DeleteObjectTaggingInput {
     type Target = DeleteObjectTaggingInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1594,7 +1606,7 @@ impl AwsConversion for crate::dto::DeleteObjectTaggingInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteObjectTaggingOutput {
+impl AwsConversion for s3s::dto::DeleteObjectTaggingOutput {
     type Target = DeleteObjectTaggingOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1610,7 +1622,7 @@ impl AwsConversion for crate::dto::DeleteObjectTaggingOutput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteObjectsInput {
+impl AwsConversion for s3s::dto::DeleteObjectsInput {
     type Target = DeleteObjectsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1638,7 +1650,7 @@ impl AwsConversion for crate::dto::DeleteObjectsInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeleteObjectsOutput {
+impl AwsConversion for s3s::dto::DeleteObjectsOutput {
     type Target = DeleteObjectsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1658,7 +1670,7 @@ impl AwsConversion for crate::dto::DeleteObjectsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::DeletePublicAccessBlockInput {
+impl AwsConversion for s3s::dto::DeletePublicAccessBlockInput {
     type Target = DeletePublicAccessBlockInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1676,7 +1688,7 @@ impl AwsConversion for crate::dto::DeletePublicAccessBlockInput {
     }
 }
 
-impl AwsConversion for crate::dto::DeletedObject {
+impl AwsConversion for s3s::dto::DeletedObject {
     type Target = DeletedObject;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1698,7 +1710,7 @@ impl AwsConversion for crate::dto::DeletedObject {
     }
 }
 
-impl AwsConversion for crate::dto::Destination {
+impl AwsConversion for s3s::dto::Destination {
     type Target = Destination;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1726,7 +1738,7 @@ impl AwsConversion for crate::dto::Destination {
     }
 }
 
-impl AwsConversion for crate::dto::EncodingType {
+impl AwsConversion for s3s::dto::EncodingType {
     type Target = EncodingType;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1739,11 +1751,12 @@ impl AwsConversion for crate::dto::EncodingType {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Url => EncodingType::Url,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::Encryption {
+impl AwsConversion for s3s::dto::Encryption {
     type Target = Encryption;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1763,7 +1776,7 @@ impl AwsConversion for crate::dto::Encryption {
     }
 }
 
-impl AwsConversion for crate::dto::EncryptionConfiguration {
+impl AwsConversion for s3s::dto::EncryptionConfiguration {
     type Target = EncryptionConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1779,7 +1792,7 @@ impl AwsConversion for crate::dto::EncryptionConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::EndEvent {
+impl AwsConversion for s3s::dto::EndEvent {
     type Target = EndEvent;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1794,7 +1807,7 @@ impl AwsConversion for crate::dto::EndEvent {
     }
 }
 
-impl AwsConversion for crate::dto::Error {
+impl AwsConversion for s3s::dto::Error {
     type Target = Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1816,7 +1829,7 @@ impl AwsConversion for crate::dto::Error {
     }
 }
 
-impl AwsConversion for crate::dto::ErrorDocument {
+impl AwsConversion for s3s::dto::ErrorDocument {
     type Target = ErrorDocument;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1832,7 +1845,7 @@ impl AwsConversion for crate::dto::ErrorDocument {
     }
 }
 
-impl AwsConversion for crate::dto::EventBridgeConfiguration {
+impl AwsConversion for s3s::dto::EventBridgeConfiguration {
     type Target = EventBridgeConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1847,7 +1860,7 @@ impl AwsConversion for crate::dto::EventBridgeConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::ExistingObjectReplication {
+impl AwsConversion for s3s::dto::ExistingObjectReplication {
     type Target = ExistingObjectReplication;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1863,7 +1876,7 @@ impl AwsConversion for crate::dto::ExistingObjectReplication {
     }
 }
 
-impl AwsConversion for crate::dto::ExistingObjectReplicationStatus {
+impl AwsConversion for s3s::dto::ExistingObjectReplicationStatus {
     type Target = ExistingObjectReplicationStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1878,11 +1891,12 @@ impl AwsConversion for crate::dto::ExistingObjectReplicationStatus {
         Ok(match x {
             Self::Disabled => ExistingObjectReplicationStatus::Disabled,
             Self::Enabled => ExistingObjectReplicationStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ExpirationStatus {
+impl AwsConversion for s3s::dto::ExpirationStatus {
     type Target = ExpirationStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1897,11 +1911,12 @@ impl AwsConversion for crate::dto::ExpirationStatus {
         Ok(match x {
             Self::Disabled => ExpirationStatus::Disabled,
             Self::Enabled => ExpirationStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ExpressionType {
+impl AwsConversion for s3s::dto::ExpressionType {
     type Target = ExpressionType;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1914,11 +1929,12 @@ impl AwsConversion for crate::dto::ExpressionType {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Sql => ExpressionType::Sql,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::FileHeaderInfo {
+impl AwsConversion for s3s::dto::FileHeaderInfo {
     type Target = FileHeaderInfo;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1935,11 +1951,12 @@ impl AwsConversion for crate::dto::FileHeaderInfo {
             Self::Ignore => FileHeaderInfo::Ignore,
             Self::None => FileHeaderInfo::None,
             Self::Use => FileHeaderInfo::Use,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::FilterRule {
+impl AwsConversion for s3s::dto::FilterRule {
     type Target = FilterRule;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1957,7 +1974,7 @@ impl AwsConversion for crate::dto::FilterRule {
     }
 }
 
-impl AwsConversion for crate::dto::FilterRuleName {
+impl AwsConversion for s3s::dto::FilterRuleName {
     type Target = FilterRuleName;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1972,11 +1989,12 @@ impl AwsConversion for crate::dto::FilterRuleName {
         Ok(match x {
             Self::Prefix => FilterRuleName::Prefix,
             Self::Suffix => FilterRuleName::Suffix,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketAccelerateConfigurationInput {
+impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationInput {
     type Target = GetBucketAccelerateConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1994,7 +2012,7 @@ impl AwsConversion for crate::dto::GetBucketAccelerateConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketAccelerateConfigurationOutput {
+impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationOutput {
     type Target = GetBucketAccelerateConfigurationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2010,7 +2028,7 @@ impl AwsConversion for crate::dto::GetBucketAccelerateConfigurationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketAclInput {
+impl AwsConversion for s3s::dto::GetBucketAclInput {
     type Target = GetBucketAclInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2028,7 +2046,7 @@ impl AwsConversion for crate::dto::GetBucketAclInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketAclOutput {
+impl AwsConversion for s3s::dto::GetBucketAclOutput {
     type Target = GetBucketAclOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2046,7 +2064,7 @@ impl AwsConversion for crate::dto::GetBucketAclOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketAnalyticsConfigurationInput {
+impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationInput {
     type Target = GetBucketAnalyticsConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2066,7 +2084,7 @@ impl AwsConversion for crate::dto::GetBucketAnalyticsConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketAnalyticsConfigurationOutput {
+impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationOutput {
     type Target = GetBucketAnalyticsConfigurationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2082,7 +2100,7 @@ impl AwsConversion for crate::dto::GetBucketAnalyticsConfigurationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketCorsInput {
+impl AwsConversion for s3s::dto::GetBucketCorsInput {
     type Target = GetBucketCorsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2100,7 +2118,7 @@ impl AwsConversion for crate::dto::GetBucketCorsInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketCorsOutput {
+impl AwsConversion for s3s::dto::GetBucketCorsOutput {
     type Target = GetBucketCorsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2116,7 +2134,7 @@ impl AwsConversion for crate::dto::GetBucketCorsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketEncryptionInput {
+impl AwsConversion for s3s::dto::GetBucketEncryptionInput {
     type Target = GetBucketEncryptionInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2134,7 +2152,7 @@ impl AwsConversion for crate::dto::GetBucketEncryptionInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketEncryptionOutput {
+impl AwsConversion for s3s::dto::GetBucketEncryptionOutput {
     type Target = GetBucketEncryptionOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2150,7 +2168,7 @@ impl AwsConversion for crate::dto::GetBucketEncryptionOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketIntelligentTieringConfigurationInput {
+impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationInput {
     type Target = GetBucketIntelligentTieringConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2168,7 +2186,7 @@ impl AwsConversion for crate::dto::GetBucketIntelligentTieringConfigurationInput
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketIntelligentTieringConfigurationOutput {
+impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationOutput {
     type Target = GetBucketIntelligentTieringConfigurationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2184,7 +2202,7 @@ impl AwsConversion for crate::dto::GetBucketIntelligentTieringConfigurationOutpu
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketInventoryConfigurationInput {
+impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationInput {
     type Target = GetBucketInventoryConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2204,7 +2222,7 @@ impl AwsConversion for crate::dto::GetBucketInventoryConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketInventoryConfigurationOutput {
+impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationOutput {
     type Target = GetBucketInventoryConfigurationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2220,7 +2238,7 @@ impl AwsConversion for crate::dto::GetBucketInventoryConfigurationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketLifecycleConfigurationInput {
+impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationInput {
     type Target = GetBucketLifecycleConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2238,7 +2256,7 @@ impl AwsConversion for crate::dto::GetBucketLifecycleConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketLifecycleConfigurationOutput {
+impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationOutput {
     type Target = GetBucketLifecycleConfigurationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2254,7 +2272,7 @@ impl AwsConversion for crate::dto::GetBucketLifecycleConfigurationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketLocationInput {
+impl AwsConversion for s3s::dto::GetBucketLocationInput {
     type Target = GetBucketLocationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2272,7 +2290,7 @@ impl AwsConversion for crate::dto::GetBucketLocationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketLocationOutput {
+impl AwsConversion for s3s::dto::GetBucketLocationOutput {
     type Target = GetBucketLocationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2288,7 +2306,7 @@ impl AwsConversion for crate::dto::GetBucketLocationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketLoggingInput {
+impl AwsConversion for s3s::dto::GetBucketLoggingInput {
     type Target = GetBucketLoggingInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2306,7 +2324,7 @@ impl AwsConversion for crate::dto::GetBucketLoggingInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketLoggingOutput {
+impl AwsConversion for s3s::dto::GetBucketLoggingOutput {
     type Target = GetBucketLoggingOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2322,7 +2340,7 @@ impl AwsConversion for crate::dto::GetBucketLoggingOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketMetricsConfigurationInput {
+impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationInput {
     type Target = GetBucketMetricsConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2342,7 +2360,7 @@ impl AwsConversion for crate::dto::GetBucketMetricsConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketMetricsConfigurationOutput {
+impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationOutput {
     type Target = GetBucketMetricsConfigurationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2358,7 +2376,7 @@ impl AwsConversion for crate::dto::GetBucketMetricsConfigurationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketNotificationConfigurationInput {
+impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationInput {
     type Target = GetBucketNotificationConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2376,7 +2394,7 @@ impl AwsConversion for crate::dto::GetBucketNotificationConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketOwnershipControlsInput {
+impl AwsConversion for s3s::dto::GetBucketOwnershipControlsInput {
     type Target = GetBucketOwnershipControlsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2394,7 +2412,7 @@ impl AwsConversion for crate::dto::GetBucketOwnershipControlsInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketOwnershipControlsOutput {
+impl AwsConversion for s3s::dto::GetBucketOwnershipControlsOutput {
     type Target = GetBucketOwnershipControlsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2410,7 +2428,7 @@ impl AwsConversion for crate::dto::GetBucketOwnershipControlsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketPolicyInput {
+impl AwsConversion for s3s::dto::GetBucketPolicyInput {
     type Target = GetBucketPolicyInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2428,7 +2446,7 @@ impl AwsConversion for crate::dto::GetBucketPolicyInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketPolicyOutput {
+impl AwsConversion for s3s::dto::GetBucketPolicyOutput {
     type Target = GetBucketPolicyOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2444,7 +2462,7 @@ impl AwsConversion for crate::dto::GetBucketPolicyOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketPolicyStatusInput {
+impl AwsConversion for s3s::dto::GetBucketPolicyStatusInput {
     type Target = GetBucketPolicyStatusInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2462,7 +2480,7 @@ impl AwsConversion for crate::dto::GetBucketPolicyStatusInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketPolicyStatusOutput {
+impl AwsConversion for s3s::dto::GetBucketPolicyStatusOutput {
     type Target = GetBucketPolicyStatusOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2478,7 +2496,7 @@ impl AwsConversion for crate::dto::GetBucketPolicyStatusOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketReplicationInput {
+impl AwsConversion for s3s::dto::GetBucketReplicationInput {
     type Target = GetBucketReplicationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2496,7 +2514,7 @@ impl AwsConversion for crate::dto::GetBucketReplicationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketReplicationOutput {
+impl AwsConversion for s3s::dto::GetBucketReplicationOutput {
     type Target = GetBucketReplicationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2512,7 +2530,7 @@ impl AwsConversion for crate::dto::GetBucketReplicationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketRequestPaymentInput {
+impl AwsConversion for s3s::dto::GetBucketRequestPaymentInput {
     type Target = GetBucketRequestPaymentInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2530,7 +2548,7 @@ impl AwsConversion for crate::dto::GetBucketRequestPaymentInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketRequestPaymentOutput {
+impl AwsConversion for s3s::dto::GetBucketRequestPaymentOutput {
     type Target = GetBucketRequestPaymentOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2546,7 +2564,7 @@ impl AwsConversion for crate::dto::GetBucketRequestPaymentOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketTaggingInput {
+impl AwsConversion for s3s::dto::GetBucketTaggingInput {
     type Target = GetBucketTaggingInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2564,7 +2582,7 @@ impl AwsConversion for crate::dto::GetBucketTaggingInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketTaggingOutput {
+impl AwsConversion for s3s::dto::GetBucketTaggingOutput {
     type Target = GetBucketTaggingOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2580,7 +2598,7 @@ impl AwsConversion for crate::dto::GetBucketTaggingOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketVersioningInput {
+impl AwsConversion for s3s::dto::GetBucketVersioningInput {
     type Target = GetBucketVersioningInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2598,7 +2616,7 @@ impl AwsConversion for crate::dto::GetBucketVersioningInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketVersioningOutput {
+impl AwsConversion for s3s::dto::GetBucketVersioningOutput {
     type Target = GetBucketVersioningOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2616,7 +2634,7 @@ impl AwsConversion for crate::dto::GetBucketVersioningOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketWebsiteInput {
+impl AwsConversion for s3s::dto::GetBucketWebsiteInput {
     type Target = GetBucketWebsiteInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2634,7 +2652,7 @@ impl AwsConversion for crate::dto::GetBucketWebsiteInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetBucketWebsiteOutput {
+impl AwsConversion for s3s::dto::GetBucketWebsiteOutput {
     type Target = GetBucketWebsiteOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2656,7 +2674,7 @@ impl AwsConversion for crate::dto::GetBucketWebsiteOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectAclInput {
+impl AwsConversion for s3s::dto::GetObjectAclInput {
     type Target = GetObjectAclInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2680,7 +2698,7 @@ impl AwsConversion for crate::dto::GetObjectAclInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectAclOutput {
+impl AwsConversion for s3s::dto::GetObjectAclOutput {
     type Target = GetObjectAclOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2700,7 +2718,7 @@ impl AwsConversion for crate::dto::GetObjectAclOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectAttributesInput {
+impl AwsConversion for s3s::dto::GetObjectAttributesInput {
     type Target = GetObjectAttributesInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2736,7 +2754,7 @@ impl AwsConversion for crate::dto::GetObjectAttributesInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectAttributesOutput {
+impl AwsConversion for s3s::dto::GetObjectAttributesOutput {
     type Target = GetObjectAttributesOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2768,7 +2786,7 @@ impl AwsConversion for crate::dto::GetObjectAttributesOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectAttributesParts {
+impl AwsConversion for s3s::dto::GetObjectAttributesParts {
     type Target = GetObjectAttributesParts;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2794,7 +2812,7 @@ impl AwsConversion for crate::dto::GetObjectAttributesParts {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectInput {
+impl AwsConversion for s3s::dto::GetObjectInput {
     type Target = GetObjectInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2850,7 +2868,7 @@ impl AwsConversion for crate::dto::GetObjectInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectLegalHoldInput {
+impl AwsConversion for s3s::dto::GetObjectLegalHoldInput {
     type Target = GetObjectLegalHoldInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2874,7 +2892,7 @@ impl AwsConversion for crate::dto::GetObjectLegalHoldInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectLegalHoldOutput {
+impl AwsConversion for s3s::dto::GetObjectLegalHoldOutput {
     type Target = GetObjectLegalHoldOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2890,7 +2908,7 @@ impl AwsConversion for crate::dto::GetObjectLegalHoldOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectLockConfigurationInput {
+impl AwsConversion for s3s::dto::GetObjectLockConfigurationInput {
     type Target = GetObjectLockConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2908,7 +2926,7 @@ impl AwsConversion for crate::dto::GetObjectLockConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectLockConfigurationOutput {
+impl AwsConversion for s3s::dto::GetObjectLockConfigurationOutput {
     type Target = GetObjectLockConfigurationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2924,7 +2942,7 @@ impl AwsConversion for crate::dto::GetObjectLockConfigurationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectOutput {
+impl AwsConversion for s3s::dto::GetObjectOutput {
     type Target = GetObjectOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3010,7 +3028,7 @@ impl AwsConversion for crate::dto::GetObjectOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectRetentionInput {
+impl AwsConversion for s3s::dto::GetObjectRetentionInput {
     type Target = GetObjectRetentionInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3034,7 +3052,7 @@ impl AwsConversion for crate::dto::GetObjectRetentionInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectRetentionOutput {
+impl AwsConversion for s3s::dto::GetObjectRetentionOutput {
     type Target = GetObjectRetentionOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3050,7 +3068,7 @@ impl AwsConversion for crate::dto::GetObjectRetentionOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectTaggingInput {
+impl AwsConversion for s3s::dto::GetObjectTaggingInput {
     type Target = GetObjectTaggingInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3074,7 +3092,7 @@ impl AwsConversion for crate::dto::GetObjectTaggingInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectTaggingOutput {
+impl AwsConversion for s3s::dto::GetObjectTaggingOutput {
     type Target = GetObjectTaggingOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3092,7 +3110,7 @@ impl AwsConversion for crate::dto::GetObjectTaggingOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectTorrentInput {
+impl AwsConversion for s3s::dto::GetObjectTorrentInput {
     type Target = GetObjectTorrentInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3114,7 +3132,7 @@ impl AwsConversion for crate::dto::GetObjectTorrentInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetObjectTorrentOutput {
+impl AwsConversion for s3s::dto::GetObjectTorrentOutput {
     type Target = GetObjectTorrentOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3132,7 +3150,7 @@ impl AwsConversion for crate::dto::GetObjectTorrentOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GetPublicAccessBlockInput {
+impl AwsConversion for s3s::dto::GetPublicAccessBlockInput {
     type Target = GetPublicAccessBlockInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3150,7 +3168,7 @@ impl AwsConversion for crate::dto::GetPublicAccessBlockInput {
     }
 }
 
-impl AwsConversion for crate::dto::GetPublicAccessBlockOutput {
+impl AwsConversion for s3s::dto::GetPublicAccessBlockOutput {
     type Target = GetPublicAccessBlockOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3166,7 +3184,7 @@ impl AwsConversion for crate::dto::GetPublicAccessBlockOutput {
     }
 }
 
-impl AwsConversion for crate::dto::GlacierJobParameters {
+impl AwsConversion for s3s::dto::GlacierJobParameters {
     type Target = GlacierJobParameters;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3182,7 +3200,7 @@ impl AwsConversion for crate::dto::GlacierJobParameters {
     }
 }
 
-impl AwsConversion for crate::dto::Grant {
+impl AwsConversion for s3s::dto::Grant {
     type Target = Grant;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3200,7 +3218,7 @@ impl AwsConversion for crate::dto::Grant {
     }
 }
 
-impl AwsConversion for crate::dto::Grantee {
+impl AwsConversion for s3s::dto::Grantee {
     type Target = Grantee;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3224,7 +3242,7 @@ impl AwsConversion for crate::dto::Grantee {
     }
 }
 
-impl AwsConversion for crate::dto::HeadBucketInput {
+impl AwsConversion for s3s::dto::HeadBucketInput {
     type Target = HeadBucketInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3242,7 +3260,7 @@ impl AwsConversion for crate::dto::HeadBucketInput {
     }
 }
 
-impl AwsConversion for crate::dto::HeadObjectInput {
+impl AwsConversion for s3s::dto::HeadObjectInput {
     type Target = HeadObjectInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3286,7 +3304,7 @@ impl AwsConversion for crate::dto::HeadObjectInput {
     }
 }
 
-impl AwsConversion for crate::dto::HeadObjectOutput {
+impl AwsConversion for s3s::dto::HeadObjectOutput {
     type Target = HeadObjectOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3368,7 +3386,7 @@ impl AwsConversion for crate::dto::HeadObjectOutput {
     }
 }
 
-impl AwsConversion for crate::dto::IndexDocument {
+impl AwsConversion for s3s::dto::IndexDocument {
     type Target = IndexDocument;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3384,7 +3402,7 @@ impl AwsConversion for crate::dto::IndexDocument {
     }
 }
 
-impl AwsConversion for crate::dto::Initiator {
+impl AwsConversion for s3s::dto::Initiator {
     type Target = Initiator;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3402,7 +3420,7 @@ impl AwsConversion for crate::dto::Initiator {
     }
 }
 
-impl AwsConversion for crate::dto::InputSerialization {
+impl AwsConversion for s3s::dto::InputSerialization {
     type Target = InputSerialization;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3424,7 +3442,7 @@ impl AwsConversion for crate::dto::InputSerialization {
     }
 }
 
-impl AwsConversion for crate::dto::IntelligentTieringAccessTier {
+impl AwsConversion for s3s::dto::IntelligentTieringAccessTier {
     type Target = IntelligentTieringAccessTier;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3439,11 +3457,12 @@ impl AwsConversion for crate::dto::IntelligentTieringAccessTier {
         Ok(match x {
             Self::ArchiveAccess => IntelligentTieringAccessTier::ArchiveAccess,
             Self::DeepArchiveAccess => IntelligentTieringAccessTier::DeepArchiveAccess,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::IntelligentTieringAndOperator {
+impl AwsConversion for s3s::dto::IntelligentTieringAndOperator {
     type Target = IntelligentTieringAndOperator;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3461,7 +3480,7 @@ impl AwsConversion for crate::dto::IntelligentTieringAndOperator {
     }
 }
 
-impl AwsConversion for crate::dto::IntelligentTieringConfiguration {
+impl AwsConversion for s3s::dto::IntelligentTieringConfiguration {
     type Target = IntelligentTieringConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3483,7 +3502,7 @@ impl AwsConversion for crate::dto::IntelligentTieringConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::IntelligentTieringFilter {
+impl AwsConversion for s3s::dto::IntelligentTieringFilter {
     type Target = IntelligentTieringFilter;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3503,7 +3522,7 @@ impl AwsConversion for crate::dto::IntelligentTieringFilter {
     }
 }
 
-impl AwsConversion for crate::dto::IntelligentTieringStatus {
+impl AwsConversion for s3s::dto::IntelligentTieringStatus {
     type Target = IntelligentTieringStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3518,11 +3537,12 @@ impl AwsConversion for crate::dto::IntelligentTieringStatus {
         Ok(match x {
             Self::Disabled => IntelligentTieringStatus::Disabled,
             Self::Enabled => IntelligentTieringStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::InvalidObjectState {
+impl AwsConversion for s3s::dto::InvalidObjectState {
     type Target = InvalidObjectState;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3540,7 +3560,7 @@ impl AwsConversion for crate::dto::InvalidObjectState {
     }
 }
 
-impl AwsConversion for crate::dto::InventoryConfiguration {
+impl AwsConversion for s3s::dto::InventoryConfiguration {
     type Target = InventoryConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3568,7 +3588,7 @@ impl AwsConversion for crate::dto::InventoryConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::InventoryDestination {
+impl AwsConversion for s3s::dto::InventoryDestination {
     type Target = InventoryDestination;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3584,7 +3604,7 @@ impl AwsConversion for crate::dto::InventoryDestination {
     }
 }
 
-impl AwsConversion for crate::dto::InventoryEncryption {
+impl AwsConversion for s3s::dto::InventoryEncryption {
     type Target = InventoryEncryption;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3602,7 +3622,7 @@ impl AwsConversion for crate::dto::InventoryEncryption {
     }
 }
 
-impl AwsConversion for crate::dto::InventoryFilter {
+impl AwsConversion for s3s::dto::InventoryFilter {
     type Target = InventoryFilter;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3618,7 +3638,7 @@ impl AwsConversion for crate::dto::InventoryFilter {
     }
 }
 
-impl AwsConversion for crate::dto::InventoryFormat {
+impl AwsConversion for s3s::dto::InventoryFormat {
     type Target = InventoryFormat;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3635,11 +3655,12 @@ impl AwsConversion for crate::dto::InventoryFormat {
             Self::Csv => InventoryFormat::Csv,
             Self::Orc => InventoryFormat::Orc,
             Self::Parquet => InventoryFormat::Parquet,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::InventoryFrequency {
+impl AwsConversion for s3s::dto::InventoryFrequency {
     type Target = InventoryFrequency;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3654,11 +3675,12 @@ impl AwsConversion for crate::dto::InventoryFrequency {
         Ok(match x {
             Self::Daily => InventoryFrequency::Daily,
             Self::Weekly => InventoryFrequency::Weekly,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::InventoryIncludedObjectVersions {
+impl AwsConversion for s3s::dto::InventoryIncludedObjectVersions {
     type Target = InventoryIncludedObjectVersions;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3673,11 +3695,12 @@ impl AwsConversion for crate::dto::InventoryIncludedObjectVersions {
         Ok(match x {
             Self::All => InventoryIncludedObjectVersions::All,
             Self::Current => InventoryIncludedObjectVersions::Current,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::InventoryOptionalField {
+impl AwsConversion for s3s::dto::InventoryOptionalField {
     type Target = InventoryOptionalField;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3714,11 +3737,12 @@ impl AwsConversion for crate::dto::InventoryOptionalField {
             Self::ReplicationStatus => InventoryOptionalField::ReplicationStatus,
             Self::Size => InventoryOptionalField::Size,
             Self::StorageClass => InventoryOptionalField::StorageClass,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::InventoryS3BucketDestination {
+impl AwsConversion for s3s::dto::InventoryS3BucketDestination {
     type Target = InventoryS3BucketDestination;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3742,7 +3766,7 @@ impl AwsConversion for crate::dto::InventoryS3BucketDestination {
     }
 }
 
-impl AwsConversion for crate::dto::InventorySchedule {
+impl AwsConversion for s3s::dto::InventorySchedule {
     type Target = InventorySchedule;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3758,7 +3782,7 @@ impl AwsConversion for crate::dto::InventorySchedule {
     }
 }
 
-impl AwsConversion for crate::dto::JSONInput {
+impl AwsConversion for s3s::dto::JSONInput {
     type Target = JsonInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3774,7 +3798,7 @@ impl AwsConversion for crate::dto::JSONInput {
     }
 }
 
-impl AwsConversion for crate::dto::JSONOutput {
+impl AwsConversion for s3s::dto::JSONOutput {
     type Target = JsonOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3790,7 +3814,7 @@ impl AwsConversion for crate::dto::JSONOutput {
     }
 }
 
-impl AwsConversion for crate::dto::JSONType {
+impl AwsConversion for s3s::dto::JSONType {
     type Target = JsonType;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3805,11 +3829,12 @@ impl AwsConversion for crate::dto::JSONType {
         Ok(match x {
             Self::Document => JsonType::Document,
             Self::Lines => JsonType::Lines,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::LambdaFunctionConfiguration {
+impl AwsConversion for s3s::dto::LambdaFunctionConfiguration {
     type Target = LambdaFunctionConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3831,7 +3856,7 @@ impl AwsConversion for crate::dto::LambdaFunctionConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::LifecycleExpiration {
+impl AwsConversion for s3s::dto::LifecycleExpiration {
     type Target = LifecycleExpiration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3851,7 +3876,7 @@ impl AwsConversion for crate::dto::LifecycleExpiration {
     }
 }
 
-impl AwsConversion for crate::dto::LifecycleRule {
+impl AwsConversion for s3s::dto::LifecycleRule {
     type Target = LifecycleRule;
 
     #[allow(deprecated)]
@@ -3885,7 +3910,7 @@ impl AwsConversion for crate::dto::LifecycleRule {
     }
 }
 
-impl AwsConversion for crate::dto::LifecycleRuleAndOperator {
+impl AwsConversion for s3s::dto::LifecycleRuleAndOperator {
     type Target = LifecycleRuleAndOperator;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3907,7 +3932,7 @@ impl AwsConversion for crate::dto::LifecycleRuleAndOperator {
     }
 }
 
-impl AwsConversion for crate::dto::LifecycleRuleFilter {
+impl AwsConversion for s3s::dto::LifecycleRuleFilter {
     type Target = LifecycleRuleFilter;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3928,11 +3953,12 @@ impl AwsConversion for crate::dto::LifecycleRuleFilter {
             Self::ObjectSizeLessThan(v) => LifecycleRuleFilter::ObjectSizeLessThan(try_into_aws(v)?),
             Self::Prefix(v) => LifecycleRuleFilter::Prefix(try_into_aws(v)?),
             Self::Tag(v) => LifecycleRuleFilter::Tag(try_into_aws(v)?),
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketAnalyticsConfigurationsInput {
+impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsInput {
     type Target = ListBucketAnalyticsConfigurationsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3952,7 +3978,7 @@ impl AwsConversion for crate::dto::ListBucketAnalyticsConfigurationsInput {
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketAnalyticsConfigurationsOutput {
+impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsOutput {
     type Target = ListBucketAnalyticsConfigurationsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3974,7 +4000,7 @@ impl AwsConversion for crate::dto::ListBucketAnalyticsConfigurationsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketIntelligentTieringConfigurationsInput {
+impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsInput {
     type Target = ListBucketIntelligentTieringConfigurationsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3992,7 +4018,7 @@ impl AwsConversion for crate::dto::ListBucketIntelligentTieringConfigurationsInp
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketIntelligentTieringConfigurationsOutput {
+impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsOutput {
     type Target = ListBucketIntelligentTieringConfigurationsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4014,7 +4040,7 @@ impl AwsConversion for crate::dto::ListBucketIntelligentTieringConfigurationsOut
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketInventoryConfigurationsInput {
+impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsInput {
     type Target = ListBucketInventoryConfigurationsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4034,7 +4060,7 @@ impl AwsConversion for crate::dto::ListBucketInventoryConfigurationsInput {
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketInventoryConfigurationsOutput {
+impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsOutput {
     type Target = ListBucketInventoryConfigurationsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4056,7 +4082,7 @@ impl AwsConversion for crate::dto::ListBucketInventoryConfigurationsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketMetricsConfigurationsInput {
+impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsInput {
     type Target = ListBucketMetricsConfigurationsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4076,7 +4102,7 @@ impl AwsConversion for crate::dto::ListBucketMetricsConfigurationsInput {
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketMetricsConfigurationsOutput {
+impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsOutput {
     type Target = ListBucketMetricsConfigurationsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4098,7 +4124,7 @@ impl AwsConversion for crate::dto::ListBucketMetricsConfigurationsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::ListBucketsOutput {
+impl AwsConversion for s3s::dto::ListBucketsOutput {
     type Target = ListBucketsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4116,7 +4142,7 @@ impl AwsConversion for crate::dto::ListBucketsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::ListMultipartUploadsInput {
+impl AwsConversion for s3s::dto::ListMultipartUploadsInput {
     type Target = ListMultipartUploadsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4146,7 +4172,7 @@ impl AwsConversion for crate::dto::ListMultipartUploadsInput {
     }
 }
 
-impl AwsConversion for crate::dto::ListMultipartUploadsOutput {
+impl AwsConversion for s3s::dto::ListMultipartUploadsOutput {
     type Target = ListMultipartUploadsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4184,7 +4210,7 @@ impl AwsConversion for crate::dto::ListMultipartUploadsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::ListObjectVersionsInput {
+impl AwsConversion for s3s::dto::ListObjectVersionsInput {
     type Target = ListObjectVersionsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4214,7 +4240,7 @@ impl AwsConversion for crate::dto::ListObjectVersionsInput {
     }
 }
 
-impl AwsConversion for crate::dto::ListObjectVersionsOutput {
+impl AwsConversion for s3s::dto::ListObjectVersionsOutput {
     type Target = ListObjectVersionsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4254,7 +4280,7 @@ impl AwsConversion for crate::dto::ListObjectVersionsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::ListObjectsInput {
+impl AwsConversion for s3s::dto::ListObjectsInput {
     type Target = ListObjectsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4284,7 +4310,7 @@ impl AwsConversion for crate::dto::ListObjectsInput {
     }
 }
 
-impl AwsConversion for crate::dto::ListObjectsOutput {
+impl AwsConversion for s3s::dto::ListObjectsOutput {
     type Target = ListObjectsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4318,7 +4344,7 @@ impl AwsConversion for crate::dto::ListObjectsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::ListObjectsV2Input {
+impl AwsConversion for s3s::dto::ListObjectsV2Input {
     type Target = ListObjectsV2Input;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4352,7 +4378,7 @@ impl AwsConversion for crate::dto::ListObjectsV2Input {
     }
 }
 
-impl AwsConversion for crate::dto::ListObjectsV2Output {
+impl AwsConversion for s3s::dto::ListObjectsV2Output {
     type Target = ListObjectsV2Output;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4390,7 +4416,7 @@ impl AwsConversion for crate::dto::ListObjectsV2Output {
     }
 }
 
-impl AwsConversion for crate::dto::ListPartsInput {
+impl AwsConversion for s3s::dto::ListPartsInput {
     type Target = ListPartsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4424,7 +4450,7 @@ impl AwsConversion for crate::dto::ListPartsInput {
     }
 }
 
-impl AwsConversion for crate::dto::ListPartsOutput {
+impl AwsConversion for s3s::dto::ListPartsOutput {
     type Target = ListPartsOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4468,7 +4494,7 @@ impl AwsConversion for crate::dto::ListPartsOutput {
     }
 }
 
-impl AwsConversion for crate::dto::LoggingEnabled {
+impl AwsConversion for s3s::dto::LoggingEnabled {
     type Target = LoggingEnabled;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4488,7 +4514,7 @@ impl AwsConversion for crate::dto::LoggingEnabled {
     }
 }
 
-impl AwsConversion for crate::dto::MFADelete {
+impl AwsConversion for s3s::dto::MFADelete {
     type Target = MfaDelete;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4503,11 +4529,12 @@ impl AwsConversion for crate::dto::MFADelete {
         Ok(match x {
             Self::Disabled => MfaDelete::Disabled,
             Self::Enabled => MfaDelete::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::MFADeleteStatus {
+impl AwsConversion for s3s::dto::MFADeleteStatus {
     type Target = MfaDeleteStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4522,11 +4549,12 @@ impl AwsConversion for crate::dto::MFADeleteStatus {
         Ok(match x {
             Self::Disabled => MfaDeleteStatus::Disabled,
             Self::Enabled => MfaDeleteStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::MetadataDirective {
+impl AwsConversion for s3s::dto::MetadataDirective {
     type Target = MetadataDirective;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4541,11 +4569,12 @@ impl AwsConversion for crate::dto::MetadataDirective {
         Ok(match x {
             Self::Copy => MetadataDirective::Copy,
             Self::Replace => MetadataDirective::Replace,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::MetadataEntry {
+impl AwsConversion for s3s::dto::MetadataEntry {
     type Target = MetadataEntry;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4563,7 +4592,7 @@ impl AwsConversion for crate::dto::MetadataEntry {
     }
 }
 
-impl AwsConversion for crate::dto::Metrics {
+impl AwsConversion for s3s::dto::Metrics {
     type Target = Metrics;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4581,7 +4610,7 @@ impl AwsConversion for crate::dto::Metrics {
     }
 }
 
-impl AwsConversion for crate::dto::MetricsAndOperator {
+impl AwsConversion for s3s::dto::MetricsAndOperator {
     type Target = MetricsAndOperator;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4601,7 +4630,7 @@ impl AwsConversion for crate::dto::MetricsAndOperator {
     }
 }
 
-impl AwsConversion for crate::dto::MetricsConfiguration {
+impl AwsConversion for s3s::dto::MetricsConfiguration {
     type Target = MetricsConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4619,7 +4648,7 @@ impl AwsConversion for crate::dto::MetricsConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::MetricsFilter {
+impl AwsConversion for s3s::dto::MetricsFilter {
     type Target = MetricsFilter;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4638,11 +4667,12 @@ impl AwsConversion for crate::dto::MetricsFilter {
             Self::And(v) => MetricsFilter::And(try_into_aws(v)?),
             Self::Prefix(v) => MetricsFilter::Prefix(try_into_aws(v)?),
             Self::Tag(v) => MetricsFilter::Tag(try_into_aws(v)?),
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::MetricsStatus {
+impl AwsConversion for s3s::dto::MetricsStatus {
     type Target = MetricsStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4657,11 +4687,12 @@ impl AwsConversion for crate::dto::MetricsStatus {
         Ok(match x {
             Self::Disabled => MetricsStatus::Disabled,
             Self::Enabled => MetricsStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::MultipartUpload {
+impl AwsConversion for s3s::dto::MultipartUpload {
     type Target = MultipartUpload;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4689,7 +4720,7 @@ impl AwsConversion for crate::dto::MultipartUpload {
     }
 }
 
-impl AwsConversion for crate::dto::NoSuchBucket {
+impl AwsConversion for s3s::dto::NoSuchBucket {
     type Target = NoSuchBucket;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4704,7 +4735,7 @@ impl AwsConversion for crate::dto::NoSuchBucket {
     }
 }
 
-impl AwsConversion for crate::dto::NoSuchKey {
+impl AwsConversion for s3s::dto::NoSuchKey {
     type Target = NoSuchKey;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4719,7 +4750,7 @@ impl AwsConversion for crate::dto::NoSuchKey {
     }
 }
 
-impl AwsConversion for crate::dto::NoSuchUpload {
+impl AwsConversion for s3s::dto::NoSuchUpload {
     type Target = NoSuchUpload;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4734,7 +4765,7 @@ impl AwsConversion for crate::dto::NoSuchUpload {
     }
 }
 
-impl AwsConversion for crate::dto::NoncurrentVersionExpiration {
+impl AwsConversion for s3s::dto::NoncurrentVersionExpiration {
     type Target = NoncurrentVersionExpiration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4752,7 +4783,7 @@ impl AwsConversion for crate::dto::NoncurrentVersionExpiration {
     }
 }
 
-impl AwsConversion for crate::dto::NoncurrentVersionTransition {
+impl AwsConversion for s3s::dto::NoncurrentVersionTransition {
     type Target = NoncurrentVersionTransition;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4772,7 +4803,7 @@ impl AwsConversion for crate::dto::NoncurrentVersionTransition {
     }
 }
 
-impl AwsConversion for crate::dto::NotFound {
+impl AwsConversion for s3s::dto::NotFound {
     type Target = NotFound;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4787,7 +4818,7 @@ impl AwsConversion for crate::dto::NotFound {
     }
 }
 
-impl AwsConversion for crate::dto::NotificationConfiguration {
+impl AwsConversion for s3s::dto::NotificationConfiguration {
     type Target = NotificationConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4809,7 +4840,7 @@ impl AwsConversion for crate::dto::NotificationConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::NotificationConfigurationFilter {
+impl AwsConversion for s3s::dto::NotificationConfigurationFilter {
     type Target = NotificationConfigurationFilter;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4825,7 +4856,7 @@ impl AwsConversion for crate::dto::NotificationConfigurationFilter {
     }
 }
 
-impl AwsConversion for crate::dto::Object {
+impl AwsConversion for s3s::dto::Object {
     type Target = Object;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4853,7 +4884,7 @@ impl AwsConversion for crate::dto::Object {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectAlreadyInActiveTierError {
+impl AwsConversion for s3s::dto::ObjectAlreadyInActiveTierError {
     type Target = ObjectAlreadyInActiveTierError;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4868,7 +4899,7 @@ impl AwsConversion for crate::dto::ObjectAlreadyInActiveTierError {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectAttributes {
+impl AwsConversion for s3s::dto::ObjectAttributes {
     type Target = ObjectAttributes;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4889,11 +4920,12 @@ impl AwsConversion for crate::dto::ObjectAttributes {
             Self::ObjectParts => ObjectAttributes::ObjectParts,
             Self::ObjectSize => ObjectAttributes::ObjectSize,
             Self::StorageClass => ObjectAttributes::StorageClass,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ObjectCannedACL {
+impl AwsConversion for s3s::dto::ObjectCannedACL {
     type Target = ObjectCannedAcl;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4918,11 +4950,12 @@ impl AwsConversion for crate::dto::ObjectCannedACL {
             Self::Private => ObjectCannedAcl::Private,
             Self::PublicRead => ObjectCannedAcl::PublicRead,
             Self::PublicReadWrite => ObjectCannedAcl::PublicReadWrite,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ObjectIdentifier {
+impl AwsConversion for s3s::dto::ObjectIdentifier {
     type Target = ObjectIdentifier;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4940,7 +4973,7 @@ impl AwsConversion for crate::dto::ObjectIdentifier {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectLockConfiguration {
+impl AwsConversion for s3s::dto::ObjectLockConfiguration {
     type Target = ObjectLockConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4958,7 +4991,7 @@ impl AwsConversion for crate::dto::ObjectLockConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectLockEnabled {
+impl AwsConversion for s3s::dto::ObjectLockEnabled {
     type Target = ObjectLockEnabled;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4971,11 +5004,12 @@ impl AwsConversion for crate::dto::ObjectLockEnabled {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Enabled => ObjectLockEnabled::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ObjectLockLegalHold {
+impl AwsConversion for s3s::dto::ObjectLockLegalHold {
     type Target = ObjectLockLegalHold;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4991,7 +5025,7 @@ impl AwsConversion for crate::dto::ObjectLockLegalHold {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectLockLegalHoldStatus {
+impl AwsConversion for s3s::dto::ObjectLockLegalHoldStatus {
     type Target = ObjectLockLegalHoldStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5006,11 +5040,12 @@ impl AwsConversion for crate::dto::ObjectLockLegalHoldStatus {
         Ok(match x {
             Self::Off => ObjectLockLegalHoldStatus::Off,
             Self::On => ObjectLockLegalHoldStatus::On,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ObjectLockMode {
+impl AwsConversion for s3s::dto::ObjectLockMode {
     type Target = ObjectLockMode;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5025,11 +5060,12 @@ impl AwsConversion for crate::dto::ObjectLockMode {
         Ok(match x {
             Self::Compliance => ObjectLockMode::Compliance,
             Self::Governance => ObjectLockMode::Governance,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ObjectLockRetention {
+impl AwsConversion for s3s::dto::ObjectLockRetention {
     type Target = ObjectLockRetention;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5047,7 +5083,7 @@ impl AwsConversion for crate::dto::ObjectLockRetention {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectLockRetentionMode {
+impl AwsConversion for s3s::dto::ObjectLockRetentionMode {
     type Target = ObjectLockRetentionMode;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5062,11 +5098,12 @@ impl AwsConversion for crate::dto::ObjectLockRetentionMode {
         Ok(match x {
             Self::Compliance => ObjectLockRetentionMode::Compliance,
             Self::Governance => ObjectLockRetentionMode::Governance,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ObjectLockRule {
+impl AwsConversion for s3s::dto::ObjectLockRule {
     type Target = ObjectLockRule;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5082,7 +5119,7 @@ impl AwsConversion for crate::dto::ObjectLockRule {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectNotInActiveTierError {
+impl AwsConversion for s3s::dto::ObjectNotInActiveTierError {
     type Target = ObjectNotInActiveTierError;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5097,7 +5134,7 @@ impl AwsConversion for crate::dto::ObjectNotInActiveTierError {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectOwnership {
+impl AwsConversion for s3s::dto::ObjectOwnership {
     type Target = ObjectOwnership;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5114,11 +5151,12 @@ impl AwsConversion for crate::dto::ObjectOwnership {
             Self::BucketOwnerEnforced => ObjectOwnership::BucketOwnerEnforced,
             Self::BucketOwnerPreferred => ObjectOwnership::BucketOwnerPreferred,
             Self::ObjectWriter => ObjectOwnership::ObjectWriter,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ObjectPart {
+impl AwsConversion for s3s::dto::ObjectPart {
     type Target = ObjectPart;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5144,7 +5182,7 @@ impl AwsConversion for crate::dto::ObjectPart {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectStorageClass {
+impl AwsConversion for s3s::dto::ObjectStorageClass {
     type Target = ObjectStorageClass;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5173,11 +5211,12 @@ impl AwsConversion for crate::dto::ObjectStorageClass {
             Self::ReducedRedundancy => ObjectStorageClass::ReducedRedundancy,
             Self::Standard => ObjectStorageClass::Standard,
             Self::StandardIa => ObjectStorageClass::StandardIa,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ObjectVersion {
+impl AwsConversion for s3s::dto::ObjectVersion {
     type Target = ObjectVersion;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5209,7 +5248,7 @@ impl AwsConversion for crate::dto::ObjectVersion {
     }
 }
 
-impl AwsConversion for crate::dto::ObjectVersionStorageClass {
+impl AwsConversion for s3s::dto::ObjectVersionStorageClass {
     type Target = ObjectVersionStorageClass;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5222,11 +5261,12 @@ impl AwsConversion for crate::dto::ObjectVersionStorageClass {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Standard => ObjectVersionStorageClass::Standard,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::OutputLocation {
+impl AwsConversion for s3s::dto::OutputLocation {
     type Target = OutputLocation;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5240,7 +5280,7 @@ impl AwsConversion for crate::dto::OutputLocation {
     }
 }
 
-impl AwsConversion for crate::dto::OutputSerialization {
+impl AwsConversion for s3s::dto::OutputSerialization {
     type Target = OutputSerialization;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5258,7 +5298,7 @@ impl AwsConversion for crate::dto::OutputSerialization {
     }
 }
 
-impl AwsConversion for crate::dto::Owner {
+impl AwsConversion for s3s::dto::Owner {
     type Target = Owner;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5276,7 +5316,7 @@ impl AwsConversion for crate::dto::Owner {
     }
 }
 
-impl AwsConversion for crate::dto::OwnerOverride {
+impl AwsConversion for s3s::dto::OwnerOverride {
     type Target = OwnerOverride;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5289,11 +5329,12 @@ impl AwsConversion for crate::dto::OwnerOverride {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Destination => OwnerOverride::Destination,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::OwnershipControls {
+impl AwsConversion for s3s::dto::OwnershipControls {
     type Target = OwnershipControls;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5309,7 +5350,7 @@ impl AwsConversion for crate::dto::OwnershipControls {
     }
 }
 
-impl AwsConversion for crate::dto::OwnershipControlsRule {
+impl AwsConversion for s3s::dto::OwnershipControlsRule {
     type Target = OwnershipControlsRule;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5325,7 +5366,7 @@ impl AwsConversion for crate::dto::OwnershipControlsRule {
     }
 }
 
-impl AwsConversion for crate::dto::ParquetInput {
+impl AwsConversion for s3s::dto::ParquetInput {
     type Target = ParquetInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5340,7 +5381,7 @@ impl AwsConversion for crate::dto::ParquetInput {
     }
 }
 
-impl AwsConversion for crate::dto::Part {
+impl AwsConversion for s3s::dto::Part {
     type Target = Part;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5370,7 +5411,7 @@ impl AwsConversion for crate::dto::Part {
     }
 }
 
-impl AwsConversion for crate::dto::Payer {
+impl AwsConversion for s3s::dto::Payer {
     type Target = Payer;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5385,11 +5426,12 @@ impl AwsConversion for crate::dto::Payer {
         Ok(match x {
             Self::BucketOwner => Payer::BucketOwner,
             Self::Requester => Payer::Requester,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::Permission {
+impl AwsConversion for s3s::dto::Permission {
     type Target = Permission;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5410,11 +5452,12 @@ impl AwsConversion for crate::dto::Permission {
             Self::ReadAcp => Permission::ReadAcp,
             Self::Write => Permission::Write,
             Self::WriteAcp => Permission::WriteAcp,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::PolicyStatus {
+impl AwsConversion for s3s::dto::PolicyStatus {
     type Target = PolicyStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5430,7 +5473,7 @@ impl AwsConversion for crate::dto::PolicyStatus {
     }
 }
 
-impl AwsConversion for crate::dto::Progress {
+impl AwsConversion for s3s::dto::Progress {
     type Target = Progress;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5450,7 +5493,7 @@ impl AwsConversion for crate::dto::Progress {
     }
 }
 
-impl AwsConversion for crate::dto::ProgressEvent {
+impl AwsConversion for s3s::dto::ProgressEvent {
     type Target = ProgressEvent;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5466,7 +5509,7 @@ impl AwsConversion for crate::dto::ProgressEvent {
     }
 }
 
-impl AwsConversion for crate::dto::Protocol {
+impl AwsConversion for s3s::dto::Protocol {
     type Target = Protocol;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5481,11 +5524,12 @@ impl AwsConversion for crate::dto::Protocol {
         Ok(match x {
             Self::Http => Protocol::Http,
             Self::Https => Protocol::Https,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::PublicAccessBlockConfiguration {
+impl AwsConversion for s3s::dto::PublicAccessBlockConfiguration {
     type Target = PublicAccessBlockConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5507,7 +5551,7 @@ impl AwsConversion for crate::dto::PublicAccessBlockConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketAccelerateConfigurationInput {
+impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationInput {
     type Target = PutBucketAccelerateConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5529,7 +5573,7 @@ impl AwsConversion for crate::dto::PutBucketAccelerateConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketAclInput {
+impl AwsConversion for s3s::dto::PutBucketAclInput {
     type Target = PutBucketAclInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5565,7 +5609,7 @@ impl AwsConversion for crate::dto::PutBucketAclInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketAnalyticsConfigurationInput {
+impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationInput {
     type Target = PutBucketAnalyticsConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5587,7 +5631,7 @@ impl AwsConversion for crate::dto::PutBucketAnalyticsConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketCorsInput {
+impl AwsConversion for s3s::dto::PutBucketCorsInput {
     type Target = PutBucketCorsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5611,7 +5655,7 @@ impl AwsConversion for crate::dto::PutBucketCorsInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketEncryptionInput {
+impl AwsConversion for s3s::dto::PutBucketEncryptionInput {
     type Target = PutBucketEncryptionInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5638,7 +5682,7 @@ impl AwsConversion for crate::dto::PutBucketEncryptionInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketIntelligentTieringConfigurationInput {
+impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationInput {
     type Target = PutBucketIntelligentTieringConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5661,7 +5705,7 @@ impl AwsConversion for crate::dto::PutBucketIntelligentTieringConfigurationInput
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketInventoryConfigurationInput {
+impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationInput {
     type Target = PutBucketInventoryConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5683,7 +5727,7 @@ impl AwsConversion for crate::dto::PutBucketInventoryConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketLifecycleConfigurationInput {
+impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
     type Target = PutBucketLifecycleConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5705,7 +5749,7 @@ impl AwsConversion for crate::dto::PutBucketLifecycleConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketLoggingInput {
+impl AwsConversion for s3s::dto::PutBucketLoggingInput {
     type Target = PutBucketLoggingInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5729,7 +5773,7 @@ impl AwsConversion for crate::dto::PutBucketLoggingInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketMetricsConfigurationInput {
+impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationInput {
     type Target = PutBucketMetricsConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5751,7 +5795,7 @@ impl AwsConversion for crate::dto::PutBucketMetricsConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketNotificationConfigurationInput {
+impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationInput {
     type Target = PutBucketNotificationConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5773,7 +5817,7 @@ impl AwsConversion for crate::dto::PutBucketNotificationConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketOwnershipControlsInput {
+impl AwsConversion for s3s::dto::PutBucketOwnershipControlsInput {
     type Target = PutBucketOwnershipControlsInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5795,7 +5839,7 @@ impl AwsConversion for crate::dto::PutBucketOwnershipControlsInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketPolicyInput {
+impl AwsConversion for s3s::dto::PutBucketPolicyInput {
     type Target = PutBucketPolicyInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5821,7 +5865,7 @@ impl AwsConversion for crate::dto::PutBucketPolicyInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketReplicationInput {
+impl AwsConversion for s3s::dto::PutBucketReplicationInput {
     type Target = PutBucketReplicationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5847,7 +5891,7 @@ impl AwsConversion for crate::dto::PutBucketReplicationInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketRequestPaymentInput {
+impl AwsConversion for s3s::dto::PutBucketRequestPaymentInput {
     type Target = PutBucketRequestPaymentInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5871,7 +5915,7 @@ impl AwsConversion for crate::dto::PutBucketRequestPaymentInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketTaggingInput {
+impl AwsConversion for s3s::dto::PutBucketTaggingInput {
     type Target = PutBucketTaggingInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5895,7 +5939,7 @@ impl AwsConversion for crate::dto::PutBucketTaggingInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketVersioningInput {
+impl AwsConversion for s3s::dto::PutBucketVersioningInput {
     type Target = PutBucketVersioningInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5921,7 +5965,7 @@ impl AwsConversion for crate::dto::PutBucketVersioningInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutBucketWebsiteInput {
+impl AwsConversion for s3s::dto::PutBucketWebsiteInput {
     type Target = PutBucketWebsiteInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5945,7 +5989,7 @@ impl AwsConversion for crate::dto::PutBucketWebsiteInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectAclInput {
+impl AwsConversion for s3s::dto::PutObjectAclInput {
     type Target = PutObjectAclInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5987,7 +6031,7 @@ impl AwsConversion for crate::dto::PutObjectAclInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectAclOutput {
+impl AwsConversion for s3s::dto::PutObjectAclOutput {
     type Target = PutObjectAclOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6003,7 +6047,7 @@ impl AwsConversion for crate::dto::PutObjectAclOutput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectInput {
+impl AwsConversion for s3s::dto::PutObjectInput {
     type Target = PutObjectInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6091,7 +6135,7 @@ impl AwsConversion for crate::dto::PutObjectInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectLegalHoldInput {
+impl AwsConversion for s3s::dto::PutObjectLegalHoldInput {
     type Target = PutObjectLegalHoldInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6121,7 +6165,7 @@ impl AwsConversion for crate::dto::PutObjectLegalHoldInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectLegalHoldOutput {
+impl AwsConversion for s3s::dto::PutObjectLegalHoldOutput {
     type Target = PutObjectLegalHoldOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6137,7 +6181,7 @@ impl AwsConversion for crate::dto::PutObjectLegalHoldOutput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectLockConfigurationInput {
+impl AwsConversion for s3s::dto::PutObjectLockConfigurationInput {
     type Target = PutObjectLockConfigurationInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6165,7 +6209,7 @@ impl AwsConversion for crate::dto::PutObjectLockConfigurationInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectLockConfigurationOutput {
+impl AwsConversion for s3s::dto::PutObjectLockConfigurationOutput {
     type Target = PutObjectLockConfigurationOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6181,7 +6225,7 @@ impl AwsConversion for crate::dto::PutObjectLockConfigurationOutput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectOutput {
+impl AwsConversion for s3s::dto::PutObjectOutput {
     type Target = PutObjectOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6223,7 +6267,7 @@ impl AwsConversion for crate::dto::PutObjectOutput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectRetentionInput {
+impl AwsConversion for s3s::dto::PutObjectRetentionInput {
     type Target = PutObjectRetentionInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6255,7 +6299,7 @@ impl AwsConversion for crate::dto::PutObjectRetentionInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectRetentionOutput {
+impl AwsConversion for s3s::dto::PutObjectRetentionOutput {
     type Target = PutObjectRetentionOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6271,7 +6315,7 @@ impl AwsConversion for crate::dto::PutObjectRetentionOutput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectTaggingInput {
+impl AwsConversion for s3s::dto::PutObjectTaggingInput {
     type Target = PutObjectTaggingInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6301,7 +6345,7 @@ impl AwsConversion for crate::dto::PutObjectTaggingInput {
     }
 }
 
-impl AwsConversion for crate::dto::PutObjectTaggingOutput {
+impl AwsConversion for s3s::dto::PutObjectTaggingOutput {
     type Target = PutObjectTaggingOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6317,7 +6361,7 @@ impl AwsConversion for crate::dto::PutObjectTaggingOutput {
     }
 }
 
-impl AwsConversion for crate::dto::PutPublicAccessBlockInput {
+impl AwsConversion for s3s::dto::PutPublicAccessBlockInput {
     type Target = PutPublicAccessBlockInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6344,7 +6388,7 @@ impl AwsConversion for crate::dto::PutPublicAccessBlockInput {
     }
 }
 
-impl AwsConversion for crate::dto::QueueConfiguration {
+impl AwsConversion for s3s::dto::QueueConfiguration {
     type Target = QueueConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6366,7 +6410,7 @@ impl AwsConversion for crate::dto::QueueConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::QuoteFields {
+impl AwsConversion for s3s::dto::QuoteFields {
     type Target = QuoteFields;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6381,11 +6425,12 @@ impl AwsConversion for crate::dto::QuoteFields {
         Ok(match x {
             Self::Always => QuoteFields::Always,
             Self::Asneeded => QuoteFields::Asneeded,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::RecordsEvent {
+impl AwsConversion for s3s::dto::RecordsEvent {
     type Target = RecordsEvent;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6401,7 +6446,7 @@ impl AwsConversion for crate::dto::RecordsEvent {
     }
 }
 
-impl AwsConversion for crate::dto::Redirect {
+impl AwsConversion for s3s::dto::Redirect {
     type Target = Redirect;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6425,7 +6470,7 @@ impl AwsConversion for crate::dto::Redirect {
     }
 }
 
-impl AwsConversion for crate::dto::RedirectAllRequestsTo {
+impl AwsConversion for s3s::dto::RedirectAllRequestsTo {
     type Target = RedirectAllRequestsTo;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6443,7 +6488,7 @@ impl AwsConversion for crate::dto::RedirectAllRequestsTo {
     }
 }
 
-impl AwsConversion for crate::dto::ReplicaModifications {
+impl AwsConversion for s3s::dto::ReplicaModifications {
     type Target = ReplicaModifications;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6459,7 +6504,7 @@ impl AwsConversion for crate::dto::ReplicaModifications {
     }
 }
 
-impl AwsConversion for crate::dto::ReplicaModificationsStatus {
+impl AwsConversion for s3s::dto::ReplicaModificationsStatus {
     type Target = ReplicaModificationsStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6474,11 +6519,12 @@ impl AwsConversion for crate::dto::ReplicaModificationsStatus {
         Ok(match x {
             Self::Disabled => ReplicaModificationsStatus::Disabled,
             Self::Enabled => ReplicaModificationsStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationConfiguration {
+impl AwsConversion for s3s::dto::ReplicationConfiguration {
     type Target = ReplicationConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6496,7 +6542,7 @@ impl AwsConversion for crate::dto::ReplicationConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationRule {
+impl AwsConversion for s3s::dto::ReplicationRule {
     type Target = ReplicationRule;
 
     #[allow(deprecated)]
@@ -6530,7 +6576,7 @@ impl AwsConversion for crate::dto::ReplicationRule {
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationRuleAndOperator {
+impl AwsConversion for s3s::dto::ReplicationRuleAndOperator {
     type Target = ReplicationRuleAndOperator;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6548,7 +6594,7 @@ impl AwsConversion for crate::dto::ReplicationRuleAndOperator {
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationRuleFilter {
+impl AwsConversion for s3s::dto::ReplicationRuleFilter {
     type Target = ReplicationRuleFilter;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6565,11 +6611,12 @@ impl AwsConversion for crate::dto::ReplicationRuleFilter {
             Self::And(v) => ReplicationRuleFilter::And(try_into_aws(v)?),
             Self::Prefix(v) => ReplicationRuleFilter::Prefix(try_into_aws(v)?),
             Self::Tag(v) => ReplicationRuleFilter::Tag(try_into_aws(v)?),
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationRuleStatus {
+impl AwsConversion for s3s::dto::ReplicationRuleStatus {
     type Target = ReplicationRuleStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6584,11 +6631,12 @@ impl AwsConversion for crate::dto::ReplicationRuleStatus {
         Ok(match x {
             Self::Disabled => ReplicationRuleStatus::Disabled,
             Self::Enabled => ReplicationRuleStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationStatus {
+impl AwsConversion for s3s::dto::ReplicationStatus {
     type Target = ReplicationStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6607,11 +6655,12 @@ impl AwsConversion for crate::dto::ReplicationStatus {
             Self::Failed => ReplicationStatus::Failed,
             Self::Pending => ReplicationStatus::Pending,
             Self::Replica => ReplicationStatus::Replica,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationTime {
+impl AwsConversion for s3s::dto::ReplicationTime {
     type Target = ReplicationTime;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6629,7 +6678,7 @@ impl AwsConversion for crate::dto::ReplicationTime {
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationTimeStatus {
+impl AwsConversion for s3s::dto::ReplicationTimeStatus {
     type Target = ReplicationTimeStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6644,11 +6693,12 @@ impl AwsConversion for crate::dto::ReplicationTimeStatus {
         Ok(match x {
             Self::Disabled => ReplicationTimeStatus::Disabled,
             Self::Enabled => ReplicationTimeStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ReplicationTimeValue {
+impl AwsConversion for s3s::dto::ReplicationTimeValue {
     type Target = ReplicationTimeValue;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6664,7 +6714,7 @@ impl AwsConversion for crate::dto::ReplicationTimeValue {
     }
 }
 
-impl AwsConversion for crate::dto::RequestCharged {
+impl AwsConversion for s3s::dto::RequestCharged {
     type Target = RequestCharged;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6677,11 +6727,12 @@ impl AwsConversion for crate::dto::RequestCharged {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Requester => RequestCharged::Requester,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::RequestPayer {
+impl AwsConversion for s3s::dto::RequestPayer {
     type Target = RequestPayer;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6694,11 +6745,12 @@ impl AwsConversion for crate::dto::RequestPayer {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Requester => RequestPayer::Requester,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::RequestPaymentConfiguration {
+impl AwsConversion for s3s::dto::RequestPaymentConfiguration {
     type Target = RequestPaymentConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6714,7 +6766,7 @@ impl AwsConversion for crate::dto::RequestPaymentConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::RequestProgress {
+impl AwsConversion for s3s::dto::RequestProgress {
     type Target = RequestProgress;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6730,7 +6782,7 @@ impl AwsConversion for crate::dto::RequestProgress {
     }
 }
 
-impl AwsConversion for crate::dto::RestoreObjectInput {
+impl AwsConversion for s3s::dto::RestoreObjectInput {
     type Target = RestoreObjectInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6758,7 +6810,7 @@ impl AwsConversion for crate::dto::RestoreObjectInput {
     }
 }
 
-impl AwsConversion for crate::dto::RestoreObjectOutput {
+impl AwsConversion for s3s::dto::RestoreObjectOutput {
     type Target = RestoreObjectOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6776,7 +6828,7 @@ impl AwsConversion for crate::dto::RestoreObjectOutput {
     }
 }
 
-impl AwsConversion for crate::dto::RestoreRequest {
+impl AwsConversion for s3s::dto::RestoreRequest {
     type Target = RestoreRequest;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6804,7 +6856,7 @@ impl AwsConversion for crate::dto::RestoreRequest {
     }
 }
 
-impl AwsConversion for crate::dto::RestoreRequestType {
+impl AwsConversion for s3s::dto::RestoreRequestType {
     type Target = RestoreRequestType;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6817,11 +6869,12 @@ impl AwsConversion for crate::dto::RestoreRequestType {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::Select => RestoreRequestType::Select,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::RoutingRule {
+impl AwsConversion for s3s::dto::RoutingRule {
     type Target = RoutingRule;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6839,7 +6892,7 @@ impl AwsConversion for crate::dto::RoutingRule {
     }
 }
 
-impl AwsConversion for crate::dto::S3KeyFilter {
+impl AwsConversion for s3s::dto::S3KeyFilter {
     type Target = S3KeyFilter;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6855,7 +6908,7 @@ impl AwsConversion for crate::dto::S3KeyFilter {
     }
 }
 
-impl AwsConversion for crate::dto::S3Location {
+impl AwsConversion for s3s::dto::S3Location {
     type Target = S3Location;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6885,7 +6938,7 @@ impl AwsConversion for crate::dto::S3Location {
     }
 }
 
-impl AwsConversion for crate::dto::SSEKMS {
+impl AwsConversion for s3s::dto::SSEKMS {
     type Target = Ssekms;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6901,7 +6954,7 @@ impl AwsConversion for crate::dto::SSEKMS {
     }
 }
 
-impl AwsConversion for crate::dto::SSES3 {
+impl AwsConversion for s3s::dto::SSES3 {
     type Target = Sses3;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6916,7 +6969,7 @@ impl AwsConversion for crate::dto::SSES3 {
     }
 }
 
-impl AwsConversion for crate::dto::ScanRange {
+impl AwsConversion for s3s::dto::ScanRange {
     type Target = ScanRange;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6934,7 +6987,7 @@ impl AwsConversion for crate::dto::ScanRange {
     }
 }
 
-impl AwsConversion for crate::dto::SelectParameters {
+impl AwsConversion for s3s::dto::SelectParameters {
     type Target = SelectParameters;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6956,7 +7009,7 @@ impl AwsConversion for crate::dto::SelectParameters {
     }
 }
 
-impl AwsConversion for crate::dto::ServerSideEncryption {
+impl AwsConversion for s3s::dto::ServerSideEncryption {
     type Target = ServerSideEncryption;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6971,11 +7024,12 @@ impl AwsConversion for crate::dto::ServerSideEncryption {
         Ok(match x {
             Self::Aes256 => ServerSideEncryption::Aes256,
             Self::AwsKms => ServerSideEncryption::AwsKms,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::ServerSideEncryptionByDefault {
+impl AwsConversion for s3s::dto::ServerSideEncryptionByDefault {
     type Target = ServerSideEncryptionByDefault;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6993,7 +7047,7 @@ impl AwsConversion for crate::dto::ServerSideEncryptionByDefault {
     }
 }
 
-impl AwsConversion for crate::dto::ServerSideEncryptionConfiguration {
+impl AwsConversion for s3s::dto::ServerSideEncryptionConfiguration {
     type Target = ServerSideEncryptionConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7009,7 +7063,7 @@ impl AwsConversion for crate::dto::ServerSideEncryptionConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::ServerSideEncryptionRule {
+impl AwsConversion for s3s::dto::ServerSideEncryptionRule {
     type Target = ServerSideEncryptionRule;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7027,7 +7081,7 @@ impl AwsConversion for crate::dto::ServerSideEncryptionRule {
     }
 }
 
-impl AwsConversion for crate::dto::SourceSelectionCriteria {
+impl AwsConversion for s3s::dto::SourceSelectionCriteria {
     type Target = SourceSelectionCriteria;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7045,7 +7099,7 @@ impl AwsConversion for crate::dto::SourceSelectionCriteria {
     }
 }
 
-impl AwsConversion for crate::dto::SseKmsEncryptedObjects {
+impl AwsConversion for s3s::dto::SseKmsEncryptedObjects {
     type Target = SseKmsEncryptedObjects;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7061,7 +7115,7 @@ impl AwsConversion for crate::dto::SseKmsEncryptedObjects {
     }
 }
 
-impl AwsConversion for crate::dto::SseKmsEncryptedObjectsStatus {
+impl AwsConversion for s3s::dto::SseKmsEncryptedObjectsStatus {
     type Target = SseKmsEncryptedObjectsStatus;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7076,11 +7130,12 @@ impl AwsConversion for crate::dto::SseKmsEncryptedObjectsStatus {
         Ok(match x {
             Self::Disabled => SseKmsEncryptedObjectsStatus::Disabled,
             Self::Enabled => SseKmsEncryptedObjectsStatus::Enabled,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::Stats {
+impl AwsConversion for s3s::dto::Stats {
     type Target = Stats;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7100,7 +7155,7 @@ impl AwsConversion for crate::dto::Stats {
     }
 }
 
-impl AwsConversion for crate::dto::StatsEvent {
+impl AwsConversion for s3s::dto::StatsEvent {
     type Target = StatsEvent;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7116,7 +7171,7 @@ impl AwsConversion for crate::dto::StatsEvent {
     }
 }
 
-impl AwsConversion for crate::dto::StorageClass {
+impl AwsConversion for s3s::dto::StorageClass {
     type Target = StorageClass;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7145,11 +7200,12 @@ impl AwsConversion for crate::dto::StorageClass {
             Self::ReducedRedundancy => StorageClass::ReducedRedundancy,
             Self::Standard => StorageClass::Standard,
             Self::StandardIa => StorageClass::StandardIa,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::StorageClassAnalysis {
+impl AwsConversion for s3s::dto::StorageClassAnalysis {
     type Target = StorageClassAnalysis;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7165,7 +7221,7 @@ impl AwsConversion for crate::dto::StorageClassAnalysis {
     }
 }
 
-impl AwsConversion for crate::dto::StorageClassAnalysisDataExport {
+impl AwsConversion for s3s::dto::StorageClassAnalysisDataExport {
     type Target = StorageClassAnalysisDataExport;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7183,7 +7239,7 @@ impl AwsConversion for crate::dto::StorageClassAnalysisDataExport {
     }
 }
 
-impl AwsConversion for crate::dto::StorageClassAnalysisSchemaVersion {
+impl AwsConversion for s3s::dto::StorageClassAnalysisSchemaVersion {
     type Target = StorageClassAnalysisSchemaVersion;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7196,11 +7252,12 @@ impl AwsConversion for crate::dto::StorageClassAnalysisSchemaVersion {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
             Self::V1 => StorageClassAnalysisSchemaVersion::V1,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::Tag {
+impl AwsConversion for s3s::dto::Tag {
     type Target = Tag;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7218,7 +7275,7 @@ impl AwsConversion for crate::dto::Tag {
     }
 }
 
-impl AwsConversion for crate::dto::Tagging {
+impl AwsConversion for s3s::dto::Tagging {
     type Target = Tagging;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7234,7 +7291,7 @@ impl AwsConversion for crate::dto::Tagging {
     }
 }
 
-impl AwsConversion for crate::dto::TaggingDirective {
+impl AwsConversion for s3s::dto::TaggingDirective {
     type Target = TaggingDirective;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7249,11 +7306,12 @@ impl AwsConversion for crate::dto::TaggingDirective {
         Ok(match x {
             Self::Copy => TaggingDirective::Copy,
             Self::Replace => TaggingDirective::Replace,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::TargetGrant {
+impl AwsConversion for s3s::dto::TargetGrant {
     type Target = TargetGrant;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7271,7 +7329,7 @@ impl AwsConversion for crate::dto::TargetGrant {
     }
 }
 
-impl AwsConversion for crate::dto::Tier {
+impl AwsConversion for s3s::dto::Tier {
     type Target = Tier;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7288,11 +7346,12 @@ impl AwsConversion for crate::dto::Tier {
             Self::Bulk => Tier::Bulk,
             Self::Expedited => Tier::Expedited,
             Self::Standard => Tier::Standard,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::Tiering {
+impl AwsConversion for s3s::dto::Tiering {
     type Target = Tiering;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7310,7 +7369,7 @@ impl AwsConversion for crate::dto::Tiering {
     }
 }
 
-impl AwsConversion for crate::dto::TopicConfiguration {
+impl AwsConversion for s3s::dto::TopicConfiguration {
     type Target = TopicConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7332,7 +7391,7 @@ impl AwsConversion for crate::dto::TopicConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::Transition {
+impl AwsConversion for s3s::dto::Transition {
     type Target = Transition;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7352,7 +7411,7 @@ impl AwsConversion for crate::dto::Transition {
     }
 }
 
-impl AwsConversion for crate::dto::TransitionStorageClass {
+impl AwsConversion for s3s::dto::TransitionStorageClass {
     type Target = TransitionStorageClass;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7375,11 +7434,12 @@ impl AwsConversion for crate::dto::TransitionStorageClass {
             Self::IntelligentTiering => TransitionStorageClass::IntelligentTiering,
             Self::OnezoneIa => TransitionStorageClass::OnezoneIa,
             Self::StandardIa => TransitionStorageClass::StandardIa,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::Type {
+impl AwsConversion for s3s::dto::Type {
     type Target = Type;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7396,11 +7456,12 @@ impl AwsConversion for crate::dto::Type {
             Self::AmazonCustomerByEmail => Type::AmazonCustomerByEmail,
             Self::CanonicalUser => Type::CanonicalUser,
             Self::Group => Type::Group,
+            _ => unreachable!(),
         })
     }
 }
 
-impl AwsConversion for crate::dto::UploadPartCopyInput {
+impl AwsConversion for s3s::dto::UploadPartCopyInput {
     type Target = UploadPartCopyInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7452,7 +7513,7 @@ impl AwsConversion for crate::dto::UploadPartCopyInput {
     }
 }
 
-impl AwsConversion for crate::dto::UploadPartCopyOutput {
+impl AwsConversion for s3s::dto::UploadPartCopyOutput {
     type Target = UploadPartCopyOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7482,7 +7543,7 @@ impl AwsConversion for crate::dto::UploadPartCopyOutput {
     }
 }
 
-impl AwsConversion for crate::dto::UploadPartInput {
+impl AwsConversion for s3s::dto::UploadPartInput {
     type Target = UploadPartInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7530,7 +7591,7 @@ impl AwsConversion for crate::dto::UploadPartInput {
     }
 }
 
-impl AwsConversion for crate::dto::UploadPartOutput {
+impl AwsConversion for s3s::dto::UploadPartOutput {
     type Target = UploadPartOutput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7566,7 +7627,7 @@ impl AwsConversion for crate::dto::UploadPartOutput {
     }
 }
 
-impl AwsConversion for crate::dto::VersioningConfiguration {
+impl AwsConversion for s3s::dto::VersioningConfiguration {
     type Target = VersioningConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7584,7 +7645,7 @@ impl AwsConversion for crate::dto::VersioningConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::WebsiteConfiguration {
+impl AwsConversion for s3s::dto::WebsiteConfiguration {
     type Target = WebsiteConfiguration;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7606,7 +7667,7 @@ impl AwsConversion for crate::dto::WebsiteConfiguration {
     }
 }
 
-impl AwsConversion for crate::dto::WriteGetObjectResponseInput {
+impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
     type Target = WriteGetObjectResponseInput;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {

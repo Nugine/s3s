@@ -13,9 +13,6 @@ categories = ["web-programming", "web-programming::http-server"]
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
-[features]
-aws = ["dep:aws-sdk-s3", "dep:aws-smithy-types-convert", "dep:aws-smithy-http"]
-
 [dependencies]
 arrayvec = "0.7.2"
 ascii = { version = "1.1.0", default-features = false }

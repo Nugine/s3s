@@ -15,7 +15,7 @@ mod error;
 mod headers;
 mod ops;
 
-mod aws;
+mod aws_conv;
 
 use crate::gen::Codegen;
 
@@ -65,8 +65,8 @@ fn main() {
     }
 
     {
-        let path = "crates/s3s/src/aws/generated.rs";
+        let path = "crates/s3s-aws/src/conv/generated.rs";
         let mut gen = Codegen::create_file(path).unwrap();
-        aws::codegen(&ops, &rust_types, &mut gen);
+        aws_conv::codegen(&ops, &rust_types, &mut gen);
     }
 }

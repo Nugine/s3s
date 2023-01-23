@@ -5,6 +5,8 @@
     clippy::cargo, //
 )]
 
+pub mod conv;
+
 mod connector;
 pub use self::connector::Connector;
 

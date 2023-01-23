@@ -13,6 +13,7 @@ categories = ["web-programming", "web-programming::http-server"]
 aws-sdk-s3 = "0.23.0"
 aws-smithy-http = "0.53.1"
 aws-smithy-types = "0.53.1"
+aws-smithy-types-convert = { version = "0.53.1", features = ["convert-time"] }
 futures = { version = "0.3.25", default-features = false, features = ["std"] }
 hyper = "0.14.23"
 s3s = { version = "0.2.0-dev", path = "../s3s" }

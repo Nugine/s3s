@@ -1,6 +1,7 @@
 mod generated;
 
-use crate::error::{S3Error, S3Result};
+use s3s::s3_error;
+use s3s::{S3Error, S3Result};
 
 use std::collections::HashMap;
 
@@ -73,7 +74,7 @@ impl<T: AwsConversion> AwsConversion for Vec<T> {
     }
 }
 
-impl AwsConversion for crate::dto::Timestamp {
+impl AwsConversion for s3s::dto::Timestamp {
     type Target = aws_sdk_s3::types::DateTime;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -87,7 +88,7 @@ impl AwsConversion for crate::dto::Timestamp {
     }
 }
 
-impl AwsConversion for crate::dto::ContentType {
+impl AwsConversion for s3s::dto::ContentType {
     type Target = String;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -99,7 +100,7 @@ impl AwsConversion for crate::dto::ContentType {
     }
 }
 
-impl AwsConversion for crate::dto::CopySource {
+impl AwsConversion for s3s::dto::CopySource {
     type Target = String;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -111,7 +112,7 @@ impl AwsConversion for crate::dto::CopySource {
     }
 }
 
-impl AwsConversion for crate::dto::Range {
+impl AwsConversion for s3s::dto::Range {
     type Target = String;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -123,7 +124,7 @@ impl AwsConversion for crate::dto::Range {
     }
 }
 
-impl AwsConversion for crate::dto::Event {
+impl AwsConversion for s3s::dto::Event {
     type Target = aws_sdk_s3::model::Event;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -135,11 +136,11 @@ impl AwsConversion for crate::dto::Event {
     }
 }
 
-fn stream_from_aws(x: aws_sdk_s3::types::ByteStream) -> Option<crate::dto::StreamingBlob> {
-    Some(crate::dto::StreamingBlob::wrap(x))
+fn stream_from_aws(x: aws_sdk_s3::types::ByteStream) -> Option<s3s::dto::StreamingBlob> {
+    Some(s3s::dto::StreamingBlob::wrap(x))
 }
 
-impl AwsConversion for crate::dto::StreamingBlob {
+impl AwsConversion for s3s::dto::StreamingBlob {
     type Target = aws_sdk_s3::types::ByteStream;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -151,7 +152,7 @@ impl AwsConversion for crate::dto::StreamingBlob {
     }
 }
 
-impl AwsConversion for crate::dto::Body {
+impl AwsConversion for s3s::dto::Body {
     type Target = aws_sdk_s3::types::Blob;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -160,18 +161,5 @@ impl AwsConversion for crate::dto::Body {
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(Self::Target::new(x))
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn mime() {
-        let x: crate::dto::ContentType = mime::TEXT_XML;
-        let y = try_into_aws(x.clone()).unwrap();
-        let z: crate::dto::ContentType = try_from_aws(y).unwrap();
-        assert_eq!(x, z);
     }
 }
