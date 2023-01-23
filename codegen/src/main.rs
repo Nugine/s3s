@@ -16,6 +16,7 @@ mod headers;
 mod ops;
 
 mod aws_conv;
+mod aws_proxy;
 
 use crate::gen::Codegen;
 
@@ -68,5 +69,11 @@ fn main() {
         let path = "crates/s3s-aws/src/conv/generated.rs";
         let mut gen = Codegen::create_file(path).unwrap();
         aws_conv::codegen(&ops, &rust_types, &mut gen);
+    }
+
+    {
+        let path = "crates/s3s-aws/src/proxy/generated.rs";
+        let mut gen = Codegen::create_file(path).unwrap();
+        aws_proxy::codegen(&ops, &rust_types, &mut gen);
     }
 }
