@@ -3,7 +3,7 @@ use crate::gen::Codegen;
 
 use serde_json::Value;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Type {
     Alias(Alias),
     Provided(Provided),
@@ -15,32 +15,32 @@ pub enum Type {
     Timestamp(Timestamp),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Alias {
     pub name: String,
     pub type_: String,
     pub doc: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Provided {
     pub name: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct List {
     pub name: String,
     pub member: ListMember,
     pub doc: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMember {
     pub type_: String,
     pub xml_name: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Map {
     pub name: String,
     pub key_type: String,
@@ -48,21 +48,21 @@ pub struct Map {
     pub doc: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnitEnum {
     pub name: String,
     pub variants: Vec<UnitEnumVariant>,
     pub doc: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnitEnumVariant {
     pub name: String,
     pub value: String,
     pub doc: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Struct {
     pub name: String,
     pub fields: Vec<StructField>,
@@ -71,7 +71,7 @@ pub struct Struct {
     pub xml_name: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StructField {
     pub name: String,
     pub type_: String,
@@ -91,21 +91,21 @@ pub struct StructField {
     pub xml_flattened: bool,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StructEnum {
     pub name: String,
     pub variants: Vec<StructEnumVariant>,
     pub doc: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StructEnumVariant {
     pub name: String,
     pub type_: String,
     pub doc: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Timestamp {
     pub name: String,
     pub format: Option<String>,

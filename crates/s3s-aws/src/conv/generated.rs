@@ -1256,6 +1256,21 @@ impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationInput {
     }
 }
 
+impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationOutput {
+    type Target = DeleteBucketAnalyticsConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::DeleteBucketCorsInput {
     type Target = DeleteBucketCorsInput;
 
@@ -1274,6 +1289,21 @@ impl AwsConversion for s3s::dto::DeleteBucketCorsInput {
     }
 }
 
+impl AwsConversion for s3s::dto::DeleteBucketCorsOutput {
+    type Target = DeleteBucketCorsOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::DeleteBucketEncryptionInput {
     type Target = DeleteBucketEncryptionInput;
 
@@ -1289,6 +1319,21 @@ impl AwsConversion for s3s::dto::DeleteBucketEncryptionInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::DeleteBucketEncryptionOutput {
+    type Target = DeleteBucketEncryptionOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -1328,6 +1373,21 @@ impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationInpu
     }
 }
 
+impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationOutput {
+    type Target = DeleteBucketIntelligentTieringConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationInput {
     type Target = DeleteBucketInventoryConfigurationInput;
 
@@ -1348,6 +1408,21 @@ impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationInput {
     }
 }
 
+impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationOutput {
+    type Target = DeleteBucketInventoryConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::DeleteBucketLifecycleInput {
     type Target = DeleteBucketLifecycleInput;
 
@@ -1363,6 +1438,21 @@ impl AwsConversion for s3s::dto::DeleteBucketLifecycleInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::DeleteBucketLifecycleOutput {
+    type Target = DeleteBucketLifecycleOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -1386,6 +1476,36 @@ impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationInput {
     }
 }
 
+impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationOutput {
+    type Target = DeleteBucketMetricsConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::DeleteBucketOutput {
+    type Target = DeleteBucketOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsInput {
     type Target = DeleteBucketOwnershipControlsInput;
 
@@ -1401,6 +1521,21 @@ impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsOutput {
+    type Target = DeleteBucketOwnershipControlsOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -1422,6 +1557,21 @@ impl AwsConversion for s3s::dto::DeleteBucketPolicyInput {
     }
 }
 
+impl AwsConversion for s3s::dto::DeleteBucketPolicyOutput {
+    type Target = DeleteBucketPolicyOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::DeleteBucketReplicationInput {
     type Target = DeleteBucketReplicationInput;
 
@@ -1437,6 +1587,21 @@ impl AwsConversion for s3s::dto::DeleteBucketReplicationInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::DeleteBucketReplicationOutput {
+    type Target = DeleteBucketReplicationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -1458,6 +1623,21 @@ impl AwsConversion for s3s::dto::DeleteBucketTaggingInput {
     }
 }
 
+impl AwsConversion for s3s::dto::DeleteBucketTaggingOutput {
+    type Target = DeleteBucketTaggingOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::DeleteBucketWebsiteInput {
     type Target = DeleteBucketWebsiteInput;
 
@@ -1473,6 +1653,21 @@ impl AwsConversion for s3s::dto::DeleteBucketWebsiteInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::DeleteBucketWebsiteOutput {
+    type Target = DeleteBucketWebsiteOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -1685,6 +1880,21 @@ impl AwsConversion for s3s::dto::DeletePublicAccessBlockInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::DeletePublicAccessBlockOutput {
+    type Target = DeletePublicAccessBlockOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -2391,6 +2601,28 @@ impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationOutput {
+    type Target = GetBucketNotificationConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            event_bridge_configuration: try_from_aws(x.event_bridge_configuration)?,
+            lambda_function_configurations: try_from_aws(x.lambda_function_configurations)?,
+            queue_configurations: try_from_aws(x.queue_configurations)?,
+            topic_configurations: try_from_aws(x.topic_configurations)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_event_bridge_configuration(try_into_aws(x.event_bridge_configuration)?);
+        y = y.set_lambda_function_configurations(try_into_aws(x.lambda_function_configurations)?);
+        y = y.set_queue_configurations(try_into_aws(x.queue_configurations)?);
+        y = y.set_topic_configurations(try_into_aws(x.topic_configurations)?);
+        Ok(y.build())
     }
 }
 
@@ -3260,6 +3492,21 @@ impl AwsConversion for s3s::dto::HeadBucketInput {
     }
 }
 
+impl AwsConversion for s3s::dto::HeadBucketOutput {
+    type Target = HeadBucketOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::HeadObjectInput {
     type Target = HeadObjectInput;
 
@@ -4121,6 +4368,21 @@ impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsOutput {
         y = y.set_metrics_configuration_list(try_into_aws(x.metrics_configuration_list)?);
         y = y.set_next_continuation_token(try_into_aws(x.next_continuation_token)?);
         Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::ListBucketsInput {
+    type Target = ListBucketsInput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        y.build().map_err(S3Error::internal_error)
     }
 }
 
@@ -5573,6 +5835,21 @@ impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationOutput {
+    type Target = PutBucketAccelerateConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketAclInput {
     type Target = PutBucketAclInput;
 
@@ -5609,6 +5886,21 @@ impl AwsConversion for s3s::dto::PutBucketAclInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketAclOutput {
+    type Target = PutBucketAclOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationInput {
     type Target = PutBucketAnalyticsConfigurationInput;
 
@@ -5628,6 +5920,21 @@ impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_id(Some(try_into_aws(x.id)?));
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationOutput {
+    type Target = PutBucketAnalyticsConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -5652,6 +5959,21 @@ impl AwsConversion for s3s::dto::PutBucketCorsInput {
         y = y.set_content_md5(try_into_aws(x.content_md5)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketCorsOutput {
+    type Target = PutBucketCorsOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -5682,6 +6004,21 @@ impl AwsConversion for s3s::dto::PutBucketEncryptionInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketEncryptionOutput {
+    type Target = PutBucketEncryptionOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationInput {
     type Target = PutBucketIntelligentTieringConfigurationInput;
 
@@ -5702,6 +6039,21 @@ impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationInput {
         y = y.set_id(Some(try_into_aws(x.id)?));
         y = y.set_intelligent_tiering_configuration(Some(try_into_aws(x.intelligent_tiering_configuration)?));
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationOutput {
+    type Target = PutBucketIntelligentTieringConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -5727,6 +6079,21 @@ impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationOutput {
+    type Target = PutBucketInventoryConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
     type Target = PutBucketLifecycleConfigurationInput;
 
@@ -5746,6 +6113,21 @@ impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_lifecycle_configuration(try_into_aws(x.lifecycle_configuration)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationOutput {
+    type Target = PutBucketLifecycleConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -5773,6 +6155,21 @@ impl AwsConversion for s3s::dto::PutBucketLoggingInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketLoggingOutput {
+    type Target = PutBucketLoggingOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationInput {
     type Target = PutBucketMetricsConfigurationInput;
 
@@ -5792,6 +6189,21 @@ impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationInput {
         y = y.set_id(Some(try_into_aws(x.id)?));
         y = y.set_metrics_configuration(Some(try_into_aws(x.metrics_configuration)?));
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationOutput {
+    type Target = PutBucketMetricsConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -5817,6 +6229,21 @@ impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationOutput {
+    type Target = PutBucketNotificationConfigurationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketOwnershipControlsInput {
     type Target = PutBucketOwnershipControlsInput;
 
@@ -5836,6 +6263,21 @@ impl AwsConversion for s3s::dto::PutBucketOwnershipControlsInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_ownership_controls(Some(try_into_aws(x.ownership_controls)?));
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketOwnershipControlsOutput {
+    type Target = PutBucketOwnershipControlsOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -5865,6 +6307,21 @@ impl AwsConversion for s3s::dto::PutBucketPolicyInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketPolicyOutput {
+    type Target = PutBucketPolicyOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketReplicationInput {
     type Target = PutBucketReplicationInput;
 
@@ -5888,6 +6345,21 @@ impl AwsConversion for s3s::dto::PutBucketReplicationInput {
         y = y.set_replication_configuration(Some(try_into_aws(x.replication_configuration)?));
         y = y.set_token(try_into_aws(x.token)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketReplicationOutput {
+    type Target = PutBucketReplicationOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -5915,6 +6387,21 @@ impl AwsConversion for s3s::dto::PutBucketRequestPaymentInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketRequestPaymentOutput {
+    type Target = PutBucketRequestPaymentOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketTaggingInput {
     type Target = PutBucketTaggingInput;
 
@@ -5936,6 +6423,21 @@ impl AwsConversion for s3s::dto::PutBucketTaggingInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_tagging(Some(try_into_aws(x.tagging)?));
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketTaggingOutput {
+    type Target = PutBucketTaggingOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -5965,6 +6467,21 @@ impl AwsConversion for s3s::dto::PutBucketVersioningInput {
     }
 }
 
+impl AwsConversion for s3s::dto::PutBucketVersioningOutput {
+    type Target = PutBucketVersioningOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::PutBucketWebsiteInput {
     type Target = PutBucketWebsiteInput;
 
@@ -5986,6 +6503,21 @@ impl AwsConversion for s3s::dto::PutBucketWebsiteInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_website_configuration(Some(try_into_aws(x.website_configuration)?));
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutBucketWebsiteOutput {
+    type Target = PutBucketWebsiteOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -6385,6 +6917,21 @@ impl AwsConversion for s3s::dto::PutPublicAccessBlockInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_public_access_block_configuration(Some(try_into_aws(x.public_access_block_configuration)?));
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::PutPublicAccessBlockOutput {
+    type Target = PutPublicAccessBlockOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }
 
@@ -7758,5 +8305,20 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
         y = y.set_tag_count(Some(try_into_aws(x.tag_count)?));
         y = y.set_version_id(try_into_aws(x.version_id)?);
         y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::WriteGetObjectResponseOutput {
+    type Target = WriteGetObjectResponseOutput;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
     }
 }

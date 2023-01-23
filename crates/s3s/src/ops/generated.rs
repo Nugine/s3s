@@ -817,7 +817,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket(&self, _input: DeleteBucketInput) -> S3Result {
+    async fn delete_bucket(&self, _input: DeleteBucketInput) -> S3Result<DeleteBucketOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucket is not implemented yet"))
     }
 
@@ -851,7 +851,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_analytics_configuration(&self, _input: DeleteBucketAnalyticsConfigurationInput) -> S3Result {
+    async fn delete_bucket_analytics_configuration(
+        &self,
+        _input: DeleteBucketAnalyticsConfigurationInput,
+    ) -> S3Result<DeleteBucketAnalyticsConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketAnalyticsConfiguration is not implemented yet"
@@ -880,7 +883,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_cors(&self, _input: DeleteBucketCorsInput) -> S3Result {
+    async fn delete_bucket_cors(&self, _input: DeleteBucketCorsInput) -> S3Result<DeleteBucketCorsOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketCors is not implemented yet"))
     }
 
@@ -908,7 +911,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_encryption(&self, _input: DeleteBucketEncryptionInput) -> S3Result {
+    async fn delete_bucket_encryption(&self, _input: DeleteBucketEncryptionInput) -> S3Result<DeleteBucketEncryptionOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketEncryption is not implemented yet"))
     }
 
@@ -938,7 +941,7 @@ pub trait S3: Send + Sync + 'static {
     async fn delete_bucket_intelligent_tiering_configuration(
         &self,
         _input: DeleteBucketIntelligentTieringConfigurationInput,
-    ) -> S3Result {
+    ) -> S3Result<DeleteBucketIntelligentTieringConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketIntelligentTieringConfiguration is not implemented yet"
@@ -971,7 +974,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_inventory_configuration(&self, _input: DeleteBucketInventoryConfigurationInput) -> S3Result {
+    async fn delete_bucket_inventory_configuration(
+        &self,
+        _input: DeleteBucketInventoryConfigurationInput,
+    ) -> S3Result<DeleteBucketInventoryConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketInventoryConfiguration is not implemented yet"
@@ -1004,7 +1010,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_lifecycle(&self, _input: DeleteBucketLifecycleInput) -> S3Result {
+    async fn delete_bucket_lifecycle(&self, _input: DeleteBucketLifecycleInput) -> S3Result<DeleteBucketLifecycleOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketLifecycle is not implemented yet"))
     }
 
@@ -1044,7 +1050,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_metrics_configuration(&self, _input: DeleteBucketMetricsConfigurationInput) -> S3Result {
+    async fn delete_bucket_metrics_configuration(
+        &self,
+        _input: DeleteBucketMetricsConfigurationInput,
+    ) -> S3Result<DeleteBucketMetricsConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketMetricsConfiguration is not implemented yet"
@@ -1070,7 +1079,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_ownership_controls(&self, _input: DeleteBucketOwnershipControlsInput) -> S3Result {
+    async fn delete_bucket_ownership_controls(
+        &self,
+        _input: DeleteBucketOwnershipControlsInput,
+    ) -> S3Result<DeleteBucketOwnershipControlsOutput> {
         Err(s3_error!(
             NotImplemented,
             "DeleteBucketOwnershipControls is not implemented yet"
@@ -1110,7 +1122,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_policy(&self, _input: DeleteBucketPolicyInput) -> S3Result {
+    async fn delete_bucket_policy(&self, _input: DeleteBucketPolicyInput) -> S3Result<DeleteBucketPolicyOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketPolicy is not implemented yet"))
     }
 
@@ -1140,7 +1152,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_replication(&self, _input: DeleteBucketReplicationInput) -> S3Result {
+    async fn delete_bucket_replication(&self, _input: DeleteBucketReplicationInput) -> S3Result<DeleteBucketReplicationOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketReplication is not implemented yet"))
     }
 
@@ -1162,7 +1174,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_tagging(&self, _input: DeleteBucketTaggingInput) -> S3Result {
+    async fn delete_bucket_tagging(&self, _input: DeleteBucketTaggingInput) -> S3Result<DeleteBucketTaggingOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketTagging is not implemented yet"))
     }
 
@@ -1193,7 +1205,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_website(&self, _input: DeleteBucketWebsiteInput) -> S3Result {
+    async fn delete_bucket_website(&self, _input: DeleteBucketWebsiteInput) -> S3Result<DeleteBucketWebsiteOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketWebsite is not implemented yet"))
     }
 
@@ -1351,7 +1363,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_public_access_block(&self, _input: DeletePublicAccessBlockInput) -> S3Result {
+    async fn delete_public_access_block(&self, _input: DeletePublicAccessBlockInput) -> S3Result<DeletePublicAccessBlockOutput> {
         Err(s3_error!(NotImplemented, "DeletePublicAccessBlock is not implemented yet"))
     }
 
@@ -1767,7 +1779,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_notification_configuration(
         &self,
         _input: GetBucketNotificationConfigurationInput,
-    ) -> S3Result<NotificationConfiguration> {
+    ) -> S3Result<GetBucketNotificationConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "GetBucketNotificationConfiguration is not implemented yet"
@@ -2569,7 +2581,7 @@ pub trait S3: Send + Sync + 'static {
     ///
     ///
     /// <p>To use this API against an access point, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form AccessPointName-AccountId.s3-accesspoint.Region.amazonaws.com. When using the Amazon Web Services SDKs, you provide the ARN in place of the bucket name. For more information see, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a>.</p>
-    async fn head_bucket(&self, _input: HeadBucketInput) -> S3Result {
+    async fn head_bucket(&self, _input: HeadBucketInput) -> S3Result<HeadBucketOutput> {
         Err(s3_error!(NotImplemented, "HeadBucket is not implemented yet"))
     }
 
@@ -2879,7 +2891,7 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Returns a list of all buckets owned by the authenticated sender of the request. To use
     /// this operation, you must have the <code>s3:ListAllMyBuckets</code> permission.</p>
-    async fn list_buckets(&self) -> S3Result<ListBucketsOutput> {
+    async fn list_buckets(&self, _input: ListBucketsInput) -> S3Result<ListBucketsOutput> {
         Err(s3_error!(NotImplemented, "ListBuckets is not implemented yet"))
     }
 
@@ -3172,7 +3184,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_accelerate_configuration(&self, _input: PutBucketAccelerateConfigurationInput) -> S3Result {
+    async fn put_bucket_accelerate_configuration(
+        &self,
+        _input: PutBucketAccelerateConfigurationInput,
+    ) -> S3Result<PutBucketAccelerateConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "PutBucketAccelerateConfiguration is not implemented yet"
@@ -3375,7 +3390,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_acl(&self, _input: PutBucketAclInput) -> S3Result {
+    async fn put_bucket_acl(&self, _input: PutBucketAclInput) -> S3Result<PutBucketAclOutput> {
         Err(s3_error!(NotImplemented, "PutBucketAcl is not implemented yet"))
     }
 
@@ -3495,7 +3510,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_analytics_configuration(&self, _input: PutBucketAnalyticsConfigurationInput) -> S3Result {
+    async fn put_bucket_analytics_configuration(
+        &self,
+        _input: PutBucketAnalyticsConfigurationInput,
+    ) -> S3Result<PutBucketAnalyticsConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "PutBucketAnalyticsConfiguration is not implemented yet"
@@ -3559,7 +3577,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_cors(&self, _input: PutBucketCorsInput) -> S3Result {
+    async fn put_bucket_cors(&self, _input: PutBucketCorsInput) -> S3Result<PutBucketCorsOutput> {
         Err(s3_error!(NotImplemented, "PutBucketCors is not implemented yet"))
     }
 
@@ -3598,7 +3616,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_encryption(&self, _input: PutBucketEncryptionInput) -> S3Result {
+    async fn put_bucket_encryption(&self, _input: PutBucketEncryptionInput) -> S3Result<PutBucketEncryptionOutput> {
         Err(s3_error!(NotImplemented, "PutBucketEncryption is not implemented yet"))
     }
 
@@ -3688,7 +3706,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_intelligent_tiering_configuration(
         &self,
         _input: PutBucketIntelligentTieringConfigurationInput,
-    ) -> S3Result {
+    ) -> S3Result<PutBucketIntelligentTieringConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "PutBucketIntelligentTieringConfiguration is not implemented yet"
@@ -3796,7 +3814,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_inventory_configuration(&self, _input: PutBucketInventoryConfigurationInput) -> S3Result {
+    async fn put_bucket_inventory_configuration(
+        &self,
+        _input: PutBucketInventoryConfigurationInput,
+    ) -> S3Result<PutBucketInventoryConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "PutBucketInventoryConfiguration is not implemented yet"
@@ -3906,7 +3927,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_lifecycle_configuration(&self, _input: PutBucketLifecycleConfigurationInput) -> S3Result {
+    async fn put_bucket_lifecycle_configuration(
+        &self,
+        _input: PutBucketLifecycleConfigurationInput,
+    ) -> S3Result<PutBucketLifecycleConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "PutBucketLifecycleConfiguration is not implemented yet"
@@ -3998,7 +4022,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_logging(&self, _input: PutBucketLoggingInput) -> S3Result {
+    async fn put_bucket_logging(&self, _input: PutBucketLoggingInput) -> S3Result<PutBucketLoggingOutput> {
         Err(s3_error!(NotImplemented, "PutBucketLogging is not implemented yet"))
     }
 
@@ -4053,7 +4077,10 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     /// </li>
     /// </ul>
-    async fn put_bucket_metrics_configuration(&self, _input: PutBucketMetricsConfigurationInput) -> S3Result {
+    async fn put_bucket_metrics_configuration(
+        &self,
+        _input: PutBucketMetricsConfigurationInput,
+    ) -> S3Result<PutBucketMetricsConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "PutBucketMetricsConfiguration is not implemented yet"
@@ -4123,7 +4150,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_notification_configuration(&self, _input: PutBucketNotificationConfigurationInput) -> S3Result {
+    async fn put_bucket_notification_configuration(
+        &self,
+        _input: PutBucketNotificationConfigurationInput,
+    ) -> S3Result<PutBucketNotificationConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
             "PutBucketNotificationConfiguration is not implemented yet"
@@ -4147,7 +4177,10 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_ownership_controls(&self, _input: PutBucketOwnershipControlsInput) -> S3Result {
+    async fn put_bucket_ownership_controls(
+        &self,
+        _input: PutBucketOwnershipControlsInput,
+    ) -> S3Result<PutBucketOwnershipControlsOutput> {
         Err(s3_error!(NotImplemented, "PutBucketOwnershipControls is not implemented yet"))
     }
 
@@ -4181,7 +4214,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_policy(&self, _input: PutBucketPolicyInput) -> S3Result {
+    async fn put_bucket_policy(&self, _input: PutBucketPolicyInput) -> S3Result<PutBucketPolicyOutput> {
         Err(s3_error!(NotImplemented, "PutBucketPolicy is not implemented yet"))
     }
 
@@ -4255,7 +4288,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_replication(&self, _input: PutBucketReplicationInput) -> S3Result {
+    async fn put_bucket_replication(&self, _input: PutBucketReplicationInput) -> S3Result<PutBucketReplicationOutput> {
         Err(s3_error!(NotImplemented, "PutBucketReplication is not implemented yet"))
     }
 
@@ -4278,7 +4311,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_request_payment(&self, _input: PutBucketRequestPaymentInput) -> S3Result {
+    async fn put_bucket_request_payment(&self, _input: PutBucketRequestPaymentInput) -> S3Result<PutBucketRequestPaymentOutput> {
         Err(s3_error!(NotImplemented, "PutBucketRequestPayment is not implemented yet"))
     }
 
@@ -4361,7 +4394,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_tagging(&self, _input: PutBucketTaggingInput) -> S3Result {
+    async fn put_bucket_tagging(&self, _input: PutBucketTaggingInput) -> S3Result<PutBucketTaggingOutput> {
         Err(s3_error!(NotImplemented, "PutBucketTagging is not implemented yet"))
     }
 
@@ -4414,7 +4447,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_versioning(&self, _input: PutBucketVersioningInput) -> S3Result {
+    async fn put_bucket_versioning(&self, _input: PutBucketVersioningInput) -> S3Result<PutBucketVersioningOutput> {
         Err(s3_error!(NotImplemented, "PutBucketVersioning is not implemented yet"))
     }
 
@@ -4544,7 +4577,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Amazon S3 has a limitation of 50 routing rules per website configuration. If you require more
     /// than 50 routing rules, you can use object redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html">Configuring an
     /// Object Redirect</a> in the <i>Amazon S3 User Guide</i>.</p>
-    async fn put_bucket_website(&self, _input: PutBucketWebsiteInput) -> S3Result {
+    async fn put_bucket_website(&self, _input: PutBucketWebsiteInput) -> S3Result<PutBucketWebsiteOutput> {
         Err(s3_error!(NotImplemented, "PutBucketWebsite is not implemented yet"))
     }
 
@@ -5044,7 +5077,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_public_access_block(&self, _input: PutPublicAccessBlockInput) -> S3Result {
+    async fn put_public_access_block(&self, _input: PutPublicAccessBlockInput) -> S3Result<PutPublicAccessBlockOutput> {
         Err(s3_error!(NotImplemented, "PutPublicAccessBlock is not implemented yet"))
     }
 
@@ -5683,7 +5716,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Example 2: PII Redaction - This Lambda function uses Amazon Comprehend, a natural language processing (NLP) service using machine learning to find insights and relationships in text. It automatically redacts personally identifiable information (PII) such as names, addresses, dates, credit card numbers, and social security numbers from documents in your Amazon S3 bucket. </p>
     /// <p>Example 3: Decompression - The Lambda function S3ObjectLambdaDecompression, is equipped to decompress objects stored in S3 in one of six compressed file formats including bzip2, gzip, snappy, zlib, zstandard and ZIP. </p>
     /// <p>For information on how to view and use these functions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-examples.html">Using Amazon Web Services built Lambda functions</a> in the <i>Amazon S3 User Guide</i>.</p>
-    async fn write_get_object_response(&self, _input: WriteGetObjectResponseInput) -> S3Result {
+    async fn write_get_object_response(&self, _input: WriteGetObjectResponseInput) -> S3Result<WriteGetObjectResponseOutput> {
         Err(s3_error!(NotImplemented, "WriteGetObjectResponse is not implemented yet"))
     }
 }
@@ -6377,6 +6410,24 @@ impl xml::SerializeContent for GetBucketLoggingOutput {
     fn serialize_content<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
         if let Some(ref val) = self.logging_enabled {
             s.content("LoggingEnabled", val)?;
+        }
+        Ok(())
+    }
+}
+
+impl xml::SerializeContent for GetBucketNotificationConfigurationOutput {
+    fn serialize_content<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
+        if let Some(ref val) = self.event_bridge_configuration {
+            s.content("EventBridgeConfiguration", val)?;
+        }
+        if let Some(iter) = &self.lambda_function_configurations {
+            s.flattened_list("CloudFunctionConfiguration", iter)?;
+        }
+        if let Some(iter) = &self.queue_configurations {
+            s.flattened_list("QueueConfiguration", iter)?;
+        }
+        if let Some(iter) = &self.topic_configurations {
+            s.flattened_list("TopicConfiguration", iter)?;
         }
         Ok(())
     }
@@ -7146,24 +7197,6 @@ impl xml::SerializeContent for NoncurrentVersionTransition {
     }
 }
 
-impl xml::SerializeContent for NotificationConfiguration {
-    fn serialize_content<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
-        if let Some(ref val) = self.event_bridge_configuration {
-            s.content("EventBridgeConfiguration", val)?;
-        }
-        if let Some(iter) = &self.lambda_function_configurations {
-            s.flattened_list("CloudFunctionConfiguration", iter)?;
-        }
-        if let Some(iter) = &self.queue_configurations {
-            s.flattened_list("QueueConfiguration", iter)?;
-        }
-        if let Some(iter) = &self.topic_configurations {
-            s.flattened_list("TopicConfiguration", iter)?;
-        }
-        Ok(())
-    }
-}
-
 impl xml::SerializeContent for NotificationConfigurationFilter {
     fn serialize_content<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
         if let Some(ref val) = self.key {
@@ -7833,6 +7866,12 @@ impl xml::Serialize for GetBucketLoggingOutput {
     }
 }
 
+impl xml::Serialize for GetBucketNotificationConfigurationOutput {
+    fn serialize<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
+        s.content("GetBucketNotificationConfigurationOutput", self)
+    }
+}
+
 impl xml::Serialize for GetBucketRequestPaymentOutput {
     fn serialize<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
         s.content("RequestPaymentConfiguration", self)
@@ -7950,12 +7989,6 @@ impl xml::Serialize for ListPartsOutput {
 impl xml::Serialize for MetricsConfiguration {
     fn serialize<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
         s.content("MetricsConfiguration", self)
-    }
-}
-
-impl xml::Serialize for NotificationConfiguration {
-    fn serialize<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
-        s.content("NotificationConfiguration", self)
     }
 }
 
@@ -12336,10 +12369,10 @@ impl DeleteBucket {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12358,10 +12391,10 @@ impl DeleteBucketAnalyticsConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketAnalyticsConfigurationOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12377,10 +12410,10 @@ impl DeleteBucketCors {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketCorsOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12396,10 +12429,10 @@ impl DeleteBucketEncryption {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketEncryptionOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12412,10 +12445,10 @@ impl DeleteBucketIntelligentTieringConfiguration {
         Ok(DeleteBucketIntelligentTieringConfigurationInput { bucket, id })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketIntelligentTieringConfigurationOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12434,10 +12467,10 @@ impl DeleteBucketInventoryConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketInventoryConfigurationOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12453,10 +12486,10 @@ impl DeleteBucketLifecycle {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketLifecycleOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12475,10 +12508,10 @@ impl DeleteBucketMetricsConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketMetricsConfigurationOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12494,10 +12527,10 @@ impl DeleteBucketOwnershipControls {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketOwnershipControlsOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12513,10 +12546,10 @@ impl DeleteBucketPolicy {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketPolicyOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12532,10 +12565,10 @@ impl DeleteBucketReplication {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketReplicationOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12551,10 +12584,10 @@ impl DeleteBucketTagging {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketTaggingOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12570,10 +12603,10 @@ impl DeleteBucketWebsite {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeleteBucketWebsiteOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12685,10 +12718,10 @@ impl DeletePublicAccessBlock {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
+    pub fn serialize_http(_: DeletePublicAccessBlockOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         *res.status_mut() = http::StatusCode::NO_CONTENT;
-        res
+        Ok(res)
     }
 }
 
@@ -12929,7 +12962,7 @@ impl GetBucketNotificationConfiguration {
         })
     }
 
-    pub fn serialize_http(x: NotificationConfiguration) -> S3Result<http::Response> {
+    pub fn serialize_http(x: GetBucketNotificationConfigurationOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
@@ -13470,8 +13503,8 @@ impl HeadBucket {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: HeadBucketOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -13671,6 +13704,10 @@ impl ListBucketMetricsConfigurations {
 }
 
 impl ListBuckets {
+    pub fn deserialize_http(_: &mut http::Request) -> S3Result<ListBucketsInput> {
+        Ok(ListBucketsInput {})
+    }
+
     pub fn serialize_http(x: ListBucketsOutput) -> S3Result<http::Response> {
         let mut res = http::Response::default();
         http::set_xml_body(&mut res, &x)?;
@@ -13896,8 +13933,8 @@ impl PutBucketAccelerateConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketAccelerateConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -13940,8 +13977,8 @@ impl PutBucketAcl {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketAclOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -13963,8 +14000,8 @@ impl PutBucketAnalyticsConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketAnalyticsConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -13989,8 +14026,8 @@ impl PutBucketCors {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketCorsOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14015,8 +14052,8 @@ impl PutBucketEncryption {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketEncryptionOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14035,8 +14072,8 @@ impl PutBucketIntelligentTieringConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketIntelligentTieringConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14058,8 +14095,8 @@ impl PutBucketInventoryConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketInventoryConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14081,8 +14118,8 @@ impl PutBucketLifecycleConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketLifecycleConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14107,8 +14144,8 @@ impl PutBucketLogging {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketLoggingOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14130,8 +14167,8 @@ impl PutBucketMetricsConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketMetricsConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14154,8 +14191,8 @@ impl PutBucketNotificationConfiguration {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketNotificationConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14177,8 +14214,8 @@ impl PutBucketOwnershipControls {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketOwnershipControlsOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14207,8 +14244,8 @@ impl PutBucketPolicy {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketPolicyOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14236,8 +14273,8 @@ impl PutBucketReplication {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketReplicationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14262,8 +14299,8 @@ impl PutBucketRequestPayment {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketRequestPaymentOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14288,8 +14325,8 @@ impl PutBucketTagging {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketTaggingOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14317,8 +14354,8 @@ impl PutBucketVersioning {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketVersioningOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14343,8 +14380,8 @@ impl PutBucketWebsite {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutBucketWebsiteOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -14859,8 +14896,8 @@ impl PutPublicAccessBlock {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: PutPublicAccessBlockOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -15219,8 +15256,8 @@ impl WriteGetObjectResponse {
         })
     }
 
-    pub fn serialize_http() -> http::Response {
-        http::Response::default()
+    pub fn serialize_http(_: WriteGetObjectResponseOutput) -> S3Result<http::Response> {
+        Ok(http::Response::default())
     }
 }
 
@@ -15319,7 +15356,7 @@ impl super::Operation for DeleteBucket {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15336,7 +15373,7 @@ impl super::Operation for DeleteBucketAnalyticsConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_analytics_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15353,7 +15390,7 @@ impl super::Operation for DeleteBucketCors {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_cors(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15370,7 +15407,7 @@ impl super::Operation for DeleteBucketEncryption {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_encryption(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15387,7 +15424,7 @@ impl super::Operation for DeleteBucketIntelligentTieringConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_intelligent_tiering_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15404,7 +15441,7 @@ impl super::Operation for DeleteBucketInventoryConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_inventory_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15421,7 +15458,7 @@ impl super::Operation for DeleteBucketLifecycle {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_lifecycle(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15438,7 +15475,7 @@ impl super::Operation for DeleteBucketMetricsConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_metrics_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15455,7 +15492,7 @@ impl super::Operation for DeleteBucketOwnershipControls {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_ownership_controls(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15472,7 +15509,7 @@ impl super::Operation for DeleteBucketPolicy {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_policy(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15489,7 +15526,7 @@ impl super::Operation for DeleteBucketReplication {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_replication(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15506,7 +15543,7 @@ impl super::Operation for DeleteBucketTagging {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_tagging(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15523,7 +15560,7 @@ impl super::Operation for DeleteBucketWebsite {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_bucket_website(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -15591,7 +15628,7 @@ impl super::Operation for DeletePublicAccessBlock {
         let input = Self::deserialize_http(req)?;
         let result = s3.delete_public_access_block(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16101,7 +16138,7 @@ impl super::Operation for HeadBucket {
         let input = Self::deserialize_http(req)?;
         let result = s3.head_bucket(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16199,8 +16236,9 @@ impl super::Operation for ListBuckets {
         "ListBuckets"
     }
 
-    async fn call(&self, s3: &dyn S3, _: &mut http::Request) -> S3Result<http::Response> {
-        let result = s3.list_buckets().await;
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_buckets(input).await;
         let res = match result {
             Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
@@ -16304,7 +16342,7 @@ impl super::Operation for PutBucketAccelerateConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_accelerate_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16321,7 +16359,7 @@ impl super::Operation for PutBucketAcl {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_acl(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16338,7 +16376,7 @@ impl super::Operation for PutBucketAnalyticsConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_analytics_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16355,7 +16393,7 @@ impl super::Operation for PutBucketCors {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_cors(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16372,7 +16410,7 @@ impl super::Operation for PutBucketEncryption {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_encryption(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16389,7 +16427,7 @@ impl super::Operation for PutBucketIntelligentTieringConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_intelligent_tiering_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16406,7 +16444,7 @@ impl super::Operation for PutBucketInventoryConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_inventory_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16423,7 +16461,7 @@ impl super::Operation for PutBucketLifecycleConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_lifecycle_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16440,7 +16478,7 @@ impl super::Operation for PutBucketLogging {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_logging(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16457,7 +16495,7 @@ impl super::Operation for PutBucketMetricsConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_metrics_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16474,7 +16512,7 @@ impl super::Operation for PutBucketNotificationConfiguration {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_notification_configuration(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16491,7 +16529,7 @@ impl super::Operation for PutBucketOwnershipControls {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_ownership_controls(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16508,7 +16546,7 @@ impl super::Operation for PutBucketPolicy {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_policy(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16525,7 +16563,7 @@ impl super::Operation for PutBucketReplication {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_replication(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16542,7 +16580,7 @@ impl super::Operation for PutBucketRequestPayment {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_request_payment(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16559,7 +16597,7 @@ impl super::Operation for PutBucketTagging {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_tagging(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16576,7 +16614,7 @@ impl super::Operation for PutBucketVersioning {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_versioning(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16593,7 +16631,7 @@ impl super::Operation for PutBucketWebsite {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_bucket_website(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16712,7 +16750,7 @@ impl super::Operation for PutPublicAccessBlock {
         let input = Self::deserialize_http(req)?;
         let result = s3.put_public_access_block(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)
@@ -16780,7 +16818,7 @@ impl super::Operation for WriteGetObjectResponse {
         let input = Self::deserialize_http(req)?;
         let result = s3.write_get_object_response(input).await;
         let res = match result {
-            Ok(()) => Self::serialize_http(),
+            Ok(output) => Self::serialize_http(output)?,
             Err(err) => super::serialize_error(err)?,
         };
         Ok(res)

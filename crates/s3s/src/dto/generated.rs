@@ -1493,6 +1493,9 @@ pub struct DeleteBucketAnalyticsConfigurationInput {
     pub id: AnalyticsId,
 }
 
+#[derive(Debug, Default)]
+pub struct DeleteBucketAnalyticsConfigurationOutput {}
+
 #[derive(Debug)]
 pub struct DeleteBucketCorsInput {
     /// <p>Specifies the bucket whose <code>cors</code> configuration is being deleted.</p>
@@ -1500,6 +1503,9 @@ pub struct DeleteBucketCorsInput {
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
 }
+
+#[derive(Debug, Default)]
+pub struct DeleteBucketCorsOutput {}
 
 #[derive(Debug)]
 pub struct DeleteBucketEncryptionInput {
@@ -1509,6 +1515,9 @@ pub struct DeleteBucketEncryptionInput {
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
 }
+
+#[derive(Debug, Default)]
+pub struct DeleteBucketEncryptionOutput {}
 
 #[derive(Debug)]
 pub struct DeleteBucketInput {
@@ -1526,6 +1535,9 @@ pub struct DeleteBucketIntelligentTieringConfigurationInput {
     pub id: IntelligentTieringId,
 }
 
+#[derive(Debug, Default)]
+pub struct DeleteBucketIntelligentTieringConfigurationOutput {}
+
 #[derive(Debug)]
 pub struct DeleteBucketInventoryConfigurationInput {
     /// <p>The name of the bucket containing the inventory configuration to delete.</p>
@@ -1536,6 +1548,9 @@ pub struct DeleteBucketInventoryConfigurationInput {
     pub id: InventoryId,
 }
 
+#[derive(Debug, Default)]
+pub struct DeleteBucketInventoryConfigurationOutput {}
+
 #[derive(Debug)]
 pub struct DeleteBucketLifecycleInput {
     /// <p>The bucket name of the lifecycle to delete.</p>
@@ -1543,6 +1558,9 @@ pub struct DeleteBucketLifecycleInput {
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
 }
+
+#[derive(Debug, Default)]
+pub struct DeleteBucketLifecycleOutput {}
 
 #[derive(Debug)]
 pub struct DeleteBucketMetricsConfigurationInput {
@@ -1554,6 +1572,12 @@ pub struct DeleteBucketMetricsConfigurationInput {
     pub id: MetricsId,
 }
 
+#[derive(Debug, Default)]
+pub struct DeleteBucketMetricsConfigurationOutput {}
+
+#[derive(Debug, Default)]
+pub struct DeleteBucketOutput {}
+
 #[derive(Debug)]
 pub struct DeleteBucketOwnershipControlsInput {
     /// <p>The Amazon S3 bucket whose <code>OwnershipControls</code> you want to delete. </p>
@@ -1561,6 +1585,9 @@ pub struct DeleteBucketOwnershipControlsInput {
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
 }
+
+#[derive(Debug, Default)]
+pub struct DeleteBucketOwnershipControlsOutput {}
 
 #[derive(Debug)]
 pub struct DeleteBucketPolicyInput {
@@ -1570,6 +1597,9 @@ pub struct DeleteBucketPolicyInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
+#[derive(Debug, Default)]
+pub struct DeleteBucketPolicyOutput {}
+
 #[derive(Debug)]
 pub struct DeleteBucketReplicationInput {
     /// <p> The bucket name. </p>
@@ -1577,6 +1607,9 @@ pub struct DeleteBucketReplicationInput {
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
 }
+
+#[derive(Debug, Default)]
+pub struct DeleteBucketReplicationOutput {}
 
 #[derive(Debug)]
 pub struct DeleteBucketTaggingInput {
@@ -1586,6 +1619,9 @@ pub struct DeleteBucketTaggingInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
+#[derive(Debug, Default)]
+pub struct DeleteBucketTaggingOutput {}
+
 #[derive(Debug)]
 pub struct DeleteBucketWebsiteInput {
     /// <p>The bucket name for which you want to remove the website configuration. </p>
@@ -1593,6 +1629,9 @@ pub struct DeleteBucketWebsiteInput {
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
 }
+
+#[derive(Debug, Default)]
+pub struct DeleteBucketWebsiteOutput {}
 
 pub type DeleteMarker = bool;
 
@@ -1777,6 +1816,9 @@ pub struct DeletePublicAccessBlockInput {
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
 }
+
+#[derive(Debug, Default)]
+pub struct DeletePublicAccessBlockOutput {}
 
 /// <p>Information about the deleted object.</p>
 #[derive(Debug, Default)]
@@ -4202,6 +4244,23 @@ pub struct GetBucketNotificationConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
+/// <p>A container for specifying the notification configuration of the bucket. If this element
+/// is empty, notifications are turned off for the bucket.</p>
+#[derive(Debug, Default)]
+pub struct GetBucketNotificationConfigurationOutput {
+    /// <p>Enables delivery of events to Amazon EventBridge.</p>
+    pub event_bridge_configuration: Option<EventBridgeConfiguration>,
+    /// <p>Describes the Lambda functions to invoke and the events for which to invoke
+    /// them.</p>
+    pub lambda_function_configurations: Option<LambdaFunctionConfigurationList>,
+    /// <p>The Amazon Simple Queue Service queues to publish messages to and the events for which
+    /// to publish messages.</p>
+    pub queue_configurations: Option<QueueConfigurationList>,
+    /// <p>The topic to which notifications are sent and the events for which notifications are
+    /// generated.</p>
+    pub topic_configurations: Option<TopicConfigurationList>,
+}
+
 #[derive(Debug)]
 pub struct GetBucketOwnershipControlsInput {
     /// <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to retrieve.
@@ -4809,6 +4868,9 @@ pub struct HeadBucketInput {
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
 }
+
+#[derive(Debug, Default)]
+pub struct HeadBucketOutput {}
 
 #[derive(Debug)]
 pub struct HeadObjectInput {
@@ -5761,6 +5823,9 @@ pub struct ListBucketMetricsConfigurationsOutput {
     /// understands.</p>
     pub next_continuation_token: Option<NextToken>,
 }
+
+#[derive(Debug, Default)]
+pub struct ListBucketsInput {}
 
 #[derive(Debug, Default)]
 pub struct ListBucketsOutput {
@@ -7432,6 +7497,9 @@ pub struct PutBucketAccelerateConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketAccelerateConfigurationOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketAclInput {
     /// <p>The canned ACL to apply to the bucket.</p>
@@ -7471,6 +7539,9 @@ pub struct PutBucketAclInput {
     pub grant_write_acp: Option<GrantWriteACP>,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketAclOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketAnalyticsConfigurationInput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
@@ -7482,6 +7553,9 @@ pub struct PutBucketAnalyticsConfigurationInput {
     /// <p>The ID that identifies the analytics configuration.</p>
     pub id: AnalyticsId,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketAnalyticsConfigurationOutput {}
 
 #[derive(Debug)]
 pub struct PutBucketCorsInput {
@@ -7510,6 +7584,9 @@ pub struct PutBucketCorsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketCorsOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketEncryptionInput {
     /// <p>Specifies default encryption for a bucket using server-side encryption with Amazon S3-managed
@@ -7533,6 +7610,9 @@ pub struct PutBucketEncryptionInput {
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketEncryptionOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
@@ -7542,6 +7622,9 @@ pub struct PutBucketIntelligentTieringConfigurationInput {
     /// <p>Container for S3 Intelligent-Tiering configuration.</p>
     pub intelligent_tiering_configuration: IntelligentTieringConfiguration,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketIntelligentTieringConfigurationOutput {}
 
 #[derive(Debug)]
 pub struct PutBucketInventoryConfigurationInput {
@@ -7554,6 +7637,9 @@ pub struct PutBucketInventoryConfigurationInput {
     /// <p>Specifies the inventory configuration.</p>
     pub inventory_configuration: InventoryConfiguration,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketInventoryConfigurationOutput {}
 
 #[derive(Debug)]
 pub struct PutBucketLifecycleConfigurationInput {
@@ -7572,6 +7658,9 @@ pub struct PutBucketLifecycleConfigurationInput {
     /// <p>Container for lifecycle rules. You can add as many as 1,000 rules.</p>
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketLifecycleConfigurationOutput {}
 
 #[derive(Debug)]
 pub struct PutBucketLoggingInput {
@@ -7594,6 +7683,9 @@ pub struct PutBucketLoggingInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketLoggingOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketMetricsConfigurationInput {
     /// <p>The name of the bucket for which the metrics configuration is set.</p>
@@ -7606,6 +7698,9 @@ pub struct PutBucketMetricsConfigurationInput {
     pub metrics_configuration: MetricsConfiguration,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketMetricsConfigurationOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketNotificationConfigurationInput {
     /// <p>The name of the bucket.</p>
@@ -7616,6 +7711,9 @@ pub struct PutBucketNotificationConfigurationInput {
     /// <p>Skips validation of Amazon SQS, Amazon SNS, and Lambda destinations. True or false value.</p>
     pub skip_destination_validation: SkipValidation,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketNotificationConfigurationOutput {}
 
 #[derive(Debug)]
 pub struct PutBucketOwnershipControlsInput {
@@ -7630,6 +7728,9 @@ pub struct PutBucketOwnershipControlsInput {
     /// to apply to this Amazon S3 bucket.</p>
     pub ownership_controls: OwnershipControls,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketOwnershipControlsOutput {}
 
 #[derive(Debug)]
 pub struct PutBucketPolicyInput {
@@ -7655,6 +7756,9 @@ pub struct PutBucketPolicyInput {
     pub policy: Policy,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketPolicyOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketReplicationInput {
     /// <p>The name of the bucket</p>
@@ -7678,6 +7782,9 @@ pub struct PutBucketReplicationInput {
     /// <p>A token to allow Object Lock to be enabled for an existing bucket.</p>
     pub token: Option<ObjectLockToken>,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketReplicationOutput {}
 
 #[derive(Debug)]
 pub struct PutBucketRequestPaymentInput {
@@ -7703,6 +7810,9 @@ pub struct PutBucketRequestPaymentInput {
     pub request_payment_configuration: RequestPaymentConfiguration,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketRequestPaymentOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketTaggingInput {
     /// <p>The bucket name.</p>
@@ -7725,6 +7835,9 @@ pub struct PutBucketTaggingInput {
     /// <p>Container for the <code>TagSet</code> and <code>Tag</code> elements.</p>
     pub tagging: Tagging,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketTaggingOutput {}
 
 #[derive(Debug)]
 pub struct PutBucketVersioningInput {
@@ -7753,6 +7866,9 @@ pub struct PutBucketVersioningInput {
     pub versioning_configuration: VersioningConfiguration,
 }
 
+#[derive(Debug, Default)]
+pub struct PutBucketVersioningOutput {}
+
 #[derive(Debug)]
 pub struct PutBucketWebsiteInput {
     /// <p>The bucket name.</p>
@@ -7775,6 +7891,9 @@ pub struct PutBucketWebsiteInput {
     /// <p>Container for the request.</p>
     pub website_configuration: WebsiteConfiguration,
 }
+
+#[derive(Debug, Default)]
+pub struct PutBucketWebsiteOutput {}
 
 #[derive(Debug)]
 pub struct PutObjectAclInput {
@@ -8210,6 +8329,9 @@ pub struct PutPublicAccessBlockInput {
     /// about when Amazon S3 considers a bucket or object public, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">The Meaning of "Public"</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub public_access_block_configuration: PublicAccessBlockConfiguration,
 }
+
+#[derive(Debug, Default)]
+pub struct PutPublicAccessBlockOutput {}
 
 pub type QueueArn = String;
 
@@ -9921,5 +10043,8 @@ pub struct WriteGetObjectResponseInput {
     /// <p>An ID used to reference a specific version of the object.</p>
     pub version_id: Option<ObjectVersionId>,
 }
+
+#[derive(Debug, Default)]
+pub struct WriteGetObjectResponseOutput {}
 
 pub type Years = i32;

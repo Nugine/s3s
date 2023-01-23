@@ -17,8 +17,8 @@ pub fn to_type_name(shape_name: &str) -> &str {
 pub type RustTypes = BTreeMap<String, rust::Type>;
 
 pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes {
-    let mut ans: BTreeMap<String, rust::Type> = default();
-    let mut insert = |k: String, v: rust::Type| assert!(ans.insert(k, v).is_none());
+    let mut space: BTreeMap<String, rust::Type> = default();
+    let mut insert = |k: String, v: rust::Type| assert!(space.insert(k, v).is_none());
 
     for (shape_name, shape) in &model.shapes {
         let name = to_type_name(shape_name).to_owned();
@@ -123,17 +123,6 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                 insert(name, ty);
             }
             smithy::Shape::Structure(shape) => {
-                let name = match name.strip_suffix("Request") {
-                    Some(op_name) => {
-                        if ops.contains_key(op_name) {
-                            f!("{op_name}Input")
-                        } else {
-                            name
-                        }
-                    }
-                    None => name,
-                };
-
                 let mut fields = Vec::new();
                 for (field_name, field) in &shape.members {
                     let name = if field_name == "Type" {
@@ -230,9 +219,45 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
         }
     }
 
-    ans.insert(o("Unit"), rust::Type::provided("Unit"));
+    // unify operation input type
+    for op in ops.values() {
+        let input_ty = if op.smithy_input == "Unit" {
+            rust::Struct {
+                name: op.input.clone(),
+                fields: default(),
+                doc: None,
+                xml_name: None,
+            }
+        } else {
+            assert!(op.smithy_input.ends_with("Request"));
+            let Some(rust::Type::Struct(mut ty)) = space.remove(&op.smithy_input) else { panic!() };
+            ty.name = op.input.clone(); // rename type
+            ty
+        };
+        assert!(space.insert(op.input.clone(), rust::Type::Struct(input_ty)).is_none());
+    }
 
-    ans
+    // unify operation output type
+    for op in ops.values() {
+        let output_ty = if op.smithy_output == "Unit" {
+            rust::Struct {
+                name: op.output.clone(),
+                fields: default(),
+                doc: None,
+                xml_name: None,
+            }
+        } else {
+            if op.smithy_output == op.output {
+                continue;
+            }
+            let rust::Type::Struct(mut ty) = space[&op.smithy_output].clone() else { panic!() };
+            ty.name = op.output.clone(); // duplicate type
+            ty
+        };
+        assert!(space.insert(op.output.clone(), rust::Type::Struct(output_ty)).is_none());
+    }
+
+    space
 }
 
 pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {

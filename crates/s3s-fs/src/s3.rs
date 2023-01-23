@@ -83,10 +83,10 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn delete_bucket(&self, input: DeleteBucketInput) -> S3Result {
+    async fn delete_bucket(&self, input: DeleteBucketInput) -> S3Result<DeleteBucketOutput> {
         let path = self.get_bucket_path(&input.bucket)?;
         try_!(fs::remove_dir_all(path).await);
-        Ok(())
+        Ok(DeleteBucketOutput {})
     }
 
     #[tracing::instrument]
@@ -208,14 +208,14 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn head_bucket(&self, input: HeadBucketInput) -> S3Result {
+    async fn head_bucket(&self, input: HeadBucketInput) -> S3Result<HeadBucketOutput> {
         let path = self.get_bucket_path(&input.bucket)?;
 
         if !path.exists() {
             return Err(s3_error!(NoSuchBucket));
         }
 
-        Ok(())
+        Ok(HeadBucketOutput {})
     }
 
     #[tracing::instrument]
@@ -246,7 +246,7 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn list_buckets(&self) -> S3Result<ListBucketsOutput> {
+    async fn list_buckets(&self, _: ListBucketsInput) -> S3Result<ListBucketsOutput> {
         let mut buckets: Vec<Bucket> = Vec::new();
         let mut iter = try_!(fs::read_dir(&self.root).await);
         while let Some(entry) = try_!(iter.next_entry().await) {
