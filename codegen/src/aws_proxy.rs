@@ -14,6 +14,8 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     g.ln("use s3s::S3;");
     g.ln("use s3s::S3Result;");
     g.lf();
+    g.ln("use tracing::debug;");
+    g.lf();
 
     g.ln("#[async_trait::async_trait]");
     g.ln("impl S3 for Proxy {");
@@ -23,8 +25,10 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         let s3s_input = f!("s3s::dto::{}", op.input);
         let s3s_output = f!("s3s::dto::{}", op.output);
 
-        let arg = if op.smithy_input == "Unit" { "_" } else { "input" };
-        g.ln(f!("async fn {method_name}(&self, {arg}: {s3s_input}) -> S3Result<{s3s_output}> {{"));
+        g.ln("#[tracing::instrument(skip(self, input))]");
+        g.ln(f!("async fn {method_name}(&self, input: {s3s_input}) -> S3Result<{s3s_output}> {{"));
+
+        g.ln("debug!(?input);");
 
         if op.smithy_input == "Unit" {
             g.ln(f!("let result = self.0.{method_name}().send().await;"));
@@ -49,7 +53,11 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         }
 
         g.ln("match result {");
-        g.ln("Ok(output) => try_from_aws(output),");
+        g.ln("Ok(output) => {");
+        g.ln("    let output = try_from_aws(output)?;");
+        g.ln("    debug!(?output);");
+        g.ln("    Ok(output)");
+        g.ln("},");
         g.ln("Err(e) => Err(wrap_sdk_error!(e)),");
         g.ln("}");
 
