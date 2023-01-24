@@ -18,6 +18,7 @@ macro_rules! wrap_sdk_error {
             if let Some(val) = meta.request_id() {
                 err.set_request_id(val);
             }
+            err.set_status_code(e.raw().http().status());
         }
         err.set_source(Box::new(source));
 
