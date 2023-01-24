@@ -5,6 +5,7 @@ use super::*;
 
 use std::borrow::Cow;
 use std::convert::Infallible;
+use std::fmt;
 use std::str::FromStr;
 
 pub type AbortDate = Timestamp;
@@ -13,14 +14,21 @@ pub type AbortDate = Timestamp;
 /// wait before permanently removing all parts of the upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">
 /// Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct AbortIncompleteMultipartUpload {
     /// <p>Specifies the number of days after which Amazon S3 aborts an incomplete multipart
     /// upload.</p>
     pub days_after_initiation: DaysAfterInitiation,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for AbortIncompleteMultipartUpload {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AbortIncompleteMultipartUpload");
+        d.field("days_after_initiation", &self.days_after_initiation);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct AbortMultipartUploadInput {
     /// <p>The bucket name to which the upload was taking place. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -36,9 +44,35 @@ pub struct AbortMultipartUploadInput {
     pub upload_id: MultipartUploadId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for AbortMultipartUploadInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AbortMultipartUploadInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        d.field("upload_id", &self.upload_id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: Option<RequestCharged>,
+}
+
+impl fmt::Debug for AbortMultipartUploadOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AbortMultipartUploadOutput");
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type AbortRuleId = String;
@@ -46,16 +80,26 @@ pub type AbortRuleId = String;
 /// <p>Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Amazon S3
 /// Transfer Acceleration</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct AccelerateConfiguration {
     /// <p>Specifies the transfer acceleration status of the bucket.</p>
     pub status: Option<BucketAccelerateStatus>,
 }
 
+impl fmt::Debug for AccelerateConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AccelerateConfiguration");
+        if let Some(ref val) = self.status {
+            d.field("status", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type AcceptRanges = String;
 
 /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct AccessControlPolicy {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -63,12 +107,32 @@ pub struct AccessControlPolicy {
     pub owner: Option<Owner>,
 }
 
+impl fmt::Debug for AccessControlPolicy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AccessControlPolicy");
+        if let Some(ref val) = self.grants {
+            d.field("grants", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>A container for information about access control for replicas.</p>
-#[derive(Debug)]
 pub struct AccessControlTranslation {
     /// <p>Specifies the replica ownership. For default and valid values, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT bucket
     /// replication</a> in the <i>Amazon S3 API Reference</i>.</p>
     pub owner: OwnerOverride,
+}
+
+impl fmt::Debug for AccessControlTranslation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AccessControlTranslation");
+        d.field("owner", &self.owner);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type AccessPointArn = String;
@@ -92,7 +156,7 @@ pub type AllowedOrigins = List<AllowedOrigin>;
 /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter.
 /// The operator must have at least two predicates in any combination, and an object must match
 /// all of the predicates for the filter to apply.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct AnalyticsAndOperator {
     /// <p>The prefix to use when evaluating an AND predicate: The prefix that an object must have
     /// to be included in the metrics results.</p>
@@ -101,8 +165,20 @@ pub struct AnalyticsAndOperator {
     pub tags: Option<TagSet>,
 }
 
+impl fmt::Debug for AnalyticsAndOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AnalyticsAndOperator");
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tags {
+            d.field("tags", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.</p>
-#[derive(Debug)]
 pub struct AnalyticsConfiguration {
     /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly
     /// one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided,
@@ -115,13 +191,32 @@ pub struct AnalyticsConfiguration {
     pub storage_class_analysis: StorageClassAnalysis,
 }
 
+impl fmt::Debug for AnalyticsConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AnalyticsConfiguration");
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        d.field("id", &self.id);
+        d.field("storage_class_analysis", &self.storage_class_analysis);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type AnalyticsConfigurationList = List<AnalyticsConfiguration>;
 
 /// <p>Where to publish the analytics results.</p>
-#[derive(Debug)]
 pub struct AnalyticsExportDestination {
     /// <p>A destination signifying output to an S3 bucket.</p>
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
+}
+
+impl fmt::Debug for AnalyticsExportDestination {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AnalyticsExportDestination");
+        d.field("s3_bucket_destination", &self.s3_bucket_destination);
+        d.finish_non_exhaustive()
+    }
 }
 
 /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly
@@ -142,7 +237,6 @@ pub enum AnalyticsFilter {
 pub type AnalyticsId = String;
 
 /// <p>Contains information about where to publish the analytics results.</p>
-#[derive(Debug)]
 pub struct AnalyticsS3BucketDestination {
     /// <p>The Amazon Resource Name (ARN) of the bucket to which data is exported.</p>
     pub bucket: BucketName,
@@ -157,6 +251,21 @@ pub struct AnalyticsS3BucketDestination {
     pub format: AnalyticsS3ExportFileFormat,
     /// <p>The prefix to use when exporting data. The prefix is prepended to all results.</p>
     pub prefix: Option<Prefix>,
+}
+
+impl fmt::Debug for AnalyticsS3BucketDestination {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("AnalyticsS3BucketDestination");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.bucket_account_id {
+            d.field("bucket_account_id", val);
+        }
+        d.field("format", &self.format);
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -235,12 +344,25 @@ impl FromStr for ArchiveStatus {
 
 /// <p> In terms of implementation, a Bucket is a resource. An Amazon S3 bucket name is globally
 /// unique, and the namespace is shared by all Amazon Web Services accounts. </p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Bucket {
     /// <p>Date the bucket was created. This date can change when making changes to your bucket, such as editing its bucket policy.</p>
     pub creation_date: Option<CreationDate>,
     /// <p>The name of the bucket.</p>
     pub name: Option<BucketName>,
+}
+
+impl fmt::Debug for Bucket {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Bucket");
+        if let Some(ref val) = self.creation_date {
+            d.field("creation_date", val);
+        }
+        if let Some(ref val) = self.name {
+            d.field("name", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -283,15 +405,29 @@ impl FromStr for BucketAccelerateStatus {
 
 /// <p>The requested bucket name is not available. The bucket namespace is shared by all users
 /// of the system. Select a different name and try again.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct BucketAlreadyExists {}
+
+impl fmt::Debug for BucketAlreadyExists {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("BucketAlreadyExists");
+        d.finish_non_exhaustive()
+    }
+}
 
 /// <p>The bucket you tried to create already exists, and you own it. Amazon S3 returns this error
 /// in all Amazon Web Services Regions except in the North Virginia Region. For legacy compatibility, if you
 /// re-create an existing bucket that you already own in the North Virginia Region, Amazon S3
 /// returns 200 OK and resets the bucket access control lists (ACLs).</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct BucketAlreadyOwnedByYou {}
+
+impl fmt::Debug for BucketAlreadyOwnedByYou {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("BucketAlreadyOwnedByYou");
+        d.finish_non_exhaustive()
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BucketCannedACL(Cow<'static, str>);
@@ -340,10 +476,17 @@ pub type BucketKeyEnabled = bool;
 /// <p>Specifies the lifecycle configuration for objects in an Amazon S3 bucket. For more
 /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>
 /// in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug)]
 pub struct BucketLifecycleConfiguration {
     /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
     pub rules: LifecycleRules,
+}
+
+impl fmt::Debug for BucketLifecycleConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("BucketLifecycleConfiguration");
+        d.field("rules", &self.rules);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -433,9 +576,19 @@ impl FromStr for BucketLocationConstraint {
 }
 
 /// <p>Container for logging status information.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct BucketLoggingStatus {
     pub logging_enabled: Option<LoggingEnabled>,
+}
+
+impl fmt::Debug for BucketLoggingStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("BucketLoggingStatus");
+        if let Some(ref val) = self.logging_enabled {
+            d.field("logging_enabled", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -531,15 +684,21 @@ pub type BytesScanned = i64;
 /// <p>Describes the cross-origin access configuration for objects in an Amazon S3 bucket. For more
 /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling
 /// Cross-Origin Resource Sharing</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug)]
 pub struct CORSConfiguration {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add
     /// up to 100 rules to the configuration.</p>
     pub cors_rules: CORSRules,
 }
 
+impl fmt::Debug for CORSConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CORSConfiguration");
+        d.field("cors_rules", &self.cors_rules);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies a cross-origin access rule for an Amazon S3 bucket.</p>
-#[derive(Debug)]
 pub struct CORSRule {
     /// <p>Headers that are specified in the <code>Access-Control-Request-Headers</code> header.
     /// These headers are allowed in a preflight OPTIONS request. In response to any preflight
@@ -561,11 +720,30 @@ pub struct CORSRule {
     pub max_age_seconds: MaxAgeSeconds,
 }
 
+impl fmt::Debug for CORSRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CORSRule");
+        if let Some(ref val) = self.allowed_headers {
+            d.field("allowed_headers", val);
+        }
+        d.field("allowed_methods", &self.allowed_methods);
+        d.field("allowed_origins", &self.allowed_origins);
+        if let Some(ref val) = self.expose_headers {
+            d.field("expose_headers", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        d.field("max_age_seconds", &self.max_age_seconds);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type CORSRules = List<CORSRule>;
 
 /// <p>Describes how an uncompressed comma-separated values (CSV)-formatted input object is
 /// formatted.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct CSVInput {
     /// <p>Specifies that CSV field values may contain quoted record delimiters and such records
     /// should be allowed. Default value is FALSE. Setting this value to TRUE may lower
@@ -615,9 +793,35 @@ pub struct CSVInput {
     pub record_delimiter: Option<RecordDelimiter>,
 }
 
+impl fmt::Debug for CSVInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CSVInput");
+        d.field("allow_quoted_record_delimiter", &self.allow_quoted_record_delimiter);
+        if let Some(ref val) = self.comments {
+            d.field("comments", val);
+        }
+        if let Some(ref val) = self.field_delimiter {
+            d.field("field_delimiter", val);
+        }
+        if let Some(ref val) = self.file_header_info {
+            d.field("file_header_info", val);
+        }
+        if let Some(ref val) = self.quote_character {
+            d.field("quote_character", val);
+        }
+        if let Some(ref val) = self.quote_escape_character {
+            d.field("quote_escape_character", val);
+        }
+        if let Some(ref val) = self.record_delimiter {
+            d.field("record_delimiter", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Describes how uncompressed comma-separated values (CSV)-formatted results are
 /// formatted.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct CSVOutput {
     /// <p>The value used to separate individual fields in a record. You can specify an arbitrary
     /// delimiter.</p>
@@ -646,10 +850,32 @@ pub struct CSVOutput {
     pub record_delimiter: Option<RecordDelimiter>,
 }
 
+impl fmt::Debug for CSVOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CSVOutput");
+        if let Some(ref val) = self.field_delimiter {
+            d.field("field_delimiter", val);
+        }
+        if let Some(ref val) = self.quote_character {
+            d.field("quote_character", val);
+        }
+        if let Some(ref val) = self.quote_escape_character {
+            d.field("quote_escape_character", val);
+        }
+        if let Some(ref val) = self.quote_fields {
+            d.field("quote_fields", val);
+        }
+        if let Some(ref val) = self.record_delimiter {
+            d.field("record_delimiter", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type CacheControl = String;
 
 /// <p>Contains all the possible checksum or digest values for an object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Checksum {
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -671,6 +897,25 @@ pub struct Checksum {
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_sha256: Option<ChecksumSHA256>,
+}
+
+impl fmt::Debug for Checksum {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Checksum");
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -769,15 +1014,24 @@ pub type Comments = String;
 /// string specified by a delimiter. CommonPrefixes lists keys that act like subdirectories in
 /// the directory specified by Prefix. For example, if the prefix is notes/ and the delimiter
 /// is a slash (/) as in notes/summer/july, the common prefix is notes/summer/. </p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct CommonPrefix {
     /// <p>Container for the specified common prefix.</p>
     pub prefix: Option<Prefix>,
 }
 
+impl fmt::Debug for CommonPrefix {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CommonPrefix");
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type CommonPrefixList = List<CommonPrefix>;
 
-#[derive(Debug)]
 pub struct CompleteMultipartUploadInput {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -830,7 +1084,47 @@ pub struct CompleteMultipartUploadInput {
     pub upload_id: MultipartUploadId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for CompleteMultipartUploadInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CompleteMultipartUploadInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.multipart_upload {
+            d.field("multipart_upload", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        d.field("upload_id", &self.upload_id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct CompleteMultipartUploadOutput {
     /// <p>The name of the bucket that contains the newly created object. Does not return the access point ARN or access point alias if used.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -890,8 +1184,55 @@ pub struct CompleteMultipartUploadOutput {
     pub version_id: Option<ObjectVersionId>,
 }
 
+impl fmt::Debug for CompleteMultipartUploadOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CompleteMultipartUploadOutput");
+        if let Some(ref val) = self.bucket {
+            d.field("bucket", val);
+        }
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.expiration {
+            d.field("expiration", val);
+        }
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        if let Some(ref val) = self.location {
+            d.field("location", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>The container for the completed multipart upload details.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct CompletedMultipartUpload {
     /// <p>Array of CompletedPart data types.</p>
     /// <p>If you do not supply a valid <code>Part</code> with your request, the service sends back an HTTP
@@ -899,8 +1240,18 @@ pub struct CompletedMultipartUpload {
     pub parts: Option<CompletedPartList>,
 }
 
+impl fmt::Debug for CompletedMultipartUpload {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CompletedMultipartUpload");
+        if let Some(ref val) = self.parts {
+            d.field("parts", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Details of the parts that were uploaded.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct CompletedPart {
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -927,6 +1278,29 @@ pub struct CompletedPart {
     /// <p>Part number that identifies the part. This is a positive integer between 1 and
     /// 10,000.</p>
     pub part_number: PartNumber,
+}
+
+impl fmt::Debug for CompletedPart {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CompletedPart");
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        d.field("part_number", &self.part_number);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type CompletedPartList = List<CompletedPart>;
@@ -975,7 +1349,7 @@ impl FromStr for CompressionType {
 /// apply. For example, 1. If request is for pages in the <code>/docs</code> folder, redirect
 /// to the <code>/documents</code> folder. 2. If request results in HTTP error 4xx, redirect
 /// request to another host where you might process the error.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Condition {
     /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error
     /// code equals this value, then the specified redirect is applied. Required when parent
@@ -999,6 +1373,19 @@ pub struct Condition {
     pub key_prefix_equals: Option<KeyPrefixEquals>,
 }
 
+impl fmt::Debug for Condition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Condition");
+        if let Some(ref val) = self.http_error_code_returned_equals {
+            d.field("http_error_code_returned_equals", val);
+        }
+        if let Some(ref val) = self.key_prefix_equals {
+            d.field("key_prefix_equals", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type ConfirmRemoveSelfBucketAccess = bool;
 
 pub type ContentDisposition = String;
@@ -1014,10 +1401,16 @@ pub type ContentMD5 = String;
 pub type ContentRange = String;
 
 /// <p></p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ContinuationEvent {}
 
-#[derive(Debug)]
+impl fmt::Debug for ContinuationEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ContinuationEvent");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct CopyObjectInput {
     /// <p>The canned ACL to apply to the object.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
@@ -1168,7 +1561,129 @@ pub struct CopyObjectInput {
     pub website_redirect_location: Option<WebsiteRedirectLocation>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for CopyObjectInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CopyObjectInput");
+        if let Some(ref val) = self.acl {
+            d.field("acl", val);
+        }
+        d.field("bucket", &self.bucket);
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.cache_control {
+            d.field("cache_control", val);
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_disposition {
+            d.field("content_disposition", val);
+        }
+        if let Some(ref val) = self.content_encoding {
+            d.field("content_encoding", val);
+        }
+        if let Some(ref val) = self.content_language {
+            d.field("content_language", val);
+        }
+        if let Some(ref val) = self.content_type {
+            d.field("content_type", val);
+        }
+        d.field("copy_source", &self.copy_source);
+        if let Some(ref val) = self.copy_source_if_match {
+            d.field("copy_source_if_match", val);
+        }
+        if let Some(ref val) = self.copy_source_if_modified_since {
+            d.field("copy_source_if_modified_since", val);
+        }
+        if let Some(ref val) = self.copy_source_if_none_match {
+            d.field("copy_source_if_none_match", val);
+        }
+        if let Some(ref val) = self.copy_source_if_unmodified_since {
+            d.field("copy_source_if_unmodified_since", val);
+        }
+        if let Some(ref val) = self.copy_source_sse_customer_algorithm {
+            d.field("copy_source_sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.copy_source_sse_customer_key {
+            d.field("copy_source_sse_customer_key", val);
+        }
+        if let Some(ref val) = self.copy_source_sse_customer_key_md5 {
+            d.field("copy_source_sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.expected_source_bucket_owner {
+            d.field("expected_source_bucket_owner", val);
+        }
+        if let Some(ref val) = self.expires {
+            d.field("expires", val);
+        }
+        if let Some(ref val) = self.grant_full_control {
+            d.field("grant_full_control", val);
+        }
+        if let Some(ref val) = self.grant_read {
+            d.field("grant_read", val);
+        }
+        if let Some(ref val) = self.grant_read_acp {
+            d.field("grant_read_acp", val);
+        }
+        if let Some(ref val) = self.grant_write_acp {
+            d.field("grant_write_acp", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.metadata {
+            d.field("metadata", val);
+        }
+        if let Some(ref val) = self.metadata_directive {
+            d.field("metadata_directive", val);
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            d.field("object_lock_legal_hold_status", val);
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            d.field("object_lock_mode", val);
+        }
+        if let Some(ref val) = self.object_lock_retain_until_date {
+            d.field("object_lock_retain_until_date", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_encryption_context {
+            d.field("ssekms_encryption_context", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.tagging {
+            d.field("tagging", val);
+        }
+        if let Some(ref val) = self.tagging_directive {
+            d.field("tagging_directive", val);
+        }
+        if let Some(ref val) = self.website_redirect_location {
+            d.field("website_redirect_location", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct CopyObjectOutput {
     /// <p>Indicates whether the copied object uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
@@ -1200,8 +1715,46 @@ pub struct CopyObjectOutput {
     pub version_id: Option<ObjectVersionId>,
 }
 
+impl fmt::Debug for CopyObjectOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CopyObjectOutput");
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.copy_object_result {
+            d.field("copy_object_result", val);
+        }
+        if let Some(ref val) = self.copy_source_version_id {
+            d.field("copy_source_version_id", val);
+        }
+        if let Some(ref val) = self.expiration {
+            d.field("expiration", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_encryption_context {
+            d.field("ssekms_encryption_context", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for all response elements.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct CopyObjectResult {
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -1229,8 +1782,33 @@ pub struct CopyObjectResult {
     pub last_modified: Option<LastModified>,
 }
 
+impl fmt::Debug for CopyObjectResult {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CopyObjectResult");
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for all response elements.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct CopyPartResult {
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -1258,6 +1836,31 @@ pub struct CopyPartResult {
     pub last_modified: Option<LastModified>,
 }
 
+impl fmt::Debug for CopyPartResult {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CopyPartResult");
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type CopySourceIfMatch = String;
 
 pub type CopySourceIfModifiedSince = Timestamp;
@@ -1277,14 +1880,23 @@ pub type CopySourceSSECustomerKeyMD5 = String;
 pub type CopySourceVersionId = String;
 
 /// <p>The configuration information for the bucket.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct CreateBucketConfiguration {
     /// <p>Specifies the Region where the bucket will be created. If you don't specify a Region,
     /// the bucket is created in the US East (N. Virginia) Region (us-east-1).</p>
     pub location_constraint: Option<BucketLocationConstraint>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for CreateBucketConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CreateBucketConfiguration");
+        if let Some(ref val) = self.location_constraint {
+            d.field("location_constraint", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct CreateBucketInput {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<BucketCannedACL>,
@@ -1309,13 +1921,55 @@ pub struct CreateBucketInput {
     pub object_ownership: Option<ObjectOwnership>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for CreateBucketInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CreateBucketInput");
+        if let Some(ref val) = self.acl {
+            d.field("acl", val);
+        }
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.create_bucket_configuration {
+            d.field("create_bucket_configuration", val);
+        }
+        if let Some(ref val) = self.grant_full_control {
+            d.field("grant_full_control", val);
+        }
+        if let Some(ref val) = self.grant_read {
+            d.field("grant_read", val);
+        }
+        if let Some(ref val) = self.grant_read_acp {
+            d.field("grant_read_acp", val);
+        }
+        if let Some(ref val) = self.grant_write {
+            d.field("grant_write", val);
+        }
+        if let Some(ref val) = self.grant_write_acp {
+            d.field("grant_write_acp", val);
+        }
+        d.field("object_lock_enabled_for_bucket", &self.object_lock_enabled_for_bucket);
+        if let Some(ref val) = self.object_ownership {
+            d.field("object_ownership", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct CreateBucketOutput {
     /// <p>A forward slash followed by the name of the bucket.</p>
     pub location: Option<Location>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for CreateBucketOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CreateBucketOutput");
+        if let Some(ref val) = self.location {
+            d.field("location", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct CreateMultipartUploadInput {
     /// <p>The canned ACL to apply to the object.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
@@ -1413,7 +2067,98 @@ pub struct CreateMultipartUploadInput {
     pub website_redirect_location: Option<WebsiteRedirectLocation>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for CreateMultipartUploadInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CreateMultipartUploadInput");
+        if let Some(ref val) = self.acl {
+            d.field("acl", val);
+        }
+        d.field("bucket", &self.bucket);
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.cache_control {
+            d.field("cache_control", val);
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_disposition {
+            d.field("content_disposition", val);
+        }
+        if let Some(ref val) = self.content_encoding {
+            d.field("content_encoding", val);
+        }
+        if let Some(ref val) = self.content_language {
+            d.field("content_language", val);
+        }
+        if let Some(ref val) = self.content_type {
+            d.field("content_type", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.expires {
+            d.field("expires", val);
+        }
+        if let Some(ref val) = self.grant_full_control {
+            d.field("grant_full_control", val);
+        }
+        if let Some(ref val) = self.grant_read {
+            d.field("grant_read", val);
+        }
+        if let Some(ref val) = self.grant_read_acp {
+            d.field("grant_read_acp", val);
+        }
+        if let Some(ref val) = self.grant_write_acp {
+            d.field("grant_write_acp", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.metadata {
+            d.field("metadata", val);
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            d.field("object_lock_legal_hold_status", val);
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            d.field("object_lock_mode", val);
+        }
+        if let Some(ref val) = self.object_lock_retain_until_date {
+            d.field("object_lock_retain_until_date", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_encryption_context {
+            d.field("ssekms_encryption_context", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.tagging {
+            d.field("tagging", val);
+        }
+        if let Some(ref val) = self.website_redirect_location {
+            d.field("website_redirect_location", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct CreateMultipartUploadOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete
     /// multipart uploads and the prefix in the lifecycle rule matches the object name in the
@@ -1461,6 +2206,50 @@ pub struct CreateMultipartUploadOutput {
     pub upload_id: Option<MultipartUploadId>,
 }
 
+impl fmt::Debug for CreateMultipartUploadOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("CreateMultipartUploadOutput");
+        if let Some(ref val) = self.abort_date {
+            d.field("abort_date", val);
+        }
+        if let Some(ref val) = self.abort_rule_id {
+            d.field("abort_rule_id", val);
+        }
+        if let Some(ref val) = self.bucket {
+            d.field("bucket", val);
+        }
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_encryption_context {
+            d.field("ssekms_encryption_context", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.upload_id {
+            d.field("upload_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type CreationDate = Timestamp;
 
 pub type Date = Timestamp;
@@ -1484,7 +2273,7 @@ pub type DaysAfterInitiation = i32;
 /// </li>
 /// </ul>
 /// </note>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct DefaultRetention {
     /// <p>The number of days that you want to specify for the default retention period. Must be
     /// used with <code>Mode</code>.</p>
@@ -1497,8 +2286,19 @@ pub struct DefaultRetention {
     pub years: Years,
 }
 
+impl fmt::Debug for DefaultRetention {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DefaultRetention");
+        d.field("days", &self.days);
+        if let Some(ref val) = self.mode {
+            d.field("mode", val);
+        }
+        d.field("years", &self.years);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for the objects to delete.</p>
-#[derive(Debug)]
 pub struct Delete {
     /// <p>The objects to delete.</p>
     pub objects: ObjectIdentifierList,
@@ -1507,7 +2307,15 @@ pub struct Delete {
     pub quiet: Quiet,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for Delete {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Delete");
+        d.field("objects", &self.objects);
+        d.field("quiet", &self.quiet);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketAnalyticsConfigurationInput {
     /// <p>The name of the bucket from which an analytics configuration is deleted.</p>
     pub bucket: BucketName,
@@ -1517,10 +2325,28 @@ pub struct DeleteBucketAnalyticsConfigurationInput {
     pub id: AnalyticsId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketAnalyticsConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketAnalyticsConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketAnalyticsConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketAnalyticsConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketAnalyticsConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketCorsInput {
     /// <p>Specifies the bucket whose <code>cors</code> configuration is being deleted.</p>
     pub bucket: BucketName,
@@ -1528,10 +2354,27 @@ pub struct DeleteBucketCorsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketCorsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketCorsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketCorsOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketCorsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketCorsOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketEncryptionInput {
     /// <p>The name of the bucket containing the server-side encryption configuration to
     /// delete.</p>
@@ -1540,10 +2383,27 @@ pub struct DeleteBucketEncryptionInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketEncryptionInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketEncryptionInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketEncryptionOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketEncryptionOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketEncryptionOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketInput {
     /// <p>Specifies the bucket being deleted.</p>
     pub bucket: BucketName,
@@ -1551,7 +2411,17 @@ pub struct DeleteBucketInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -1559,10 +2429,25 @@ pub struct DeleteBucketIntelligentTieringConfigurationInput {
     pub id: IntelligentTieringId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketIntelligentTieringConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketIntelligentTieringConfigurationInput");
+        d.field("bucket", &self.bucket);
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketIntelligentTieringConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketIntelligentTieringConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketIntelligentTieringConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketInventoryConfigurationInput {
     /// <p>The name of the bucket containing the inventory configuration to delete.</p>
     pub bucket: BucketName,
@@ -1572,10 +2457,28 @@ pub struct DeleteBucketInventoryConfigurationInput {
     pub id: InventoryId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketInventoryConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketInventoryConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketInventoryConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketInventoryConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketInventoryConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketLifecycleInput {
     /// <p>The bucket name of the lifecycle to delete.</p>
     pub bucket: BucketName,
@@ -1583,10 +2486,27 @@ pub struct DeleteBucketLifecycleInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketLifecycleInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketLifecycleInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketLifecycleOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketLifecycleOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketLifecycleOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketMetricsConfigurationInput {
     /// <p>The name of the bucket containing the metrics configuration to delete.</p>
     pub bucket: BucketName,
@@ -1596,13 +2516,38 @@ pub struct DeleteBucketMetricsConfigurationInput {
     pub id: MetricsId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketMetricsConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketMetricsConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketMetricsConfigurationOutput {}
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketMetricsConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketMetricsConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketOwnershipControlsInput {
     /// <p>The Amazon S3 bucket whose <code>OwnershipControls</code> you want to delete. </p>
     pub bucket: BucketName,
@@ -1610,10 +2555,27 @@ pub struct DeleteBucketOwnershipControlsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketOwnershipControlsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketOwnershipControlsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketOwnershipControlsOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketOwnershipControlsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketOwnershipControlsOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketPolicyInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -1621,10 +2583,27 @@ pub struct DeleteBucketPolicyInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketPolicyInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketPolicyInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketPolicyOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketPolicyOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketPolicyOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketReplicationInput {
     /// <p> The bucket name. </p>
     pub bucket: BucketName,
@@ -1632,10 +2611,27 @@ pub struct DeleteBucketReplicationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketReplicationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketReplicationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketReplicationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketReplicationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketReplicationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketTaggingInput {
     /// <p>The bucket that has the tag set to be removed.</p>
     pub bucket: BucketName,
@@ -1643,10 +2639,27 @@ pub struct DeleteBucketTaggingInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketTaggingInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketTaggingInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketTaggingOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteBucketTaggingOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketTaggingOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteBucketWebsiteInput {
     /// <p>The bucket name for which you want to remove the website configuration. </p>
     pub bucket: BucketName,
@@ -1654,13 +2667,31 @@ pub struct DeleteBucketWebsiteInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteBucketWebsiteInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketWebsiteInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteBucketWebsiteOutput {}
+
+impl fmt::Debug for DeleteBucketWebsiteOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteBucketWebsiteOutput");
+        d.finish_non_exhaustive()
+    }
+}
 
 pub type DeleteMarker = bool;
 
 /// <p>Information about the delete marker.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct DeleteMarkerEntry {
     /// <p>Specifies whether the object is (true) or is not (false) the latest version of an
     /// object.</p>
@@ -1675,6 +2706,26 @@ pub struct DeleteMarkerEntry {
     pub version_id: Option<ObjectVersionId>,
 }
 
+impl fmt::Debug for DeleteMarkerEntry {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteMarkerEntry");
+        d.field("is_latest", &self.is_latest);
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies whether Amazon S3 replicates delete markers. If you specify a <code>Filter</code>
 /// in your replication configuration, you must also include a
 /// <code>DeleteMarkerReplication</code> element. If your <code>Filter</code> includes a
@@ -1687,13 +2738,23 @@ pub struct DeleteMarkerEntry {
 /// <p>If you are using an earlier version of the replication configuration, Amazon S3 handles
 /// replication of delete markers differently. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-add-config.html#replication-backward-compat-considerations">Backward Compatibility</a>.</p>
 /// </note>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct DeleteMarkerReplication {
     /// <p>Indicates whether to replicate delete markers.</p>
     /// <note>
     /// <p>Indicates whether to replicate delete markers.</p>
     /// </note>
     pub status: Option<DeleteMarkerReplicationStatus>,
+}
+
+impl fmt::Debug for DeleteMarkerReplication {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteMarkerReplication");
+        if let Some(ref val) = self.status {
+            d.field("status", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1738,7 +2799,6 @@ pub type DeleteMarkerVersionId = String;
 
 pub type DeleteMarkers = List<DeleteMarkerEntry>;
 
-#[derive(Debug)]
 pub struct DeleteObjectInput {
     /// <p>The bucket name of the bucket containing the object. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1762,7 +2822,29 @@ pub struct DeleteObjectInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteObjectInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteObjectInput");
+        d.field("bucket", &self.bucket);
+        d.field("bypass_governance_retention", &self.bypass_governance_retention);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.mfa {
+            d.field("mfa", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteObjectOutput {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was
     /// not (false) a delete marker.</p>
@@ -1773,7 +2855,20 @@ pub struct DeleteObjectOutput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteObjectOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteObjectOutput");
+        d.field("delete_marker", &self.delete_marker);
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteObjectTaggingInput {
     /// <p>The bucket name containing the objects from which to remove the tags. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1788,13 +2883,37 @@ pub struct DeleteObjectTaggingInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteObjectTaggingInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteObjectTaggingInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was removed from.</p>
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteObjectTaggingOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteObjectTaggingOutput");
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeleteObjectsInput {
     /// <p>The bucket name containing the objects to delete. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1826,7 +2945,29 @@ pub struct DeleteObjectsInput {
     pub request_payer: Option<RequestPayer>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeleteObjectsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteObjectsInput");
+        d.field("bucket", &self.bucket);
+        d.field("bypass_governance_retention", &self.bypass_governance_retention);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        d.field("delete", &self.delete);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.mfa {
+            d.field("mfa", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeleteObjectsOutput {
     /// <p>Container element for a successful delete. It identifies the object that was
     /// successfully deleted.</p>
@@ -1837,7 +2978,22 @@ pub struct DeleteObjectsOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for DeleteObjectsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteObjectsOutput");
+        if let Some(ref val) = self.deleted {
+            d.field("deleted", val);
+        }
+        if let Some(ref val) = self.errors {
+            d.field("errors", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct DeletePublicAccessBlockInput {
     /// <p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete.
     /// </p>
@@ -1846,11 +3002,29 @@ pub struct DeletePublicAccessBlockInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for DeletePublicAccessBlockInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeletePublicAccessBlockInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct DeletePublicAccessBlockOutput {}
 
+impl fmt::Debug for DeletePublicAccessBlockOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeletePublicAccessBlockOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Information about the deleted object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct DeletedObject {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was
     /// not (false) a delete marker. In a simple DELETE, this header indicates whether (true) or
@@ -1866,6 +3040,23 @@ pub struct DeletedObject {
     pub version_id: Option<ObjectVersionId>,
 }
 
+impl fmt::Debug for DeletedObject {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeletedObject");
+        d.field("delete_marker", &self.delete_marker);
+        if let Some(ref val) = self.delete_marker_version_id {
+            d.field("delete_marker_version_id", val);
+        }
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type DeletedObjects = List<DeletedObject>;
 
 pub type Delimiter = String;
@@ -1874,7 +3065,6 @@ pub type Description = String;
 
 /// <p>Specifies information about where to publish analysis or configuration results for an
 /// Amazon S3 bucket and S3 Replication Time Control (S3 RTC).</p>
-#[derive(Debug)]
 pub struct Destination {
     /// <p>Specify this only in a cross-account scenario (where source and destination bucket
     /// owners are not the same), and you want to change replica ownership to the Amazon Web Services account that
@@ -1905,6 +3095,32 @@ pub struct Destination {
     /// <p>For valid values, see the <code>StorageClass</code> element of the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT Bucket
     /// replication</a> action in the <i>Amazon S3 API Reference</i>.</p>
     pub storage_class: Option<StorageClass>,
+}
+
+impl fmt::Debug for Destination {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Destination");
+        if let Some(ref val) = self.access_control_translation {
+            d.field("access_control_translation", val);
+        }
+        if let Some(ref val) = self.account {
+            d.field("account", val);
+        }
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.encryption_configuration {
+            d.field("encryption_configuration", val);
+        }
+        if let Some(ref val) = self.metrics {
+            d.field("metrics", val);
+        }
+        if let Some(ref val) = self.replication_time {
+            d.field("replication_time", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type DisplayName = String;
@@ -1957,7 +3173,6 @@ impl FromStr for EncodingType {
 }
 
 /// <p>Contains the type of server-side encryption used.</p>
-#[derive(Debug)]
 pub struct Encryption {
     /// <p>The server-side encryption algorithm used when storing job results in Amazon S3 (for example,
     /// AES256, aws:kms).</p>
@@ -1973,9 +3188,23 @@ pub struct Encryption {
     pub kms_key_id: Option<SSEKMSKeyId>,
 }
 
+impl fmt::Debug for Encryption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Encryption");
+        d.field("encryption_type", &self.encryption_type);
+        if let Some(ref val) = self.kms_context {
+            d.field("kms_context", val);
+        }
+        if let Some(ref val) = self.kms_key_id {
+            d.field("kms_key_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies encryption-related information for an Amazon S3 bucket that is a destination for
 /// replicated objects.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct EncryptionConfiguration {
     /// <p>Specifies the ID (Key ARN or Alias ARN) of the customer managed Amazon Web Services KMS key
     /// stored in Amazon Web Services Key Management Service (KMS) for the destination bucket. Amazon S3 uses
@@ -1985,16 +3214,33 @@ pub struct EncryptionConfiguration {
     pub replica_kms_key_id: Option<ReplicaKmsKeyID>,
 }
 
+impl fmt::Debug for EncryptionConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("EncryptionConfiguration");
+        if let Some(ref val) = self.replica_kms_key_id {
+            d.field("replica_kms_key_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type End = i64;
 
 /// <p>A message that indicates the request is complete and no more messages will be sent. You
 /// should not assume that the request is complete until the client receives an
 /// <code>EndEvent</code>.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct EndEvent {}
 
+impl fmt::Debug for EndEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("EndEvent");
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for all error elements.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Error {
     /// <p>The error code is a string that uniquely identifies an error condition. It is meant to
     /// be read and understood by programs that detect and handle errors by type. </p>
@@ -3873,10 +5119,28 @@ pub struct Error {
     pub version_id: Option<ObjectVersionId>,
 }
 
+impl fmt::Debug for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Error");
+        if let Some(ref val) = self.code {
+            d.field("code", val);
+        }
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        if let Some(ref val) = self.message {
+            d.field("message", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type ErrorCode = String;
 
 /// <p>The error information.</p>
-#[derive(Debug)]
 pub struct ErrorDocument {
     /// <p>The object key name to use when a 4XX class error occurs.</p>
     /// <important>
@@ -3887,23 +5151,45 @@ pub struct ErrorDocument {
     pub key: ObjectKey,
 }
 
+impl fmt::Debug for ErrorDocument {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ErrorDocument");
+        d.field("key", &self.key);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type ErrorMessage = String;
 
 pub type Errors = List<Error>;
 
 /// <p>A container for specifying the configuration for Amazon EventBridge.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct EventBridgeConfiguration {}
+
+impl fmt::Debug for EventBridgeConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("EventBridgeConfiguration");
+        d.finish_non_exhaustive()
+    }
+}
 
 pub type EventList = List<Event>;
 
 /// <p>Optional configuration to replicate existing source bucket objects. For more
 /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html#existing-object-replication">Replicating Existing Objects</a> in the <i>Amazon S3 User Guide</i>.
 /// </p>
-#[derive(Debug)]
 pub struct ExistingObjectReplication {
     /// <p></p>
     pub status: ExistingObjectReplicationStatus,
+}
+
+impl fmt::Debug for ExistingObjectReplication {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ExistingObjectReplication");
+        d.field("status", &self.status);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -4076,7 +5362,7 @@ impl FromStr for FileHeaderInfo {
 
 /// <p>Specifies the Amazon S3 object key name to filter on and whether to filter on the suffix or
 /// prefix of the key name.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct FilterRule {
     /// <p>The object key name prefix or suffix identifying one or more objects to which the
     /// filtering rule applies. The maximum length is 1,024 characters. Overlapping prefixes and
@@ -4085,6 +5371,19 @@ pub struct FilterRule {
     pub name: Option<FilterRuleName>,
     /// <p>The value that the filter searches for in object key names.</p>
     pub value: Option<FilterRuleValue>,
+}
+
+impl fmt::Debug for FilterRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("FilterRule");
+        if let Some(ref val) = self.name {
+            d.field("name", val);
+        }
+        if let Some(ref val) = self.value {
+            d.field("value", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 /// <p>A list of containers for the key-value pair that defines the criteria for the filter
@@ -4131,7 +5430,6 @@ impl FromStr for FilterRuleName {
 
 pub type FilterRuleValue = String;
 
-#[derive(Debug)]
 pub struct GetBucketAccelerateConfigurationInput {
     /// <p>The name of the bucket for which the accelerate configuration is retrieved.</p>
     pub bucket: BucketName,
@@ -4139,13 +5437,33 @@ pub struct GetBucketAccelerateConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketAccelerateConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketAccelerateConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketAccelerateConfigurationOutput {
     /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<BucketAccelerateStatus>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketAccelerateConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketAccelerateConfigurationOutput");
+        if let Some(ref val) = self.status {
+            d.field("status", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketAclInput {
     /// <p>Specifies the S3 bucket whose ACL is being requested.</p>
     pub bucket: BucketName,
@@ -4153,7 +5471,18 @@ pub struct GetBucketAclInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketAclInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketAclInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -4161,7 +5490,19 @@ pub struct GetBucketAclOutput {
     pub owner: Option<Owner>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketAclOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketAclOutput");
+        if let Some(ref val) = self.grants {
+            d.field("grants", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketAnalyticsConfigurationInput {
     /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
     pub bucket: BucketName,
@@ -4171,13 +5512,34 @@ pub struct GetBucketAnalyticsConfigurationInput {
     pub id: AnalyticsId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketAnalyticsConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketAnalyticsConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketAnalyticsConfigurationOutput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: Option<AnalyticsConfiguration>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketAnalyticsConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketAnalyticsConfigurationOutput");
+        if let Some(ref val) = self.analytics_configuration {
+            d.field("analytics_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketCorsInput {
     /// <p>The bucket name for which to get the cors configuration.</p>
     pub bucket: BucketName,
@@ -4185,14 +5547,34 @@ pub struct GetBucketCorsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketCorsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketCorsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketCorsOutput {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add
     /// up to 100 rules to the configuration.</p>
     pub cors_rules: Option<CORSRules>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketCorsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketCorsOutput");
+        if let Some(ref val) = self.cors_rules {
+            d.field("cors_rules", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketEncryptionInput {
     /// <p>The name of the bucket from which the server-side encryption configuration is
     /// retrieved.</p>
@@ -4201,12 +5583,32 @@ pub struct GetBucketEncryptionInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketEncryptionInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketEncryptionInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketEncryptionOutput {
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketEncryptionOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketEncryptionOutput");
+        if let Some(ref val) = self.server_side_encryption_configuration {
+            d.field("server_side_encryption_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -4214,13 +5616,31 @@ pub struct GetBucketIntelligentTieringConfigurationInput {
     pub id: IntelligentTieringId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketIntelligentTieringConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketIntelligentTieringConfigurationInput");
+        d.field("bucket", &self.bucket);
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketIntelligentTieringConfigurationOutput {
     /// <p>Container for S3 Intelligent-Tiering configuration.</p>
     pub intelligent_tiering_configuration: Option<IntelligentTieringConfiguration>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketIntelligentTieringConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketIntelligentTieringConfigurationOutput");
+        if let Some(ref val) = self.intelligent_tiering_configuration {
+            d.field("intelligent_tiering_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketInventoryConfigurationInput {
     /// <p>The name of the bucket containing the inventory configuration to retrieve.</p>
     pub bucket: BucketName,
@@ -4230,13 +5650,34 @@ pub struct GetBucketInventoryConfigurationInput {
     pub id: InventoryId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketInventoryConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketInventoryConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketInventoryConfigurationOutput {
     /// <p>Specifies the inventory configuration.</p>
     pub inventory_configuration: Option<InventoryConfiguration>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketInventoryConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketInventoryConfigurationOutput");
+        if let Some(ref val) = self.inventory_configuration {
+            d.field("inventory_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketLifecycleConfigurationInput {
     /// <p>The name of the bucket for which to get the lifecycle information.</p>
     pub bucket: BucketName,
@@ -4244,13 +5685,33 @@ pub struct GetBucketLifecycleConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketLifecycleConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketLifecycleConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketLifecycleConfigurationOutput {
     /// <p>Container for a lifecycle rule.</p>
     pub rules: Option<LifecycleRules>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketLifecycleConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketLifecycleConfigurationOutput");
+        if let Some(ref val) = self.rules {
+            d.field("rules", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketLocationInput {
     /// <p>The name of the bucket for which to get the location.</p>
     pub bucket: BucketName,
@@ -4258,7 +5719,18 @@ pub struct GetBucketLocationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketLocationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketLocationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketLocationOutput {
     /// <p>Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported
     /// location constraints by Region, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a>.
@@ -4267,7 +5739,16 @@ pub struct GetBucketLocationOutput {
     pub location_constraint: Option<BucketLocationConstraint>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketLocationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketLocationOutput");
+        if let Some(ref val) = self.location_constraint {
+            d.field("location_constraint", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketLoggingInput {
     /// <p>The bucket name for which to get the logging information.</p>
     pub bucket: BucketName,
@@ -4275,12 +5756,32 @@ pub struct GetBucketLoggingInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketLoggingInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketLoggingInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketLoggingOutput {
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketLoggingOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketLoggingOutput");
+        if let Some(ref val) = self.logging_enabled {
+            d.field("logging_enabled", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketMetricsConfigurationInput {
     /// <p>The name of the bucket containing the metrics configuration to retrieve.</p>
     pub bucket: BucketName,
@@ -4290,13 +5791,34 @@ pub struct GetBucketMetricsConfigurationInput {
     pub id: MetricsId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketMetricsConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketMetricsConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketMetricsConfigurationOutput {
     /// <p>Specifies the metrics configuration.</p>
     pub metrics_configuration: Option<MetricsConfiguration>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketMetricsConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketMetricsConfigurationOutput");
+        if let Some(ref val) = self.metrics_configuration {
+            d.field("metrics_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketNotificationConfigurationInput {
     /// <p>The name of the bucket for which to get the notification configuration.</p>
     pub bucket: BucketName,
@@ -4304,9 +5826,20 @@ pub struct GetBucketNotificationConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
+impl fmt::Debug for GetBucketNotificationConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketNotificationConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>A container for specifying the notification configuration of the bucket. If this element
 /// is empty, notifications are turned off for the bucket.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct GetBucketNotificationConfigurationOutput {
     /// <p>Enables delivery of events to Amazon EventBridge.</p>
     pub event_bridge_configuration: Option<EventBridgeConfiguration>,
@@ -4321,7 +5854,25 @@ pub struct GetBucketNotificationConfigurationOutput {
     pub topic_configurations: Option<TopicConfigurationList>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketNotificationConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketNotificationConfigurationOutput");
+        if let Some(ref val) = self.event_bridge_configuration {
+            d.field("event_bridge_configuration", val);
+        }
+        if let Some(ref val) = self.lambda_function_configurations {
+            d.field("lambda_function_configurations", val);
+        }
+        if let Some(ref val) = self.queue_configurations {
+            d.field("queue_configurations", val);
+        }
+        if let Some(ref val) = self.topic_configurations {
+            d.field("topic_configurations", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketOwnershipControlsInput {
     /// <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to retrieve.
     /// </p>
@@ -4330,14 +5881,34 @@ pub struct GetBucketOwnershipControlsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketOwnershipControlsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketOwnershipControlsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketOwnershipControlsOutput {
     /// <p>The <code>OwnershipControls</code> (BucketOwnerEnforced, BucketOwnerPreferred, or ObjectWriter) currently in
     /// effect for this Amazon S3 bucket.</p>
     pub ownership_controls: Option<OwnershipControls>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketOwnershipControlsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketOwnershipControlsOutput");
+        if let Some(ref val) = self.ownership_controls {
+            d.field("ownership_controls", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketPolicyInput {
     /// <p>The bucket name for which to get the bucket policy.</p>
     pub bucket: BucketName,
@@ -4345,13 +5916,33 @@ pub struct GetBucketPolicyInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketPolicyInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketPolicyInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketPolicyOutput {
     /// <p>The bucket policy as a JSON document.</p>
     pub policy: Option<Policy>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketPolicyOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketPolicyOutput");
+        if let Some(ref val) = self.policy {
+            d.field("policy", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketPolicyStatusInput {
     /// <p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>
     pub bucket: BucketName,
@@ -4359,13 +5950,33 @@ pub struct GetBucketPolicyStatusInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketPolicyStatusInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketPolicyStatusInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketPolicyStatusOutput {
     /// <p>The policy status for the specified bucket.</p>
     pub policy_status: Option<PolicyStatus>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketPolicyStatusOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketPolicyStatusOutput");
+        if let Some(ref val) = self.policy_status {
+            d.field("policy_status", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketReplicationInput {
     /// <p>The bucket name for which to get the replication information.</p>
     pub bucket: BucketName,
@@ -4373,12 +5984,32 @@ pub struct GetBucketReplicationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketReplicationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketReplicationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketReplicationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketReplicationOutput");
+        if let Some(ref val) = self.replication_configuration {
+            d.field("replication_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketRequestPaymentInput {
     /// <p>The name of the bucket for which to get the payment request configuration</p>
     pub bucket: BucketName,
@@ -4386,13 +6017,33 @@ pub struct GetBucketRequestPaymentInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketRequestPaymentInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketRequestPaymentInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketRequestPaymentOutput {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Option<Payer>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketRequestPaymentOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketRequestPaymentOutput");
+        if let Some(ref val) = self.payer {
+            d.field("payer", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketTaggingInput {
     /// <p>The name of the bucket for which to get the tagging information.</p>
     pub bucket: BucketName,
@@ -4400,13 +6051,30 @@ pub struct GetBucketTaggingInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketTaggingInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketTaggingInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketTaggingOutput {
     /// <p>Contains the tag set.</p>
     pub tag_set: TagSet,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketTaggingOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketTaggingOutput");
+        d.field("tag_set", &self.tag_set);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketVersioningInput {
     /// <p>The name of the bucket for which to get the versioning information.</p>
     pub bucket: BucketName,
@@ -4414,7 +6082,18 @@ pub struct GetBucketVersioningInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketVersioningInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketVersioningInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketVersioningOutput {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This
     /// element is only returned if the bucket has been configured with MFA delete. If the bucket
@@ -4424,7 +6103,19 @@ pub struct GetBucketVersioningOutput {
     pub status: Option<BucketVersioningStatus>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketVersioningOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketVersioningOutput");
+        if let Some(ref val) = self.mfa_delete {
+            d.field("mfa_delete", val);
+        }
+        if let Some(ref val) = self.status {
+            d.field("status", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetBucketWebsiteInput {
     /// <p>The bucket name for which to get the website configuration.</p>
     pub bucket: BucketName,
@@ -4432,7 +6123,18 @@ pub struct GetBucketWebsiteInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetBucketWebsiteInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketWebsiteInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetBucketWebsiteOutput {
     /// <p>The object key name of the website error document to use for 4XX class errors.</p>
     pub error_document: Option<ErrorDocument>,
@@ -4446,7 +6148,25 @@ pub struct GetBucketWebsiteOutput {
     pub routing_rules: Option<RoutingRules>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetBucketWebsiteOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetBucketWebsiteOutput");
+        if let Some(ref val) = self.error_document {
+            d.field("error_document", val);
+        }
+        if let Some(ref val) = self.index_document {
+            d.field("index_document", val);
+        }
+        if let Some(ref val) = self.redirect_all_requests_to {
+            d.field("redirect_all_requests_to", val);
+        }
+        if let Some(ref val) = self.routing_rules {
+            d.field("routing_rules", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetObjectAclInput {
     /// <p>The bucket name that contains the object for which to get the ACL information. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4460,7 +6180,25 @@ pub struct GetObjectAclInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetObjectAclInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectAclInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetObjectAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -4469,7 +6207,22 @@ pub struct GetObjectAclOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetObjectAclOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectAclOutput");
+        if let Some(ref val) = self.grants {
+            d.field("grants", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetObjectAttributesInput {
     /// <p>The name of the bucket that contains the object.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4505,7 +6258,39 @@ pub struct GetObjectAttributesInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetObjectAttributesInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectAttributesInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        d.field("max_parts", &self.max_parts);
+        d.field("object_attributes", &self.object_attributes);
+        if let Some(ref val) = self.part_number_marker {
+            d.field("part_number_marker", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetObjectAttributesOutput {
     /// <p>The checksum or digest of the object.</p>
     pub checksum: Option<Checksum>,
@@ -4533,8 +6318,38 @@ pub struct GetObjectAttributesOutput {
     pub version_id: Option<ObjectVersionId>,
 }
 
+impl fmt::Debug for GetObjectAttributesOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectAttributesOutput");
+        if let Some(ref val) = self.checksum {
+            d.field("checksum", val);
+        }
+        d.field("delete_marker", &self.delete_marker);
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        if let Some(ref val) = self.object_parts {
+            d.field("object_parts", val);
+        }
+        d.field("object_size", &self.object_size);
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>A collection of parts associated with a multipart upload.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct GetObjectAttributesParts {
     /// <p>Indicates whether the returned list of parts is truncated. A value of
     /// <code>true</code> indicates that the list was truncated. A list can be truncated if the
@@ -4555,7 +6370,25 @@ pub struct GetObjectAttributesParts {
     pub total_parts_count: PartsCount,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetObjectAttributesParts {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectAttributesParts");
+        d.field("is_truncated", &self.is_truncated);
+        d.field("max_parts", &self.max_parts);
+        if let Some(ref val) = self.next_part_number_marker {
+            d.field("next_part_number_marker", val);
+        }
+        if let Some(ref val) = self.part_number_marker {
+            d.field("part_number_marker", val);
+        }
+        if let Some(ref val) = self.parts {
+            d.field("parts", val);
+        }
+        d.field("total_parts_count", &self.total_parts_count);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetObjectInput {
     /// <p>The bucket name containing the object. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4621,7 +6454,70 @@ pub struct GetObjectInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetObjectInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_mode {
+            d.field("checksum_mode", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.if_match {
+            d.field("if_match", val);
+        }
+        if let Some(ref val) = self.if_modified_since {
+            d.field("if_modified_since", val);
+        }
+        if let Some(ref val) = self.if_none_match {
+            d.field("if_none_match", val);
+        }
+        if let Some(ref val) = self.if_unmodified_since {
+            d.field("if_unmodified_since", val);
+        }
+        d.field("key", &self.key);
+        d.field("part_number", &self.part_number);
+        if let Some(ref val) = self.range {
+            d.field("range", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.response_cache_control {
+            d.field("response_cache_control", val);
+        }
+        if let Some(ref val) = self.response_content_disposition {
+            d.field("response_content_disposition", val);
+        }
+        if let Some(ref val) = self.response_content_encoding {
+            d.field("response_content_encoding", val);
+        }
+        if let Some(ref val) = self.response_content_language {
+            d.field("response_content_language", val);
+        }
+        if let Some(ref val) = self.response_content_type {
+            d.field("response_content_type", val);
+        }
+        if let Some(ref val) = self.response_expires {
+            d.field("response_expires", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetObjectLegalHoldInput {
     /// <p>The bucket name containing the object whose legal hold status you want to retrieve. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4635,13 +6531,40 @@ pub struct GetObjectLegalHoldInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetObjectLegalHoldInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectLegalHoldInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetObjectLegalHoldOutput {
     /// <p>The current legal hold status for the specified object.</p>
     pub legal_hold: Option<ObjectLockLegalHold>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetObjectLegalHoldOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectLegalHoldOutput");
+        if let Some(ref val) = self.legal_hold {
+            d.field("legal_hold", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetObjectLockConfigurationInput {
     /// <p>The bucket whose Object Lock configuration you want to retrieve.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4650,13 +6573,34 @@ pub struct GetObjectLockConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetObjectLockConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectLockConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetObjectLockConfigurationOutput {
     /// <p>The specified bucket's Object Lock configuration.</p>
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetObjectLockConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectLockConfigurationOutput");
+        if let Some(ref val) = self.object_lock_configuration {
+            d.field("object_lock_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<AcceptRanges>,
@@ -4765,9 +6709,111 @@ pub struct GetObjectOutput {
     pub website_redirect_location: Option<WebsiteRedirectLocation>,
 }
 
+impl fmt::Debug for GetObjectOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectOutput");
+        if let Some(ref val) = self.accept_ranges {
+            d.field("accept_ranges", val);
+        }
+        if let Some(ref val) = self.body {
+            d.field("body", val);
+        }
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.cache_control {
+            d.field("cache_control", val);
+        }
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.content_disposition {
+            d.field("content_disposition", val);
+        }
+        if let Some(ref val) = self.content_encoding {
+            d.field("content_encoding", val);
+        }
+        if let Some(ref val) = self.content_language {
+            d.field("content_language", val);
+        }
+        d.field("content_length", &self.content_length);
+        if let Some(ref val) = self.content_range {
+            d.field("content_range", val);
+        }
+        if let Some(ref val) = self.content_type {
+            d.field("content_type", val);
+        }
+        d.field("delete_marker", &self.delete_marker);
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.expiration {
+            d.field("expiration", val);
+        }
+        if let Some(ref val) = self.expires {
+            d.field("expires", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        if let Some(ref val) = self.metadata {
+            d.field("metadata", val);
+        }
+        d.field("missing_meta", &self.missing_meta);
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            d.field("object_lock_legal_hold_status", val);
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            d.field("object_lock_mode", val);
+        }
+        if let Some(ref val) = self.object_lock_retain_until_date {
+            d.field("object_lock_retain_until_date", val);
+        }
+        d.field("parts_count", &self.parts_count);
+        if let Some(ref val) = self.replication_status {
+            d.field("replication_status", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.restore {
+            d.field("restore", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        d.field("tag_count", &self.tag_count);
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        if let Some(ref val) = self.website_redirect_location {
+            d.field("website_redirect_location", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type GetObjectResponseStatusCode = i32;
 
-#[derive(Debug)]
 pub struct GetObjectRetentionInput {
     /// <p>The bucket name containing the object whose retention settings you want to retrieve. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4781,13 +6827,40 @@ pub struct GetObjectRetentionInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetObjectRetentionInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectRetentionInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetObjectRetentionOutput {
     /// <p>The container element for an object's retention settings.</p>
     pub retention: Option<ObjectLockRetention>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetObjectRetentionOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectRetentionOutput");
+        if let Some(ref val) = self.retention {
+            d.field("retention", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetObjectTaggingInput {
     /// <p>The bucket name containing the object for which to get the tagging information. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4803,7 +6876,24 @@ pub struct GetObjectTaggingInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetObjectTaggingInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectTaggingInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetObjectTaggingOutput {
     /// <p>Contains the tag set.</p>
     pub tag_set: TagSet,
@@ -4811,7 +6901,17 @@ pub struct GetObjectTaggingOutput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetObjectTaggingOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectTaggingOutput");
+        d.field("tag_set", &self.tag_set);
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetObjectTorrentInput {
     /// <p>The name of the bucket containing the object for which to get the torrent files.</p>
     pub bucket: BucketName,
@@ -4822,14 +6922,41 @@ pub struct GetObjectTorrentInput {
     pub request_payer: Option<RequestPayer>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetObjectTorrentInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectTorrentInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetObjectTorrentOutput {
     /// <p>A Bencoded dictionary as defined by the BitTorrent specification</p>
     pub body: Option<StreamingBlob>,
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for GetObjectTorrentOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetObjectTorrentOutput");
+        if let Some(ref val) = self.body {
+            d.field("body", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct GetPublicAccessBlockInput {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want
     /// to retrieve. </p>
@@ -4838,27 +6965,68 @@ pub struct GetPublicAccessBlockInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for GetPublicAccessBlockInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetPublicAccessBlockInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct GetPublicAccessBlockOutput {
     /// <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3
     /// bucket.</p>
     pub public_access_block_configuration: Option<PublicAccessBlockConfiguration>,
 }
 
+impl fmt::Debug for GetPublicAccessBlockOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GetPublicAccessBlockOutput");
+        if let Some(ref val) = self.public_access_block_configuration {
+            d.field("public_access_block_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for S3 Glacier job parameters.</p>
-#[derive(Debug)]
 pub struct GlacierJobParameters {
     /// <p>Retrieval tier at which the restore will be processed.</p>
     pub tier: Tier,
 }
 
+impl fmt::Debug for GlacierJobParameters {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("GlacierJobParameters");
+        d.field("tier", &self.tier);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for grant information.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Grant {
     /// <p>The person being granted permissions.</p>
     pub grantee: Option<Grantee>,
     /// <p>Specifies the permission given to the grantee.</p>
     pub permission: Option<Permission>,
+}
+
+impl fmt::Debug for Grant {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Grant");
+        if let Some(ref val) = self.grantee {
+            d.field("grantee", val);
+        }
+        if let Some(ref val) = self.permission {
+            d.field("permission", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type GrantFullControl = String;
@@ -4872,7 +7040,6 @@ pub type GrantWrite = String;
 pub type GrantWriteACP = String;
 
 /// <p>Container for the person being granted permissions.</p>
-#[derive(Debug)]
 pub struct Grantee {
     /// <p>Screen name of the grantee.</p>
     pub display_name: Option<DisplayName>,
@@ -4916,9 +7083,28 @@ pub struct Grantee {
     pub uri: Option<URI>,
 }
 
+impl fmt::Debug for Grantee {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Grantee");
+        if let Some(ref val) = self.display_name {
+            d.field("display_name", val);
+        }
+        if let Some(ref val) = self.email_address {
+            d.field("email_address", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        d.field("type_", &self.type_);
+        if let Some(ref val) = self.uri {
+            d.field("uri", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type Grants = List<Grant>;
 
-#[derive(Debug)]
 pub struct HeadBucketInput {
     /// <p>The bucket name.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4929,10 +7115,27 @@ pub struct HeadBucketInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for HeadBucketInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("HeadBucketInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct HeadBucketOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for HeadBucketOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("HeadBucketOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct HeadObjectInput {
     /// <p>The name of the bucket containing the object.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -4984,7 +7187,53 @@ pub struct HeadObjectInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for HeadObjectInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("HeadObjectInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_mode {
+            d.field("checksum_mode", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.if_match {
+            d.field("if_match", val);
+        }
+        if let Some(ref val) = self.if_modified_since {
+            d.field("if_modified_since", val);
+        }
+        if let Some(ref val) = self.if_none_match {
+            d.field("if_none_match", val);
+        }
+        if let Some(ref val) = self.if_unmodified_since {
+            d.field("if_unmodified_since", val);
+        }
+        d.field("key", &self.key);
+        d.field("part_number", &self.part_number);
+        if let Some(ref val) = self.range {
+            d.field("range", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct HeadObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<AcceptRanges>,
@@ -5152,6 +7401,105 @@ pub struct HeadObjectOutput {
     pub website_redirect_location: Option<WebsiteRedirectLocation>,
 }
 
+impl fmt::Debug for HeadObjectOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("HeadObjectOutput");
+        if let Some(ref val) = self.accept_ranges {
+            d.field("accept_ranges", val);
+        }
+        if let Some(ref val) = self.archive_status {
+            d.field("archive_status", val);
+        }
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.cache_control {
+            d.field("cache_control", val);
+        }
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.content_disposition {
+            d.field("content_disposition", val);
+        }
+        if let Some(ref val) = self.content_encoding {
+            d.field("content_encoding", val);
+        }
+        if let Some(ref val) = self.content_language {
+            d.field("content_language", val);
+        }
+        d.field("content_length", &self.content_length);
+        if let Some(ref val) = self.content_type {
+            d.field("content_type", val);
+        }
+        d.field("delete_marker", &self.delete_marker);
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.expiration {
+            d.field("expiration", val);
+        }
+        if let Some(ref val) = self.expires {
+            d.field("expires", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        if let Some(ref val) = self.metadata {
+            d.field("metadata", val);
+        }
+        d.field("missing_meta", &self.missing_meta);
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            d.field("object_lock_legal_hold_status", val);
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            d.field("object_lock_mode", val);
+        }
+        if let Some(ref val) = self.object_lock_retain_until_date {
+            d.field("object_lock_retain_until_date", val);
+        }
+        d.field("parts_count", &self.parts_count);
+        if let Some(ref val) = self.replication_status {
+            d.field("replication_status", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.restore {
+            d.field("restore", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        if let Some(ref val) = self.website_redirect_location {
+            d.field("website_redirect_location", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type HostName = String;
 
 pub type HttpErrorCodeReturnedEquals = String;
@@ -5169,7 +7517,6 @@ pub type IfNoneMatch = String;
 pub type IfUnmodifiedSince = Timestamp;
 
 /// <p>Container for the <code>Suffix</code> element.</p>
-#[derive(Debug)]
 pub struct IndexDocument {
     /// <p>A suffix that is appended to a request that is for a directory on the website endpoint
     /// (for example,if the suffix is index.html and you make a request to samplebucket/images/ the
@@ -5183,10 +7530,18 @@ pub struct IndexDocument {
     pub suffix: Suffix,
 }
 
+impl fmt::Debug for IndexDocument {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("IndexDocument");
+        d.field("suffix", &self.suffix);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type Initiated = Timestamp;
 
 /// <p>Container element that identifies who initiated the multipart upload. </p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Initiator {
     /// <p>Name of the Principal.</p>
     pub display_name: Option<DisplayName>,
@@ -5195,8 +7550,21 @@ pub struct Initiator {
     pub id: Option<ID>,
 }
 
+impl fmt::Debug for Initiator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Initiator");
+        if let Some(ref val) = self.display_name {
+            d.field("display_name", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Describes the serialization format of the object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
     pub csv: Option<CSVInput>,
@@ -5207,6 +7575,25 @@ pub struct InputSerialization {
     pub json: Option<JSONInput>,
     /// <p>Specifies Parquet as object's input serialization format.</p>
     pub parquet: Option<ParquetInput>,
+}
+
+impl fmt::Debug for InputSerialization {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("InputSerialization");
+        if let Some(ref val) = self.csv {
+            d.field("csv", val);
+        }
+        if let Some(ref val) = self.compression_type {
+            d.field("compression_type", val);
+        }
+        if let Some(ref val) = self.json {
+            d.field("json", val);
+        }
+        if let Some(ref val) = self.parquet {
+            d.field("parquet", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -5249,7 +7636,7 @@ impl FromStr for IntelligentTieringAccessTier {
 
 /// <p>A container for specifying S3 Intelligent-Tiering filters. The filters determine the
 /// subset of objects to which the rule applies.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct IntelligentTieringAndOperator {
     /// <p>An object key name prefix that identifies the subset of objects to which the
     /// configuration applies.</p>
@@ -5259,10 +7646,22 @@ pub struct IntelligentTieringAndOperator {
     pub tags: Option<TagSet>,
 }
 
+impl fmt::Debug for IntelligentTieringAndOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("IntelligentTieringAndOperator");
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tags {
+            d.field("tags", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies the S3 Intelligent-Tiering configuration for an Amazon S3 bucket.</p>
 /// <p>For information about the S3 Intelligent-Tiering storage class, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for
 /// automatically optimizing frequently and infrequently accessed objects</a>.</p>
-#[derive(Debug)]
 pub struct IntelligentTieringConfiguration {
     /// <p>Specifies a bucket filter. The configuration only includes objects that meet the
     /// filter's criteria.</p>
@@ -5275,13 +7674,26 @@ pub struct IntelligentTieringConfiguration {
     pub tierings: TieringList,
 }
 
+impl fmt::Debug for IntelligentTieringConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("IntelligentTieringConfiguration");
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        d.field("id", &self.id);
+        d.field("status", &self.status);
+        d.field("tierings", &self.tierings);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type IntelligentTieringConfigurationList = List<IntelligentTieringConfiguration>;
 
 pub type IntelligentTieringDays = i32;
 
 /// <p>The <code>Filter</code> is used to identify objects that the S3 Intelligent-Tiering
 /// configuration applies to.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct IntelligentTieringFilter {
     /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter.
     /// The operator must have at least two predicates, and an object must match all of the
@@ -5296,6 +7708,22 @@ pub struct IntelligentTieringFilter {
     /// </important>
     pub prefix: Option<Prefix>,
     pub tag: Option<Tag>,
+}
+
+impl fmt::Debug for IntelligentTieringFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("IntelligentTieringFilter");
+        if let Some(ref val) = self.and {
+            d.field("and", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tag {
+            d.field("tag", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type IntelligentTieringId = String;
@@ -5339,16 +7767,28 @@ impl FromStr for IntelligentTieringStatus {
 }
 
 /// <p>Object is archived and inaccessible until restored.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct InvalidObjectState {
     pub access_tier: Option<IntelligentTieringAccessTier>,
     pub storage_class: Option<StorageClass>,
 }
 
+impl fmt::Debug for InvalidObjectState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("InvalidObjectState");
+        if let Some(ref val) = self.access_tier {
+            d.field("access_tier", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies the inventory configuration for an Amazon S3 bucket. For more information, see
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETInventoryConfig.html">GET Bucket inventory</a> in the <i>Amazon S3 API Reference</i>.
 /// </p>
-#[derive(Debug)]
 pub struct InventoryConfiguration {
     /// <p>Contains information about where to publish the inventory results.</p>
     pub destination: InventoryDestination,
@@ -5373,19 +7813,44 @@ pub struct InventoryConfiguration {
     pub schedule: InventorySchedule,
 }
 
+impl fmt::Debug for InventoryConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("InventoryConfiguration");
+        d.field("destination", &self.destination);
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        d.field("id", &self.id);
+        d.field("included_object_versions", &self.included_object_versions);
+        d.field("is_enabled", &self.is_enabled);
+        if let Some(ref val) = self.optional_fields {
+            d.field("optional_fields", val);
+        }
+        d.field("schedule", &self.schedule);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type InventoryConfigurationList = List<InventoryConfiguration>;
 
 /// <p>Specifies the inventory configuration for an Amazon S3 bucket.</p>
-#[derive(Debug)]
 pub struct InventoryDestination {
     /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional)
     /// where inventory results are published.</p>
     pub s3_bucket_destination: InventoryS3BucketDestination,
 }
 
+impl fmt::Debug for InventoryDestination {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("InventoryDestination");
+        d.field("s3_bucket_destination", &self.s3_bucket_destination);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Contains the type of server-side encryption used to encrypt the inventory
 /// results.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct InventoryEncryption {
     /// <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
     pub ssekms: Option<SSEKMS>,
@@ -5393,12 +7858,32 @@ pub struct InventoryEncryption {
     pub sses3: Option<SSES3>,
 }
 
+impl fmt::Debug for InventoryEncryption {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("InventoryEncryption");
+        if let Some(ref val) = self.ssekms {
+            d.field("ssekms", val);
+        }
+        if let Some(ref val) = self.sses3 {
+            d.field("sses3", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies an inventory filter. The inventory only includes objects that meet the
 /// filter's criteria.</p>
-#[derive(Debug)]
 pub struct InventoryFilter {
     /// <p>The prefix that an object must have to be included in the inventory results.</p>
     pub prefix: Prefix,
+}
+
+impl fmt::Debug for InventoryFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("InventoryFilter");
+        d.field("prefix", &self.prefix);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -5583,7 +8068,6 @@ pub type InventoryOptionalFields = List<InventoryOptionalField>;
 
 /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional)
 /// where inventory results are published.</p>
-#[derive(Debug)]
 pub struct InventoryS3BucketDestination {
     /// <p>The account ID that owns the destination S3 bucket. If no account ID is provided, the
     /// owner is not validated before exporting data. </p>
@@ -5604,11 +8088,36 @@ pub struct InventoryS3BucketDestination {
     pub prefix: Option<Prefix>,
 }
 
+impl fmt::Debug for InventoryS3BucketDestination {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("InventoryS3BucketDestination");
+        if let Some(ref val) = self.account_id {
+            d.field("account_id", val);
+        }
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.encryption {
+            d.field("encryption", val);
+        }
+        d.field("format", &self.format);
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies the schedule for generating inventory results.</p>
-#[derive(Debug)]
 pub struct InventorySchedule {
     /// <p>Specifies how frequently inventory results are produced.</p>
     pub frequency: InventoryFrequency,
+}
+
+impl fmt::Debug for InventorySchedule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("InventorySchedule");
+        d.field("frequency", &self.frequency);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type IsEnabled = bool;
@@ -5620,18 +8129,38 @@ pub type IsPublic = bool;
 pub type IsTruncated = bool;
 
 /// <p>Specifies JSON as object's input serialization format.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct JSONInput {
     /// <p>The type of JSON. Valid values: Document, Lines.</p>
     pub type_: Option<JSONType>,
 }
 
+impl fmt::Debug for JSONInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("JSONInput");
+        if let Some(ref val) = self.type_ {
+            d.field("type_", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies JSON as request's output serialization format.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct JSONOutput {
     /// <p>The value used to separate individual records in the output. If no value is specified,
     /// Amazon S3 uses a newline character ('\n').</p>
     pub record_delimiter: Option<RecordDelimiter>,
+}
+
+impl fmt::Debug for JSONOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("JSONOutput");
+        if let Some(ref val) = self.record_delimiter {
+            d.field("record_delimiter", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -5683,7 +8212,6 @@ pub type KeyPrefixEquals = String;
 pub type LambdaFunctionArn = String;
 
 /// <p>A container for specifying the configuration for Lambda notifications.</p>
-#[derive(Debug)]
 pub struct LambdaFunctionConfiguration {
     /// <p>The Amazon S3 bucket event for which to invoke the Lambda function. For more information,
     /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported
@@ -5696,12 +8224,27 @@ pub struct LambdaFunctionConfiguration {
     pub lambda_function_arn: LambdaFunctionArn,
 }
 
+impl fmt::Debug for LambdaFunctionConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("LambdaFunctionConfiguration");
+        d.field("events", &self.events);
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        d.field("lambda_function_arn", &self.lambda_function_arn);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type LambdaFunctionConfigurationList = List<LambdaFunctionConfiguration>;
 
 pub type LastModified = Timestamp;
 
 /// <p>Container for the expiration for the lifecycle of the object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct LifecycleExpiration {
     /// <p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601
     /// Format.</p>
@@ -5715,8 +8258,19 @@ pub struct LifecycleExpiration {
     pub expired_object_delete_marker: ExpiredObjectDeleteMarker,
 }
 
+impl fmt::Debug for LifecycleExpiration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("LifecycleExpiration");
+        if let Some(ref val) = self.date {
+            d.field("date", val);
+        }
+        d.field("days", &self.days);
+        d.field("expired_object_delete_marker", &self.expired_object_delete_marker);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
-#[derive(Debug)]
 pub struct LifecycleRule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     /// <p>Specifies the expiration for the lifecycle of the object in the form of date, days and,
@@ -5751,10 +8305,42 @@ pub struct LifecycleRule {
     pub transitions: Option<TransitionList>,
 }
 
+impl fmt::Debug for LifecycleRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("LifecycleRule");
+        if let Some(ref val) = self.abort_incomplete_multipart_upload {
+            d.field("abort_incomplete_multipart_upload", val);
+        }
+        if let Some(ref val) = self.expiration {
+            d.field("expiration", val);
+        }
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        if let Some(ref val) = self.noncurrent_version_expiration {
+            d.field("noncurrent_version_expiration", val);
+        }
+        if let Some(ref val) = self.noncurrent_version_transitions {
+            d.field("noncurrent_version_transitions", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        d.field("status", &self.status);
+        if let Some(ref val) = self.transitions {
+            d.field("transitions", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>This is used in a Lifecycle Rule Filter to apply a logical AND to two or more
 /// predicates. The Lifecycle Rule will apply to any object matching all of the predicates
 /// configured inside the And operator.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct LifecycleRuleAndOperator {
     /// <p>Minimum object size to which the rule applies.</p>
     pub object_size_greater_than: ObjectSizeGreaterThanBytes,
@@ -5765,6 +8351,21 @@ pub struct LifecycleRuleAndOperator {
     /// <p>All of these tags must exist in the object's tag set in order for the rule to
     /// apply.</p>
     pub tags: Option<TagSet>,
+}
+
+impl fmt::Debug for LifecycleRuleAndOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("LifecycleRuleAndOperator");
+        d.field("object_size_greater_than", &self.object_size_greater_than);
+        d.field("object_size_less_than", &self.object_size_less_than);
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tags {
+            d.field("tags", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 /// <p>The <code>Filter</code> is used to identify objects that a Lifecycle Rule applies to. A
@@ -5791,7 +8392,6 @@ pub enum LifecycleRuleFilter {
 
 pub type LifecycleRules = List<LifecycleRule>;
 
-#[derive(Debug)]
 pub struct ListBucketAnalyticsConfigurationsInput {
     /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
     pub bucket: BucketName,
@@ -5802,7 +8402,21 @@ pub struct ListBucketAnalyticsConfigurationsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListBucketAnalyticsConfigurationsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketAnalyticsConfigurationsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     /// <p>The list of analytics configurations for a bucket.</p>
     pub analytics_configuration_list: Option<AnalyticsConfigurationList>,
@@ -5821,7 +8435,23 @@ pub struct ListBucketAnalyticsConfigurationsOutput {
     pub next_continuation_token: Option<NextToken>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ListBucketAnalyticsConfigurationsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketAnalyticsConfigurationsOutput");
+        if let Some(ref val) = self.analytics_configuration_list {
+            d.field("analytics_configuration_list", val);
+        }
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        if let Some(ref val) = self.next_continuation_token {
+            d.field("next_continuation_token", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct ListBucketIntelligentTieringConfigurationsInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -5830,7 +8460,18 @@ pub struct ListBucketIntelligentTieringConfigurationsInput {
     pub continuation_token: Option<Token>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListBucketIntelligentTieringConfigurationsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketIntelligentTieringConfigurationsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListBucketIntelligentTieringConfigurationsOutput {
     /// <p>The <code>ContinuationToken</code> that represents a placeholder from where this request
     /// should begin.</p>
@@ -5847,7 +8488,23 @@ pub struct ListBucketIntelligentTieringConfigurationsOutput {
     pub next_continuation_token: Option<NextToken>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ListBucketIntelligentTieringConfigurationsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketIntelligentTieringConfigurationsOutput");
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.intelligent_tiering_configuration_list {
+            d.field("intelligent_tiering_configuration_list", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        if let Some(ref val) = self.next_continuation_token {
+            d.field("next_continuation_token", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct ListBucketInventoryConfigurationsInput {
     /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
     pub bucket: BucketName,
@@ -5859,7 +8516,21 @@ pub struct ListBucketInventoryConfigurationsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListBucketInventoryConfigurationsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketInventoryConfigurationsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListBucketInventoryConfigurationsOutput {
     /// <p>If sent in the request, the marker that is used as a starting point for this inventory
     /// configuration list response.</p>
@@ -5876,7 +8547,23 @@ pub struct ListBucketInventoryConfigurationsOutput {
     pub next_continuation_token: Option<NextToken>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ListBucketInventoryConfigurationsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketInventoryConfigurationsOutput");
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.inventory_configuration_list {
+            d.field("inventory_configuration_list", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        if let Some(ref val) = self.next_continuation_token {
+            d.field("next_continuation_token", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct ListBucketMetricsConfigurationsInput {
     /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
     pub bucket: BucketName,
@@ -5889,7 +8576,21 @@ pub struct ListBucketMetricsConfigurationsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListBucketMetricsConfigurationsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketMetricsConfigurationsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListBucketMetricsConfigurationsOutput {
     /// <p>The marker that is used as a starting point for this metrics configuration list
     /// response. This value is present if it was sent in the request.</p>
@@ -5907,10 +8608,34 @@ pub struct ListBucketMetricsConfigurationsOutput {
     pub next_continuation_token: Option<NextToken>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListBucketMetricsConfigurationsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketMetricsConfigurationsOutput");
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        if let Some(ref val) = self.metrics_configuration_list {
+            d.field("metrics_configuration_list", val);
+        }
+        if let Some(ref val) = self.next_continuation_token {
+            d.field("next_continuation_token", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListBucketsInput {}
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListBucketsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketsInput");
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListBucketsOutput {
     /// <p>The list of buckets owned by the requester.</p>
     pub buckets: Option<Buckets>,
@@ -5918,7 +8643,19 @@ pub struct ListBucketsOutput {
     pub owner: Option<Owner>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ListBucketsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListBucketsOutput");
+        if let Some(ref val) = self.buckets {
+            d.field("buckets", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct ListMultipartUploadsInput {
     /// <p>The name of the bucket to which the multipart upload was initiated. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -5961,7 +8698,34 @@ pub struct ListMultipartUploadsInput {
     pub upload_id_marker: Option<UploadIdMarker>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListMultipartUploadsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListMultipartUploadsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.delimiter {
+            d.field("delimiter", val);
+        }
+        if let Some(ref val) = self.encoding_type {
+            d.field("encoding_type", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.key_marker {
+            d.field("key_marker", val);
+        }
+        d.field("max_uploads", &self.max_uploads);
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.upload_id_marker {
+            d.field("upload_id_marker", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListMultipartUploadsOutput {
     /// <p>The name of the bucket to which the multipart upload was initiated. Does not return the access point ARN or access point alias if used.</p>
     pub bucket: Option<BucketName>,
@@ -6006,7 +8770,45 @@ pub struct ListMultipartUploadsOutput {
     pub uploads: Option<MultipartUploadList>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ListMultipartUploadsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListMultipartUploadsOutput");
+        if let Some(ref val) = self.bucket {
+            d.field("bucket", val);
+        }
+        if let Some(ref val) = self.common_prefixes {
+            d.field("common_prefixes", val);
+        }
+        if let Some(ref val) = self.delimiter {
+            d.field("delimiter", val);
+        }
+        if let Some(ref val) = self.encoding_type {
+            d.field("encoding_type", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        if let Some(ref val) = self.key_marker {
+            d.field("key_marker", val);
+        }
+        d.field("max_uploads", &self.max_uploads);
+        if let Some(ref val) = self.next_key_marker {
+            d.field("next_key_marker", val);
+        }
+        if let Some(ref val) = self.next_upload_id_marker {
+            d.field("next_upload_id_marker", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.upload_id_marker {
+            d.field("upload_id_marker", val);
+        }
+        if let Some(ref val) = self.uploads {
+            d.field("uploads", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct ListObjectVersionsInput {
     /// <p>The bucket name that contains the objects. </p>
     pub bucket: BucketName,
@@ -6037,7 +8839,34 @@ pub struct ListObjectVersionsInput {
     pub version_id_marker: Option<VersionIdMarker>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListObjectVersionsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListObjectVersionsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.delimiter {
+            d.field("delimiter", val);
+        }
+        if let Some(ref val) = self.encoding_type {
+            d.field("encoding_type", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.key_marker {
+            d.field("key_marker", val);
+        }
+        d.field("max_keys", &self.max_keys);
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.version_id_marker {
+            d.field("version_id_marker", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListObjectVersionsOutput {
     /// <p>All of the keys rolled up into a common prefix count as a single return when calculating
     /// the number of returns.</p>
@@ -6087,7 +8916,48 @@ pub struct ListObjectVersionsOutput {
     pub versions: Option<ObjectVersionList>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ListObjectVersionsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListObjectVersionsOutput");
+        if let Some(ref val) = self.common_prefixes {
+            d.field("common_prefixes", val);
+        }
+        if let Some(ref val) = self.delete_markers {
+            d.field("delete_markers", val);
+        }
+        if let Some(ref val) = self.delimiter {
+            d.field("delimiter", val);
+        }
+        if let Some(ref val) = self.encoding_type {
+            d.field("encoding_type", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        if let Some(ref val) = self.key_marker {
+            d.field("key_marker", val);
+        }
+        d.field("max_keys", &self.max_keys);
+        if let Some(ref val) = self.name {
+            d.field("name", val);
+        }
+        if let Some(ref val) = self.next_key_marker {
+            d.field("next_key_marker", val);
+        }
+        if let Some(ref val) = self.next_version_id_marker {
+            d.field("next_version_id_marker", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.version_id_marker {
+            d.field("version_id_marker", val);
+        }
+        if let Some(ref val) = self.versions {
+            d.field("versions", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct ListObjectsInput {
     /// <p>The name of the bucket containing the objects.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -6113,7 +8983,34 @@ pub struct ListObjectsInput {
     pub request_payer: Option<RequestPayer>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListObjectsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListObjectsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.delimiter {
+            d.field("delimiter", val);
+        }
+        if let Some(ref val) = self.encoding_type {
+            d.field("encoding_type", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.marker {
+            d.field("marker", val);
+        }
+        d.field("max_keys", &self.max_keys);
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListObjectsOutput {
     /// <p>All of the keys (up to 1,000) rolled up in a common prefix count as a single return when calculating
     /// the number of returns. </p>
@@ -6161,7 +9058,39 @@ pub struct ListObjectsOutput {
     pub prefix: Option<Prefix>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ListObjectsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListObjectsOutput");
+        if let Some(ref val) = self.common_prefixes {
+            d.field("common_prefixes", val);
+        }
+        if let Some(ref val) = self.contents {
+            d.field("contents", val);
+        }
+        if let Some(ref val) = self.delimiter {
+            d.field("delimiter", val);
+        }
+        if let Some(ref val) = self.encoding_type {
+            d.field("encoding_type", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        if let Some(ref val) = self.marker {
+            d.field("marker", val);
+        }
+        d.field("max_keys", &self.max_keys);
+        if let Some(ref val) = self.name {
+            d.field("name", val);
+        }
+        if let Some(ref val) = self.next_marker {
+            d.field("next_marker", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct ListObjectsV2Input {
     /// <p>Bucket name to list. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -6195,7 +9124,38 @@ pub struct ListObjectsV2Input {
     pub start_after: Option<StartAfter>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListObjectsV2Input {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListObjectsV2Input");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.delimiter {
+            d.field("delimiter", val);
+        }
+        if let Some(ref val) = self.encoding_type {
+            d.field("encoding_type", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("fetch_owner", &self.fetch_owner);
+        d.field("max_keys", &self.max_keys);
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.start_after {
+            d.field("start_after", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListObjectsV2Output {
     /// <p>All of the keys (up to 1,000) rolled up into a common prefix count as a single return when calculating
     /// the number of returns.</p>
@@ -6263,7 +9223,43 @@ pub struct ListObjectsV2Output {
     pub start_after: Option<StartAfter>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for ListObjectsV2Output {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListObjectsV2Output");
+        if let Some(ref val) = self.common_prefixes {
+            d.field("common_prefixes", val);
+        }
+        if let Some(ref val) = self.contents {
+            d.field("contents", val);
+        }
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.delimiter {
+            d.field("delimiter", val);
+        }
+        if let Some(ref val) = self.encoding_type {
+            d.field("encoding_type", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        d.field("key_count", &self.key_count);
+        d.field("max_keys", &self.max_keys);
+        if let Some(ref val) = self.name {
+            d.field("name", val);
+        }
+        if let Some(ref val) = self.next_continuation_token {
+            d.field("next_continuation_token", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.start_after {
+            d.field("start_after", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct ListPartsInput {
     /// <p>The name of the bucket to which the parts are being uploaded. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -6299,7 +9295,36 @@ pub struct ListPartsInput {
     pub upload_id: MultipartUploadId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for ListPartsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListPartsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        d.field("max_parts", &self.max_parts);
+        if let Some(ref val) = self.part_number_marker {
+            d.field("part_number_marker", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        d.field("upload_id", &self.upload_id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct ListPartsOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete
     /// multipart uploads and the prefix in the lifecycle rule matches the object name in the
@@ -6354,6 +9379,54 @@ pub struct ListPartsOutput {
     pub upload_id: Option<MultipartUploadId>,
 }
 
+impl fmt::Debug for ListPartsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ListPartsOutput");
+        if let Some(ref val) = self.abort_date {
+            d.field("abort_date", val);
+        }
+        if let Some(ref val) = self.abort_rule_id {
+            d.field("abort_rule_id", val);
+        }
+        if let Some(ref val) = self.bucket {
+            d.field("bucket", val);
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.initiator {
+            d.field("initiator", val);
+        }
+        d.field("is_truncated", &self.is_truncated);
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        d.field("max_parts", &self.max_parts);
+        if let Some(ref val) = self.next_part_number_marker {
+            d.field("next_part_number_marker", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        if let Some(ref val) = self.part_number_marker {
+            d.field("part_number_marker", val);
+        }
+        if let Some(ref val) = self.parts {
+            d.field("parts", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.upload_id {
+            d.field("upload_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type Location = String;
 
 pub type LocationPrefix = String;
@@ -6361,7 +9434,6 @@ pub type LocationPrefix = String;
 /// <p>Describes where logs are stored and the prefix that Amazon S3 assigns to all log object keys
 /// for a bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlogging.html">PUT Bucket logging</a> in the
 /// <i>Amazon S3 API Reference</i>.</p>
-#[derive(Debug)]
 pub struct LoggingEnabled {
     /// <p>Specifies the bucket where you want Amazon S3 to store server access logs. You can have your
     /// logs delivered to any bucket that you own, including the same bucket that is being logged.
@@ -6378,6 +9450,18 @@ pub struct LoggingEnabled {
     /// single bucket, you can use a prefix to distinguish which log files came from which
     /// bucket.</p>
     pub target_prefix: TargetPrefix,
+}
+
+impl fmt::Debug for LoggingEnabled {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("LoggingEnabled");
+        d.field("target_bucket", &self.target_bucket);
+        if let Some(ref val) = self.target_grants {
+            d.field("target_grants", val);
+        }
+        d.field("target_prefix", &self.target_prefix);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type MFA = String;
@@ -6511,12 +9595,25 @@ impl FromStr for MetadataDirective {
 }
 
 /// <p>A metadata key-value pair to store with an object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct MetadataEntry {
     /// <p>Name of the Object.</p>
     pub name: Option<MetadataKey>,
     /// <p>Value of the Object.</p>
     pub value: Option<MetadataValue>,
+}
+
+impl fmt::Debug for MetadataEntry {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("MetadataEntry");
+        if let Some(ref val) = self.name {
+            d.field("name", val);
+        }
+        if let Some(ref val) = self.value {
+            d.field("value", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type MetadataKey = String;
@@ -6525,7 +9622,6 @@ pub type MetadataValue = String;
 
 /// <p> A container specifying replication metrics-related settings enabling replication
 /// metrics and events.</p>
-#[derive(Debug)]
 pub struct Metrics {
     /// <p> A container specifying the time threshold for emitting the
     /// <code>s3:Replication:OperationMissedThreshold</code> event. </p>
@@ -6534,10 +9630,21 @@ pub struct Metrics {
     pub status: MetricsStatus,
 }
 
+impl fmt::Debug for Metrics {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Metrics");
+        if let Some(ref val) = self.event_threshold {
+            d.field("event_threshold", val);
+        }
+        d.field("status", &self.status);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter.
 /// The operator must have at least two predicates, and an object must match all of the
 /// predicates in order for the filter to apply.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct MetricsAndOperator {
     /// <p>The access point ARN used when evaluating an <code>AND</code> predicate.</p>
     pub access_point_arn: Option<AccessPointArn>,
@@ -6547,12 +9654,27 @@ pub struct MetricsAndOperator {
     pub tags: Option<TagSet>,
 }
 
+impl fmt::Debug for MetricsAndOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("MetricsAndOperator");
+        if let Some(ref val) = self.access_point_arn {
+            d.field("access_point_arn", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tags {
+            d.field("tags", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies a metrics configuration for the CloudWatch request metrics (specified by the
 /// metrics configuration ID) from an Amazon S3 bucket. If you're updating an existing metrics
 /// configuration, note that this is a full replacement of the existing metrics configuration.
 /// If you don't include the elements you want to keep, they are erased. For more information,
 /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTMetricConfiguration.html">PutBucketMetricsConfiguration</a>.</p>
-#[derive(Debug)]
 pub struct MetricsConfiguration {
     /// <p>Specifies a metrics configuration filter. The metrics configuration will only include
     /// objects that meet the filter's criteria. A filter must be a prefix, an object tag, an access point ARN, or a conjunction
@@ -6560,6 +9682,17 @@ pub struct MetricsConfiguration {
     pub filter: Option<MetricsFilter>,
     /// <p>The ID used to identify the metrics configuration.</p>
     pub id: MetricsId,
+}
+
+impl fmt::Debug for MetricsConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("MetricsConfiguration");
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type MetricsConfigurationList = List<MetricsConfiguration>;
@@ -6627,7 +9760,7 @@ pub type Minutes = i32;
 pub type MissingMeta = i32;
 
 /// <p>Container for the <code>MultipartUpload</code> for the Amazon S3 object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct MultipartUpload {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
@@ -6643,6 +9776,34 @@ pub struct MultipartUpload {
     pub storage_class: Option<StorageClass>,
     /// <p>Upload ID that identifies the multipart upload.</p>
     pub upload_id: Option<MultipartUploadId>,
+}
+
+impl fmt::Debug for MultipartUpload {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("MultipartUpload");
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.initiated {
+            d.field("initiated", val);
+        }
+        if let Some(ref val) = self.initiator {
+            d.field("initiator", val);
+        }
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.upload_id {
+            d.field("upload_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type MultipartUploadId = String;
@@ -6662,22 +9823,43 @@ pub type NextUploadIdMarker = String;
 pub type NextVersionIdMarker = String;
 
 /// <p>The specified bucket does not exist.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NoSuchBucket {}
 
+impl fmt::Debug for NoSuchBucket {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("NoSuchBucket");
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>The specified key does not exist.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NoSuchKey {}
 
+impl fmt::Debug for NoSuchKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("NoSuchKey");
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>The specified multipart upload does not exist.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NoSuchUpload {}
+
+impl fmt::Debug for NoSuchUpload {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("NoSuchUpload");
+        d.finish_non_exhaustive()
+    }
+}
 
 /// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently
 /// deletes the noncurrent object versions. You set this lifecycle configuration action on a
 /// bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent
 /// object versions at a specific period in the object's lifetime.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NoncurrentVersionExpiration {
     /// <p>Specifies how many noncurrent versions Amazon S3 will retain. If there are this many more recent
     /// noncurrent versions, Amazon S3 will take the associated action. For more information about noncurrent
@@ -6690,6 +9872,15 @@ pub struct NoncurrentVersionExpiration {
     pub noncurrent_days: Days,
 }
 
+impl fmt::Debug for NoncurrentVersionExpiration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("NoncurrentVersionExpiration");
+        d.field("newer_noncurrent_versions", &self.newer_noncurrent_versions);
+        d.field("noncurrent_days", &self.noncurrent_days);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for the transition rule that describes when noncurrent objects transition to
 /// the <code>STANDARD_IA</code>, <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>,
 /// <code>GLACIER_IR</code>, <code>GLACIER</code>, or <code>DEEP_ARCHIVE</code> storage class. If your bucket is
@@ -6698,7 +9889,7 @@ pub struct NoncurrentVersionExpiration {
 /// <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>, <code>GLACIER_IR</code>, <code>GLACIER</code>, or
 /// <code>DEEP_ARCHIVE</code> storage class at a specific period in the object's
 /// lifetime.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NoncurrentVersionTransition {
     /// <p>Specifies how many noncurrent versions Amazon S3 will retain. If there are this many more recent
     /// noncurrent versions, Amazon S3 will take the associated action. For more information about noncurrent
@@ -6714,15 +9905,34 @@ pub struct NoncurrentVersionTransition {
     pub storage_class: Option<TransitionStorageClass>,
 }
 
+impl fmt::Debug for NoncurrentVersionTransition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("NoncurrentVersionTransition");
+        d.field("newer_noncurrent_versions", &self.newer_noncurrent_versions);
+        d.field("noncurrent_days", &self.noncurrent_days);
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type NoncurrentVersionTransitionList = List<NoncurrentVersionTransition>;
 
 /// <p>The specified content does not exist.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NotFound {}
+
+impl fmt::Debug for NotFound {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("NotFound");
+        d.finish_non_exhaustive()
+    }
+}
 
 /// <p>A container for specifying the notification configuration of the bucket. If this element
 /// is empty, notifications are turned off for the bucket.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NotificationConfiguration {
     /// <p>Enables delivery of events to Amazon EventBridge.</p>
     pub event_bridge_configuration: Option<EventBridgeConfiguration>,
@@ -6737,12 +9947,41 @@ pub struct NotificationConfiguration {
     pub topic_configurations: Option<TopicConfigurationList>,
 }
 
+impl fmt::Debug for NotificationConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("NotificationConfiguration");
+        if let Some(ref val) = self.event_bridge_configuration {
+            d.field("event_bridge_configuration", val);
+        }
+        if let Some(ref val) = self.lambda_function_configurations {
+            d.field("lambda_function_configurations", val);
+        }
+        if let Some(ref val) = self.queue_configurations {
+            d.field("queue_configurations", val);
+        }
+        if let Some(ref val) = self.topic_configurations {
+            d.field("topic_configurations", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies object key name filtering rules. For information about key name filtering, see
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring
 /// Event Notifications</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NotificationConfigurationFilter {
     pub key: Option<S3KeyFilter>,
+}
+
+impl fmt::Debug for NotificationConfigurationFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("NotificationConfigurationFilter");
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 /// <p>An optional unique identifier for configurations in a notification configuration. If you
@@ -6750,7 +9989,7 @@ pub struct NotificationConfigurationFilter {
 pub type NotificationId = String;
 
 /// <p>An object consists of data and its descriptive metadata.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Object {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithmList>,
@@ -6790,9 +10029,42 @@ pub struct Object {
     pub storage_class: Option<ObjectStorageClass>,
 }
 
+impl fmt::Debug for Object {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Object");
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        d.field("size", &self.size);
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>This action is not allowed against this storage tier.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ObjectAlreadyInActiveTierError {}
+
+impl fmt::Debug for ObjectAlreadyInActiveTierError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectAlreadyInActiveTierError");
+        d.finish_non_exhaustive()
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ObjectAttributes(Cow<'static, str>);
@@ -6889,7 +10161,6 @@ impl FromStr for ObjectCannedACL {
 }
 
 /// <p>Object Identifier is unique value to identify objects.</p>
-#[derive(Debug)]
 pub struct ObjectIdentifier {
     /// <p>Key name of the object.</p>
     /// <important>
@@ -6902,6 +10173,17 @@ pub struct ObjectIdentifier {
     pub version_id: Option<ObjectVersionId>,
 }
 
+impl fmt::Debug for ObjectIdentifier {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectIdentifier");
+        d.field("key", &self.key);
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type ObjectIdentifierList = List<ObjectIdentifier>;
 
 pub type ObjectKey = String;
@@ -6909,7 +10191,7 @@ pub type ObjectKey = String;
 pub type ObjectList = List<Object>;
 
 /// <p>The container element for Object Lock configuration parameters.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ObjectLockConfiguration {
     /// <p>Indicates whether this bucket has an Object Lock configuration enabled.
     /// Enable <code>ObjectLockEnabled</code> when you apply <code>ObjectLockConfiguration</code>
@@ -6920,6 +10202,19 @@ pub struct ObjectLockConfiguration {
     /// The period can be either <code>Days</code> or <code>Years</code> but you must select one.
     /// You cannot specify <code>Days</code> and <code>Years</code> at the same time.</p>
     pub rule: Option<ObjectLockRule>,
+}
+
+impl fmt::Debug for ObjectLockConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectLockConfiguration");
+        if let Some(ref val) = self.object_lock_enabled {
+            d.field("object_lock_enabled", val);
+        }
+        if let Some(ref val) = self.rule {
+            d.field("rule", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -6961,10 +10256,20 @@ impl FromStr for ObjectLockEnabled {
 pub type ObjectLockEnabledForBucket = bool;
 
 /// <p>A legal hold configuration for an object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ObjectLockLegalHold {
     /// <p>Indicates whether the specified object has a legal hold in place.</p>
     pub status: Option<ObjectLockLegalHoldStatus>,
+}
+
+impl fmt::Debug for ObjectLockLegalHold {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectLockLegalHold");
+        if let Some(ref val) = self.status {
+            d.field("status", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -7046,12 +10351,25 @@ impl FromStr for ObjectLockMode {
 pub type ObjectLockRetainUntilDate = Timestamp;
 
 /// <p>A Retention configuration for an object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ObjectLockRetention {
     /// <p>Indicates the Retention mode for the specified object.</p>
     pub mode: Option<ObjectLockRetentionMode>,
     /// <p>The date on which this Object Lock Retention will expire.</p>
     pub retain_until_date: Option<Date>,
+}
+
+impl fmt::Debug for ObjectLockRetention {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectLockRetention");
+        if let Some(ref val) = self.mode {
+            d.field("mode", val);
+        }
+        if let Some(ref val) = self.retain_until_date {
+            d.field("retain_until_date", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -7093,7 +10411,7 @@ impl FromStr for ObjectLockRetentionMode {
 }
 
 /// <p>The container element for an Object Lock rule.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ObjectLockRule {
     /// <p>The default Object Lock retention mode and period that you want to apply to new objects
     /// placed in the specified bucket. Bucket settings require both a mode and a period.
@@ -7102,12 +10420,29 @@ pub struct ObjectLockRule {
     pub default_retention: Option<DefaultRetention>,
 }
 
+impl fmt::Debug for ObjectLockRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectLockRule");
+        if let Some(ref val) = self.default_retention {
+            d.field("default_retention", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type ObjectLockToken = String;
 
 /// <p>The source object of the COPY action is not in the active tier and is only stored in
 /// Amazon S3 Glacier.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ObjectNotInActiveTierError {}
+
+impl fmt::Debug for ObjectNotInActiveTierError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectNotInActiveTierError");
+        d.finish_non_exhaustive()
+    }
+}
 
 /// <p>The container element for object ownership for a bucket's ownership controls.</p>
 /// <p>BucketOwnerPreferred - Objects uploaded to the bucket change ownership to the bucket
@@ -7161,7 +10496,7 @@ impl FromStr for ObjectOwnership {
 }
 
 /// <p>A container for elements related to an individual part.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ObjectPart {
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
     /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
@@ -7188,6 +10523,27 @@ pub struct ObjectPart {
     pub part_number: PartNumber,
     /// <p>The size of the uploaded part in bytes.</p>
     pub size: Size,
+}
+
+impl fmt::Debug for ObjectPart {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectPart");
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        d.field("part_number", &self.part_number);
+        d.field("size", &self.size);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type ObjectSize = i64;
@@ -7249,7 +10605,7 @@ impl FromStr for ObjectStorageClass {
 }
 
 /// <p>The version of an object.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ObjectVersion {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithmList>,
@@ -7270,6 +10626,36 @@ pub struct ObjectVersion {
     pub storage_class: Option<ObjectVersionStorageClass>,
     /// <p>Version ID of an object.</p>
     pub version_id: Option<ObjectVersionId>,
+}
+
+impl fmt::Debug for ObjectVersion {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ObjectVersion");
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        d.field("is_latest", &self.is_latest);
+        if let Some(ref val) = self.key {
+            d.field("key", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        if let Some(ref val) = self.owner {
+            d.field("owner", val);
+        }
+        d.field("size", &self.size);
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type ObjectVersionId = String;
@@ -7313,14 +10699,24 @@ impl FromStr for ObjectVersionStorageClass {
 }
 
 /// <p>Describes the location where the restore job's output is stored.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct OutputLocation {
     /// <p>Describes an S3 location that will receive the results of the restore request.</p>
     pub s3: Option<S3Location>,
 }
 
+impl fmt::Debug for OutputLocation {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("OutputLocation");
+        if let Some(ref val) = self.s3 {
+            d.field("s3", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Describes how results of the Select job are serialized.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct OutputSerialization {
     /// <p>Describes the serialization of CSV-encoded Select results.</p>
     pub csv: Option<CSVOutput>,
@@ -7328,13 +10724,39 @@ pub struct OutputSerialization {
     pub json: Option<JSONOutput>,
 }
 
+impl fmt::Debug for OutputSerialization {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("OutputSerialization");
+        if let Some(ref val) = self.csv {
+            d.field("csv", val);
+        }
+        if let Some(ref val) = self.json {
+            d.field("json", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for the owner's display name and ID.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Owner {
     /// <p>Container for the display name of the owner.</p>
     pub display_name: Option<DisplayName>,
     /// <p>Container for the ID of the owner.</p>
     pub id: Option<ID>,
+}
+
+impl fmt::Debug for Owner {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Owner");
+        if let Some(ref val) = self.display_name {
+            d.field("display_name", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -7374,26 +10796,47 @@ impl FromStr for OwnerOverride {
 }
 
 /// <p>The container element for a bucket's ownership controls.</p>
-#[derive(Debug)]
 pub struct OwnershipControls {
     /// <p>The container element for an ownership control rule.</p>
     pub rules: OwnershipControlsRules,
 }
 
+impl fmt::Debug for OwnershipControls {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("OwnershipControls");
+        d.field("rules", &self.rules);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>The container element for an ownership control rule.</p>
-#[derive(Debug)]
 pub struct OwnershipControlsRule {
     pub object_ownership: ObjectOwnership,
+}
+
+impl fmt::Debug for OwnershipControlsRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("OwnershipControlsRule");
+        d.field("object_ownership", &self.object_ownership);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type OwnershipControlsRules = List<OwnershipControlsRule>;
 
 /// <p>Container for Parquet.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ParquetInput {}
 
+impl fmt::Debug for ParquetInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ParquetInput");
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for elements related to a part.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Part {
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
     /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
@@ -7424,6 +10867,33 @@ pub struct Part {
     pub part_number: PartNumber,
     /// <p>Size in bytes of the uploaded part data.</p>
     pub size: Size,
+}
+
+impl fmt::Debug for Part {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Part");
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        d.field("part_number", &self.part_number);
+        d.field("size", &self.size);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type PartNumber = i32;
@@ -7521,11 +10991,19 @@ impl FromStr for Permission {
 pub type Policy = String;
 
 /// <p>The container element for a bucket's policy status.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct PolicyStatus {
     /// <p>The policy status for this bucket. <code>TRUE</code> indicates that this bucket is
     /// public. <code>FALSE</code> indicates that the bucket is not public.</p>
     pub is_public: IsPublic,
+}
+
+impl fmt::Debug for PolicyStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PolicyStatus");
+        d.field("is_public", &self.is_public);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type Prefix = String;
@@ -7533,7 +11011,7 @@ pub type Prefix = String;
 pub type Priority = i32;
 
 /// <p>This data type contains information about progress of an operation.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Progress {
     /// <p>The current number of uncompressed object bytes processed.</p>
     pub bytes_processed: BytesProcessed,
@@ -7543,11 +11021,31 @@ pub struct Progress {
     pub bytes_scanned: BytesScanned,
 }
 
+impl fmt::Debug for Progress {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Progress");
+        d.field("bytes_processed", &self.bytes_processed);
+        d.field("bytes_returned", &self.bytes_returned);
+        d.field("bytes_scanned", &self.bytes_scanned);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>This data type contains information about the progress event of an operation.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ProgressEvent {
     /// <p>The Progress event details.</p>
     pub details: Option<Progress>,
+}
+
+impl fmt::Debug for ProgressEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ProgressEvent");
+        if let Some(ref val) = self.details {
+            d.field("details", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -7591,7 +11089,7 @@ impl FromStr for Protocol {
 /// <p>The PublicAccessBlock configuration that you want to apply to this Amazon S3 bucket. You can
 /// enable the configuration options in any combination. For more information about when Amazon S3
 /// considers a bucket or object public, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">The Meaning of "Public"</a> in the <i>Amazon S3 User Guide</i>. </p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct PublicAccessBlockConfiguration {
     /// <p>Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket
     /// and objects in this bucket. Setting this element to <code>TRUE</code> causes the following
@@ -7631,7 +11129,17 @@ pub struct PublicAccessBlockConfiguration {
     pub restrict_public_buckets: Setting,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for PublicAccessBlockConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PublicAccessBlockConfiguration");
+        d.field("block_public_acls", &self.block_public_acls);
+        d.field("block_public_policy", &self.block_public_policy);
+        d.field("ignore_public_acls", &self.ignore_public_acls);
+        d.field("restrict_public_buckets", &self.restrict_public_buckets);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketAccelerateConfigurationInput {
     /// <p>Container for setting the transfer acceleration state.</p>
     pub accelerate_configuration: AccelerateConfiguration,
@@ -7649,10 +11157,31 @@ pub struct PutBucketAccelerateConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketAccelerateConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketAccelerateConfigurationInput");
+        d.field("accelerate_configuration", &self.accelerate_configuration);
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketAccelerateConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketAccelerateConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketAccelerateConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketAclInput {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<BucketCannedACL>,
@@ -7691,10 +11220,54 @@ pub struct PutBucketAclInput {
     pub grant_write_acp: Option<GrantWriteACP>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketAclInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketAclInput");
+        if let Some(ref val) = self.acl {
+            d.field("acl", val);
+        }
+        if let Some(ref val) = self.access_control_policy {
+            d.field("access_control_policy", val);
+        }
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.grant_full_control {
+            d.field("grant_full_control", val);
+        }
+        if let Some(ref val) = self.grant_read {
+            d.field("grant_read", val);
+        }
+        if let Some(ref val) = self.grant_read_acp {
+            d.field("grant_read_acp", val);
+        }
+        if let Some(ref val) = self.grant_write {
+            d.field("grant_write", val);
+        }
+        if let Some(ref val) = self.grant_write_acp {
+            d.field("grant_write_acp", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketAclOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketAclOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketAclOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketAnalyticsConfigurationInput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: AnalyticsConfiguration,
@@ -7706,10 +11279,29 @@ pub struct PutBucketAnalyticsConfigurationInput {
     pub id: AnalyticsId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketAnalyticsConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketAnalyticsConfigurationInput");
+        d.field("analytics_configuration", &self.analytics_configuration);
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketAnalyticsConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketAnalyticsConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketAnalyticsConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketCorsInput {
     /// <p>Specifies the bucket impacted by the <code>cors</code>configuration.</p>
     pub bucket: BucketName,
@@ -7736,10 +11328,34 @@ pub struct PutBucketCorsInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketCorsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketCorsInput");
+        d.field("bucket", &self.bucket);
+        d.field("cors_configuration", &self.cors_configuration);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketCorsOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketCorsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketCorsOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketEncryptionInput {
     /// <p>Specifies default encryption for a bucket using server-side encryption with Amazon S3-managed
     /// keys (SSE-S3) or customer managed keys (SSE-KMS). For information about
@@ -7762,10 +11378,34 @@ pub struct PutBucketEncryptionInput {
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketEncryptionInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketEncryptionInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("server_side_encryption_configuration", &self.server_side_encryption_configuration);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketEncryptionOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketEncryptionOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketEncryptionOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -7775,10 +11415,26 @@ pub struct PutBucketIntelligentTieringConfigurationInput {
     pub intelligent_tiering_configuration: IntelligentTieringConfiguration,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketIntelligentTieringConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketIntelligentTieringConfigurationInput");
+        d.field("bucket", &self.bucket);
+        d.field("id", &self.id);
+        d.field("intelligent_tiering_configuration", &self.intelligent_tiering_configuration);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketIntelligentTieringConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketIntelligentTieringConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketIntelligentTieringConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketInventoryConfigurationInput {
     /// <p>The name of the bucket where the inventory configuration will be stored.</p>
     pub bucket: BucketName,
@@ -7790,10 +11446,29 @@ pub struct PutBucketInventoryConfigurationInput {
     pub inventory_configuration: InventoryConfiguration,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketInventoryConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketInventoryConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.field("inventory_configuration", &self.inventory_configuration);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketInventoryConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketInventoryConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketInventoryConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketLifecycleConfigurationInput {
     /// <p>The name of the bucket for which to set the configuration.</p>
     pub bucket: BucketName,
@@ -7811,10 +11486,33 @@ pub struct PutBucketLifecycleConfigurationInput {
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketLifecycleConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketLifecycleConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.lifecycle_configuration {
+            d.field("lifecycle_configuration", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketLifecycleConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketLifecycleConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketLifecycleConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketLoggingInput {
     /// <p>The name of the bucket for which to set the logging parameters.</p>
     pub bucket: BucketName,
@@ -7835,10 +11533,34 @@ pub struct PutBucketLoggingInput {
     pub expected_bucket_owner: Option<AccountId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketLoggingInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketLoggingInput");
+        d.field("bucket", &self.bucket);
+        d.field("bucket_logging_status", &self.bucket_logging_status);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketLoggingOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketLoggingOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketLoggingOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketMetricsConfigurationInput {
     /// <p>The name of the bucket for which the metrics configuration is set.</p>
     pub bucket: BucketName,
@@ -7850,10 +11572,29 @@ pub struct PutBucketMetricsConfigurationInput {
     pub metrics_configuration: MetricsConfiguration,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketMetricsConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketMetricsConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("id", &self.id);
+        d.field("metrics_configuration", &self.metrics_configuration);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketMetricsConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketMetricsConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketMetricsConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketNotificationConfigurationInput {
     /// <p>The name of the bucket.</p>
     pub bucket: BucketName,
@@ -7864,10 +11605,29 @@ pub struct PutBucketNotificationConfigurationInput {
     pub skip_destination_validation: SkipValidation,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketNotificationConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketNotificationConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("notification_configuration", &self.notification_configuration);
+        d.field("skip_destination_validation", &self.skip_destination_validation);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketNotificationConfigurationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketNotificationConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketNotificationConfigurationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketOwnershipControlsInput {
     /// <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to set.</p>
     pub bucket: BucketName,
@@ -7881,10 +11641,31 @@ pub struct PutBucketOwnershipControlsInput {
     pub ownership_controls: OwnershipControls,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketOwnershipControlsInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketOwnershipControlsInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("ownership_controls", &self.ownership_controls);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketOwnershipControlsOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketOwnershipControlsOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketOwnershipControlsOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketPolicyInput {
     /// <p>The name of the bucket.</p>
     pub bucket: BucketName,
@@ -7908,10 +11689,35 @@ pub struct PutBucketPolicyInput {
     pub policy: Policy,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketPolicyInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketPolicyInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        d.field("confirm_remove_self_bucket_access", &self.confirm_remove_self_bucket_access);
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("policy", &self.policy);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketPolicyOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketPolicyOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketPolicyOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketReplicationInput {
     /// <p>The name of the bucket</p>
     pub bucket: BucketName,
@@ -7935,10 +11741,37 @@ pub struct PutBucketReplicationInput {
     pub token: Option<ObjectLockToken>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketReplicationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketReplicationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("replication_configuration", &self.replication_configuration);
+        if let Some(ref val) = self.token {
+            d.field("token", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketReplicationOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketReplicationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketReplicationOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketRequestPaymentInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -7962,10 +11795,34 @@ pub struct PutBucketRequestPaymentInput {
     pub request_payment_configuration: RequestPaymentConfiguration,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketRequestPaymentInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketRequestPaymentInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("request_payment_configuration", &self.request_payment_configuration);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketRequestPaymentOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketRequestPaymentOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketRequestPaymentOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketTaggingInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -7988,10 +11845,34 @@ pub struct PutBucketTaggingInput {
     pub tagging: Tagging,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketTaggingInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketTaggingInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("tagging", &self.tagging);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketTaggingOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketTaggingOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketTaggingOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketVersioningInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -8018,10 +11899,37 @@ pub struct PutBucketVersioningInput {
     pub versioning_configuration: VersioningConfiguration,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketVersioningInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketVersioningInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.mfa {
+            d.field("mfa", val);
+        }
+        d.field("versioning_configuration", &self.versioning_configuration);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketVersioningOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketVersioningOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketVersioningOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutBucketWebsiteInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -8044,10 +11952,34 @@ pub struct PutBucketWebsiteInput {
     pub website_configuration: WebsiteConfiguration,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutBucketWebsiteInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketWebsiteInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("website_configuration", &self.website_configuration);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutBucketWebsiteOutput {}
 
-#[derive(Debug)]
+impl fmt::Debug for PutBucketWebsiteOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutBucketWebsiteOutput");
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutObjectAclInput {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
     pub acl: Option<ObjectCannedACL>,
@@ -8101,12 +12033,66 @@ pub struct PutObjectAclInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutObjectAclInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectAclInput");
+        if let Some(ref val) = self.acl {
+            d.field("acl", val);
+        }
+        if let Some(ref val) = self.access_control_policy {
+            d.field("access_control_policy", val);
+        }
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.grant_full_control {
+            d.field("grant_full_control", val);
+        }
+        if let Some(ref val) = self.grant_read {
+            d.field("grant_read", val);
+        }
+        if let Some(ref val) = self.grant_read_acp {
+            d.field("grant_read_acp", val);
+        }
+        if let Some(ref val) = self.grant_write {
+            d.field("grant_write", val);
+        }
+        if let Some(ref val) = self.grant_write_acp {
+            d.field("grant_write_acp", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutObjectAclOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for PutObjectAclOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectAclOutput");
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutObjectInput {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned
     /// ACL</a>.</p>
@@ -8268,7 +12254,116 @@ pub struct PutObjectInput {
     pub website_redirect_location: Option<WebsiteRedirectLocation>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for PutObjectInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectInput");
+        if let Some(ref val) = self.acl {
+            d.field("acl", val);
+        }
+        if let Some(ref val) = self.body {
+            d.field("body", val);
+        }
+        d.field("bucket", &self.bucket);
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.cache_control {
+            d.field("cache_control", val);
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.content_disposition {
+            d.field("content_disposition", val);
+        }
+        if let Some(ref val) = self.content_encoding {
+            d.field("content_encoding", val);
+        }
+        if let Some(ref val) = self.content_language {
+            d.field("content_language", val);
+        }
+        d.field("content_length", &self.content_length);
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.content_type {
+            d.field("content_type", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.expires {
+            d.field("expires", val);
+        }
+        if let Some(ref val) = self.grant_full_control {
+            d.field("grant_full_control", val);
+        }
+        if let Some(ref val) = self.grant_read {
+            d.field("grant_read", val);
+        }
+        if let Some(ref val) = self.grant_read_acp {
+            d.field("grant_read_acp", val);
+        }
+        if let Some(ref val) = self.grant_write_acp {
+            d.field("grant_write_acp", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.metadata {
+            d.field("metadata", val);
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            d.field("object_lock_legal_hold_status", val);
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            d.field("object_lock_mode", val);
+        }
+        if let Some(ref val) = self.object_lock_retain_until_date {
+            d.field("object_lock_retain_until_date", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_encryption_context {
+            d.field("ssekms_encryption_context", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.tagging {
+            d.field("tagging", val);
+        }
+        if let Some(ref val) = self.website_redirect_location {
+            d.field("website_redirect_location", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutObjectLegalHoldInput {
     /// <p>The bucket name containing the object that you want to place a legal hold on. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -8296,12 +12391,48 @@ pub struct PutObjectLegalHoldInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutObjectLegalHoldInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectLegalHoldInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.legal_hold {
+            d.field("legal_hold", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutObjectLegalHoldOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for PutObjectLegalHoldOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectLegalHoldOutput");
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutObjectLockConfigurationInput {
     /// <p>The bucket whose Object Lock configuration you want to create or replace.</p>
     pub bucket: BucketName,
@@ -8325,12 +12456,48 @@ pub struct PutObjectLockConfigurationInput {
     pub token: Option<ObjectLockToken>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutObjectLockConfigurationInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectLockConfigurationInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.object_lock_configuration {
+            d.field("object_lock_configuration", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.token {
+            d.field("token", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutObjectLockConfigurationOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutObjectLockConfigurationOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectLockConfigurationOutput");
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutObjectOutput {
     /// <p>Indicates whether the uploaded object uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
@@ -8386,7 +12553,53 @@ pub struct PutObjectOutput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for PutObjectOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectOutput");
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.expiration {
+            d.field("expiration", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_encryption_context {
+            d.field("ssekms_encryption_context", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutObjectRetentionInput {
     /// <p>The bucket name that contains the object you want to apply this Object Retention
     /// configuration to. </p>
@@ -8418,12 +12631,49 @@ pub struct PutObjectRetentionInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutObjectRetentionInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectRetentionInput");
+        d.field("bucket", &self.bucket);
+        d.field("bypass_governance_retention", &self.bypass_governance_retention);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.retention {
+            d.field("retention", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutObjectRetentionOutput {
     pub request_charged: Option<RequestCharged>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for PutObjectRetentionOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectRetentionOutput");
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutObjectTaggingInput {
     /// <p>The bucket name containing the object. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -8452,13 +12702,47 @@ pub struct PutObjectTaggingInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutObjectTaggingInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectTaggingInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        d.field("tagging", &self.tagging);
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was added to.</p>
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for PutObjectTaggingOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutObjectTaggingOutput");
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct PutPublicAccessBlockInput {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want
     /// to set.</p>
@@ -8482,14 +12766,38 @@ pub struct PutPublicAccessBlockInput {
     pub public_access_block_configuration: PublicAccessBlockConfiguration,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for PutPublicAccessBlockInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutPublicAccessBlockInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("public_access_block_configuration", &self.public_access_block_configuration);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct PutPublicAccessBlockOutput {}
+
+impl fmt::Debug for PutPublicAccessBlockOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("PutPublicAccessBlockOutput");
+        d.finish_non_exhaustive()
+    }
+}
 
 pub type QueueArn = String;
 
 /// <p>Specifies the configuration for publishing messages to an Amazon Simple Queue Service
 /// (Amazon SQS) queue when Amazon S3 detects specified events.</p>
-#[derive(Debug)]
 pub struct QueueConfiguration {
     /// <p>A collection of bucket events for which to send notifications</p>
     pub events: EventList,
@@ -8498,6 +12806,21 @@ pub struct QueueConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the Amazon SQS queue to which Amazon S3 publishes a message
     /// when it detects events of the specified type.</p>
     pub queue_arn: QueueArn,
+}
+
+impl fmt::Debug for QueueConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("QueueConfiguration");
+        d.field("events", &self.events);
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        d.field("queue_arn", &self.queue_arn);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type QueueConfigurationList = List<QueueConfiguration>;
@@ -8549,15 +12872,25 @@ impl FromStr for QuoteFields {
 pub type RecordDelimiter = String;
 
 /// <p>The container for the records event.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct RecordsEvent {
     /// <p>The byte array of partial, one or more result records.</p>
     pub payload: Option<Body>,
 }
 
+impl fmt::Debug for RecordsEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RecordsEvent");
+        if let Some(ref val) = self.payload {
+            d.field("payload", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies how requests are redirected. In the event of an error, you can specify a
 /// different error code to return.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Redirect {
     /// <p>The host name to use in the redirect request.</p>
     pub host_name: Option<HostName>,
@@ -8590,15 +12923,47 @@ pub struct Redirect {
     pub replace_key_with: Option<ReplaceKeyWith>,
 }
 
+impl fmt::Debug for Redirect {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Redirect");
+        if let Some(ref val) = self.host_name {
+            d.field("host_name", val);
+        }
+        if let Some(ref val) = self.http_redirect_code {
+            d.field("http_redirect_code", val);
+        }
+        if let Some(ref val) = self.protocol {
+            d.field("protocol", val);
+        }
+        if let Some(ref val) = self.replace_key_prefix_with {
+            d.field("replace_key_prefix_with", val);
+        }
+        if let Some(ref val) = self.replace_key_with {
+            d.field("replace_key_with", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies the redirect behavior of all requests to a website endpoint of an Amazon S3
 /// bucket.</p>
-#[derive(Debug)]
 pub struct RedirectAllRequestsTo {
     /// <p>Name of the host where requests are redirected.</p>
     pub host_name: HostName,
     /// <p>Protocol to use when redirecting requests. The default is the protocol that is used in
     /// the original request.</p>
     pub protocol: Option<Protocol>,
+}
+
+impl fmt::Debug for RedirectAllRequestsTo {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RedirectAllRequestsTo");
+        d.field("host_name", &self.host_name);
+        if let Some(ref val) = self.protocol {
+            d.field("protocol", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type ReplaceKeyPrefixWith = String;
@@ -8616,10 +12981,17 @@ pub type ReplicaKmsKeyID = String;
 /// replication configuration is the earlier version, V1. In the earlier version, this
 /// element is not allowed.</p>
 /// </note>
-#[derive(Debug)]
 pub struct ReplicaModifications {
     /// <p>Specifies whether Amazon S3 replicates modifications on replicas.</p>
     pub status: ReplicaModificationsStatus,
+}
+
+impl fmt::Debug for ReplicaModifications {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ReplicaModifications");
+        d.field("status", &self.status);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -8662,7 +13034,6 @@ impl FromStr for ReplicaModificationsStatus {
 
 /// <p>A container for replication rules. You can add up to 1,000 rules. The maximum size of a
 /// replication configuration is 2 MB.</p>
-#[derive(Debug)]
 pub struct ReplicationConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the Identity and Access Management (IAM) role that
     /// Amazon S3 assumes when replicating objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-how-setup.html">How to Set Up
@@ -8673,8 +13044,16 @@ pub struct ReplicationConfiguration {
     pub rules: ReplicationRules,
 }
 
+impl fmt::Debug for ReplicationConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ReplicationConfiguration");
+        d.field("role", &self.role);
+        d.field("rules", &self.rules);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies which Amazon S3 objects to replicate and where to store the replicas.</p>
-#[derive(Debug)]
 pub struct ReplicationRule {
     pub delete_marker_replication: Option<DeleteMarkerReplication>,
     /// <p>A container for information about the replication destination and its configurations
@@ -8712,6 +13091,34 @@ pub struct ReplicationRule {
     pub status: ReplicationRuleStatus,
 }
 
+impl fmt::Debug for ReplicationRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ReplicationRule");
+        if let Some(ref val) = self.delete_marker_replication {
+            d.field("delete_marker_replication", val);
+        }
+        d.field("destination", &self.destination);
+        if let Some(ref val) = self.existing_object_replication {
+            d.field("existing_object_replication", val);
+        }
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        d.field("priority", &self.priority);
+        if let Some(ref val) = self.source_selection_criteria {
+            d.field("source_selection_criteria", val);
+        }
+        d.field("status", &self.status);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>A container for specifying rule filters. The filters determine the subset of objects to
 /// which the rule applies. This element is required only if you specify more than one filter. </p>
 /// <p>For example:</p>
@@ -8725,13 +13132,26 @@ pub struct ReplicationRule {
 /// in an <code>And</code> tag.</p>
 /// </li>
 /// </ul>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ReplicationRuleAndOperator {
     /// <p>An object key name prefix that identifies the subset of objects to which the rule
     /// applies.</p>
     pub prefix: Option<Prefix>,
     /// <p>An array of tags containing key and value pairs.</p>
     pub tags: Option<TagSet>,
+}
+
+impl fmt::Debug for ReplicationRuleAndOperator {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ReplicationRuleAndOperator");
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tags {
+            d.field("tags", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 /// <p>A filter that identifies the subset of objects to which the replication rule applies. A
@@ -8852,13 +13272,21 @@ impl FromStr for ReplicationStatus {
 /// <p> A container specifying S3 Replication Time Control (S3 RTC) related information, including whether S3 RTC is
 /// enabled and the time when all objects and operations on objects must be replicated. Must be
 /// specified together with a <code>Metrics</code> block. </p>
-#[derive(Debug)]
 pub struct ReplicationTime {
     /// <p> Specifies whether the replication time is enabled. </p>
     pub status: ReplicationTimeStatus,
     /// <p> A container specifying the time by which replication should be complete for all objects
     /// and operations on objects. </p>
     pub time: ReplicationTimeValue,
+}
+
+impl fmt::Debug for ReplicationTime {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ReplicationTime");
+        d.field("status", &self.status);
+        d.field("time", &self.time);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -8901,11 +13329,19 @@ impl FromStr for ReplicationTimeStatus {
 
 /// <p> A container specifying the time value for S3 Replication Time Control (S3 RTC) and replication metrics
 /// <code>EventThreshold</code>. </p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ReplicationTimeValue {
     /// <p> Contains an integer specifying time in minutes. </p>
     /// <p> Valid value: 15</p>
     pub minutes: Minutes,
+}
+
+impl fmt::Debug for ReplicationTimeValue {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ReplicationTimeValue");
+        d.field("minutes", &self.minutes);
+        d.finish_non_exhaustive()
+    }
 }
 
 /// <p>If present, indicates that the requester was successfully charged for the
@@ -8987,19 +13423,34 @@ impl FromStr for RequestPayer {
 }
 
 /// <p>Container for Payer.</p>
-#[derive(Debug)]
 pub struct RequestPaymentConfiguration {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Payer,
 }
 
+impl fmt::Debug for RequestPaymentConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RequestPaymentConfiguration");
+        d.field("payer", &self.payer);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for specifying if periodic <code>QueryProgress</code> messages should be
 /// sent.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct RequestProgress {
     /// <p>Specifies whether periodic QueryProgress frames should be sent. Valid values: TRUE,
     /// FALSE. Default value: FALSE.</p>
     pub enabled: EnableRequestProgress,
+}
+
+impl fmt::Debug for RequestProgress {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RequestProgress");
+        d.field("enabled", &self.enabled);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type RequestRoute = String;
@@ -9020,7 +13471,6 @@ pub type ResponseExpires = Timestamp;
 
 pub type Restore = String;
 
-#[derive(Debug)]
 pub struct RestoreObjectInput {
     /// <p>The bucket name containing the object to restore. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -9045,7 +13495,31 @@ pub struct RestoreObjectInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for RestoreObjectInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RestoreObjectInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.restore_request {
+            d.field("restore_request", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct RestoreObjectOutput {
     pub request_charged: Option<RequestCharged>,
     /// <p>Indicates the path in the provided S3 output location where Select results will be
@@ -9053,10 +13527,23 @@ pub struct RestoreObjectOutput {
     pub restore_output_path: Option<RestoreOutputPath>,
 }
 
+impl fmt::Debug for RestoreObjectOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RestoreObjectOutput");
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.restore_output_path {
+            d.field("restore_output_path", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type RestoreOutputPath = String;
 
 /// <p>Container for restore job parameters.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct RestoreRequest {
     /// <p>Lifetime of the active copy in days. Do not use with restores that specify
     /// <code>OutputLocation</code>.</p>
@@ -9076,6 +13563,32 @@ pub struct RestoreRequest {
     pub tier: Option<Tier>,
     /// <p>Type of restore request.</p>
     pub type_: Option<RestoreRequestType>,
+}
+
+impl fmt::Debug for RestoreRequest {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RestoreRequest");
+        d.field("days", &self.days);
+        if let Some(ref val) = self.description {
+            d.field("description", val);
+        }
+        if let Some(ref val) = self.glacier_job_parameters {
+            d.field("glacier_job_parameters", val);
+        }
+        if let Some(ref val) = self.output_location {
+            d.field("output_location", val);
+        }
+        if let Some(ref val) = self.select_parameters {
+            d.field("select_parameters", val);
+        }
+        if let Some(ref val) = self.tier {
+            d.field("tier", val);
+        }
+        if let Some(ref val) = self.type_ {
+            d.field("type_", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9119,7 +13632,6 @@ pub type Role = String;
 /// <p>Specifies the redirect behavior and when a redirect is applied. For more information
 /// about routing rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html#advanced-conditional-redirects">Configuring advanced conditional redirects</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug)]
 pub struct RoutingRule {
     /// <p>A container for describing a condition that must be met for the specified redirect to
     /// apply. For example, 1. If request is for pages in the <code>/docs</code> folder, redirect
@@ -9132,16 +13644,36 @@ pub struct RoutingRule {
     pub redirect: Redirect,
 }
 
+impl fmt::Debug for RoutingRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RoutingRule");
+        if let Some(ref val) = self.condition {
+            d.field("condition", val);
+        }
+        d.field("redirect", &self.redirect);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type RoutingRules = List<RoutingRule>;
 
 /// <p>A container for object key name prefix and suffix filtering rules.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct S3KeyFilter {
     pub filter_rules: Option<FilterRuleList>,
 }
 
+impl fmt::Debug for S3KeyFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("S3KeyFilter");
+        if let Some(ref val) = self.filter_rules {
+            d.field("filter_rules", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Describes an Amazon S3 location that will receive the results of the restore request.</p>
-#[derive(Debug)]
 pub struct S3Location {
     /// <p>A list of grants that control access to the staged results.</p>
     pub access_control_list: Option<Grants>,
@@ -9160,6 +13692,33 @@ pub struct S3Location {
     pub user_metadata: Option<UserMetadata>,
 }
 
+impl fmt::Debug for S3Location {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("S3Location");
+        if let Some(ref val) = self.access_control_list {
+            d.field("access_control_list", val);
+        }
+        d.field("bucket_name", &self.bucket_name);
+        if let Some(ref val) = self.canned_acl {
+            d.field("canned_acl", val);
+        }
+        if let Some(ref val) = self.encryption {
+            d.field("encryption", val);
+        }
+        d.field("prefix", &self.prefix);
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        if let Some(ref val) = self.tagging {
+            d.field("tagging", val);
+        }
+        if let Some(ref val) = self.user_metadata {
+            d.field("user_metadata", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type SSECustomerAlgorithm = String;
 
 pub type SSECustomerKey = String;
@@ -9167,11 +13726,18 @@ pub type SSECustomerKey = String;
 pub type SSECustomerKeyMD5 = String;
 
 /// <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
-#[derive(Debug)]
 pub struct SSEKMS {
     /// <p>Specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric customer managed key
     /// to use for encrypting inventory reports.</p>
     pub key_id: SSEKMSKeyId,
+}
+
+impl fmt::Debug for SSEKMS {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("SSEKMS");
+        d.field("key_id", &self.key_id);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type SSEKMSEncryptionContext = String;
@@ -9179,14 +13745,21 @@ pub type SSEKMSEncryptionContext = String;
 pub type SSEKMSKeyId = String;
 
 /// <p>Specifies the use of SSE-S3 to encrypt delivered inventory reports.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct SSES3 {}
+
+impl fmt::Debug for SSES3 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("SSES3");
+        d.finish_non_exhaustive()
+    }
+}
 
 /// <p>Specifies the byte range of the object to get the records from. A record is processed
 /// when its first byte is contained by the range. This parameter is optional, but when
 /// specified, it must not be empty. See RFC 2616, Section 14.35.1 about how to specify the
 /// start and end of the range.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ScanRange {
     /// <p>Specifies the end of the byte range. This parameter is optional. Valid values:
     /// non-negative integers. The default value is one less than the size of the object being
@@ -9203,8 +13776,16 @@ pub struct ScanRange {
     pub start: Start,
 }
 
+impl fmt::Debug for ScanRange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ScanRange");
+        d.field("end", &self.end);
+        d.field("start", &self.start);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Describes the parameters for Select job types.</p>
-#[derive(Debug)]
 pub struct SelectParameters {
     /// <p>The expression that is used to query the object.</p>
     pub expression: Expression,
@@ -9214,6 +13795,17 @@ pub struct SelectParameters {
     pub input_serialization: InputSerialization,
     /// <p>Describes how the results of the Select job are serialized.</p>
     pub output_serialization: OutputSerialization,
+}
+
+impl fmt::Debug for SelectParameters {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("SelectParameters");
+        d.field("expression", &self.expression);
+        d.field("expression_type", &self.expression_type);
+        d.field("input_serialization", &self.input_serialization);
+        d.field("output_serialization", &self.output_serialization);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9260,7 +13852,6 @@ impl FromStr for ServerSideEncryption {
 /// an Amazon Web Services KMS key in your Amazon Web Services account the first time that you add an object encrypted with
 /// SSE-KMS to a bucket. By default, Amazon S3 uses this KMS key for SSE-KMS. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PUT Bucket encryption</a> in
 /// the <i>Amazon S3 API Reference</i>.</p>
-#[derive(Debug)]
 pub struct ServerSideEncryptionByDefault {
     /// <p>Amazon Web Services Key Management Service (KMS) customer Amazon Web Services KMS key ID to use for the default
     /// encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
@@ -9292,16 +13883,34 @@ pub struct ServerSideEncryptionByDefault {
     pub sse_algorithm: ServerSideEncryption,
 }
 
+impl fmt::Debug for ServerSideEncryptionByDefault {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ServerSideEncryptionByDefault");
+        if let Some(ref val) = self.kms_master_key_id {
+            d.field("kms_master_key_id", val);
+        }
+        d.field("sse_algorithm", &self.sse_algorithm);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies the default server-side-encryption configuration.</p>
-#[derive(Debug)]
 pub struct ServerSideEncryptionConfiguration {
     /// <p>Container for information about a particular server-side encryption configuration
     /// rule.</p>
     pub rules: ServerSideEncryptionRules,
 }
 
+impl fmt::Debug for ServerSideEncryptionConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ServerSideEncryptionConfiguration");
+        d.field("rules", &self.rules);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies the default server-side encryption configuration.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ServerSideEncryptionRule {
     /// <p>Specifies the default server-side encryption to apply to new objects in the bucket. If a
     /// PUT Object request doesn't specify any server-side encryption, this default encryption will
@@ -9310,6 +13919,17 @@ pub struct ServerSideEncryptionRule {
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected. Setting the <code>BucketKeyEnabled</code> element to <code>true</code> causes Amazon S3 to use an S3 Bucket Key. By default, S3 Bucket Key is not enabled.</p>
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket_key_enabled: BucketKeyEnabled,
+}
+
+impl fmt::Debug for ServerSideEncryptionRule {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ServerSideEncryptionRule");
+        if let Some(ref val) = self.apply_server_side_encryption_by_default {
+            d.field("apply_server_side_encryption_by_default", val);
+        }
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type ServerSideEncryptionRules = List<ServerSideEncryptionRule>;
@@ -9325,7 +13945,7 @@ pub type SkipValidation = bool;
 /// objects. Currently, Amazon S3 supports only the filter that you can specify for objects created
 /// with server-side encryption using a customer managed key stored in Amazon Web Services Key Management
 /// Service (SSE-KMS).</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct SourceSelectionCriteria {
     /// <p>A filter that you can specify for selections for modifications on replicas. Amazon S3 doesn't
     /// replicate replica modifications by default. In the latest version of replication
@@ -9343,13 +13963,33 @@ pub struct SourceSelectionCriteria {
     pub sse_kms_encrypted_objects: Option<SseKmsEncryptedObjects>,
 }
 
+impl fmt::Debug for SourceSelectionCriteria {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("SourceSelectionCriteria");
+        if let Some(ref val) = self.replica_modifications {
+            d.field("replica_modifications", val);
+        }
+        if let Some(ref val) = self.sse_kms_encrypted_objects {
+            d.field("sse_kms_encrypted_objects", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>A container for filter information for the selection of S3 objects encrypted with Amazon Web Services
 /// KMS.</p>
-#[derive(Debug)]
 pub struct SseKmsEncryptedObjects {
     /// <p>Specifies whether Amazon S3 replicates objects created with server-side encryption using an
     /// Amazon Web Services KMS key stored in Amazon Web Services Key Management Service.</p>
     pub status: SseKmsEncryptedObjectsStatus,
+}
+
+impl fmt::Debug for SseKmsEncryptedObjects {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("SseKmsEncryptedObjects");
+        d.field("status", &self.status);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9395,7 +14035,7 @@ pub type Start = i64;
 pub type StartAfter = String;
 
 /// <p>Container for the stats details.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Stats {
     /// <p>The total number of uncompressed object bytes processed.</p>
     pub bytes_processed: BytesProcessed,
@@ -9405,11 +14045,31 @@ pub struct Stats {
     pub bytes_scanned: BytesScanned,
 }
 
+impl fmt::Debug for Stats {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Stats");
+        d.field("bytes_processed", &self.bytes_processed);
+        d.field("bytes_returned", &self.bytes_returned);
+        d.field("bytes_scanned", &self.bytes_scanned);
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for the Stats Event.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct StatsEvent {
     /// <p>The Stats event details.</p>
     pub details: Option<Stats>,
+}
+
+impl fmt::Debug for StatsEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("StatsEvent");
+        if let Some(ref val) = self.details {
+            d.field("details", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9466,22 +14126,40 @@ impl FromStr for StorageClass {
 
 /// <p>Specifies data related to access patterns to be collected and made available to analyze
 /// the tradeoffs between different storage classes for an Amazon S3 bucket.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct StorageClassAnalysis {
     /// <p>Specifies how data related to the storage class analysis for an Amazon S3 bucket should be
     /// exported.</p>
     pub data_export: Option<StorageClassAnalysisDataExport>,
 }
 
+impl fmt::Debug for StorageClassAnalysis {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("StorageClassAnalysis");
+        if let Some(ref val) = self.data_export {
+            d.field("data_export", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Container for data related to the storage class analysis for an Amazon S3 bucket for
 /// export.</p>
-#[derive(Debug)]
 pub struct StorageClassAnalysisDataExport {
     /// <p>The place to store the data for an analysis.</p>
     pub destination: AnalyticsExportDestination,
     /// <p>The version of the output schema to use when exporting data. Must be
     /// <code>V_1</code>.</p>
     pub output_schema_version: StorageClassAnalysisSchemaVersion,
+}
+
+impl fmt::Debug for StorageClassAnalysisDataExport {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("StorageClassAnalysisDataExport");
+        d.field("destination", &self.destination);
+        d.field("output_schema_version", &self.output_schema_version);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9523,7 +14201,6 @@ impl FromStr for StorageClassAnalysisSchemaVersion {
 pub type Suffix = String;
 
 /// <p>A container of a key value name pair.</p>
-#[derive(Debug)]
 pub struct Tag {
     /// <p>Name of the object key.</p>
     pub key: ObjectKey,
@@ -9531,15 +14208,31 @@ pub struct Tag {
     pub value: Value,
 }
 
+impl fmt::Debug for Tag {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Tag");
+        d.field("key", &self.key);
+        d.field("value", &self.value);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type TagCount = i32;
 
 pub type TagSet = List<Tag>;
 
 /// <p>Container for <code>TagSet</code> elements.</p>
-#[derive(Debug)]
 pub struct Tagging {
     /// <p>A collection for a set of tags</p>
     pub tag_set: TagSet,
+}
+
+impl fmt::Debug for Tagging {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Tagging");
+        d.field("tag_set", &self.tag_set);
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9588,12 +14281,25 @@ pub type TargetBucket = String;
 /// <p>Buckets that use the bucket owner enforced setting for Object
 /// Ownership don't support target grants. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html#grant-log-delivery-permissions-general">Permissions server access log delivery</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct TargetGrant {
     /// <p>Container for the person being granted permissions.</p>
     pub grantee: Option<Grantee>,
     /// <p>Logging permissions assigned to the grantee for the bucket.</p>
     pub permission: Option<BucketLogsPermission>,
+}
+
+impl fmt::Debug for TargetGrant {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("TargetGrant");
+        if let Some(ref val) = self.grantee {
+            d.field("grantee", val);
+        }
+        if let Some(ref val) = self.permission {
+            d.field("permission", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type TargetGrants = List<TargetGrant>;
@@ -9643,7 +14349,6 @@ impl FromStr for Tier {
 /// <p>The S3 Intelligent-Tiering storage class is designed to optimize storage costs by
 /// automatically moving data to the most cost-effective storage access tier, without
 /// additional operational overhead.</p>
-#[derive(Debug)]
 pub struct Tiering {
     /// <p>S3 Intelligent-Tiering access tier. See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for
     /// automatically optimizing frequently and infrequently accessed objects</a> for a list
@@ -9656,6 +14361,15 @@ pub struct Tiering {
     pub days: IntelligentTieringDays,
 }
 
+impl fmt::Debug for Tiering {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Tiering");
+        d.field("access_tier", &self.access_tier);
+        d.field("days", &self.days);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type TieringList = List<Tiering>;
 
 pub type Token = String;
@@ -9664,7 +14378,6 @@ pub type TopicArn = String;
 
 /// <p>A container for specifying the configuration for publication of messages to an Amazon
 /// Simple Notification Service (Amazon SNS) topic when Amazon S3 detects specified events.</p>
-#[derive(Debug)]
 pub struct TopicConfiguration {
     /// <p>The Amazon S3 bucket event about which to send notifications. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported
@@ -9677,12 +14390,27 @@ pub struct TopicConfiguration {
     pub topic_arn: TopicArn,
 }
 
+impl fmt::Debug for TopicConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("TopicConfiguration");
+        d.field("events", &self.events);
+        if let Some(ref val) = self.filter {
+            d.field("filter", val);
+        }
+        if let Some(ref val) = self.id {
+            d.field("id", val);
+        }
+        d.field("topic_arn", &self.topic_arn);
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type TopicConfigurationList = List<TopicConfiguration>;
 
 /// <p>Specifies when an object transitions to a specified storage class. For more information
 /// about Amazon S3 lifecycle configuration rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-transition-general-considerations.html">Transitioning
 /// Objects Using Amazon S3 Lifecycle</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct Transition {
     /// <p>Indicates when objects are transitioned to the specified storage class. The date value
     /// must be in ISO 8601 format. The time is always midnight UTC.</p>
@@ -9692,6 +14420,20 @@ pub struct Transition {
     pub days: Days,
     /// <p>The storage class to which you want the object to transition.</p>
     pub storage_class: Option<TransitionStorageClass>,
+}
+
+impl fmt::Debug for Transition {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("Transition");
+        if let Some(ref val) = self.date {
+            d.field("date", val);
+        }
+        d.field("days", &self.days);
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type TransitionList = List<Transition>;
@@ -9786,7 +14528,6 @@ pub type URI = String;
 
 pub type UploadIdMarker = String;
 
-#[derive(Debug)]
 pub struct UploadPartCopyInput {
     /// <p>The bucket name.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -9868,7 +14609,61 @@ pub struct UploadPartCopyInput {
     pub upload_id: MultipartUploadId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for UploadPartCopyInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("UploadPartCopyInput");
+        d.field("bucket", &self.bucket);
+        d.field("copy_source", &self.copy_source);
+        if let Some(ref val) = self.copy_source_if_match {
+            d.field("copy_source_if_match", val);
+        }
+        if let Some(ref val) = self.copy_source_if_modified_since {
+            d.field("copy_source_if_modified_since", val);
+        }
+        if let Some(ref val) = self.copy_source_if_none_match {
+            d.field("copy_source_if_none_match", val);
+        }
+        if let Some(ref val) = self.copy_source_if_unmodified_since {
+            d.field("copy_source_if_unmodified_since", val);
+        }
+        if let Some(ref val) = self.copy_source_range {
+            d.field("copy_source_range", val);
+        }
+        if let Some(ref val) = self.copy_source_sse_customer_algorithm {
+            d.field("copy_source_sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.copy_source_sse_customer_key {
+            d.field("copy_source_sse_customer_key", val);
+        }
+        if let Some(ref val) = self.copy_source_sse_customer_key_md5 {
+            d.field("copy_source_sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.expected_source_bucket_owner {
+            d.field("expected_source_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        d.field("part_number", &self.part_number);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        d.field("upload_id", &self.upload_id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct UploadPartCopyOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
@@ -9893,7 +14688,35 @@ pub struct UploadPartCopyOutput {
     pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
-#[derive(Debug)]
+impl fmt::Debug for UploadPartCopyOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("UploadPartCopyOutput");
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.copy_part_result {
+            d.field("copy_part_result", val);
+        }
+        if let Some(ref val) = self.copy_source_version_id {
+            d.field("copy_source_version_id", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub struct UploadPartInput {
     /// <p>Object data.</p>
     pub body: Option<StreamingBlob>,
@@ -9964,7 +14787,55 @@ pub struct UploadPartInput {
     pub upload_id: MultipartUploadId,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for UploadPartInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("UploadPartInput");
+        if let Some(ref val) = self.body {
+            d.field("body", val);
+        }
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.checksum_algorithm {
+            d.field("checksum_algorithm", val);
+        }
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        d.field("content_length", &self.content_length);
+        if let Some(ref val) = self.content_md5 {
+            d.field("content_md5", val);
+        }
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        d.field("part_number", &self.part_number);
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        d.field("upload_id", &self.upload_id);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct UploadPartOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption with Amazon Web Services KMS (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
@@ -10006,6 +14877,44 @@ pub struct UploadPartOutput {
     pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
+impl fmt::Debug for UploadPartOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("UploadPartOutput");
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type UserMetadata = List<MetadataEntry>;
 
 pub type Value = String;
@@ -10016,7 +14925,7 @@ pub type VersionIdMarker = String;
 
 /// <p>Describes the versioning state of an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html">PUT
 /// Bucket versioning</a> in the <i>Amazon S3 API Reference</i>.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct VersioningConfiguration {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This
     /// element is only returned if the bucket has been configured with MFA delete. If the bucket
@@ -10026,8 +14935,21 @@ pub struct VersioningConfiguration {
     pub status: Option<BucketVersioningStatus>,
 }
 
+impl fmt::Debug for VersioningConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("VersioningConfiguration");
+        if let Some(ref val) = self.mfa_delete {
+            d.field("mfa_delete", val);
+        }
+        if let Some(ref val) = self.status {
+            d.field("status", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Specifies website configuration parameters for an Amazon S3 bucket.</p>
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct WebsiteConfiguration {
     /// <p>The name of the error document for the website.</p>
     pub error_document: Option<ErrorDocument>,
@@ -10042,9 +14964,27 @@ pub struct WebsiteConfiguration {
     pub routing_rules: Option<RoutingRules>,
 }
 
+impl fmt::Debug for WebsiteConfiguration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("WebsiteConfiguration");
+        if let Some(ref val) = self.error_document {
+            d.field("error_document", val);
+        }
+        if let Some(ref val) = self.index_document {
+            d.field("index_document", val);
+        }
+        if let Some(ref val) = self.redirect_all_requests_to {
+            d.field("redirect_all_requests_to", val);
+        }
+        if let Some(ref val) = self.routing_rules {
+            d.field("routing_rules", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type WebsiteRedirectLocation = String;
 
-#[derive(Debug)]
 pub struct WriteGetObjectResponseInput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<AcceptRanges>,
@@ -10265,7 +15205,123 @@ pub struct WriteGetObjectResponseInput {
     pub version_id: Option<ObjectVersionId>,
 }
 
-#[derive(Debug, Default)]
+impl fmt::Debug for WriteGetObjectResponseInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("WriteGetObjectResponseInput");
+        if let Some(ref val) = self.accept_ranges {
+            d.field("accept_ranges", val);
+        }
+        if let Some(ref val) = self.body {
+            d.field("body", val);
+        }
+        d.field("bucket_key_enabled", &self.bucket_key_enabled);
+        if let Some(ref val) = self.cache_control {
+            d.field("cache_control", val);
+        }
+        if let Some(ref val) = self.checksum_crc32 {
+            d.field("checksum_crc32", val);
+        }
+        if let Some(ref val) = self.checksum_crc32c {
+            d.field("checksum_crc32c", val);
+        }
+        if let Some(ref val) = self.checksum_sha1 {
+            d.field("checksum_sha1", val);
+        }
+        if let Some(ref val) = self.checksum_sha256 {
+            d.field("checksum_sha256", val);
+        }
+        if let Some(ref val) = self.content_disposition {
+            d.field("content_disposition", val);
+        }
+        if let Some(ref val) = self.content_encoding {
+            d.field("content_encoding", val);
+        }
+        if let Some(ref val) = self.content_language {
+            d.field("content_language", val);
+        }
+        d.field("content_length", &self.content_length);
+        if let Some(ref val) = self.content_range {
+            d.field("content_range", val);
+        }
+        if let Some(ref val) = self.content_type {
+            d.field("content_type", val);
+        }
+        d.field("delete_marker", &self.delete_marker);
+        if let Some(ref val) = self.e_tag {
+            d.field("e_tag", val);
+        }
+        if let Some(ref val) = self.error_code {
+            d.field("error_code", val);
+        }
+        if let Some(ref val) = self.error_message {
+            d.field("error_message", val);
+        }
+        if let Some(ref val) = self.expiration {
+            d.field("expiration", val);
+        }
+        if let Some(ref val) = self.expires {
+            d.field("expires", val);
+        }
+        if let Some(ref val) = self.last_modified {
+            d.field("last_modified", val);
+        }
+        if let Some(ref val) = self.metadata {
+            d.field("metadata", val);
+        }
+        d.field("missing_meta", &self.missing_meta);
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            d.field("object_lock_legal_hold_status", val);
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            d.field("object_lock_mode", val);
+        }
+        if let Some(ref val) = self.object_lock_retain_until_date {
+            d.field("object_lock_retain_until_date", val);
+        }
+        d.field("parts_count", &self.parts_count);
+        if let Some(ref val) = self.replication_status {
+            d.field("replication_status", val);
+        }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
+        d.field("request_route", &self.request_route);
+        d.field("request_token", &self.request_token);
+        if let Some(ref val) = self.restore {
+            d.field("restore", val);
+        }
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        if let Some(ref val) = self.ssekms_key_id {
+            d.field("ssekms_key_id", val);
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            d.field("server_side_encryption", val);
+        }
+        d.field("status_code", &self.status_code);
+        if let Some(ref val) = self.storage_class {
+            d.field("storage_class", val);
+        }
+        d.field("tag_count", &self.tag_count);
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
 pub struct WriteGetObjectResponseOutput {}
+
+impl fmt::Debug for WriteGetObjectResponseOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("WriteGetObjectResponseOutput");
+        d.finish_non_exhaustive()
+    }
+}
 
 pub type Years = i32;

@@ -268,8 +268,9 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
         "use super::*;",
         "",
         "use std::borrow::Cow;",
-        "use std::str::FromStr;",
         "use std::convert::Infallible;",
+        "use std::fmt;",
+        "use std::str::FromStr;",
         "",
     ];
 
@@ -329,13 +330,11 @@ fn codegen_struct(ty: &rust::Struct, _rust_types: &RustTypes, g: &mut Codegen) {
 
     codegen_doc(ty.doc.as_deref(), g);
     if can_derive_default {
-        g.ln("#[derive(Debug, Default)]");
-    } else {
-        g.ln("#[derive(Debug)]");
+        g.ln("#[derive(Default)]");
     }
     // g.ln("#[non_exhaustive]"); // TODO: builder?
-    g.ln(f!("pub struct {} {{", ty.name));
 
+    g.ln(f!("pub struct {} {{", ty.name));
     for field in &ty.fields {
         codegen_doc(field.doc.as_deref(), g);
         if field.option_type {
@@ -344,7 +343,23 @@ fn codegen_struct(ty: &rust::Struct, _rust_types: &RustTypes, g: &mut Codegen) {
             g.ln(f!("    pub {}: {},", field.name, field.type_));
         }
     }
+    g.ln("}");
+    g.lf();
 
+    g.ln(f!("impl fmt::Debug for {} {{", ty.name));
+    g.ln("fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {");
+    g.ln(f!("let mut d = f.debug_struct(\"{}\");", ty.name));
+    for field in &ty.fields {
+        if field.option_type {
+            g.ln(f!("if let Some(ref val) = self.{} {{", field.name));
+            g.ln(f!("d.field(\"{}\", val);", field.name));
+            g.ln("}");
+        } else {
+            g.ln(f!("d.field(\"{0}\", &self.{0});", field.name));
+        }
+    }
+    g.ln("d.finish_non_exhaustive()");
+    g.ln("}");
     g.ln("}");
 }
 
