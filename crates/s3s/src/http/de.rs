@@ -11,6 +11,7 @@ use core::fmt;
 use std::str::FromStr;
 
 use futures::TryStreamExt;
+use tracing::debug;
 
 fn missing_header(name: &HeaderName) -> S3Error {
     invalid_request!("missing header: {}", name.as_str())
@@ -182,6 +183,8 @@ pub fn take_string_body(req: &mut Request) -> S3Result<String> {
 
 pub fn take_stream_body(req: &mut Request) -> StreamingBlob {
     let body = std::mem::take(req.body_mut());
+    let size_hint = <hyper::Body as hyper::body::HttpBody>::size_hint(&body);
+    debug!(?size_hint, "taking streaming blob");
     StreamingBlob(Box::pin(body.map_err(|err| Box::new(err) as Box<dyn std::error::Error + Send + Sync>)))
 }
 
