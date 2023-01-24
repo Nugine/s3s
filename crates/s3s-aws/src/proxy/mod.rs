@@ -5,6 +5,8 @@ macro_rules! wrap_sdk_error {
 
         let mut err = S3Error::new(S3ErrorCode::InternalError);
         let source = $e;
+        tracing::debug!("sdk error: {:?}", source);
+
         if let SdkError::ServiceError(ref e) = source {
             let meta = e.err().meta();
             if let Some(val) = meta.code().and_then(|s| S3ErrorCode::from_bytes(s.as_bytes())) {
