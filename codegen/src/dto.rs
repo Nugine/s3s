@@ -293,104 +293,13 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
                 g.ln(f!("pub type {} = Map<{}, {}>;", ty.name, ty.key_type, ty.value_type));
             }
             rust::Type::StrEnum(ty) => {
-                codegen_doc(ty.doc.as_deref(), g);
-                g.ln("#[derive(Debug, Clone, PartialEq, Eq)]");
-                g.ln(f!("pub struct {}(Cow<'static, str>);", ty.name));
-                g.lf();
-
-                g.ln(f!("impl {} {{", ty.name));
-                {
-                    for variant in &ty.variants {
-                        codegen_doc(variant.doc.as_deref(), g);
-                        g.ln(f!("pub const {}: &str = \"{}\";", variant.name, variant.value));
-                        g.lf();
-                    }
-
-                    g.ln("#[must_use]");
-                    g.ln("pub fn as_str(&self) -> &str {");
-                    g.ln("&self.0");
-                    g.ln("}");
-                    g.lf();
-
-                    g.ln("#[must_use]");
-                    g.ln("pub fn from_static(s: &'static str) -> Self {");
-                    g.ln("Self(Cow::from(s))");
-                    g.ln("}");
-                    g.lf();
-                }
-                g.ln("}");
-                g.lf();
-
-                g.ln(f!("impl From<String> for {} {{", ty.name));
-                g.ln("fn from(s: String) -> Self {");
-                g.ln("Self(Cow::from(s))");
-                g.ln("}");
-                g.ln("}");
-                g.lf();
-
-                g.ln(f!("impl From<{}> for Cow<'static, str> {{", ty.name));
-                g.ln(f!("fn from(s: {}) -> Self {{", ty.name));
-                g.ln("s.0");
-                g.ln("}");
-                g.ln("}");
-                g.lf();
-
-                g.ln(f!("impl FromStr for {} {{", ty.name));
-                g.ln("type Err = Infallible;");
-                g.ln("fn from_str(s: &str) -> Result<Self, Self::Err> {");
-                g.ln("Ok(Self::from(s.to_owned()))");
-                g.ln("}");
-                g.ln("}");
+                codegen_str_enum(ty, rust_types, g);
             }
             rust::Type::Struct(ty) => {
-                let is_rust_default = |v: &Value| match v {
-                    Value::Bool(x) => !x,
-                    Value::Number(x) => x.as_i64() == Some(0),
-                    Value::String(x) => x.is_empty(),
-                    _ => unimplemented!("{v:#?}"),
-                };
-
-                let can_derive_default = ty.fields.iter().all(|field| {
-                    let is_option = field.option_type;
-                    let has_default = match field.default_value {
-                        Some(ref v) => is_rust_default(v),
-                        None => false,
-                    };
-                    is_option || has_default
-                });
-
-                codegen_doc(ty.doc.as_deref(), g);
-                if can_derive_default {
-                    g.ln("#[derive(Debug, Default)]");
-                } else {
-                    g.ln("#[derive(Debug)]");
-                }
-                // g.ln("#[non_exhaustive]"); // TODO: builder?
-                g.ln(f!("pub struct {} {{", ty.name));
-
-                for field in &ty.fields {
-                    codegen_doc(field.doc.as_deref(), g);
-                    if field.option_type {
-                        g.ln(f!("    pub {}: Option<{}>,", field.name, field.type_));
-                    } else {
-                        g.ln(f!("    pub {}: {},", field.name, field.type_));
-                    }
-                }
-
-                g.ln("}");
+                codegen_struct(ty, rust_types, g);
             }
             rust::Type::StructEnum(ty) => {
-                codegen_doc(ty.doc.as_deref(), g);
-                g.ln("#[derive(Debug)]");
-                g.ln("#[non_exhaustive]");
-                g.ln(f!("pub enum {} {{", ty.name));
-
-                for variant in &ty.variants {
-                    codegen_doc(variant.doc.as_deref(), g);
-                    g.ln(f!("    {}({}),", variant.name, variant.type_));
-                }
-
-                g.ln("}");
+                codegen_struct_enum(ty, rust_types, g);
             }
             rust::Type::Timestamp(ty) => {
                 codegen_doc(ty.doc.as_deref(), g);
@@ -399,4 +308,107 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
         }
         g.lf();
     }
+}
+
+fn codegen_struct(ty: &rust::Struct, _rust_types: &RustTypes, g: &mut Codegen) {
+    let is_rust_default = |v: &Value| match v {
+        Value::Bool(x) => !x,
+        Value::Number(x) => x.as_i64() == Some(0),
+        Value::String(x) => x.is_empty(),
+        _ => unimplemented!("{v:#?}"),
+    };
+
+    let can_derive_default = ty.fields.iter().all(|field| {
+        let is_option = field.option_type;
+        let has_default = match field.default_value {
+            Some(ref v) => is_rust_default(v),
+            None => false,
+        };
+        is_option || has_default
+    });
+
+    codegen_doc(ty.doc.as_deref(), g);
+    if can_derive_default {
+        g.ln("#[derive(Debug, Default)]");
+    } else {
+        g.ln("#[derive(Debug)]");
+    }
+    // g.ln("#[non_exhaustive]"); // TODO: builder?
+    g.ln(f!("pub struct {} {{", ty.name));
+
+    for field in &ty.fields {
+        codegen_doc(field.doc.as_deref(), g);
+        if field.option_type {
+            g.ln(f!("    pub {}: Option<{}>,", field.name, field.type_));
+        } else {
+            g.ln(f!("    pub {}: {},", field.name, field.type_));
+        }
+    }
+
+    g.ln("}");
+}
+
+fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes, g: &mut Codegen) {
+    codegen_doc(ty.doc.as_deref(), g);
+    g.ln("#[derive(Debug, Clone, PartialEq, Eq)]");
+    g.ln(f!("pub struct {}(Cow<'static, str>);", ty.name));
+    g.lf();
+
+    g.ln(f!("impl {} {{", ty.name));
+    {
+        for variant in &ty.variants {
+            codegen_doc(variant.doc.as_deref(), g);
+            g.ln(f!("pub const {}: &str = \"{}\";", variant.name, variant.value));
+            g.lf();
+        }
+
+        g.ln("#[must_use]");
+        g.ln("pub fn as_str(&self) -> &str {");
+        g.ln("&self.0");
+        g.ln("}");
+        g.lf();
+
+        g.ln("#[must_use]");
+        g.ln("pub fn from_static(s: &'static str) -> Self {");
+        g.ln("Self(Cow::from(s))");
+        g.ln("}");
+        g.lf();
+    }
+    g.ln("}");
+    g.lf();
+
+    g.ln(f!("impl From<String> for {} {{", ty.name));
+    g.ln("fn from(s: String) -> Self {");
+    g.ln("Self(Cow::from(s))");
+    g.ln("}");
+    g.ln("}");
+    g.lf();
+
+    g.ln(f!("impl From<{}> for Cow<'static, str> {{", ty.name));
+    g.ln(f!("fn from(s: {}) -> Self {{", ty.name));
+    g.ln("s.0");
+    g.ln("}");
+    g.ln("}");
+    g.lf();
+
+    g.ln(f!("impl FromStr for {} {{", ty.name));
+    g.ln("type Err = Infallible;");
+    g.ln("fn from_str(s: &str) -> Result<Self, Self::Err> {");
+    g.ln("Ok(Self::from(s.to_owned()))");
+    g.ln("}");
+    g.ln("}");
+}
+
+fn codegen_struct_enum(ty: &rust::StructEnum, _rust_types: &RustTypes, g: &mut Codegen) {
+    codegen_doc(ty.doc.as_deref(), g);
+    g.ln("#[derive(Debug)]");
+    g.ln("#[non_exhaustive]");
+    g.ln(f!("pub enum {} {{", ty.name));
+
+    for variant in &ty.variants {
+        codegen_doc(variant.doc.as_deref(), g);
+        g.ln(f!("    {}({}),", variant.name, variant.type_));
+    }
+
+    g.ln("}");
 }
