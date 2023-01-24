@@ -7,7 +7,7 @@ use crate::{rust, smithy};
 use std::collections::BTreeMap;
 use std::ops::Not;
 
-use heck::{ToSnakeCase, ToUpperCamelCase};
+use heck::{ToShoutySnakeCase, ToSnakeCase};
 use serde_json::Value;
 
 pub fn to_type_name(shape_name: &str) -> &str {
@@ -101,21 +101,21 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                 let mut variants = Vec::new();
                 for (variant_name, variant) in &shape.members {
                     let name = match variant_name.as_str() {
-                        "CRC32C" => o("Crc32C"),
-                        _ => variant_name.to_upper_camel_case(),
+                        "CRC32C" => o("CRC32C"),
+                        _ => variant_name.to_shouty_snake_case(),
                     };
 
                     let value = variant.traits.enum_value().unwrap().to_owned();
                     assert!(value.is_ascii());
 
-                    let variant = rust::UnitEnumVariant {
+                    let variant = rust::StrEnumVariant {
                         name,
                         value,
                         doc: variant.traits.doc().map(o),
                     };
                     variants.push(variant);
                 }
-                let ty = rust::Type::UnitEnum(rust::UnitEnum {
+                let ty = rust::Type::StrEnum(rust::StrEnum {
                     name: name.clone(),
                     variants,
                     doc: shape.traits.doc().map(o),
@@ -267,7 +267,9 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
         "",
         "use super::*;",
         "",
+        "use std::borrow::Cow;",
         "use std::str::FromStr;",
+        "use std::convert::Infallible;",
         "",
     ];
 
@@ -290,59 +292,53 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
                 codegen_doc(ty.doc.as_deref(), g);
                 g.ln(f!("pub type {} = Map<{}, {}>;", ty.name, ty.key_type, ty.value_type));
             }
-            rust::Type::UnitEnum(ty) => {
+            rust::Type::StrEnum(ty) => {
                 codegen_doc(ty.doc.as_deref(), g);
-                g.ln("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
-                g.ln("#[non_exhaustive]");
-                g.ln(f!("pub enum {} {{", ty.name));
-
-                for variant in &ty.variants {
-                    codegen_doc(variant.doc.as_deref(), g);
-                    g.ln(f!("    {},", variant.name));
-                }
-
-                g.ln("}");
-
+                g.ln("#[derive(Debug, Clone, PartialEq, Eq)]");
+                g.ln(f!("pub struct {}(Cow<'static, str>);", ty.name));
                 g.lf();
+
                 g.ln(f!("impl {} {{", ty.name));
-
                 {
-                    g.ln("#[must_use]");
-                    g.ln("pub const fn as_str(&self) -> &'static str {");
-
-                    g.ln("match self {");
                     for variant in &ty.variants {
-                        g.ln(f!("    Self::{} => \"{}\",", variant.name, variant.value));
+                        codegen_doc(variant.doc.as_deref(), g);
+                        g.ln(f!("pub const {}: &str = \"{}\";", variant.name, variant.value));
+                        g.lf();
                     }
-                    g.ln("}");
 
+                    g.ln("#[must_use]");
+                    g.ln("pub fn as_str(&self) -> &str {");
+                    g.ln("&self.0");
+                    g.ln("}");
+                    g.lf();
+
+                    g.ln("#[must_use]");
+                    g.ln("pub fn from_static(s: &'static str) -> Self {");
+                    g.ln("Self(Cow::from(s))");
                     g.ln("}");
                     g.lf();
                 }
-
-                {
-                    g.ln("#[must_use]");
-                    g.ln("pub const fn from_bytes(s: &[u8]) -> Option<Self> {");
-
-                    g.ln("match s {");
-                    for variant in &ty.variants {
-                        g.ln(f!("b\"{}\" => Some(Self::{}),", variant.value, variant.name));
-                    }
-                    g.ln("_ => None,");
-                    g.ln("}");
-
-                    g.ln("}");
-                    g.lf();
-                }
-
                 g.ln("}");
+                g.lf();
 
+                g.ln(f!("impl From<String> for {} {{", ty.name));
+                g.ln("fn from(s: String) -> Self {");
+                g.ln("Self(Cow::from(s))");
+                g.ln("}");
+                g.ln("}");
+                g.lf();
+
+                g.ln(f!("impl From<{}> for Cow<'static, str> {{", ty.name));
+                g.ln(f!("fn from(s: {}) -> Self {{", ty.name));
+                g.ln("s.0");
+                g.ln("}");
+                g.ln("}");
                 g.lf();
 
                 g.ln(f!("impl FromStr for {} {{", ty.name));
-                g.ln("type Err = ParseEnumError;");
+                g.ln("type Err = Infallible;");
                 g.ln("fn from_str(s: &str) -> Result<Self, Self::Err> {");
-                g.ln("Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))");
+                g.ln("Ok(Self::from(s.to_owned()))");
                 g.ln("}");
                 g.ln("}");
             }

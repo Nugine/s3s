@@ -101,6 +101,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         "use crate::path::S3Path;",
         "",
         "use std::io::Write;",
+        "use std::borrow::Cow;",
         "",
     ];
 
@@ -206,7 +207,7 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 field_type_names.insert(ty.member.type_.as_str());
                 q.push_back(ty.member.type_.as_str());
             }
-            rust::Type::UnitEnum(ty) => {
+            rust::Type::StrEnum(ty) => {
                 field_type_names.insert(ty.name.as_str());
             }
             rust::Type::StructEnum(ty) => {
@@ -273,7 +274,7 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 g.ln("}");
                 g.ln("}");
             }
-            rust::Type::UnitEnum(ty) => {
+            rust::Type::StrEnum(ty) => {
                 g.ln(f!("impl xml::SerializeContent for {} {{", ty.name));
                 g.ln("fn serialize_content<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {");
 
@@ -381,7 +382,7 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 field_type_names.insert(ty.member.type_.as_str());
                 q.push_back(ty.member.type_.as_str());
             }
-            rust::Type::UnitEnum(ty) => {
+            rust::Type::StrEnum(ty) => {
                 field_type_names.insert(ty.name.as_str());
             }
             rust::Type::StructEnum(ty) => {
@@ -469,12 +470,10 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 g.ln("}");
                 g.ln("}");
             }
-            rust::Type::UnitEnum(ty) => {
+            rust::Type::StrEnum(ty) => {
                 g.ln(f!("impl<'xml> xml::DeserializeContent<'xml> for {} {{", ty.name));
                 g.ln("fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {");
-
-                g.ln("d.text(|t|Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))");
-
+                g.ln("String::deserialize_content(d).map(Self::from)");
                 g.ln("}");
                 g.ln("}");
             }
@@ -548,7 +547,7 @@ fn codegen_http(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
 }
 
 fn codegen_header_value(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
-    let mut unit_enum_names: BTreeSet<&str> = default();
+    let mut str_enum_names: BTreeSet<&str> = default();
 
     for op in ops.values() {
         for ty_name in [op.input.as_str(), op.output.as_str()] {
@@ -561,12 +560,12 @@ fn codegen_header_value(ops: &Operations, rust_types: &RustTypes, g: &mut Codege
                         match field_type {
                             rust::Type::List(list_ty) => {
                                 let member_type = &rust_types[list_ty.member.type_.as_str()];
-                                if let rust::Type::UnitEnum(ty) = member_type {
-                                    unit_enum_names.insert(ty.name.as_str());
+                                if let rust::Type::StrEnum(ty) = member_type {
+                                    str_enum_names.insert(ty.name.as_str());
                                 }
                             }
-                            rust::Type::UnitEnum(ty) => {
-                                unit_enum_names.insert(ty.name.as_str());
+                            rust::Type::StrEnum(ty) => {
+                                str_enum_names.insert(ty.name.as_str());
                             }
                             rust::Type::Alias(_) => {}
                             rust::Type::Provided(_) => {}
@@ -580,35 +579,29 @@ fn codegen_header_value(ops: &Operations, rust_types: &RustTypes, g: &mut Codege
         }
     }
 
-    for rust_type in unit_enum_names.iter().map(|&x| &rust_types[x]) {
-        let rust::Type::UnitEnum(ty) = rust_type else { panic!() };
+    for rust_type in str_enum_names.iter().map(|&x| &rust_types[x]) {
+        let rust::Type::StrEnum(ty) = rust_type else { panic!() };
 
         g.ln(f!("impl http::TryIntoHeaderValue for {} {{", ty.name));
-        g.ln("type Error = std::convert::Infallible;");
+        g.ln("type Error = http::InvalidHeaderValue;");
         g.ln("fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {");
-        g.ln("match self {");
-        for variant in &ty.variants {
-            g.ln(f!("Self::{0} => {{", variant.name));
-
-            // TODO(blocking): inline_const https://github.com/rust-lang/rust/pull/104087
-            // g.ln("Ok(const { http::HeaderValue::from_static(\"{}\") })");
-
-            g.ln("Ok(http::HeaderValue::from_static(\"{}\"))");
-            g.ln("}");
-        }
-        g.ln("}");
+        g.ln("    match Cow::from(self) {");
+        g.ln("        Cow::Borrowed(s) => http::HeaderValue::try_from(s),");
+        g.ln("        Cow::Owned(s) => http::HeaderValue::try_from(s),");
+        g.ln("    }");
         g.ln("}");
         g.ln("}");
         g.lf();
     }
 
-    for rust_type in unit_enum_names.iter().map(|&x| &rust_types[x]) {
-        let rust::Type::UnitEnum(ty) = rust_type else { panic!() };
+    for rust_type in str_enum_names.iter().map(|&x| &rust_types[x]) {
+        let rust::Type::StrEnum(ty) = rust_type else { panic!() };
 
         g.ln(f!("impl http::TryFromHeaderValue for {} {{", ty.name));
         g.ln("type Error = http::ParseHeaderError;");
         g.ln("fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {");
-        g.ln("    Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)");
+        g.ln("    let val = val.to_str().map_err(|_|http::ParseHeaderError::Enum)?;");
+        g.ln("    Ok(Self::from(val.to_owned()))");
         g.ln("}");
         g.ln("}");
         g.lf();

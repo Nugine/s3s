@@ -9,7 +9,7 @@ pub enum Type {
     Provided(Provided),
     List(List),
     Map(Map),
-    UnitEnum(UnitEnum),
+    StrEnum(StrEnum),
     Struct(Struct),
     StructEnum(StructEnum),
     Timestamp(Timestamp),
@@ -49,14 +49,14 @@ pub struct Map {
 }
 
 #[derive(Debug, Clone)]
-pub struct UnitEnum {
+pub struct StrEnum {
     pub name: String,
-    pub variants: Vec<UnitEnumVariant>,
+    pub variants: Vec<StrEnumVariant>,
     pub doc: Option<String>,
 }
 
 #[derive(Debug, Clone)]
-pub struct UnitEnumVariant {
+pub struct StrEnumVariant {
     pub name: String,
     pub value: String,
     pub doc: Option<String>,

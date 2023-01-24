@@ -3,6 +3,8 @@
 
 use super::*;
 
+use std::borrow::Cow;
+use std::convert::Infallible;
 use std::str::FromStr;
 
 pub type AbortDate = Timestamp;
@@ -157,66 +159,77 @@ pub struct AnalyticsS3BucketDestination {
     pub prefix: Option<Prefix>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum AnalyticsS3ExportFileFormat {
-    Csv,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct AnalyticsS3ExportFileFormat(Cow<'static, str>);
 
 impl AnalyticsS3ExportFileFormat {
+    pub const CSV: &str = "CSV";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Csv => "CSV",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"CSV" => Some(Self::Csv),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for AnalyticsS3ExportFileFormat {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<AnalyticsS3ExportFileFormat> for Cow<'static, str> {
+    fn from(s: AnalyticsS3ExportFileFormat) -> Self {
+        s.0
     }
 }
 
 impl FromStr for AnalyticsS3ExportFileFormat {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ArchiveStatus {
-    ArchiveAccess,
-    DeepArchiveAccess,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ArchiveStatus(Cow<'static, str>);
 
 impl ArchiveStatus {
+    pub const ARCHIVE_ACCESS: &str = "ARCHIVE_ACCESS";
+
+    pub const DEEP_ARCHIVE_ACCESS: &str = "DEEP_ARCHIVE_ACCESS";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::ArchiveAccess => "ARCHIVE_ACCESS",
-            Self::DeepArchiveAccess => "DEEP_ARCHIVE_ACCESS",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"ARCHIVE_ACCESS" => Some(Self::ArchiveAccess),
-            b"DEEP_ARCHIVE_ACCESS" => Some(Self::DeepArchiveAccess),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ArchiveStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ArchiveStatus> for Cow<'static, str> {
+    fn from(s: ArchiveStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ArchiveStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -230,36 +243,41 @@ pub struct Bucket {
     pub name: Option<BucketName>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum BucketAccelerateStatus {
-    Enabled,
-    Suspended,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BucketAccelerateStatus(Cow<'static, str>);
 
 impl BucketAccelerateStatus {
+    pub const ENABLED: &str = "Enabled";
+
+    pub const SUSPENDED: &str = "Suspended";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Enabled => "Enabled",
-            Self::Suspended => "Suspended",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Enabled" => Some(Self::Enabled),
-            b"Suspended" => Some(Self::Suspended),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for BucketAccelerateStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<BucketAccelerateStatus> for Cow<'static, str> {
+    fn from(s: BucketAccelerateStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for BucketAccelerateStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -275,42 +293,45 @@ pub struct BucketAlreadyExists {}
 #[derive(Debug, Default)]
 pub struct BucketAlreadyOwnedByYou {}
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum BucketCannedACL {
-    AuthenticatedRead,
-    Private,
-    PublicRead,
-    PublicReadWrite,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BucketCannedACL(Cow<'static, str>);
 
 impl BucketCannedACL {
+    pub const AUTHENTICATED_READ: &str = "authenticated-read";
+
+    pub const PRIVATE: &str = "private";
+
+    pub const PUBLIC_READ: &str = "public-read";
+
+    pub const PUBLIC_READ_WRITE: &str = "public-read-write";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::AuthenticatedRead => "authenticated-read",
-            Self::Private => "private",
-            Self::PublicRead => "public-read",
-            Self::PublicReadWrite => "public-read-write",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"authenticated-read" => Some(Self::AuthenticatedRead),
-            b"private" => Some(Self::Private),
-            b"public-read" => Some(Self::PublicRead),
-            b"public-read-write" => Some(Self::PublicReadWrite),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for BucketCannedACL {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<BucketCannedACL> for Cow<'static, str> {
+    fn from(s: BucketCannedACL) -> Self {
+        s.0
     }
 }
 
 impl FromStr for BucketCannedACL {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -325,108 +346,89 @@ pub struct BucketLifecycleConfiguration {
     pub rules: LifecycleRules,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum BucketLocationConstraint {
-    Eu,
-    AfSouth1,
-    ApEast1,
-    ApNortheast1,
-    ApNortheast2,
-    ApNortheast3,
-    ApSouth1,
-    ApSoutheast1,
-    ApSoutheast2,
-    ApSoutheast3,
-    CaCentral1,
-    CnNorth1,
-    CnNorthwest1,
-    EuCentral1,
-    EuNorth1,
-    EuSouth1,
-    EuWest1,
-    EuWest2,
-    EuWest3,
-    MeSouth1,
-    SaEast1,
-    UsEast2,
-    UsGovEast1,
-    UsGovWest1,
-    UsWest1,
-    UsWest2,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BucketLocationConstraint(Cow<'static, str>);
 
 impl BucketLocationConstraint {
+    pub const EU: &str = "EU";
+
+    pub const AF_SOUTH_1: &str = "af-south-1";
+
+    pub const AP_EAST_1: &str = "ap-east-1";
+
+    pub const AP_NORTHEAST_1: &str = "ap-northeast-1";
+
+    pub const AP_NORTHEAST_2: &str = "ap-northeast-2";
+
+    pub const AP_NORTHEAST_3: &str = "ap-northeast-3";
+
+    pub const AP_SOUTH_1: &str = "ap-south-1";
+
+    pub const AP_SOUTHEAST_1: &str = "ap-southeast-1";
+
+    pub const AP_SOUTHEAST_2: &str = "ap-southeast-2";
+
+    pub const AP_SOUTHEAST_3: &str = "ap-southeast-3";
+
+    pub const CA_CENTRAL_1: &str = "ca-central-1";
+
+    pub const CN_NORTH_1: &str = "cn-north-1";
+
+    pub const CN_NORTHWEST_1: &str = "cn-northwest-1";
+
+    pub const EU_CENTRAL_1: &str = "eu-central-1";
+
+    pub const EU_NORTH_1: &str = "eu-north-1";
+
+    pub const EU_SOUTH_1: &str = "eu-south-1";
+
+    pub const EU_WEST_1: &str = "eu-west-1";
+
+    pub const EU_WEST_2: &str = "eu-west-2";
+
+    pub const EU_WEST_3: &str = "eu-west-3";
+
+    pub const ME_SOUTH_1: &str = "me-south-1";
+
+    pub const SA_EAST_1: &str = "sa-east-1";
+
+    pub const US_EAST_2: &str = "us-east-2";
+
+    pub const US_GOV_EAST_1: &str = "us-gov-east-1";
+
+    pub const US_GOV_WEST_1: &str = "us-gov-west-1";
+
+    pub const US_WEST_1: &str = "us-west-1";
+
+    pub const US_WEST_2: &str = "us-west-2";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Eu => "EU",
-            Self::AfSouth1 => "af-south-1",
-            Self::ApEast1 => "ap-east-1",
-            Self::ApNortheast1 => "ap-northeast-1",
-            Self::ApNortheast2 => "ap-northeast-2",
-            Self::ApNortheast3 => "ap-northeast-3",
-            Self::ApSouth1 => "ap-south-1",
-            Self::ApSoutheast1 => "ap-southeast-1",
-            Self::ApSoutheast2 => "ap-southeast-2",
-            Self::ApSoutheast3 => "ap-southeast-3",
-            Self::CaCentral1 => "ca-central-1",
-            Self::CnNorth1 => "cn-north-1",
-            Self::CnNorthwest1 => "cn-northwest-1",
-            Self::EuCentral1 => "eu-central-1",
-            Self::EuNorth1 => "eu-north-1",
-            Self::EuSouth1 => "eu-south-1",
-            Self::EuWest1 => "eu-west-1",
-            Self::EuWest2 => "eu-west-2",
-            Self::EuWest3 => "eu-west-3",
-            Self::MeSouth1 => "me-south-1",
-            Self::SaEast1 => "sa-east-1",
-            Self::UsEast2 => "us-east-2",
-            Self::UsGovEast1 => "us-gov-east-1",
-            Self::UsGovWest1 => "us-gov-west-1",
-            Self::UsWest1 => "us-west-1",
-            Self::UsWest2 => "us-west-2",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"EU" => Some(Self::Eu),
-            b"af-south-1" => Some(Self::AfSouth1),
-            b"ap-east-1" => Some(Self::ApEast1),
-            b"ap-northeast-1" => Some(Self::ApNortheast1),
-            b"ap-northeast-2" => Some(Self::ApNortheast2),
-            b"ap-northeast-3" => Some(Self::ApNortheast3),
-            b"ap-south-1" => Some(Self::ApSouth1),
-            b"ap-southeast-1" => Some(Self::ApSoutheast1),
-            b"ap-southeast-2" => Some(Self::ApSoutheast2),
-            b"ap-southeast-3" => Some(Self::ApSoutheast3),
-            b"ca-central-1" => Some(Self::CaCentral1),
-            b"cn-north-1" => Some(Self::CnNorth1),
-            b"cn-northwest-1" => Some(Self::CnNorthwest1),
-            b"eu-central-1" => Some(Self::EuCentral1),
-            b"eu-north-1" => Some(Self::EuNorth1),
-            b"eu-south-1" => Some(Self::EuSouth1),
-            b"eu-west-1" => Some(Self::EuWest1),
-            b"eu-west-2" => Some(Self::EuWest2),
-            b"eu-west-3" => Some(Self::EuWest3),
-            b"me-south-1" => Some(Self::MeSouth1),
-            b"sa-east-1" => Some(Self::SaEast1),
-            b"us-east-2" => Some(Self::UsEast2),
-            b"us-gov-east-1" => Some(Self::UsGovEast1),
-            b"us-gov-west-1" => Some(Self::UsGovWest1),
-            b"us-west-1" => Some(Self::UsWest1),
-            b"us-west-2" => Some(Self::UsWest2),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for BucketLocationConstraint {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<BucketLocationConstraint> for Cow<'static, str> {
+    fn from(s: BucketLocationConstraint) -> Self {
+        s.0
     }
 }
 
 impl FromStr for BucketLocationConstraint {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -436,74 +438,83 @@ pub struct BucketLoggingStatus {
     pub logging_enabled: Option<LoggingEnabled>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum BucketLogsPermission {
-    FullControl,
-    Read,
-    Write,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BucketLogsPermission(Cow<'static, str>);
 
 impl BucketLogsPermission {
+    pub const FULL_CONTROL: &str = "FULL_CONTROL";
+
+    pub const READ: &str = "READ";
+
+    pub const WRITE: &str = "WRITE";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::FullControl => "FULL_CONTROL",
-            Self::Read => "READ",
-            Self::Write => "WRITE",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"FULL_CONTROL" => Some(Self::FullControl),
-            b"READ" => Some(Self::Read),
-            b"WRITE" => Some(Self::Write),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for BucketLogsPermission {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<BucketLogsPermission> for Cow<'static, str> {
+    fn from(s: BucketLogsPermission) -> Self {
+        s.0
     }
 }
 
 impl FromStr for BucketLogsPermission {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
 pub type BucketName = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum BucketVersioningStatus {
-    Enabled,
-    Suspended,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BucketVersioningStatus(Cow<'static, str>);
 
 impl BucketVersioningStatus {
+    pub const ENABLED: &str = "Enabled";
+
+    pub const SUSPENDED: &str = "Suspended";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Enabled => "Enabled",
-            Self::Suspended => "Suspended",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Enabled" => Some(Self::Enabled),
-            b"Suspended" => Some(Self::Suspended),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for BucketVersioningStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<BucketVersioningStatus> for Cow<'static, str> {
+    fn from(s: BucketVersioningStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for BucketVersioningStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -662,42 +673,45 @@ pub struct Checksum {
     pub checksum_sha256: Option<ChecksumSHA256>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ChecksumAlgorithm {
-    Crc32,
-    Crc32C,
-    Sha1,
-    Sha256,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ChecksumAlgorithm(Cow<'static, str>);
 
 impl ChecksumAlgorithm {
+    pub const CRC32: &str = "CRC32";
+
+    pub const CRC32C: &str = "CRC32C";
+
+    pub const SHA1: &str = "SHA1";
+
+    pub const SHA256: &str = "SHA256";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Crc32 => "CRC32",
-            Self::Crc32C => "CRC32C",
-            Self::Sha1 => "SHA1",
-            Self::Sha256 => "SHA256",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"CRC32" => Some(Self::Crc32),
-            b"CRC32C" => Some(Self::Crc32C),
-            b"SHA1" => Some(Self::Sha1),
-            b"SHA256" => Some(Self::Sha256),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ChecksumAlgorithm {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ChecksumAlgorithm> for Cow<'static, str> {
+    fn from(s: ChecksumAlgorithm) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ChecksumAlgorithm {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -707,33 +721,39 @@ pub type ChecksumCRC32 = String;
 
 pub type ChecksumCRC32C = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ChecksumMode {
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ChecksumMode(Cow<'static, str>);
 
 impl ChecksumMode {
+    pub const ENABLED: &str = "ENABLED";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Enabled => "ENABLED",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"ENABLED" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ChecksumMode {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ChecksumMode> for Cow<'static, str> {
+    fn from(s: ChecksumMode) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ChecksumMode {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -911,39 +931,43 @@ pub struct CompletedPart {
 
 pub type CompletedPartList = List<CompletedPart>;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum CompressionType {
-    Bzip2,
-    Gzip,
-    None,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CompressionType(Cow<'static, str>);
 
 impl CompressionType {
+    pub const BZIP2: &str = "BZIP2";
+
+    pub const GZIP: &str = "GZIP";
+
+    pub const NONE: &str = "NONE";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Bzip2 => "BZIP2",
-            Self::Gzip => "GZIP",
-            Self::None => "NONE",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"BZIP2" => Some(Self::Bzip2),
-            b"GZIP" => Some(Self::Gzip),
-            b"NONE" => Some(Self::None),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for CompressionType {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<CompressionType> for Cow<'static, str> {
+    fn from(s: CompressionType) -> Self {
+        s.0
     }
 }
 
 impl FromStr for CompressionType {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -1672,36 +1696,41 @@ pub struct DeleteMarkerReplication {
     pub status: Option<DeleteMarkerReplicationStatus>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum DeleteMarkerReplicationStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DeleteMarkerReplicationStatus(Cow<'static, str>);
 
 impl DeleteMarkerReplicationStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for DeleteMarkerReplicationStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<DeleteMarkerReplicationStatus> for Cow<'static, str> {
+    fn from(s: DeleteMarkerReplicationStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for DeleteMarkerReplicationStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -1891,33 +1920,39 @@ pub type EnableRequestProgress = bool;
 /// cannot parse some characters, such as characters with an ASCII value from 0 to 10. For
 /// characters that are not supported in XML 1.0, you can add this parameter to request that
 /// Amazon S3 encode the keys in the response.</p>
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum EncodingType {
-    Url,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct EncodingType(Cow<'static, str>);
 
 impl EncodingType {
+    pub const URL: &str = "url";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Url => "url",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"url" => Some(Self::Url),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for EncodingType {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<EncodingType> for Cow<'static, str> {
+    fn from(s: EncodingType) -> Self {
+        s.0
     }
 }
 
 impl FromStr for EncodingType {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -3871,71 +3906,81 @@ pub struct ExistingObjectReplication {
     pub status: ExistingObjectReplicationStatus,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ExistingObjectReplicationStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ExistingObjectReplicationStatus(Cow<'static, str>);
 
 impl ExistingObjectReplicationStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ExistingObjectReplicationStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ExistingObjectReplicationStatus> for Cow<'static, str> {
+    fn from(s: ExistingObjectReplicationStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ExistingObjectReplicationStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
 pub type Expiration = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ExpirationStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ExpirationStatus(Cow<'static, str>);
 
 impl ExpirationStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ExpirationStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ExpirationStatus> for Cow<'static, str> {
+    fn from(s: ExpirationStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ExpirationStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -3949,33 +3994,39 @@ pub type ExposeHeaders = List<ExposeHeader>;
 
 pub type Expression = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ExpressionType {
-    Sql,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ExpressionType(Cow<'static, str>);
 
 impl ExpressionType {
+    pub const SQL: &str = "SQL";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Sql => "SQL",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"SQL" => Some(Self::Sql),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ExpressionType {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ExpressionType> for Cow<'static, str> {
+    fn from(s: ExpressionType) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ExpressionType {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -3983,39 +4034,43 @@ pub type FetchOwner = bool;
 
 pub type FieldDelimiter = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum FileHeaderInfo {
-    Ignore,
-    None,
-    Use,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FileHeaderInfo(Cow<'static, str>);
 
 impl FileHeaderInfo {
+    pub const IGNORE: &str = "IGNORE";
+
+    pub const NONE: &str = "NONE";
+
+    pub const USE: &str = "USE";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Ignore => "IGNORE",
-            Self::None => "NONE",
-            Self::Use => "USE",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"IGNORE" => Some(Self::Ignore),
-            b"NONE" => Some(Self::None),
-            b"USE" => Some(Self::Use),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for FileHeaderInfo {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<FileHeaderInfo> for Cow<'static, str> {
+    fn from(s: FileHeaderInfo) -> Self {
+        s.0
     }
 }
 
 impl FromStr for FileHeaderInfo {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -4036,36 +4091,41 @@ pub struct FilterRule {
 /// rule.</p>
 pub type FilterRuleList = List<FilterRule>;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum FilterRuleName {
-    Prefix,
-    Suffix,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct FilterRuleName(Cow<'static, str>);
 
 impl FilterRuleName {
+    pub const PREFIX: &str = "prefix";
+
+    pub const SUFFIX: &str = "suffix";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Prefix => "prefix",
-            Self::Suffix => "suffix",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"prefix" => Some(Self::Prefix),
-            b"suffix" => Some(Self::Suffix),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for FilterRuleName {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<FilterRuleName> for Cow<'static, str> {
+    fn from(s: FilterRuleName) -> Self {
+        s.0
     }
 }
 
 impl FromStr for FilterRuleName {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -5149,36 +5209,41 @@ pub struct InputSerialization {
     pub parquet: Option<ParquetInput>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum IntelligentTieringAccessTier {
-    ArchiveAccess,
-    DeepArchiveAccess,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct IntelligentTieringAccessTier(Cow<'static, str>);
 
 impl IntelligentTieringAccessTier {
+    pub const ARCHIVE_ACCESS: &str = "ARCHIVE_ACCESS";
+
+    pub const DEEP_ARCHIVE_ACCESS: &str = "DEEP_ARCHIVE_ACCESS";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::ArchiveAccess => "ARCHIVE_ACCESS",
-            Self::DeepArchiveAccess => "DEEP_ARCHIVE_ACCESS",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"ARCHIVE_ACCESS" => Some(Self::ArchiveAccess),
-            b"DEEP_ARCHIVE_ACCESS" => Some(Self::DeepArchiveAccess),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for IntelligentTieringAccessTier {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<IntelligentTieringAccessTier> for Cow<'static, str> {
+    fn from(s: IntelligentTieringAccessTier) -> Self {
+        s.0
     }
 }
 
 impl FromStr for IntelligentTieringAccessTier {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -5235,36 +5300,41 @@ pub struct IntelligentTieringFilter {
 
 pub type IntelligentTieringId = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum IntelligentTieringStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct IntelligentTieringStatus(Cow<'static, str>);
 
 impl IntelligentTieringStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for IntelligentTieringStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<IntelligentTieringStatus> for Cow<'static, str> {
+    fn from(s: IntelligentTieringStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for IntelligentTieringStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -5331,173 +5401,181 @@ pub struct InventoryFilter {
     pub prefix: Prefix,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum InventoryFormat {
-    Csv,
-    Orc,
-    Parquet,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct InventoryFormat(Cow<'static, str>);
 
 impl InventoryFormat {
+    pub const CSV: &str = "CSV";
+
+    pub const ORC: &str = "ORC";
+
+    pub const PARQUET: &str = "Parquet";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Csv => "CSV",
-            Self::Orc => "ORC",
-            Self::Parquet => "Parquet",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"CSV" => Some(Self::Csv),
-            b"ORC" => Some(Self::Orc),
-            b"Parquet" => Some(Self::Parquet),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for InventoryFormat {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<InventoryFormat> for Cow<'static, str> {
+    fn from(s: InventoryFormat) -> Self {
+        s.0
     }
 }
 
 impl FromStr for InventoryFormat {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum InventoryFrequency {
-    Daily,
-    Weekly,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct InventoryFrequency(Cow<'static, str>);
 
 impl InventoryFrequency {
+    pub const DAILY: &str = "Daily";
+
+    pub const WEEKLY: &str = "Weekly";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Daily => "Daily",
-            Self::Weekly => "Weekly",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Daily" => Some(Self::Daily),
-            b"Weekly" => Some(Self::Weekly),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for InventoryFrequency {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<InventoryFrequency> for Cow<'static, str> {
+    fn from(s: InventoryFrequency) -> Self {
+        s.0
     }
 }
 
 impl FromStr for InventoryFrequency {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
 pub type InventoryId = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum InventoryIncludedObjectVersions {
-    All,
-    Current,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct InventoryIncludedObjectVersions(Cow<'static, str>);
 
 impl InventoryIncludedObjectVersions {
+    pub const ALL: &str = "All";
+
+    pub const CURRENT: &str = "Current";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::All => "All",
-            Self::Current => "Current",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"All" => Some(Self::All),
-            b"Current" => Some(Self::Current),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for InventoryIncludedObjectVersions {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<InventoryIncludedObjectVersions> for Cow<'static, str> {
+    fn from(s: InventoryIncludedObjectVersions) -> Self {
+        s.0
     }
 }
 
 impl FromStr for InventoryIncludedObjectVersions {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum InventoryOptionalField {
-    BucketKeyStatus,
-    ChecksumAlgorithm,
-    ETag,
-    EncryptionStatus,
-    IntelligentTieringAccessTier,
-    IsMultipartUploaded,
-    LastModifiedDate,
-    ObjectLockLegalHoldStatus,
-    ObjectLockMode,
-    ObjectLockRetainUntilDate,
-    ReplicationStatus,
-    Size,
-    StorageClass,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct InventoryOptionalField(Cow<'static, str>);
 
 impl InventoryOptionalField {
+    pub const BUCKET_KEY_STATUS: &str = "BucketKeyStatus";
+
+    pub const CHECKSUM_ALGORITHM: &str = "ChecksumAlgorithm";
+
+    pub const E_TAG: &str = "ETag";
+
+    pub const ENCRYPTION_STATUS: &str = "EncryptionStatus";
+
+    pub const INTELLIGENT_TIERING_ACCESS_TIER: &str = "IntelligentTieringAccessTier";
+
+    pub const IS_MULTIPART_UPLOADED: &str = "IsMultipartUploaded";
+
+    pub const LAST_MODIFIED_DATE: &str = "LastModifiedDate";
+
+    pub const OBJECT_LOCK_LEGAL_HOLD_STATUS: &str = "ObjectLockLegalHoldStatus";
+
+    pub const OBJECT_LOCK_MODE: &str = "ObjectLockMode";
+
+    pub const OBJECT_LOCK_RETAIN_UNTIL_DATE: &str = "ObjectLockRetainUntilDate";
+
+    pub const REPLICATION_STATUS: &str = "ReplicationStatus";
+
+    pub const SIZE: &str = "Size";
+
+    pub const STORAGE_CLASS: &str = "StorageClass";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::BucketKeyStatus => "BucketKeyStatus",
-            Self::ChecksumAlgorithm => "ChecksumAlgorithm",
-            Self::ETag => "ETag",
-            Self::EncryptionStatus => "EncryptionStatus",
-            Self::IntelligentTieringAccessTier => "IntelligentTieringAccessTier",
-            Self::IsMultipartUploaded => "IsMultipartUploaded",
-            Self::LastModifiedDate => "LastModifiedDate",
-            Self::ObjectLockLegalHoldStatus => "ObjectLockLegalHoldStatus",
-            Self::ObjectLockMode => "ObjectLockMode",
-            Self::ObjectLockRetainUntilDate => "ObjectLockRetainUntilDate",
-            Self::ReplicationStatus => "ReplicationStatus",
-            Self::Size => "Size",
-            Self::StorageClass => "StorageClass",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"BucketKeyStatus" => Some(Self::BucketKeyStatus),
-            b"ChecksumAlgorithm" => Some(Self::ChecksumAlgorithm),
-            b"ETag" => Some(Self::ETag),
-            b"EncryptionStatus" => Some(Self::EncryptionStatus),
-            b"IntelligentTieringAccessTier" => Some(Self::IntelligentTieringAccessTier),
-            b"IsMultipartUploaded" => Some(Self::IsMultipartUploaded),
-            b"LastModifiedDate" => Some(Self::LastModifiedDate),
-            b"ObjectLockLegalHoldStatus" => Some(Self::ObjectLockLegalHoldStatus),
-            b"ObjectLockMode" => Some(Self::ObjectLockMode),
-            b"ObjectLockRetainUntilDate" => Some(Self::ObjectLockRetainUntilDate),
-            b"ReplicationStatus" => Some(Self::ReplicationStatus),
-            b"Size" => Some(Self::Size),
-            b"StorageClass" => Some(Self::StorageClass),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for InventoryOptionalField {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<InventoryOptionalField> for Cow<'static, str> {
+    fn from(s: InventoryOptionalField) -> Self {
+        s.0
     }
 }
 
 impl FromStr for InventoryOptionalField {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -5556,36 +5634,41 @@ pub struct JSONOutput {
     pub record_delimiter: Option<RecordDelimiter>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum JSONType {
-    Document,
-    Lines,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct JSONType(Cow<'static, str>);
 
 impl JSONType {
+    pub const DOCUMENT: &str = "DOCUMENT";
+
+    pub const LINES: &str = "LINES";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Document => "DOCUMENT",
-            Self::Lines => "LINES",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"DOCUMENT" => Some(Self::Document),
-            b"LINES" => Some(Self::Lines),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for JSONType {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<JSONType> for Cow<'static, str> {
+    fn from(s: JSONType) -> Self {
+        s.0
     }
 }
 
 impl FromStr for JSONType {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6299,69 +6382,79 @@ pub struct LoggingEnabled {
 
 pub type MFA = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum MFADelete {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MFADelete(Cow<'static, str>);
 
 impl MFADelete {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for MFADelete {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<MFADelete> for Cow<'static, str> {
+    fn from(s: MFADelete) -> Self {
+        s.0
     }
 }
 
 impl FromStr for MFADelete {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum MFADeleteStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MFADeleteStatus(Cow<'static, str>);
 
 impl MFADeleteStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for MFADeleteStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<MFADeleteStatus> for Cow<'static, str> {
+    fn from(s: MFADeleteStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for MFADeleteStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6379,36 +6472,41 @@ pub type Message = String;
 
 pub type Metadata = Map<MetadataKey, MetadataValue>;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum MetadataDirective {
-    Copy,
-    Replace,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MetadataDirective(Cow<'static, str>);
 
 impl MetadataDirective {
+    pub const COPY: &str = "COPY";
+
+    pub const REPLACE: &str = "REPLACE";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Copy => "COPY",
-            Self::Replace => "REPLACE",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"COPY" => Some(Self::Copy),
-            b"REPLACE" => Some(Self::Replace),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for MetadataDirective {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<MetadataDirective> for Cow<'static, str> {
+    fn from(s: MetadataDirective) -> Self {
+        s.0
     }
 }
 
 impl FromStr for MetadataDirective {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6486,36 +6584,41 @@ pub enum MetricsFilter {
 
 pub type MetricsId = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum MetricsStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MetricsStatus(Cow<'static, str>);
 
 impl MetricsStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for MetricsStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<MetricsStatus> for Cow<'static, str> {
+    fn from(s: MetricsStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for MetricsStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6691,95 +6794,97 @@ pub struct Object {
 #[derive(Debug, Default)]
 pub struct ObjectAlreadyInActiveTierError {}
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectAttributes {
-    Checksum,
-    Etag,
-    ObjectParts,
-    ObjectSize,
-    StorageClass,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectAttributes(Cow<'static, str>);
 
 impl ObjectAttributes {
+    pub const CHECKSUM: &str = "Checksum";
+
+    pub const ETAG: &str = "ETag";
+
+    pub const OBJECT_PARTS: &str = "ObjectParts";
+
+    pub const OBJECT_SIZE: &str = "ObjectSize";
+
+    pub const STORAGE_CLASS: &str = "StorageClass";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Checksum => "Checksum",
-            Self::Etag => "ETag",
-            Self::ObjectParts => "ObjectParts",
-            Self::ObjectSize => "ObjectSize",
-            Self::StorageClass => "StorageClass",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Checksum" => Some(Self::Checksum),
-            b"ETag" => Some(Self::Etag),
-            b"ObjectParts" => Some(Self::ObjectParts),
-            b"ObjectSize" => Some(Self::ObjectSize),
-            b"StorageClass" => Some(Self::StorageClass),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectAttributes {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectAttributes> for Cow<'static, str> {
+    fn from(s: ObjectAttributes) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectAttributes {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
 pub type ObjectAttributesList = List<ObjectAttributes>;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectCannedACL {
-    AuthenticatedRead,
-    AwsExecRead,
-    BucketOwnerFullControl,
-    BucketOwnerRead,
-    Private,
-    PublicRead,
-    PublicReadWrite,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectCannedACL(Cow<'static, str>);
 
 impl ObjectCannedACL {
+    pub const AUTHENTICATED_READ: &str = "authenticated-read";
+
+    pub const AWS_EXEC_READ: &str = "aws-exec-read";
+
+    pub const BUCKET_OWNER_FULL_CONTROL: &str = "bucket-owner-full-control";
+
+    pub const BUCKET_OWNER_READ: &str = "bucket-owner-read";
+
+    pub const PRIVATE: &str = "private";
+
+    pub const PUBLIC_READ: &str = "public-read";
+
+    pub const PUBLIC_READ_WRITE: &str = "public-read-write";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::AuthenticatedRead => "authenticated-read",
-            Self::AwsExecRead => "aws-exec-read",
-            Self::BucketOwnerFullControl => "bucket-owner-full-control",
-            Self::BucketOwnerRead => "bucket-owner-read",
-            Self::Private => "private",
-            Self::PublicRead => "public-read",
-            Self::PublicReadWrite => "public-read-write",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"authenticated-read" => Some(Self::AuthenticatedRead),
-            b"aws-exec-read" => Some(Self::AwsExecRead),
-            b"bucket-owner-full-control" => Some(Self::BucketOwnerFullControl),
-            b"bucket-owner-read" => Some(Self::BucketOwnerRead),
-            b"private" => Some(Self::Private),
-            b"public-read" => Some(Self::PublicRead),
-            b"public-read-write" => Some(Self::PublicReadWrite),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectCannedACL {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectCannedACL> for Cow<'static, str> {
+    fn from(s: ObjectCannedACL) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectCannedACL {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6817,33 +6922,39 @@ pub struct ObjectLockConfiguration {
     pub rule: Option<ObjectLockRule>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectLockEnabled {
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectLockEnabled(Cow<'static, str>);
 
 impl ObjectLockEnabled {
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectLockEnabled {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectLockEnabled> for Cow<'static, str> {
+    fn from(s: ObjectLockEnabled) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectLockEnabled {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6856,69 +6967,79 @@ pub struct ObjectLockLegalHold {
     pub status: Option<ObjectLockLegalHoldStatus>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectLockLegalHoldStatus {
-    Off,
-    On,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectLockLegalHoldStatus(Cow<'static, str>);
 
 impl ObjectLockLegalHoldStatus {
+    pub const OFF: &str = "OFF";
+
+    pub const ON: &str = "ON";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Off => "OFF",
-            Self::On => "ON",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"OFF" => Some(Self::Off),
-            b"ON" => Some(Self::On),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectLockLegalHoldStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectLockLegalHoldStatus> for Cow<'static, str> {
+    fn from(s: ObjectLockLegalHoldStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectLockLegalHoldStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectLockMode {
-    Compliance,
-    Governance,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectLockMode(Cow<'static, str>);
 
 impl ObjectLockMode {
+    pub const COMPLIANCE: &str = "COMPLIANCE";
+
+    pub const GOVERNANCE: &str = "GOVERNANCE";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Compliance => "COMPLIANCE",
-            Self::Governance => "GOVERNANCE",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"COMPLIANCE" => Some(Self::Compliance),
-            b"GOVERNANCE" => Some(Self::Governance),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectLockMode {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectLockMode> for Cow<'static, str> {
+    fn from(s: ObjectLockMode) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectLockMode {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6933,36 +7054,41 @@ pub struct ObjectLockRetention {
     pub retain_until_date: Option<Date>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectLockRetentionMode {
-    Compliance,
-    Governance,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectLockRetentionMode(Cow<'static, str>);
 
 impl ObjectLockRetentionMode {
+    pub const COMPLIANCE: &str = "COMPLIANCE";
+
+    pub const GOVERNANCE: &str = "GOVERNANCE";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Compliance => "COMPLIANCE",
-            Self::Governance => "GOVERNANCE",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"COMPLIANCE" => Some(Self::Compliance),
-            b"GOVERNANCE" => Some(Self::Governance),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectLockRetentionMode {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectLockRetentionMode> for Cow<'static, str> {
+    fn from(s: ObjectLockRetentionMode) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectLockRetentionMode {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6994,39 +7120,43 @@ pub struct ObjectNotInActiveTierError {}
 /// accepts PUT requests that don't specify an ACL or bucket owner full control
 /// ACLs, such as the <code>bucket-owner-full-control</code> canned
 /// ACL or an equivalent form of this ACL expressed in the XML format.</p>
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectOwnership {
-    BucketOwnerEnforced,
-    BucketOwnerPreferred,
-    ObjectWriter,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectOwnership(Cow<'static, str>);
 
 impl ObjectOwnership {
+    pub const BUCKET_OWNER_ENFORCED: &str = "BucketOwnerEnforced";
+
+    pub const BUCKET_OWNER_PREFERRED: &str = "BucketOwnerPreferred";
+
+    pub const OBJECT_WRITER: &str = "ObjectWriter";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::BucketOwnerEnforced => "BucketOwnerEnforced",
-            Self::BucketOwnerPreferred => "BucketOwnerPreferred",
-            Self::ObjectWriter => "ObjectWriter",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"BucketOwnerEnforced" => Some(Self::BucketOwnerEnforced),
-            b"BucketOwnerPreferred" => Some(Self::BucketOwnerPreferred),
-            b"ObjectWriter" => Some(Self::ObjectWriter),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectOwnership {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectOwnership> for Cow<'static, str> {
+    fn from(s: ObjectOwnership) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectOwnership {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -7066,57 +7196,55 @@ pub type ObjectSizeGreaterThanBytes = i64;
 
 pub type ObjectSizeLessThanBytes = i64;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectStorageClass {
-    DeepArchive,
-    Glacier,
-    GlacierIr,
-    IntelligentTiering,
-    OnezoneIa,
-    Outposts,
-    ReducedRedundancy,
-    Standard,
-    StandardIa,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectStorageClass(Cow<'static, str>);
 
 impl ObjectStorageClass {
+    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+
+    pub const GLACIER: &str = "GLACIER";
+
+    pub const GLACIER_IR: &str = "GLACIER_IR";
+
+    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+
+    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+
+    pub const OUTPOSTS: &str = "OUTPOSTS";
+
+    pub const REDUCED_REDUNDANCY: &str = "REDUCED_REDUNDANCY";
+
+    pub const STANDARD: &str = "STANDARD";
+
+    pub const STANDARD_IA: &str = "STANDARD_IA";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::DeepArchive => "DEEP_ARCHIVE",
-            Self::Glacier => "GLACIER",
-            Self::GlacierIr => "GLACIER_IR",
-            Self::IntelligentTiering => "INTELLIGENT_TIERING",
-            Self::OnezoneIa => "ONEZONE_IA",
-            Self::Outposts => "OUTPOSTS",
-            Self::ReducedRedundancy => "REDUCED_REDUNDANCY",
-            Self::Standard => "STANDARD",
-            Self::StandardIa => "STANDARD_IA",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"DEEP_ARCHIVE" => Some(Self::DeepArchive),
-            b"GLACIER" => Some(Self::Glacier),
-            b"GLACIER_IR" => Some(Self::GlacierIr),
-            b"INTELLIGENT_TIERING" => Some(Self::IntelligentTiering),
-            b"ONEZONE_IA" => Some(Self::OnezoneIa),
-            b"OUTPOSTS" => Some(Self::Outposts),
-            b"REDUCED_REDUNDANCY" => Some(Self::ReducedRedundancy),
-            b"STANDARD" => Some(Self::Standard),
-            b"STANDARD_IA" => Some(Self::StandardIa),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectStorageClass {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectStorageClass> for Cow<'static, str> {
+    fn from(s: ObjectStorageClass) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectStorageClass {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -7148,33 +7276,39 @@ pub type ObjectVersionId = String;
 
 pub type ObjectVersionList = List<ObjectVersion>;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ObjectVersionStorageClass {
-    Standard,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ObjectVersionStorageClass(Cow<'static, str>);
 
 impl ObjectVersionStorageClass {
+    pub const STANDARD: &str = "STANDARD";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Standard => "STANDARD",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"STANDARD" => Some(Self::Standard),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ObjectVersionStorageClass {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ObjectVersionStorageClass> for Cow<'static, str> {
+    fn from(s: ObjectVersionStorageClass) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ObjectVersionStorageClass {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -7203,33 +7337,39 @@ pub struct Owner {
     pub id: Option<ID>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum OwnerOverride {
-    Destination,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct OwnerOverride(Cow<'static, str>);
 
 impl OwnerOverride {
+    pub const DESTINATION: &str = "Destination";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Destination => "Destination",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Destination" => Some(Self::Destination),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for OwnerOverride {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<OwnerOverride> for Cow<'static, str> {
+    fn from(s: OwnerOverride) -> Self {
+        s.0
     }
 }
 
 impl FromStr for OwnerOverride {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -7296,78 +7436,85 @@ pub type PartsCount = i32;
 
 pub type PartsList = List<ObjectPart>;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum Payer {
-    BucketOwner,
-    Requester,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Payer(Cow<'static, str>);
 
 impl Payer {
+    pub const BUCKET_OWNER: &str = "BucketOwner";
+
+    pub const REQUESTER: &str = "Requester";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::BucketOwner => "BucketOwner",
-            Self::Requester => "Requester",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"BucketOwner" => Some(Self::BucketOwner),
-            b"Requester" => Some(Self::Requester),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for Payer {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<Payer> for Cow<'static, str> {
+    fn from(s: Payer) -> Self {
+        s.0
     }
 }
 
 impl FromStr for Payer {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum Permission {
-    FullControl,
-    Read,
-    ReadAcp,
-    Write,
-    WriteAcp,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Permission(Cow<'static, str>);
 
 impl Permission {
+    pub const FULL_CONTROL: &str = "FULL_CONTROL";
+
+    pub const READ: &str = "READ";
+
+    pub const READ_ACP: &str = "READ_ACP";
+
+    pub const WRITE: &str = "WRITE";
+
+    pub const WRITE_ACP: &str = "WRITE_ACP";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::FullControl => "FULL_CONTROL",
-            Self::Read => "READ",
-            Self::ReadAcp => "READ_ACP",
-            Self::Write => "WRITE",
-            Self::WriteAcp => "WRITE_ACP",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"FULL_CONTROL" => Some(Self::FullControl),
-            b"READ" => Some(Self::Read),
-            b"READ_ACP" => Some(Self::ReadAcp),
-            b"WRITE" => Some(Self::Write),
-            b"WRITE_ACP" => Some(Self::WriteAcp),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for Permission {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<Permission> for Cow<'static, str> {
+    fn from(s: Permission) -> Self {
+        s.0
     }
 }
 
 impl FromStr for Permission {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -7403,36 +7550,41 @@ pub struct ProgressEvent {
     pub details: Option<Progress>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum Protocol {
-    Http,
-    Https,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Protocol(Cow<'static, str>);
 
 impl Protocol {
+    pub const HTTP: &str = "http";
+
+    pub const HTTPS: &str = "https";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Http => "http",
-            Self::Https => "https",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"http" => Some(Self::Http),
-            b"https" => Some(Self::Https),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for Protocol {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<Protocol> for Cow<'static, str> {
+    fn from(s: Protocol) -> Self {
+        s.0
     }
 }
 
 impl FromStr for Protocol {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -8356,36 +8508,41 @@ pub type QuoteCharacter = String;
 
 pub type QuoteEscapeCharacter = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum QuoteFields {
-    Always,
-    Asneeded,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct QuoteFields(Cow<'static, str>);
 
 impl QuoteFields {
+    pub const ALWAYS: &str = "ALWAYS";
+
+    pub const ASNEEDED: &str = "ASNEEDED";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Always => "ALWAYS",
-            Self::Asneeded => "ASNEEDED",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"ALWAYS" => Some(Self::Always),
-            b"ASNEEDED" => Some(Self::Asneeded),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for QuoteFields {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<QuoteFields> for Cow<'static, str> {
+    fn from(s: QuoteFields) -> Self {
+        s.0
     }
 }
 
 impl FromStr for QuoteFields {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -8465,36 +8622,41 @@ pub struct ReplicaModifications {
     pub status: ReplicaModificationsStatus,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ReplicaModificationsStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ReplicaModificationsStatus(Cow<'static, str>);
 
 impl ReplicaModificationsStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ReplicaModificationsStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ReplicaModificationsStatus> for Cow<'static, str> {
+    fn from(s: ReplicaModificationsStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ReplicaModificationsStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -8605,77 +8767,85 @@ pub enum ReplicationRuleFilter {
     Tag(Tag),
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ReplicationRuleStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ReplicationRuleStatus(Cow<'static, str>);
 
 impl ReplicationRuleStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ReplicationRuleStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ReplicationRuleStatus> for Cow<'static, str> {
+    fn from(s: ReplicationRuleStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ReplicationRuleStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
 pub type ReplicationRules = List<ReplicationRule>;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ReplicationStatus {
-    Complete,
-    Failed,
-    Pending,
-    Replica,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ReplicationStatus(Cow<'static, str>);
 
 impl ReplicationStatus {
+    pub const COMPLETE: &str = "COMPLETE";
+
+    pub const FAILED: &str = "FAILED";
+
+    pub const PENDING: &str = "PENDING";
+
+    pub const REPLICA: &str = "REPLICA";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Complete => "COMPLETE",
-            Self::Failed => "FAILED",
-            Self::Pending => "PENDING",
-            Self::Replica => "REPLICA",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"COMPLETE" => Some(Self::Complete),
-            b"FAILED" => Some(Self::Failed),
-            b"PENDING" => Some(Self::Pending),
-            b"REPLICA" => Some(Self::Replica),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ReplicationStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ReplicationStatus> for Cow<'static, str> {
+    fn from(s: ReplicationStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ReplicationStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -8691,36 +8861,41 @@ pub struct ReplicationTime {
     pub time: ReplicationTimeValue,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ReplicationTimeStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ReplicationTimeStatus(Cow<'static, str>);
 
 impl ReplicationTimeStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ReplicationTimeStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ReplicationTimeStatus> for Cow<'static, str> {
+    fn from(s: ReplicationTimeStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ReplicationTimeStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -8735,33 +8910,39 @@ pub struct ReplicationTimeValue {
 
 /// <p>If present, indicates that the requester was successfully charged for the
 /// request.</p>
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum RequestCharged {
-    Requester,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RequestCharged(Cow<'static, str>);
 
 impl RequestCharged {
+    pub const REQUESTER: &str = "requester";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Requester => "requester",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"requester" => Some(Self::Requester),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for RequestCharged {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<RequestCharged> for Cow<'static, str> {
+    fn from(s: RequestCharged) -> Self {
+        s.0
     }
 }
 
 impl FromStr for RequestCharged {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -8769,33 +8950,39 @@ impl FromStr for RequestCharged {
 /// owners need not specify this parameter in their requests. For information about downloading
 /// objects from Requester Pays buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html">Downloading Objects in
 /// Requester Pays Buckets</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum RequestPayer {
-    Requester,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RequestPayer(Cow<'static, str>);
 
 impl RequestPayer {
+    pub const REQUESTER: &str = "requester";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Requester => "requester",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"requester" => Some(Self::Requester),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for RequestPayer {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<RequestPayer> for Cow<'static, str> {
+    fn from(s: RequestPayer) -> Self {
+        s.0
     }
 }
 
 impl FromStr for RequestPayer {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -8891,33 +9078,39 @@ pub struct RestoreRequest {
     pub type_: Option<RestoreRequestType>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum RestoreRequestType {
-    Select,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RestoreRequestType(Cow<'static, str>);
 
 impl RestoreRequestType {
+    pub const SELECT: &str = "SELECT";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Select => "SELECT",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"SELECT" => Some(Self::Select),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for RestoreRequestType {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<RestoreRequestType> for Cow<'static, str> {
+    fn from(s: RestoreRequestType) -> Self {
+        s.0
     }
 }
 
 impl FromStr for RestoreRequestType {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -9023,36 +9216,41 @@ pub struct SelectParameters {
     pub output_serialization: OutputSerialization,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum ServerSideEncryption {
-    Aes256,
-    AwsKms,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ServerSideEncryption(Cow<'static, str>);
 
 impl ServerSideEncryption {
+    pub const AES256: &str = "AES256";
+
+    pub const AWS_KMS: &str = "aws:kms";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Aes256 => "AES256",
-            Self::AwsKms => "aws:kms",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"AES256" => Some(Self::Aes256),
-            b"aws:kms" => Some(Self::AwsKms),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for ServerSideEncryption {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<ServerSideEncryption> for Cow<'static, str> {
+    fn from(s: ServerSideEncryption) -> Self {
+        s.0
     }
 }
 
 impl FromStr for ServerSideEncryption {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -9154,36 +9352,41 @@ pub struct SseKmsEncryptedObjects {
     pub status: SseKmsEncryptedObjectsStatus,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum SseKmsEncryptedObjectsStatus {
-    Disabled,
-    Enabled,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SseKmsEncryptedObjectsStatus(Cow<'static, str>);
 
 impl SseKmsEncryptedObjectsStatus {
+    pub const DISABLED: &str = "Disabled";
+
+    pub const ENABLED: &str = "Enabled";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Disabled => "Disabled",
-            Self::Enabled => "Enabled",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Disabled" => Some(Self::Disabled),
-            b"Enabled" => Some(Self::Enabled),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for SseKmsEncryptedObjectsStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<SseKmsEncryptedObjectsStatus> for Cow<'static, str> {
+    fn from(s: SseKmsEncryptedObjectsStatus) -> Self {
+        s.0
     }
 }
 
 impl FromStr for SseKmsEncryptedObjectsStatus {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -9209,57 +9412,55 @@ pub struct StatsEvent {
     pub details: Option<Stats>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum StorageClass {
-    DeepArchive,
-    Glacier,
-    GlacierIr,
-    IntelligentTiering,
-    OnezoneIa,
-    Outposts,
-    ReducedRedundancy,
-    Standard,
-    StandardIa,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct StorageClass(Cow<'static, str>);
 
 impl StorageClass {
+    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+
+    pub const GLACIER: &str = "GLACIER";
+
+    pub const GLACIER_IR: &str = "GLACIER_IR";
+
+    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+
+    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+
+    pub const OUTPOSTS: &str = "OUTPOSTS";
+
+    pub const REDUCED_REDUNDANCY: &str = "REDUCED_REDUNDANCY";
+
+    pub const STANDARD: &str = "STANDARD";
+
+    pub const STANDARD_IA: &str = "STANDARD_IA";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::DeepArchive => "DEEP_ARCHIVE",
-            Self::Glacier => "GLACIER",
-            Self::GlacierIr => "GLACIER_IR",
-            Self::IntelligentTiering => "INTELLIGENT_TIERING",
-            Self::OnezoneIa => "ONEZONE_IA",
-            Self::Outposts => "OUTPOSTS",
-            Self::ReducedRedundancy => "REDUCED_REDUNDANCY",
-            Self::Standard => "STANDARD",
-            Self::StandardIa => "STANDARD_IA",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"DEEP_ARCHIVE" => Some(Self::DeepArchive),
-            b"GLACIER" => Some(Self::Glacier),
-            b"GLACIER_IR" => Some(Self::GlacierIr),
-            b"INTELLIGENT_TIERING" => Some(Self::IntelligentTiering),
-            b"ONEZONE_IA" => Some(Self::OnezoneIa),
-            b"OUTPOSTS" => Some(Self::Outposts),
-            b"REDUCED_REDUNDANCY" => Some(Self::ReducedRedundancy),
-            b"STANDARD" => Some(Self::Standard),
-            b"STANDARD_IA" => Some(Self::StandardIa),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for StorageClass {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<StorageClass> for Cow<'static, str> {
+    fn from(s: StorageClass) -> Self {
+        s.0
     }
 }
 
 impl FromStr for StorageClass {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -9283,33 +9484,39 @@ pub struct StorageClassAnalysisDataExport {
     pub output_schema_version: StorageClassAnalysisSchemaVersion,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum StorageClassAnalysisSchemaVersion {
-    V1,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct StorageClassAnalysisSchemaVersion(Cow<'static, str>);
 
 impl StorageClassAnalysisSchemaVersion {
+    pub const V_1: &str = "V_1";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::V1 => "V_1",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"V_1" => Some(Self::V1),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for StorageClassAnalysisSchemaVersion {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<StorageClassAnalysisSchemaVersion> for Cow<'static, str> {
+    fn from(s: StorageClassAnalysisSchemaVersion) -> Self {
+        s.0
     }
 }
 
 impl FromStr for StorageClassAnalysisSchemaVersion {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -9335,36 +9542,41 @@ pub struct Tagging {
     pub tag_set: TagSet,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum TaggingDirective {
-    Copy,
-    Replace,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TaggingDirective(Cow<'static, str>);
 
 impl TaggingDirective {
+    pub const COPY: &str = "COPY";
+
+    pub const REPLACE: &str = "REPLACE";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Copy => "COPY",
-            Self::Replace => "REPLACE",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"COPY" => Some(Self::Copy),
-            b"REPLACE" => Some(Self::Replace),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for TaggingDirective {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<TaggingDirective> for Cow<'static, str> {
+    fn from(s: TaggingDirective) -> Self {
+        s.0
     }
 }
 
 impl FromStr for TaggingDirective {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -9388,39 +9600,43 @@ pub type TargetGrants = List<TargetGrant>;
 
 pub type TargetPrefix = String;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum Tier {
-    Bulk,
-    Expedited,
-    Standard,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Tier(Cow<'static, str>);
 
 impl Tier {
+    pub const BULK: &str = "Bulk";
+
+    pub const EXPEDITED: &str = "Expedited";
+
+    pub const STANDARD: &str = "Standard";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Bulk => "Bulk",
-            Self::Expedited => "Expedited",
-            Self::Standard => "Standard",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"Bulk" => Some(Self::Bulk),
-            b"Expedited" => Some(Self::Expedited),
-            b"Standard" => Some(Self::Standard),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for Tier {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<Tier> for Cow<'static, str> {
+    fn from(s: Tier) -> Self {
+        s.0
     }
 }
 
 impl FromStr for Tier {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -9480,84 +9696,89 @@ pub struct Transition {
 
 pub type TransitionList = List<Transition>;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum TransitionStorageClass {
-    DeepArchive,
-    Glacier,
-    GlacierIr,
-    IntelligentTiering,
-    OnezoneIa,
-    StandardIa,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TransitionStorageClass(Cow<'static, str>);
 
 impl TransitionStorageClass {
+    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+
+    pub const GLACIER: &str = "GLACIER";
+
+    pub const GLACIER_IR: &str = "GLACIER_IR";
+
+    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+
+    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+
+    pub const STANDARD_IA: &str = "STANDARD_IA";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::DeepArchive => "DEEP_ARCHIVE",
-            Self::Glacier => "GLACIER",
-            Self::GlacierIr => "GLACIER_IR",
-            Self::IntelligentTiering => "INTELLIGENT_TIERING",
-            Self::OnezoneIa => "ONEZONE_IA",
-            Self::StandardIa => "STANDARD_IA",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"DEEP_ARCHIVE" => Some(Self::DeepArchive),
-            b"GLACIER" => Some(Self::Glacier),
-            b"GLACIER_IR" => Some(Self::GlacierIr),
-            b"INTELLIGENT_TIERING" => Some(Self::IntelligentTiering),
-            b"ONEZONE_IA" => Some(Self::OnezoneIa),
-            b"STANDARD_IA" => Some(Self::StandardIa),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for TransitionStorageClass {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<TransitionStorageClass> for Cow<'static, str> {
+    fn from(s: TransitionStorageClass) -> Self {
+        s.0
     }
 }
 
 impl FromStr for TransitionStorageClass {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-#[non_exhaustive]
-pub enum Type {
-    AmazonCustomerByEmail,
-    CanonicalUser,
-    Group,
-}
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Type(Cow<'static, str>);
 
 impl Type {
+    pub const AMAZON_CUSTOMER_BY_EMAIL: &str = "AmazonCustomerByEmail";
+
+    pub const CANONICAL_USER: &str = "CanonicalUser";
+
+    pub const GROUP: &str = "Group";
+
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::AmazonCustomerByEmail => "AmazonCustomerByEmail",
-            Self::CanonicalUser => "CanonicalUser",
-            Self::Group => "Group",
-        }
+    pub fn as_str(&self) -> &str {
+        &self.0
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
-        match s {
-            b"AmazonCustomerByEmail" => Some(Self::AmazonCustomerByEmail),
-            b"CanonicalUser" => Some(Self::CanonicalUser),
-            b"Group" => Some(Self::Group),
-            _ => None,
-        }
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for Type {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<Type> for Cow<'static, str> {
+    fn from(s: Type) -> Self {
+        s.0
     }
 }
 
 impl FromStr for Type {
-    type Err = ParseEnumError;
+    type Err = Infallible;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Self::from_bytes(s.as_bytes()).ok_or(ParseEnumError(()))
+        Ok(Self::from(s.to_owned()))
     }
 }
 

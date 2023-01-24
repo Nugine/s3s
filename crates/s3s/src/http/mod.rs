@@ -23,5 +23,5 @@ pub type Body = hyper::Body;
 pub type Request = hyper::Request<Body>;
 pub type Response = hyper::Response<Body>;
 
-pub use hyper::header::{HeaderName, HeaderValue};
+pub use hyper::header::{HeaderName, HeaderValue, InvalidHeaderValue};
 pub use hyper::http::StatusCode;

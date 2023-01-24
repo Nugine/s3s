@@ -26,10 +26,6 @@ pub type Body = hyper::body::Bytes;
 
 pub type Unit = ();
 
-#[derive(Debug, thiserror::Error)]
-#[error("ParseEnumError")]
-pub struct ParseEnumError(());
-
 impl From<ListObjectsInput> for ListObjectsV2Input {
     fn from(v1: ListObjectsInput) -> Self {
         let ListObjectsInput {

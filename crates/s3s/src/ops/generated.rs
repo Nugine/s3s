@@ -8,6 +8,7 @@ use crate::http;
 use crate::path::S3Path;
 use crate::xml;
 
+use std::borrow::Cow;
 use std::io::Write;
 
 /// An async trait which represents the S3 API
@@ -8201,13 +8202,13 @@ impl<'xml> xml::DeserializeContent<'xml> for AnalyticsS3BucketDestination {
 
 impl<'xml> xml::DeserializeContent<'xml> for AnalyticsS3ExportFileFormat {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for BucketAccelerateStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -8230,7 +8231,7 @@ impl<'xml> xml::DeserializeContent<'xml> for BucketLifecycleConfiguration {
 
 impl<'xml> xml::DeserializeContent<'xml> for BucketLocationConstraint {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -8253,13 +8254,13 @@ impl<'xml> xml::DeserializeContent<'xml> for BucketLoggingStatus {
 
 impl<'xml> xml::DeserializeContent<'xml> for BucketLogsPermission {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for BucketVersioningStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -8545,7 +8546,7 @@ impl<'xml> xml::DeserializeContent<'xml> for CompletedPart {
 
 impl<'xml> xml::DeserializeContent<'xml> for CompressionType {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -8676,7 +8677,7 @@ impl<'xml> xml::DeserializeContent<'xml> for DeleteMarkerReplication {
 
 impl<'xml> xml::DeserializeContent<'xml> for DeleteMarkerReplicationStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -8853,25 +8854,25 @@ impl<'xml> xml::DeserializeContent<'xml> for ExistingObjectReplication {
 
 impl<'xml> xml::DeserializeContent<'xml> for ExistingObjectReplicationStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for ExpirationStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for ExpressionType {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for FileHeaderInfo {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -8902,7 +8903,7 @@ impl<'xml> xml::DeserializeContent<'xml> for FilterRule {
 
 impl<'xml> xml::DeserializeContent<'xml> for FilterRuleName {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -9072,7 +9073,7 @@ impl<'xml> xml::DeserializeContent<'xml> for InputSerialization {
 
 impl<'xml> xml::DeserializeContent<'xml> for IntelligentTieringAccessTier {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -9178,7 +9179,7 @@ impl<'xml> xml::DeserializeContent<'xml> for IntelligentTieringFilter {
 
 impl<'xml> xml::DeserializeContent<'xml> for IntelligentTieringStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -9320,25 +9321,25 @@ impl<'xml> xml::DeserializeContent<'xml> for InventoryFilter {
 
 impl<'xml> xml::DeserializeContent<'xml> for InventoryFormat {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for InventoryFrequency {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for InventoryIncludedObjectVersions {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for InventoryOptionalField {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -9452,7 +9453,7 @@ impl<'xml> xml::DeserializeContent<'xml> for JSONOutput {
 
 impl<'xml> xml::DeserializeContent<'xml> for JSONType {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -9720,7 +9721,7 @@ impl<'xml> xml::DeserializeContent<'xml> for LoggingEnabled {
 
 impl<'xml> xml::DeserializeContent<'xml> for MFADelete {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -9854,7 +9855,7 @@ impl<'xml> xml::DeserializeContent<'xml> for MetricsFilter {
 
 impl<'xml> xml::DeserializeContent<'xml> for MetricsStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -9982,7 +9983,7 @@ impl<'xml> xml::DeserializeContent<'xml> for NotificationConfigurationFilter {
 
 impl<'xml> xml::DeserializeContent<'xml> for ObjectCannedACL {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10044,7 +10045,7 @@ impl<'xml> xml::DeserializeContent<'xml> for ObjectLockConfiguration {
 
 impl<'xml> xml::DeserializeContent<'xml> for ObjectLockEnabled {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10067,7 +10068,7 @@ impl<'xml> xml::DeserializeContent<'xml> for ObjectLockLegalHold {
 
 impl<'xml> xml::DeserializeContent<'xml> for ObjectLockLegalHoldStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10098,7 +10099,7 @@ impl<'xml> xml::DeserializeContent<'xml> for ObjectLockRetention {
 
 impl<'xml> xml::DeserializeContent<'xml> for ObjectLockRetentionMode {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10121,7 +10122,7 @@ impl<'xml> xml::DeserializeContent<'xml> for ObjectLockRule {
 
 impl<'xml> xml::DeserializeContent<'xml> for ObjectOwnership {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10194,7 +10195,7 @@ impl<'xml> xml::DeserializeContent<'xml> for Owner {
 
 impl<'xml> xml::DeserializeContent<'xml> for OwnerOverride {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10242,19 +10243,19 @@ impl<'xml> xml::DeserializeContent<'xml> for ParquetInput {
 
 impl<'xml> xml::DeserializeContent<'xml> for Payer {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for Permission {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for Protocol {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10350,7 +10351,7 @@ impl<'xml> xml::DeserializeContent<'xml> for QueueConfiguration {
 
 impl<'xml> xml::DeserializeContent<'xml> for QuoteFields {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10458,7 +10459,7 @@ impl<'xml> xml::DeserializeContent<'xml> for ReplicaModifications {
 
 impl<'xml> xml::DeserializeContent<'xml> for ReplicaModificationsStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10615,7 +10616,7 @@ impl<'xml> xml::DeserializeContent<'xml> for ReplicationRuleFilter {
 
 impl<'xml> xml::DeserializeContent<'xml> for ReplicationRuleStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10649,7 +10650,7 @@ impl<'xml> xml::DeserializeContent<'xml> for ReplicationTime {
 
 impl<'xml> xml::DeserializeContent<'xml> for ReplicationTimeStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10766,7 +10767,7 @@ impl<'xml> xml::DeserializeContent<'xml> for RestoreRequest {
 
 impl<'xml> xml::DeserializeContent<'xml> for RestoreRequestType {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -10968,7 +10969,7 @@ impl<'xml> xml::DeserializeContent<'xml> for SelectParameters {
 
 impl<'xml> xml::DeserializeContent<'xml> for ServerSideEncryption {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -11094,13 +11095,13 @@ impl<'xml> xml::DeserializeContent<'xml> for SseKmsEncryptedObjects {
 
 impl<'xml> xml::DeserializeContent<'xml> for SseKmsEncryptedObjectsStatus {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for StorageClass {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -11151,7 +11152,7 @@ impl<'xml> xml::DeserializeContent<'xml> for StorageClassAnalysisDataExport {
 
 impl<'xml> xml::DeserializeContent<'xml> for StorageClassAnalysisSchemaVersion {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -11229,7 +11230,7 @@ impl<'xml> xml::DeserializeContent<'xml> for TargetGrant {
 
 impl<'xml> xml::DeserializeContent<'xml> for Tier {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -11344,13 +11345,13 @@ impl<'xml> xml::DeserializeContent<'xml> for Transition {
 
 impl<'xml> xml::DeserializeContent<'xml> for TransitionStorageClass {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
 impl<'xml> xml::DeserializeContent<'xml> for Type {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
-        d.text(|t| Self::from_bytes(t.as_ref()).ok_or(xml::DeError::InvalidContent))
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -11576,180 +11577,161 @@ impl<'xml> xml::Deserialize<'xml> for WebsiteConfiguration {
 }
 
 impl http::TryIntoHeaderValue for ArchiveStatus {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::ArchiveAccess => Ok(http::HeaderValue::from_static("{}")),
-            Self::DeepArchiveAccess => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for BucketCannedACL {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::AuthenticatedRead => Ok(http::HeaderValue::from_static("{}")),
-            Self::Private => Ok(http::HeaderValue::from_static("{}")),
-            Self::PublicRead => Ok(http::HeaderValue::from_static("{}")),
-            Self::PublicReadWrite => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ChecksumAlgorithm {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Crc32 => Ok(http::HeaderValue::from_static("{}")),
-            Self::Crc32C => Ok(http::HeaderValue::from_static("{}")),
-            Self::Sha1 => Ok(http::HeaderValue::from_static("{}")),
-            Self::Sha256 => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ChecksumMode {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Enabled => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for MetadataDirective {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Copy => Ok(http::HeaderValue::from_static("{}")),
-            Self::Replace => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ObjectAttributes {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Checksum => Ok(http::HeaderValue::from_static("{}")),
-            Self::Etag => Ok(http::HeaderValue::from_static("{}")),
-            Self::ObjectParts => Ok(http::HeaderValue::from_static("{}")),
-            Self::ObjectSize => Ok(http::HeaderValue::from_static("{}")),
-            Self::StorageClass => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ObjectCannedACL {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::AuthenticatedRead => Ok(http::HeaderValue::from_static("{}")),
-            Self::AwsExecRead => Ok(http::HeaderValue::from_static("{}")),
-            Self::BucketOwnerFullControl => Ok(http::HeaderValue::from_static("{}")),
-            Self::BucketOwnerRead => Ok(http::HeaderValue::from_static("{}")),
-            Self::Private => Ok(http::HeaderValue::from_static("{}")),
-            Self::PublicRead => Ok(http::HeaderValue::from_static("{}")),
-            Self::PublicReadWrite => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ObjectLockLegalHoldStatus {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Off => Ok(http::HeaderValue::from_static("{}")),
-            Self::On => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ObjectLockMode {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Compliance => Ok(http::HeaderValue::from_static("{}")),
-            Self::Governance => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ObjectOwnership {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::BucketOwnerEnforced => Ok(http::HeaderValue::from_static("{}")),
-            Self::BucketOwnerPreferred => Ok(http::HeaderValue::from_static("{}")),
-            Self::ObjectWriter => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ReplicationStatus {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Complete => Ok(http::HeaderValue::from_static("{}")),
-            Self::Failed => Ok(http::HeaderValue::from_static("{}")),
-            Self::Pending => Ok(http::HeaderValue::from_static("{}")),
-            Self::Replica => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for RequestCharged {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Requester => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for RequestPayer {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Requester => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for ServerSideEncryption {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Aes256 => Ok(http::HeaderValue::from_static("{}")),
-            Self::AwsKms => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for StorageClass {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::DeepArchive => Ok(http::HeaderValue::from_static("{}")),
-            Self::Glacier => Ok(http::HeaderValue::from_static("{}")),
-            Self::GlacierIr => Ok(http::HeaderValue::from_static("{}")),
-            Self::IntelligentTiering => Ok(http::HeaderValue::from_static("{}")),
-            Self::OnezoneIa => Ok(http::HeaderValue::from_static("{}")),
-            Self::Outposts => Ok(http::HeaderValue::from_static("{}")),
-            Self::ReducedRedundancy => Ok(http::HeaderValue::from_static("{}")),
-            Self::Standard => Ok(http::HeaderValue::from_static("{}")),
-            Self::StandardIa => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
 
 impl http::TryIntoHeaderValue for TaggingDirective {
-    type Error = std::convert::Infallible;
+    type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
-        match self {
-            Self::Copy => Ok(http::HeaderValue::from_static("{}")),
-            Self::Replace => Ok(http::HeaderValue::from_static("{}")),
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
         }
     }
 }
@@ -11757,112 +11739,128 @@ impl http::TryIntoHeaderValue for TaggingDirective {
 impl http::TryFromHeaderValue for ArchiveStatus {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for BucketCannedACL {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ChecksumAlgorithm {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ChecksumMode {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for MetadataDirective {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ObjectAttributes {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ObjectCannedACL {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ObjectLockLegalHoldStatus {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ObjectLockMode {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ObjectOwnership {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ReplicationStatus {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for RequestCharged {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for RequestPayer {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for ServerSideEncryption {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for StorageClass {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 
 impl http::TryFromHeaderValue for TaggingDirective {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        Self::from_bytes(val.as_bytes()).ok_or(http::ParseHeaderError::Enum)
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
     }
 }
 

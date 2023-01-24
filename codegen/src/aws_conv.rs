@@ -1,3 +1,5 @@
+use heck::ToUpperCamelCase;
+
 use crate::dto::RustTypes;
 use crate::f;
 use crate::gen::Codegen;
@@ -20,7 +22,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
             rust::Type::Timestamp(_) => continue,
             rust::Type::List(_) => continue,
             rust::Type::Map(_) => continue,
-            rust::Type::UnitEnum(_) => {}
+            rust::Type::StrEnum(_) => {}
             rust::Type::Struct(_) => {}
             rust::Type::StructEnum(_) => {}
         }
@@ -76,12 +78,18 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 }
                 g.ln("})");
             }
-            rust::Type::UnitEnum(ty) => {
+            rust::Type::StrEnum(ty) => {
                 g.ln("Ok(match x {");
                 for variant in &ty.variants {
-                    g.ln(f!("{aws_name}::{0} => Self::{0},", variant.name));
+                    let s3s_variant_name = variant.name.as_str();
+                    let aws_variant_name = match s3s_variant_name {
+                        "CRC32C" => "Crc32C".to_owned(),
+                        _ => s3s_variant_name.to_upper_camel_case(),
+                    };
+                    g.ln(f!("{aws_name}::{aws_variant_name} => Self::from_static(Self::{s3s_variant_name}),"));
                 }
-                g.ln("_ => unreachable!(),");
+                g.ln(f!("{aws_name}::Unknown(_) => Self::from(x.as_str().to_owned()),"));
+                g.ln("_ => Self::from(x.as_str().to_owned()),");
                 g.ln("})");
             }
             rust::Type::StructEnum(ty) => {
@@ -89,7 +97,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                 for variant in &ty.variants {
                     g.ln(f!("{aws_name}::{0}(v) => Self::{0}(try_from_aws(v)?),", variant.name));
                 }
-                g.ln("_ => unreachable!(),");
+                g.ln(f!("_ => unimplemented!(\"unknown variant of {aws_name}: {{x:?}}\"),"));
                 g.ln("})");
             }
             _ => panic!(),
@@ -131,20 +139,15 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                     g.ln("Ok(y.build())");
                 }
             }
-            rust::Type::UnitEnum(ty) => {
-                g.ln("Ok(match x {");
-                for variant in &ty.variants {
-                    g.ln(f!("Self::{0} => {aws_name}::{0},", variant.name));
-                }
-                g.ln("_ => unreachable!(),");
-                g.ln("})");
+            rust::Type::StrEnum(_) => {
+                g.ln(f!("Ok({aws_name}::from(x.as_str()))"));
             }
             rust::Type::StructEnum(ty) => {
                 g.ln("Ok(match x {");
                 for variant in &ty.variants {
                     g.ln(f!("Self::{0}(v) => {aws_name}::{0}(try_into_aws(v)?),", variant.name));
                 }
-                g.ln("_ => unreachable!(),");
+                g.ln(f!("_ => unimplemented!(\"unknown variant of {}: {{x:?}}\"),", ty.name));
                 g.ln("})");
             }
             _ => panic!(),
