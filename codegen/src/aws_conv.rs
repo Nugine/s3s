@@ -32,6 +32,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
 
         g.ln(f!("impl AwsConversion for {s3s_path} {{"));
         g.ln(f!("    type Target = {aws_name};"));
+        g.ln("type Error = S3Error;");
         g.lf();
 
         if contains_deprecated_field(name) {
@@ -52,28 +53,13 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                         "type_" => "r#type",
                         s => s,
                     };
-                    let field_type = &rust_types[field.type_.as_str()];
 
-                    'gen: {
-                        if let rust::Type::Provided(ty) = field_type {
-                            match ty.name.as_str() {
-                                "StreamingBlob" => {
-                                    g.ln(f!("{s3s_field_name}: stream_from_aws(x.{aws_field_name}),"));
-                                    break 'gen;
-                                }
-                                "Body" => {}
-                                "ContentType" | "CopySource" | "Range" => {
-                                    // typed header value
-                                }
-                                _ => unimplemented!("{ty:#?}"),
-                            }
-                        }
-
-                        if field.option_type || field.default_value.is_some() {
-                            g.ln(f!("{s3s_field_name}: try_from_aws(x.{aws_field_name})?,"));
-                        } else {
-                            g.ln(f!("{s3s_field_name}: unwrap_from_aws(x.{aws_field_name}, \"{s3s_field_name}\")?,"));
-                        }
+                    if field.type_ == "StreamingBlob" {
+                        g.ln(f!("{s3s_field_name}: Some(try_from_aws(x.{aws_field_name})?),"));
+                    } else if field.option_type || field.default_value.is_some() {
+                        g.ln(f!("{s3s_field_name}: try_from_aws(x.{aws_field_name})?,"));
+                    } else {
+                        g.ln(f!("{s3s_field_name}: unwrap_from_aws(x.{aws_field_name}, \"{s3s_field_name}\")?,"));
                     }
                 }
                 g.ln("})");

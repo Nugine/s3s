@@ -7,6 +7,7 @@ use aws_sdk_s3::output::*;
 
 impl AwsConversion for s3s::dto::AbortIncompleteMultipartUpload {
     type Target = AbortIncompleteMultipartUpload;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -23,6 +24,7 @@ impl AwsConversion for s3s::dto::AbortIncompleteMultipartUpload {
 
 impl AwsConversion for s3s::dto::AbortMultipartUploadInput {
     type Target = AbortMultipartUploadInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -47,6 +49,7 @@ impl AwsConversion for s3s::dto::AbortMultipartUploadInput {
 
 impl AwsConversion for s3s::dto::AbortMultipartUploadOutput {
     type Target = AbortMultipartUploadOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -63,6 +66,7 @@ impl AwsConversion for s3s::dto::AbortMultipartUploadOutput {
 
 impl AwsConversion for s3s::dto::AccelerateConfiguration {
     type Target = AccelerateConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -79,6 +83,7 @@ impl AwsConversion for s3s::dto::AccelerateConfiguration {
 
 impl AwsConversion for s3s::dto::AccessControlPolicy {
     type Target = AccessControlPolicy;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -97,6 +102,7 @@ impl AwsConversion for s3s::dto::AccessControlPolicy {
 
 impl AwsConversion for s3s::dto::AccessControlTranslation {
     type Target = AccessControlTranslation;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -113,6 +119,7 @@ impl AwsConversion for s3s::dto::AccessControlTranslation {
 
 impl AwsConversion for s3s::dto::AnalyticsAndOperator {
     type Target = AnalyticsAndOperator;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -131,6 +138,7 @@ impl AwsConversion for s3s::dto::AnalyticsAndOperator {
 
 impl AwsConversion for s3s::dto::AnalyticsConfiguration {
     type Target = AnalyticsConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -151,6 +159,7 @@ impl AwsConversion for s3s::dto::AnalyticsConfiguration {
 
 impl AwsConversion for s3s::dto::AnalyticsExportDestination {
     type Target = AnalyticsExportDestination;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -167,6 +176,7 @@ impl AwsConversion for s3s::dto::AnalyticsExportDestination {
 
 impl AwsConversion for s3s::dto::AnalyticsFilter {
     type Target = AnalyticsFilter;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -189,6 +199,7 @@ impl AwsConversion for s3s::dto::AnalyticsFilter {
 
 impl AwsConversion for s3s::dto::AnalyticsS3BucketDestination {
     type Target = AnalyticsS3BucketDestination;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -211,6 +222,7 @@ impl AwsConversion for s3s::dto::AnalyticsS3BucketDestination {
 
 impl AwsConversion for s3s::dto::AnalyticsS3ExportFileFormat {
     type Target = AnalyticsS3ExportFileFormat;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -227,6 +239,7 @@ impl AwsConversion for s3s::dto::AnalyticsS3ExportFileFormat {
 
 impl AwsConversion for s3s::dto::ArchiveStatus {
     type Target = ArchiveStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -244,6 +257,7 @@ impl AwsConversion for s3s::dto::ArchiveStatus {
 
 impl AwsConversion for s3s::dto::Bucket {
     type Target = Bucket;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -262,6 +276,7 @@ impl AwsConversion for s3s::dto::Bucket {
 
 impl AwsConversion for s3s::dto::BucketAccelerateStatus {
     type Target = BucketAccelerateStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -279,6 +294,7 @@ impl AwsConversion for s3s::dto::BucketAccelerateStatus {
 
 impl AwsConversion for s3s::dto::BucketAlreadyExists {
     type Target = BucketAlreadyExists;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -294,6 +310,7 @@ impl AwsConversion for s3s::dto::BucketAlreadyExists {
 
 impl AwsConversion for s3s::dto::BucketAlreadyOwnedByYou {
     type Target = BucketAlreadyOwnedByYou;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -309,6 +326,7 @@ impl AwsConversion for s3s::dto::BucketAlreadyOwnedByYou {
 
 impl AwsConversion for s3s::dto::BucketCannedACL {
     type Target = BucketCannedAcl;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -328,6 +346,7 @@ impl AwsConversion for s3s::dto::BucketCannedACL {
 
 impl AwsConversion for s3s::dto::BucketLifecycleConfiguration {
     type Target = BucketLifecycleConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -344,6 +363,7 @@ impl AwsConversion for s3s::dto::BucketLifecycleConfiguration {
 
 impl AwsConversion for s3s::dto::BucketLocationConstraint {
     type Target = BucketLocationConstraint;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -385,6 +405,7 @@ impl AwsConversion for s3s::dto::BucketLocationConstraint {
 
 impl AwsConversion for s3s::dto::BucketLoggingStatus {
     type Target = BucketLoggingStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -401,6 +422,7 @@ impl AwsConversion for s3s::dto::BucketLoggingStatus {
 
 impl AwsConversion for s3s::dto::BucketLogsPermission {
     type Target = BucketLogsPermission;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -419,6 +441,7 @@ impl AwsConversion for s3s::dto::BucketLogsPermission {
 
 impl AwsConversion for s3s::dto::BucketVersioningStatus {
     type Target = BucketVersioningStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -436,6 +459,7 @@ impl AwsConversion for s3s::dto::BucketVersioningStatus {
 
 impl AwsConversion for s3s::dto::CORSConfiguration {
     type Target = CorsConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -452,6 +476,7 @@ impl AwsConversion for s3s::dto::CORSConfiguration {
 
 impl AwsConversion for s3s::dto::CORSRule {
     type Target = CorsRule;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -478,6 +503,7 @@ impl AwsConversion for s3s::dto::CORSRule {
 
 impl AwsConversion for s3s::dto::CSVInput {
     type Target = CsvInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -506,6 +532,7 @@ impl AwsConversion for s3s::dto::CSVInput {
 
 impl AwsConversion for s3s::dto::CSVOutput {
     type Target = CsvOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -530,6 +557,7 @@ impl AwsConversion for s3s::dto::CSVOutput {
 
 impl AwsConversion for s3s::dto::Checksum {
     type Target = Checksum;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -552,6 +580,7 @@ impl AwsConversion for s3s::dto::Checksum {
 
 impl AwsConversion for s3s::dto::ChecksumAlgorithm {
     type Target = ChecksumAlgorithm;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -571,6 +600,7 @@ impl AwsConversion for s3s::dto::ChecksumAlgorithm {
 
 impl AwsConversion for s3s::dto::ChecksumMode {
     type Target = ChecksumMode;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -587,6 +617,7 @@ impl AwsConversion for s3s::dto::ChecksumMode {
 
 impl AwsConversion for s3s::dto::CommonPrefix {
     type Target = CommonPrefix;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -603,6 +634,7 @@ impl AwsConversion for s3s::dto::CommonPrefix {
 
 impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
     type Target = CompleteMultipartUploadInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -643,6 +675,7 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
 
 impl AwsConversion for s3s::dto::CompleteMultipartUploadOutput {
     type Target = CompleteMultipartUploadOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -685,6 +718,7 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadOutput {
 
 impl AwsConversion for s3s::dto::CompletedMultipartUpload {
     type Target = CompletedMultipartUpload;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -701,6 +735,7 @@ impl AwsConversion for s3s::dto::CompletedMultipartUpload {
 
 impl AwsConversion for s3s::dto::CompletedPart {
     type Target = CompletedPart;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -727,6 +762,7 @@ impl AwsConversion for s3s::dto::CompletedPart {
 
 impl AwsConversion for s3s::dto::CompressionType {
     type Target = CompressionType;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -745,6 +781,7 @@ impl AwsConversion for s3s::dto::CompressionType {
 
 impl AwsConversion for s3s::dto::Condition {
     type Target = Condition;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -763,6 +800,7 @@ impl AwsConversion for s3s::dto::Condition {
 
 impl AwsConversion for s3s::dto::ContinuationEvent {
     type Target = ContinuationEvent;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -778,6 +816,7 @@ impl AwsConversion for s3s::dto::ContinuationEvent {
 
 impl AwsConversion for s3s::dto::CopyObjectInput {
     type Target = CopyObjectInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -874,6 +913,7 @@ impl AwsConversion for s3s::dto::CopyObjectInput {
 
 impl AwsConversion for s3s::dto::CopyObjectOutput {
     type Target = CopyObjectOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -910,6 +950,7 @@ impl AwsConversion for s3s::dto::CopyObjectOutput {
 
 impl AwsConversion for s3s::dto::CopyObjectResult {
     type Target = CopyObjectResult;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -936,6 +977,7 @@ impl AwsConversion for s3s::dto::CopyObjectResult {
 
 impl AwsConversion for s3s::dto::CopyPartResult {
     type Target = CopyPartResult;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -962,6 +1004,7 @@ impl AwsConversion for s3s::dto::CopyPartResult {
 
 impl AwsConversion for s3s::dto::CreateBucketConfiguration {
     type Target = CreateBucketConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -978,6 +1021,7 @@ impl AwsConversion for s3s::dto::CreateBucketConfiguration {
 
 impl AwsConversion for s3s::dto::CreateBucketInput {
     type Target = CreateBucketInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1012,6 +1056,7 @@ impl AwsConversion for s3s::dto::CreateBucketInput {
 
 impl AwsConversion for s3s::dto::CreateBucketOutput {
     type Target = CreateBucketOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1028,6 +1073,7 @@ impl AwsConversion for s3s::dto::CreateBucketOutput {
 
 impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
     type Target = CreateMultipartUploadInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1102,6 +1148,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
 
 impl AwsConversion for s3s::dto::CreateMultipartUploadOutput {
     type Target = CreateMultipartUploadOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1142,6 +1189,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadOutput {
 
 impl AwsConversion for s3s::dto::DefaultRetention {
     type Target = DefaultRetention;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1162,6 +1210,7 @@ impl AwsConversion for s3s::dto::DefaultRetention {
 
 impl AwsConversion for s3s::dto::Delete {
     type Target = Delete;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1180,6 +1229,7 @@ impl AwsConversion for s3s::dto::Delete {
 
 impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationInput {
     type Target = DeleteBucketAnalyticsConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1200,6 +1250,7 @@ impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationOutput {
     type Target = DeleteBucketAnalyticsConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1215,6 +1266,7 @@ impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketCorsInput {
     type Target = DeleteBucketCorsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1233,6 +1285,7 @@ impl AwsConversion for s3s::dto::DeleteBucketCorsInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketCorsOutput {
     type Target = DeleteBucketCorsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1248,6 +1301,7 @@ impl AwsConversion for s3s::dto::DeleteBucketCorsOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketEncryptionInput {
     type Target = DeleteBucketEncryptionInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1266,6 +1320,7 @@ impl AwsConversion for s3s::dto::DeleteBucketEncryptionInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketEncryptionOutput {
     type Target = DeleteBucketEncryptionOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1281,6 +1336,7 @@ impl AwsConversion for s3s::dto::DeleteBucketEncryptionOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketInput {
     type Target = DeleteBucketInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1299,6 +1355,7 @@ impl AwsConversion for s3s::dto::DeleteBucketInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationInput {
     type Target = DeleteBucketIntelligentTieringConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1317,6 +1374,7 @@ impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationInpu
 
 impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationOutput {
     type Target = DeleteBucketIntelligentTieringConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1332,6 +1390,7 @@ impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationOutp
 
 impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationInput {
     type Target = DeleteBucketInventoryConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1352,6 +1411,7 @@ impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationOutput {
     type Target = DeleteBucketInventoryConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1367,6 +1427,7 @@ impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketLifecycleInput {
     type Target = DeleteBucketLifecycleInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1385,6 +1446,7 @@ impl AwsConversion for s3s::dto::DeleteBucketLifecycleInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketLifecycleOutput {
     type Target = DeleteBucketLifecycleOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1400,6 +1462,7 @@ impl AwsConversion for s3s::dto::DeleteBucketLifecycleOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationInput {
     type Target = DeleteBucketMetricsConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1420,6 +1483,7 @@ impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationOutput {
     type Target = DeleteBucketMetricsConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1435,6 +1499,7 @@ impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketOutput {
     type Target = DeleteBucketOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1450,6 +1515,7 @@ impl AwsConversion for s3s::dto::DeleteBucketOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsInput {
     type Target = DeleteBucketOwnershipControlsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1468,6 +1534,7 @@ impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsOutput {
     type Target = DeleteBucketOwnershipControlsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1483,6 +1550,7 @@ impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketPolicyInput {
     type Target = DeleteBucketPolicyInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1501,6 +1569,7 @@ impl AwsConversion for s3s::dto::DeleteBucketPolicyInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketPolicyOutput {
     type Target = DeleteBucketPolicyOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1516,6 +1585,7 @@ impl AwsConversion for s3s::dto::DeleteBucketPolicyOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketReplicationInput {
     type Target = DeleteBucketReplicationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1534,6 +1604,7 @@ impl AwsConversion for s3s::dto::DeleteBucketReplicationInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketReplicationOutput {
     type Target = DeleteBucketReplicationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1549,6 +1620,7 @@ impl AwsConversion for s3s::dto::DeleteBucketReplicationOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketTaggingInput {
     type Target = DeleteBucketTaggingInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1567,6 +1639,7 @@ impl AwsConversion for s3s::dto::DeleteBucketTaggingInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketTaggingOutput {
     type Target = DeleteBucketTaggingOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1582,6 +1655,7 @@ impl AwsConversion for s3s::dto::DeleteBucketTaggingOutput {
 
 impl AwsConversion for s3s::dto::DeleteBucketWebsiteInput {
     type Target = DeleteBucketWebsiteInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1600,6 +1674,7 @@ impl AwsConversion for s3s::dto::DeleteBucketWebsiteInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketWebsiteOutput {
     type Target = DeleteBucketWebsiteOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1615,6 +1690,7 @@ impl AwsConversion for s3s::dto::DeleteBucketWebsiteOutput {
 
 impl AwsConversion for s3s::dto::DeleteMarkerEntry {
     type Target = DeleteMarkerEntry;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1639,6 +1715,7 @@ impl AwsConversion for s3s::dto::DeleteMarkerEntry {
 
 impl AwsConversion for s3s::dto::DeleteMarkerReplication {
     type Target = DeleteMarkerReplication;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1655,6 +1732,7 @@ impl AwsConversion for s3s::dto::DeleteMarkerReplication {
 
 impl AwsConversion for s3s::dto::DeleteMarkerReplicationStatus {
     type Target = DeleteMarkerReplicationStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -1672,6 +1750,7 @@ impl AwsConversion for s3s::dto::DeleteMarkerReplicationStatus {
 
 impl AwsConversion for s3s::dto::DeleteObjectInput {
     type Target = DeleteObjectInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1700,6 +1779,7 @@ impl AwsConversion for s3s::dto::DeleteObjectInput {
 
 impl AwsConversion for s3s::dto::DeleteObjectOutput {
     type Target = DeleteObjectOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1720,6 +1800,7 @@ impl AwsConversion for s3s::dto::DeleteObjectOutput {
 
 impl AwsConversion for s3s::dto::DeleteObjectTaggingInput {
     type Target = DeleteObjectTaggingInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1742,6 +1823,7 @@ impl AwsConversion for s3s::dto::DeleteObjectTaggingInput {
 
 impl AwsConversion for s3s::dto::DeleteObjectTaggingOutput {
     type Target = DeleteObjectTaggingOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1758,6 +1840,7 @@ impl AwsConversion for s3s::dto::DeleteObjectTaggingOutput {
 
 impl AwsConversion for s3s::dto::DeleteObjectsInput {
     type Target = DeleteObjectsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1786,6 +1869,7 @@ impl AwsConversion for s3s::dto::DeleteObjectsInput {
 
 impl AwsConversion for s3s::dto::DeleteObjectsOutput {
     type Target = DeleteObjectsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1806,6 +1890,7 @@ impl AwsConversion for s3s::dto::DeleteObjectsOutput {
 
 impl AwsConversion for s3s::dto::DeletePublicAccessBlockInput {
     type Target = DeletePublicAccessBlockInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1824,6 +1909,7 @@ impl AwsConversion for s3s::dto::DeletePublicAccessBlockInput {
 
 impl AwsConversion for s3s::dto::DeletePublicAccessBlockOutput {
     type Target = DeletePublicAccessBlockOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1839,6 +1925,7 @@ impl AwsConversion for s3s::dto::DeletePublicAccessBlockOutput {
 
 impl AwsConversion for s3s::dto::DeletedObject {
     type Target = DeletedObject;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1861,6 +1948,7 @@ impl AwsConversion for s3s::dto::DeletedObject {
 
 impl AwsConversion for s3s::dto::Destination {
     type Target = Destination;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1889,6 +1977,7 @@ impl AwsConversion for s3s::dto::Destination {
 
 impl AwsConversion for s3s::dto::EncodingType {
     type Target = EncodingType;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -1905,6 +1994,7 @@ impl AwsConversion for s3s::dto::EncodingType {
 
 impl AwsConversion for s3s::dto::Encryption {
     type Target = Encryption;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1925,6 +2015,7 @@ impl AwsConversion for s3s::dto::Encryption {
 
 impl AwsConversion for s3s::dto::EncryptionConfiguration {
     type Target = EncryptionConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1941,6 +2032,7 @@ impl AwsConversion for s3s::dto::EncryptionConfiguration {
 
 impl AwsConversion for s3s::dto::EndEvent {
     type Target = EndEvent;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -1956,6 +2048,7 @@ impl AwsConversion for s3s::dto::EndEvent {
 
 impl AwsConversion for s3s::dto::Error {
     type Target = Error;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1978,6 +2071,7 @@ impl AwsConversion for s3s::dto::Error {
 
 impl AwsConversion for s3s::dto::ErrorDocument {
     type Target = ErrorDocument;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -1994,6 +2088,7 @@ impl AwsConversion for s3s::dto::ErrorDocument {
 
 impl AwsConversion for s3s::dto::EventBridgeConfiguration {
     type Target = EventBridgeConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -2009,6 +2104,7 @@ impl AwsConversion for s3s::dto::EventBridgeConfiguration {
 
 impl AwsConversion for s3s::dto::ExistingObjectReplication {
     type Target = ExistingObjectReplication;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2025,6 +2121,7 @@ impl AwsConversion for s3s::dto::ExistingObjectReplication {
 
 impl AwsConversion for s3s::dto::ExistingObjectReplicationStatus {
     type Target = ExistingObjectReplicationStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -2042,6 +2139,7 @@ impl AwsConversion for s3s::dto::ExistingObjectReplicationStatus {
 
 impl AwsConversion for s3s::dto::ExpirationStatus {
     type Target = ExpirationStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -2059,6 +2157,7 @@ impl AwsConversion for s3s::dto::ExpirationStatus {
 
 impl AwsConversion for s3s::dto::ExpressionType {
     type Target = ExpressionType;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -2075,6 +2174,7 @@ impl AwsConversion for s3s::dto::ExpressionType {
 
 impl AwsConversion for s3s::dto::FileHeaderInfo {
     type Target = FileHeaderInfo;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -2093,6 +2193,7 @@ impl AwsConversion for s3s::dto::FileHeaderInfo {
 
 impl AwsConversion for s3s::dto::FilterRule {
     type Target = FilterRule;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2111,6 +2212,7 @@ impl AwsConversion for s3s::dto::FilterRule {
 
 impl AwsConversion for s3s::dto::FilterRuleName {
     type Target = FilterRuleName;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -2128,6 +2230,7 @@ impl AwsConversion for s3s::dto::FilterRuleName {
 
 impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationInput {
     type Target = GetBucketAccelerateConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2146,6 +2249,7 @@ impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationInput {
 
 impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationOutput {
     type Target = GetBucketAccelerateConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2162,6 +2266,7 @@ impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationOutput {
 
 impl AwsConversion for s3s::dto::GetBucketAclInput {
     type Target = GetBucketAclInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2180,6 +2285,7 @@ impl AwsConversion for s3s::dto::GetBucketAclInput {
 
 impl AwsConversion for s3s::dto::GetBucketAclOutput {
     type Target = GetBucketAclOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2198,6 +2304,7 @@ impl AwsConversion for s3s::dto::GetBucketAclOutput {
 
 impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationInput {
     type Target = GetBucketAnalyticsConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2218,6 +2325,7 @@ impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationInput {
 
 impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationOutput {
     type Target = GetBucketAnalyticsConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2234,6 +2342,7 @@ impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationOutput {
 
 impl AwsConversion for s3s::dto::GetBucketCorsInput {
     type Target = GetBucketCorsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2252,6 +2361,7 @@ impl AwsConversion for s3s::dto::GetBucketCorsInput {
 
 impl AwsConversion for s3s::dto::GetBucketCorsOutput {
     type Target = GetBucketCorsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2268,6 +2378,7 @@ impl AwsConversion for s3s::dto::GetBucketCorsOutput {
 
 impl AwsConversion for s3s::dto::GetBucketEncryptionInput {
     type Target = GetBucketEncryptionInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2286,6 +2397,7 @@ impl AwsConversion for s3s::dto::GetBucketEncryptionInput {
 
 impl AwsConversion for s3s::dto::GetBucketEncryptionOutput {
     type Target = GetBucketEncryptionOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2302,6 +2414,7 @@ impl AwsConversion for s3s::dto::GetBucketEncryptionOutput {
 
 impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationInput {
     type Target = GetBucketIntelligentTieringConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2320,6 +2433,7 @@ impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationInput {
 
 impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationOutput {
     type Target = GetBucketIntelligentTieringConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2336,6 +2450,7 @@ impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationOutput 
 
 impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationInput {
     type Target = GetBucketInventoryConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2356,6 +2471,7 @@ impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationInput {
 
 impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationOutput {
     type Target = GetBucketInventoryConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2372,6 +2488,7 @@ impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationOutput {
 
 impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationInput {
     type Target = GetBucketLifecycleConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2390,6 +2507,7 @@ impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationInput {
 
 impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationOutput {
     type Target = GetBucketLifecycleConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2406,6 +2524,7 @@ impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationOutput {
 
 impl AwsConversion for s3s::dto::GetBucketLocationInput {
     type Target = GetBucketLocationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2424,6 +2543,7 @@ impl AwsConversion for s3s::dto::GetBucketLocationInput {
 
 impl AwsConversion for s3s::dto::GetBucketLocationOutput {
     type Target = GetBucketLocationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2440,6 +2560,7 @@ impl AwsConversion for s3s::dto::GetBucketLocationOutput {
 
 impl AwsConversion for s3s::dto::GetBucketLoggingInput {
     type Target = GetBucketLoggingInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2458,6 +2579,7 @@ impl AwsConversion for s3s::dto::GetBucketLoggingInput {
 
 impl AwsConversion for s3s::dto::GetBucketLoggingOutput {
     type Target = GetBucketLoggingOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2474,6 +2596,7 @@ impl AwsConversion for s3s::dto::GetBucketLoggingOutput {
 
 impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationInput {
     type Target = GetBucketMetricsConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2494,6 +2617,7 @@ impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationInput {
 
 impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationOutput {
     type Target = GetBucketMetricsConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2510,6 +2634,7 @@ impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationOutput {
 
 impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationInput {
     type Target = GetBucketNotificationConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2528,6 +2653,7 @@ impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationInput {
 
 impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationOutput {
     type Target = GetBucketNotificationConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2550,6 +2676,7 @@ impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationOutput {
 
 impl AwsConversion for s3s::dto::GetBucketOwnershipControlsInput {
     type Target = GetBucketOwnershipControlsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2568,6 +2695,7 @@ impl AwsConversion for s3s::dto::GetBucketOwnershipControlsInput {
 
 impl AwsConversion for s3s::dto::GetBucketOwnershipControlsOutput {
     type Target = GetBucketOwnershipControlsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2584,6 +2712,7 @@ impl AwsConversion for s3s::dto::GetBucketOwnershipControlsOutput {
 
 impl AwsConversion for s3s::dto::GetBucketPolicyInput {
     type Target = GetBucketPolicyInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2602,6 +2731,7 @@ impl AwsConversion for s3s::dto::GetBucketPolicyInput {
 
 impl AwsConversion for s3s::dto::GetBucketPolicyOutput {
     type Target = GetBucketPolicyOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2618,6 +2748,7 @@ impl AwsConversion for s3s::dto::GetBucketPolicyOutput {
 
 impl AwsConversion for s3s::dto::GetBucketPolicyStatusInput {
     type Target = GetBucketPolicyStatusInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2636,6 +2767,7 @@ impl AwsConversion for s3s::dto::GetBucketPolicyStatusInput {
 
 impl AwsConversion for s3s::dto::GetBucketPolicyStatusOutput {
     type Target = GetBucketPolicyStatusOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2652,6 +2784,7 @@ impl AwsConversion for s3s::dto::GetBucketPolicyStatusOutput {
 
 impl AwsConversion for s3s::dto::GetBucketReplicationInput {
     type Target = GetBucketReplicationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2670,6 +2803,7 @@ impl AwsConversion for s3s::dto::GetBucketReplicationInput {
 
 impl AwsConversion for s3s::dto::GetBucketReplicationOutput {
     type Target = GetBucketReplicationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2686,6 +2820,7 @@ impl AwsConversion for s3s::dto::GetBucketReplicationOutput {
 
 impl AwsConversion for s3s::dto::GetBucketRequestPaymentInput {
     type Target = GetBucketRequestPaymentInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2704,6 +2839,7 @@ impl AwsConversion for s3s::dto::GetBucketRequestPaymentInput {
 
 impl AwsConversion for s3s::dto::GetBucketRequestPaymentOutput {
     type Target = GetBucketRequestPaymentOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2720,6 +2856,7 @@ impl AwsConversion for s3s::dto::GetBucketRequestPaymentOutput {
 
 impl AwsConversion for s3s::dto::GetBucketTaggingInput {
     type Target = GetBucketTaggingInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2738,6 +2875,7 @@ impl AwsConversion for s3s::dto::GetBucketTaggingInput {
 
 impl AwsConversion for s3s::dto::GetBucketTaggingOutput {
     type Target = GetBucketTaggingOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2754,6 +2892,7 @@ impl AwsConversion for s3s::dto::GetBucketTaggingOutput {
 
 impl AwsConversion for s3s::dto::GetBucketVersioningInput {
     type Target = GetBucketVersioningInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2772,6 +2911,7 @@ impl AwsConversion for s3s::dto::GetBucketVersioningInput {
 
 impl AwsConversion for s3s::dto::GetBucketVersioningOutput {
     type Target = GetBucketVersioningOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2790,6 +2930,7 @@ impl AwsConversion for s3s::dto::GetBucketVersioningOutput {
 
 impl AwsConversion for s3s::dto::GetBucketWebsiteInput {
     type Target = GetBucketWebsiteInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2808,6 +2949,7 @@ impl AwsConversion for s3s::dto::GetBucketWebsiteInput {
 
 impl AwsConversion for s3s::dto::GetBucketWebsiteOutput {
     type Target = GetBucketWebsiteOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2830,6 +2972,7 @@ impl AwsConversion for s3s::dto::GetBucketWebsiteOutput {
 
 impl AwsConversion for s3s::dto::GetObjectAclInput {
     type Target = GetObjectAclInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2854,6 +2997,7 @@ impl AwsConversion for s3s::dto::GetObjectAclInput {
 
 impl AwsConversion for s3s::dto::GetObjectAclOutput {
     type Target = GetObjectAclOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2874,6 +3018,7 @@ impl AwsConversion for s3s::dto::GetObjectAclOutput {
 
 impl AwsConversion for s3s::dto::GetObjectAttributesInput {
     type Target = GetObjectAttributesInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2910,6 +3055,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesInput {
 
 impl AwsConversion for s3s::dto::GetObjectAttributesOutput {
     type Target = GetObjectAttributesOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2942,6 +3088,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesOutput {
 
 impl AwsConversion for s3s::dto::GetObjectAttributesParts {
     type Target = GetObjectAttributesParts;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -2968,6 +3115,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesParts {
 
 impl AwsConversion for s3s::dto::GetObjectInput {
     type Target = GetObjectInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3024,6 +3172,7 @@ impl AwsConversion for s3s::dto::GetObjectInput {
 
 impl AwsConversion for s3s::dto::GetObjectLegalHoldInput {
     type Target = GetObjectLegalHoldInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3048,6 +3197,7 @@ impl AwsConversion for s3s::dto::GetObjectLegalHoldInput {
 
 impl AwsConversion for s3s::dto::GetObjectLegalHoldOutput {
     type Target = GetObjectLegalHoldOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3064,6 +3214,7 @@ impl AwsConversion for s3s::dto::GetObjectLegalHoldOutput {
 
 impl AwsConversion for s3s::dto::GetObjectLockConfigurationInput {
     type Target = GetObjectLockConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3082,6 +3233,7 @@ impl AwsConversion for s3s::dto::GetObjectLockConfigurationInput {
 
 impl AwsConversion for s3s::dto::GetObjectLockConfigurationOutput {
     type Target = GetObjectLockConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3098,11 +3250,12 @@ impl AwsConversion for s3s::dto::GetObjectLockConfigurationOutput {
 
 impl AwsConversion for s3s::dto::GetObjectOutput {
     type Target = GetObjectOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             accept_ranges: try_from_aws(x.accept_ranges)?,
-            body: stream_from_aws(x.body),
+            body: Some(try_from_aws(x.body)?),
             bucket_key_enabled: try_from_aws(x.bucket_key_enabled)?,
             cache_control: try_from_aws(x.cache_control)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
@@ -3184,6 +3337,7 @@ impl AwsConversion for s3s::dto::GetObjectOutput {
 
 impl AwsConversion for s3s::dto::GetObjectRetentionInput {
     type Target = GetObjectRetentionInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3208,6 +3362,7 @@ impl AwsConversion for s3s::dto::GetObjectRetentionInput {
 
 impl AwsConversion for s3s::dto::GetObjectRetentionOutput {
     type Target = GetObjectRetentionOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3224,6 +3379,7 @@ impl AwsConversion for s3s::dto::GetObjectRetentionOutput {
 
 impl AwsConversion for s3s::dto::GetObjectTaggingInput {
     type Target = GetObjectTaggingInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3248,6 +3404,7 @@ impl AwsConversion for s3s::dto::GetObjectTaggingInput {
 
 impl AwsConversion for s3s::dto::GetObjectTaggingOutput {
     type Target = GetObjectTaggingOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3266,6 +3423,7 @@ impl AwsConversion for s3s::dto::GetObjectTaggingOutput {
 
 impl AwsConversion for s3s::dto::GetObjectTorrentInput {
     type Target = GetObjectTorrentInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3288,10 +3446,11 @@ impl AwsConversion for s3s::dto::GetObjectTorrentInput {
 
 impl AwsConversion for s3s::dto::GetObjectTorrentOutput {
     type Target = GetObjectTorrentOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
-            body: stream_from_aws(x.body),
+            body: Some(try_from_aws(x.body)?),
             request_charged: try_from_aws(x.request_charged)?,
         })
     }
@@ -3306,6 +3465,7 @@ impl AwsConversion for s3s::dto::GetObjectTorrentOutput {
 
 impl AwsConversion for s3s::dto::GetPublicAccessBlockInput {
     type Target = GetPublicAccessBlockInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3324,6 +3484,7 @@ impl AwsConversion for s3s::dto::GetPublicAccessBlockInput {
 
 impl AwsConversion for s3s::dto::GetPublicAccessBlockOutput {
     type Target = GetPublicAccessBlockOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3340,6 +3501,7 @@ impl AwsConversion for s3s::dto::GetPublicAccessBlockOutput {
 
 impl AwsConversion for s3s::dto::GlacierJobParameters {
     type Target = GlacierJobParameters;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3356,6 +3518,7 @@ impl AwsConversion for s3s::dto::GlacierJobParameters {
 
 impl AwsConversion for s3s::dto::Grant {
     type Target = Grant;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3374,6 +3537,7 @@ impl AwsConversion for s3s::dto::Grant {
 
 impl AwsConversion for s3s::dto::Grantee {
     type Target = Grantee;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3398,6 +3562,7 @@ impl AwsConversion for s3s::dto::Grantee {
 
 impl AwsConversion for s3s::dto::HeadBucketInput {
     type Target = HeadBucketInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3416,6 +3581,7 @@ impl AwsConversion for s3s::dto::HeadBucketInput {
 
 impl AwsConversion for s3s::dto::HeadBucketOutput {
     type Target = HeadBucketOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -3431,6 +3597,7 @@ impl AwsConversion for s3s::dto::HeadBucketOutput {
 
 impl AwsConversion for s3s::dto::HeadObjectInput {
     type Target = HeadObjectInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3475,6 +3642,7 @@ impl AwsConversion for s3s::dto::HeadObjectInput {
 
 impl AwsConversion for s3s::dto::HeadObjectOutput {
     type Target = HeadObjectOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3557,6 +3725,7 @@ impl AwsConversion for s3s::dto::HeadObjectOutput {
 
 impl AwsConversion for s3s::dto::IndexDocument {
     type Target = IndexDocument;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3573,6 +3742,7 @@ impl AwsConversion for s3s::dto::IndexDocument {
 
 impl AwsConversion for s3s::dto::Initiator {
     type Target = Initiator;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3591,6 +3761,7 @@ impl AwsConversion for s3s::dto::Initiator {
 
 impl AwsConversion for s3s::dto::InputSerialization {
     type Target = InputSerialization;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3613,6 +3784,7 @@ impl AwsConversion for s3s::dto::InputSerialization {
 
 impl AwsConversion for s3s::dto::IntelligentTieringAccessTier {
     type Target = IntelligentTieringAccessTier;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -3630,6 +3802,7 @@ impl AwsConversion for s3s::dto::IntelligentTieringAccessTier {
 
 impl AwsConversion for s3s::dto::IntelligentTieringAndOperator {
     type Target = IntelligentTieringAndOperator;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3648,6 +3821,7 @@ impl AwsConversion for s3s::dto::IntelligentTieringAndOperator {
 
 impl AwsConversion for s3s::dto::IntelligentTieringConfiguration {
     type Target = IntelligentTieringConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3670,6 +3844,7 @@ impl AwsConversion for s3s::dto::IntelligentTieringConfiguration {
 
 impl AwsConversion for s3s::dto::IntelligentTieringFilter {
     type Target = IntelligentTieringFilter;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3690,6 +3865,7 @@ impl AwsConversion for s3s::dto::IntelligentTieringFilter {
 
 impl AwsConversion for s3s::dto::IntelligentTieringStatus {
     type Target = IntelligentTieringStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -3707,6 +3883,7 @@ impl AwsConversion for s3s::dto::IntelligentTieringStatus {
 
 impl AwsConversion for s3s::dto::InvalidObjectState {
     type Target = InvalidObjectState;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3725,6 +3902,7 @@ impl AwsConversion for s3s::dto::InvalidObjectState {
 
 impl AwsConversion for s3s::dto::InventoryConfiguration {
     type Target = InventoryConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3753,6 +3931,7 @@ impl AwsConversion for s3s::dto::InventoryConfiguration {
 
 impl AwsConversion for s3s::dto::InventoryDestination {
     type Target = InventoryDestination;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3769,6 +3948,7 @@ impl AwsConversion for s3s::dto::InventoryDestination {
 
 impl AwsConversion for s3s::dto::InventoryEncryption {
     type Target = InventoryEncryption;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3787,6 +3967,7 @@ impl AwsConversion for s3s::dto::InventoryEncryption {
 
 impl AwsConversion for s3s::dto::InventoryFilter {
     type Target = InventoryFilter;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3803,6 +3984,7 @@ impl AwsConversion for s3s::dto::InventoryFilter {
 
 impl AwsConversion for s3s::dto::InventoryFormat {
     type Target = InventoryFormat;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -3821,6 +4003,7 @@ impl AwsConversion for s3s::dto::InventoryFormat {
 
 impl AwsConversion for s3s::dto::InventoryFrequency {
     type Target = InventoryFrequency;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -3838,6 +4021,7 @@ impl AwsConversion for s3s::dto::InventoryFrequency {
 
 impl AwsConversion for s3s::dto::InventoryIncludedObjectVersions {
     type Target = InventoryIncludedObjectVersions;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -3855,6 +4039,7 @@ impl AwsConversion for s3s::dto::InventoryIncludedObjectVersions {
 
 impl AwsConversion for s3s::dto::InventoryOptionalField {
     type Target = InventoryOptionalField;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -3883,6 +4068,7 @@ impl AwsConversion for s3s::dto::InventoryOptionalField {
 
 impl AwsConversion for s3s::dto::InventoryS3BucketDestination {
     type Target = InventoryS3BucketDestination;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3907,6 +4093,7 @@ impl AwsConversion for s3s::dto::InventoryS3BucketDestination {
 
 impl AwsConversion for s3s::dto::InventorySchedule {
     type Target = InventorySchedule;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3923,6 +4110,7 @@ impl AwsConversion for s3s::dto::InventorySchedule {
 
 impl AwsConversion for s3s::dto::JSONInput {
     type Target = JsonInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3939,6 +4127,7 @@ impl AwsConversion for s3s::dto::JSONInput {
 
 impl AwsConversion for s3s::dto::JSONOutput {
     type Target = JsonOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3955,6 +4144,7 @@ impl AwsConversion for s3s::dto::JSONOutput {
 
 impl AwsConversion for s3s::dto::JSONType {
     type Target = JsonType;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -3972,6 +4162,7 @@ impl AwsConversion for s3s::dto::JSONType {
 
 impl AwsConversion for s3s::dto::LambdaFunctionConfiguration {
     type Target = LambdaFunctionConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -3994,6 +4185,7 @@ impl AwsConversion for s3s::dto::LambdaFunctionConfiguration {
 
 impl AwsConversion for s3s::dto::LifecycleExpiration {
     type Target = LifecycleExpiration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4014,6 +4206,7 @@ impl AwsConversion for s3s::dto::LifecycleExpiration {
 
 impl AwsConversion for s3s::dto::LifecycleRule {
     type Target = LifecycleRule;
+    type Error = S3Error;
 
     #[allow(deprecated)]
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4048,6 +4241,7 @@ impl AwsConversion for s3s::dto::LifecycleRule {
 
 impl AwsConversion for s3s::dto::LifecycleRuleAndOperator {
     type Target = LifecycleRuleAndOperator;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4070,6 +4264,7 @@ impl AwsConversion for s3s::dto::LifecycleRuleAndOperator {
 
 impl AwsConversion for s3s::dto::LifecycleRuleFilter {
     type Target = LifecycleRuleFilter;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -4096,6 +4291,7 @@ impl AwsConversion for s3s::dto::LifecycleRuleFilter {
 
 impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsInput {
     type Target = ListBucketAnalyticsConfigurationsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4116,6 +4312,7 @@ impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsInput {
 
 impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsOutput {
     type Target = ListBucketAnalyticsConfigurationsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4138,6 +4335,7 @@ impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsOutput {
 
 impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsInput {
     type Target = ListBucketIntelligentTieringConfigurationsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4156,6 +4354,7 @@ impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsInput
 
 impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsOutput {
     type Target = ListBucketIntelligentTieringConfigurationsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4178,6 +4377,7 @@ impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsOutpu
 
 impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsInput {
     type Target = ListBucketInventoryConfigurationsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4198,6 +4398,7 @@ impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsInput {
 
 impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsOutput {
     type Target = ListBucketInventoryConfigurationsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4220,6 +4421,7 @@ impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsOutput {
 
 impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsInput {
     type Target = ListBucketMetricsConfigurationsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4240,6 +4442,7 @@ impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsInput {
 
 impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsOutput {
     type Target = ListBucketMetricsConfigurationsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4262,6 +4465,7 @@ impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsOutput {
 
 impl AwsConversion for s3s::dto::ListBucketsInput {
     type Target = ListBucketsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -4277,6 +4481,7 @@ impl AwsConversion for s3s::dto::ListBucketsInput {
 
 impl AwsConversion for s3s::dto::ListBucketsOutput {
     type Target = ListBucketsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4295,6 +4500,7 @@ impl AwsConversion for s3s::dto::ListBucketsOutput {
 
 impl AwsConversion for s3s::dto::ListMultipartUploadsInput {
     type Target = ListMultipartUploadsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4325,6 +4531,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsInput {
 
 impl AwsConversion for s3s::dto::ListMultipartUploadsOutput {
     type Target = ListMultipartUploadsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4363,6 +4570,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsOutput {
 
 impl AwsConversion for s3s::dto::ListObjectVersionsInput {
     type Target = ListObjectVersionsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4393,6 +4601,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsInput {
 
 impl AwsConversion for s3s::dto::ListObjectVersionsOutput {
     type Target = ListObjectVersionsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4433,6 +4642,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsOutput {
 
 impl AwsConversion for s3s::dto::ListObjectsInput {
     type Target = ListObjectsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4463,6 +4673,7 @@ impl AwsConversion for s3s::dto::ListObjectsInput {
 
 impl AwsConversion for s3s::dto::ListObjectsOutput {
     type Target = ListObjectsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4497,6 +4708,7 @@ impl AwsConversion for s3s::dto::ListObjectsOutput {
 
 impl AwsConversion for s3s::dto::ListObjectsV2Input {
     type Target = ListObjectsV2Input;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4531,6 +4743,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Input {
 
 impl AwsConversion for s3s::dto::ListObjectsV2Output {
     type Target = ListObjectsV2Output;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4569,6 +4782,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Output {
 
 impl AwsConversion for s3s::dto::ListPartsInput {
     type Target = ListPartsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4603,6 +4817,7 @@ impl AwsConversion for s3s::dto::ListPartsInput {
 
 impl AwsConversion for s3s::dto::ListPartsOutput {
     type Target = ListPartsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4647,6 +4862,7 @@ impl AwsConversion for s3s::dto::ListPartsOutput {
 
 impl AwsConversion for s3s::dto::LoggingEnabled {
     type Target = LoggingEnabled;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4667,6 +4883,7 @@ impl AwsConversion for s3s::dto::LoggingEnabled {
 
 impl AwsConversion for s3s::dto::MFADelete {
     type Target = MfaDelete;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -4684,6 +4901,7 @@ impl AwsConversion for s3s::dto::MFADelete {
 
 impl AwsConversion for s3s::dto::MFADeleteStatus {
     type Target = MfaDeleteStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -4701,6 +4919,7 @@ impl AwsConversion for s3s::dto::MFADeleteStatus {
 
 impl AwsConversion for s3s::dto::MetadataDirective {
     type Target = MetadataDirective;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -4718,6 +4937,7 @@ impl AwsConversion for s3s::dto::MetadataDirective {
 
 impl AwsConversion for s3s::dto::MetadataEntry {
     type Target = MetadataEntry;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4736,6 +4956,7 @@ impl AwsConversion for s3s::dto::MetadataEntry {
 
 impl AwsConversion for s3s::dto::Metrics {
     type Target = Metrics;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4754,6 +4975,7 @@ impl AwsConversion for s3s::dto::Metrics {
 
 impl AwsConversion for s3s::dto::MetricsAndOperator {
     type Target = MetricsAndOperator;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4774,6 +4996,7 @@ impl AwsConversion for s3s::dto::MetricsAndOperator {
 
 impl AwsConversion for s3s::dto::MetricsConfiguration {
     type Target = MetricsConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4792,6 +5015,7 @@ impl AwsConversion for s3s::dto::MetricsConfiguration {
 
 impl AwsConversion for s3s::dto::MetricsFilter {
     type Target = MetricsFilter;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -4816,6 +5040,7 @@ impl AwsConversion for s3s::dto::MetricsFilter {
 
 impl AwsConversion for s3s::dto::MetricsStatus {
     type Target = MetricsStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -4833,6 +5058,7 @@ impl AwsConversion for s3s::dto::MetricsStatus {
 
 impl AwsConversion for s3s::dto::MultipartUpload {
     type Target = MultipartUpload;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4861,6 +5087,7 @@ impl AwsConversion for s3s::dto::MultipartUpload {
 
 impl AwsConversion for s3s::dto::NoSuchBucket {
     type Target = NoSuchBucket;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -4876,6 +5103,7 @@ impl AwsConversion for s3s::dto::NoSuchBucket {
 
 impl AwsConversion for s3s::dto::NoSuchKey {
     type Target = NoSuchKey;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -4891,6 +5119,7 @@ impl AwsConversion for s3s::dto::NoSuchKey {
 
 impl AwsConversion for s3s::dto::NoSuchUpload {
     type Target = NoSuchUpload;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -4906,6 +5135,7 @@ impl AwsConversion for s3s::dto::NoSuchUpload {
 
 impl AwsConversion for s3s::dto::NoncurrentVersionExpiration {
     type Target = NoncurrentVersionExpiration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4924,6 +5154,7 @@ impl AwsConversion for s3s::dto::NoncurrentVersionExpiration {
 
 impl AwsConversion for s3s::dto::NoncurrentVersionTransition {
     type Target = NoncurrentVersionTransition;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4944,6 +5175,7 @@ impl AwsConversion for s3s::dto::NoncurrentVersionTransition {
 
 impl AwsConversion for s3s::dto::NotFound {
     type Target = NotFound;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -4959,6 +5191,7 @@ impl AwsConversion for s3s::dto::NotFound {
 
 impl AwsConversion for s3s::dto::NotificationConfiguration {
     type Target = NotificationConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4981,6 +5214,7 @@ impl AwsConversion for s3s::dto::NotificationConfiguration {
 
 impl AwsConversion for s3s::dto::NotificationConfigurationFilter {
     type Target = NotificationConfigurationFilter;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -4997,6 +5231,7 @@ impl AwsConversion for s3s::dto::NotificationConfigurationFilter {
 
 impl AwsConversion for s3s::dto::Object {
     type Target = Object;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5025,6 +5260,7 @@ impl AwsConversion for s3s::dto::Object {
 
 impl AwsConversion for s3s::dto::ObjectAlreadyInActiveTierError {
     type Target = ObjectAlreadyInActiveTierError;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5040,6 +5276,7 @@ impl AwsConversion for s3s::dto::ObjectAlreadyInActiveTierError {
 
 impl AwsConversion for s3s::dto::ObjectAttributes {
     type Target = ObjectAttributes;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5060,6 +5297,7 @@ impl AwsConversion for s3s::dto::ObjectAttributes {
 
 impl AwsConversion for s3s::dto::ObjectCannedACL {
     type Target = ObjectCannedAcl;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5082,6 +5320,7 @@ impl AwsConversion for s3s::dto::ObjectCannedACL {
 
 impl AwsConversion for s3s::dto::ObjectIdentifier {
     type Target = ObjectIdentifier;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5100,6 +5339,7 @@ impl AwsConversion for s3s::dto::ObjectIdentifier {
 
 impl AwsConversion for s3s::dto::ObjectLockConfiguration {
     type Target = ObjectLockConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5118,6 +5358,7 @@ impl AwsConversion for s3s::dto::ObjectLockConfiguration {
 
 impl AwsConversion for s3s::dto::ObjectLockEnabled {
     type Target = ObjectLockEnabled;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5134,6 +5375,7 @@ impl AwsConversion for s3s::dto::ObjectLockEnabled {
 
 impl AwsConversion for s3s::dto::ObjectLockLegalHold {
     type Target = ObjectLockLegalHold;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5150,6 +5392,7 @@ impl AwsConversion for s3s::dto::ObjectLockLegalHold {
 
 impl AwsConversion for s3s::dto::ObjectLockLegalHoldStatus {
     type Target = ObjectLockLegalHoldStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5167,6 +5410,7 @@ impl AwsConversion for s3s::dto::ObjectLockLegalHoldStatus {
 
 impl AwsConversion for s3s::dto::ObjectLockMode {
     type Target = ObjectLockMode;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5184,6 +5428,7 @@ impl AwsConversion for s3s::dto::ObjectLockMode {
 
 impl AwsConversion for s3s::dto::ObjectLockRetention {
     type Target = ObjectLockRetention;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5202,6 +5447,7 @@ impl AwsConversion for s3s::dto::ObjectLockRetention {
 
 impl AwsConversion for s3s::dto::ObjectLockRetentionMode {
     type Target = ObjectLockRetentionMode;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5219,6 +5465,7 @@ impl AwsConversion for s3s::dto::ObjectLockRetentionMode {
 
 impl AwsConversion for s3s::dto::ObjectLockRule {
     type Target = ObjectLockRule;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5235,6 +5482,7 @@ impl AwsConversion for s3s::dto::ObjectLockRule {
 
 impl AwsConversion for s3s::dto::ObjectNotInActiveTierError {
     type Target = ObjectNotInActiveTierError;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5250,6 +5498,7 @@ impl AwsConversion for s3s::dto::ObjectNotInActiveTierError {
 
 impl AwsConversion for s3s::dto::ObjectOwnership {
     type Target = ObjectOwnership;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5268,6 +5517,7 @@ impl AwsConversion for s3s::dto::ObjectOwnership {
 
 impl AwsConversion for s3s::dto::ObjectPart {
     type Target = ObjectPart;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5294,6 +5544,7 @@ impl AwsConversion for s3s::dto::ObjectPart {
 
 impl AwsConversion for s3s::dto::ObjectStorageClass {
     type Target = ObjectStorageClass;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5318,6 +5569,7 @@ impl AwsConversion for s3s::dto::ObjectStorageClass {
 
 impl AwsConversion for s3s::dto::ObjectVersion {
     type Target = ObjectVersion;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5350,6 +5602,7 @@ impl AwsConversion for s3s::dto::ObjectVersion {
 
 impl AwsConversion for s3s::dto::ObjectVersionStorageClass {
     type Target = ObjectVersionStorageClass;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5366,6 +5619,7 @@ impl AwsConversion for s3s::dto::ObjectVersionStorageClass {
 
 impl AwsConversion for s3s::dto::OutputLocation {
     type Target = OutputLocation;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self { s3: try_from_aws(x.s3)? })
@@ -5380,6 +5634,7 @@ impl AwsConversion for s3s::dto::OutputLocation {
 
 impl AwsConversion for s3s::dto::OutputSerialization {
     type Target = OutputSerialization;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5398,6 +5653,7 @@ impl AwsConversion for s3s::dto::OutputSerialization {
 
 impl AwsConversion for s3s::dto::Owner {
     type Target = Owner;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5416,6 +5672,7 @@ impl AwsConversion for s3s::dto::Owner {
 
 impl AwsConversion for s3s::dto::OwnerOverride {
     type Target = OwnerOverride;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5432,6 +5689,7 @@ impl AwsConversion for s3s::dto::OwnerOverride {
 
 impl AwsConversion for s3s::dto::OwnershipControls {
     type Target = OwnershipControls;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5448,6 +5706,7 @@ impl AwsConversion for s3s::dto::OwnershipControls {
 
 impl AwsConversion for s3s::dto::OwnershipControlsRule {
     type Target = OwnershipControlsRule;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5464,6 +5723,7 @@ impl AwsConversion for s3s::dto::OwnershipControlsRule {
 
 impl AwsConversion for s3s::dto::ParquetInput {
     type Target = ParquetInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5479,6 +5739,7 @@ impl AwsConversion for s3s::dto::ParquetInput {
 
 impl AwsConversion for s3s::dto::Part {
     type Target = Part;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5509,6 +5770,7 @@ impl AwsConversion for s3s::dto::Part {
 
 impl AwsConversion for s3s::dto::Payer {
     type Target = Payer;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5526,6 +5788,7 @@ impl AwsConversion for s3s::dto::Payer {
 
 impl AwsConversion for s3s::dto::Permission {
     type Target = Permission;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5546,6 +5809,7 @@ impl AwsConversion for s3s::dto::Permission {
 
 impl AwsConversion for s3s::dto::PolicyStatus {
     type Target = PolicyStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5562,6 +5826,7 @@ impl AwsConversion for s3s::dto::PolicyStatus {
 
 impl AwsConversion for s3s::dto::Progress {
     type Target = Progress;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5582,6 +5847,7 @@ impl AwsConversion for s3s::dto::Progress {
 
 impl AwsConversion for s3s::dto::ProgressEvent {
     type Target = ProgressEvent;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5598,6 +5864,7 @@ impl AwsConversion for s3s::dto::ProgressEvent {
 
 impl AwsConversion for s3s::dto::Protocol {
     type Target = Protocol;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -5615,6 +5882,7 @@ impl AwsConversion for s3s::dto::Protocol {
 
 impl AwsConversion for s3s::dto::PublicAccessBlockConfiguration {
     type Target = PublicAccessBlockConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5637,6 +5905,7 @@ impl AwsConversion for s3s::dto::PublicAccessBlockConfiguration {
 
 impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationInput {
     type Target = PutBucketAccelerateConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5659,6 +5928,7 @@ impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationInput {
 
 impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationOutput {
     type Target = PutBucketAccelerateConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5674,6 +5944,7 @@ impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationOutput {
 
 impl AwsConversion for s3s::dto::PutBucketAclInput {
     type Target = PutBucketAclInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5710,6 +5981,7 @@ impl AwsConversion for s3s::dto::PutBucketAclInput {
 
 impl AwsConversion for s3s::dto::PutBucketAclOutput {
     type Target = PutBucketAclOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5725,6 +5997,7 @@ impl AwsConversion for s3s::dto::PutBucketAclOutput {
 
 impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationInput {
     type Target = PutBucketAnalyticsConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5747,6 +6020,7 @@ impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationInput {
 
 impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationOutput {
     type Target = PutBucketAnalyticsConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5762,6 +6036,7 @@ impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationOutput {
 
 impl AwsConversion for s3s::dto::PutBucketCorsInput {
     type Target = PutBucketCorsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5786,6 +6061,7 @@ impl AwsConversion for s3s::dto::PutBucketCorsInput {
 
 impl AwsConversion for s3s::dto::PutBucketCorsOutput {
     type Target = PutBucketCorsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5801,6 +6077,7 @@ impl AwsConversion for s3s::dto::PutBucketCorsOutput {
 
 impl AwsConversion for s3s::dto::PutBucketEncryptionInput {
     type Target = PutBucketEncryptionInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5828,6 +6105,7 @@ impl AwsConversion for s3s::dto::PutBucketEncryptionInput {
 
 impl AwsConversion for s3s::dto::PutBucketEncryptionOutput {
     type Target = PutBucketEncryptionOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5843,6 +6121,7 @@ impl AwsConversion for s3s::dto::PutBucketEncryptionOutput {
 
 impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationInput {
     type Target = PutBucketIntelligentTieringConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5866,6 +6145,7 @@ impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationInput {
 
 impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationOutput {
     type Target = PutBucketIntelligentTieringConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5881,6 +6161,7 @@ impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationOutput 
 
 impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationInput {
     type Target = PutBucketInventoryConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5903,6 +6184,7 @@ impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationInput {
 
 impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationOutput {
     type Target = PutBucketInventoryConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5918,6 +6200,7 @@ impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationOutput {
 
 impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
     type Target = PutBucketLifecycleConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5940,6 +6223,7 @@ impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
 
 impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationOutput {
     type Target = PutBucketLifecycleConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5955,6 +6239,7 @@ impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationOutput {
 
 impl AwsConversion for s3s::dto::PutBucketLoggingInput {
     type Target = PutBucketLoggingInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -5979,6 +6264,7 @@ impl AwsConversion for s3s::dto::PutBucketLoggingInput {
 
 impl AwsConversion for s3s::dto::PutBucketLoggingOutput {
     type Target = PutBucketLoggingOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -5994,6 +6280,7 @@ impl AwsConversion for s3s::dto::PutBucketLoggingOutput {
 
 impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationInput {
     type Target = PutBucketMetricsConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6016,6 +6303,7 @@ impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationInput {
 
 impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationOutput {
     type Target = PutBucketMetricsConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6031,6 +6319,7 @@ impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationOutput {
 
 impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationInput {
     type Target = PutBucketNotificationConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6053,6 +6342,7 @@ impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationInput {
 
 impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationOutput {
     type Target = PutBucketNotificationConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6068,6 +6358,7 @@ impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationOutput {
 
 impl AwsConversion for s3s::dto::PutBucketOwnershipControlsInput {
     type Target = PutBucketOwnershipControlsInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6090,6 +6381,7 @@ impl AwsConversion for s3s::dto::PutBucketOwnershipControlsInput {
 
 impl AwsConversion for s3s::dto::PutBucketOwnershipControlsOutput {
     type Target = PutBucketOwnershipControlsOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6105,6 +6397,7 @@ impl AwsConversion for s3s::dto::PutBucketOwnershipControlsOutput {
 
 impl AwsConversion for s3s::dto::PutBucketPolicyInput {
     type Target = PutBucketPolicyInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6131,6 +6424,7 @@ impl AwsConversion for s3s::dto::PutBucketPolicyInput {
 
 impl AwsConversion for s3s::dto::PutBucketPolicyOutput {
     type Target = PutBucketPolicyOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6146,6 +6440,7 @@ impl AwsConversion for s3s::dto::PutBucketPolicyOutput {
 
 impl AwsConversion for s3s::dto::PutBucketReplicationInput {
     type Target = PutBucketReplicationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6172,6 +6467,7 @@ impl AwsConversion for s3s::dto::PutBucketReplicationInput {
 
 impl AwsConversion for s3s::dto::PutBucketReplicationOutput {
     type Target = PutBucketReplicationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6187,6 +6483,7 @@ impl AwsConversion for s3s::dto::PutBucketReplicationOutput {
 
 impl AwsConversion for s3s::dto::PutBucketRequestPaymentInput {
     type Target = PutBucketRequestPaymentInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6211,6 +6508,7 @@ impl AwsConversion for s3s::dto::PutBucketRequestPaymentInput {
 
 impl AwsConversion for s3s::dto::PutBucketRequestPaymentOutput {
     type Target = PutBucketRequestPaymentOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6226,6 +6524,7 @@ impl AwsConversion for s3s::dto::PutBucketRequestPaymentOutput {
 
 impl AwsConversion for s3s::dto::PutBucketTaggingInput {
     type Target = PutBucketTaggingInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6250,6 +6549,7 @@ impl AwsConversion for s3s::dto::PutBucketTaggingInput {
 
 impl AwsConversion for s3s::dto::PutBucketTaggingOutput {
     type Target = PutBucketTaggingOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6265,6 +6565,7 @@ impl AwsConversion for s3s::dto::PutBucketTaggingOutput {
 
 impl AwsConversion for s3s::dto::PutBucketVersioningInput {
     type Target = PutBucketVersioningInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6291,6 +6592,7 @@ impl AwsConversion for s3s::dto::PutBucketVersioningInput {
 
 impl AwsConversion for s3s::dto::PutBucketVersioningOutput {
     type Target = PutBucketVersioningOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6306,6 +6608,7 @@ impl AwsConversion for s3s::dto::PutBucketVersioningOutput {
 
 impl AwsConversion for s3s::dto::PutBucketWebsiteInput {
     type Target = PutBucketWebsiteInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6330,6 +6633,7 @@ impl AwsConversion for s3s::dto::PutBucketWebsiteInput {
 
 impl AwsConversion for s3s::dto::PutBucketWebsiteOutput {
     type Target = PutBucketWebsiteOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6345,6 +6649,7 @@ impl AwsConversion for s3s::dto::PutBucketWebsiteOutput {
 
 impl AwsConversion for s3s::dto::PutObjectAclInput {
     type Target = PutObjectAclInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6387,6 +6692,7 @@ impl AwsConversion for s3s::dto::PutObjectAclInput {
 
 impl AwsConversion for s3s::dto::PutObjectAclOutput {
     type Target = PutObjectAclOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6403,11 +6709,12 @@ impl AwsConversion for s3s::dto::PutObjectAclOutput {
 
 impl AwsConversion for s3s::dto::PutObjectInput {
     type Target = PutObjectInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             acl: try_from_aws(x.acl)?,
-            body: stream_from_aws(x.body),
+            body: Some(try_from_aws(x.body)?),
             bucket: unwrap_from_aws(x.bucket, "bucket")?,
             bucket_key_enabled: try_from_aws(x.bucket_key_enabled)?,
             cache_control: try_from_aws(x.cache_control)?,
@@ -6491,6 +6798,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
 
 impl AwsConversion for s3s::dto::PutObjectLegalHoldInput {
     type Target = PutObjectLegalHoldInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6521,6 +6829,7 @@ impl AwsConversion for s3s::dto::PutObjectLegalHoldInput {
 
 impl AwsConversion for s3s::dto::PutObjectLegalHoldOutput {
     type Target = PutObjectLegalHoldOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6537,6 +6846,7 @@ impl AwsConversion for s3s::dto::PutObjectLegalHoldOutput {
 
 impl AwsConversion for s3s::dto::PutObjectLockConfigurationInput {
     type Target = PutObjectLockConfigurationInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6565,6 +6875,7 @@ impl AwsConversion for s3s::dto::PutObjectLockConfigurationInput {
 
 impl AwsConversion for s3s::dto::PutObjectLockConfigurationOutput {
     type Target = PutObjectLockConfigurationOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6581,6 +6892,7 @@ impl AwsConversion for s3s::dto::PutObjectLockConfigurationOutput {
 
 impl AwsConversion for s3s::dto::PutObjectOutput {
     type Target = PutObjectOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6623,6 +6935,7 @@ impl AwsConversion for s3s::dto::PutObjectOutput {
 
 impl AwsConversion for s3s::dto::PutObjectRetentionInput {
     type Target = PutObjectRetentionInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6655,6 +6968,7 @@ impl AwsConversion for s3s::dto::PutObjectRetentionInput {
 
 impl AwsConversion for s3s::dto::PutObjectRetentionOutput {
     type Target = PutObjectRetentionOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6671,6 +6985,7 @@ impl AwsConversion for s3s::dto::PutObjectRetentionOutput {
 
 impl AwsConversion for s3s::dto::PutObjectTaggingInput {
     type Target = PutObjectTaggingInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6701,6 +7016,7 @@ impl AwsConversion for s3s::dto::PutObjectTaggingInput {
 
 impl AwsConversion for s3s::dto::PutObjectTaggingOutput {
     type Target = PutObjectTaggingOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6717,6 +7033,7 @@ impl AwsConversion for s3s::dto::PutObjectTaggingOutput {
 
 impl AwsConversion for s3s::dto::PutPublicAccessBlockInput {
     type Target = PutPublicAccessBlockInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6744,6 +7061,7 @@ impl AwsConversion for s3s::dto::PutPublicAccessBlockInput {
 
 impl AwsConversion for s3s::dto::PutPublicAccessBlockOutput {
     type Target = PutPublicAccessBlockOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -6759,6 +7077,7 @@ impl AwsConversion for s3s::dto::PutPublicAccessBlockOutput {
 
 impl AwsConversion for s3s::dto::QueueConfiguration {
     type Target = QueueConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6781,6 +7100,7 @@ impl AwsConversion for s3s::dto::QueueConfiguration {
 
 impl AwsConversion for s3s::dto::QuoteFields {
     type Target = QuoteFields;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -6798,6 +7118,7 @@ impl AwsConversion for s3s::dto::QuoteFields {
 
 impl AwsConversion for s3s::dto::RecordsEvent {
     type Target = RecordsEvent;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6814,6 +7135,7 @@ impl AwsConversion for s3s::dto::RecordsEvent {
 
 impl AwsConversion for s3s::dto::Redirect {
     type Target = Redirect;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6838,6 +7160,7 @@ impl AwsConversion for s3s::dto::Redirect {
 
 impl AwsConversion for s3s::dto::RedirectAllRequestsTo {
     type Target = RedirectAllRequestsTo;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6856,6 +7179,7 @@ impl AwsConversion for s3s::dto::RedirectAllRequestsTo {
 
 impl AwsConversion for s3s::dto::ReplicaModifications {
     type Target = ReplicaModifications;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6872,6 +7196,7 @@ impl AwsConversion for s3s::dto::ReplicaModifications {
 
 impl AwsConversion for s3s::dto::ReplicaModificationsStatus {
     type Target = ReplicaModificationsStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -6889,6 +7214,7 @@ impl AwsConversion for s3s::dto::ReplicaModificationsStatus {
 
 impl AwsConversion for s3s::dto::ReplicationConfiguration {
     type Target = ReplicationConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6907,6 +7233,7 @@ impl AwsConversion for s3s::dto::ReplicationConfiguration {
 
 impl AwsConversion for s3s::dto::ReplicationRule {
     type Target = ReplicationRule;
+    type Error = S3Error;
 
     #[allow(deprecated)]
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6941,6 +7268,7 @@ impl AwsConversion for s3s::dto::ReplicationRule {
 
 impl AwsConversion for s3s::dto::ReplicationRuleAndOperator {
     type Target = ReplicationRuleAndOperator;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -6959,6 +7287,7 @@ impl AwsConversion for s3s::dto::ReplicationRuleAndOperator {
 
 impl AwsConversion for s3s::dto::ReplicationRuleFilter {
     type Target = ReplicationRuleFilter;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -6981,6 +7310,7 @@ impl AwsConversion for s3s::dto::ReplicationRuleFilter {
 
 impl AwsConversion for s3s::dto::ReplicationRuleStatus {
     type Target = ReplicationRuleStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -6998,6 +7328,7 @@ impl AwsConversion for s3s::dto::ReplicationRuleStatus {
 
 impl AwsConversion for s3s::dto::ReplicationStatus {
     type Target = ReplicationStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7017,6 +7348,7 @@ impl AwsConversion for s3s::dto::ReplicationStatus {
 
 impl AwsConversion for s3s::dto::ReplicationTime {
     type Target = ReplicationTime;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7035,6 +7367,7 @@ impl AwsConversion for s3s::dto::ReplicationTime {
 
 impl AwsConversion for s3s::dto::ReplicationTimeStatus {
     type Target = ReplicationTimeStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7052,6 +7385,7 @@ impl AwsConversion for s3s::dto::ReplicationTimeStatus {
 
 impl AwsConversion for s3s::dto::ReplicationTimeValue {
     type Target = ReplicationTimeValue;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7068,6 +7402,7 @@ impl AwsConversion for s3s::dto::ReplicationTimeValue {
 
 impl AwsConversion for s3s::dto::RequestCharged {
     type Target = RequestCharged;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7084,6 +7419,7 @@ impl AwsConversion for s3s::dto::RequestCharged {
 
 impl AwsConversion for s3s::dto::RequestPayer {
     type Target = RequestPayer;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7100,6 +7436,7 @@ impl AwsConversion for s3s::dto::RequestPayer {
 
 impl AwsConversion for s3s::dto::RequestPaymentConfiguration {
     type Target = RequestPaymentConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7116,6 +7453,7 @@ impl AwsConversion for s3s::dto::RequestPaymentConfiguration {
 
 impl AwsConversion for s3s::dto::RequestProgress {
     type Target = RequestProgress;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7132,6 +7470,7 @@ impl AwsConversion for s3s::dto::RequestProgress {
 
 impl AwsConversion for s3s::dto::RestoreObjectInput {
     type Target = RestoreObjectInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7160,6 +7499,7 @@ impl AwsConversion for s3s::dto::RestoreObjectInput {
 
 impl AwsConversion for s3s::dto::RestoreObjectOutput {
     type Target = RestoreObjectOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7178,6 +7518,7 @@ impl AwsConversion for s3s::dto::RestoreObjectOutput {
 
 impl AwsConversion for s3s::dto::RestoreRequest {
     type Target = RestoreRequest;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7206,6 +7547,7 @@ impl AwsConversion for s3s::dto::RestoreRequest {
 
 impl AwsConversion for s3s::dto::RestoreRequestType {
     type Target = RestoreRequestType;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7222,6 +7564,7 @@ impl AwsConversion for s3s::dto::RestoreRequestType {
 
 impl AwsConversion for s3s::dto::RoutingRule {
     type Target = RoutingRule;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7240,6 +7583,7 @@ impl AwsConversion for s3s::dto::RoutingRule {
 
 impl AwsConversion for s3s::dto::S3KeyFilter {
     type Target = S3KeyFilter;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7256,6 +7600,7 @@ impl AwsConversion for s3s::dto::S3KeyFilter {
 
 impl AwsConversion for s3s::dto::S3Location {
     type Target = S3Location;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7286,6 +7631,7 @@ impl AwsConversion for s3s::dto::S3Location {
 
 impl AwsConversion for s3s::dto::SSEKMS {
     type Target = Ssekms;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7302,6 +7648,7 @@ impl AwsConversion for s3s::dto::SSEKMS {
 
 impl AwsConversion for s3s::dto::SSES3 {
     type Target = Sses3;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
@@ -7317,6 +7664,7 @@ impl AwsConversion for s3s::dto::SSES3 {
 
 impl AwsConversion for s3s::dto::ScanRange {
     type Target = ScanRange;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7335,6 +7683,7 @@ impl AwsConversion for s3s::dto::ScanRange {
 
 impl AwsConversion for s3s::dto::SelectParameters {
     type Target = SelectParameters;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7357,6 +7706,7 @@ impl AwsConversion for s3s::dto::SelectParameters {
 
 impl AwsConversion for s3s::dto::ServerSideEncryption {
     type Target = ServerSideEncryption;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7374,6 +7724,7 @@ impl AwsConversion for s3s::dto::ServerSideEncryption {
 
 impl AwsConversion for s3s::dto::ServerSideEncryptionByDefault {
     type Target = ServerSideEncryptionByDefault;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7392,6 +7743,7 @@ impl AwsConversion for s3s::dto::ServerSideEncryptionByDefault {
 
 impl AwsConversion for s3s::dto::ServerSideEncryptionConfiguration {
     type Target = ServerSideEncryptionConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7408,6 +7760,7 @@ impl AwsConversion for s3s::dto::ServerSideEncryptionConfiguration {
 
 impl AwsConversion for s3s::dto::ServerSideEncryptionRule {
     type Target = ServerSideEncryptionRule;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7426,6 +7779,7 @@ impl AwsConversion for s3s::dto::ServerSideEncryptionRule {
 
 impl AwsConversion for s3s::dto::SourceSelectionCriteria {
     type Target = SourceSelectionCriteria;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7444,6 +7798,7 @@ impl AwsConversion for s3s::dto::SourceSelectionCriteria {
 
 impl AwsConversion for s3s::dto::SseKmsEncryptedObjects {
     type Target = SseKmsEncryptedObjects;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7460,6 +7815,7 @@ impl AwsConversion for s3s::dto::SseKmsEncryptedObjects {
 
 impl AwsConversion for s3s::dto::SseKmsEncryptedObjectsStatus {
     type Target = SseKmsEncryptedObjectsStatus;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7477,6 +7833,7 @@ impl AwsConversion for s3s::dto::SseKmsEncryptedObjectsStatus {
 
 impl AwsConversion for s3s::dto::Stats {
     type Target = Stats;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7497,6 +7854,7 @@ impl AwsConversion for s3s::dto::Stats {
 
 impl AwsConversion for s3s::dto::StatsEvent {
     type Target = StatsEvent;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7513,6 +7871,7 @@ impl AwsConversion for s3s::dto::StatsEvent {
 
 impl AwsConversion for s3s::dto::StorageClass {
     type Target = StorageClass;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7537,6 +7896,7 @@ impl AwsConversion for s3s::dto::StorageClass {
 
 impl AwsConversion for s3s::dto::StorageClassAnalysis {
     type Target = StorageClassAnalysis;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7553,6 +7913,7 @@ impl AwsConversion for s3s::dto::StorageClassAnalysis {
 
 impl AwsConversion for s3s::dto::StorageClassAnalysisDataExport {
     type Target = StorageClassAnalysisDataExport;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7571,6 +7932,7 @@ impl AwsConversion for s3s::dto::StorageClassAnalysisDataExport {
 
 impl AwsConversion for s3s::dto::StorageClassAnalysisSchemaVersion {
     type Target = StorageClassAnalysisSchemaVersion;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7587,6 +7949,7 @@ impl AwsConversion for s3s::dto::StorageClassAnalysisSchemaVersion {
 
 impl AwsConversion for s3s::dto::Tag {
     type Target = Tag;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7605,6 +7968,7 @@ impl AwsConversion for s3s::dto::Tag {
 
 impl AwsConversion for s3s::dto::Tagging {
     type Target = Tagging;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7621,6 +7985,7 @@ impl AwsConversion for s3s::dto::Tagging {
 
 impl AwsConversion for s3s::dto::TaggingDirective {
     type Target = TaggingDirective;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7638,6 +8003,7 @@ impl AwsConversion for s3s::dto::TaggingDirective {
 
 impl AwsConversion for s3s::dto::TargetGrant {
     type Target = TargetGrant;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7656,6 +8022,7 @@ impl AwsConversion for s3s::dto::TargetGrant {
 
 impl AwsConversion for s3s::dto::Tier {
     type Target = Tier;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7674,6 +8041,7 @@ impl AwsConversion for s3s::dto::Tier {
 
 impl AwsConversion for s3s::dto::Tiering {
     type Target = Tiering;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7692,6 +8060,7 @@ impl AwsConversion for s3s::dto::Tiering {
 
 impl AwsConversion for s3s::dto::TopicConfiguration {
     type Target = TopicConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7714,6 +8083,7 @@ impl AwsConversion for s3s::dto::TopicConfiguration {
 
 impl AwsConversion for s3s::dto::Transition {
     type Target = Transition;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7734,6 +8104,7 @@ impl AwsConversion for s3s::dto::Transition {
 
 impl AwsConversion for s3s::dto::TransitionStorageClass {
     type Target = TransitionStorageClass;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7755,6 +8126,7 @@ impl AwsConversion for s3s::dto::TransitionStorageClass {
 
 impl AwsConversion for s3s::dto::Type {
     type Target = Type;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
@@ -7773,6 +8145,7 @@ impl AwsConversion for s3s::dto::Type {
 
 impl AwsConversion for s3s::dto::UploadPartCopyInput {
     type Target = UploadPartCopyInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7825,6 +8198,7 @@ impl AwsConversion for s3s::dto::UploadPartCopyInput {
 
 impl AwsConversion for s3s::dto::UploadPartCopyOutput {
     type Target = UploadPartCopyOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7855,10 +8229,11 @@ impl AwsConversion for s3s::dto::UploadPartCopyOutput {
 
 impl AwsConversion for s3s::dto::UploadPartInput {
     type Target = UploadPartInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
-            body: stream_from_aws(x.body),
+            body: Some(try_from_aws(x.body)?),
             bucket: unwrap_from_aws(x.bucket, "bucket")?,
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
@@ -7903,6 +8278,7 @@ impl AwsConversion for s3s::dto::UploadPartInput {
 
 impl AwsConversion for s3s::dto::UploadPartOutput {
     type Target = UploadPartOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7939,6 +8315,7 @@ impl AwsConversion for s3s::dto::UploadPartOutput {
 
 impl AwsConversion for s3s::dto::VersioningConfiguration {
     type Target = VersioningConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7957,6 +8334,7 @@ impl AwsConversion for s3s::dto::VersioningConfiguration {
 
 impl AwsConversion for s3s::dto::WebsiteConfiguration {
     type Target = WebsiteConfiguration;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
@@ -7979,11 +8357,12 @@ impl AwsConversion for s3s::dto::WebsiteConfiguration {
 
 impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
     type Target = WriteGetObjectResponseInput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             accept_ranges: try_from_aws(x.accept_ranges)?,
-            body: stream_from_aws(x.body),
+            body: Some(try_from_aws(x.body)?),
             bucket_key_enabled: try_from_aws(x.bucket_key_enabled)?,
             cache_control: try_from_aws(x.cache_control)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
@@ -8073,6 +8452,7 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
 
 impl AwsConversion for s3s::dto::WriteGetObjectResponseOutput {
     type Target = WriteGetObjectResponseOutput;
+    type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         let _ = x;
