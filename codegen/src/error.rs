@@ -114,7 +114,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
     g.ln("use hyper::StatusCode;");
     g.lf();
 
-    g.ln("#[derive(Debug, Clone, Copy, PartialEq, Eq)]");
+    g.ln("#[derive(Debug, Clone, PartialEq, Eq)]");
     g.ln("#[non_exhaustive]");
     g.ln("pub enum S3ErrorCode {");
     for err in errors.values() {
@@ -149,6 +149,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
         g.ln(f!("{},", err.code));
         g.lf();
     }
+    g.ln("Unknown(Box<str>),");
     g.ln("}");
     g.lf();
 
@@ -156,12 +157,13 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
 
     {
         g.ln("#[must_use]");
-        g.ln("pub const fn as_str(&self) -> &'static str {");
+        g.ln("pub fn as_str(&self) -> &str {");
 
         g.ln("match self {");
         for err in errors.values() {
             g.ln(f!("Self::{} => \"{}\",", err.code, err.code));
         }
+        g.ln("Self::Unknown(s) => s,");
         g.ln("}");
 
         g.ln("}");
@@ -170,13 +172,13 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
 
     {
         g.ln("#[must_use]");
-        g.ln("pub const fn from_bytes(s: &[u8]) -> Option<Self> {");
+        g.ln("pub fn from_bytes(s: &[u8]) -> Option<Self> {");
 
         g.ln("match s {");
         for err in errors.values() {
             g.ln(f!("b\"{}\" => Some(Self::{}),", err.code, err.code));
         }
-        g.ln("_ => None");
+        g.ln("_ => std::str::from_utf8(s).ok().map(|s| Self::Unknown(s.into()))");
         g.ln("}");
 
         g.ln("}");
@@ -185,7 +187,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
 
     {
         g.ln("#[must_use]");
-        g.ln("pub const fn status_code(self) -> Option<StatusCode> {");
+        g.ln("pub fn status_code(&self) -> Option<StatusCode> {");
 
         g.ln("match self {");
         for err in errors.values() {
@@ -218,6 +220,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
             }
             g.ln(f!("Self::{} => None,", err.code));
         }
+        g.ln("Self::Unknown(_) => None,");
         g.ln("}");
 
         g.ln("}");

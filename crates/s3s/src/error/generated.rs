@@ -1,6 +1,6 @@
 use hyper::StatusCode;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum S3ErrorCode {
     /// Access Denied
@@ -485,11 +485,13 @@ pub enum S3ErrorCode {
     /// HTTP Status Code: 400 Bad Request
     ///
     UserKeyMustBeSpecified,
+
+    Unknown(Box<str>),
 }
 
 impl S3ErrorCode {
     #[must_use]
-    pub const fn as_str(&self) -> &'static str {
+    pub fn as_str(&self) -> &str {
         match self {
             Self::AccessDenied => "AccessDenied ",
             Self::AccountProblem => "AccountProblem",
@@ -571,11 +573,12 @@ impl S3ErrorCode {
             Self::UnexpectedContent => "UnexpectedContent",
             Self::UnresolvableGrantByEmailAddress => "UnresolvableGrantByEmailAddress",
             Self::UserKeyMustBeSpecified => "UserKeyMustBeSpecified",
+            Self::Unknown(s) => s,
         }
     }
 
     #[must_use]
-    pub const fn from_bytes(s: &[u8]) -> Option<Self> {
+    pub fn from_bytes(s: &[u8]) -> Option<Self> {
         match s {
             b"AccessDenied " => Some(Self::AccessDenied),
             b"AccountProblem" => Some(Self::AccountProblem),
@@ -657,12 +660,12 @@ impl S3ErrorCode {
             b"UnexpectedContent" => Some(Self::UnexpectedContent),
             b"UnresolvableGrantByEmailAddress" => Some(Self::UnresolvableGrantByEmailAddress),
             b"UserKeyMustBeSpecified" => Some(Self::UserKeyMustBeSpecified),
-            _ => None,
+            _ => std::str::from_utf8(s).ok().map(|s| Self::Unknown(s.into())),
         }
     }
 
     #[must_use]
-    pub const fn status_code(self) -> Option<StatusCode> {
+    pub fn status_code(&self) -> Option<StatusCode> {
         match self {
             Self::AccessDenied => Some(StatusCode::FORBIDDEN),
             Self::AccountProblem => Some(StatusCode::FORBIDDEN),
@@ -744,6 +747,7 @@ impl S3ErrorCode {
             Self::UnexpectedContent => Some(StatusCode::BAD_REQUEST),
             Self::UnresolvableGrantByEmailAddress => Some(StatusCode::BAD_REQUEST),
             Self::UserKeyMustBeSpecified => Some(StatusCode::BAD_REQUEST),
+            Self::Unknown(_) => None,
         }
     }
 }

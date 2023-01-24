@@ -34,7 +34,7 @@ pub trait Operation: Send + Sync + 'static {
 
 fn serialize_error(x: S3Error) -> S3Result<Response> {
     let mut res = Response::default();
-    *res.status_mut() = x.code().status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
+    *res.status_mut() = x.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
     http::set_xml_body(&mut res, &x)?;
     Ok(res)
 }
