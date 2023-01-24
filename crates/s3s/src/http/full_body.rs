@@ -28,12 +28,18 @@ impl FullBody {
         let content_length = req
             .headers()
             .get(hyper::header::CONTENT_LENGTH)
-            .and_then(|val| atoi::atoi::<u64>(val.as_bytes()))
-            .ok_or(S3ErrorCode::MissingContentLength)?;
+            .and_then(|val| atoi::atoi::<u64>(val.as_bytes()));
 
-        check_len(content_length, limit)?;
+        if let Some(content_length) = content_length {
+            check_len(content_length, limit)?;
+        }
 
         let bytes = concat(body, limit).await?;
+        if bytes.is_empty() {
+            return Ok(Self(bytes));
+        }
+
+        let content_length = content_length.ok_or(S3ErrorCode::MissingContentLength)?;
         if bytes.len() as u64 != content_length {
             return Err(s3_error!(IncompleteBody));
         }
