@@ -27,12 +27,52 @@ macro_rules! wrap_sdk_error {
 
 mod generated;
 
-use aws_sdk_s3::Client;
+pub struct Proxy(aws_sdk_s3::Client);
 
-pub struct Proxy(Client);
+impl From<aws_sdk_s3::Client> for Proxy {
+    fn from(value: aws_sdk_s3::Client) -> Self {
+        Self(value)
+    }
+}
 
-impl From<Client> for Proxy {
-    fn from(val: Client) -> Self {
-        Self(val)
+async fn transform_body(body: Option<s3s::dto::StreamingBlob>) -> aws_sdk_s3::types::ByteStream {
+    use aws_smithy_http::body::SdkBody;
+    use futures::Stream;
+
+    const AGGREGATION_THRESHOLD: usize = 8 * 1024;
+
+    match body {
+        None => SdkBody::empty().into(),
+        Some(stream) => {
+            let can_aggregate = match stream.size_hint() {
+                (_, Some(upper)) => upper <= AGGREGATION_THRESHOLD,
+                _ => false,
+            };
+            if can_aggregate {
+                return aggregate(stream).await.into();
+            }
+            SdkBody::from(hyper::Body::wrap_stream(stream.0)).into()
+        }
+    }
+}
+
+async fn aggregate(stream: s3s::dto::StreamingBlob) -> aws_smithy_http::body::SdkBody {
+    use aws_smithy_http::body::SdkBody;
+    use bytes::BufMut;
+    use futures::TryStreamExt;
+    use std::future::ready;
+
+    let result: Result<Vec<bytes::Bytes>, _> = stream.try_collect().await;
+    match result {
+        Ok(buf) => {
+            let mut vec: Vec<u8> = Vec::with_capacity(buf.iter().map(|b| b.len()).sum());
+            buf.into_iter().for_each(|bytes| vec.put(bytes));
+            tracing::debug!(len=?vec.len(), "aggregated body");
+            SdkBody::from(vec)
+        }
+        Err(err) => {
+            let stream = futures::stream::once(ready(<Result<bytes::Bytes, _>>::Err(err)));
+            SdkBody::from(hyper::Body::wrap_stream(stream))
+        }
     }
 }

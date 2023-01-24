@@ -1797,7 +1797,7 @@ impl S3 for Proxy {
         debug!(?input);
         let mut b = self.0.put_object();
         b = b.set_acl(try_into_aws(input.acl)?);
-        b = b.set_body(try_into_aws(input.body)?);
+        b = b.set_body(Some(transform_body(input.body).await));
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_bucket_key_enabled(Some(try_into_aws(input.bucket_key_enabled)?));
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
@@ -2023,7 +2023,7 @@ impl S3 for Proxy {
     async fn upload_part(&self, input: s3s::dto::UploadPartInput) -> S3Result<s3s::dto::UploadPartOutput> {
         debug!(?input);
         let mut b = self.0.upload_part();
-        b = b.set_body(try_into_aws(input.body)?);
+        b = b.set_body(Some(transform_body(input.body).await));
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);
@@ -2093,7 +2093,7 @@ impl S3 for Proxy {
         debug!(?input);
         let mut b = self.0.write_get_object_response();
         b = b.set_accept_ranges(try_into_aws(input.accept_ranges)?);
-        b = b.set_body(try_into_aws(input.body)?);
+        b = b.set_body(Some(transform_body(input.body).await));
         b = b.set_bucket_key_enabled(Some(try_into_aws(input.bucket_key_enabled)?));
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);

@@ -43,7 +43,9 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                     s => s,
                 };
 
-                if field.option_type {
+                if field.type_ == "StreamingBlob" {
+                    g.ln(f!("b = b.set_{aws_field_name}(Some(transform_body(input.{s3s_field_name}).await));"));
+                } else if field.option_type {
                     g.ln(f!("b = b.set_{aws_field_name}(try_into_aws(input.{s3s_field_name})?);"));
                 } else {
                     g.ln(f!("b = b.set_{aws_field_name}(Some(try_into_aws(input.{s3s_field_name})?));"));

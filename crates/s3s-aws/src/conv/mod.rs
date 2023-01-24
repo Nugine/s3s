@@ -158,7 +158,7 @@ impl AwsConversion for s3s::dto::StreamingBlob {
     }
 
     fn try_into_aws(x: Self) -> Result<Self::Target, Self::Error> {
-        Ok(hyper::Body::wrap_stream(x).into())
+        Ok(hyper::Body::wrap_stream(x.0).into())
     }
 }
 
