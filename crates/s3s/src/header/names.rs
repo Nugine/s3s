@@ -99,6 +99,8 @@ pub const X_AMZ_COPY_SOURCE_VERSION_ID: HeaderName = HeaderName::from_static("x-
 
 pub const X_AMZ_DATE: HeaderName = HeaderName::from_static("x-amz-date");
 
+pub const X_AMZ_DECODED_CONTENT_LENGTH: HeaderName = HeaderName::from_static("x-amz-decoded-content-length");
+
 pub const X_AMZ_DELETE_MARKER: HeaderName = HeaderName::from_static("x-amz-delete-marker");
 
 pub const X_AMZ_EXPECTED_BUCKET_OWNER: HeaderName = HeaderName::from_static("x-amz-expected-bucket-owner");

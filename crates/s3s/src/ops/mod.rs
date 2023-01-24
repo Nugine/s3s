@@ -3,6 +3,7 @@ pub use self::generated::*;
 
 use crate::auth::S3Auth;
 use crate::error::*;
+use crate::header;
 use crate::header::{AmzContentSha256, AmzDate, AuthorizationV4, CredentialV4};
 use crate::http;
 use crate::http::{AwsChunkedStream, Body, FullBody, Multipart};
@@ -134,6 +135,7 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
         let mut body = mem::take(req.body_mut());
         let headers = extract_headers(req)?;
         let mime = extract_mime(&headers)?;
+        let body_transformed;
         {
             let mut scx = SignatureContext {
                 auth,
@@ -143,14 +145,32 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
                 mime,
                 body,
                 multipart: None,
+                body_transformed: false,
             };
 
             scx.check().await?;
 
             body = scx.body;
             multipart = scx.multipart;
+            body_transformed = scx.body_transformed;
         }
         *req.body_mut() = body;
+        if body_transformed {
+            let len = req
+                .headers()
+                .get(header::names::X_AMZ_DECODED_CONTENT_LENGTH)
+                .and_then(|val| atoi::atoi::<u64>(val.as_bytes()))
+                .unwrap_or(0);
+
+            if let Some(val) = req.headers_mut().get_mut(header::names::CONTENT_LENGTH) {
+                if len > 0 {
+                    *val = crate::utils::fmt_u64(len, |s| http::HeaderValue::try_from(s).unwrap())
+                } else {
+                    *val = http::HeaderValue::from_static("0");
+                }
+            }
+        }
+        debug!(?body_transformed);
     }
 
     let (op, needs_full_body) = 'resolve: {
@@ -193,6 +213,7 @@ struct SignatureContext<'a> {
     mime: Option<Mime>,
     body: Body,
     multipart: Option<Multipart>,
+    body_transformed: bool,
 }
 
 impl SignatureContext<'_> {
@@ -233,6 +254,7 @@ impl SignatureContext<'_> {
         let multipart = http::transform_multipart(body, boundary.as_str().as_bytes())
             .await
             .map_err(|e| s3_error!(e, MalformedPOSTRequest))?;
+        self.body_transformed = true;
 
         let info = PostSignatureInfo::extract(&multipart).ok_or_else(|| invalid_request!("missing required multipart fields"))?;
 
@@ -299,6 +321,7 @@ impl SignatureContext<'_> {
         Ok(())
     }
 
+    #[tracing::instrument(skip(self))]
     async fn check_header_auth(&mut self) -> S3Result<()> {
         let authorization: AuthorizationV4<'_> = match extract_authorization_v4(&self.headers)? {
             Some(mut a) => {
@@ -342,6 +365,8 @@ impl SignatureContext<'_> {
                 let body = mem::take(&mut self.body);
                 let bytes = FullBody::extract_with_body(self.req, body).await?.0;
 
+                debug!(len=?bytes.len(), "extracted full body");
+
                 let payload = if matches!(amz_content_sha256, AmzContentSha256::UnsignedPayload) {
                     signature_v4::Payload::Unsigned
                 } else if bytes.is_empty() {
@@ -378,6 +403,7 @@ impl SignatureContext<'_> {
             );
 
             self.body = Body::wrap_stream(chunked_stream);
+            self.body_transformed = true;
         }
 
         Ok(())

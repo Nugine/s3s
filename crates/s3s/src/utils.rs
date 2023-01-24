@@ -38,6 +38,12 @@ pub fn fmt_long<T>(val: i64, f: impl FnOnce(&str) -> T) -> T {
     f(buf.as_str())
 }
 
+pub fn fmt_u64<T>(val: u64, f: impl FnOnce(&str) -> T) -> T {
+    let mut buf = ArrayString::<32>::new();
+    write!(&mut buf, "{val}").unwrap();
+    f(buf.as_str())
+}
+
 /// on-stack formatting
 #[allow(clippy::unwrap_used)]
 pub fn fmt_timestamp<T>(val: &Timestamp, fmt: TimestampFormat, f: impl FnOnce(&[u8]) -> T) -> T {

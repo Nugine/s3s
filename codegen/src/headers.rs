@@ -26,6 +26,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
         headers.insert("x-amz-date");
         headers.insert("authorization");
         headers.insert("host");
+        headers.insert("x-amz-decoded-content-length");
     }
 
     let prelude = [

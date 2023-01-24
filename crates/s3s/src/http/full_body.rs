@@ -31,7 +31,9 @@ impl FullBody {
             .and_then(|val| atoi::atoi::<u64>(val.as_bytes()));
 
         if let Some(content_length) = content_length {
-            check_len(content_length, limit)?;
+            if content_length > 0 {
+                check_len(content_length, limit)?;
+            }
         }
 
         let bytes = concat(body, limit).await?;
