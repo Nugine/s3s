@@ -14401,7 +14401,8 @@ impl PutObject {
     }
 
     pub fn deserialize_http_multipart(req: &mut http::Request, mut m: http::Multipart) -> S3Result<PutObjectInput> {
-        let (bucket, key) = http::unwrap_object(req);
+        let bucket = http::unwrap_bucket(req);
+        let key = http::parse_field_value(&m, "key")?.ok_or_else(|| invalid_request!("missing key"))?;
 
         let body: Option<StreamingBlob> = m.take_file_stream().map(StreamingBlob::wrap);
 

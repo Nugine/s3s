@@ -908,7 +908,8 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes, g: &mut 
     ));
 
     {
-        g.ln("let (bucket, key) = http::unwrap_object(req);");
+        g.ln("let bucket = http::unwrap_bucket(req);");
+        g.ln("let key = http::parse_field_value(&m, \"key\")?.ok_or_else(|| invalid_request!(\"missing key\"))?;");
         g.lf();
     }
 

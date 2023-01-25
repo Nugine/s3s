@@ -16,6 +16,7 @@ export AWS_REGION=us-east-1
 if [ -z "$RUST_LOG" ]; then
     export RUST_LOG="s3s_proxy=debug,s3s_aws=debug,s3s=debug"
 fi
+export RUST_BACKTRACE=full
 
 s3s-proxy \
     --host          localhost               \

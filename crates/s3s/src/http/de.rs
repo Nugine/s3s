@@ -130,11 +130,13 @@ pub fn parse_opt_query_timestamp(req: &Request, name: &str, fmt: TimestampFormat
     Ok(Some(Timestamp::parse(fmt, val).map_err(|err| invalid_query(err, name, val))?))
 }
 
+#[track_caller]
 pub fn unwrap_bucket(req: &mut Request) -> String {
     let Some(S3Path::Bucket { bucket }) = req.extensions_mut().remove::<S3Path>() else { panic!("url parameter not found") };
     bucket.into()
 }
 
+#[track_caller]
 pub fn unwrap_object(req: &mut Request) -> (String, String) {
     let Some(S3Path::Object { bucket, key }) = req.extensions_mut().remove::<S3Path>() else { panic!("url parameter not found") };
     (bucket.into(), key.into())

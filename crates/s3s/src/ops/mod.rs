@@ -202,7 +202,8 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
                 }
             }
         }
-        debug!(?body_transformed, ?decoded_content_length);
+        let has_multipart = multipart.is_some();
+        debug!(?body_transformed, ?decoded_content_length, ?has_multipart);
     }
 
     let (op, needs_full_body) = 'resolve: {
