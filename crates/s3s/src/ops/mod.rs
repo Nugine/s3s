@@ -99,7 +99,12 @@ fn extract_amz_content_sha256<'a>(hs: &'_ OrderedHeaders<'a>) -> S3Result<Option
     let Some(val) = hs.get(crate::header::names::X_AMZ_CONTENT_SHA256) else { return Ok(None) };
     match AmzContentSha256::parse(val) {
         Ok(x) => Ok(Some(x)),
-        Err(e) => Err(invalid_request!(e, "invalid header: x-amz-content-sha256")),
+        Err(e) => {
+            let mut err: S3Error = S3ErrorCode::Unknown("XAmzContentSHA256Mismatch".into()).into();
+            err.set_message("invalid header: x-amz-content-sha256");
+            err.set_source(Box::new(e));
+            Err(err)
+        }
     }
 }
 
