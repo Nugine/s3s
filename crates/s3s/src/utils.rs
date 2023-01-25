@@ -1,6 +1,8 @@
 use crate::dto::{Timestamp, TimestampFormat};
 
 use std::fmt::Write;
+use std::future::Future;
+use std::pin::Pin;
 
 use arrayvec::{ArrayString, ArrayVec};
 
@@ -87,3 +89,6 @@ macro_rules! invalid_request {
 pub fn is_base64_encoded(bytes: &[u8]) -> bool {
     base64_simd::STANDARD.check(bytes).is_ok()
 }
+
+/// `Pin<Box<dyn Future<Output = T> + Send + Sync + 'a>>`
+pub type SyncBoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + Sync + 'a>>;

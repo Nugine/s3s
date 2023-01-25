@@ -3,9 +3,10 @@
 //! See <https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPOST.html>
 //!
 
+use crate::error::StdError;
+use crate::utils::SyncBoxFuture;
+
 use std::fmt::{self, Debug};
-use std::future::Future;
-use std::io;
 use std::mem;
 use std::pin::Pin;
 
@@ -58,17 +59,20 @@ impl Multipart {
     }
 }
 
-/// generate format error
-fn generate_format_error() -> io::Error {
-    io::Error::new(io::ErrorKind::InvalidData, "multipart/form-data format error")
+#[derive(Debug, thiserror::Error)]
+pub enum MultipartError {
+    #[error("MultipartError: Underlying: {0}")]
+    Underlying(StdError),
+    #[error("MultipartError: InvalidFormat")]
+    InvalidFormat,
 }
 
 /// transform multipart
 /// # Errors
 /// Returns an `Err` if the format is invalid
-pub async fn transform_multipart<S>(body_stream: S, boundary: &'_ [u8]) -> io::Result<Multipart>
+pub async fn transform_multipart<S>(body_stream: S, boundary: &'_ [u8]) -> Result<Multipart, MultipartError>
 where
-    S: Stream<Item = io::Result<Bytes>> + Send + Sync + 'static,
+    S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
 {
     let mut buf = Vec::new();
 
@@ -87,8 +91,8 @@ where
     loop {
         // copy bytes to buf
         match body.as_mut().next().await {
-            None => return Err(generate_format_error()),
-            Some(Err(e)) => return Err(e),
+            None => return Err(MultipartError::InvalidFormat),
+            Some(Err(e)) => return Err(MultipartError::Underlying(e)),
             Some(Ok(bytes)) => buf.extend_from_slice(&bytes),
         };
 
@@ -111,9 +115,9 @@ fn try_parse<S>(
     buf: &'_ [u8],
     fields: &'_ mut Vec<(String, String)>,
     boundary: &'_ [u8],
-) -> Result<io::Result<Multipart>, (Pin<Box<S>>, Box<[u8]>)>
+) -> Result<Result<Multipart, MultipartError>, (Pin<Box<S>>, Box<[u8]>)>
 where
-    S: Stream<Item = io::Result<Bytes>> + Send + Sync + 'static,
+    S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
 {
     #[allow(clippy::indexing_slicing)]
     let pat_without_crlf = &pat[..pat.len().wrapping_sub(2)];
@@ -131,14 +135,14 @@ where
                 None => return Err((body, pat)),
                 Some(line) => {
                     if line != pat_without_crlf {
-                        return Ok(Err(generate_format_error()));
+                        return Ok(Err(MultipartError::InvalidFormat));
                     };
                 }
             }
         }
         Some(line) => {
             if line != pat_without_crlf {
-                return Ok(Err(generate_format_error()));
+                return Ok(Err(MultipartError::InvalidFormat));
             }
         }
     };
@@ -148,7 +152,7 @@ where
         let (idx, parsed_headers) = match httparse::parse_headers(lines.slice, &mut headers) {
             Ok(httparse::Status::Complete(ans)) => ans,
             Ok(_) => return Err((body, pat)),
-            Err(_) => return Ok(Err(generate_format_error())),
+            Err(_) => return Ok(Err(MultipartError::InvalidFormat)),
         };
         lines.slice = lines.slice.split_at(idx).1;
 
@@ -166,7 +170,7 @@ where
 
         let content_disposition = match content_disposition_bytes.map(parse_content_disposition) {
             None => return Err((body, pat)),
-            Some(Err(_)) => return Ok(Err(generate_format_error())),
+            Some(Err(_)) => return Ok(Err(MultipartError::InvalidFormat)),
             Some(Ok((_, c))) => c,
         };
         match content_disposition.filename {
@@ -178,7 +182,7 @@ where
                         let b = &b[..b.len().saturating_sub(2)];
 
                         match std::str::from_utf8(b) {
-                            Err(_) => return Ok(Err(generate_format_error())),
+                            Err(_) => return Ok(Err(MultipartError::InvalidFormat)),
                             Ok(s) => s,
                         }
                     }
@@ -189,7 +193,7 @@ where
             Some(filename) => {
                 let content_type = match content_type_bytes.map(std::str::from_utf8) {
                     None => return Err((body, pat)),
-                    Some(Err(_)) => return Ok(Err(generate_format_error())),
+                    Some(Err(_)) => return Ok(Err(MultipartError::InvalidFormat)),
                     Some(Ok(s)) => s,
                 };
                 let remaining_bytes = if lines.slice.is_empty() {
@@ -221,12 +225,9 @@ pub enum FileStreamError {
     #[error("FileStreamError: Incomplete")]
     Incomplete,
     /// IO error
-    #[error("FileStreamError: IO: {}",.0)]
-    Io(io::Error),
+    #[error("FileStreamError: Underlying: {0}")]
+    Underlying(StdError),
 }
-
-/// `Pin<Box<dyn Future<Output = T> + Send + Sync + 'a>>`
-type SyncBoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + Sync + 'a>>;
 
 /// File stream
 pub struct FileStream {
@@ -244,7 +245,7 @@ impl FileStream {
     /// Constructs a `FileStream`
     fn new<S>(body: Pin<Box<S>>, boundary: &'_ [u8], prev_bytes: Option<Bytes>) -> Self
     where
-        S: Stream<Item = io::Result<Bytes>> + Send + Sync + 'static,
+        S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
     {
         /// internal async generator
         async fn gen<S>(
@@ -254,7 +255,7 @@ impl FileStream {
             prev_bytes: Option<Bytes>,
         ) -> Result<(), FileStreamError>
         where
-            S: Stream<Item = io::Result<Bytes>> + Send + Sync + 'static,
+            S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
         {
             let mut state: u8;
 
@@ -274,7 +275,7 @@ impl FileStream {
                     1 => {
                         match body.as_mut().next().await {
                             None => return Err(FileStreamError::Incomplete),
-                            Some(Err(e)) => return Err(FileStreamError::Io(e)),
+                            Some(Err(e)) => return Err(FileStreamError::Underlying(e)),
                             Some(Ok(b)) => bytes = b,
                         };
                         state = 2;
@@ -312,7 +313,7 @@ impl FileStream {
                     3 => {
                         match body.as_mut().next().await {
                             None => return Err(FileStreamError::Incomplete),
-                            Some(Err(e)) => return Err(FileStreamError::Io(e)),
+                            Some(Err(e)) => return Err(FileStreamError::Underlying(e)),
                             Some(Ok(b)) => buf.extend_from_slice(&b),
                         };
                         bytes = Bytes::from(mem::take(&mut buf));
@@ -495,7 +496,7 @@ mod tests {
         let body_bytes = body
             .iter()
             .map(|b| Ok(Bytes::from(slice::from_ref(b))))
-            .collect::<Vec<io::Result<Bytes>>>();
+            .collect::<Vec<Result<Bytes, StdError>>>();
 
         let body_stream = futures::stream::iter(body_bytes);
 
@@ -558,7 +559,7 @@ mod tests {
 
             ss.into_iter()
                 .map(|s| Ok(Bytes::from(s.into_bytes())))
-                .collect::<Vec<io::Result<Bytes>>>()
+                .collect::<Vec<Result<Bytes, StdError>>>()
         };
 
         let body_stream = futures::stream::iter(body_bytes);
@@ -606,7 +607,7 @@ mod tests {
             b"-----c634190ccaebbc34--\r\n",
         ];
 
-        let body_bytes: Vec<io::Result<Bytes>> = { bytes.iter().copied().map(Bytes::copy_from_slice).map(Ok).collect() };
+        let body_bytes: Vec<Result<Bytes, StdError>> = { bytes.iter().copied().map(Bytes::copy_from_slice).map(Ok).collect() };
         let body_stream = futures::stream::iter(body_bytes);
         let boundary = "------------------------c634190ccaebbc34";
 

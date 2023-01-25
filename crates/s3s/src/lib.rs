@@ -22,9 +22,11 @@ mod xml;
 pub mod dto;
 pub mod path;
 pub mod service;
+pub mod stream;
 
 pub use self::auth::*;
 pub use self::error::*;
+pub use self::http::{Body, Request, Response};
 pub use self::ops::S3;
 
 #[cfg(test)]

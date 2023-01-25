@@ -1,6 +1,6 @@
 use crate::auth::S3Auth;
 use crate::error::{S3Error, S3Result};
-use crate::http;
+use crate::http::{Body, Request, Response};
 use crate::ops::S3;
 
 use std::convert::Infallible;
@@ -15,7 +15,6 @@ use tracing::{debug, error};
 pub struct S3Service {
     s3: Box<dyn S3>,
     auth: Option<Box<dyn S3Auth>>,
-    full_body_limit: u64,
     base_domain: Option<String>,
 }
 
@@ -25,17 +24,12 @@ impl S3Service {
         Self {
             s3,
             auth: None,
-            full_body_limit: 0,
             base_domain: None,
         }
     }
 
     pub fn set_auth(&mut self, auth: Box<dyn S3Auth>) {
         self.auth = Some(auth);
-    }
-
-    pub fn set_full_body_limit(&mut self, length_limit: u64) {
-        self.full_body_limit = length_limit;
     }
 
     pub fn set_base_domain(&mut self, base_domain: impl Into<String>) {
@@ -47,12 +41,8 @@ impl S3Service {
         skip(self, req),
         fields(start_time=?time::OffsetDateTime::now_utc())
     )]
-    pub async fn call(&self, mut req: http::Request) -> S3Result<http::Response> {
+    pub async fn call(&self, mut req: Request) -> S3Result<Response> {
         debug!(?req);
-
-        if self.full_body_limit > 0 {
-            req.extensions_mut().insert(crate::http::LengthLimit(self.full_body_limit));
-        }
 
         let s3 = &*self.s3;
         let auth = self.auth.as_deref();
@@ -83,20 +73,27 @@ impl SharedS3Service {
     }
 }
 
+impl AsRef<S3Service> for SharedS3Service {
+    fn as_ref(&self) -> &S3Service {
+        &self.0
+    }
+}
+
 // TODO(blocking): GAT?
 // See https://github.com/tower-rs/tower/issues/636
-impl Service<http::Request> for SharedS3Service {
-    type Response = http::Response;
+impl Service<hyper::Request<hyper::Body>> for SharedS3Service {
+    type Response = Response;
 
     type Error = S3Error;
 
-    type Future = BoxFuture<'static, S3Result<http::Response>>;
+    type Future = BoxFuture<'static, Result<Self::Response, Self::Error>>;
 
     fn poll_ready(&mut self, _: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
         Poll::Ready(Ok(())) // ASK: back pressure?
     }
 
-    fn call(&mut self, req: http::Request) -> Self::Future {
+    fn call(&mut self, req: hyper::Request<hyper::Body>) -> Self::Future {
+        let req = req.map(Body::from);
         let service = self.0.clone();
         Box::pin(async move { service.call(req).await })
     }

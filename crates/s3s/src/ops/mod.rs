@@ -6,21 +6,19 @@ use crate::error::*;
 use crate::header;
 use crate::header::{AmzContentSha256, AmzDate, AuthorizationV4, CredentialV4};
 use crate::http;
-use crate::http::{AwsChunkedStream, Body, FullBody, Multipart};
+use crate::http::{AwsChunkedStream, Body, Multipart};
 use crate::http::{OrderedHeaders, OrderedQs};
 use crate::http::{Request, Response};
 use crate::path::{ParseS3PathError, S3Path};
 use crate::signature_v4;
 use crate::signature_v4::PresignedUrl;
+use crate::stream::wrap;
 use crate::utils::is_base64_encoded;
 
-use std::io;
 use std::mem;
 use std::ops::Not;
 
 use bytes::Bytes;
-use futures::Stream;
-use futures::StreamExt;
 use hyper::Method;
 use hyper::StatusCode;
 use mime::Mime;
@@ -132,6 +130,31 @@ fn extract_decoded_content_length(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option
     }
 }
 
+async fn extract_full_body(req: &Request, body: &mut Body) -> S3Result<Bytes> {
+    if let Some(bytes) = body.bytes() {
+        return Ok(bytes);
+    }
+
+    let content_length = req
+        .headers()
+        .get(hyper::header::CONTENT_LENGTH)
+        .and_then(|val| atoi::atoi::<u64>(val.as_bytes()));
+
+    let bytes = body
+        .store_all_unlimited()
+        .await
+        .map_err(|e| S3Error::with_source(S3ErrorCode::InternalError, e))?;
+
+    if bytes.is_empty().not() {
+        let content_length = content_length.ok_or(S3ErrorCode::MissingContentLength)?;
+        if bytes.len() as u64 != content_length {
+            return Err(s3_error!(IncompleteBody));
+        }
+    }
+
+    Ok(bytes)
+}
+
 pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<Response> {
     match call_inner(req, s3, auth, base_domain).await {
         Ok(res) => Ok(res),
@@ -144,9 +167,9 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
     let qs = extract_qs(req)?;
 
     // check signature
+    let mut body = mem::take(req.body_mut());
     let multipart: Option<Multipart>;
     {
-        let mut body = mem::take(req.body_mut());
         let headers = extract_headers(req)?;
         let mime = extract_mime(&headers)?;
         let decoded_content_length = extract_decoded_content_length(&headers)?;
@@ -158,7 +181,7 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
                 qs: qs.as_ref(),
                 headers,
                 mime,
-                body,
+                body: &mut body,
                 multipart: None,
                 body_transformed: false,
                 decoded_content_length,
@@ -166,11 +189,9 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
 
             scx.check().await?;
 
-            body = scx.body;
             multipart = scx.multipart;
             body_transformed = scx.body_transformed;
         }
-        *req.body_mut() = body;
         if body_transformed {
             if let Some(val) = req.headers_mut().get_mut(header::names::CONTENT_LENGTH) {
                 let len = decoded_content_length.unwrap_or(0);
@@ -209,9 +230,9 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
     }
 
     if needs_full_body {
-        let full_body = http::FullBody::extract(req).await?;
-        req.extensions_mut().insert(full_body);
+        extract_full_body(req, &mut body).await?;
     }
+    *req.body_mut() = body;
 
     op.call(s3, req).await
 }
@@ -222,7 +243,7 @@ struct SignatureContext<'a> {
     qs: Option<&'a OrderedQs>,
     headers: OrderedHeaders<'a>,
     mime: Option<Mime>,
-    body: Body,
+    body: &'a mut Body,
     multipart: Option<Multipart>,
     body_transformed: bool,
     decoded_content_length: Option<usize>,
@@ -262,7 +283,7 @@ impl SignatureContext<'_> {
             .get_param(mime::BOUNDARY)
             .ok_or_else(|| invalid_request!("missing boundary"))?;
 
-        let body = io_stream(mem::take(&mut self.body));
+        let body = mem::take(self.body);
         let multipart = http::transform_multipart(body, boundary.as_str().as_bytes())
             .await
             .map_err(|e| s3_error!(e, MalformedPOSTRequest))?;
@@ -374,8 +395,7 @@ impl SignatureContext<'_> {
                 let payload = signature_v4::Payload::Empty;
                 signature_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             } else {
-                let body = mem::take(&mut self.body);
-                let bytes = FullBody::extract_with_body(self.req, body).await?.0;
+                let bytes = extract_full_body(self.req, self.body).await?;
 
                 debug!(len=?bytes.len(), "extracted full body");
 
@@ -387,11 +407,7 @@ impl SignatureContext<'_> {
                     signature_v4::Payload::SingleChunk(&bytes)
                 };
 
-                let ans = signature_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload);
-
-                self.body = Body::from(bytes);
-
-                ans
+                signature_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             };
 
             let region = authorization.credential.aws_region;
@@ -408,10 +424,8 @@ impl SignatureContext<'_> {
                 .decoded_content_length
                 .ok_or_else(|| s3_error!(MissingContentLength, "missing header: x-amz-decoded-content-length"))?;
 
-            let body = io_stream(mem::take(&mut self.body));
-
-            let chunked_stream = AwsChunkedStream::new(
-                body,
+            let stream = AwsChunkedStream::new(
+                mem::take(self.body),
                 signature.into(),
                 amz_date,
                 authorization.credential.aws_region.into(),
@@ -419,9 +433,9 @@ impl SignatureContext<'_> {
                 decoded_content_length,
             );
 
-            debug!(len=?chunked_stream.remaining_length(), "aws-chunked");
+            debug!(len=?stream.remaining_length(), "aws-chunked");
 
-            self.body = Body::wrap_stream(chunked_stream);
+            *self.body = Body::from(wrap(stream));
             self.body_transformed = true;
         }
 
@@ -452,10 +466,6 @@ impl<'a> PostSignatureInfo<'a> {
             x_amz_signature,
         })
     }
-}
-
-fn io_stream(body: Body) -> impl Stream<Item = io::Result<Bytes>> + Send + 'static {
-    body.map(|try_chunk| try_chunk.map_err(|e| io::Error::new(io::ErrorKind::Other, format!("Error obtaining chunk: {e}"))))
 }
 
 fn require_auth(auth: Option<&dyn S3Auth>) -> S3Result<&dyn S3Auth> {

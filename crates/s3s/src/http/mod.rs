@@ -4,9 +4,6 @@ pub use self::ser::*;
 mod de;
 pub use self::de::*;
 
-mod full_body;
-pub use self::full_body::*;
-
 mod ordered_qs;
 pub use self::ordered_qs::*;
 
@@ -19,7 +16,9 @@ pub use self::aws_chunked_stream::*;
 mod multipart;
 pub use self::multipart::*;
 
-pub type Body = hyper::Body;
+mod body;
+pub use self::body::*;
+
 pub type Request = hyper::Request<Body>;
 pub type Response = hyper::Response<Body>;
 

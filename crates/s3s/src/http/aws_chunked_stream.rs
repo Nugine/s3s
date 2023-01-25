@@ -1,15 +1,16 @@
 //! aws-chunked stream
 
+use crate::error::StdError;
 use crate::header::AmzDate;
 use crate::signature_v4;
+use crate::stream::{ByteStream, RemainingLength};
+use crate::utils::SyncBoxFuture;
 
 use std::convert::TryInto;
 use std::fmt::{self, Debug};
-use std::io;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use futures::future::BoxFuture;
 use futures::pin_mut;
 use futures::stream::{Stream, StreamExt};
 use hyper::body::{Buf, Bytes};
@@ -19,14 +20,14 @@ use transform_stream::AsyncTryStream;
 /// Aws chunked stream
 pub struct AwsChunkedStream {
     /// inner
-    inner: AsyncTryStream<Bytes, AwsChunkedStreamError, BoxFuture<'static, Result<(), AwsChunkedStreamError>>>,
+    inner: AsyncTryStream<Bytes, AwsChunkedStreamError, SyncBoxFuture<'static, Result<(), AwsChunkedStreamError>>>,
 
     remaining_length: usize,
 }
 
 impl Debug for AwsChunkedStream {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AwsChunkedStream {{...}}")
+        f.debug_struct("AwsChunkedStream").finish_non_exhaustive()
     }
 }
 
@@ -46,12 +47,12 @@ struct SignatureCtx {
     prev_signature: Box<str>,
 }
 
+/// [`AwsChunkedStream`]
 #[derive(Debug, thiserror::Error)]
-/// `AwsChunkedStreamError`
 pub enum AwsChunkedStreamError {
-    /// IO error
-    #[error("AwsChunkedStreamError: IO: {}",.0)]
-    Io(io::Error),
+    /// Underlying error
+    #[error("AwsChunkedStreamError: Underlying: {}",.0)]
+    Underlying(StdError),
     /// Signature mismatch
     #[error("AwsChunkedStreamError: SignatureMismatch")]
     SignatureMismatch,
@@ -118,9 +119,9 @@ impl AwsChunkedStream {
         decoded_content_length: usize,
     ) -> Self
     where
-        S: Stream<Item = io::Result<Bytes>> + Send + 'static,
+        S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
     {
-        let inner = AsyncTryStream::<_, _, BoxFuture<'static, Result<(), AwsChunkedStreamError>>>::new(|mut y| {
+        let inner = AsyncTryStream::<_, _, SyncBoxFuture<'static, Result<(), AwsChunkedStreamError>>>::new(|mut y| {
             #[allow(clippy::shadow_same)] // necessary for `pin_mut!`
             Box::pin(async move {
                 pin_mut!(body);
@@ -137,7 +138,7 @@ impl AwsChunkedStream {
                     let meta = {
                         match Self::read_meta_bytes(body.as_mut(), prev_bytes, &mut buf).await {
                             None => break,
-                            Some(Err(e)) => return Err(AwsChunkedStreamError::Io(e)),
+                            Some(Err(e)) => return Err(AwsChunkedStreamError::Underlying(e)),
                             Some(Ok(remaining_bytes)) => prev_bytes = remaining_bytes,
                         };
                         if let Ok((_, meta)) = parse_chunk_meta(&buf) {
@@ -178,9 +179,9 @@ impl AwsChunkedStream {
     }
 
     /// read meta bytes and return remaining bytes
-    async fn read_meta_bytes<S>(mut body: Pin<&mut S>, prev_bytes: Bytes, buf: &mut Vec<u8>) -> Option<io::Result<Bytes>>
+    async fn read_meta_bytes<S>(mut body: Pin<&mut S>, prev_bytes: Bytes, buf: &mut Vec<u8>) -> Option<Result<Bytes, StdError>>
     where
-        S: Stream<Item = io::Result<Bytes>> + Send + 'static,
+        S: Stream<Item = Result<Bytes, StdError>> + Send + 'static,
     {
         buf.clear();
 
@@ -219,7 +220,7 @@ impl AwsChunkedStream {
         mut data_size: usize,
     ) -> Option<Result<(Vec<Bytes>, Bytes), AwsChunkedStreamError>>
     where
-        S: Stream<Item = io::Result<Bytes>> + Send + 'static,
+        S: Stream<Item = Result<Bytes, StdError>> + Send + 'static,
     {
         let mut bytes_buffer = Vec::new();
         let mut push_data_bytes = |mut bytes: Bytes| {
@@ -245,7 +246,7 @@ impl AwsChunkedStream {
 
             loop {
                 match body.next().await? {
-                    Err(e) => return Some(Err(AwsChunkedStreamError::Io(e))),
+                    Err(e) => return Some(Err(AwsChunkedStreamError::Underlying(e))),
                     Ok(bytes) => {
                         if let Some(remaining_bytes) = push_data_bytes(bytes) {
                             break 'outer remaining_bytes;
@@ -262,7 +263,7 @@ impl AwsChunkedStream {
                 loop {
                     match *remaining_bytes.as_ref() {
                         [] => match body.next().await? {
-                            Err(e) => return Some(Err(AwsChunkedStreamError::Io(e))),
+                            Err(e) => return Some(Err(AwsChunkedStreamError::Underlying(e))),
                             Ok(bytes) => remaining_bytes = bytes,
                         },
 
@@ -298,6 +299,12 @@ impl Stream for AwsChunkedStream {
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
         self.poll(cx)
+    }
+}
+
+impl ByteStream for AwsChunkedStream {
+    fn remaining_length(&self) -> RemainingLength {
+        RemainingLength::new_exact(self.remaining_length())
     }
 }
 

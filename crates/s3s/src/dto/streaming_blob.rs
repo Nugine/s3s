@@ -1,25 +1,38 @@
 //! Streaming blob
 
+use crate::error::StdError;
+use crate::http::Body;
+use crate::stream::*;
+
 use std::fmt;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use futures::stream::BoxStream;
-use futures::{Stream, StreamExt};
+use futures::Stream;
 use hyper::body::Bytes;
 
-/// A new type of `BoxStream<'static, io::Result<Bytes>>`
-pub struct StreamingBlob(pub BoxStream<'static, Result<Bytes, Box<dyn std::error::Error + Send + Sync>>>);
+pub struct StreamingBlob {
+    inner: DynByteStream,
+}
 
 impl StreamingBlob {
+    pub fn new<S>(stream: S) -> Self
+    where
+        S: ByteStream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+    {
+        Self { inner: Box::pin(stream) }
+    }
+
     pub fn wrap<S, E>(stream: S) -> Self
     where
-        S: Stream<Item = Result<Bytes, E>> + Send + 'static,
+        S: Stream<Item = Result<Bytes, E>> + Send + Sync + 'static,
         E: std::error::Error + Send + Sync + 'static,
     {
-        Self(Box::pin(
-            stream.map(|x| x.map_err(|e| Box::new(e) as Box<dyn std::error::Error + Send + Sync>)),
-        ))
+        Self { inner: wrap(stream) }
+    }
+
+    fn into_inner(self) -> DynByteStream {
+        self.inner
     }
 }
 
@@ -30,13 +43,37 @@ impl fmt::Debug for StreamingBlob {
 }
 
 impl Stream for StreamingBlob {
-    type Item = Result<Bytes, Box<dyn std::error::Error + Send + Sync>>;
+    type Item = Result<Bytes, StdError>;
 
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        Pin::new(&mut self.0).poll_next(cx)
+        Pin::new(&mut self.inner).poll_next(cx)
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        self.0.size_hint()
+        self.inner.size_hint()
+    }
+}
+
+impl ByteStream for StreamingBlob {
+    fn remaining_length(&self) -> RemainingLength {
+        self.inner.remaining_length()
+    }
+}
+
+impl From<StreamingBlob> for DynByteStream {
+    fn from(value: StreamingBlob) -> Self {
+        value.into_inner()
+    }
+}
+
+impl From<StreamingBlob> for Body {
+    fn from(value: StreamingBlob) -> Self {
+        Body::from(value.into_inner())
+    }
+}
+
+impl From<Body> for StreamingBlob {
+    fn from(value: Body) -> Self {
+        Self::new(value)
     }
 }

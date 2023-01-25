@@ -1,3 +1,4 @@
+use super::Body;
 use super::Response;
 
 use crate::dto::{Metadata, StreamingBlob, Timestamp, TimestampFormat};
@@ -93,14 +94,14 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
             .and_then(|_| val.serialize(&mut ser))
             .map_err(S3Error::internal_error)?;
     }
-    *res.body_mut() = hyper::Body::from(buf);
+    *res.body_mut() = Body::from(buf);
     res.headers_mut()
         .insert(hyper::header::CONTENT_TYPE, HeaderValue::from_static(mime::TEXT_XML.as_ref()));
     Ok(())
 }
 
 pub fn set_stream_body(res: &mut Response, stream: StreamingBlob) {
-    *res.body_mut() = hyper::Body::wrap_stream(stream.0);
+    *res.body_mut() = Body::from(stream);
 }
 
 pub fn add_opt_metadata(res: &mut Response, metadata: Option<Metadata>) -> S3Result {

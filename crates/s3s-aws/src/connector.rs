@@ -43,23 +43,23 @@ impl Service<Request<SdkBody>> for Connector {
 
     fn call(&mut self, req: Request<SdkBody>) -> Self::Future {
         let req = convert_input(req);
-        let mut service = self.0.clone();
-        Box::pin(async move { convert_output(service.call(req).await) })
+        let service = self.0.clone();
+        Box::pin(async move { convert_output(service.as_ref().call(req).await) })
     }
 }
 
-fn convert_input(mut req: Request<SdkBody>) -> Request<hyper::Body> {
+fn convert_input(mut req: Request<SdkBody>) -> Request<s3s::Body> {
     if req.headers().contains_key(HOST).not() {
         let host = auto_host_header(req.uri());
         req.headers_mut().insert(HOST, host);
     }
 
-    req.map(|sdk_body| hyper::Body::wrap_stream(ByteStream::from(sdk_body)))
+    req.map(|sdk_body| s3s::Body::from(hyper::Body::wrap_stream(ByteStream::from(sdk_body))))
 }
 
-fn convert_output(result: S3Result<Response<hyper::Body>>) -> Result<Response<SdkBody>, ConnectorError> {
+fn convert_output(result: S3Result<Response<s3s::Body>>) -> Result<Response<SdkBody>, ConnectorError> {
     match result {
-        Ok(res) => Ok(res.map(SdkBody::from)),
+        Ok(res) => Ok(res.map(|s3s_body| SdkBody::from(hyper::Body::from(s3s_body)))),
         Err(e) => Err(on_err(e)),
     }
 }

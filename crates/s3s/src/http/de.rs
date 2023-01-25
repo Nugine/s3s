@@ -1,4 +1,4 @@
-use super::{FullBody, Multipart, OrderedQs, Request};
+use super::{Multipart, OrderedQs, Request};
 
 use crate::dto::{List, Metadata, StreamingBlob, Timestamp, TimestampFormat};
 use crate::error::*;
@@ -7,10 +7,9 @@ use crate::path::S3Path;
 use crate::utils::from_utf8_vec;
 use crate::xml;
 
-use core::fmt;
+use std::fmt;
 use std::str::FromStr;
 
-use futures::TryStreamExt;
 use tracing::debug;
 
 fn missing_header(name: &HeaderName) -> S3Error {
@@ -149,7 +148,7 @@ pub fn take_xml_body<T>(req: &mut Request) -> S3Result<T>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
-    let Some(FullBody(bytes)) = req.extensions_mut().remove::<FullBody>() else { panic!("full body not found") };
+    let bytes = req.body_mut().bytes().expect("full body not found");
     if bytes.is_empty() {
         return Err(S3ErrorCode::MissingRequestBodyError.into());
     }
@@ -163,7 +162,7 @@ pub fn take_opt_xml_body<T>(req: &mut Request) -> S3Result<Option<T>>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
-    let Some(FullBody(bytes)) = req.extensions_mut().remove::<FullBody>() else { panic!("full body not found") };
+    let bytes = req.body_mut().bytes().expect("full body not found");
     if bytes.is_empty() {
         return Ok(None);
     }
@@ -174,7 +173,7 @@ where
 }
 
 pub fn take_string_body(req: &mut Request) -> S3Result<String> {
-    let Some(FullBody(bytes)) = req.extensions_mut().remove::<FullBody>() else { panic!("full body not found") };
+    let bytes = req.body_mut().bytes().expect("full body not found");
     match from_utf8_vec(bytes.into()) {
         Some(s) => Ok(s),
         None => Err(invalid_request!("expected UTF-8 body")),
@@ -183,9 +182,9 @@ pub fn take_string_body(req: &mut Request) -> S3Result<String> {
 
 pub fn take_stream_body(req: &mut Request) -> StreamingBlob {
     let body = std::mem::take(req.body_mut());
-    let size_hint = <hyper::Body as hyper::body::HttpBody>::size_hint(&body);
+    let size_hint = http_body::Body::size_hint(&body);
     debug!(?size_hint, "taking streaming blob");
-    StreamingBlob(Box::pin(body.map_err(|err| Box::new(err) as Box<dyn std::error::Error + Send + Sync>)))
+    StreamingBlob::from(body)
 }
 
 pub fn parse_opt_metadata(req: &Request) -> S3Result<Option<Metadata>> {
