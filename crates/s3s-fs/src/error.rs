@@ -1,5 +1,6 @@
 use s3s::S3Error;
 use s3s::S3ErrorCode;
+use s3s::StdError;
 
 use std::panic::Location;
 
@@ -7,7 +8,7 @@ use tracing::error;
 
 #[derive(Debug)]
 pub struct Error {
-    source: Box<dyn std::error::Error + Send + Sync + 'static>,
+    source: StdError,
 }
 
 pub type Result<T = (), E = Error> = std::result::Result<T, E>;
@@ -15,7 +16,7 @@ pub type Result<T = (), E = Error> = std::result::Result<T, E>;
 impl Error {
     #[must_use]
     #[track_caller]
-    pub fn new(source: Box<dyn std::error::Error + Send + Sync + 'static>) -> Self {
+    pub fn new(source: StdError) -> Self {
         log(&*source);
         Self { source }
     }

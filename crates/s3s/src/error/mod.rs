@@ -11,6 +11,8 @@ use std::str::FromStr;
 
 use hyper::StatusCode;
 
+pub type StdError = Box<dyn std::error::Error + Send + Sync + 'static>;
+
 pub type S3Result<T = (), E = S3Error> = std::result::Result<T, E>;
 
 #[derive(Debug, thiserror::Error)]
@@ -23,7 +25,7 @@ struct Inner {
     // resource: Option<String>,
     request_id: Option<String>,
     status_code: Option<StatusCode>,
-    source: Option<Box<dyn std::error::Error + Send + Sync + 'static>>,
+    source: Option<StdError>,
 }
 
 impl S3Error {
@@ -47,7 +49,7 @@ impl S3Error {
     }
 
     #[must_use]
-    pub fn with_source(code: S3ErrorCode, source: Box<dyn std::error::Error + Send + Sync + 'static>) -> Self {
+    pub fn with_source(code: S3ErrorCode, source: StdError) -> Self {
         let mut this = Self::new(code);
         this.0.source = Some(source);
         this
@@ -65,7 +67,7 @@ impl S3Error {
         self.0.request_id = Some(val.into());
     }
 
-    pub fn set_source(&mut self, val: Box<dyn std::error::Error + Send + Sync + 'static>) {
+    pub fn set_source(&mut self, val: StdError) {
         self.0.source = Some(val);
     }
 

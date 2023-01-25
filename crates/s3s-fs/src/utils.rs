@@ -1,5 +1,7 @@
 use crate::error::*;
 
+use s3s::StdError;
+
 use tokio::io::AsyncWrite;
 use tokio::io::AsyncWriteExt;
 
@@ -10,7 +12,7 @@ use transform_stream::AsyncTryStream;
 
 pub async fn copy_bytes<S, W>(mut stream: S, writer: &mut W) -> Result<u64>
 where
-    S: Stream<Item = Result<Bytes, Box<dyn std::error::Error + Send + Sync + 'static>>> + Unpin,
+    S: Stream<Item = Result<Bytes, StdError>> + Unpin,
     W: AsyncWrite + Unpin,
 {
     let mut nwritten: u64 = 0;
