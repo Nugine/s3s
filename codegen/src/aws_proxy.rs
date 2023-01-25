@@ -43,6 +43,15 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                     s => s,
                 };
 
+                // hack
+                if op.name == "PutObject" && field.type_ == "ChecksumAlgorithm" {
+                    assert!(field.option_type);
+                    let default_val = "aws_sdk_s3::model::ChecksumAlgorithm::Sha256";
+                    let val = f!("try_into_aws(input.{s3s_field_name})?.or(Some({default_val}))");
+                    g.ln(f!("b = b.set_{aws_field_name}({val});"));
+                    continue;
+                }
+
                 if field.option_type {
                     g.ln(f!("b = b.set_{aws_field_name}(try_into_aws(input.{s3s_field_name})?);"));
                 } else {

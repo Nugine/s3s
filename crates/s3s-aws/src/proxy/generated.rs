@@ -1801,7 +1801,9 @@ impl S3 for Proxy {
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_bucket_key_enabled(Some(try_into_aws(input.bucket_key_enabled)?));
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
-        b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
+        b = b.set_checksum_algorithm(
+            try_into_aws(input.checksum_algorithm)?.or(Some(aws_sdk_s3::model::ChecksumAlgorithm::Sha256)),
+        );
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);
         b = b.set_checksum_crc32_c(try_into_aws(input.checksum_crc32c)?);
         b = b.set_checksum_sha1(try_into_aws(input.checksum_sha1)?);
