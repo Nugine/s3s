@@ -9,8 +9,6 @@ use hyper::Body;
 
 pub struct LengthLimit(pub u64);
 
-pub const DEFAULT_LENGTH_LIMIT: u64 = 2 * 1024 * 1024;
-
 pub struct FullBody(pub Bytes);
 
 impl FullBody {
@@ -22,7 +20,11 @@ impl FullBody {
     pub async fn extract_with_body(req: &Request, body: Body) -> S3Result<Self> {
         let limit = match req.extensions().get::<LengthLimit>() {
             Some(lim) => lim.0,
-            None => DEFAULT_LENGTH_LIMIT,
+            None => {
+                // FIXME: unbounded memory allocation
+                let bytes = hyper::body::to_bytes(body).await.map_err(S3Error::internal_error)?;
+                return Ok(Self(bytes));
+            }
         };
 
         let content_length = req

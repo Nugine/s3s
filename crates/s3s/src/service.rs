@@ -25,7 +25,7 @@ impl S3Service {
         Self {
             s3,
             auth: None,
-            full_body_limit: crate::http::DEFAULT_LENGTH_LIMIT,
+            full_body_limit: 0,
             base_domain: None,
         }
     }
