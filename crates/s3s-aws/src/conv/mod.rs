@@ -4,8 +4,6 @@ mod generated;
 use s3s::s3_error;
 use s3s::{S3Error, S3Result};
 
-
-
 pub trait AwsConversion: Sized {
     type Target;
     type Error;
