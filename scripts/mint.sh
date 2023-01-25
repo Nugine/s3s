@@ -7,3 +7,5 @@ docker run \
     --network host \
     -v /tmp/mint:/mint/log \
     minio/mint:edge
+
+./scripts/report-mint.py /tmp/mint/log.json

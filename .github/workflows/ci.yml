@@ -46,9 +46,7 @@ jobs:
       - run: docker pull minio/minio:latest
       - run: cargo install --path crates/s3s-proxy
       - run: |
-          ./scripts/s3s-proxy.sh > /tmp/s3s-proxy.ansi &
+          ./scripts/s3s-proxy.sh &
           sleep 5s
           ./scripts/mint.sh > /tmp/mint.log
-      - run: cat /tmp/s3s-proxy.ansi
       - run: cat /tmp/mint.log
-      - run: ./scripts/report-mint.py /tmp/mint/log.json
