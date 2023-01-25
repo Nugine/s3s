@@ -33,3 +33,22 @@ jobs:
       - run: |
           ./scripts/codegen.sh
           [[ -z $(git status -s) ]] # Fail if changed. See https://stackoverflow.com/a/9393642
+
+  mint:
+    name: E2E (s3s-proxy, mint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly
+      - run: docker pull minio/mint:edge
+      - run: docker pull minio/minio:latest
+      - run: cargo install --path crates/s3s-proxy
+      - run: |
+          ./scripts/s3s-proxy.sh > /tmp/s3s-proxy.ansi &
+          sleep 5s
+          ./scripts/mint.sh > /tmp/mint.log
+      - run: cat /tmp/s3s-proxy.ansi
+      - run: cat /tmp/mint.log
+      - run: ./scripts/report-mint.py /tmp/mint/log.json
