@@ -38,7 +38,7 @@ pub fn fmt_long<T>(val: i64, f: impl FnOnce(&str) -> T) -> T {
     f(buf.as_str())
 }
 
-pub fn fmt_u64<T>(val: u64, f: impl FnOnce(&str) -> T) -> T {
+pub fn fmt_usize<T>(val: usize, f: impl FnOnce(&str) -> T) -> T {
     let mut buf = ArrayString::<32>::new();
     write!(&mut buf, "{val}").unwrap();
     f(buf.as_str())

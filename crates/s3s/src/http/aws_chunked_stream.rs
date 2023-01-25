@@ -20,6 +20,8 @@ use transform_stream::AsyncTryStream;
 pub struct AwsChunkedStream {
     /// inner
     inner: AsyncTryStream<Bytes, AwsChunkedStreamError, BoxFuture<'static, Result<(), AwsChunkedStreamError>>>,
+
+    remaining_length: usize,
 }
 
 impl Debug for AwsChunkedStream {
@@ -107,7 +109,14 @@ fn check_signature(ctx: &SignatureCtx, expected_signature: &[u8], chunk_data: &[
 
 impl AwsChunkedStream {
     /// Constructs a `ChunkedStream`
-    pub fn new<S>(body: S, seed_signature: Box<str>, amz_date: AmzDate, region: Box<str>, secret_key: Box<str>) -> Self
+    pub fn new<S>(
+        body: S,
+        seed_signature: Box<str>,
+        amz_date: AmzDate,
+        region: Box<str>,
+        secret_key: Box<str>,
+        decoded_content_length: usize,
+    ) -> Self
     where
         S: Stream<Item = io::Result<Bytes>> + Send + 'static,
     {
@@ -162,7 +171,10 @@ impl AwsChunkedStream {
                 Ok(())
             })
         });
-        Self { inner }
+        Self {
+            inner,
+            remaining_length: decoded_content_length,
+        }
     }
 
     /// read meta bytes and return remaining bytes
@@ -266,14 +278,26 @@ impl AwsChunkedStream {
 
         Some(Ok((bytes_buffer, remaining_bytes)))
     }
+
+    pub fn remaining_length(&self) -> usize {
+        self.remaining_length
+    }
+
+    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Result<Bytes, AwsChunkedStreamError>>> {
+        let ans = Pin::new(&mut self.inner).poll_next(cx);
+        if let Poll::Ready(Some(Ok(ref bytes))) = ans {
+            self.remaining_length = self.remaining_length.saturating_sub(bytes.len());
+        }
+        ans
+    }
 }
 
 #[allow(clippy::missing_trait_methods)]
 impl Stream for AwsChunkedStream {
     type Item = Result<Bytes, AwsChunkedStreamError>;
 
-    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        Pin::new(&mut self.inner).poll_next(cx)
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        self.poll(cx)
     }
 }
 
@@ -297,10 +321,12 @@ mod tests {
 
         let chunk1_data = vec![b'a'; 0x10000]; // 65536
         let chunk2_data = vec![b'a'; 1024];
+        let chunk3_data = [];
+        let decoded_content_length = chunk1_data.len() + chunk2_data.len() + chunk3_data.len();
 
         let chunk1 = join(&[chunk1_meta, &chunk1_data, b"\r\n"]);
         let chunk2 = join(&[chunk2_meta, &chunk2_data, b"\r\n"]);
-        let chunk3 = join(&[chunk3_meta, b"\r\n"]);
+        let chunk3 = join(&[chunk3_meta, &chunk3_data, b"\r\n"]);
 
         let chunk_results: Vec<Result<Bytes, _>> = vec![Ok(chunk1), Ok(chunk2), Ok(chunk3)];
 
@@ -312,8 +338,14 @@ mod tests {
         let date = AmzDate::parse(timestamp).unwrap();
 
         let stream = futures::stream::iter(chunk_results.into_iter());
-        let mut chunked_stream =
-            AwsChunkedStream::new(stream, seed_signature.into(), date, region.into(), secret_access_key.into());
+        let mut chunked_stream = AwsChunkedStream::new(
+            stream,
+            seed_signature.into(),
+            date,
+            region.into(),
+            secret_access_key.into(),
+            decoded_content_length,
+        );
 
         let ans1 = chunked_stream.next().await.unwrap();
         assert_eq!(ans1.unwrap(), chunk1_data.as_slice());

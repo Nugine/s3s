@@ -123,6 +123,15 @@ fn extract_amz_date(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<AmzDate>> {
         Err(e) => Err(invalid_request!(e, "invalid header: x-amz-date")),
     }
 }
+
+fn extract_decoded_content_length(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<usize>> {
+    let Some(val) = hs.get(crate::header::names::X_AMZ_DECODED_CONTENT_LENGTH) else { return Ok(None) };
+    match atoi::atoi::<usize>(val.as_bytes()) {
+        Some(x) => Ok(Some(x)),
+        None => Err(invalid_request!("invalid header: x-amz-decoded-content-length")),
+    }
+}
+
 pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<Response> {
     match call_inner(req, s3, auth, base_domain).await {
         Ok(res) => Ok(res),
@@ -140,6 +149,7 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
         let mut body = mem::take(req.body_mut());
         let headers = extract_headers(req)?;
         let mime = extract_mime(&headers)?;
+        let decoded_content_length = extract_decoded_content_length(&headers)?;
         let body_transformed;
         {
             let mut scx = SignatureContext {
@@ -151,6 +161,7 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
                 body,
                 multipart: None,
                 body_transformed: false,
+                decoded_content_length,
             };
 
             scx.check().await?;
@@ -161,21 +172,16 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
         }
         *req.body_mut() = body;
         if body_transformed {
-            let len = req
-                .headers()
-                .get(header::names::X_AMZ_DECODED_CONTENT_LENGTH)
-                .and_then(|val| atoi::atoi::<u64>(val.as_bytes()))
-                .unwrap_or(0);
-
             if let Some(val) = req.headers_mut().get_mut(header::names::CONTENT_LENGTH) {
+                let len = decoded_content_length.unwrap_or(0);
                 if len > 0 {
-                    *val = crate::utils::fmt_u64(len, |s| http::HeaderValue::try_from(s).unwrap())
+                    *val = crate::utils::fmt_usize(len, |s| http::HeaderValue::try_from(s).unwrap())
                 } else {
                     *val = http::HeaderValue::from_static("0");
                 }
             }
         }
-        debug!(?body_transformed);
+        debug!(?body_transformed, ?decoded_content_length);
     }
 
     let (op, needs_full_body) = 'resolve: {
@@ -219,6 +225,7 @@ struct SignatureContext<'a> {
     body: Body,
     multipart: Option<Multipart>,
     body_transformed: bool,
+    decoded_content_length: Option<usize>,
 }
 
 impl SignatureContext<'_> {
@@ -397,6 +404,10 @@ impl SignatureContext<'_> {
         }
 
         if is_stream {
+            let decoded_content_length = self
+                .decoded_content_length
+                .ok_or_else(|| s3_error!(MissingContentLength, "missing header: x-amz-decoded-content-length"))?;
+
             let body = io_stream(mem::take(&mut self.body));
 
             let chunked_stream = AwsChunkedStream::new(
@@ -405,7 +416,10 @@ impl SignatureContext<'_> {
                 amz_date,
                 authorization.credential.aws_region.into(),
                 secret_key.into(),
+                decoded_content_length,
             );
+
+            debug!(len=?chunked_stream.remaining_length(), "aws-chunked");
 
             self.body = Body::wrap_stream(chunked_stream);
             self.body_transformed = true;
