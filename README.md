@@ -82,4 +82,4 @@ just download-model
 just codegen
 ```
 
-It should change nothing if you are running the lastest code.
+It should change nothing if you are running the latest code.
