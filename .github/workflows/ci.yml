@@ -35,7 +35,7 @@ jobs:
           [[ -z $(git status -s) ]] # Fail if changed. See https://stackoverflow.com/a/9393642
 
   mint:
-    name: E2E (s3s-proxy, mint)
+    name: e2e (s3s-proxy, mint)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -45,8 +45,5 @@ jobs:
       - run: docker pull minio/mint:edge
       - run: docker pull minio/minio:latest
       - run: cargo install --path crates/s3s-proxy
-      - run: |
-          ./scripts/s3s-proxy.sh &
-          sleep 5s
-          ./scripts/mint.sh > /tmp/mint.log
+      - run: ./scripts/e2e-mint.sh
       - run: cat /tmp/mint.log
