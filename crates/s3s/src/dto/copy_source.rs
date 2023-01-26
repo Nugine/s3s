@@ -55,6 +55,7 @@ impl CopySource {
     /// Returns an error if the header is invalid
     pub fn parse(header: &str) -> Result<Self, ParseCopySourceError> {
         let header = urlencoding::decode(header).map_err(|_| ParseCopySourceError::InvalidEncoding)?;
+        let header = header.strip_prefix('/').unwrap_or(&header);
 
         // FIXME: support access point
         match header.split_once('/') {
