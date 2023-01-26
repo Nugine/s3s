@@ -158,7 +158,10 @@ async fn extract_full_body(req: &Request, body: &mut Body) -> S3Result<Bytes> {
 pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<Response> {
     match call_inner(req, s3, auth, base_domain).await {
         Ok(res) => Ok(res),
-        Err(err) => serialize_error(err),
+        Err(err) => {
+            debug!(?err, "op returns error");
+            serialize_error(err)
+        }
     }
 }
 
