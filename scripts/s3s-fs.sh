@@ -10,9 +10,9 @@ if [ -z "$RUST_LOG" ]; then
 fi
 
 s3s-fs \
-    --access-key    AKIAIOSFODNN7EXAMPLE                        \
-    --secret-key    wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY    \
-    --host          localhost                                   \
-    --port          8014                                        \
-    --domain-name   localhost:8014                              \
+    --access-key    AKEXAMPLES3S    \
+    --secret-key    SKEXAMPLES3S    \
+    --host          localhost       \
+    --port          8014            \
+    --domain-name   localhost:8014  \
     "$DATA_DIR"

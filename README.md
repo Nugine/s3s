@@ -69,8 +69,8 @@ Run `s3s-fs` with example configuration
 ```
 
 ```
-Access Key: AKIAIOSFODNN7EXAMPLE
-Secret Key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+Access Key: AKEXAMPLES3S
+Secret Key: SKEXAMPLES3S
 ```
 
 Then you can explore it with your favorite S3 client!
