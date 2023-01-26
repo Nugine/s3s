@@ -24,7 +24,7 @@ fn invalid_header<E>(source: E, name: &HeaderName, val: impl fmt::Debug) -> S3Er
 where
     E: std::error::Error + Send + Sync + 'static,
 {
-    invalid_request!(source, "invalid header: {}: {:?}", name.as_str(), val)
+    s3_error!(source, InvalidArgument, "invalid header: {}: {:?}", name.as_str(), val)
 }
 
 pub fn parse_header<T>(req: &Request, name: &HeaderName) -> S3Result<T>
@@ -91,7 +91,7 @@ fn invalid_query<E>(source: E, name: &str, val: &str) -> S3Error
 where
     E: std::error::Error + Send + Sync + 'static,
 {
-    invalid_request!(source, "invalid query: {}: {}", name, val)
+    s3_error!(source, InvalidArgument, "invalid query: {}: {}", name, val)
 }
 
 pub fn parse_query<T: FromStr>(req: &Request, name: &str) -> S3Result<T>
@@ -277,15 +277,17 @@ where
     T: FromStr,
     T::Err: std::error::Error + Send + Sync + 'static,
 {
-    m.find_field_value(name)
-        .map(|val| val.parse())
-        .transpose()
-        .map_err(|e| invalid_request!(e, "invalid field value"))
+    let Some(val) = m.find_field_value(name) else { return Ok(None) };
+    match val.parse() {
+        Ok(ans) => Ok(Some(ans)),
+        Err(source) => Err(s3_error!(source, InvalidArgument, "invalid field value: {}: {:?}", name, val)),
+    }
 }
 
 pub fn parse_field_value_timestamp(m: &Multipart, name: &str, fmt: TimestampFormat) -> S3Result<Option<Timestamp>> {
-    m.find_field_value(name)
-        .map(|val| Timestamp::parse(fmt, val))
-        .transpose()
-        .map_err(|e| invalid_request!(e, "invalid field value"))
+    let Some(val) = m.find_field_value(name) else { return Ok(None) };
+    match Timestamp::parse(fmt, val) {
+        Ok(ans) => Ok(Some(ans)),
+        Err(source) => Err(s3_error!(source, InvalidArgument, "invalid field value: {}: {:?}", name, val)),
+    }
 }
