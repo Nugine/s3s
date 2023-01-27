@@ -5,7 +5,6 @@
 )]
 
 use s3s::service::S3Service;
-use tokio::sync::MutexGuard;
 
 use std::env;
 use std::fs;
@@ -21,7 +20,9 @@ use aws_sdk_s3::Region;
 use anyhow::Result;
 use once_cell::sync::Lazy;
 use tokio::sync::Mutex;
+use tokio::sync::MutexGuard;
 use tracing::{debug, error};
+use uuid::Uuid;
 
 const FS_ROOT: &str = concat!(env!("CARGO_TARGET_TMPDIR"), "/s3s-fs-tests-aws");
 const DOMAIN_NAME: &str = "localhost:8014";
@@ -89,9 +90,19 @@ async fn create_bucket(c: &Client, bucket: &str) -> Result<()> {
     Ok(())
 }
 
+async fn delete_object(c: &Client, bucket: &str, key: &str) -> Result<()> {
+    c.delete_object().bucket(bucket).key(key).send().await?;
+    Ok(())
+}
+
+async fn delete_bucket(c: &Client, bucket: &str) -> Result<()> {
+    c.delete_bucket().bucket(bucket).send().await?;
+    Ok(())
+}
+
 #[tokio::test]
 #[tracing::instrument]
-async fn test_list_buckets() {
+async fn test_list_buckets() -> Result<()> {
     let c = Client::new(config());
     let result = c.list_buckets().send().await;
 
@@ -100,7 +111,44 @@ async fn test_list_buckets() {
         Err(ref err) => error!(?err),
     }
 
-    let _ = result.unwrap();
+    result?;
+    Ok(())
+}
+
+#[tokio::test]
+#[tracing::instrument]
+async fn test_single_object() -> Result<()> {
+    let _guard = serial().await;
+
+    let c = Client::new(config());
+    let bucket = format!("test-single-object-{}", Uuid::new_v4());
+    let bucket = bucket.as_str();
+    let key = "sample.txt";
+    let content = "hello world\n你好世界\n";
+
+    create_bucket(&c, bucket).await?;
+
+    {
+        let body = ByteStream::from_static(content.as_bytes());
+        c.put_object().bucket(bucket).key(key).body(body).send().await?;
+    }
+
+    {
+        let ans = c.get_object().bucket(bucket).key(key).send().await?;
+
+        let content_length: usize = ans.content_length().try_into().unwrap();
+        let body = ans.body.collect().await?.into_bytes();
+
+        assert_eq!(content_length, content.len());
+        assert_eq!(body.as_ref(), content.as_bytes());
+    }
+
+    {
+        delete_object(&c, bucket, key).await?;
+        delete_bucket(&c, bucket).await?;
+    }
+
+    Ok(())
 }
 
 #[tokio::test]
@@ -110,7 +158,7 @@ async fn test_multipart() -> Result<()> {
 
     let c = Client::new(config());
 
-    let bucket = format!("test-multipart-{}", uuid::Uuid::new_v4());
+    let bucket = format!("test-multipart-{}", Uuid::new_v4());
     let bucket = bucket.as_str();
     create_bucket(&c, bucket).await?;
 
@@ -169,8 +217,8 @@ async fn test_multipart() -> Result<()> {
     }
 
     {
-        c.delete_object().bucket(bucket).key(key).send().await?;
-        c.delete_bucket().bucket(bucket).send().await?;
+        delete_object(&c, bucket, key).await?;
+        delete_bucket(&c, bucket).await?;
     }
 
     Ok(())
