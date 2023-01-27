@@ -25,3 +25,8 @@ sync-version:
     cargo set-version -p s3s-fs         0.2.0
     cargo set-version -p s3s-aws        0.2.0
     cargo set-version -p s3s-proxy      0.0.0
+
+publish:
+    cargo publish -p s3s
+    cargo publish -p s3s-aws
+    cargo publish -p s3s-fs
