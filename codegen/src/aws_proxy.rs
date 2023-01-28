@@ -21,6 +21,10 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     g.ln("impl S3 for Proxy {");
 
     for op in ops.values() {
+        if op.name == "SelectObjectContent" {
+            continue; // TODO: SelectObjectContent
+        }
+
         let method_name = op.name.to_snake_case();
         let s3s_input = f!("s3s::dto::{}", op.input);
         let s3s_output = f!("s3s::dto::{}", op.output);

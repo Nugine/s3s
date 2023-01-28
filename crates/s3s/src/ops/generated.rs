@@ -5665,190 +5665,6 @@ pub trait S3: Send + Sync + 'static {
     }
 }
 
-pub struct AbortMultipartUpload;
-
-pub struct CompleteMultipartUpload;
-
-pub struct CopyObject;
-
-pub struct CreateBucket;
-
-pub struct CreateMultipartUpload;
-
-pub struct DeleteBucket;
-
-pub struct DeleteBucketAnalyticsConfiguration;
-
-pub struct DeleteBucketCors;
-
-pub struct DeleteBucketEncryption;
-
-pub struct DeleteBucketIntelligentTieringConfiguration;
-
-pub struct DeleteBucketInventoryConfiguration;
-
-pub struct DeleteBucketLifecycle;
-
-pub struct DeleteBucketMetricsConfiguration;
-
-pub struct DeleteBucketOwnershipControls;
-
-pub struct DeleteBucketPolicy;
-
-pub struct DeleteBucketReplication;
-
-pub struct DeleteBucketTagging;
-
-pub struct DeleteBucketWebsite;
-
-pub struct DeleteObject;
-
-pub struct DeleteObjectTagging;
-
-pub struct DeleteObjects;
-
-pub struct DeletePublicAccessBlock;
-
-pub struct GetBucketAccelerateConfiguration;
-
-pub struct GetBucketAcl;
-
-pub struct GetBucketAnalyticsConfiguration;
-
-pub struct GetBucketCors;
-
-pub struct GetBucketEncryption;
-
-pub struct GetBucketIntelligentTieringConfiguration;
-
-pub struct GetBucketInventoryConfiguration;
-
-pub struct GetBucketLifecycleConfiguration;
-
-pub struct GetBucketLocation;
-
-pub struct GetBucketLogging;
-
-pub struct GetBucketMetricsConfiguration;
-
-pub struct GetBucketNotificationConfiguration;
-
-pub struct GetBucketOwnershipControls;
-
-pub struct GetBucketPolicy;
-
-pub struct GetBucketPolicyStatus;
-
-pub struct GetBucketReplication;
-
-pub struct GetBucketRequestPayment;
-
-pub struct GetBucketTagging;
-
-pub struct GetBucketVersioning;
-
-pub struct GetBucketWebsite;
-
-pub struct GetObject;
-
-pub struct GetObjectAcl;
-
-pub struct GetObjectAttributes;
-
-pub struct GetObjectLegalHold;
-
-pub struct GetObjectLockConfiguration;
-
-pub struct GetObjectRetention;
-
-pub struct GetObjectTagging;
-
-pub struct GetObjectTorrent;
-
-pub struct GetPublicAccessBlock;
-
-pub struct HeadBucket;
-
-pub struct HeadObject;
-
-pub struct ListBucketAnalyticsConfigurations;
-
-pub struct ListBucketIntelligentTieringConfigurations;
-
-pub struct ListBucketInventoryConfigurations;
-
-pub struct ListBucketMetricsConfigurations;
-
-pub struct ListBuckets;
-
-pub struct ListMultipartUploads;
-
-pub struct ListObjectVersions;
-
-pub struct ListObjects;
-
-pub struct ListObjectsV2;
-
-pub struct ListParts;
-
-pub struct PutBucketAccelerateConfiguration;
-
-pub struct PutBucketAcl;
-
-pub struct PutBucketAnalyticsConfiguration;
-
-pub struct PutBucketCors;
-
-pub struct PutBucketEncryption;
-
-pub struct PutBucketIntelligentTieringConfiguration;
-
-pub struct PutBucketInventoryConfiguration;
-
-pub struct PutBucketLifecycleConfiguration;
-
-pub struct PutBucketLogging;
-
-pub struct PutBucketMetricsConfiguration;
-
-pub struct PutBucketNotificationConfiguration;
-
-pub struct PutBucketOwnershipControls;
-
-pub struct PutBucketPolicy;
-
-pub struct PutBucketReplication;
-
-pub struct PutBucketRequestPayment;
-
-pub struct PutBucketTagging;
-
-pub struct PutBucketVersioning;
-
-pub struct PutBucketWebsite;
-
-pub struct PutObject;
-
-pub struct PutObjectAcl;
-
-pub struct PutObjectLegalHold;
-
-pub struct PutObjectLockConfiguration;
-
-pub struct PutObjectRetention;
-
-pub struct PutObjectTagging;
-
-pub struct PutPublicAccessBlock;
-
-pub struct RestoreObject;
-
-pub struct UploadPart;
-
-pub struct UploadPartCopy;
-
-pub struct WriteGetObjectResponse;
-
 impl xml::SerializeContent for AbortIncompleteMultipartUpload {
     fn serialize_content<W: Write>(&self, s: &mut xml::Serializer<W>) -> xml::SerResult {
         s.content("DaysAfterInitiation", &self.days_after_initiation)?;
@@ -10692,6 +10508,25 @@ impl<'xml> xml::DeserializeContent<'xml> for RequestPaymentConfiguration {
     }
 }
 
+impl<'xml> xml::DeserializeContent<'xml> for RequestProgress {
+    fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
+        let mut enabled: Option<EnableRequestProgress> = None;
+        d.for_each_element(|d, x| match x {
+            b"Enabled" => {
+                if enabled.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                enabled = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(xml::DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            enabled: enabled.unwrap_or(false),
+        })
+    }
+}
+
 impl<'xml> xml::DeserializeContent<'xml> for RestoreRequest {
     fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
         let mut days: Option<Days> = None;
@@ -10918,6 +10753,98 @@ impl<'xml> xml::DeserializeContent<'xml> for SSEKMS {
 impl<'xml> xml::DeserializeContent<'xml> for SSES3 {
     fn deserialize_content(_: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
         Ok(Self {})
+    }
+}
+
+impl<'xml> xml::DeserializeContent<'xml> for ScanRange {
+    fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
+        let mut end: Option<End> = None;
+        let mut start: Option<Start> = None;
+        d.for_each_element(|d, x| match x {
+            b"End" => {
+                if end.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                end = Some(d.content()?);
+                Ok(())
+            }
+            b"Start" => {
+                if start.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                start = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(xml::DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            end: end.unwrap_or(0),
+            start: start.unwrap_or(0),
+        })
+    }
+}
+
+impl<'xml> xml::DeserializeContent<'xml> for SelectObjectContentRequest {
+    fn deserialize_content(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
+        let mut expression: Option<Expression> = None;
+        let mut expression_type: Option<ExpressionType> = None;
+        let mut input_serialization: Option<InputSerialization> = None;
+        let mut output_serialization: Option<OutputSerialization> = None;
+        let mut request_progress: Option<RequestProgress> = None;
+        let mut scan_range: Option<ScanRange> = None;
+        d.for_each_element(|d, x| match x {
+            b"Expression" => {
+                if expression.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                expression = Some(d.content()?);
+                Ok(())
+            }
+            b"ExpressionType" => {
+                if expression_type.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                expression_type = Some(d.content()?);
+                Ok(())
+            }
+            b"InputSerialization" => {
+                if input_serialization.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                input_serialization = Some(d.content()?);
+                Ok(())
+            }
+            b"OutputSerialization" => {
+                if output_serialization.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                output_serialization = Some(d.content()?);
+                Ok(())
+            }
+            b"RequestProgress" => {
+                if request_progress.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                request_progress = Some(d.content()?);
+                Ok(())
+            }
+            b"ScanRange" => {
+                if scan_range.is_some() {
+                    return Err(xml::DeError::DuplicateField);
+                }
+                scan_range = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(xml::DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            expression: expression.ok_or(xml::DeError::MissingField)?,
+            expression_type: expression_type.ok_or(xml::DeError::MissingField)?,
+            input_serialization: input_serialization.ok_or(xml::DeError::MissingField)?,
+            output_serialization: output_serialization.ok_or(xml::DeError::MissingField)?,
+            request_progress,
+            scan_range,
+        })
     }
 }
 
@@ -11552,6 +11479,12 @@ impl<'xml> xml::Deserialize<'xml> for RestoreRequest {
     }
 }
 
+impl<'xml> xml::Deserialize<'xml> for SelectObjectContentRequest {
+    fn deserialize(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
+        d.named_element("SelectObjectContentRequest", |d| d.content())
+    }
+}
+
 impl<'xml> xml::Deserialize<'xml> for ServerSideEncryptionConfiguration {
     fn deserialize(d: &mut xml::Deserializer<'xml>) -> xml::DeResult<Self> {
         d.named_element("ServerSideEncryptionConfiguration", |d| d.content())
@@ -11864,6 +11797,8 @@ impl http::TryFromHeaderValue for TaggingDirective {
     }
 }
 
+pub struct AbortMultipartUpload;
+
 impl AbortMultipartUpload {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<AbortMultipartUploadInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -11890,6 +11825,25 @@ impl AbortMultipartUpload {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for AbortMultipartUpload {
+    fn name(&self) -> &'static str {
+        "AbortMultipartUpload"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.abort_multipart_upload(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct CompleteMultipartUpload;
 
 impl CompleteMultipartUpload {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<CompleteMultipartUploadInput> {
@@ -11948,6 +11902,25 @@ impl CompleteMultipartUpload {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for CompleteMultipartUpload {
+    fn name(&self) -> &'static str {
+        "CompleteMultipartUpload"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.complete_multipart_upload(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct CopyObject;
 
 impl CopyObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<CopyObjectInput> {
@@ -12108,6 +12081,25 @@ impl CopyObject {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for CopyObject {
+    fn name(&self) -> &'static str {
+        "CopyObject"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.copy_object(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct CreateBucket;
+
 impl CreateBucket {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<CreateBucketInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12151,6 +12143,25 @@ impl CreateBucket {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for CreateBucket {
+    fn name(&self) -> &'static str {
+        "CreateBucket"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.create_bucket(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct CreateMultipartUpload;
 
 impl CreateMultipartUpload {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<CreateMultipartUploadInput> {
@@ -12270,6 +12281,25 @@ impl CreateMultipartUpload {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for CreateMultipartUpload {
+    fn name(&self) -> &'static str {
+        "CreateMultipartUpload"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.create_multipart_upload(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucket;
+
 impl DeleteBucket {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12288,6 +12318,25 @@ impl DeleteBucket {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucket {
+    fn name(&self) -> &'static str {
+        "DeleteBucket"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketAnalyticsConfiguration;
 
 impl DeleteBucketAnalyticsConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketAnalyticsConfigurationInput> {
@@ -12311,6 +12360,25 @@ impl DeleteBucketAnalyticsConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketAnalyticsConfiguration {
+    fn name(&self) -> &'static str {
+        "DeleteBucketAnalyticsConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_analytics_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketCors;
+
 impl DeleteBucketCors {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketCorsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12329,6 +12397,25 @@ impl DeleteBucketCors {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketCors {
+    fn name(&self) -> &'static str {
+        "DeleteBucketCors"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_cors(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketEncryption;
 
 impl DeleteBucketEncryption {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketEncryptionInput> {
@@ -12349,6 +12436,25 @@ impl DeleteBucketEncryption {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketEncryption {
+    fn name(&self) -> &'static str {
+        "DeleteBucketEncryption"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_encryption(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketIntelligentTieringConfiguration;
+
 impl DeleteBucketIntelligentTieringConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketIntelligentTieringConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12364,6 +12470,25 @@ impl DeleteBucketIntelligentTieringConfiguration {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketIntelligentTieringConfiguration {
+    fn name(&self) -> &'static str {
+        "DeleteBucketIntelligentTieringConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_intelligent_tiering_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketInventoryConfiguration;
 
 impl DeleteBucketInventoryConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketInventoryConfigurationInput> {
@@ -12387,6 +12512,25 @@ impl DeleteBucketInventoryConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketInventoryConfiguration {
+    fn name(&self) -> &'static str {
+        "DeleteBucketInventoryConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_inventory_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketLifecycle;
+
 impl DeleteBucketLifecycle {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketLifecycleInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12405,6 +12549,25 @@ impl DeleteBucketLifecycle {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketLifecycle {
+    fn name(&self) -> &'static str {
+        "DeleteBucketLifecycle"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_lifecycle(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketMetricsConfiguration;
 
 impl DeleteBucketMetricsConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketMetricsConfigurationInput> {
@@ -12428,6 +12591,25 @@ impl DeleteBucketMetricsConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketMetricsConfiguration {
+    fn name(&self) -> &'static str {
+        "DeleteBucketMetricsConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_metrics_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketOwnershipControls;
+
 impl DeleteBucketOwnershipControls {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketOwnershipControlsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12446,6 +12628,25 @@ impl DeleteBucketOwnershipControls {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketOwnershipControls {
+    fn name(&self) -> &'static str {
+        "DeleteBucketOwnershipControls"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_ownership_controls(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketPolicy;
 
 impl DeleteBucketPolicy {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketPolicyInput> {
@@ -12466,6 +12667,25 @@ impl DeleteBucketPolicy {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketPolicy {
+    fn name(&self) -> &'static str {
+        "DeleteBucketPolicy"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_policy(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketReplication;
+
 impl DeleteBucketReplication {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketReplicationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12484,6 +12704,25 @@ impl DeleteBucketReplication {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketReplication {
+    fn name(&self) -> &'static str {
+        "DeleteBucketReplication"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_replication(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketTagging;
 
 impl DeleteBucketTagging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketTaggingInput> {
@@ -12504,6 +12743,25 @@ impl DeleteBucketTagging {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketTagging {
+    fn name(&self) -> &'static str {
+        "DeleteBucketTagging"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_tagging(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteBucketWebsite;
+
 impl DeleteBucketWebsite {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketWebsiteInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12522,6 +12780,25 @@ impl DeleteBucketWebsite {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketWebsite {
+    fn name(&self) -> &'static str {
+        "DeleteBucketWebsite"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_bucket_website(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteObject;
 
 impl DeleteObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectInput> {
@@ -12559,6 +12836,25 @@ impl DeleteObject {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for DeleteObject {
+    fn name(&self) -> &'static str {
+        "DeleteObject"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_object(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteObjectTagging;
+
 impl DeleteObjectTagging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectTaggingInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -12582,6 +12878,25 @@ impl DeleteObjectTagging {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteObjectTagging {
+    fn name(&self) -> &'static str {
+        "DeleteObjectTagging"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_object_tagging(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeleteObjects;
 
 impl DeleteObjects {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectsInput> {
@@ -12619,6 +12934,25 @@ impl DeleteObjects {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for DeleteObjects {
+    fn name(&self) -> &'static str {
+        "DeleteObjects"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_objects(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct DeletePublicAccessBlock;
+
 impl DeletePublicAccessBlock {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeletePublicAccessBlockInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12637,6 +12971,25 @@ impl DeletePublicAccessBlock {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for DeletePublicAccessBlock {
+    fn name(&self) -> &'static str {
+        "DeletePublicAccessBlock"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.delete_public_access_block(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketAccelerateConfiguration;
 
 impl GetBucketAccelerateConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAccelerateConfigurationInput> {
@@ -12657,6 +13010,25 @@ impl GetBucketAccelerateConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketAccelerateConfiguration {
+    fn name(&self) -> &'static str {
+        "GetBucketAccelerateConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_accelerate_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketAcl;
+
 impl GetBucketAcl {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAclInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12675,6 +13047,25 @@ impl GetBucketAcl {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketAcl {
+    fn name(&self) -> &'static str {
+        "GetBucketAcl"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_acl(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketAnalyticsConfiguration;
 
 impl GetBucketAnalyticsConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketAnalyticsConfigurationInput> {
@@ -12700,6 +13091,25 @@ impl GetBucketAnalyticsConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketAnalyticsConfiguration {
+    fn name(&self) -> &'static str {
+        "GetBucketAnalyticsConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_analytics_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketCors;
+
 impl GetBucketCors {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketCorsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12718,6 +13128,25 @@ impl GetBucketCors {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketCors {
+    fn name(&self) -> &'static str {
+        "GetBucketCors"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_cors(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketEncryption;
 
 impl GetBucketEncryption {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketEncryptionInput> {
@@ -12740,6 +13169,25 @@ impl GetBucketEncryption {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketEncryption {
+    fn name(&self) -> &'static str {
+        "GetBucketEncryption"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_encryption(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketIntelligentTieringConfiguration;
+
 impl GetBucketIntelligentTieringConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketIntelligentTieringConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12757,6 +13205,25 @@ impl GetBucketIntelligentTieringConfiguration {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketIntelligentTieringConfiguration {
+    fn name(&self) -> &'static str {
+        "GetBucketIntelligentTieringConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_intelligent_tiering_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketInventoryConfiguration;
 
 impl GetBucketInventoryConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketInventoryConfigurationInput> {
@@ -12782,6 +13249,25 @@ impl GetBucketInventoryConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketInventoryConfiguration {
+    fn name(&self) -> &'static str {
+        "GetBucketInventoryConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_inventory_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketLifecycleConfiguration;
+
 impl GetBucketLifecycleConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLifecycleConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12800,6 +13286,25 @@ impl GetBucketLifecycleConfiguration {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketLifecycleConfiguration {
+    fn name(&self) -> &'static str {
+        "GetBucketLifecycleConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_lifecycle_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketLocation;
 
 impl GetBucketLocation {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLocationInput> {
@@ -12820,6 +13325,25 @@ impl GetBucketLocation {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketLocation {
+    fn name(&self) -> &'static str {
+        "GetBucketLocation"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_location(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketLogging;
+
 impl GetBucketLogging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketLoggingInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12838,6 +13362,25 @@ impl GetBucketLogging {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketLogging {
+    fn name(&self) -> &'static str {
+        "GetBucketLogging"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_logging(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketMetricsConfiguration;
 
 impl GetBucketMetricsConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketMetricsConfigurationInput> {
@@ -12863,6 +13406,25 @@ impl GetBucketMetricsConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketMetricsConfiguration {
+    fn name(&self) -> &'static str {
+        "GetBucketMetricsConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_metrics_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketNotificationConfiguration;
+
 impl GetBucketNotificationConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketNotificationConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12881,6 +13443,25 @@ impl GetBucketNotificationConfiguration {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketNotificationConfiguration {
+    fn name(&self) -> &'static str {
+        "GetBucketNotificationConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_notification_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketOwnershipControls;
 
 impl GetBucketOwnershipControls {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketOwnershipControlsInput> {
@@ -12903,6 +13484,25 @@ impl GetBucketOwnershipControls {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketOwnershipControls {
+    fn name(&self) -> &'static str {
+        "GetBucketOwnershipControls"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_ownership_controls(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketPolicy;
+
 impl GetBucketPolicy {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketPolicyInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12923,6 +13523,25 @@ impl GetBucketPolicy {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketPolicy {
+    fn name(&self) -> &'static str {
+        "GetBucketPolicy"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_policy(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketPolicyStatus;
 
 impl GetBucketPolicyStatus {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketPolicyStatusInput> {
@@ -12945,6 +13564,25 @@ impl GetBucketPolicyStatus {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketPolicyStatus {
+    fn name(&self) -> &'static str {
+        "GetBucketPolicyStatus"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_policy_status(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketReplication;
+
 impl GetBucketReplication {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketReplicationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12966,6 +13604,25 @@ impl GetBucketReplication {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketReplication {
+    fn name(&self) -> &'static str {
+        "GetBucketReplication"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_replication(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketRequestPayment;
+
 impl GetBucketRequestPayment {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketRequestPaymentInput> {
         let bucket = http::unwrap_bucket(req);
@@ -12984,6 +13641,25 @@ impl GetBucketRequestPayment {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketRequestPayment {
+    fn name(&self) -> &'static str {
+        "GetBucketRequestPayment"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_request_payment(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketTagging;
 
 impl GetBucketTagging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketTaggingInput> {
@@ -13004,6 +13680,25 @@ impl GetBucketTagging {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketTagging {
+    fn name(&self) -> &'static str {
+        "GetBucketTagging"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_tagging(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketVersioning;
+
 impl GetBucketVersioning {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketVersioningInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13023,6 +13718,25 @@ impl GetBucketVersioning {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetBucketVersioning {
+    fn name(&self) -> &'static str {
+        "GetBucketVersioning"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_versioning(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetBucketWebsite;
+
 impl GetBucketWebsite {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketWebsiteInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13041,6 +13755,25 @@ impl GetBucketWebsite {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketWebsite {
+    fn name(&self) -> &'static str {
+        "GetBucketWebsite"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_bucket_website(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetObject;
 
 impl GetObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectInput> {
@@ -13164,6 +13897,25 @@ impl GetObject {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetObject {
+    fn name(&self) -> &'static str {
+        "GetObject"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_object(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetObjectAcl;
+
 impl GetObjectAcl {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectAclInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -13190,6 +13942,25 @@ impl GetObjectAcl {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetObjectAcl {
+    fn name(&self) -> &'static str {
+        "GetObjectAcl"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_object_acl(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetObjectAttributes;
 
 impl GetObjectAttributes {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectAttributesInput> {
@@ -13241,6 +14012,25 @@ impl GetObjectAttributes {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetObjectAttributes {
+    fn name(&self) -> &'static str {
+        "GetObjectAttributes"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_object_attributes(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetObjectLegalHold;
+
 impl GetObjectLegalHold {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectLegalHoldInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -13269,6 +14059,25 @@ impl GetObjectLegalHold {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetObjectLegalHold {
+    fn name(&self) -> &'static str {
+        "GetObjectLegalHold"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_object_legal_hold(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetObjectLockConfiguration;
+
 impl GetObjectLockConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectLockConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13289,6 +14098,25 @@ impl GetObjectLockConfiguration {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for GetObjectLockConfiguration {
+    fn name(&self) -> &'static str {
+        "GetObjectLockConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_object_lock_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetObjectRetention;
 
 impl GetObjectRetention {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectRetentionInput> {
@@ -13318,6 +14146,25 @@ impl GetObjectRetention {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetObjectRetention {
+    fn name(&self) -> &'static str {
+        "GetObjectRetention"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_object_retention(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetObjectTagging;
+
 impl GetObjectTagging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectTaggingInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -13345,6 +14192,25 @@ impl GetObjectTagging {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetObjectTagging {
+    fn name(&self) -> &'static str {
+        "GetObjectTagging"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_object_tagging(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetObjectTorrent;
+
 impl GetObjectTorrent {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetObjectTorrentInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -13371,6 +14237,25 @@ impl GetObjectTorrent {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetObjectTorrent {
+    fn name(&self) -> &'static str {
+        "GetObjectTorrent"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_object_torrent(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct GetPublicAccessBlock;
+
 impl GetPublicAccessBlock {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetPublicAccessBlockInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13392,6 +14277,25 @@ impl GetPublicAccessBlock {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for GetPublicAccessBlock {
+    fn name(&self) -> &'static str {
+        "GetPublicAccessBlock"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.get_public_access_block(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct HeadBucket;
+
 impl HeadBucket {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<HeadBucketInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13408,6 +14312,25 @@ impl HeadBucket {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for HeadBucket {
+    fn name(&self) -> &'static str {
+        "HeadBucket"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.head_bucket(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct HeadObject;
 
 impl HeadObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<HeadObjectInput> {
@@ -13507,6 +14430,25 @@ impl HeadObject {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for HeadObject {
+    fn name(&self) -> &'static str {
+        "HeadObject"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.head_object(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListBucketAnalyticsConfigurations;
+
 impl ListBucketAnalyticsConfigurations {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketAnalyticsConfigurationsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13529,6 +14471,25 @@ impl ListBucketAnalyticsConfigurations {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for ListBucketAnalyticsConfigurations {
+    fn name(&self) -> &'static str {
+        "ListBucketAnalyticsConfigurations"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_bucket_analytics_configurations(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListBucketIntelligentTieringConfigurations;
+
 impl ListBucketIntelligentTieringConfigurations {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketIntelligentTieringConfigurationsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13547,6 +14508,25 @@ impl ListBucketIntelligentTieringConfigurations {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for ListBucketIntelligentTieringConfigurations {
+    fn name(&self) -> &'static str {
+        "ListBucketIntelligentTieringConfigurations"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_bucket_intelligent_tiering_configurations(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListBucketInventoryConfigurations;
 
 impl ListBucketInventoryConfigurations {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketInventoryConfigurationsInput> {
@@ -13570,6 +14550,25 @@ impl ListBucketInventoryConfigurations {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for ListBucketInventoryConfigurations {
+    fn name(&self) -> &'static str {
+        "ListBucketInventoryConfigurations"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_bucket_inventory_configurations(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListBucketMetricsConfigurations;
+
 impl ListBucketMetricsConfigurations {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketMetricsConfigurationsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13592,6 +14591,25 @@ impl ListBucketMetricsConfigurations {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for ListBucketMetricsConfigurations {
+    fn name(&self) -> &'static str {
+        "ListBucketMetricsConfigurations"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_bucket_metrics_configurations(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListBuckets;
+
 impl ListBuckets {
     pub fn deserialize_http(_: &mut http::Request) -> S3Result<ListBucketsInput> {
         Ok(ListBucketsInput {})
@@ -13603,6 +14621,25 @@ impl ListBuckets {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for ListBuckets {
+    fn name(&self) -> &'static str {
+        "ListBuckets"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_buckets(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListMultipartUploads;
 
 impl ListMultipartUploads {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListMultipartUploadsInput> {
@@ -13641,6 +14678,25 @@ impl ListMultipartUploads {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for ListMultipartUploads {
+    fn name(&self) -> &'static str {
+        "ListMultipartUploads"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_multipart_uploads(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListObjectVersions;
+
 impl ListObjectVersions {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectVersionsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13678,6 +14734,25 @@ impl ListObjectVersions {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for ListObjectVersions {
+    fn name(&self) -> &'static str {
+        "ListObjectVersions"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_object_versions(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListObjects;
+
 impl ListObjects {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13714,6 +14789,25 @@ impl ListObjects {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for ListObjects {
+    fn name(&self) -> &'static str {
+        "ListObjects"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_objects(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListObjectsV2;
 
 impl ListObjectsV2 {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListObjectsV2Input> {
@@ -13757,6 +14851,25 @@ impl ListObjectsV2 {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for ListObjectsV2 {
+    fn name(&self) -> &'static str {
+        "ListObjectsV2"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_objects_v2(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct ListParts;
 
 impl ListParts {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListPartsInput> {
@@ -13804,6 +14917,25 @@ impl ListParts {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for ListParts {
+    fn name(&self) -> &'static str {
+        "ListParts"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.list_parts(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketAccelerateConfiguration;
+
 impl PutBucketAccelerateConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAccelerateConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13826,6 +14958,25 @@ impl PutBucketAccelerateConfiguration {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutBucketAccelerateConfiguration {
+    fn name(&self) -> &'static str {
+        "PutBucketAccelerateConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_accelerate_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketAcl;
 
 impl PutBucketAcl {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAclInput> {
@@ -13871,6 +15022,25 @@ impl PutBucketAcl {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketAcl {
+    fn name(&self) -> &'static str {
+        "PutBucketAcl"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_acl(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketAnalyticsConfiguration;
+
 impl PutBucketAnalyticsConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketAnalyticsConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13893,6 +15063,25 @@ impl PutBucketAnalyticsConfiguration {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutBucketAnalyticsConfiguration {
+    fn name(&self) -> &'static str {
+        "PutBucketAnalyticsConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_analytics_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketCors;
 
 impl PutBucketCors {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketCorsInput> {
@@ -13920,6 +15109,25 @@ impl PutBucketCors {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketCors {
+    fn name(&self) -> &'static str {
+        "PutBucketCors"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_cors(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketEncryption;
+
 impl PutBucketEncryption {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketEncryptionInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13946,6 +15154,25 @@ impl PutBucketEncryption {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketEncryption {
+    fn name(&self) -> &'static str {
+        "PutBucketEncryption"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_encryption(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketIntelligentTieringConfiguration;
+
 impl PutBucketIntelligentTieringConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketIntelligentTieringConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -13965,6 +15192,25 @@ impl PutBucketIntelligentTieringConfiguration {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutBucketIntelligentTieringConfiguration {
+    fn name(&self) -> &'static str {
+        "PutBucketIntelligentTieringConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_intelligent_tiering_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketInventoryConfiguration;
 
 impl PutBucketInventoryConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketInventoryConfigurationInput> {
@@ -13989,6 +15235,25 @@ impl PutBucketInventoryConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketInventoryConfiguration {
+    fn name(&self) -> &'static str {
+        "PutBucketInventoryConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_inventory_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketLifecycleConfiguration;
+
 impl PutBucketLifecycleConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketLifecycleConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14011,6 +15276,25 @@ impl PutBucketLifecycleConfiguration {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutBucketLifecycleConfiguration {
+    fn name(&self) -> &'static str {
+        "PutBucketLifecycleConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_lifecycle_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketLogging;
 
 impl PutBucketLogging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketLoggingInput> {
@@ -14038,6 +15322,25 @@ impl PutBucketLogging {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketLogging {
+    fn name(&self) -> &'static str {
+        "PutBucketLogging"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_logging(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketMetricsConfiguration;
+
 impl PutBucketMetricsConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketMetricsConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14060,6 +15363,25 @@ impl PutBucketMetricsConfiguration {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutBucketMetricsConfiguration {
+    fn name(&self) -> &'static str {
+        "PutBucketMetricsConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_metrics_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketNotificationConfiguration;
 
 impl PutBucketNotificationConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketNotificationConfigurationInput> {
@@ -14085,6 +15407,25 @@ impl PutBucketNotificationConfiguration {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketNotificationConfiguration {
+    fn name(&self) -> &'static str {
+        "PutBucketNotificationConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_notification_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketOwnershipControls;
+
 impl PutBucketOwnershipControls {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketOwnershipControlsInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14107,6 +15448,25 @@ impl PutBucketOwnershipControls {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutBucketOwnershipControls {
+    fn name(&self) -> &'static str {
+        "PutBucketOwnershipControls"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_ownership_controls(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketPolicy;
 
 impl PutBucketPolicy {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketPolicyInput> {
@@ -14138,6 +15498,25 @@ impl PutBucketPolicy {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketPolicy {
+    fn name(&self) -> &'static str {
+        "PutBucketPolicy"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_policy(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketReplication;
+
 impl PutBucketReplication {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketReplicationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14167,6 +15546,25 @@ impl PutBucketReplication {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketReplication {
+    fn name(&self) -> &'static str {
+        "PutBucketReplication"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_replication(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketRequestPayment;
+
 impl PutBucketRequestPayment {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketRequestPaymentInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14193,6 +15591,25 @@ impl PutBucketRequestPayment {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketRequestPayment {
+    fn name(&self) -> &'static str {
+        "PutBucketRequestPayment"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_request_payment(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketTagging;
+
 impl PutBucketTagging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketTaggingInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14218,6 +15635,25 @@ impl PutBucketTagging {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutBucketTagging {
+    fn name(&self) -> &'static str {
+        "PutBucketTagging"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_tagging(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketVersioning;
 
 impl PutBucketVersioning {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketVersioningInput> {
@@ -14248,6 +15684,25 @@ impl PutBucketVersioning {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutBucketVersioning {
+    fn name(&self) -> &'static str {
+        "PutBucketVersioning"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_versioning(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutBucketWebsite;
+
 impl PutBucketWebsite {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketWebsiteInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14273,6 +15728,25 @@ impl PutBucketWebsite {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutBucketWebsite {
+    fn name(&self) -> &'static str {
+        "PutBucketWebsite"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_bucket_website(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutObject;
 
 impl PutObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectInput> {
@@ -14557,6 +16031,25 @@ impl PutObject {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutObject {
+    fn name(&self) -> &'static str {
+        "PutObject"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_object(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutObjectAcl;
+
 impl PutObjectAcl {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectAclInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -14610,6 +16103,25 @@ impl PutObjectAcl {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutObjectAcl {
+    fn name(&self) -> &'static str {
+        "PutObjectAcl"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_object_acl(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutObjectLegalHold;
+
 impl PutObjectLegalHold {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectLegalHoldInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -14645,6 +16157,25 @@ impl PutObjectLegalHold {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutObjectLegalHold {
+    fn name(&self) -> &'static str {
+        "PutObjectLegalHold"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_object_legal_hold(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutObjectLockConfiguration;
+
 impl PutObjectLockConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectLockConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14678,6 +16209,25 @@ impl PutObjectLockConfiguration {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutObjectLockConfiguration {
+    fn name(&self) -> &'static str {
+        "PutObjectLockConfiguration"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_object_lock_configuration(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutObjectRetention;
 
 impl PutObjectRetention {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectRetentionInput> {
@@ -14718,6 +16268,25 @@ impl PutObjectRetention {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutObjectRetention {
+    fn name(&self) -> &'static str {
+        "PutObjectRetention"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_object_retention(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutObjectTagging;
+
 impl PutObjectTagging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectTaggingInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -14753,6 +16322,25 @@ impl PutObjectTagging {
     }
 }
 
+#[async_trait::async_trait]
+impl super::Operation for PutObjectTagging {
+    fn name(&self) -> &'static str {
+        "PutObjectTagging"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_object_tagging(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct PutPublicAccessBlock;
+
 impl PutPublicAccessBlock {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutPublicAccessBlockInput> {
         let bucket = http::unwrap_bucket(req);
@@ -14778,6 +16366,25 @@ impl PutPublicAccessBlock {
         Ok(http::Response::default())
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for PutPublicAccessBlock {
+    fn name(&self) -> &'static str {
+        "PutPublicAccessBlock"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.put_public_access_block(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct RestoreObject;
 
 impl RestoreObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<RestoreObjectInput> {
@@ -14811,6 +16418,57 @@ impl RestoreObject {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for RestoreObject {
+    fn name(&self) -> &'static str {
+        "RestoreObject"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.restore_object(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+#[allow(dead_code)] // TODO
+pub struct SelectObjectContent;
+
+#[allow(dead_code)] // TODO
+impl SelectObjectContent {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<SelectObjectContentInput> {
+        let (bucket, key) = http::unwrap_object(req);
+
+        let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
+
+        let sse_customer_algorithm: Option<SSECustomerAlgorithm> =
+            http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM)?;
+
+        let sse_customer_key: Option<SSECustomerKey> = http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY)?;
+
+        let sse_customer_key_md5: Option<SSECustomerKeyMD5> =
+            http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5)?;
+
+        let request: SelectObjectContentRequest = http::take_xml_body(req)?;
+
+        Ok(SelectObjectContentInput {
+            bucket,
+            expected_bucket_owner,
+            key,
+            sse_customer_algorithm,
+            sse_customer_key,
+            sse_customer_key_md5,
+            request,
+        })
+    }
+}
+
+pub struct UploadPart;
 
 impl UploadPart {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<UploadPartInput> {
@@ -14885,6 +16543,25 @@ impl UploadPart {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for UploadPart {
+    fn name(&self) -> &'static str {
+        "UploadPart"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.upload_part(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct UploadPartCopy;
 
 impl UploadPartCopy {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<UploadPartCopyInput> {
@@ -14970,6 +16647,25 @@ impl UploadPartCopy {
         Ok(res)
     }
 }
+
+#[async_trait::async_trait]
+impl super::Operation for UploadPartCopy {
+    fn name(&self) -> &'static str {
+        "UploadPartCopy"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.upload_part_copy(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
+    }
+}
+
+pub struct WriteGetObjectResponse;
 
 impl WriteGetObjectResponse {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<WriteGetObjectResponseInput> {
@@ -15112,1553 +16808,6 @@ impl WriteGetObjectResponse {
 
     pub fn serialize_http(_: WriteGetObjectResponseOutput) -> S3Result<http::Response> {
         Ok(http::Response::default())
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for AbortMultipartUpload {
-    fn name(&self) -> &'static str {
-        "AbortMultipartUpload"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.abort_multipart_upload(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for CompleteMultipartUpload {
-    fn name(&self) -> &'static str {
-        "CompleteMultipartUpload"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.complete_multipart_upload(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for CopyObject {
-    fn name(&self) -> &'static str {
-        "CopyObject"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.copy_object(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for CreateBucket {
-    fn name(&self) -> &'static str {
-        "CreateBucket"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.create_bucket(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for CreateMultipartUpload {
-    fn name(&self) -> &'static str {
-        "CreateMultipartUpload"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.create_multipart_upload(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucket {
-    fn name(&self) -> &'static str {
-        "DeleteBucket"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketAnalyticsConfiguration {
-    fn name(&self) -> &'static str {
-        "DeleteBucketAnalyticsConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_analytics_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketCors {
-    fn name(&self) -> &'static str {
-        "DeleteBucketCors"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_cors(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketEncryption {
-    fn name(&self) -> &'static str {
-        "DeleteBucketEncryption"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_encryption(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketIntelligentTieringConfiguration {
-    fn name(&self) -> &'static str {
-        "DeleteBucketIntelligentTieringConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_intelligent_tiering_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketInventoryConfiguration {
-    fn name(&self) -> &'static str {
-        "DeleteBucketInventoryConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_inventory_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketLifecycle {
-    fn name(&self) -> &'static str {
-        "DeleteBucketLifecycle"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_lifecycle(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketMetricsConfiguration {
-    fn name(&self) -> &'static str {
-        "DeleteBucketMetricsConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_metrics_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketOwnershipControls {
-    fn name(&self) -> &'static str {
-        "DeleteBucketOwnershipControls"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_ownership_controls(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketPolicy {
-    fn name(&self) -> &'static str {
-        "DeleteBucketPolicy"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_policy(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketReplication {
-    fn name(&self) -> &'static str {
-        "DeleteBucketReplication"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_replication(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketTagging {
-    fn name(&self) -> &'static str {
-        "DeleteBucketTagging"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_tagging(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteBucketWebsite {
-    fn name(&self) -> &'static str {
-        "DeleteBucketWebsite"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_bucket_website(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteObject {
-    fn name(&self) -> &'static str {
-        "DeleteObject"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_object(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteObjectTagging {
-    fn name(&self) -> &'static str {
-        "DeleteObjectTagging"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_object_tagging(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeleteObjects {
-    fn name(&self) -> &'static str {
-        "DeleteObjects"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_objects(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for DeletePublicAccessBlock {
-    fn name(&self) -> &'static str {
-        "DeletePublicAccessBlock"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.delete_public_access_block(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketAccelerateConfiguration {
-    fn name(&self) -> &'static str {
-        "GetBucketAccelerateConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_accelerate_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketAcl {
-    fn name(&self) -> &'static str {
-        "GetBucketAcl"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_acl(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketAnalyticsConfiguration {
-    fn name(&self) -> &'static str {
-        "GetBucketAnalyticsConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_analytics_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketCors {
-    fn name(&self) -> &'static str {
-        "GetBucketCors"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_cors(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketEncryption {
-    fn name(&self) -> &'static str {
-        "GetBucketEncryption"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_encryption(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketIntelligentTieringConfiguration {
-    fn name(&self) -> &'static str {
-        "GetBucketIntelligentTieringConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_intelligent_tiering_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketInventoryConfiguration {
-    fn name(&self) -> &'static str {
-        "GetBucketInventoryConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_inventory_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketLifecycleConfiguration {
-    fn name(&self) -> &'static str {
-        "GetBucketLifecycleConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_lifecycle_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketLocation {
-    fn name(&self) -> &'static str {
-        "GetBucketLocation"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_location(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketLogging {
-    fn name(&self) -> &'static str {
-        "GetBucketLogging"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_logging(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketMetricsConfiguration {
-    fn name(&self) -> &'static str {
-        "GetBucketMetricsConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_metrics_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketNotificationConfiguration {
-    fn name(&self) -> &'static str {
-        "GetBucketNotificationConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_notification_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketOwnershipControls {
-    fn name(&self) -> &'static str {
-        "GetBucketOwnershipControls"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_ownership_controls(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketPolicy {
-    fn name(&self) -> &'static str {
-        "GetBucketPolicy"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_policy(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketPolicyStatus {
-    fn name(&self) -> &'static str {
-        "GetBucketPolicyStatus"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_policy_status(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketReplication {
-    fn name(&self) -> &'static str {
-        "GetBucketReplication"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_replication(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketRequestPayment {
-    fn name(&self) -> &'static str {
-        "GetBucketRequestPayment"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_request_payment(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketTagging {
-    fn name(&self) -> &'static str {
-        "GetBucketTagging"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_tagging(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketVersioning {
-    fn name(&self) -> &'static str {
-        "GetBucketVersioning"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_versioning(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetBucketWebsite {
-    fn name(&self) -> &'static str {
-        "GetBucketWebsite"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_bucket_website(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetObject {
-    fn name(&self) -> &'static str {
-        "GetObject"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_object(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetObjectAcl {
-    fn name(&self) -> &'static str {
-        "GetObjectAcl"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_object_acl(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetObjectAttributes {
-    fn name(&self) -> &'static str {
-        "GetObjectAttributes"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_object_attributes(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetObjectLegalHold {
-    fn name(&self) -> &'static str {
-        "GetObjectLegalHold"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_object_legal_hold(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetObjectLockConfiguration {
-    fn name(&self) -> &'static str {
-        "GetObjectLockConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_object_lock_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetObjectRetention {
-    fn name(&self) -> &'static str {
-        "GetObjectRetention"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_object_retention(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetObjectTagging {
-    fn name(&self) -> &'static str {
-        "GetObjectTagging"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_object_tagging(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetObjectTorrent {
-    fn name(&self) -> &'static str {
-        "GetObjectTorrent"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_object_torrent(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for GetPublicAccessBlock {
-    fn name(&self) -> &'static str {
-        "GetPublicAccessBlock"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.get_public_access_block(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for HeadBucket {
-    fn name(&self) -> &'static str {
-        "HeadBucket"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.head_bucket(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for HeadObject {
-    fn name(&self) -> &'static str {
-        "HeadObject"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.head_object(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListBucketAnalyticsConfigurations {
-    fn name(&self) -> &'static str {
-        "ListBucketAnalyticsConfigurations"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_bucket_analytics_configurations(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListBucketIntelligentTieringConfigurations {
-    fn name(&self) -> &'static str {
-        "ListBucketIntelligentTieringConfigurations"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_bucket_intelligent_tiering_configurations(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListBucketInventoryConfigurations {
-    fn name(&self) -> &'static str {
-        "ListBucketInventoryConfigurations"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_bucket_inventory_configurations(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListBucketMetricsConfigurations {
-    fn name(&self) -> &'static str {
-        "ListBucketMetricsConfigurations"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_bucket_metrics_configurations(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListBuckets {
-    fn name(&self) -> &'static str {
-        "ListBuckets"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_buckets(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListMultipartUploads {
-    fn name(&self) -> &'static str {
-        "ListMultipartUploads"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_multipart_uploads(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListObjectVersions {
-    fn name(&self) -> &'static str {
-        "ListObjectVersions"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_object_versions(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListObjects {
-    fn name(&self) -> &'static str {
-        "ListObjects"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_objects(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListObjectsV2 {
-    fn name(&self) -> &'static str {
-        "ListObjectsV2"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_objects_v2(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for ListParts {
-    fn name(&self) -> &'static str {
-        "ListParts"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.list_parts(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketAccelerateConfiguration {
-    fn name(&self) -> &'static str {
-        "PutBucketAccelerateConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_accelerate_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketAcl {
-    fn name(&self) -> &'static str {
-        "PutBucketAcl"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_acl(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketAnalyticsConfiguration {
-    fn name(&self) -> &'static str {
-        "PutBucketAnalyticsConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_analytics_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketCors {
-    fn name(&self) -> &'static str {
-        "PutBucketCors"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_cors(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketEncryption {
-    fn name(&self) -> &'static str {
-        "PutBucketEncryption"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_encryption(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketIntelligentTieringConfiguration {
-    fn name(&self) -> &'static str {
-        "PutBucketIntelligentTieringConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_intelligent_tiering_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketInventoryConfiguration {
-    fn name(&self) -> &'static str {
-        "PutBucketInventoryConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_inventory_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketLifecycleConfiguration {
-    fn name(&self) -> &'static str {
-        "PutBucketLifecycleConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_lifecycle_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketLogging {
-    fn name(&self) -> &'static str {
-        "PutBucketLogging"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_logging(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketMetricsConfiguration {
-    fn name(&self) -> &'static str {
-        "PutBucketMetricsConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_metrics_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketNotificationConfiguration {
-    fn name(&self) -> &'static str {
-        "PutBucketNotificationConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_notification_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketOwnershipControls {
-    fn name(&self) -> &'static str {
-        "PutBucketOwnershipControls"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_ownership_controls(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketPolicy {
-    fn name(&self) -> &'static str {
-        "PutBucketPolicy"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_policy(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketReplication {
-    fn name(&self) -> &'static str {
-        "PutBucketReplication"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_replication(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketRequestPayment {
-    fn name(&self) -> &'static str {
-        "PutBucketRequestPayment"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_request_payment(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketTagging {
-    fn name(&self) -> &'static str {
-        "PutBucketTagging"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_tagging(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketVersioning {
-    fn name(&self) -> &'static str {
-        "PutBucketVersioning"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_versioning(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutBucketWebsite {
-    fn name(&self) -> &'static str {
-        "PutBucketWebsite"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_bucket_website(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutObject {
-    fn name(&self) -> &'static str {
-        "PutObject"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_object(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutObjectAcl {
-    fn name(&self) -> &'static str {
-        "PutObjectAcl"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_object_acl(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutObjectLegalHold {
-    fn name(&self) -> &'static str {
-        "PutObjectLegalHold"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_object_legal_hold(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutObjectLockConfiguration {
-    fn name(&self) -> &'static str {
-        "PutObjectLockConfiguration"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_object_lock_configuration(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutObjectRetention {
-    fn name(&self) -> &'static str {
-        "PutObjectRetention"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_object_retention(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutObjectTagging {
-    fn name(&self) -> &'static str {
-        "PutObjectTagging"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_object_tagging(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for PutPublicAccessBlock {
-    fn name(&self) -> &'static str {
-        "PutPublicAccessBlock"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.put_public_access_block(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for RestoreObject {
-    fn name(&self) -> &'static str {
-        "RestoreObject"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.restore_object(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for UploadPart {
-    fn name(&self) -> &'static str {
-        "UploadPart"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.upload_part(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
-    }
-}
-
-#[async_trait::async_trait]
-impl super::Operation for UploadPartCopy {
-    fn name(&self) -> &'static str {
-        "UploadPartCopy"
-    }
-
-    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let result = s3.upload_part_copy(input).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
-        };
-        Ok(res)
     }
 }
 

@@ -38,9 +38,6 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
         let smithy::Shape::Operation(sh) = shape else { continue };
 
         let op_name = dto::to_type_name(shape_name).to_owned();
-        if op_name == "SelectObjectContent" {
-            continue; // TODO(further): impl SelectObjectContent
-        }
 
         let cvt = |n| {
             if n == "smithy.api#Unit" {
@@ -110,12 +107,6 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     }
 
     codegen_async_trait(ops, g);
-
-    for op in ops.values() {
-        g.ln(f!("pub struct {};", op.name));
-        g.lf();
-    }
-
     codegen_xml_ser(ops, rust_types, g);
     codegen_xml_de(ops, rust_types, g);
     codegen_http(ops, rust_types, g);
@@ -128,6 +119,10 @@ fn codegen_async_trait(ops: &Operations, g: &mut Codegen) {
     g.ln("pub trait S3: Send + Sync + 'static {");
 
     for op in ops.values() {
+        if op.name == "SelectObjectContent" {
+            continue; // TODO: SelectObjectContent
+        }
+
         codegen_doc(op.doc.as_deref(), g);
 
         let method_name = op.name.to_snake_case();
@@ -531,6 +526,23 @@ fn codegen_http(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     codegen_header_value(ops, rust_types, g);
 
     for op in ops.values() {
+        if op.name == "SelectObjectContent" {
+            g.ln("#[allow(dead_code)] // TODO");
+            g.ln(f!("pub struct {};", op.name));
+            g.lf();
+
+            g.ln("#[allow(dead_code)] // TODO");
+            g.ln(f!("impl {} {{", op.name));
+            codegen_op_http_de(op, rust_types, g);
+            g.ln("}");
+            g.lf();
+
+            continue; // TODO: SelectObjectContent
+        }
+
+        g.ln(f!("pub struct {};", op.name));
+        g.lf();
+
         g.ln(f!("impl {} {{", op.name));
 
         codegen_op_http_de(op, rust_types, g);
@@ -538,9 +550,7 @@ fn codegen_http(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
 
         g.ln("}");
         g.lf();
-    }
 
-    for op in ops.values() {
         codegen_op_http_call(op, g);
         g.lf();
     }
@@ -1066,6 +1076,10 @@ struct Route<'a> {
 fn collect_routes<'a>(ops: &'a Operations, rust_types: &'a RustTypes) -> HashMap<String, HashMap<PathPattern, Vec<Route<'a>>>> {
     let mut ans: HashMap<String, HashMap<PathPattern, Vec<Route<'_>>>> = default();
     for op in ops.values() {
+        if op.name == "SelectObjectContent" {
+            continue; // TODO: SelectObjectContent
+        }
+
         let pat = PathPattern::parse(&op.http_uri);
         let map = ans.entry(op.http_method.clone()).or_default();
         let vec = map.entry(pat).or_default();
