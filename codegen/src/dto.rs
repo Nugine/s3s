@@ -21,20 +21,18 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
     let mut insert = |k: String, v: rust::Type| assert!(space.insert(k, v).is_none());
 
     for (shape_name, shape) in &model.shapes {
-        let name = to_type_name(shape_name).to_owned();
-
-        if name.starts_with("SelectObjectContent") {
-            continue; // TODO(further): impl SelectObjectContent
-        }
+        let name = match to_type_name(shape_name) {
+            "SelectObjectContentEventStream" => o("SelectObjectContentEvent"), // rename
+            s => s.to_owned(),
+        };
 
         let provided_types = [
-            "Body",                           //
-            "StreamingBlob",                  //
-            "SelectObjectContentEventStream", //
-            "CopySource",                     //
-            "Range",                          //
-            "ContentType",                    //
-            "Event",                          //
+            "Body",          //
+            "StreamingBlob", //
+            "CopySource",    //
+            "Range",         //
+            "ContentType",   //
+            "Event",         //
         ];
 
         if provided_types.contains(&name.as_str()) {
@@ -219,8 +217,42 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
         }
     }
 
+    {
+        let Some(rust::Type::Struct(mut ty)) = space.remove("SelectObjectContentRequest") else { panic!() };
+        let request = rust::Struct {
+            name: ty.name.clone(),
+            fields: ty.fields.iter().filter(|x| x.position == "xml").cloned().collect(),
+            doc: ty.doc.clone(),
+            xml_name: None,
+        };
+
+        ty.fields.iter().for_each(|x| assert!(x.name != "request"));
+
+        ty.fields.retain(|x| x.position != "xml");
+        ty.fields.push(rust::StructField {
+            name: o("request"),
+            type_: request.name.clone(),
+            doc: None,
+            camel_name: request.name.clone(),
+            option_type: false,
+            default_value: None,
+            position: o("payload"),
+            http_header: None,
+            http_query: None,
+            xml_name: Some(request.name.clone()),
+            xml_flattened: false,
+        });
+        ty.name = o("SelectObjectContentInput");
+
+        space.insert("SelectObjectContentInput".into(), rust::Type::Struct(ty));
+        space.insert("SelectObjectContentRequest".into(), rust::Type::Struct(request));
+    }
+
     // unify operation input type
     for op in ops.values() {
+        if op.name == "SelectObjectContent" {
+            continue;
+        }
         let input_ty = if op.smithy_input == "Unit" {
             rust::Struct {
                 name: op.input.clone(),

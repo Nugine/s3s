@@ -13785,6 +13785,152 @@ impl fmt::Debug for ScanRange {
     }
 }
 
+/// <p>The container for selecting objects from a content event stream.</p>
+#[derive(Debug)]
+#[non_exhaustive]
+pub enum SelectObjectContentEvent {
+    /// <p>The Continuation Event.</p>
+    Cont(ContinuationEvent),
+    /// <p>The End Event.</p>
+    End(EndEvent),
+    /// <p>The Progress Event.</p>
+    Progress(ProgressEvent),
+    /// <p>The Records Event.</p>
+    Records(RecordsEvent),
+    /// <p>The Stats Event.</p>
+    Stats(StatsEvent),
+}
+
+/// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query
+/// Language (SQL) statement. In the request, along with the SQL expression, you must specify a
+/// data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data
+/// into records. It returns only records that match the specified SQL expression. You must
+/// also specify the data serialization format for the response. For more information, see
+/// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
+pub struct SelectObjectContentInput {
+    /// <p>The S3 bucket.</p>
+    pub bucket: BucketName,
+    /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
+    pub expected_bucket_owner: Option<AccountId>,
+    /// <p>The object key.</p>
+    pub key: ObjectKey,
+    /// <p>The server-side encryption (SSE) algorithm used to encrypt the object. This parameter is needed only when the object was created
+    /// using a checksum algorithm. For more information,
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Protecting data using SSE-C keys</a> in the
+    /// <i>Amazon S3 User Guide</i>.</p>
+    pub sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+    /// <p>The server-side encryption (SSE) customer managed key. This parameter is needed only when the object was created using a checksum algorithm.
+    /// For more information, see
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Protecting data using SSE-C keys</a> in the
+    /// <i>Amazon S3 User Guide</i>.</p>
+    pub sse_customer_key: Option<SSECustomerKey>,
+    /// <p>The MD5 server-side encryption (SSE) customer managed key. This parameter is needed only when the object was created using a checksum
+    /// algorithm. For more information,
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Protecting data using SSE-C keys</a> in the
+    /// <i>Amazon S3 User Guide</i>.</p>
+    pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+    pub request: SelectObjectContentRequest,
+}
+
+impl fmt::Debug for SelectObjectContentInput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("SelectObjectContentInput");
+        d.field("bucket", &self.bucket);
+        if let Some(ref val) = self.expected_bucket_owner {
+            d.field("expected_bucket_owner", val);
+        }
+        d.field("key", &self.key);
+        if let Some(ref val) = self.sse_customer_algorithm {
+            d.field("sse_customer_algorithm", val);
+        }
+        if let Some(ref val) = self.sse_customer_key {
+            d.field("sse_customer_key", val);
+        }
+        if let Some(ref val) = self.sse_customer_key_md5 {
+            d.field("sse_customer_key_md5", val);
+        }
+        d.field("request", &self.request);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Default)]
+pub struct SelectObjectContentOutput {
+    /// <p>The array of results.</p>
+    pub payload: Option<SelectObjectContentEventStream>,
+}
+
+impl fmt::Debug for SelectObjectContentOutput {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("SelectObjectContentOutput");
+        if let Some(ref val) = self.payload {
+            d.field("payload", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+/// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query
+/// Language (SQL) statement. In the request, along with the SQL expression, you must specify a
+/// data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data
+/// into records. It returns only records that match the specified SQL expression. You must
+/// also specify the data serialization format for the response. For more information, see
+/// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
+pub struct SelectObjectContentRequest {
+    /// <p>The expression that is used to query the object.</p>
+    pub expression: Expression,
+    /// <p>The type of the provided expression (for example, SQL).</p>
+    pub expression_type: ExpressionType,
+    /// <p>Describes the format of the data in the object that is being queried.</p>
+    pub input_serialization: InputSerialization,
+    /// <p>Describes the format of the data that you want Amazon S3 to return in response.</p>
+    pub output_serialization: OutputSerialization,
+    /// <p>Specifies if periodic request progress information should be enabled.</p>
+    pub request_progress: Option<RequestProgress>,
+    /// <p>Specifies the byte range of the object to get the records from. A record is processed
+    /// when its first byte is contained by the range. This parameter is optional, but when
+    /// specified, it must not be empty. See RFC 2616, Section 14.35.1 about how to specify the
+    /// start and end of the range.</p>
+    /// <p>
+    /// <code>ScanRange</code>may be used in the following ways:</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <code><scanrange><start>50</start><end>100</end></scanrange></code>
+    /// - process only the records starting between the bytes 50 and 100 (inclusive, counting
+    /// from zero)</p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <code><scanrange><start>50</start></scanrange></code> -
+    /// process only the records starting after the byte 50</p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <code><scanrange><end>50</end></scanrange></code> -
+    /// process only the records within the last 50 bytes of the file.</p>
+    /// </li>
+    /// </ul>
+    pub scan_range: Option<ScanRange>,
+}
+
+impl fmt::Debug for SelectObjectContentRequest {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("SelectObjectContentRequest");
+        d.field("expression", &self.expression);
+        d.field("expression_type", &self.expression_type);
+        d.field("input_serialization", &self.input_serialization);
+        d.field("output_serialization", &self.output_serialization);
+        if let Some(ref val) = self.request_progress {
+            d.field("request_progress", val);
+        }
+        if let Some(ref val) = self.scan_range {
+            d.field("scan_range", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 /// <p>Describes the parameters for Select job types.</p>
 pub struct SelectParameters {
     /// <p>The expression that is used to query the object.</p>

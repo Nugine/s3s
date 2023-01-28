@@ -16,6 +16,10 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     g.lf();
 
     for (name, rust_type) in rust_types {
+        if name.starts_with("SelectObjectContent") {
+            continue; // TODO: SelectObjectContent
+        }
+
         match rust_type {
             rust::Type::Alias(_) => continue,
             rust::Type::Provided(_) => continue,

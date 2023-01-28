@@ -19,6 +19,9 @@ pub use self::content_type::*;
 mod event;
 pub use self::event::Event;
 
+mod event_stream;
+pub use self::event_stream::*;
+
 pub type List<T> = Vec<T>;
 pub type Map<K, V> = std::collections::HashMap<K, V>;
 

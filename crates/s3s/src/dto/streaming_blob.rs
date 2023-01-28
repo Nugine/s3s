@@ -38,7 +38,9 @@ impl StreamingBlob {
 
 impl fmt::Debug for StreamingBlob {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("StreamingBlob").finish_non_exhaustive()
+        f.debug_struct("StreamingBlob")
+            .field("remaining_length", &self.remaining_length())
+            .finish_non_exhaustive()
     }
 }
 
