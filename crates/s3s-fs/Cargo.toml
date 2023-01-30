@@ -43,7 +43,7 @@ uuid = { version = "1.2.2", features = ["v4"] }
 
 [dev-dependencies]
 anyhow = { version = "1.0.68", features = ["backtrace"] }
-aws-config = "0.53.0"
+aws-config = "0.54.1"
 aws-credential-types = { version = "0.53.0", features = ["test-util"] }
 aws-sdk-s3 = "0.23.0"
 once_cell = "1.17.0"
