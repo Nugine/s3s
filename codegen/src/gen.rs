@@ -28,4 +28,10 @@ impl Codegen {
     pub fn ln(&mut self, line: impl AsRef<str>) {
         writeln!(self.writer, "{}", line.as_ref()).unwrap();
     }
+
+    pub fn lines<'a>(&mut self, lines: impl AsRef<[&'a str]>) {
+        for line in lines.as_ref() {
+            self.ln(line);
+        }
+    }
 }

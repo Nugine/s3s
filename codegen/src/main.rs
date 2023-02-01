@@ -14,6 +14,7 @@ mod dto;
 mod error;
 mod headers;
 mod ops;
+mod xml;
 
 mod aws_conv;
 mod aws_proxy;
@@ -57,6 +58,12 @@ fn main() {
         let path = "crates/s3s/src/error/generated.rs";
         let mut gen = Codegen::create_file(path).unwrap();
         error::codegen(&model, &mut gen);
+    }
+
+    {
+        let path = "crates/s3s/src/xml/generated.rs";
+        let mut gen = Codegen::create_file(path).unwrap();
+        xml::codegen(&ops, &rust_types, &mut gen);
     }
 
     {

@@ -1,6 +1,8 @@
 use crate::f;
 use crate::gen::Codegen;
 
+use std::fmt;
+
 use serde_json::Value;
 
 #[derive(Debug, Clone)]
@@ -174,5 +176,13 @@ pub fn codegen_doc(doc: Option<&str>, g: &mut Codegen) {
         }
 
         g.ln(f!("/// {line}"));
+    }
+}
+
+pub fn default_value_literal(v: &Value) -> &dyn fmt::Display {
+    match v {
+        Value::Bool(x) => x,
+        Value::Number(x) => x,
+        _ => unimplemented!(),
     }
 }
