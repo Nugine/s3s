@@ -1,5 +1,5 @@
 #!/bin/bash -e
-F="target/s3.json"
+F="codegen/s3.json"
 if [ ! -f $F ]; then
     ./scripts/download-model.sh
 fi
