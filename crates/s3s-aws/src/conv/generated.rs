@@ -7683,6 +7683,49 @@ impl AwsConversion for s3s::dto::ScanRange {
     }
 }
 
+impl AwsConversion for s3s::dto::SelectObjectContentEvent {
+    type Target = SelectObjectContentEventStream;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(match x {
+            SelectObjectContentEventStream::Cont(v) => Self::Cont(try_from_aws(v)?),
+            SelectObjectContentEventStream::End(v) => Self::End(try_from_aws(v)?),
+            SelectObjectContentEventStream::Progress(v) => Self::Progress(try_from_aws(v)?),
+            SelectObjectContentEventStream::Records(v) => Self::Records(try_from_aws(v)?),
+            SelectObjectContentEventStream::Stats(v) => Self::Stats(try_from_aws(v)?),
+            _ => unimplemented!("unknown variant of SelectObjectContentEventStream: {x:?}"),
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        Ok(match x {
+            Self::Cont(v) => SelectObjectContentEventStream::Cont(try_into_aws(v)?),
+            Self::End(v) => SelectObjectContentEventStream::End(try_into_aws(v)?),
+            Self::Progress(v) => SelectObjectContentEventStream::Progress(try_into_aws(v)?),
+            Self::Records(v) => SelectObjectContentEventStream::Records(try_into_aws(v)?),
+            Self::Stats(v) => SelectObjectContentEventStream::Stats(try_into_aws(v)?),
+            _ => unimplemented!("unknown variant of SelectObjectContentEvent: {x:?}"),
+        })
+    }
+}
+
+impl AwsConversion for s3s::dto::SelectObjectContentOutput {
+    type Target = SelectObjectContentOutput;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            payload: Some(crate::event_stream::from_aws(x.payload)),
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        drop(x);
+        unimplemented!("See https://github.com/Nugine/s3s/issues/5")
+    }
+}
+
 impl AwsConversion for s3s::dto::SelectParameters {
     type Target = SelectParameters;
     type Error = S3Error;

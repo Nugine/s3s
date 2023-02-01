@@ -45,7 +45,7 @@ smallvec = "1.10.0"
 thiserror = "1.0.38"
 time = { version = "0.3.17", features = ["formatting", "parsing", "macros"] }
 tracing = "0.1.37"
-transform-stream = "0.2.0"
+transform-stream = "0.3.0"
 urlencoding = "2.1.2"
 
 [dev-dependencies]

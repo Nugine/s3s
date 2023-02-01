@@ -2022,6 +2022,36 @@ impl S3 for Proxy {
     }
 
     #[tracing::instrument(skip(self, input))]
+    async fn select_object_content(
+        &self,
+        input: s3s::dto::SelectObjectContentInput,
+    ) -> S3Result<s3s::dto::SelectObjectContentOutput> {
+        debug!(?input);
+        let mut b = self.0.select_object_content();
+        b = b.set_bucket(Some(try_into_aws(input.bucket)?));
+        b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
+        b = b.set_key(Some(try_into_aws(input.key)?));
+        b = b.set_sse_customer_algorithm(try_into_aws(input.sse_customer_algorithm)?);
+        b = b.set_sse_customer_key(try_into_aws(input.sse_customer_key)?);
+        b = b.set_sse_customer_key_md5(try_into_aws(input.sse_customer_key_md5)?);
+        b = b.set_expression(Some(try_into_aws(input.request.expression)?));
+        b = b.set_expression_type(Some(try_into_aws(input.request.expression_type)?));
+        b = b.set_input_serialization(Some(try_into_aws(input.request.input_serialization)?));
+        b = b.set_output_serialization(Some(try_into_aws(input.request.output_serialization)?));
+        b = b.set_request_progress(try_into_aws(input.request.request_progress)?);
+        b = b.set_scan_range(try_into_aws(input.request.scan_range)?);
+        let result = b.send().await;
+        match result {
+            Ok(output) => {
+                let output = try_from_aws(output)?;
+                debug!(?output);
+                Ok(output)
+            }
+            Err(e) => Err(wrap_sdk_error!(e)),
+        }
+    }
+
+    #[tracing::instrument(skip(self, input))]
     async fn upload_part(&self, input: s3s::dto::UploadPartInput) -> S3Result<s3s::dto::UploadPartOutput> {
         debug!(?input);
         let mut b = self.0.upload_part();

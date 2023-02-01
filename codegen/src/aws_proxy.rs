@@ -25,10 +25,6 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     g.ln("impl S3 for Proxy {");
 
     for op in ops.values() {
-        if op.name == "SelectObjectContent" {
-            continue; // TODO: SelectObjectContent
-        }
-
         let method_name = op.name.to_snake_case();
         let s3s_input = f!("s3s::dto::{}", op.input);
         let s3s_output = f!("s3s::dto::{}", op.output);
@@ -43,12 +39,27 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         } else {
             g.ln(f!("let mut b = self.0.{method_name}();"));
             let rust::Type::Struct(ty) = &rust_types[op.input.as_str()] else { panic!() };
-            for field in &ty.fields {
-                let s3s_field_name = field.name.as_str();
-                let aws_field_name = match s3s_field_name {
-                    "checksum_crc32c" => "checksum_crc32_c",
-                    "type_" => "type",
-                    s => s,
+
+            let flattened_fields = if ty.name == "SelectObjectContentInput" {
+                let rust::Type::Struct(flattened_ty) = &rust_types["SelectObjectContentRequest"] else { panic!() };
+                flattened_ty.fields.as_slice()
+            } else {
+                &[]
+            };
+
+            for field in ty.fields.iter().chain(flattened_fields) {
+                let s3s_field_name = match ty.name.as_str() {
+                    "SelectObjectContentInput" if field.name == "request" => continue,
+                    "SelectObjectContentInput" if field.position == "xml" => f!("request.{}", field.name),
+                    _ => field.name.clone(),
+                };
+                let aws_field_name = match ty.name.as_str() {
+                    "SelectObjectContentInput" => field.name.as_str(),
+                    _ => match s3s_field_name.as_str() {
+                        "checksum_crc32c" => "checksum_crc32_c",
+                        "type_" => "type",
+                        s => s,
+                    },
                 };
 
                 // // hack

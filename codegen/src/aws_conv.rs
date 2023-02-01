@@ -20,8 +20,10 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     ]);
 
     for (name, rust_type) in rust_types {
-        if name.starts_with("SelectObjectContent") {
-            continue; // TODO: SelectObjectContent
+        match name.as_str() {
+            "SelectObjectContentRequest" => continue,
+            "SelectObjectContentInput" => continue,
+            _ => {}
         }
 
         match rust_type {
@@ -62,7 +64,9 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                         s => s,
                     };
 
-                    if field.type_ == "StreamingBlob" {
+                    if field.type_ == "SelectObjectContentEventStream" {
+                        g.ln(f!("{s3s_field_name}: Some(crate::event_stream::from_aws(x.{aws_field_name})),"));
+                    } else if field.type_ == "StreamingBlob" {
                         g.ln(f!("{s3s_field_name}: Some(try_from_aws(x.{aws_field_name})?),"));
                     } else if field.option_type || field.default_value.is_some() {
                         g.ln(f!("{s3s_field_name}: try_from_aws(x.{aws_field_name})?,"));
@@ -104,6 +108,11 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         }
         g.ln("fn try_into_aws(x: Self) -> S3Result<Self::Target> {");
         match rust_type {
+            rust::Type::Struct(ty) if ty.name == "SelectObjectContentOutput" => {
+                // TODO(blocking): SelectObjectContentOutput::try_into_aws
+                g.ln("drop(x);");
+                g.ln("unimplemented!(\"See https://github.com/Nugine/s3s/issues/5\")");
+            }
             rust::Type::Struct(ty) => {
                 if ty.fields.is_empty() {
                     g.ln("let _ = x;");
@@ -168,6 +177,7 @@ fn aws_ty_name(name: &str) -> &str {
         "ObjectCannedACL" => "ObjectCannedAcl",
         "SSEKMS" => "Ssekms",
         "SSES3" => "Sses3",
+        "SelectObjectContentEvent" => "SelectObjectContentEventStream",
         _ => name,
     }
 }

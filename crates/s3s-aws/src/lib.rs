@@ -5,7 +5,11 @@
     clippy::cargo, //
 )]
 
+#[macro_use]
+mod error;
+
 mod body;
+mod event_stream;
 
 pub mod conv;
 

@@ -149,3 +149,46 @@ impl AwsConversion for s3s::dto::Body {
         Ok(Self::Target::new(x))
     }
 }
+
+impl AwsConversion for s3s::dto::SelectObjectContentInput {
+    type Target = aws_sdk_s3::input::SelectObjectContentInput;
+
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> Result<Self, Self::Error> {
+        Ok(Self {
+            bucket: unwrap_from_aws(x.bucket, "bucket")?,
+            expected_bucket_owner: x.expected_bucket_owner,
+            key: unwrap_from_aws(x.key, "key")?,
+            sse_customer_algorithm: x.sse_customer_algorithm,
+            sse_customer_key: x.sse_customer_key,
+            sse_customer_key_md5: x.sse_customer_key_md5,
+            request: s3s::dto::SelectObjectContentRequest {
+                expression: unwrap_from_aws(x.expression, "expression")?,
+                expression_type: unwrap_from_aws(x.expression_type, "expression_type")?,
+                input_serialization: unwrap_from_aws(x.input_serialization, "input_serialization")?,
+                output_serialization: unwrap_from_aws(x.output_serialization, "output_serialization")?,
+                request_progress: try_from_aws(x.request_progress)?,
+                scan_range: try_from_aws(x.scan_range)?,
+            },
+        })
+    }
+
+    fn try_into_aws(x: Self) -> Result<Self::Target, Self::Error> {
+        aws_sdk_s3::input::SelectObjectContentInput::builder()
+            .set_bucket(Some(x.bucket))
+            .set_expected_bucket_owner(x.expected_bucket_owner)
+            .set_key(Some(x.key))
+            .set_sse_customer_algorithm(x.sse_customer_algorithm)
+            .set_sse_customer_key(x.sse_customer_key)
+            .set_sse_customer_key_md5(x.sse_customer_key_md5)
+            .set_expression(Some(x.request.expression))
+            .set_expression_type(Some(try_into_aws(x.request.expression_type)?))
+            .set_input_serialization(Some(try_into_aws(x.request.input_serialization)?))
+            .set_output_serialization(Some(try_into_aws(x.request.output_serialization)?))
+            .set_request_progress(try_into_aws(x.request.request_progress)?)
+            .set_scan_range(try_into_aws(x.request.scan_range)?)
+            .build()
+            .map_err(S3Error::internal_error)
+    }
+}
