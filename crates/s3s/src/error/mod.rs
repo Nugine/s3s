@@ -193,3 +193,15 @@ impl FromStr for S3ErrorCode {
         Ok(Self::from_bytes(s.as_bytes()).unwrap())
     }
 }
+
+impl S3ErrorCode {
+    pub fn as_str(&self) -> &str {
+        if let Some(s) = self.as_static_str() {
+            return s;
+        }
+        if let Self::Custom(s) = self {
+            return s;
+        }
+        unreachable!()
+    }
+}

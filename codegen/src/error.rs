@@ -159,17 +159,30 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
     g.ln("impl S3ErrorCode {");
 
     {
-        g.ln("#[must_use]");
-        g.ln("pub fn as_str(&self) -> &str {");
-
-        g.ln("match self {");
+        g.ln("const STATIC_CODE_LIST: &'static [&'static str] = &[");
         for err in errors.values() {
-            g.ln(f!("Self::{} => \"{}\",", err.code, err.code));
+            g.ln(f!("\"{}\",", err.code));
         }
-        g.ln("Self::Custom(s) => s,");
-        g.ln("}");
+        g.ln("];");
+        g.lf();
 
+        g.ln("#[inline(always)]");
+        g.ln("#[must_use]");
+        g.ln("fn as_enum_tag(&self) -> usize {");
+        g.ln("match self {");
+        for (idx, err) in errors.values().enumerate() {
+            g.ln(f!("Self::{} => {},", err.code, idx));
+        }
+        g.ln("Self::Custom(_) => usize::MAX,");
         g.ln("}");
+        g.ln("}");
+        g.lf();
+
+        g.lines([
+            "pub(crate) fn as_static_str(&self) -> Option<&'static str> {",
+            "    Self::STATIC_CODE_LIST.get(self.as_enum_tag()).copied()",
+            "}",
+        ]);
         g.lf();
     }
 
