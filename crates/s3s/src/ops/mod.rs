@@ -19,6 +19,7 @@ use std::mem;
 use std::ops::Not;
 
 use bytes::Bytes;
+use bytestring::ByteString;
 use hyper::Method;
 use hyper::StatusCode;
 use mime::Mime;
@@ -98,7 +99,7 @@ fn extract_amz_content_sha256<'a>(hs: &'_ OrderedHeaders<'a>) -> S3Result<Option
     match AmzContentSha256::parse(val) {
         Ok(x) => Ok(Some(x)),
         Err(e) => {
-            let mut err: S3Error = S3ErrorCode::Unknown("XAmzContentSHA256Mismatch".into()).into();
+            let mut err: S3Error = S3ErrorCode::Custom(ByteString::from_static("XAmzContentSHA256Mismatch")).into();
             err.set_message("invalid header: x-amz-content-sha256");
             err.set_source(Box::new(e));
             Err(err)

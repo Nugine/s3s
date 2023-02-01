@@ -1,3 +1,4 @@
+use bytestring::ByteString;
 use hyper::StatusCode;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -486,7 +487,7 @@ pub enum S3ErrorCode {
     ///
     UserKeyMustBeSpecified,
 
-    Unknown(Box<str>),
+    Custom(ByteString),
 }
 
 impl S3ErrorCode {
@@ -573,7 +574,7 @@ impl S3ErrorCode {
             Self::UnexpectedContent => "UnexpectedContent",
             Self::UnresolvableGrantByEmailAddress => "UnresolvableGrantByEmailAddress",
             Self::UserKeyMustBeSpecified => "UserKeyMustBeSpecified",
-            Self::Unknown(s) => s,
+            Self::Custom(s) => s,
         }
     }
 
@@ -660,7 +661,7 @@ impl S3ErrorCode {
             b"UnexpectedContent" => Some(Self::UnexpectedContent),
             b"UnresolvableGrantByEmailAddress" => Some(Self::UnresolvableGrantByEmailAddress),
             b"UserKeyMustBeSpecified" => Some(Self::UserKeyMustBeSpecified),
-            _ => std::str::from_utf8(s).ok().map(|s| Self::Unknown(s.into())),
+            _ => std::str::from_utf8(s).ok().map(|s| Self::Custom(s.into())),
         }
     }
 
@@ -747,7 +748,7 @@ impl S3ErrorCode {
             Self::UnexpectedContent => Some(StatusCode::BAD_REQUEST),
             Self::UnresolvableGrantByEmailAddress => Some(StatusCode::BAD_REQUEST),
             Self::UserKeyMustBeSpecified => Some(StatusCode::BAD_REQUEST),
-            Self::Unknown(_) => None,
+            Self::Custom(_) => None,
         }
     }
 }

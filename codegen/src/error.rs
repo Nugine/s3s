@@ -111,8 +111,11 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
         err.status.push(status);
     }
 
-    g.ln("use hyper::StatusCode;");
-    g.lf();
+    g.lines([
+        "use bytestring::ByteString;", //
+        "use hyper::StatusCode;",      //
+        "",                            //
+    ]);
 
     g.ln("#[derive(Debug, Clone, PartialEq, Eq)]");
     g.ln("#[non_exhaustive]");
@@ -149,7 +152,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
         g.ln(f!("{},", err.code));
         g.lf();
     }
-    g.ln("Unknown(Box<str>),");
+    g.ln("Custom(ByteString),");
     g.ln("}");
     g.lf();
 
@@ -163,7 +166,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
         for err in errors.values() {
             g.ln(f!("Self::{} => \"{}\",", err.code, err.code));
         }
-        g.ln("Self::Unknown(s) => s,");
+        g.ln("Self::Custom(s) => s,");
         g.ln("}");
 
         g.ln("}");
@@ -178,7 +181,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
         for err in errors.values() {
             g.ln(f!("b\"{}\" => Some(Self::{}),", err.code, err.code));
         }
-        g.ln("_ => std::str::from_utf8(s).ok().map(|s| Self::Unknown(s.into()))");
+        g.ln("_ => std::str::from_utf8(s).ok().map(|s| Self::Custom(s.into()))");
         g.ln("}");
 
         g.ln("}");
@@ -220,7 +223,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
             }
             g.ln(f!("Self::{} => None,", err.code));
         }
-        g.ln("Self::Unknown(_) => None,");
+        g.ln("Self::Custom(_) => None,");
         g.ln("}");
 
         g.ln("}");
