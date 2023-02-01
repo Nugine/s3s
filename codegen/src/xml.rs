@@ -62,6 +62,15 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         assert!(payload_count <= 1);
     }
 
+    {
+        let extra = ["Progress", "Stats"];
+        for ty in extra {
+            root_type_names.insert(ty);
+            field_type_names.insert(ty);
+            q.push_back(ty);
+        }
+    }
+
     while let Some(name) = q.pop_front() {
         let rust_type = &rust_types[name];
         match rust_type {
@@ -226,6 +235,15 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
             }
         }
         assert!(payload_count <= 1);
+    }
+
+    {
+        let extra = ["Progress", "Stats"];
+        for ty in extra {
+            root_type_names.insert(ty, None);
+            field_type_names.insert(ty);
+            q.push_back(ty);
+        }
     }
 
     while let Some(name) = q.pop_front() {

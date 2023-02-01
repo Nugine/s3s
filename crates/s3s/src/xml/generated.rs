@@ -1537,6 +1537,15 @@ impl SerializeContent for PolicyStatus {
     }
 }
 
+impl SerializeContent for Progress {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        s.content("BytesProcessed", &self.bytes_processed)?;
+        s.content("BytesReturned", &self.bytes_returned)?;
+        s.content("BytesScanned", &self.bytes_scanned)?;
+        Ok(())
+    }
+}
+
 impl SerializeContent for Protocol {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         self.as_str().serialize_content(s)
@@ -1791,6 +1800,15 @@ impl SerializeContent for SseKmsEncryptedObjects {
 impl SerializeContent for SseKmsEncryptedObjectsStatus {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         self.as_str().serialize_content(s)
+    }
+}
+
+impl SerializeContent for Stats {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        s.content("BytesProcessed", &self.bytes_processed)?;
+        s.content("BytesReturned", &self.bytes_returned)?;
+        s.content("BytesScanned", &self.bytes_scanned)?;
+        Ok(())
     }
 }
 
@@ -2121,6 +2139,12 @@ impl Serialize for PolicyStatus {
     }
 }
 
+impl Serialize for Progress {
+    fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        s.content("Progress", self)
+    }
+}
+
 impl Serialize for PublicAccessBlockConfiguration {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         s.content("PublicAccessBlockConfiguration", self)
@@ -2136,6 +2160,12 @@ impl Serialize for ReplicationConfiguration {
 impl Serialize for ServerSideEncryptionConfiguration {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         s.content("ServerSideEncryptionConfiguration", self)
+    }
+}
+
+impl Serialize for Stats {
+    fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        s.content("Stats", self)
     }
 }
 
@@ -4408,6 +4438,43 @@ impl<'xml> DeserializeContent<'xml> for Permission {
     }
 }
 
+impl<'xml> DeserializeContent<'xml> for Progress {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut bytes_processed: Option<BytesProcessed> = None;
+        let mut bytes_returned: Option<BytesReturned> = None;
+        let mut bytes_scanned: Option<BytesScanned> = None;
+        d.for_each_element(|d, x| match x {
+            b"BytesProcessed" => {
+                if bytes_processed.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                bytes_processed = Some(d.content()?);
+                Ok(())
+            }
+            b"BytesReturned" => {
+                if bytes_returned.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                bytes_returned = Some(d.content()?);
+                Ok(())
+            }
+            b"BytesScanned" => {
+                if bytes_scanned.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                bytes_scanned = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            bytes_processed: bytes_processed.unwrap_or(0),
+            bytes_returned: bytes_returned.unwrap_or(0),
+            bytes_scanned: bytes_scanned.unwrap_or(0),
+        })
+    }
+}
+
 impl<'xml> DeserializeContent<'xml> for Protocol {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         String::deserialize_content(d).map(Self::from)
@@ -5365,6 +5432,43 @@ impl<'xml> DeserializeContent<'xml> for SseKmsEncryptedObjectsStatus {
     }
 }
 
+impl<'xml> DeserializeContent<'xml> for Stats {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut bytes_processed: Option<BytesProcessed> = None;
+        let mut bytes_returned: Option<BytesReturned> = None;
+        let mut bytes_scanned: Option<BytesScanned> = None;
+        d.for_each_element(|d, x| match x {
+            b"BytesProcessed" => {
+                if bytes_processed.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                bytes_processed = Some(d.content()?);
+                Ok(())
+            }
+            b"BytesReturned" => {
+                if bytes_returned.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                bytes_returned = Some(d.content()?);
+                Ok(())
+            }
+            b"BytesScanned" => {
+                if bytes_scanned.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                bytes_scanned = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            bytes_processed: bytes_processed.unwrap_or(0),
+            bytes_returned: bytes_returned.unwrap_or(0),
+            bytes_scanned: bytes_scanned.unwrap_or(0),
+        })
+    }
+}
+
 impl<'xml> DeserializeContent<'xml> for StorageClass {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         String::deserialize_content(d).map(Self::from)
@@ -5794,6 +5898,12 @@ impl<'xml> Deserialize<'xml> for OwnershipControls {
     }
 }
 
+impl<'xml> Deserialize<'xml> for Progress {
+    fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        d.named_element("Progress", |d| d.content())
+    }
+}
+
 impl<'xml> Deserialize<'xml> for PublicAccessBlockConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         d.named_element("PublicAccessBlockConfiguration", |d| d.content())
@@ -5827,6 +5937,12 @@ impl<'xml> Deserialize<'xml> for SelectObjectContentRequest {
 impl<'xml> Deserialize<'xml> for ServerSideEncryptionConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         d.named_element("ServerSideEncryptionConfiguration", |d| d.content())
+    }
+}
+
+impl<'xml> Deserialize<'xml> for Stats {
+    fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        d.named_element("Stats", |d| d.content())
     }
 }
 
