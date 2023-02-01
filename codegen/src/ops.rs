@@ -5,6 +5,7 @@ use crate::xml::{is_xml_output, is_xml_payload};
 use crate::{default, f, headers, o};
 use crate::{dto, rust, smithy};
 
+use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::ops::Not;
 
@@ -115,20 +116,6 @@ fn codegen_http(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
     codegen_header_value(ops, rust_types, g);
 
     for op in ops.values() {
-        if op.name == "SelectObjectContent" {
-            g.ln("#[allow(dead_code)] // TODO");
-            g.ln(f!("pub struct {};", op.name));
-            g.lf();
-
-            g.ln("#[allow(dead_code)] // TODO");
-            g.ln(f!("impl {} {{", op.name));
-            codegen_op_http_de(op, rust_types, g);
-            g.ln("}");
-            g.lf();
-
-            continue; // TODO: SelectObjectContent
-        }
-
         g.ln(f!("pub struct {};", op.name));
         g.lf();
 
@@ -275,7 +262,10 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                             }
                         }
                         "SelectObjectContentEventStream" => {
-                            unimplemented!()
+                            assert!(field.option_type);
+                            g.ln(f!("if let Some(val) = x.{} {{", field.name));
+                            g.ln("http::set_event_stream_body(&mut res, val);");
+                            g.ln("}");
                         }
                         _ => {
                             if field.option_type {
@@ -665,10 +655,6 @@ struct Route<'a> {
 fn collect_routes<'a>(ops: &'a Operations, rust_types: &'a RustTypes) -> HashMap<String, HashMap<PathPattern, Vec<Route<'a>>>> {
     let mut ans: HashMap<String, HashMap<PathPattern, Vec<Route<'_>>>> = default();
     for op in ops.values() {
-        if op.name == "SelectObjectContent" {
-            continue; // TODO: SelectObjectContent
-        }
-
         let pat = PathPattern::parse(&op.http_uri);
         let map = ans.entry(op.http_method.clone()).or_default();
         let vec = map.entry(pat).or_default();
@@ -686,14 +672,25 @@ fn collect_routes<'a>(ops: &'a Operations, rust_types: &'a RustTypes) -> HashMap
     }
     for map in ans.values_mut() {
         for vec in map.values_mut() {
-            vec.sort_by_key(|r| r.op.name.as_str());
-            vec.reverse();
+            vec.sort_by_key(|r| {
+                let has_qt = r.query_tag.is_some();
+                let has_qp = r.query_patterns.is_empty().not();
 
-            vec.sort_by_key(|r| r.required_headers.len());
-            vec.sort_by_key(|r| r.required_query_strings.len());
-            vec.sort_by_key(|r| r.query_patterns.len());
-            vec.sort_by_key(|r| r.query_tag.is_some() as u8);
-            vec.reverse();
+                let priority = match (has_qt, has_qp) {
+                    (true, true) => 1,
+                    (true, false) => 2,
+                    (false, true) => 3,
+                    (false, false) => 4,
+                };
+
+                (
+                    priority,
+                    Reverse(r.query_patterns.len()),
+                    Reverse(r.required_query_strings.len()),
+                    Reverse(r.required_headers.len()),
+                    r.op.name.as_str(),
+                )
+            });
         }
     }
     ans
@@ -780,18 +777,23 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
             match routes[method].get(&pattern) {
                 None => g.ln("Err(super::unknown_operation())"),
                 Some(group) => {
-                    // DEBUG:
-                    // for route in group {
-                    //     println!(
-                    //         "{:<50} qt={:?}, qp={:?}, qs={:?}, hs={:?}",
-                    //         route.op.name,
-                    //         route.query_tag,
-                    //         route.query_patterns,
-                    //         route.required_query_strings,
-                    //         route.required_headers
-                    //     );
-                    //     println!("     {}", route.op.http_uri);
+                    // NOTE: To debug the routing order, uncomment the lines below.
+                    // {
+                    //     println!("{} {:?}", method, pattern);
                     //     println!();
+                    //     for route in group {
+                    //         println!(
+                    //             "{:<80} qt={:<30} qp={:<30}, qs={:?}, hs={:?}",
+                    //             route.op.name,
+                    //             f!("{:?}", route.query_tag.as_deref()),
+                    //             f!("{:?}", route.query_patterns),
+                    //             route.required_query_strings,
+                    //             route.required_headers
+                    //         );
+                    //         println!("{}", route.op.http_uri);
+                    //         println!();
+                    //     }
+                    //     println!("\n\n\n");
                     // }
 
                     assert!(group.is_empty().not());
@@ -815,26 +817,53 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
 
                         g.ln("if let Some(qs) = qs {");
                         for route in group {
-                            if let Some(ref tag) = route.query_tag {
-                                assert!(tag.as_bytes().iter().all(|&x| x == b'-' || x.is_ascii_alphabetic()), "{tag}");
-                                g.ln(f!("if qs.has(\"{tag}\") {{"));
-                                succ(route, g, true);
-                                g.ln("}");
-                            }
-                        }
-                        for route in group {
+                            let has_qt = route.query_tag.is_some();
+                            let has_qp = route.query_patterns.is_empty().not();
+
                             let qp = route.query_patterns.as_slice();
-                            assert!(qp.len() <= 1);
-                            if let Some((ref n, ref v)) = qp.first() {
-                                g.ln(f!("if super::check_query_pattern(qs, \"{n}\",\"{v}\") {{"));
-                                succ(route, g, true);
-                                g.ln("}");
+
+                            if has_qt {
+                                let tag = route.query_tag.as_deref().unwrap();
+                                assert!(tag.as_bytes().iter().all(|&x| x == b'-' || x.is_ascii_alphabetic()), "{tag}");
+                            }
+                            if has_qp {
+                                assert!(qp.len() <= 1);
+                            }
+
+                            match (has_qt, has_qp) {
+                                (true, true) => {
+                                    assert_eq!(route.op.name, "SelectObjectContent");
+
+                                    let tag = route.query_tag.as_deref().unwrap();
+                                    let (n, v) = qp.first().unwrap();
+
+                                    g.ln(f!("if qs.has(\"{tag}\") && super::check_query_pattern(qs, \"{n}\",\"{v}\") {{"));
+                                    succ(route, g, true);
+                                    g.ln("}");
+                                }
+                                (true, false) => {
+                                    let tag = route.query_tag.as_deref().unwrap();
+
+                                    g.ln(f!("if qs.has(\"{tag}\") {{"));
+                                    succ(route, g, true);
+                                    g.ln("}");
+                                }
+                                (false, true) => {
+                                    let (n, v) = qp.first().unwrap();
+                                    g.ln(f!("if super::check_query_pattern(qs, \"{n}\",\"{v}\") {{"));
+                                    succ(route, g, true);
+                                    g.ln("}");
+                                }
+                                (false, false) => {}
                             }
                         }
                         g.ln("}");
 
                         for route in group {
-                            if route.query_tag.is_some() || route.query_patterns.is_empty().not() {
+                            let has_qt = route.query_tag.is_some();
+                            let has_qp = route.query_patterns.is_empty().not();
+
+                            if has_qt || has_qp {
                                 continue;
                             }
 

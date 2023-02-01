@@ -1,6 +1,7 @@
 use super::Body;
 use super::Response;
 
+use crate::dto::SelectObjectContentEventStream;
 use crate::dto::{Metadata, StreamingBlob, Timestamp, TimestampFormat};
 use crate::error::{S3Error, S3Result};
 use crate::http::{HeaderName, HeaderValue};
@@ -102,6 +103,10 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
 
 pub fn set_stream_body(res: &mut Response, stream: StreamingBlob) {
     *res.body_mut() = Body::from(stream);
+}
+
+pub fn set_event_stream_body(res: &mut Response, stream: SelectObjectContentEventStream) {
+    *res.body_mut() = Body::from(stream.into_byte_stream());
 }
 
 pub fn add_opt_metadata(res: &mut Response, metadata: Option<Metadata>) -> S3Result {

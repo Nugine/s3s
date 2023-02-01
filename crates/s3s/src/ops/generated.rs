@@ -4937,10 +4937,8 @@ impl super::Operation for RestoreObject {
     }
 }
 
-#[allow(dead_code)] // TODO
 pub struct SelectObjectContent;
 
-#[allow(dead_code)] // TODO
 impl SelectObjectContent {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<SelectObjectContentInput> {
         let (bucket, key) = http::unwrap_object(req);
@@ -4966,6 +4964,31 @@ impl SelectObjectContent {
             sse_customer_key_md5,
             request,
         })
+    }
+
+    pub fn serialize_http(x: SelectObjectContentOutput) -> S3Result<http::Response> {
+        let mut res = http::Response::default();
+        if let Some(val) = x.payload {
+            http::set_event_stream_body(&mut res, val);
+        }
+        Ok(res)
+    }
+}
+
+#[async_trait::async_trait]
+impl super::Operation for SelectObjectContent {
+    fn name(&self) -> &'static str {
+        "SelectObjectContent"
+    }
+
+    async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let result = s3.select_object_content(input).await;
+        let res = match result {
+            Ok(output) => Self::serialize_http(output)?,
+            Err(err) => super::serialize_error(err)?,
+        };
+        Ok(res)
     }
 }
 
@@ -5478,6 +5501,9 @@ pub fn resolve_route(
             }
             S3Path::Object { .. } => {
                 if let Some(qs) = qs {
+                    if qs.has("select") && super::check_query_pattern(qs, "select-type", "2") {
+                        return Ok((&SelectObjectContent as &'static dyn super::Operation, true));
+                    }
                     if qs.has("uploads") {
                         return Ok((&CreateMultipartUpload as &'static dyn super::Operation, false));
                     }
