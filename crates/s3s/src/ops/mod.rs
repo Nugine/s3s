@@ -10,6 +10,7 @@ use crate::http::{AwsChunkedStream, Body, Multipart};
 use crate::http::{OrderedHeaders, OrderedQs};
 use crate::http::{Request, Response};
 use crate::path::{ParseS3PathError, S3Path};
+use crate::s3_trait::S3;
 use crate::signature_v4;
 use crate::signature_v4::PresignedUrl;
 use crate::stream::wrap;

@@ -14,6 +14,7 @@ mod dto;
 mod error;
 mod headers;
 mod ops;
+mod s3_trait;
 mod xml;
 
 mod aws_conv;
@@ -64,6 +65,12 @@ fn main() {
         let path = "crates/s3s/src/xml/generated.rs";
         let mut gen = Codegen::create_file(path).unwrap();
         xml::codegen(&ops, &rust_types, &mut gen);
+    }
+
+    {
+        let path = "crates/s3s/src/s3_trait.rs";
+        let mut gen = Codegen::create_file(path).unwrap();
+        s3_trait::codegen(&ops, &mut gen);
     }
 
     {

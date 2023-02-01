@@ -1,7 +1,7 @@
 use crate::auth::S3Auth;
 use crate::error::{S3Error, S3Result};
 use crate::http::{Body, Request, Response};
-use crate::ops::S3;
+use crate::s3_trait::S3;
 
 use std::convert::Infallible;
 use std::future::{ready, Ready};

@@ -1,6 +1,6 @@
 use crate::dto::RustTypes;
 use crate::gen::Codegen;
-use crate::rust::{codegen_doc, default_value_literal};
+use crate::rust::default_value_literal;
 use crate::xml::{is_xml_output, is_xml_payload};
 use crate::{default, f, headers, o};
 use crate::{dto, rust, smithy};
@@ -94,40 +94,14 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         "use crate::http;",
         "use crate::error::*;",
         "use crate::path::S3Path;",
+        "use crate::s3_trait::S3;",
         "",
         "use std::borrow::Cow;",
         "",
     ]);
 
-    codegen_async_trait(ops, g);
-
     codegen_http(ops, rust_types, g);
     codegen_router(ops, rust_types, g);
-}
-
-fn codegen_async_trait(ops: &Operations, g: &mut Codegen) {
-    g.ln("/// An async trait which represents the S3 API");
-    g.ln("#[async_trait::async_trait]");
-    g.ln("pub trait S3: Send + Sync + 'static {");
-
-    for op in ops.values() {
-        if op.name == "SelectObjectContent" {
-            continue; // TODO: SelectObjectContent
-        }
-
-        codegen_doc(op.doc.as_deref(), g);
-
-        let method_name = op.name.to_snake_case();
-
-        g.ln(f!("async fn {method_name}(&self, _input: {}) -> S3Result<{}> {{", op.input, op.output));
-
-        g.ln(f!("Err(s3_error!(NotImplemented, \"{} is not implemented yet\"))", op.name));
-        g.ln("}");
-        g.lf();
-    }
-
-    g.ln("}");
-    g.lf();
 }
 
 fn status_code_name(code: u16) -> &'static str {

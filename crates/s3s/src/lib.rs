@@ -16,6 +16,7 @@ mod auth;
 mod header;
 mod http;
 mod ops;
+mod s3_trait;
 mod signature_v4;
 mod xml;
 
@@ -27,7 +28,7 @@ pub mod stream;
 pub use self::auth::*;
 pub use self::error::*;
 pub use self::http::{Body, Request, Response};
-pub use self::ops::S3;
+pub use self::s3_trait::S3;
 
 #[cfg(test)]
 mod tests {
