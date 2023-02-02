@@ -150,7 +150,7 @@ fn deserialize_xml<T>(bytes: &[u8]) -> S3Result<T>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
-    let mut d = xml::Deserializer::new(&bytes);
+    let mut d = xml::Deserializer::new(bytes);
     let ans = T::deserialize(&mut d).map_err(malformed_xml)?;
     d.expect_eof().map_err(malformed_xml)?;
     Ok(ans)
