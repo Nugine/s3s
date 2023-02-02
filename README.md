@@ -41,7 +41,7 @@ The data types, serialization and deserialization are generated from the smithy 
 
 Toolchain
 
-+ Rust 1.66.1 or newer
++ [Rust 1.66.1 or newer](https://rustup.rs/)
 + [just](https://github.com/casey/just)
 
 Get the source code
@@ -56,6 +56,15 @@ cd s3s
 ```bash
 just dev
 ```
+
+#### Run the codegen
+
+```bash
+just download-model
+just codegen
+```
+
+It should change nothing if you are running the latest code.
 
 #### Play the test server
 
@@ -78,11 +87,22 @@ Secret Key: SKEXAMPLES3S
 
 Then you can explore it with your favorite S3 client!
 
-#### Run the codegen
+#### Run E2E tests
+
+Install `s3s-proxy`
 
 ```bash
-just download-model
-just codegen
+just install
 ```
 
-It should change nothing if you are running the latest code.
+Run the combined server and save logs
+
+```bash
+./scripts/s3s-proxy.sh | tee target/s3s-proxy.ansi
+```
+
+Open a new terminal, then run the test suite
+
+```bash
+./scripts/mint.sh
+```
