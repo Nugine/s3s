@@ -280,11 +280,15 @@ impl SerializeContent for CreateMultipartUploadOutput {
 
 impl SerializeContent for DefaultRetention {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("Days", &self.days)?;
+        if self.days != 0 {
+            s.content("Days", &self.days)?;
+        }
         if let Some(ref val) = self.mode {
             s.content("Mode", val)?;
         }
-        s.content("Years", &self.years)?;
+        if self.years != 0 {
+            s.content("Years", &self.years)?;
+        }
         Ok(())
     }
 }

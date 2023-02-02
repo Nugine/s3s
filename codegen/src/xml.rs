@@ -156,7 +156,16 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                         g.ln(f!("s.content(\"{xml_name}\", val)?;"));
                         g.ln("}");
                     } else {
-                        g.ln(f!("s.content(\"{}\", &self.{})?;", xml_name, field.name));
+                        let default_is_zero = field.default_value.as_ref().and_then(|v| v.as_u64()) == Some(0);
+                        let skip_zero = default_is_zero && ty.name == "DefaultRetention"; // ASK: the real condition?
+
+                        if skip_zero {
+                            g.ln(f!("if self.{} != 0 {{", field.name));
+                            g.ln(f!("s.content(\"{}\", &self.{})?;", xml_name, field.name));
+                            g.ln("}");
+                        } else {
+                            g.ln(f!("s.content(\"{}\", &self.{})?;", xml_name, field.name));
+                        }
                     }
                 }
 
