@@ -63,3 +63,4 @@ if __name__ == "__main__":
 
     # TODO: pass more tests
     assert counts["s3cmd"]["fail"] == 0
+    assert counts["aws-sdk-go"]["fail"] == 0

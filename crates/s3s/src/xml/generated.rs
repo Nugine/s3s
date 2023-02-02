@@ -2220,7 +2220,7 @@ impl<'xml> DeserializeContent<'xml> for AccessControlPolicy {
                 if grants.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                grants = Some(d.list_content("member")?);
+                grants = Some(d.list_content("Grant")?);
                 Ok(())
             }
             b"Owner" => {
@@ -3423,7 +3423,7 @@ impl<'xml> DeserializeContent<'xml> for InventoryConfiguration {
                 if optional_fields.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                optional_fields = Some(d.list_content("member")?);
+                optional_fields = Some(d.list_content("Field")?);
                 Ok(())
             }
             b"Schedule" => {
@@ -3890,7 +3890,7 @@ impl<'xml> DeserializeContent<'xml> for LoggingEnabled {
                 if target_grants.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                target_grants = Some(d.list_content("member")?);
+                target_grants = Some(d.list_content("Grant")?);
                 Ok(())
             }
             b"TargetPrefix" => {
@@ -5076,7 +5076,7 @@ impl<'xml> DeserializeContent<'xml> for S3Location {
                 if access_control_list.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                access_control_list = Some(d.list_content("member")?);
+                access_control_list = Some(d.list_content("Grant")?);
                 Ok(())
             }
             b"BucketName" => {
@@ -5125,7 +5125,7 @@ impl<'xml> DeserializeContent<'xml> for S3Location {
                 if user_metadata.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                user_metadata = Some(d.list_content("member")?);
+                user_metadata = Some(d.list_content("MetadataEntry")?);
                 Ok(())
             }
             _ => Err(DeError::UnexpectedTagName),
@@ -5568,7 +5568,7 @@ impl<'xml> DeserializeContent<'xml> for Tagging {
                 if tag_set.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                tag_set = Some(d.list_content("member")?);
+                tag_set = Some(d.list_content("Tag")?);
                 Ok(())
             }
             _ => Err(DeError::UnexpectedTagName),
@@ -5788,7 +5788,7 @@ impl<'xml> DeserializeContent<'xml> for WebsiteConfiguration {
                 if routing_rules.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                routing_rules = Some(d.list_content("member")?);
+                routing_rules = Some(d.list_content("RoutingRule")?);
                 Ok(())
             }
             _ => Err(DeError::UnexpectedTagName),

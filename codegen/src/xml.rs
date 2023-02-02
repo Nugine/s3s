@@ -331,8 +331,10 @@ fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                                 g.ln(f!("let ans: {} = d.content()?;", list_ty.member.type_));
                                 g.ln(f!("{field_name}.get_or_insert_with(List::new).push(ans);"));
                             } else {
+                                let member_xml_name = list_ty.member.xml_name.as_deref().unwrap();
+
                                 g.ln(f!("if {field_name}.is_some() {{ return Err(DeError::DuplicateField); }}"));
-                                g.ln(f!("{field_name} = Some(d.list_content(\"member\")?);"));
+                                g.ln(f!("{field_name} = Some(d.list_content(\"{member_xml_name}\")?);"));
                             }
                         } else if let rust::Type::Timestamp(ts_ty) = field_type {
                             let fmt = ts_ty.format.as_deref().unwrap_or("DateTime");

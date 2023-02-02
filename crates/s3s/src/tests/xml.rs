@@ -23,10 +23,8 @@ where
 /// See <https://github.com/Nugine/s3s/issues/2>
 #[test]
 fn d001() {
-    use crate::dto::CompletedMultipartUpload;
-
     let input = read(concat!(DATA_DIR, "/d001.xml"));
-    let ans = deserialize::<CompletedMultipartUpload>(&input).unwrap();
+    let ans = deserialize::<crate::dto::CompletedMultipartUpload>(&input).unwrap();
 
     let parts = ans.parts.as_deref().unwrap();
     assert_eq!(parts.len(), 3);
@@ -43,13 +41,22 @@ fn d001() {
 
 #[test]
 fn d002() {
-    use crate::dto::SelectObjectContentRequest;
-
     let input = read(concat!(DATA_DIR, "/d002.xml"));
-    let ans = deserialize::<SelectObjectContentRequest>(&input).unwrap();
+    let ans = deserialize::<crate::dto::SelectObjectContentRequest>(&input).unwrap();
 
     {
         let csv = ans.input_serialization.csv.as_ref().unwrap();
         assert_eq!(csv.allow_quoted_record_delimiter, false);
     }
+}
+
+#[test]
+fn d003() {
+    let input = read(concat!(DATA_DIR, "/d003.xml"));
+    let ans = deserialize::<crate::dto::Tagging>(&input).unwrap();
+
+    assert_eq!(ans.tag_set.len(), 1);
+    let tag = &ans.tag_set[0];
+    assert_eq!(tag.key, "Key4");
+    assert_eq!(tag.value, "Value4");
 }
