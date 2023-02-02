@@ -332,6 +332,8 @@ impl<'xml> DeserializeContent<'xml> for bool {
         d.text(|t| match t.as_ref() {
             b"true" => Ok(true),
             b"false" => Ok(false),
+            b"TRUE" => Ok(true),
+            b"FALSE" => Ok(false),
             _ => Err(DeError::InvalidContent),
         })
     }

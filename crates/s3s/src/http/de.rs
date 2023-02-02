@@ -146,6 +146,16 @@ fn malformed_xml(source: xml::DeError) -> S3Error {
     S3Error::with_source(S3ErrorCode::MalformedXML, Box::new(source))
 }
 
+fn deserialize_xml<T>(bytes: &[u8]) -> S3Result<T>
+where
+    T: for<'xml> xml::Deserialize<'xml>,
+{
+    let mut d = xml::Deserializer::new(&bytes);
+    let ans = T::deserialize(&mut d).map_err(malformed_xml)?;
+    d.expect_eof().map_err(malformed_xml)?;
+    Ok(ans)
+}
+
 pub fn take_xml_body<T>(req: &mut Request) -> S3Result<T>
 where
     T: for<'xml> xml::Deserialize<'xml>,
@@ -154,10 +164,11 @@ where
     if bytes.is_empty() {
         return Err(S3ErrorCode::MissingRequestBodyError.into());
     }
-    let mut d = xml::Deserializer::new(&bytes);
-    let ans = T::deserialize(&mut d).map_err(malformed_xml)?;
-    d.expect_eof().map_err(malformed_xml)?;
-    Ok(ans)
+    let result = deserialize_xml(&bytes);
+    if result.is_err() {
+        debug!(?bytes, "malformed xml body");
+    }
+    result
 }
 
 pub fn take_opt_xml_body<T>(req: &mut Request) -> S3Result<Option<T>>
@@ -168,10 +179,11 @@ where
     if bytes.is_empty() {
         return Ok(None);
     }
-    let mut d = xml::Deserializer::new(&bytes);
-    let ans = T::deserialize(&mut d).map_err(malformed_xml)?;
-    d.expect_eof().map_err(malformed_xml)?;
-    Ok(Some(ans))
+    let result = deserialize_xml(&bytes).map(Some);
+    if result.is_err() {
+        debug!(?bytes, "malformed xml body");
+    }
+    result
 }
 
 pub fn take_string_body(req: &mut Request) -> S3Result<String> {
