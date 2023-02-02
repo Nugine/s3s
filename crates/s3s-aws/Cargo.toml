@@ -1,6 +1,6 @@
 [package]
 name = "s3s-aws"
-version = "0.3.0"
+version = "0.3.1-dev"
 edition = "2021"
 description = "S3 service adapter integrated with aws-sdk-s3"
 license = "Apache-2.0"
@@ -18,7 +18,7 @@ aws-smithy-types-convert = { version = "0.54.1", features = ["convert-time"] }
 bytes = "1.3.0"
 futures = { version = "0.3.25", default-features = false, features = ["std"] }
 hyper = "0.14.23"
-s3s = { version = "0.3.0", path = "../s3s" }
+s3s = { version = "0.3.1-dev", path = "../s3s" }
 sync_wrapper = "0.1.2"
 tracing = "0.1.37"
 transform-stream = "0.3.0"
