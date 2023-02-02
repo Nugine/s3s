@@ -4377,11 +4377,19 @@ impl PutObject {
         })
     }
 
-    pub fn deserialize_http_multipart(req: &mut http::Request, mut m: http::Multipart) -> S3Result<PutObjectInput> {
+    pub fn deserialize_http_multipart(req: &mut http::Request, m: http::Multipart) -> S3Result<PutObjectInput> {
         let bucket = http::unwrap_bucket(req);
         let key = http::parse_field_value(&m, "key")?.ok_or_else(|| invalid_request!("missing key"))?;
 
-        let body: Option<StreamingBlob> = m.take_file_stream().map(StreamingBlob::wrap);
+        let vec_stream = req
+            .extensions_mut()
+            .remove::<crate::stream::VecByteStream>()
+            .expect("missing vec stream");
+
+        let content_length = i64::try_from(vec_stream.exact_remaining_length())
+            .map_err(|e| s3_error!(e, InvalidArgument, "content-length overflow"))?;
+
+        let body: Option<StreamingBlob> = Some(StreamingBlob::new(vec_stream));
 
         let acl: Option<ObjectCannedACL> = http::parse_field_value(&m, "x-amz-acl")?;
 
@@ -4405,8 +4413,6 @@ impl PutObject {
         let content_encoding: Option<ContentEncoding> = http::parse_field_value(&m, "content-encoding")?;
 
         let content_language: Option<ContentLanguage> = http::parse_field_value(&m, "content-language")?;
-
-        let content_length: ContentLength = http::parse_field_value(&m, "content-length")?.unwrap_or(0);
 
         let content_md5: Option<ContentMD5> = http::parse_field_value(&m, "content-md5")?;
 

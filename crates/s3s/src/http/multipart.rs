@@ -4,6 +4,7 @@
 //!
 
 use crate::error::StdError;
+use crate::stream::ByteStream;
 use crate::utils::SyncBoxFuture;
 
 use std::fmt::{self, Debug};
@@ -342,12 +343,21 @@ impl FileStream {
     }
 }
 
-#[allow(clippy::missing_trait_methods)]
 impl Stream for FileStream {
     type Item = Result<Bytes, FileStreamError>;
 
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut std::task::Context<'_>) -> std::task::Poll<Option<Self::Item>> {
         Pin::new(&mut self.inner).poll_next(cx)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (0, None)
+    }
+}
+
+impl ByteStream for FileStream {
+    fn remaining_length(&self) -> crate::stream::RemainingLength {
+        crate::stream::RemainingLength::unknown()
     }
 }
 

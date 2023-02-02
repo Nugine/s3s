@@ -1,12 +1,12 @@
 use crate::error::StdError;
 
+use std::collections::VecDeque;
 use std::fmt;
 use std::pin::Pin;
-use std::task::Context;
-use std::task::Poll;
+use std::task::{Context, Poll};
 
 use bytes::Bytes;
-use futures::Stream;
+use futures::{pin_mut, Stream, StreamExt};
 
 pub trait ByteStream: Stream {
     fn remaining_length(&self) -> RemainingLength {
@@ -81,49 +81,112 @@ impl From<http_body::SizeHint> for RemainingLength {
 
 impl fmt::Debug for RemainingLength {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        if let Some(exact) = self.exact() {
+            return write!(f, "{exact}");
+        }
         match self.upper {
-            Some(upper) => write!(f, "({}..{})", self.lower, upper),
+            Some(upper) => write!(f, "({}..={})", self.lower, upper),
             None => write!(f, "({}..)", self.lower),
         }
     }
 }
 
-pin_project_lite::pin_project! {
-    pub(crate) struct StreamWrapper<S> {
-        #[pin]
-        inner: S
-    }
+pub(crate) fn into_dyn<S, E>(s: S) -> DynByteStream
+where
+    S: ByteStream<Item = Result<Bytes, E>> + Send + Sync + Unpin + 'static,
+    E: std::error::Error + Send + Sync + 'static,
+{
+    Box::pin(Wrapper(s))
 }
 
-impl<S, E> Stream for StreamWrapper<S>
+struct Wrapper<S>(S);
+
+impl<S, E> Stream for Wrapper<S>
 where
-    S: Stream<Item = Result<Bytes, E>> + Send + Sync + 'static,
+    S: ByteStream<Item = Result<Bytes, E>> + Send + Sync + Unpin + 'static,
     E: std::error::Error + Send + Sync + 'static,
 {
     type Item = Result<Bytes, StdError>;
 
-    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        let this = self.project();
-        this.inner.poll_next(cx).map_err(|e| Box::new(e) as StdError)
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = Pin::new(&mut self.0);
+        this.poll_next(cx).map_err(|e| Box::new(e) as StdError)
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        self.inner.size_hint()
+        self.0.size_hint()
     }
 }
 
-impl<S> ByteStream for StreamWrapper<S>
+impl<S, E> ByteStream for Wrapper<S>
 where
-    StreamWrapper<S>: Stream<Item = Result<Bytes, StdError>>,
+    S: ByteStream<Item = Result<Bytes, E>> + Send + Sync + Unpin + 'static,
+    E: std::error::Error + Send + Sync + 'static,
 {
     fn remaining_length(&self) -> RemainingLength {
-        RemainingLength::unknown()
+        self.0.remaining_length()
     }
 }
 
-pub(crate) fn wrap<S>(inner: S) -> DynByteStream
+// FIXME: unbounded memory allocation
+pub(crate) async fn aggregate_unlimited<S, E>(stream: S) -> Result<Vec<Bytes>, E>
 where
-    StreamWrapper<S>: ByteStream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+    S: ByteStream<Item = Result<Bytes, E>>,
 {
-    Box::pin(StreamWrapper { inner })
+    let mut vec = Vec::new();
+    pin_mut!(stream);
+    while let Some(result) = stream.next().await {
+        vec.push(result?)
+    }
+    Ok(vec)
+}
+
+pub(crate) struct VecByteStream {
+    queue: VecDeque<Bytes>,
+    remaining_bytes: usize,
+}
+
+impl VecByteStream {
+    pub fn new(v: Vec<Bytes>) -> Self {
+        let total = v
+            .iter()
+            .map(|b| b.len())
+            .try_fold(0, |acc: usize, x| acc.checked_add(x))
+            .expect("length overflow");
+
+        Self {
+            queue: v.into(),
+            remaining_bytes: total,
+        }
+    }
+
+    pub fn exact_remaining_length(&self) -> usize {
+        self.remaining_bytes
+    }
+}
+
+impl Stream for VecByteStream {
+    type Item = Result<Bytes, StdError>;
+
+    fn poll_next(self: Pin<&mut Self>, _: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = Pin::into_inner(self);
+        match this.queue.pop_front() {
+            Some(b) => {
+                this.remaining_bytes -= b.len();
+                Poll::Ready(Some(Ok(b)))
+            }
+            None => Poll::Ready(None),
+        }
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let cnt = self.queue.len();
+        (cnt, Some(cnt))
+    }
+}
+
+impl ByteStream for VecByteStream {
+    fn remaining_length(&self) -> RemainingLength {
+        RemainingLength::new_exact(self.remaining_bytes)
+    }
 }

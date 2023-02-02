@@ -13,7 +13,8 @@ use crate::path::{ParseS3PathError, S3Path};
 use crate::s3_trait::S3;
 use crate::signature_v4;
 use crate::signature_v4::PresignedUrl;
-use crate::stream::wrap;
+use crate::stream::aggregate_unlimited;
+use crate::stream::VecByteStream;
 use crate::utils::is_base64_encoded;
 
 use std::mem;
@@ -212,13 +213,18 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
     }
 
     let (op, needs_full_body) = 'resolve: {
-        if let Some(multipart) = multipart {
+        if let Some(mut multipart) = multipart {
             if req.method() == Method::POST {
                 match s3_path {
                     S3Path::Root => return Err(unknown_operation()),
                     S3Path::Bucket { .. } => {
                         // POST object
+                        debug!(?multipart);
+                        let file_stream = multipart.take_file_stream().expect("missing file stream");
+                        let vec_bytes = aggregate_unlimited(file_stream).await.map_err(S3Error::internal_error)?;
+                        let vec_stream = VecByteStream::new(vec_bytes);
                         req.extensions_mut().insert(multipart);
+                        req.extensions_mut().insert(vec_stream);
                         break 'resolve (&PutObject as &'static dyn Operation, false);
                     }
                     S3Path::Object { .. } => return Err(s3_error!(MethodNotAllowed)),
@@ -439,9 +445,9 @@ impl SignatureContext<'_> {
                 decoded_content_length,
             );
 
-            debug!(len=?stream.remaining_length(), "aws-chunked");
+            debug!(len=?stream.exact_remaining_length(), "aws-chunked");
 
-            *self.body = Body::from(wrap(stream));
+            *self.body = Body::from(stream.into_byte_stream());
             self.body_transformed = true;
         }
 

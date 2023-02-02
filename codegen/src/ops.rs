@@ -494,20 +494,21 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes, g: &mut 
     assert_eq!(op.name, "PutObject");
 
     g.ln(f!(
-        "pub fn deserialize_http_multipart(req: &mut http::Request, mut m: http::Multipart) -> S3Result<{}> {{",
+        "pub fn deserialize_http_multipart(req: &mut http::Request, m: http::Multipart) -> S3Result<{}> {{",
         op.input
     ));
 
-    {
-        g.ln("let bucket = http::unwrap_bucket(req);");
-        g.ln("let key = http::parse_field_value(&m, \"key\")?.ok_or_else(|| invalid_request!(\"missing key\"))?;");
-        g.lf();
-    }
-
-    {
-        g.ln("let body: Option<StreamingBlob> = m.take_file_stream().map(StreamingBlob::wrap);");
-        g.lf();
-    }
+    g.lines([
+        "let bucket = http::unwrap_bucket(req);",
+        "let key = http::parse_field_value(&m, \"key\")?.ok_or_else(|| invalid_request!(\"missing key\"))?;",
+        "",
+        "let vec_stream = req.extensions_mut().remove::<crate::stream::VecByteStream>().expect(\"missing vec stream\");",
+        "",
+        "let content_length = i64::try_from(vec_stream.exact_remaining_length()).map_err(|e|s3_error!(e, InvalidArgument, \"content-length overflow\"))?;",
+        "",
+        "let body: Option<StreamingBlob> = Some(StreamingBlob::new(vec_stream));",
+        "",
+    ]);
 
     let rust::Type::Struct(ty) = &rust_types[op.input.as_str()] else { panic!() };
 
@@ -518,6 +519,10 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes, g: &mut 
                 let header = field.http_header.as_deref().unwrap();
                 assert!(header.as_bytes().iter().all(|&x| x == b'-' || x.is_ascii_alphanumeric()));
                 let header = header.to_ascii_lowercase();
+
+                if header == "content-length" {
+                    continue;
+                }
 
                 let field_type = &rust_types[field.type_.as_str()];
 

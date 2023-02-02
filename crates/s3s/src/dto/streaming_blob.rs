@@ -68,6 +68,12 @@ impl From<StreamingBlob> for DynByteStream {
     }
 }
 
+impl From<DynByteStream> for StreamingBlob {
+    fn from(value: DynByteStream) -> Self {
+        Self { inner: value }
+    }
+}
+
 impl From<StreamingBlob> for Body {
     fn from(value: StreamingBlob) -> Self {
         Body::from(value.into_inner())
@@ -78,4 +84,44 @@ impl From<Body> for StreamingBlob {
     fn from(value: Body) -> Self {
         Self::new(value)
     }
+}
+
+pin_project_lite::pin_project! {
+    pub(crate) struct StreamWrapper<S> {
+        #[pin]
+        inner: S
+    }
+}
+
+impl<S, E> Stream for StreamWrapper<S>
+where
+    S: Stream<Item = Result<Bytes, E>> + Send + Sync + 'static,
+    E: std::error::Error + Send + Sync + 'static,
+{
+    type Item = Result<Bytes, StdError>;
+
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let this = self.project();
+        this.inner.poll_next(cx).map_err(|e| Box::new(e) as StdError)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.inner.size_hint()
+    }
+}
+
+impl<S> ByteStream for StreamWrapper<S>
+where
+    StreamWrapper<S>: Stream<Item = Result<Bytes, StdError>>,
+{
+    fn remaining_length(&self) -> RemainingLength {
+        RemainingLength::unknown()
+    }
+}
+
+fn wrap<S>(inner: S) -> DynByteStream
+where
+    StreamWrapper<S>: ByteStream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+{
+    Box::pin(StreamWrapper { inner })
 }

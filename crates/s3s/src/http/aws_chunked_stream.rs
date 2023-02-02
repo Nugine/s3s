@@ -3,7 +3,7 @@
 use crate::error::StdError;
 use crate::header::AmzDate;
 use crate::signature_v4;
-use crate::stream::{ByteStream, RemainingLength};
+use crate::stream::{ByteStream, DynByteStream, RemainingLength};
 use crate::utils::SyncBoxFuture;
 
 use std::convert::TryInto;
@@ -280,10 +280,6 @@ impl AwsChunkedStream {
         Some(Ok((bytes_buffer, remaining_bytes)))
     }
 
-    pub fn remaining_length(&self) -> usize {
-        self.remaining_length
-    }
-
     fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Result<Bytes, AwsChunkedStreamError>>> {
         let ans = Pin::new(&mut self.inner).poll_next(cx);
         if let Poll::Ready(Some(Ok(ref bytes))) = ans {
@@ -291,20 +287,31 @@ impl AwsChunkedStream {
         }
         ans
     }
+
+    pub fn exact_remaining_length(&self) -> usize {
+        self.remaining_length
+    }
+
+    pub fn into_byte_stream(self) -> DynByteStream {
+        crate::stream::into_dyn(self)
+    }
 }
 
-#[allow(clippy::missing_trait_methods)]
 impl Stream for AwsChunkedStream {
     type Item = Result<Bytes, AwsChunkedStreamError>;
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
         self.poll(cx)
     }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (0, None)
+    }
 }
 
 impl ByteStream for AwsChunkedStream {
     fn remaining_length(&self) -> RemainingLength {
-        RemainingLength::new_exact(self.remaining_length())
+        RemainingLength::new_exact(self.remaining_length)
     }
 }
 
