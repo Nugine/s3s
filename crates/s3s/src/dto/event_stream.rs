@@ -67,7 +67,13 @@ impl Stream for Wrapper {
         let item = ready!(Pin::new(&mut self.0).poll_next(cx));
         debug!(?item, "SelectObjectContentEventStream");
         match item {
-            Some(ev) => Poll::Ready(Some(event_into_bytes(ev).map_err(|e| Box::new(e) as StdError))),
+            Some(ev) => {
+                let result = event_into_bytes(ev);
+                if let Err(ref err) = result {
+                    debug!("SelectObjectContentEventStream: Error: {}", err)
+                }
+                Poll::Ready(Some(result.map_err(|e| Box::new(e) as StdError)))
+            }
             None => Poll::Ready(None),
         }
     }
@@ -117,9 +123,11 @@ impl Message {
                 Some(acc)
             });
 
+            let payload_len = self.payload.as_ref().map_or(0, |p| p.len());
+
             let total_len = headers_len
                 .and_then(|acc| acc.checked_add(4 + 4 + 4 + 4))
-                .and_then(|acc| self.payload.as_ref().and_then(|payload| acc.checked_add(payload.len())));
+                .and_then(|acc| acc.checked_add(payload_len));
 
             total_byte_length = u32::try_from(total_len.ok_or(SerError::LengthOverflow)?)?;
             headers_byte_length = u32::try_from(headers_len.ok_or(SerError::LengthOverflow)?)?;
