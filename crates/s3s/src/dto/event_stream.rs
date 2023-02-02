@@ -64,7 +64,9 @@ impl Stream for Wrapper {
     type Item = Result<Bytes, StdError>;
 
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        match ready!(Pin::new(&mut self.0).poll_next(cx)) {
+        let item = ready!(Pin::new(&mut self.0).poll_next(cx));
+        debug!(?item, "SelectObjectContentEventStream");
+        match item {
             Some(ev) => Poll::Ready(Some(event_into_bytes(ev).map_err(|e| Box::new(e) as StdError))),
             None => Poll::Ready(None),
         }

@@ -107,6 +107,8 @@ pub fn set_stream_body(res: &mut Response, stream: StreamingBlob) {
 
 pub fn set_event_stream_body(res: &mut Response, stream: SelectObjectContentEventStream) {
     *res.body_mut() = Body::from(stream.into_byte_stream());
+    res.headers_mut()
+        .insert(hyper::header::TRANSFER_ENCODING, HeaderValue::from_static("chunked"));
 }
 
 pub fn add_opt_metadata(res: &mut Response, metadata: Option<Metadata>) -> S3Result {

@@ -11,7 +11,8 @@ pub fn from_aws(src: AwsSelectObjectContentEventStream) -> s3s::dto::SelectObjec
     s3s::dto::SelectObjectContentEventStream::new(AsyncStream::new(|mut y| async move {
         loop {
             let recv = SyncFuture::new(src.get_mut().recv());
-            match recv.await {
+            let ans = recv.await;
+            match ans {
                 Ok(Some(ev)) => y.yield_(crate::conv::try_from_aws(ev)).await,
                 Ok(None) => break,
                 Err(err) => y.yield_err(wrap_sdk_error!(err)).await,
