@@ -3,7 +3,7 @@
 //! A path in the S3 storage.
 //!
 //! + [Request styles](https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAPI.html#virtual-hosted-path-style-requests)
-//! + [Bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html#bucketnamingrules)
+//! + [Bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
 
 use std::net::IpAddr;
 
@@ -42,7 +42,7 @@ pub enum ParseS3PathError {
     KeyTooLong,
 }
 
-/// See [bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html#bucketnamingrules)
+/// See [bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
 #[must_use]
 pub fn check_bucket_name(name: &str) -> bool {
     if !(3_usize..64).contains(&name.len()) {
@@ -62,6 +62,10 @@ pub fn check_bucket_name(name: &str) -> bool {
     }
 
     if name.as_bytes().last().map(|&b| b.is_ascii_lowercase() || b.is_ascii_digit()) != Some(true) {
+        return false;
+    }
+
+    if name.contains("..") {
         return false;
     }
 
@@ -154,6 +158,25 @@ pub fn parse_virtual_hosted_style<'a>(base_domain: &str, host: &'a str, uri_path
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn bucket_naming_rules() {
+        let cases = [
+            ("docexamplebucket1", true),
+            ("log-delivery-march-2020", true),
+            ("my-hosted-content", true),
+            ("docexamplewebsite.com", true),
+            ("www.docexamplewebsite.com", true),
+            ("my.example.s3.bucket", true),
+            ("doc_example_bucket", false),
+            ("DocExampleBucket", false),
+            ("doc-example-bucket-", false),
+        ];
+
+        for (input, expected) in cases {
+            assert_eq!(check_bucket_name(input), expected);
+        }
+    }
 
     fn bucket(bucket: &str) -> S3Path {
         S3Path::Bucket { bucket: bucket.into() }
