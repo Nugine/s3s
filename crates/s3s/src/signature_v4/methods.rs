@@ -93,7 +93,7 @@ fn uri_encode_string(input: &str, encode_slash: bool) -> String {
 
 /// is skipped header
 fn is_skipped_header(header: &str) -> bool {
-    ["authorization", "user-agent"].contains(&header)
+    header == "authorization"
 }
 
 /// is skipped query string
