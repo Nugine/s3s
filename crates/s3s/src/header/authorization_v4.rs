@@ -84,7 +84,7 @@ impl<'a> CredentialV4<'a> {
         let mut slash_tail1 = terminated(take_till1(|c| c == '/'), take(1_usize));
         let mut slash_tail0 = terminated(take_till(|c| c == '/'), take(1_usize));
 
-        parse_and_bind!(mut input => slash_tail1 => access_key_id);
+        parse_and_bind!(mut input => slash_tail0 => access_key_id);
         parse_and_bind!(mut input => slash_tail1 => date);
         parse_and_bind!(date => CredentialV4::verify_date => _);
         parse_and_bind!(mut input => slash_tail0 => aws_region);
@@ -225,7 +225,7 @@ mod tests {
     }
 
     #[test]
-    fn regression() {
+    fn special_20200921() {
         let auth = concat!(
             "AWS4-HMAC-SHA256 ",
             "Credential=AKIAIOSFODNN7EXAMPLE/20200921/us-east-1/s3/aws4_request,",
@@ -245,5 +245,24 @@ mod tests {
             &["host", "x-amz-content-sha256", "x-amz-date", "x-amz-decoded-content-length"]
         );
         assert_eq!(ans.signature, "7a7f7778618cadc05f112b44cca218e001a0a020c5c512d8aa2bca2afb713fad");
+    }
+
+    #[test]
+    fn special_20230204() {
+        let auth = concat!(
+            "AWS4-HMAC-SHA256 ",
+            "Credential=/20230204/us-east-1/s3/aws4_request, ",
+            "SignedHeaders=host;x-amz-content-sha256;x-amz-date;x-amz-user-agent, ",
+            "Signature=d2ff90c5a29855fd7c56251aa4c02c49a1bc258a8cc9c191ba3cfc037c5dab80"
+        );
+        let ans = AuthorizationV4::parse(auth).unwrap();
+
+        assert_eq!(ans.algorithm, "AWS4-HMAC-SHA256");
+        assert_eq!(ans.credential.access_key_id, "");
+        assert_eq!(ans.credential.date, "20230204");
+        assert_eq!(ans.credential.aws_region, "us-east-1");
+        assert_eq!(ans.credential.aws_service, "s3");
+        assert_eq!(ans.signed_headers, &["host", "x-amz-content-sha256", "x-amz-date", "x-amz-user-agent"]);
+        assert_eq!(ans.signature, "d2ff90c5a29855fd7c56251aa4c02c49a1bc258a8cc9c191ba3cfc037c5dab80");
     }
 }
