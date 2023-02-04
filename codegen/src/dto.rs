@@ -217,6 +217,17 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
         }
     }
 
+    // patch LifecycleExpiration
+    {
+        let Some(rust::Type::Struct(ty)) = space.get_mut("LifecycleExpiration") else { panic!() };
+        for field_name in ["days", "expired_object_delete_marker"] {
+            let field = ty.fields.iter_mut().find(|x| x.name == field_name).unwrap();
+            field.default_value = None;
+            field.option_type = true;
+        }
+    }
+
+    // patch SelectObjectContent input
     {
         let Some(rust::Type::Struct(mut ty)) = space.remove("SelectObjectContentRequest") else { panic!() };
         let request = rust::Struct {

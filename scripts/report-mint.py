@@ -73,7 +73,7 @@ if __name__ == "__main__":
     assert counts["awscli"]["pass"] >= 10
     assert counts["minio-dotnet"]["pass"] >= 1
     assert counts["minio-go"]["pass"] >= 1
-    assert counts["minio-java"]["pass"] >= 15
+    assert counts["minio-java"]["pass"] >= 17
     assert counts["versioning"]["pass"] >= 4
 
     # assert counts["minio-js"]["pass"] >= 0

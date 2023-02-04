@@ -863,8 +863,12 @@ impl SerializeContent for LifecycleExpiration {
         if let Some(ref val) = self.date {
             s.timestamp("Date", val, TimestampFormat::DateTime)?;
         }
-        s.content("Days", &self.days)?;
-        s.content("ExpiredObjectDeleteMarker", &self.expired_object_delete_marker)?;
+        if let Some(ref val) = self.days {
+            s.content("Days", val)?;
+        }
+        if let Some(ref val) = self.expired_object_delete_marker {
+            s.content("ExpiredObjectDeleteMarker", val)?;
+        }
         Ok(())
     }
 }
@@ -3723,8 +3727,8 @@ impl<'xml> DeserializeContent<'xml> for LifecycleExpiration {
         })?;
         Ok(Self {
             date,
-            days: days.unwrap_or(0),
-            expired_object_delete_marker: expired_object_delete_marker.unwrap_or(false),
+            days,
+            expired_object_delete_marker,
         })
     }
 }

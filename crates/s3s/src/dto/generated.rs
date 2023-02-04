@@ -8252,11 +8252,11 @@ pub struct LifecycleExpiration {
     pub date: Option<Date>,
     /// <p>Indicates the lifetime, in days, of the objects that are subject to the rule. The value
     /// must be a non-zero positive integer.</p>
-    pub days: Days,
+    pub days: Option<Days>,
     /// <p>Indicates whether Amazon S3 will remove a delete marker with no noncurrent versions. If set
     /// to true, the delete marker will be expired; if set to false the policy takes no action.
     /// This cannot be specified with Days or Date in a Lifecycle Expiration Policy.</p>
-    pub expired_object_delete_marker: ExpiredObjectDeleteMarker,
+    pub expired_object_delete_marker: Option<ExpiredObjectDeleteMarker>,
 }
 
 impl fmt::Debug for LifecycleExpiration {
@@ -8265,8 +8265,12 @@ impl fmt::Debug for LifecycleExpiration {
         if let Some(ref val) = self.date {
             d.field("date", val);
         }
-        d.field("days", &self.days);
-        d.field("expired_object_delete_marker", &self.expired_object_delete_marker);
+        if let Some(ref val) = self.days {
+            d.field("days", val);
+        }
+        if let Some(ref val) = self.expired_object_delete_marker {
+            d.field("expired_object_delete_marker", val);
+        }
         d.finish_non_exhaustive()
     }
 }

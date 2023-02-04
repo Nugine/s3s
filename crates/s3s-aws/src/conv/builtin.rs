@@ -192,3 +192,31 @@ impl AwsConversion for s3s::dto::SelectObjectContentInput {
             .map_err(S3Error::internal_error)
     }
 }
+
+impl AwsConversion for s3s::dto::LifecycleExpiration {
+    type Target = aws_sdk_s3::model::LifecycleExpiration;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            date: try_from_aws(x.date)?,
+            days: ignore_default(x.days, 0),
+            expired_object_delete_marker: ignore_default(x.expired_object_delete_marker, false),
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_date(try_into_aws(x.date)?);
+        y = y.set_days(x.days);
+        y = y.set_expired_object_delete_marker(x.expired_object_delete_marker);
+        Ok(y.build())
+    }
+}
+
+fn ignore_default<T: Eq + Copy>(val: T, default: T) -> Option<T> {
+    if val == default {
+        return None;
+    }
+    Some(val)
+}

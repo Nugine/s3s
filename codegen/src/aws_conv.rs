@@ -23,6 +23,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         match name.as_str() {
             "SelectObjectContentRequest" => continue,
             "SelectObjectContentInput" => continue,
+            "LifecycleExpiration" => continue,
             _ => {}
         }
 

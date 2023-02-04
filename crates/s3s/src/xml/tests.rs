@@ -137,12 +137,12 @@ fn d004() {
 fn s001() {
     let val = crate::dto::LifecycleExpiration {
         date: None,
-        days: 365,
-        expired_object_delete_marker: false,
+        days: Some(365),
+        expired_object_delete_marker: None,
     };
 
     let ans = serialize_content(&val).unwrap();
-    let expected = "<Days>365</Days><ExpiredObjectDeleteMarker>false</ExpiredObjectDeleteMarker>";
+    let expected = "<Days>365</Days>";
 
     assert_eq!(ans, expected);
 }
