@@ -1,5 +1,7 @@
 //! Ordered query strings
 
+use crate::utils::stable_sort_by_first;
+
 /// Immutable query string container
 #[derive(Debug, Clone)]
 pub struct OrderedQs {
@@ -22,7 +24,7 @@ impl OrderedQs {
     #[cfg(test)]
     #[must_use]
     pub fn from_vec_unchecked(mut v: Vec<(String, String)>) -> Self {
-        v.sort();
+        stable_sort_by_first(&mut v);
         Self { qs: v }
     }
 
@@ -33,7 +35,7 @@ impl OrderedQs {
     pub fn parse(query: &str) -> Result<Self, ParseOrderedQsError> {
         let result = serde_urlencoded::from_str::<Vec<(String, String)>>(query);
         let mut v = result.map_err(|e| ParseOrderedQsError { inner: e })?;
-        v.sort();
+        stable_sort_by_first(&mut v);
         Ok(Self { qs: v })
     }
 

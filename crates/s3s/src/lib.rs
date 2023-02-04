@@ -2,8 +2,11 @@
 #![forbid(unsafe_code)]
 #![deny(
     clippy::all, //
-    clippy::must_use_candidate, //
     clippy::cargo, //
+    clippy::must_use_candidate, //
+)]
+#![warn(
+    clippy::dbg_macro, //
 )]
 #![allow(
     clippy::multiple_crate_versions, // FIXME(blocking): waiting for https://github.com/tokio-rs/tokio/pull/5386

@@ -92,3 +92,7 @@ pub fn is_base64_encoded(bytes: &[u8]) -> bool {
 
 /// `Pin<Box<dyn Future<Output = T> + Send + Sync + 'a>>`
 pub type SyncBoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + Sync + 'a>>;
+
+pub fn stable_sort_by_first(v: &mut [(String, String)]) {
+    v.sort_by(|lhs, rhs| lhs.0.cmp(&rhs.0));
+}

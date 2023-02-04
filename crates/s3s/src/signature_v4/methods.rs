@@ -3,6 +3,7 @@
 use crate::header::AmzDate;
 use crate::http::OrderedHeaders;
 use crate::utils::from_ascii;
+use crate::utils::stable_sort_by_first;
 
 use hex_simd::{AsOut, AsciiCase};
 use hmac::{Hmac, Mac};
@@ -122,8 +123,8 @@ pub enum Payload<'a> {
 pub fn create_canonical_request(
     method: &Method,
     uri_path: &str,
-    query_strings: &[(impl AsRef<str>, impl AsRef<str>)],
-    headers: &OrderedHeaders<'_>,
+    decoded_query_strings: &[(impl AsRef<str>, impl AsRef<str>)],
+    signed_headers: &OrderedHeaders<'_>,
     payload: Payload<'_>,
 ) -> String {
     let mut ans = String::with_capacity(256);
@@ -144,12 +145,12 @@ pub fn create_canonical_request(
         // <CanonicalQueryString>\n
         let encoded_query_strings = {
             let mut qs = <SmallVec<[(String, String); 16]>>::new();
-            for (n, v) in query_strings {
+            for (n, v) in decoded_query_strings {
                 let name = uri_encode_string(n.as_ref(), true);
                 let value = uri_encode_string(v.as_ref(), true);
                 qs.push((name, value));
             }
-            qs.sort();
+            stable_sort_by_first(&mut qs);
             qs
         };
 
@@ -176,7 +177,7 @@ pub fn create_canonical_request(
 
         // FIXME: check HOST, Content-Type, x-amz-security-token, x-amz-content-sha256
 
-        for &(name, value) in headers.as_ref().iter() {
+        for &(name, value) in signed_headers.as_ref().iter() {
             if is_skipped_header(name) {
                 continue;
             }
@@ -191,7 +192,7 @@ pub fn create_canonical_request(
     {
         // <SignedHeaders>\n
         let mut first_flag = true;
-        for &(name, _) in headers.as_ref().iter() {
+        for &(name, _) in signed_headers.as_ref().iter() {
             if is_skipped_header(name) {
                 continue;
             }
@@ -318,8 +319,8 @@ pub fn calculate_signature(string_to_sign: &str, secret_key: &str, amz_date: &Am
 pub fn create_presigned_canonical_request(
     method: &Method,
     uri_path: &str,
-    query_strings: &[(impl AsRef<str>, impl AsRef<str>)],
-    headers: &OrderedHeaders<'_>,
+    decoded_query_strings: &[(impl AsRef<str>, impl AsRef<str>)],
+    signed_headers: &OrderedHeaders<'_>,
 ) -> String {
     let mut ans = String::with_capacity(256);
     {
@@ -336,7 +337,7 @@ pub fn create_presigned_canonical_request(
         // <CanonicalQueryString>\n
         let encoded_query_strings = {
             let mut qs = <SmallVec<[(String, String); 16]>>::new();
-            for (n, v) in query_strings {
+            for (n, v) in decoded_query_strings {
                 if is_skipped_query_string(n.as_ref()) {
                     continue;
                 }
@@ -344,7 +345,7 @@ pub fn create_presigned_canonical_request(
                 let value = uri_encode_string(v.as_ref(), true);
                 qs.push((name, value));
             }
-            qs.sort();
+            stable_sort_by_first(&mut qs);
             qs
         };
 
@@ -368,9 +369,7 @@ pub fn create_presigned_canonical_request(
     {
         // <CanonicalHeaders>\n
 
-        // FIXME: check HOST, Content-Type, x-amz-security-token, x-amz-content-sha256
-
-        for &(name, value) in headers.as_ref().iter() {
+        for &(name, value) in signed_headers.as_ref().iter() {
             if is_skipped_header(name) {
                 continue;
             }
@@ -384,7 +383,7 @@ pub fn create_presigned_canonical_request(
     {
         // <SignedHeaders>\n
         let mut first_flag = true;
-        for &(name, _) in headers.as_ref().iter() {
+        for &(name, _) in signed_headers.as_ref().iter() {
             if is_skipped_header(name) {
                 continue;
             }
@@ -804,5 +803,53 @@ mod tests {
         let signature = calculate_signature(&string_to_sign, secret_access_key, &info.amz_date, info.credential.aws_region);
         assert_eq!(signature, "aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404");
         assert_eq!(signature, info.signature);
+    }
+
+    #[test]
+    fn special_20230204() {
+        use hyper::header::HeaderName;
+        use hyper::header::HeaderValue;
+
+        let mut req = hyper::Request::<hyper::body::Bytes>::default();
+
+        *req.method_mut() = Method::GET;
+        *req.uri_mut() = hyper::Uri::from_static("http://localhost:8014/minio-java-test-1gqr1v4?prefix=prefix&suffix=suffix&events=s3%3AObjectCreated%3A%2A&events=s3%3AObjectAccessed%3A%2A");
+
+        let x_amz_date = "20230204T155111Z";
+        let headers = [
+            ("content-md5", "1B2M2Y8AsgTpgAmY7PhCfg=="),
+            ("host", "localhost:8014"),
+            ("x-amz-content-sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
+            ("x-amz-date", x_amz_date),
+        ];
+        for (name, value) in headers.iter() {
+            req.headers_mut()
+                .insert(HeaderName::from_static(name), HeaderValue::from_static(value));
+        }
+
+        let signed_header_names = &["content-md5", "host", "x-amz-content-sha256", "x-amz-date"];
+
+        let payload = Payload::Empty;
+        let date = AmzDate::parse(x_amz_date).unwrap();
+        let region = "us-east-1";
+
+        let secret_access_key = "minioadmin";
+
+        {
+            let uri_path = req.uri().path();
+            let qs = req.uri().query().map(|q| OrderedQs::parse(q).unwrap());
+            let query_strings: &[_] = qs.as_ref().map_or(&[], |x| x.as_ref());
+
+            let signed_headers = OrderedHeaders::from_headers(req.headers())
+                .unwrap()
+                .find_multiple(signed_header_names);
+
+            let canonical_request = create_canonical_request(req.method(), uri_path, query_strings, &signed_headers, payload);
+
+            let string_to_sign = create_string_to_sign(&canonical_request, &date, region);
+
+            let signature = calculate_signature(&string_to_sign, secret_access_key, &date, region);
+            assert_eq!(signature, "96ad058ca27352e0fc2bd4efd8973792077570667bdaf749655f42e204bc649c");
+        }
     }
 }
