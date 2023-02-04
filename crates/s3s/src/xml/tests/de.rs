@@ -1,10 +1,8 @@
-// TODO: auto-generated tests
-
 use crate::xml;
 
 use const_str::concat;
 
-const DATA_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/src/tests/xml");
+const DATA_DIR: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/src/xml/tests");
 
 fn read(path: &str) -> Vec<u8> {
     std::fs::read(path).unwrap()

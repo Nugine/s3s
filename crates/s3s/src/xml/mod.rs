@@ -5,3 +5,8 @@ mod ser;
 pub use self::ser::*;
 
 mod generated;
+
+#[cfg(test)]
+mod tests {
+    mod de;
+}
