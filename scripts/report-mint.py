@@ -64,6 +64,7 @@ if __name__ == "__main__":
     assert counts["aws-sdk-go"]["fail"] == 0
     assert counts["aws-sdk-ruby"]["fail"] == 0
     assert counts["mc"]["fail"] == 0
+    assert counts["minio-py"]["fail"] == 0
     assert counts["s3cmd"]["fail"] == 0
     assert counts["s3select"]["fail"] == 0
 
@@ -73,7 +74,6 @@ if __name__ == "__main__":
     assert counts["minio-dotnet"]["pass"] >= 1
     assert counts["minio-go"]["pass"] >= 1
     assert counts["minio-java"]["pass"] >= 8
-    assert counts["minio-py"]["pass"] >= 13
     assert counts["versioning"]["pass"] >= 4
 
     # assert counts["minio-js"]["pass"] >= 0

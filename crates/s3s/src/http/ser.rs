@@ -87,6 +87,10 @@ impl TryIntoHeaderValue for String {
     }
 }
 
+/// See <https://github.com/hyperium/mime/issues/144>
+#[allow(clippy::declare_interior_mutable_const)]
+const APPLICATION_XML: HeaderValue = HeaderValue::from_static("application/xml");
+
 pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result {
     let mut buf = Vec::with_capacity(256);
     {
@@ -96,8 +100,7 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
             .map_err(S3Error::internal_error)?;
     }
     *res.body_mut() = Body::from(buf);
-    res.headers_mut()
-        .insert(hyper::header::CONTENT_TYPE, HeaderValue::from_static(mime::TEXT_XML.as_ref()));
+    res.headers_mut().insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
     Ok(())
 }
 
