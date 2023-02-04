@@ -409,7 +409,11 @@ impl SignatureContext<'_> {
             } else {
                 let bytes = extract_full_body(self.req, self.body).await?;
 
-                debug!(len=?bytes.len(), "extracted full body");
+                if bytes.len() < 1024 {
+                    debug!(len=?bytes.len(), body=?bytes, "extracted full body");
+                } else {
+                    debug!(len=?bytes.len(), "extracted full body");
+                }
 
                 let payload = if matches!(amz_content_sha256, AmzContentSha256::UnsignedPayload) {
                     signature_v4::Payload::Unsigned

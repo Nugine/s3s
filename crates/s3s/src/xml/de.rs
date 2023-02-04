@@ -35,6 +35,9 @@ pub struct Deserializer<'xml> {
 
     /// peeked event
     peeked: Option<DeEvent<'xml>>,
+
+    /// store an extra event
+    next_slot: Option<DeEvent<'xml>>,
 }
 
 /// XML deserialization result
@@ -96,11 +99,15 @@ impl<'xml> Deserializer<'xml> {
         Self {
             inner: Reader::from_reader(xml),
             peeked: None,
+            next_slot: None,
         }
     }
 
     /// Reads the next event
     fn read_event(&mut self) -> DeResult<DeEvent<'xml>> {
+        if let Some(ev) = self.next_slot.take() {
+            return Ok(ev);
+        }
         loop {
             let ev = self.inner.read_event().map_err(invalid_xml)?;
             let de = match ev {
@@ -109,10 +116,14 @@ impl<'xml> Deserializer<'xml> {
                 Event::Text(x) => DeEvent::Text(x),
                 Event::Eof => DeEvent::Eof,
 
-                // ignore the others
-                Event::Empty(_) | Event::Comment(_) | Event::CData(_) | Event::Decl(_) | Event::PI(_) | Event::DocType(_) => {
-                    continue
+                Event::Empty(x) => {
+                    // translate `<CSV/>` to `<CSV></CSV>`
+                    self.next_slot = Some(DeEvent::End(x.to_end().into_owned()));
+                    DeEvent::Start(x)
                 }
+
+                // ignore the others
+                Event::Comment(_) | Event::CData(_) | Event::Decl(_) | Event::PI(_) | Event::DocType(_) => continue,
             };
             break Ok(de);
         }

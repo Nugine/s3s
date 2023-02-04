@@ -1,0 +1,13 @@
+<SelectObjectContentRequest xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+    <Expression>select * from s3object</Expression>
+    <ExpressionType>SQL</ExpressionType>
+    <InputSerialization>
+        <CSV />
+    </InputSerialization>
+    <OutputSerialization>
+        <CSV />
+    </OutputSerialization>
+    <RequestProgress>
+        <Enabled>true</Enabled>
+    </RequestProgress>
+</SelectObjectContentRequest>

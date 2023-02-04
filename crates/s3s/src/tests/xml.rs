@@ -60,3 +60,12 @@ fn d003() {
     assert_eq!(tag.key, "Key4");
     assert_eq!(tag.value, "Value4");
 }
+
+#[test]
+fn d004() {
+    let input = read(concat!(DATA_DIR, "/d004.xml"));
+    let ans = deserialize::<crate::dto::SelectObjectContentRequest>(&input).unwrap();
+
+    assert!(ans.input_serialization.csv.is_some());
+    assert!(ans.output_serialization.csv.is_some());
+}
