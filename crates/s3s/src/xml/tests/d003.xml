@@ -1,8 +1,0 @@
-<Tagging xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
-    <TagSet>
-        <Tag>
-            <Key>Key4</Key>
-            <Value>Value4</Value>
-        </Tag>
-    </TagSet>
-</Tagging>

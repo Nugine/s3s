@@ -7,6 +7,4 @@ pub use self::ser::*;
 mod generated;
 
 #[cfg(test)]
-mod tests {
-    mod de;
-}
+mod tests;
