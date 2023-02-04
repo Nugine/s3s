@@ -60,6 +60,9 @@ pub enum FormatTimestampError {
 const RFC1123: &[FormatItem<'_>] =
     format_description!("[weekday repr:short], [day] [month repr:short] [year] [hour]:[minute]:[second] GMT");
 
+/// See <https://github.com/minio/minio-java/issues/1419>
+const RFC3339: &[FormatItem<'_>] = format_description!("[year]-[month]-[day]T[hour]:[minute]:[second].[subsecond digits:3]Z");
+
 impl Timestamp {
     pub fn parse(format: TimestampFormat, s: &str) -> Result<Self, ParseTimestampError> {
         let ans = match format {
@@ -96,7 +99,7 @@ impl Timestamp {
     pub fn format(&self, format: TimestampFormat, w: &mut impl io::Write) -> Result<(), FormatTimestampError> {
         match format {
             TimestampFormat::DateTime => {
-                self.0.format_into(w, &Rfc3339)?;
+                self.0.format_into(w, RFC3339)?;
             }
             TimestampFormat::HttpDate => {
                 self.0.format_into(w, RFC1123)?;
@@ -120,7 +123,7 @@ mod tests {
     #[test]
     fn text_repr() {
         let cases = [
-            (TimestampFormat::DateTime, "1985-04-12T23:20:50.52Z"),
+            (TimestampFormat::DateTime, "1985-04-12T23:20:50.520Z"),
             (TimestampFormat::HttpDate, "Tue, 29 Apr 2014 18:30:38 GMT"),
             (TimestampFormat::HttpDate, "Wed, 21 Oct 2015 07:28:00 GMT"),
             // (TimestampFormat::HttpDate, "Sun, 02 Jan 2000 20:34:56.000 GMT"), // FIXME: optional fractional seconds
