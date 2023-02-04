@@ -64,6 +64,16 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
             f!("{op_name}Output")
         };
 
+        // See https://github.com/awslabs/smithy-rs/discussions/2308
+        let smithy_http_code = sh.traits.http_code().unwrap();
+        let http_code = if op_name == "PutBucketPolicy" {
+            assert_eq!(smithy_output, "Unit");
+            assert_eq!(smithy_http_code, 200);
+            204
+        } else {
+            smithy_http_code
+        };
+
         let op = Operation {
             name: op_name.clone(),
 
@@ -77,7 +87,7 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
 
             http_method: sh.traits.http_method().unwrap().to_owned(),
             http_uri: sh.traits.http_uri().unwrap().to_owned(),
-            http_code: sh.traits.http_code().unwrap(),
+            http_code,
         };
         insert(op_name, op);
     }

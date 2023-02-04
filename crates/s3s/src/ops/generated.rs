@@ -3997,7 +3997,9 @@ impl PutBucketPolicy {
     }
 
     pub fn serialize_http(_: PutBucketPolicyOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        let mut res = http::Response::default();
+        *res.status_mut() = http::StatusCode::NO_CONTENT;
+        Ok(res)
     }
 }
 
