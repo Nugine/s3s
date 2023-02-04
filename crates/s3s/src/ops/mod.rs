@@ -432,6 +432,7 @@ impl SignatureContext<'_> {
         };
 
         if signature != authorization.signature {
+            debug!(?signature, expected=?authorization.signature, "signature mismatch");
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
