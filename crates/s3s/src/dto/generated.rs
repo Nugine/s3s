@@ -273,7 +273,7 @@ impl fmt::Debug for AnalyticsS3BucketDestination {
 pub struct AnalyticsS3ExportFileFormat(Cow<'static, str>);
 
 impl AnalyticsS3ExportFileFormat {
-    pub const CSV: &str = "CSV";
+    pub const CSV: Self = Self::from_static("CSV");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -281,8 +281,8 @@ impl AnalyticsS3ExportFileFormat {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -309,9 +309,9 @@ impl FromStr for AnalyticsS3ExportFileFormat {
 pub struct ArchiveStatus(Cow<'static, str>);
 
 impl ArchiveStatus {
-    pub const ARCHIVE_ACCESS: &str = "ARCHIVE_ACCESS";
+    pub const ARCHIVE_ACCESS: Self = Self::from_static("ARCHIVE_ACCESS");
 
-    pub const DEEP_ARCHIVE_ACCESS: &str = "DEEP_ARCHIVE_ACCESS";
+    pub const DEEP_ARCHIVE_ACCESS: Self = Self::from_static("DEEP_ARCHIVE_ACCESS");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -319,8 +319,8 @@ impl ArchiveStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -370,9 +370,9 @@ impl fmt::Debug for Bucket {
 pub struct BucketAccelerateStatus(Cow<'static, str>);
 
 impl BucketAccelerateStatus {
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
-    pub const SUSPENDED: &str = "Suspended";
+    pub const SUSPENDED: Self = Self::from_static("Suspended");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -380,8 +380,8 @@ impl BucketAccelerateStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -434,13 +434,13 @@ impl fmt::Debug for BucketAlreadyOwnedByYou {
 pub struct BucketCannedACL(Cow<'static, str>);
 
 impl BucketCannedACL {
-    pub const AUTHENTICATED_READ: &str = "authenticated-read";
+    pub const AUTHENTICATED_READ: Self = Self::from_static("authenticated-read");
 
-    pub const PRIVATE: &str = "private";
+    pub const PRIVATE: Self = Self::from_static("private");
 
-    pub const PUBLIC_READ: &str = "public-read";
+    pub const PUBLIC_READ: Self = Self::from_static("public-read");
 
-    pub const PUBLIC_READ_WRITE: &str = "public-read-write";
+    pub const PUBLIC_READ_WRITE: Self = Self::from_static("public-read-write");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -448,8 +448,8 @@ impl BucketCannedACL {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -494,57 +494,57 @@ impl fmt::Debug for BucketLifecycleConfiguration {
 pub struct BucketLocationConstraint(Cow<'static, str>);
 
 impl BucketLocationConstraint {
-    pub const EU: &str = "EU";
+    pub const EU: Self = Self::from_static("EU");
 
-    pub const AF_SOUTH_1: &str = "af-south-1";
+    pub const AF_SOUTH_1: Self = Self::from_static("af-south-1");
 
-    pub const AP_EAST_1: &str = "ap-east-1";
+    pub const AP_EAST_1: Self = Self::from_static("ap-east-1");
 
-    pub const AP_NORTHEAST_1: &str = "ap-northeast-1";
+    pub const AP_NORTHEAST_1: Self = Self::from_static("ap-northeast-1");
 
-    pub const AP_NORTHEAST_2: &str = "ap-northeast-2";
+    pub const AP_NORTHEAST_2: Self = Self::from_static("ap-northeast-2");
 
-    pub const AP_NORTHEAST_3: &str = "ap-northeast-3";
+    pub const AP_NORTHEAST_3: Self = Self::from_static("ap-northeast-3");
 
-    pub const AP_SOUTH_1: &str = "ap-south-1";
+    pub const AP_SOUTH_1: Self = Self::from_static("ap-south-1");
 
-    pub const AP_SOUTHEAST_1: &str = "ap-southeast-1";
+    pub const AP_SOUTHEAST_1: Self = Self::from_static("ap-southeast-1");
 
-    pub const AP_SOUTHEAST_2: &str = "ap-southeast-2";
+    pub const AP_SOUTHEAST_2: Self = Self::from_static("ap-southeast-2");
 
-    pub const AP_SOUTHEAST_3: &str = "ap-southeast-3";
+    pub const AP_SOUTHEAST_3: Self = Self::from_static("ap-southeast-3");
 
-    pub const CA_CENTRAL_1: &str = "ca-central-1";
+    pub const CA_CENTRAL_1: Self = Self::from_static("ca-central-1");
 
-    pub const CN_NORTH_1: &str = "cn-north-1";
+    pub const CN_NORTH_1: Self = Self::from_static("cn-north-1");
 
-    pub const CN_NORTHWEST_1: &str = "cn-northwest-1";
+    pub const CN_NORTHWEST_1: Self = Self::from_static("cn-northwest-1");
 
-    pub const EU_CENTRAL_1: &str = "eu-central-1";
+    pub const EU_CENTRAL_1: Self = Self::from_static("eu-central-1");
 
-    pub const EU_NORTH_1: &str = "eu-north-1";
+    pub const EU_NORTH_1: Self = Self::from_static("eu-north-1");
 
-    pub const EU_SOUTH_1: &str = "eu-south-1";
+    pub const EU_SOUTH_1: Self = Self::from_static("eu-south-1");
 
-    pub const EU_WEST_1: &str = "eu-west-1";
+    pub const EU_WEST_1: Self = Self::from_static("eu-west-1");
 
-    pub const EU_WEST_2: &str = "eu-west-2";
+    pub const EU_WEST_2: Self = Self::from_static("eu-west-2");
 
-    pub const EU_WEST_3: &str = "eu-west-3";
+    pub const EU_WEST_3: Self = Self::from_static("eu-west-3");
 
-    pub const ME_SOUTH_1: &str = "me-south-1";
+    pub const ME_SOUTH_1: Self = Self::from_static("me-south-1");
 
-    pub const SA_EAST_1: &str = "sa-east-1";
+    pub const SA_EAST_1: Self = Self::from_static("sa-east-1");
 
-    pub const US_EAST_2: &str = "us-east-2";
+    pub const US_EAST_2: Self = Self::from_static("us-east-2");
 
-    pub const US_GOV_EAST_1: &str = "us-gov-east-1";
+    pub const US_GOV_EAST_1: Self = Self::from_static("us-gov-east-1");
 
-    pub const US_GOV_WEST_1: &str = "us-gov-west-1";
+    pub const US_GOV_WEST_1: Self = Self::from_static("us-gov-west-1");
 
-    pub const US_WEST_1: &str = "us-west-1";
+    pub const US_WEST_1: Self = Self::from_static("us-west-1");
 
-    pub const US_WEST_2: &str = "us-west-2";
+    pub const US_WEST_2: Self = Self::from_static("us-west-2");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -552,8 +552,8 @@ impl BucketLocationConstraint {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -596,11 +596,11 @@ impl fmt::Debug for BucketLoggingStatus {
 pub struct BucketLogsPermission(Cow<'static, str>);
 
 impl BucketLogsPermission {
-    pub const FULL_CONTROL: &str = "FULL_CONTROL";
+    pub const FULL_CONTROL: Self = Self::from_static("FULL_CONTROL");
 
-    pub const READ: &str = "READ";
+    pub const READ: Self = Self::from_static("READ");
 
-    pub const WRITE: &str = "WRITE";
+    pub const WRITE: Self = Self::from_static("WRITE");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -608,8 +608,8 @@ impl BucketLogsPermission {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -638,9 +638,9 @@ pub type BucketName = String;
 pub struct BucketVersioningStatus(Cow<'static, str>);
 
 impl BucketVersioningStatus {
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
-    pub const SUSPENDED: &str = "Suspended";
+    pub const SUSPENDED: Self = Self::from_static("Suspended");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -648,8 +648,8 @@ impl BucketVersioningStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -923,13 +923,13 @@ impl fmt::Debug for Checksum {
 pub struct ChecksumAlgorithm(Cow<'static, str>);
 
 impl ChecksumAlgorithm {
-    pub const CRC32: &str = "CRC32";
+    pub const CRC32: Self = Self::from_static("CRC32");
 
-    pub const CRC32C: &str = "CRC32C";
+    pub const CRC32C: Self = Self::from_static("CRC32C");
 
-    pub const SHA1: &str = "SHA1";
+    pub const SHA1: Self = Self::from_static("SHA1");
 
-    pub const SHA256: &str = "SHA256";
+    pub const SHA256: Self = Self::from_static("SHA256");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -937,8 +937,8 @@ impl ChecksumAlgorithm {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -971,7 +971,7 @@ pub type ChecksumCRC32C = String;
 pub struct ChecksumMode(Cow<'static, str>);
 
 impl ChecksumMode {
-    pub const ENABLED: &str = "ENABLED";
+    pub const ENABLED: Self = Self::from_static("ENABLED");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -979,8 +979,8 @@ impl ChecksumMode {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -1310,11 +1310,11 @@ pub type CompletedPartList = List<CompletedPart>;
 pub struct CompressionType(Cow<'static, str>);
 
 impl CompressionType {
-    pub const BZIP2: &str = "BZIP2";
+    pub const BZIP2: Self = Self::from_static("BZIP2");
 
-    pub const GZIP: &str = "GZIP";
+    pub const GZIP: Self = Self::from_static("GZIP");
 
-    pub const NONE: &str = "NONE";
+    pub const NONE: Self = Self::from_static("NONE");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -1322,8 +1322,8 @@ impl CompressionType {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -2762,9 +2762,9 @@ impl fmt::Debug for DeleteMarkerReplication {
 pub struct DeleteMarkerReplicationStatus(Cow<'static, str>);
 
 impl DeleteMarkerReplicationStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -2772,8 +2772,8 @@ impl DeleteMarkerReplicationStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -3141,7 +3141,7 @@ pub type EnableRequestProgress = bool;
 pub struct EncodingType(Cow<'static, str>);
 
 impl EncodingType {
-    pub const URL: &str = "url";
+    pub const URL: Self = Self::from_static("url");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -3149,8 +3149,8 @@ impl EncodingType {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -5197,9 +5197,9 @@ impl fmt::Debug for ExistingObjectReplication {
 pub struct ExistingObjectReplicationStatus(Cow<'static, str>);
 
 impl ExistingObjectReplicationStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5207,8 +5207,8 @@ impl ExistingObjectReplicationStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -5237,9 +5237,9 @@ pub type Expiration = String;
 pub struct ExpirationStatus(Cow<'static, str>);
 
 impl ExpirationStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5247,8 +5247,8 @@ impl ExpirationStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -5285,7 +5285,7 @@ pub type Expression = String;
 pub struct ExpressionType(Cow<'static, str>);
 
 impl ExpressionType {
-    pub const SQL: &str = "SQL";
+    pub const SQL: Self = Self::from_static("SQL");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5293,8 +5293,8 @@ impl ExpressionType {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -5325,11 +5325,11 @@ pub type FieldDelimiter = String;
 pub struct FileHeaderInfo(Cow<'static, str>);
 
 impl FileHeaderInfo {
-    pub const IGNORE: &str = "IGNORE";
+    pub const IGNORE: Self = Self::from_static("IGNORE");
 
-    pub const NONE: &str = "NONE";
+    pub const NONE: Self = Self::from_static("NONE");
 
-    pub const USE: &str = "USE";
+    pub const USE: Self = Self::from_static("USE");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5337,8 +5337,8 @@ impl FileHeaderInfo {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -5395,9 +5395,9 @@ pub type FilterRuleList = List<FilterRule>;
 pub struct FilterRuleName(Cow<'static, str>);
 
 impl FilterRuleName {
-    pub const PREFIX: &str = "prefix";
+    pub const PREFIX: Self = Self::from_static("prefix");
 
-    pub const SUFFIX: &str = "suffix";
+    pub const SUFFIX: Self = Self::from_static("suffix");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5405,8 +5405,8 @@ impl FilterRuleName {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -7601,9 +7601,9 @@ impl fmt::Debug for InputSerialization {
 pub struct IntelligentTieringAccessTier(Cow<'static, str>);
 
 impl IntelligentTieringAccessTier {
-    pub const ARCHIVE_ACCESS: &str = "ARCHIVE_ACCESS";
+    pub const ARCHIVE_ACCESS: Self = Self::from_static("ARCHIVE_ACCESS");
 
-    pub const DEEP_ARCHIVE_ACCESS: &str = "DEEP_ARCHIVE_ACCESS";
+    pub const DEEP_ARCHIVE_ACCESS: Self = Self::from_static("DEEP_ARCHIVE_ACCESS");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -7611,8 +7611,8 @@ impl IntelligentTieringAccessTier {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -7733,9 +7733,9 @@ pub type IntelligentTieringId = String;
 pub struct IntelligentTieringStatus(Cow<'static, str>);
 
 impl IntelligentTieringStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -7743,8 +7743,8 @@ impl IntelligentTieringStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -7891,11 +7891,11 @@ impl fmt::Debug for InventoryFilter {
 pub struct InventoryFormat(Cow<'static, str>);
 
 impl InventoryFormat {
-    pub const CSV: &str = "CSV";
+    pub const CSV: Self = Self::from_static("CSV");
 
-    pub const ORC: &str = "ORC";
+    pub const ORC: Self = Self::from_static("ORC");
 
-    pub const PARQUET: &str = "Parquet";
+    pub const PARQUET: Self = Self::from_static("Parquet");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -7903,8 +7903,8 @@ impl InventoryFormat {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -7931,9 +7931,9 @@ impl FromStr for InventoryFormat {
 pub struct InventoryFrequency(Cow<'static, str>);
 
 impl InventoryFrequency {
-    pub const DAILY: &str = "Daily";
+    pub const DAILY: Self = Self::from_static("Daily");
 
-    pub const WEEKLY: &str = "Weekly";
+    pub const WEEKLY: Self = Self::from_static("Weekly");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -7941,8 +7941,8 @@ impl InventoryFrequency {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -7971,9 +7971,9 @@ pub type InventoryId = String;
 pub struct InventoryIncludedObjectVersions(Cow<'static, str>);
 
 impl InventoryIncludedObjectVersions {
-    pub const ALL: &str = "All";
+    pub const ALL: Self = Self::from_static("All");
 
-    pub const CURRENT: &str = "Current";
+    pub const CURRENT: Self = Self::from_static("Current");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -7981,8 +7981,8 @@ impl InventoryIncludedObjectVersions {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -8009,31 +8009,31 @@ impl FromStr for InventoryIncludedObjectVersions {
 pub struct InventoryOptionalField(Cow<'static, str>);
 
 impl InventoryOptionalField {
-    pub const BUCKET_KEY_STATUS: &str = "BucketKeyStatus";
+    pub const BUCKET_KEY_STATUS: Self = Self::from_static("BucketKeyStatus");
 
-    pub const CHECKSUM_ALGORITHM: &str = "ChecksumAlgorithm";
+    pub const CHECKSUM_ALGORITHM: Self = Self::from_static("ChecksumAlgorithm");
 
-    pub const E_TAG: &str = "ETag";
+    pub const E_TAG: Self = Self::from_static("ETag");
 
-    pub const ENCRYPTION_STATUS: &str = "EncryptionStatus";
+    pub const ENCRYPTION_STATUS: Self = Self::from_static("EncryptionStatus");
 
-    pub const INTELLIGENT_TIERING_ACCESS_TIER: &str = "IntelligentTieringAccessTier";
+    pub const INTELLIGENT_TIERING_ACCESS_TIER: Self = Self::from_static("IntelligentTieringAccessTier");
 
-    pub const IS_MULTIPART_UPLOADED: &str = "IsMultipartUploaded";
+    pub const IS_MULTIPART_UPLOADED: Self = Self::from_static("IsMultipartUploaded");
 
-    pub const LAST_MODIFIED_DATE: &str = "LastModifiedDate";
+    pub const LAST_MODIFIED_DATE: Self = Self::from_static("LastModifiedDate");
 
-    pub const OBJECT_LOCK_LEGAL_HOLD_STATUS: &str = "ObjectLockLegalHoldStatus";
+    pub const OBJECT_LOCK_LEGAL_HOLD_STATUS: Self = Self::from_static("ObjectLockLegalHoldStatus");
 
-    pub const OBJECT_LOCK_MODE: &str = "ObjectLockMode";
+    pub const OBJECT_LOCK_MODE: Self = Self::from_static("ObjectLockMode");
 
-    pub const OBJECT_LOCK_RETAIN_UNTIL_DATE: &str = "ObjectLockRetainUntilDate";
+    pub const OBJECT_LOCK_RETAIN_UNTIL_DATE: Self = Self::from_static("ObjectLockRetainUntilDate");
 
-    pub const REPLICATION_STATUS: &str = "ReplicationStatus";
+    pub const REPLICATION_STATUS: Self = Self::from_static("ReplicationStatus");
 
-    pub const SIZE: &str = "Size";
+    pub const SIZE: Self = Self::from_static("Size");
 
-    pub const STORAGE_CLASS: &str = "StorageClass";
+    pub const STORAGE_CLASS: Self = Self::from_static("StorageClass");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8041,8 +8041,8 @@ impl InventoryOptionalField {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -8168,9 +8168,9 @@ impl fmt::Debug for JSONOutput {
 pub struct JSONType(Cow<'static, str>);
 
 impl JSONType {
-    pub const DOCUMENT: &str = "DOCUMENT";
+    pub const DOCUMENT: Self = Self::from_static("DOCUMENT");
 
-    pub const LINES: &str = "LINES";
+    pub const LINES: Self = Self::from_static("LINES");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8178,8 +8178,8 @@ impl JSONType {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -9475,9 +9475,9 @@ pub type MFA = String;
 pub struct MFADelete(Cow<'static, str>);
 
 impl MFADelete {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -9485,8 +9485,8 @@ impl MFADelete {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -9513,9 +9513,9 @@ impl FromStr for MFADelete {
 pub struct MFADeleteStatus(Cow<'static, str>);
 
 impl MFADeleteStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -9523,8 +9523,8 @@ impl MFADeleteStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -9565,9 +9565,9 @@ pub type Metadata = Map<MetadataKey, MetadataValue>;
 pub struct MetadataDirective(Cow<'static, str>);
 
 impl MetadataDirective {
-    pub const COPY: &str = "COPY";
+    pub const COPY: Self = Self::from_static("COPY");
 
-    pub const REPLACE: &str = "REPLACE";
+    pub const REPLACE: Self = Self::from_static("REPLACE");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -9575,8 +9575,8 @@ impl MetadataDirective {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -9726,9 +9726,9 @@ pub type MetricsId = String;
 pub struct MetricsStatus(Cow<'static, str>);
 
 impl MetricsStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -9736,8 +9736,8 @@ impl MetricsStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10075,15 +10075,15 @@ impl fmt::Debug for ObjectAlreadyInActiveTierError {
 pub struct ObjectAttributes(Cow<'static, str>);
 
 impl ObjectAttributes {
-    pub const CHECKSUM: &str = "Checksum";
+    pub const CHECKSUM: Self = Self::from_static("Checksum");
 
-    pub const ETAG: &str = "ETag";
+    pub const ETAG: Self = Self::from_static("ETag");
 
-    pub const OBJECT_PARTS: &str = "ObjectParts";
+    pub const OBJECT_PARTS: Self = Self::from_static("ObjectParts");
 
-    pub const OBJECT_SIZE: &str = "ObjectSize";
+    pub const OBJECT_SIZE: Self = Self::from_static("ObjectSize");
 
-    pub const STORAGE_CLASS: &str = "StorageClass";
+    pub const STORAGE_CLASS: Self = Self::from_static("StorageClass");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10091,8 +10091,8 @@ impl ObjectAttributes {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10121,19 +10121,19 @@ pub type ObjectAttributesList = List<ObjectAttributes>;
 pub struct ObjectCannedACL(Cow<'static, str>);
 
 impl ObjectCannedACL {
-    pub const AUTHENTICATED_READ: &str = "authenticated-read";
+    pub const AUTHENTICATED_READ: Self = Self::from_static("authenticated-read");
 
-    pub const AWS_EXEC_READ: &str = "aws-exec-read";
+    pub const AWS_EXEC_READ: Self = Self::from_static("aws-exec-read");
 
-    pub const BUCKET_OWNER_FULL_CONTROL: &str = "bucket-owner-full-control";
+    pub const BUCKET_OWNER_FULL_CONTROL: Self = Self::from_static("bucket-owner-full-control");
 
-    pub const BUCKET_OWNER_READ: &str = "bucket-owner-read";
+    pub const BUCKET_OWNER_READ: Self = Self::from_static("bucket-owner-read");
 
-    pub const PRIVATE: &str = "private";
+    pub const PRIVATE: Self = Self::from_static("private");
 
-    pub const PUBLIC_READ: &str = "public-read";
+    pub const PUBLIC_READ: Self = Self::from_static("public-read");
 
-    pub const PUBLIC_READ_WRITE: &str = "public-read-write";
+    pub const PUBLIC_READ_WRITE: Self = Self::from_static("public-read-write");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10141,8 +10141,8 @@ impl ObjectCannedACL {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10226,7 +10226,7 @@ impl fmt::Debug for ObjectLockConfiguration {
 pub struct ObjectLockEnabled(Cow<'static, str>);
 
 impl ObjectLockEnabled {
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10234,8 +10234,8 @@ impl ObjectLockEnabled {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10281,9 +10281,9 @@ impl fmt::Debug for ObjectLockLegalHold {
 pub struct ObjectLockLegalHoldStatus(Cow<'static, str>);
 
 impl ObjectLockLegalHoldStatus {
-    pub const OFF: &str = "OFF";
+    pub const OFF: Self = Self::from_static("OFF");
 
-    pub const ON: &str = "ON";
+    pub const ON: Self = Self::from_static("ON");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10291,8 +10291,8 @@ impl ObjectLockLegalHoldStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10319,9 +10319,9 @@ impl FromStr for ObjectLockLegalHoldStatus {
 pub struct ObjectLockMode(Cow<'static, str>);
 
 impl ObjectLockMode {
-    pub const COMPLIANCE: &str = "COMPLIANCE";
+    pub const COMPLIANCE: Self = Self::from_static("COMPLIANCE");
 
-    pub const GOVERNANCE: &str = "GOVERNANCE";
+    pub const GOVERNANCE: Self = Self::from_static("GOVERNANCE");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10329,8 +10329,8 @@ impl ObjectLockMode {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10381,9 +10381,9 @@ impl fmt::Debug for ObjectLockRetention {
 pub struct ObjectLockRetentionMode(Cow<'static, str>);
 
 impl ObjectLockRetentionMode {
-    pub const COMPLIANCE: &str = "COMPLIANCE";
+    pub const COMPLIANCE: Self = Self::from_static("COMPLIANCE");
 
-    pub const GOVERNANCE: &str = "GOVERNANCE";
+    pub const GOVERNANCE: Self = Self::from_static("GOVERNANCE");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10391,8 +10391,8 @@ impl ObjectLockRetentionMode {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10464,11 +10464,11 @@ impl fmt::Debug for ObjectNotInActiveTierError {
 pub struct ObjectOwnership(Cow<'static, str>);
 
 impl ObjectOwnership {
-    pub const BUCKET_OWNER_ENFORCED: &str = "BucketOwnerEnforced";
+    pub const BUCKET_OWNER_ENFORCED: Self = Self::from_static("BucketOwnerEnforced");
 
-    pub const BUCKET_OWNER_PREFERRED: &str = "BucketOwnerPreferred";
+    pub const BUCKET_OWNER_PREFERRED: Self = Self::from_static("BucketOwnerPreferred");
 
-    pub const OBJECT_WRITER: &str = "ObjectWriter";
+    pub const OBJECT_WRITER: Self = Self::from_static("ObjectWriter");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10476,8 +10476,8 @@ impl ObjectOwnership {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10561,23 +10561,23 @@ pub type ObjectSizeLessThanBytes = i64;
 pub struct ObjectStorageClass(Cow<'static, str>);
 
 impl ObjectStorageClass {
-    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+    pub const DEEP_ARCHIVE: Self = Self::from_static("DEEP_ARCHIVE");
 
-    pub const GLACIER: &str = "GLACIER";
+    pub const GLACIER: Self = Self::from_static("GLACIER");
 
-    pub const GLACIER_IR: &str = "GLACIER_IR";
+    pub const GLACIER_IR: Self = Self::from_static("GLACIER_IR");
 
-    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+    pub const INTELLIGENT_TIERING: Self = Self::from_static("INTELLIGENT_TIERING");
 
-    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+    pub const ONEZONE_IA: Self = Self::from_static("ONEZONE_IA");
 
-    pub const OUTPOSTS: &str = "OUTPOSTS";
+    pub const OUTPOSTS: Self = Self::from_static("OUTPOSTS");
 
-    pub const REDUCED_REDUNDANCY: &str = "REDUCED_REDUNDANCY";
+    pub const REDUCED_REDUNDANCY: Self = Self::from_static("REDUCED_REDUNDANCY");
 
-    pub const STANDARD: &str = "STANDARD";
+    pub const STANDARD: Self = Self::from_static("STANDARD");
 
-    pub const STANDARD_IA: &str = "STANDARD_IA";
+    pub const STANDARD_IA: Self = Self::from_static("STANDARD_IA");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10585,8 +10585,8 @@ impl ObjectStorageClass {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10671,7 +10671,7 @@ pub type ObjectVersionList = List<ObjectVersion>;
 pub struct ObjectVersionStorageClass(Cow<'static, str>);
 
 impl ObjectVersionStorageClass {
-    pub const STANDARD: &str = "STANDARD";
+    pub const STANDARD: Self = Self::from_static("STANDARD");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10679,8 +10679,8 @@ impl ObjectVersionStorageClass {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10768,7 +10768,7 @@ impl fmt::Debug for Owner {
 pub struct OwnerOverride(Cow<'static, str>);
 
 impl OwnerOverride {
-    pub const DESTINATION: &str = "Destination";
+    pub const DESTINATION: Self = Self::from_static("Destination");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10776,8 +10776,8 @@ impl OwnerOverride {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10915,9 +10915,9 @@ pub type PartsList = List<ObjectPart>;
 pub struct Payer(Cow<'static, str>);
 
 impl Payer {
-    pub const BUCKET_OWNER: &str = "BucketOwner";
+    pub const BUCKET_OWNER: Self = Self::from_static("BucketOwner");
 
-    pub const REQUESTER: &str = "Requester";
+    pub const REQUESTER: Self = Self::from_static("Requester");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10925,8 +10925,8 @@ impl Payer {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -10953,15 +10953,15 @@ impl FromStr for Payer {
 pub struct Permission(Cow<'static, str>);
 
 impl Permission {
-    pub const FULL_CONTROL: &str = "FULL_CONTROL";
+    pub const FULL_CONTROL: Self = Self::from_static("FULL_CONTROL");
 
-    pub const READ: &str = "READ";
+    pub const READ: Self = Self::from_static("READ");
 
-    pub const READ_ACP: &str = "READ_ACP";
+    pub const READ_ACP: Self = Self::from_static("READ_ACP");
 
-    pub const WRITE: &str = "WRITE";
+    pub const WRITE: Self = Self::from_static("WRITE");
 
-    pub const WRITE_ACP: &str = "WRITE_ACP";
+    pub const WRITE_ACP: Self = Self::from_static("WRITE_ACP");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10969,8 +10969,8 @@ impl Permission {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -11057,9 +11057,9 @@ impl fmt::Debug for ProgressEvent {
 pub struct Protocol(Cow<'static, str>);
 
 impl Protocol {
-    pub const HTTP: &str = "http";
+    pub const HTTP: Self = Self::from_static("http");
 
-    pub const HTTPS: &str = "https";
+    pub const HTTPS: Self = Self::from_static("https");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -11067,8 +11067,8 @@ impl Protocol {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -12840,9 +12840,9 @@ pub type QuoteEscapeCharacter = String;
 pub struct QuoteFields(Cow<'static, str>);
 
 impl QuoteFields {
-    pub const ALWAYS: &str = "ALWAYS";
+    pub const ALWAYS: Self = Self::from_static("ALWAYS");
 
-    pub const ASNEEDED: &str = "ASNEEDED";
+    pub const ASNEEDED: Self = Self::from_static("ASNEEDED");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -12850,8 +12850,8 @@ impl QuoteFields {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -13003,9 +13003,9 @@ impl fmt::Debug for ReplicaModifications {
 pub struct ReplicaModificationsStatus(Cow<'static, str>);
 
 impl ReplicaModificationsStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13013,8 +13013,8 @@ impl ReplicaModificationsStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -13196,9 +13196,9 @@ pub enum ReplicationRuleFilter {
 pub struct ReplicationRuleStatus(Cow<'static, str>);
 
 impl ReplicationRuleStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13206,8 +13206,8 @@ impl ReplicationRuleStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -13236,13 +13236,13 @@ pub type ReplicationRules = List<ReplicationRule>;
 pub struct ReplicationStatus(Cow<'static, str>);
 
 impl ReplicationStatus {
-    pub const COMPLETE: &str = "COMPLETE";
+    pub const COMPLETE: Self = Self::from_static("COMPLETE");
 
-    pub const FAILED: &str = "FAILED";
+    pub const FAILED: Self = Self::from_static("FAILED");
 
-    pub const PENDING: &str = "PENDING";
+    pub const PENDING: Self = Self::from_static("PENDING");
 
-    pub const REPLICA: &str = "REPLICA";
+    pub const REPLICA: Self = Self::from_static("REPLICA");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13250,8 +13250,8 @@ impl ReplicationStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -13298,9 +13298,9 @@ impl fmt::Debug for ReplicationTime {
 pub struct ReplicationTimeStatus(Cow<'static, str>);
 
 impl ReplicationTimeStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13308,8 +13308,8 @@ impl ReplicationTimeStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -13355,7 +13355,7 @@ impl fmt::Debug for ReplicationTimeValue {
 pub struct RequestCharged(Cow<'static, str>);
 
 impl RequestCharged {
-    pub const REQUESTER: &str = "requester";
+    pub const REQUESTER: Self = Self::from_static("requester");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13363,8 +13363,8 @@ impl RequestCharged {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -13395,7 +13395,7 @@ impl FromStr for RequestCharged {
 pub struct RequestPayer(Cow<'static, str>);
 
 impl RequestPayer {
-    pub const REQUESTER: &str = "requester";
+    pub const REQUESTER: Self = Self::from_static("requester");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13403,8 +13403,8 @@ impl RequestPayer {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -13600,7 +13600,7 @@ impl fmt::Debug for RestoreRequest {
 pub struct RestoreRequestType(Cow<'static, str>);
 
 impl RestoreRequestType {
-    pub const SELECT: &str = "SELECT";
+    pub const SELECT: Self = Self::from_static("SELECT");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13608,8 +13608,8 @@ impl RestoreRequestType {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -13963,9 +13963,9 @@ impl fmt::Debug for SelectParameters {
 pub struct ServerSideEncryption(Cow<'static, str>);
 
 impl ServerSideEncryption {
-    pub const AES256: &str = "AES256";
+    pub const AES256: Self = Self::from_static("AES256");
 
-    pub const AWS_KMS: &str = "aws:kms";
+    pub const AWS_KMS: Self = Self::from_static("aws:kms");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13973,8 +13973,8 @@ impl ServerSideEncryption {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -14147,9 +14147,9 @@ impl fmt::Debug for SseKmsEncryptedObjects {
 pub struct SseKmsEncryptedObjectsStatus(Cow<'static, str>);
 
 impl SseKmsEncryptedObjectsStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: Self = Self::from_static("Disabled");
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14157,8 +14157,8 @@ impl SseKmsEncryptedObjectsStatus {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -14227,23 +14227,23 @@ impl fmt::Debug for StatsEvent {
 pub struct StorageClass(Cow<'static, str>);
 
 impl StorageClass {
-    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+    pub const DEEP_ARCHIVE: Self = Self::from_static("DEEP_ARCHIVE");
 
-    pub const GLACIER: &str = "GLACIER";
+    pub const GLACIER: Self = Self::from_static("GLACIER");
 
-    pub const GLACIER_IR: &str = "GLACIER_IR";
+    pub const GLACIER_IR: Self = Self::from_static("GLACIER_IR");
 
-    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+    pub const INTELLIGENT_TIERING: Self = Self::from_static("INTELLIGENT_TIERING");
 
-    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+    pub const ONEZONE_IA: Self = Self::from_static("ONEZONE_IA");
 
-    pub const OUTPOSTS: &str = "OUTPOSTS";
+    pub const OUTPOSTS: Self = Self::from_static("OUTPOSTS");
 
-    pub const REDUCED_REDUNDANCY: &str = "REDUCED_REDUNDANCY";
+    pub const REDUCED_REDUNDANCY: Self = Self::from_static("REDUCED_REDUNDANCY");
 
-    pub const STANDARD: &str = "STANDARD";
+    pub const STANDARD: Self = Self::from_static("STANDARD");
 
-    pub const STANDARD_IA: &str = "STANDARD_IA";
+    pub const STANDARD_IA: Self = Self::from_static("STANDARD_IA");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14251,8 +14251,8 @@ impl StorageClass {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -14317,7 +14317,7 @@ impl fmt::Debug for StorageClassAnalysisDataExport {
 pub struct StorageClassAnalysisSchemaVersion(Cow<'static, str>);
 
 impl StorageClassAnalysisSchemaVersion {
-    pub const V_1: &str = "V_1";
+    pub const V_1: Self = Self::from_static("V_1");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14325,8 +14325,8 @@ impl StorageClassAnalysisSchemaVersion {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -14390,9 +14390,9 @@ impl fmt::Debug for Tagging {
 pub struct TaggingDirective(Cow<'static, str>);
 
 impl TaggingDirective {
-    pub const COPY: &str = "COPY";
+    pub const COPY: Self = Self::from_static("COPY");
 
-    pub const REPLACE: &str = "REPLACE";
+    pub const REPLACE: Self = Self::from_static("REPLACE");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14400,8 +14400,8 @@ impl TaggingDirective {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -14461,11 +14461,11 @@ pub type TargetPrefix = String;
 pub struct Tier(Cow<'static, str>);
 
 impl Tier {
-    pub const BULK: &str = "Bulk";
+    pub const BULK: Self = Self::from_static("Bulk");
 
-    pub const EXPEDITED: &str = "Expedited";
+    pub const EXPEDITED: Self = Self::from_static("Expedited");
 
-    pub const STANDARD: &str = "Standard";
+    pub const STANDARD: Self = Self::from_static("Standard");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14473,8 +14473,8 @@ impl Tier {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -14593,17 +14593,17 @@ pub type TransitionList = List<Transition>;
 pub struct TransitionStorageClass(Cow<'static, str>);
 
 impl TransitionStorageClass {
-    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+    pub const DEEP_ARCHIVE: Self = Self::from_static("DEEP_ARCHIVE");
 
-    pub const GLACIER: &str = "GLACIER";
+    pub const GLACIER: Self = Self::from_static("GLACIER");
 
-    pub const GLACIER_IR: &str = "GLACIER_IR";
+    pub const GLACIER_IR: Self = Self::from_static("GLACIER_IR");
 
-    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+    pub const INTELLIGENT_TIERING: Self = Self::from_static("INTELLIGENT_TIERING");
 
-    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+    pub const ONEZONE_IA: Self = Self::from_static("ONEZONE_IA");
 
-    pub const STANDARD_IA: &str = "STANDARD_IA";
+    pub const STANDARD_IA: Self = Self::from_static("STANDARD_IA");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14611,8 +14611,8 @@ impl TransitionStorageClass {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 
@@ -14639,11 +14639,11 @@ impl FromStr for TransitionStorageClass {
 pub struct Type(Cow<'static, str>);
 
 impl Type {
-    pub const AMAZON_CUSTOMER_BY_EMAIL: &str = "AmazonCustomerByEmail";
+    pub const AMAZON_CUSTOMER_BY_EMAIL: Self = Self::from_static("AmazonCustomerByEmail");
 
-    pub const CANONICAL_USER: &str = "CanonicalUser";
+    pub const CANONICAL_USER: Self = Self::from_static("CanonicalUser");
 
-    pub const GROUP: &str = "Group";
+    pub const GROUP: Self = Self::from_static("Group");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14651,8 +14651,8 @@ impl Type {
     }
 
     #[must_use]
-    pub fn from_static(s: &'static str) -> Self {
-        Self(Cow::from(s))
+    pub const fn from_static(s: &'static str) -> Self {
+        Self(Cow::Borrowed(s))
     }
 }
 

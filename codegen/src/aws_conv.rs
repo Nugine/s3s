@@ -85,7 +85,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                         "CRC32C" => "Crc32C".to_owned(),
                         _ => s3s_variant_name.to_upper_camel_case(),
                     };
-                    g.ln(f!("{aws_name}::{aws_variant_name} => Self::from_static(Self::{s3s_variant_name}),"));
+                    g.ln(f!("{aws_name}::{aws_variant_name} => Self::{s3s_variant_name},"));
                 }
                 g.ln(f!("{aws_name}::Unknown(_) => Self::from(x.as_str().to_owned()),"));
                 g.ln("_ => Self::from(x.as_str().to_owned()),");

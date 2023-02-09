@@ -413,7 +413,7 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes, g: &mut Codegen
     {
         for variant in &ty.variants {
             codegen_doc(variant.doc.as_deref(), g);
-            g.ln(f!("pub const {}: &str = \"{}\";", variant.name, variant.value));
+            g.ln(f!("pub const {}: Self = Self::from_static(\"{}\");", variant.name, variant.value));
             g.lf();
         }
 
@@ -424,8 +424,8 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes, g: &mut Codegen
         g.lf();
 
         g.ln("#[must_use]");
-        g.ln("pub fn from_static(s: &'static str) -> Self {");
-        g.ln("Self(Cow::from(s))");
+        g.ln("pub const fn from_static(s: &'static str) -> Self {");
+        g.ln("Self(Cow::Borrowed(s))");
         g.ln("}");
         g.lf();
     }

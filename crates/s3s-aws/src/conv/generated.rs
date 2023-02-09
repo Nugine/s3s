@@ -228,7 +228,7 @@ impl AwsConversion for s3s::dto::AnalyticsS3ExportFileFormat {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            AnalyticsS3ExportFileFormat::Csv => Self::from_static(Self::CSV),
+            AnalyticsS3ExportFileFormat::Csv => Self::CSV,
             AnalyticsS3ExportFileFormat::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -245,8 +245,8 @@ impl AwsConversion for s3s::dto::ArchiveStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ArchiveStatus::ArchiveAccess => Self::from_static(Self::ARCHIVE_ACCESS),
-            ArchiveStatus::DeepArchiveAccess => Self::from_static(Self::DEEP_ARCHIVE_ACCESS),
+            ArchiveStatus::ArchiveAccess => Self::ARCHIVE_ACCESS,
+            ArchiveStatus::DeepArchiveAccess => Self::DEEP_ARCHIVE_ACCESS,
             ArchiveStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -282,8 +282,8 @@ impl AwsConversion for s3s::dto::BucketAccelerateStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketAccelerateStatus::Enabled => Self::from_static(Self::ENABLED),
-            BucketAccelerateStatus::Suspended => Self::from_static(Self::SUSPENDED),
+            BucketAccelerateStatus::Enabled => Self::ENABLED,
+            BucketAccelerateStatus::Suspended => Self::SUSPENDED,
             BucketAccelerateStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -332,10 +332,10 @@ impl AwsConversion for s3s::dto::BucketCannedACL {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketCannedAcl::AuthenticatedRead => Self::from_static(Self::AUTHENTICATED_READ),
-            BucketCannedAcl::Private => Self::from_static(Self::PRIVATE),
-            BucketCannedAcl::PublicRead => Self::from_static(Self::PUBLIC_READ),
-            BucketCannedAcl::PublicReadWrite => Self::from_static(Self::PUBLIC_READ_WRITE),
+            BucketCannedAcl::AuthenticatedRead => Self::AUTHENTICATED_READ,
+            BucketCannedAcl::Private => Self::PRIVATE,
+            BucketCannedAcl::PublicRead => Self::PUBLIC_READ,
+            BucketCannedAcl::PublicReadWrite => Self::PUBLIC_READ_WRITE,
             BucketCannedAcl::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -369,32 +369,32 @@ impl AwsConversion for s3s::dto::BucketLocationConstraint {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketLocationConstraint::Eu => Self::from_static(Self::EU),
-            BucketLocationConstraint::AfSouth1 => Self::from_static(Self::AF_SOUTH_1),
-            BucketLocationConstraint::ApEast1 => Self::from_static(Self::AP_EAST_1),
-            BucketLocationConstraint::ApNortheast1 => Self::from_static(Self::AP_NORTHEAST_1),
-            BucketLocationConstraint::ApNortheast2 => Self::from_static(Self::AP_NORTHEAST_2),
-            BucketLocationConstraint::ApNortheast3 => Self::from_static(Self::AP_NORTHEAST_3),
-            BucketLocationConstraint::ApSouth1 => Self::from_static(Self::AP_SOUTH_1),
-            BucketLocationConstraint::ApSoutheast1 => Self::from_static(Self::AP_SOUTHEAST_1),
-            BucketLocationConstraint::ApSoutheast2 => Self::from_static(Self::AP_SOUTHEAST_2),
-            BucketLocationConstraint::ApSoutheast3 => Self::from_static(Self::AP_SOUTHEAST_3),
-            BucketLocationConstraint::CaCentral1 => Self::from_static(Self::CA_CENTRAL_1),
-            BucketLocationConstraint::CnNorth1 => Self::from_static(Self::CN_NORTH_1),
-            BucketLocationConstraint::CnNorthwest1 => Self::from_static(Self::CN_NORTHWEST_1),
-            BucketLocationConstraint::EuCentral1 => Self::from_static(Self::EU_CENTRAL_1),
-            BucketLocationConstraint::EuNorth1 => Self::from_static(Self::EU_NORTH_1),
-            BucketLocationConstraint::EuSouth1 => Self::from_static(Self::EU_SOUTH_1),
-            BucketLocationConstraint::EuWest1 => Self::from_static(Self::EU_WEST_1),
-            BucketLocationConstraint::EuWest2 => Self::from_static(Self::EU_WEST_2),
-            BucketLocationConstraint::EuWest3 => Self::from_static(Self::EU_WEST_3),
-            BucketLocationConstraint::MeSouth1 => Self::from_static(Self::ME_SOUTH_1),
-            BucketLocationConstraint::SaEast1 => Self::from_static(Self::SA_EAST_1),
-            BucketLocationConstraint::UsEast2 => Self::from_static(Self::US_EAST_2),
-            BucketLocationConstraint::UsGovEast1 => Self::from_static(Self::US_GOV_EAST_1),
-            BucketLocationConstraint::UsGovWest1 => Self::from_static(Self::US_GOV_WEST_1),
-            BucketLocationConstraint::UsWest1 => Self::from_static(Self::US_WEST_1),
-            BucketLocationConstraint::UsWest2 => Self::from_static(Self::US_WEST_2),
+            BucketLocationConstraint::Eu => Self::EU,
+            BucketLocationConstraint::AfSouth1 => Self::AF_SOUTH_1,
+            BucketLocationConstraint::ApEast1 => Self::AP_EAST_1,
+            BucketLocationConstraint::ApNortheast1 => Self::AP_NORTHEAST_1,
+            BucketLocationConstraint::ApNortheast2 => Self::AP_NORTHEAST_2,
+            BucketLocationConstraint::ApNortheast3 => Self::AP_NORTHEAST_3,
+            BucketLocationConstraint::ApSouth1 => Self::AP_SOUTH_1,
+            BucketLocationConstraint::ApSoutheast1 => Self::AP_SOUTHEAST_1,
+            BucketLocationConstraint::ApSoutheast2 => Self::AP_SOUTHEAST_2,
+            BucketLocationConstraint::ApSoutheast3 => Self::AP_SOUTHEAST_3,
+            BucketLocationConstraint::CaCentral1 => Self::CA_CENTRAL_1,
+            BucketLocationConstraint::CnNorth1 => Self::CN_NORTH_1,
+            BucketLocationConstraint::CnNorthwest1 => Self::CN_NORTHWEST_1,
+            BucketLocationConstraint::EuCentral1 => Self::EU_CENTRAL_1,
+            BucketLocationConstraint::EuNorth1 => Self::EU_NORTH_1,
+            BucketLocationConstraint::EuSouth1 => Self::EU_SOUTH_1,
+            BucketLocationConstraint::EuWest1 => Self::EU_WEST_1,
+            BucketLocationConstraint::EuWest2 => Self::EU_WEST_2,
+            BucketLocationConstraint::EuWest3 => Self::EU_WEST_3,
+            BucketLocationConstraint::MeSouth1 => Self::ME_SOUTH_1,
+            BucketLocationConstraint::SaEast1 => Self::SA_EAST_1,
+            BucketLocationConstraint::UsEast2 => Self::US_EAST_2,
+            BucketLocationConstraint::UsGovEast1 => Self::US_GOV_EAST_1,
+            BucketLocationConstraint::UsGovWest1 => Self::US_GOV_WEST_1,
+            BucketLocationConstraint::UsWest1 => Self::US_WEST_1,
+            BucketLocationConstraint::UsWest2 => Self::US_WEST_2,
             BucketLocationConstraint::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -428,9 +428,9 @@ impl AwsConversion for s3s::dto::BucketLogsPermission {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketLogsPermission::FullControl => Self::from_static(Self::FULL_CONTROL),
-            BucketLogsPermission::Read => Self::from_static(Self::READ),
-            BucketLogsPermission::Write => Self::from_static(Self::WRITE),
+            BucketLogsPermission::FullControl => Self::FULL_CONTROL,
+            BucketLogsPermission::Read => Self::READ,
+            BucketLogsPermission::Write => Self::WRITE,
             BucketLogsPermission::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -447,8 +447,8 @@ impl AwsConversion for s3s::dto::BucketVersioningStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketVersioningStatus::Enabled => Self::from_static(Self::ENABLED),
-            BucketVersioningStatus::Suspended => Self::from_static(Self::SUSPENDED),
+            BucketVersioningStatus::Enabled => Self::ENABLED,
+            BucketVersioningStatus::Suspended => Self::SUSPENDED,
             BucketVersioningStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -586,10 +586,10 @@ impl AwsConversion for s3s::dto::ChecksumAlgorithm {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ChecksumAlgorithm::Crc32 => Self::from_static(Self::CRC32),
-            ChecksumAlgorithm::Crc32C => Self::from_static(Self::CRC32C),
-            ChecksumAlgorithm::Sha1 => Self::from_static(Self::SHA1),
-            ChecksumAlgorithm::Sha256 => Self::from_static(Self::SHA256),
+            ChecksumAlgorithm::Crc32 => Self::CRC32,
+            ChecksumAlgorithm::Crc32C => Self::CRC32C,
+            ChecksumAlgorithm::Sha1 => Self::SHA1,
+            ChecksumAlgorithm::Sha256 => Self::SHA256,
             ChecksumAlgorithm::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -606,7 +606,7 @@ impl AwsConversion for s3s::dto::ChecksumMode {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ChecksumMode::Enabled => Self::from_static(Self::ENABLED),
+            ChecksumMode::Enabled => Self::ENABLED,
             ChecksumMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -768,9 +768,9 @@ impl AwsConversion for s3s::dto::CompressionType {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            CompressionType::Bzip2 => Self::from_static(Self::BZIP2),
-            CompressionType::Gzip => Self::from_static(Self::GZIP),
-            CompressionType::None => Self::from_static(Self::NONE),
+            CompressionType::Bzip2 => Self::BZIP2,
+            CompressionType::Gzip => Self::GZIP,
+            CompressionType::None => Self::NONE,
             CompressionType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -1738,8 +1738,8 @@ impl AwsConversion for s3s::dto::DeleteMarkerReplicationStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            DeleteMarkerReplicationStatus::Disabled => Self::from_static(Self::DISABLED),
-            DeleteMarkerReplicationStatus::Enabled => Self::from_static(Self::ENABLED),
+            DeleteMarkerReplicationStatus::Disabled => Self::DISABLED,
+            DeleteMarkerReplicationStatus::Enabled => Self::ENABLED,
             DeleteMarkerReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -1983,7 +1983,7 @@ impl AwsConversion for s3s::dto::EncodingType {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            EncodingType::Url => Self::from_static(Self::URL),
+            EncodingType::Url => Self::URL,
             EncodingType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -2127,8 +2127,8 @@ impl AwsConversion for s3s::dto::ExistingObjectReplicationStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ExistingObjectReplicationStatus::Disabled => Self::from_static(Self::DISABLED),
-            ExistingObjectReplicationStatus::Enabled => Self::from_static(Self::ENABLED),
+            ExistingObjectReplicationStatus::Disabled => Self::DISABLED,
+            ExistingObjectReplicationStatus::Enabled => Self::ENABLED,
             ExistingObjectReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -2145,8 +2145,8 @@ impl AwsConversion for s3s::dto::ExpirationStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ExpirationStatus::Disabled => Self::from_static(Self::DISABLED),
-            ExpirationStatus::Enabled => Self::from_static(Self::ENABLED),
+            ExpirationStatus::Disabled => Self::DISABLED,
+            ExpirationStatus::Enabled => Self::ENABLED,
             ExpirationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -2163,7 +2163,7 @@ impl AwsConversion for s3s::dto::ExpressionType {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ExpressionType::Sql => Self::from_static(Self::SQL),
+            ExpressionType::Sql => Self::SQL,
             ExpressionType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -2180,9 +2180,9 @@ impl AwsConversion for s3s::dto::FileHeaderInfo {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            FileHeaderInfo::Ignore => Self::from_static(Self::IGNORE),
-            FileHeaderInfo::None => Self::from_static(Self::NONE),
-            FileHeaderInfo::Use => Self::from_static(Self::USE),
+            FileHeaderInfo::Ignore => Self::IGNORE,
+            FileHeaderInfo::None => Self::NONE,
+            FileHeaderInfo::Use => Self::USE,
             FileHeaderInfo::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -2218,8 +2218,8 @@ impl AwsConversion for s3s::dto::FilterRuleName {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            FilterRuleName::Prefix => Self::from_static(Self::PREFIX),
-            FilterRuleName::Suffix => Self::from_static(Self::SUFFIX),
+            FilterRuleName::Prefix => Self::PREFIX,
+            FilterRuleName::Suffix => Self::SUFFIX,
             FilterRuleName::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -3790,8 +3790,8 @@ impl AwsConversion for s3s::dto::IntelligentTieringAccessTier {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            IntelligentTieringAccessTier::ArchiveAccess => Self::from_static(Self::ARCHIVE_ACCESS),
-            IntelligentTieringAccessTier::DeepArchiveAccess => Self::from_static(Self::DEEP_ARCHIVE_ACCESS),
+            IntelligentTieringAccessTier::ArchiveAccess => Self::ARCHIVE_ACCESS,
+            IntelligentTieringAccessTier::DeepArchiveAccess => Self::DEEP_ARCHIVE_ACCESS,
             IntelligentTieringAccessTier::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -3871,8 +3871,8 @@ impl AwsConversion for s3s::dto::IntelligentTieringStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            IntelligentTieringStatus::Disabled => Self::from_static(Self::DISABLED),
-            IntelligentTieringStatus::Enabled => Self::from_static(Self::ENABLED),
+            IntelligentTieringStatus::Disabled => Self::DISABLED,
+            IntelligentTieringStatus::Enabled => Self::ENABLED,
             IntelligentTieringStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -3990,9 +3990,9 @@ impl AwsConversion for s3s::dto::InventoryFormat {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            InventoryFormat::Csv => Self::from_static(Self::CSV),
-            InventoryFormat::Orc => Self::from_static(Self::ORC),
-            InventoryFormat::Parquet => Self::from_static(Self::PARQUET),
+            InventoryFormat::Csv => Self::CSV,
+            InventoryFormat::Orc => Self::ORC,
+            InventoryFormat::Parquet => Self::PARQUET,
             InventoryFormat::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -4009,8 +4009,8 @@ impl AwsConversion for s3s::dto::InventoryFrequency {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            InventoryFrequency::Daily => Self::from_static(Self::DAILY),
-            InventoryFrequency::Weekly => Self::from_static(Self::WEEKLY),
+            InventoryFrequency::Daily => Self::DAILY,
+            InventoryFrequency::Weekly => Self::WEEKLY,
             InventoryFrequency::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -4027,8 +4027,8 @@ impl AwsConversion for s3s::dto::InventoryIncludedObjectVersions {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            InventoryIncludedObjectVersions::All => Self::from_static(Self::ALL),
-            InventoryIncludedObjectVersions::Current => Self::from_static(Self::CURRENT),
+            InventoryIncludedObjectVersions::All => Self::ALL,
+            InventoryIncludedObjectVersions::Current => Self::CURRENT,
             InventoryIncludedObjectVersions::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -4045,19 +4045,19 @@ impl AwsConversion for s3s::dto::InventoryOptionalField {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            InventoryOptionalField::BucketKeyStatus => Self::from_static(Self::BUCKET_KEY_STATUS),
-            InventoryOptionalField::ChecksumAlgorithm => Self::from_static(Self::CHECKSUM_ALGORITHM),
-            InventoryOptionalField::ETag => Self::from_static(Self::E_TAG),
-            InventoryOptionalField::EncryptionStatus => Self::from_static(Self::ENCRYPTION_STATUS),
-            InventoryOptionalField::IntelligentTieringAccessTier => Self::from_static(Self::INTELLIGENT_TIERING_ACCESS_TIER),
-            InventoryOptionalField::IsMultipartUploaded => Self::from_static(Self::IS_MULTIPART_UPLOADED),
-            InventoryOptionalField::LastModifiedDate => Self::from_static(Self::LAST_MODIFIED_DATE),
-            InventoryOptionalField::ObjectLockLegalHoldStatus => Self::from_static(Self::OBJECT_LOCK_LEGAL_HOLD_STATUS),
-            InventoryOptionalField::ObjectLockMode => Self::from_static(Self::OBJECT_LOCK_MODE),
-            InventoryOptionalField::ObjectLockRetainUntilDate => Self::from_static(Self::OBJECT_LOCK_RETAIN_UNTIL_DATE),
-            InventoryOptionalField::ReplicationStatus => Self::from_static(Self::REPLICATION_STATUS),
-            InventoryOptionalField::Size => Self::from_static(Self::SIZE),
-            InventoryOptionalField::StorageClass => Self::from_static(Self::STORAGE_CLASS),
+            InventoryOptionalField::BucketKeyStatus => Self::BUCKET_KEY_STATUS,
+            InventoryOptionalField::ChecksumAlgorithm => Self::CHECKSUM_ALGORITHM,
+            InventoryOptionalField::ETag => Self::E_TAG,
+            InventoryOptionalField::EncryptionStatus => Self::ENCRYPTION_STATUS,
+            InventoryOptionalField::IntelligentTieringAccessTier => Self::INTELLIGENT_TIERING_ACCESS_TIER,
+            InventoryOptionalField::IsMultipartUploaded => Self::IS_MULTIPART_UPLOADED,
+            InventoryOptionalField::LastModifiedDate => Self::LAST_MODIFIED_DATE,
+            InventoryOptionalField::ObjectLockLegalHoldStatus => Self::OBJECT_LOCK_LEGAL_HOLD_STATUS,
+            InventoryOptionalField::ObjectLockMode => Self::OBJECT_LOCK_MODE,
+            InventoryOptionalField::ObjectLockRetainUntilDate => Self::OBJECT_LOCK_RETAIN_UNTIL_DATE,
+            InventoryOptionalField::ReplicationStatus => Self::REPLICATION_STATUS,
+            InventoryOptionalField::Size => Self::SIZE,
+            InventoryOptionalField::StorageClass => Self::STORAGE_CLASS,
             InventoryOptionalField::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -4150,8 +4150,8 @@ impl AwsConversion for s3s::dto::JSONType {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            JsonType::Document => Self::from_static(Self::DOCUMENT),
-            JsonType::Lines => Self::from_static(Self::LINES),
+            JsonType::Document => Self::DOCUMENT,
+            JsonType::Lines => Self::LINES,
             JsonType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -4868,8 +4868,8 @@ impl AwsConversion for s3s::dto::MFADelete {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MfaDelete::Disabled => Self::from_static(Self::DISABLED),
-            MfaDelete::Enabled => Self::from_static(Self::ENABLED),
+            MfaDelete::Disabled => Self::DISABLED,
+            MfaDelete::Enabled => Self::ENABLED,
             MfaDelete::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -4886,8 +4886,8 @@ impl AwsConversion for s3s::dto::MFADeleteStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MfaDeleteStatus::Disabled => Self::from_static(Self::DISABLED),
-            MfaDeleteStatus::Enabled => Self::from_static(Self::ENABLED),
+            MfaDeleteStatus::Disabled => Self::DISABLED,
+            MfaDeleteStatus::Enabled => Self::ENABLED,
             MfaDeleteStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -4904,8 +4904,8 @@ impl AwsConversion for s3s::dto::MetadataDirective {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MetadataDirective::Copy => Self::from_static(Self::COPY),
-            MetadataDirective::Replace => Self::from_static(Self::REPLACE),
+            MetadataDirective::Copy => Self::COPY,
+            MetadataDirective::Replace => Self::REPLACE,
             MetadataDirective::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5025,8 +5025,8 @@ impl AwsConversion for s3s::dto::MetricsStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MetricsStatus::Disabled => Self::from_static(Self::DISABLED),
-            MetricsStatus::Enabled => Self::from_static(Self::ENABLED),
+            MetricsStatus::Disabled => Self::DISABLED,
+            MetricsStatus::Enabled => Self::ENABLED,
             MetricsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5261,11 +5261,11 @@ impl AwsConversion for s3s::dto::ObjectAttributes {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectAttributes::Checksum => Self::from_static(Self::CHECKSUM),
-            ObjectAttributes::Etag => Self::from_static(Self::ETAG),
-            ObjectAttributes::ObjectParts => Self::from_static(Self::OBJECT_PARTS),
-            ObjectAttributes::ObjectSize => Self::from_static(Self::OBJECT_SIZE),
-            ObjectAttributes::StorageClass => Self::from_static(Self::STORAGE_CLASS),
+            ObjectAttributes::Checksum => Self::CHECKSUM,
+            ObjectAttributes::Etag => Self::ETAG,
+            ObjectAttributes::ObjectParts => Self::OBJECT_PARTS,
+            ObjectAttributes::ObjectSize => Self::OBJECT_SIZE,
+            ObjectAttributes::StorageClass => Self::STORAGE_CLASS,
             ObjectAttributes::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5282,13 +5282,13 @@ impl AwsConversion for s3s::dto::ObjectCannedACL {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectCannedAcl::AuthenticatedRead => Self::from_static(Self::AUTHENTICATED_READ),
-            ObjectCannedAcl::AwsExecRead => Self::from_static(Self::AWS_EXEC_READ),
-            ObjectCannedAcl::BucketOwnerFullControl => Self::from_static(Self::BUCKET_OWNER_FULL_CONTROL),
-            ObjectCannedAcl::BucketOwnerRead => Self::from_static(Self::BUCKET_OWNER_READ),
-            ObjectCannedAcl::Private => Self::from_static(Self::PRIVATE),
-            ObjectCannedAcl::PublicRead => Self::from_static(Self::PUBLIC_READ),
-            ObjectCannedAcl::PublicReadWrite => Self::from_static(Self::PUBLIC_READ_WRITE),
+            ObjectCannedAcl::AuthenticatedRead => Self::AUTHENTICATED_READ,
+            ObjectCannedAcl::AwsExecRead => Self::AWS_EXEC_READ,
+            ObjectCannedAcl::BucketOwnerFullControl => Self::BUCKET_OWNER_FULL_CONTROL,
+            ObjectCannedAcl::BucketOwnerRead => Self::BUCKET_OWNER_READ,
+            ObjectCannedAcl::Private => Self::PRIVATE,
+            ObjectCannedAcl::PublicRead => Self::PUBLIC_READ,
+            ObjectCannedAcl::PublicReadWrite => Self::PUBLIC_READ_WRITE,
             ObjectCannedAcl::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5343,7 +5343,7 @@ impl AwsConversion for s3s::dto::ObjectLockEnabled {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectLockEnabled::Enabled => Self::from_static(Self::ENABLED),
+            ObjectLockEnabled::Enabled => Self::ENABLED,
             ObjectLockEnabled::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5377,8 +5377,8 @@ impl AwsConversion for s3s::dto::ObjectLockLegalHoldStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectLockLegalHoldStatus::Off => Self::from_static(Self::OFF),
-            ObjectLockLegalHoldStatus::On => Self::from_static(Self::ON),
+            ObjectLockLegalHoldStatus::Off => Self::OFF,
+            ObjectLockLegalHoldStatus::On => Self::ON,
             ObjectLockLegalHoldStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5395,8 +5395,8 @@ impl AwsConversion for s3s::dto::ObjectLockMode {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectLockMode::Compliance => Self::from_static(Self::COMPLIANCE),
-            ObjectLockMode::Governance => Self::from_static(Self::GOVERNANCE),
+            ObjectLockMode::Compliance => Self::COMPLIANCE,
+            ObjectLockMode::Governance => Self::GOVERNANCE,
             ObjectLockMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5432,8 +5432,8 @@ impl AwsConversion for s3s::dto::ObjectLockRetentionMode {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectLockRetentionMode::Compliance => Self::from_static(Self::COMPLIANCE),
-            ObjectLockRetentionMode::Governance => Self::from_static(Self::GOVERNANCE),
+            ObjectLockRetentionMode::Compliance => Self::COMPLIANCE,
+            ObjectLockRetentionMode::Governance => Self::GOVERNANCE,
             ObjectLockRetentionMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5483,9 +5483,9 @@ impl AwsConversion for s3s::dto::ObjectOwnership {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectOwnership::BucketOwnerEnforced => Self::from_static(Self::BUCKET_OWNER_ENFORCED),
-            ObjectOwnership::BucketOwnerPreferred => Self::from_static(Self::BUCKET_OWNER_PREFERRED),
-            ObjectOwnership::ObjectWriter => Self::from_static(Self::OBJECT_WRITER),
+            ObjectOwnership::BucketOwnerEnforced => Self::BUCKET_OWNER_ENFORCED,
+            ObjectOwnership::BucketOwnerPreferred => Self::BUCKET_OWNER_PREFERRED,
+            ObjectOwnership::ObjectWriter => Self::OBJECT_WRITER,
             ObjectOwnership::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5529,15 +5529,15 @@ impl AwsConversion for s3s::dto::ObjectStorageClass {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectStorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
-            ObjectStorageClass::Glacier => Self::from_static(Self::GLACIER),
-            ObjectStorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
-            ObjectStorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
-            ObjectStorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
-            ObjectStorageClass::Outposts => Self::from_static(Self::OUTPOSTS),
-            ObjectStorageClass::ReducedRedundancy => Self::from_static(Self::REDUCED_REDUNDANCY),
-            ObjectStorageClass::Standard => Self::from_static(Self::STANDARD),
-            ObjectStorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
+            ObjectStorageClass::DeepArchive => Self::DEEP_ARCHIVE,
+            ObjectStorageClass::Glacier => Self::GLACIER,
+            ObjectStorageClass::GlacierIr => Self::GLACIER_IR,
+            ObjectStorageClass::IntelligentTiering => Self::INTELLIGENT_TIERING,
+            ObjectStorageClass::OnezoneIa => Self::ONEZONE_IA,
+            ObjectStorageClass::Outposts => Self::OUTPOSTS,
+            ObjectStorageClass::ReducedRedundancy => Self::REDUCED_REDUNDANCY,
+            ObjectStorageClass::Standard => Self::STANDARD,
+            ObjectStorageClass::StandardIa => Self::STANDARD_IA,
             ObjectStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5587,7 +5587,7 @@ impl AwsConversion for s3s::dto::ObjectVersionStorageClass {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectVersionStorageClass::Standard => Self::from_static(Self::STANDARD),
+            ObjectVersionStorageClass::Standard => Self::STANDARD,
             ObjectVersionStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5657,7 +5657,7 @@ impl AwsConversion for s3s::dto::OwnerOverride {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            OwnerOverride::Destination => Self::from_static(Self::DESTINATION),
+            OwnerOverride::Destination => Self::DESTINATION,
             OwnerOverride::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5755,8 +5755,8 @@ impl AwsConversion for s3s::dto::Payer {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Payer::BucketOwner => Self::from_static(Self::BUCKET_OWNER),
-            Payer::Requester => Self::from_static(Self::REQUESTER),
+            Payer::BucketOwner => Self::BUCKET_OWNER,
+            Payer::Requester => Self::REQUESTER,
             Payer::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5773,11 +5773,11 @@ impl AwsConversion for s3s::dto::Permission {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Permission::FullControl => Self::from_static(Self::FULL_CONTROL),
-            Permission::Read => Self::from_static(Self::READ),
-            Permission::ReadAcp => Self::from_static(Self::READ_ACP),
-            Permission::Write => Self::from_static(Self::WRITE),
-            Permission::WriteAcp => Self::from_static(Self::WRITE_ACP),
+            Permission::FullControl => Self::FULL_CONTROL,
+            Permission::Read => Self::READ,
+            Permission::ReadAcp => Self::READ_ACP,
+            Permission::Write => Self::WRITE,
+            Permission::WriteAcp => Self::WRITE_ACP,
             Permission::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -5849,8 +5849,8 @@ impl AwsConversion for s3s::dto::Protocol {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Protocol::Http => Self::from_static(Self::HTTP),
-            Protocol::Https => Self::from_static(Self::HTTPS),
+            Protocol::Http => Self::HTTP,
+            Protocol::Https => Self::HTTPS,
             Protocol::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7085,8 +7085,8 @@ impl AwsConversion for s3s::dto::QuoteFields {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            QuoteFields::Always => Self::from_static(Self::ALWAYS),
-            QuoteFields::Asneeded => Self::from_static(Self::ASNEEDED),
+            QuoteFields::Always => Self::ALWAYS,
+            QuoteFields::Asneeded => Self::ASNEEDED,
             QuoteFields::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7181,8 +7181,8 @@ impl AwsConversion for s3s::dto::ReplicaModificationsStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicaModificationsStatus::Disabled => Self::from_static(Self::DISABLED),
-            ReplicaModificationsStatus::Enabled => Self::from_static(Self::ENABLED),
+            ReplicaModificationsStatus::Disabled => Self::DISABLED,
+            ReplicaModificationsStatus::Enabled => Self::ENABLED,
             ReplicaModificationsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7295,8 +7295,8 @@ impl AwsConversion for s3s::dto::ReplicationRuleStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicationRuleStatus::Disabled => Self::from_static(Self::DISABLED),
-            ReplicationRuleStatus::Enabled => Self::from_static(Self::ENABLED),
+            ReplicationRuleStatus::Disabled => Self::DISABLED,
+            ReplicationRuleStatus::Enabled => Self::ENABLED,
             ReplicationRuleStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7313,10 +7313,10 @@ impl AwsConversion for s3s::dto::ReplicationStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicationStatus::Complete => Self::from_static(Self::COMPLETE),
-            ReplicationStatus::Failed => Self::from_static(Self::FAILED),
-            ReplicationStatus::Pending => Self::from_static(Self::PENDING),
-            ReplicationStatus::Replica => Self::from_static(Self::REPLICA),
+            ReplicationStatus::Complete => Self::COMPLETE,
+            ReplicationStatus::Failed => Self::FAILED,
+            ReplicationStatus::Pending => Self::PENDING,
+            ReplicationStatus::Replica => Self::REPLICA,
             ReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7352,8 +7352,8 @@ impl AwsConversion for s3s::dto::ReplicationTimeStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicationTimeStatus::Disabled => Self::from_static(Self::DISABLED),
-            ReplicationTimeStatus::Enabled => Self::from_static(Self::ENABLED),
+            ReplicationTimeStatus::Disabled => Self::DISABLED,
+            ReplicationTimeStatus::Enabled => Self::ENABLED,
             ReplicationTimeStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7387,7 +7387,7 @@ impl AwsConversion for s3s::dto::RequestCharged {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            RequestCharged::Requester => Self::from_static(Self::REQUESTER),
+            RequestCharged::Requester => Self::REQUESTER,
             RequestCharged::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7404,7 +7404,7 @@ impl AwsConversion for s3s::dto::RequestPayer {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            RequestPayer::Requester => Self::from_static(Self::REQUESTER),
+            RequestPayer::Requester => Self::REQUESTER,
             RequestPayer::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7532,7 +7532,7 @@ impl AwsConversion for s3s::dto::RestoreRequestType {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            RestoreRequestType::Select => Self::from_static(Self::SELECT),
+            RestoreRequestType::Select => Self::SELECT,
             RestoreRequestType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7734,8 +7734,8 @@ impl AwsConversion for s3s::dto::ServerSideEncryption {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ServerSideEncryption::Aes256 => Self::from_static(Self::AES256),
-            ServerSideEncryption::AwsKms => Self::from_static(Self::AWS_KMS),
+            ServerSideEncryption::Aes256 => Self::AES256,
+            ServerSideEncryption::AwsKms => Self::AWS_KMS,
             ServerSideEncryption::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7843,8 +7843,8 @@ impl AwsConversion for s3s::dto::SseKmsEncryptedObjectsStatus {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            SseKmsEncryptedObjectsStatus::Disabled => Self::from_static(Self::DISABLED),
-            SseKmsEncryptedObjectsStatus::Enabled => Self::from_static(Self::ENABLED),
+            SseKmsEncryptedObjectsStatus::Disabled => Self::DISABLED,
+            SseKmsEncryptedObjectsStatus::Enabled => Self::ENABLED,
             SseKmsEncryptedObjectsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7899,15 +7899,15 @@ impl AwsConversion for s3s::dto::StorageClass {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            StorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
-            StorageClass::Glacier => Self::from_static(Self::GLACIER),
-            StorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
-            StorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
-            StorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
-            StorageClass::Outposts => Self::from_static(Self::OUTPOSTS),
-            StorageClass::ReducedRedundancy => Self::from_static(Self::REDUCED_REDUNDANCY),
-            StorageClass::Standard => Self::from_static(Self::STANDARD),
-            StorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
+            StorageClass::DeepArchive => Self::DEEP_ARCHIVE,
+            StorageClass::Glacier => Self::GLACIER,
+            StorageClass::GlacierIr => Self::GLACIER_IR,
+            StorageClass::IntelligentTiering => Self::INTELLIGENT_TIERING,
+            StorageClass::OnezoneIa => Self::ONEZONE_IA,
+            StorageClass::Outposts => Self::OUTPOSTS,
+            StorageClass::ReducedRedundancy => Self::REDUCED_REDUNDANCY,
+            StorageClass::Standard => Self::STANDARD,
+            StorageClass::StandardIa => Self::STANDARD_IA,
             StorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -7960,7 +7960,7 @@ impl AwsConversion for s3s::dto::StorageClassAnalysisSchemaVersion {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            StorageClassAnalysisSchemaVersion::V1 => Self::from_static(Self::V_1),
+            StorageClassAnalysisSchemaVersion::V1 => Self::V_1,
             StorageClassAnalysisSchemaVersion::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -8013,8 +8013,8 @@ impl AwsConversion for s3s::dto::TaggingDirective {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            TaggingDirective::Copy => Self::from_static(Self::COPY),
-            TaggingDirective::Replace => Self::from_static(Self::REPLACE),
+            TaggingDirective::Copy => Self::COPY,
+            TaggingDirective::Replace => Self::REPLACE,
             TaggingDirective::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -8050,9 +8050,9 @@ impl AwsConversion for s3s::dto::Tier {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Tier::Bulk => Self::from_static(Self::BULK),
-            Tier::Expedited => Self::from_static(Self::EXPEDITED),
-            Tier::Standard => Self::from_static(Self::STANDARD),
+            Tier::Bulk => Self::BULK,
+            Tier::Expedited => Self::EXPEDITED,
+            Tier::Standard => Self::STANDARD,
             Tier::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -8132,12 +8132,12 @@ impl AwsConversion for s3s::dto::TransitionStorageClass {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            TransitionStorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
-            TransitionStorageClass::Glacier => Self::from_static(Self::GLACIER),
-            TransitionStorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
-            TransitionStorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
-            TransitionStorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
-            TransitionStorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
+            TransitionStorageClass::DeepArchive => Self::DEEP_ARCHIVE,
+            TransitionStorageClass::Glacier => Self::GLACIER,
+            TransitionStorageClass::GlacierIr => Self::GLACIER_IR,
+            TransitionStorageClass::IntelligentTiering => Self::INTELLIGENT_TIERING,
+            TransitionStorageClass::OnezoneIa => Self::ONEZONE_IA,
+            TransitionStorageClass::StandardIa => Self::STANDARD_IA,
             TransitionStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
@@ -8154,9 +8154,9 @@ impl AwsConversion for s3s::dto::Type {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Type::AmazonCustomerByEmail => Self::from_static(Self::AMAZON_CUSTOMER_BY_EMAIL),
-            Type::CanonicalUser => Self::from_static(Self::CANONICAL_USER),
-            Type::Group => Self::from_static(Self::GROUP),
+            Type::AmazonCustomerByEmail => Self::AMAZON_CUSTOMER_BY_EMAIL,
+            Type::CanonicalUser => Self::CANONICAL_USER,
+            Type::Group => Self::GROUP,
             Type::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
