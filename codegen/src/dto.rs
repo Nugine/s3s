@@ -318,6 +318,42 @@ pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {
         "",
     ]);
 
+    g.lines([
+        "// implement own Cow replacement so we can have StructuralEq",
+        "#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]",
+        "enum CowStr {",
+        "    Borrowed(&'static str),",
+        "    Owned(String),",
+        "}",
+        "",
+        "impl CowStr {",
+        "    fn as_str(&self) -> &str {",
+        "        match self {",
+        "            CowStr::Borrowed(s) => s,",
+        "            CowStr::Owned(s) => s,",
+        "        }",
+        "    }",
+        "}",
+        "",
+        "impl From<Cow<'static, str>> for CowStr {",
+        "    fn from(cow: Cow<'static, str>) -> Self {",
+        "        match cow {",
+        "            Cow::Borrowed(s) => CowStr::Borrowed(s),",
+        "            Cow::Owned(s) => CowStr::Owned(s),",
+        "        }",
+        "    }",
+        "}",
+        "",
+        "impl From<CowStr> for Cow<'static, str> {",
+        "    fn from(cow: CowStr) -> Self {",
+        "        match cow {",
+        "            CowStr::Borrowed(s) => Cow::Borrowed(s),",
+        "            CowStr::Owned(s) => Cow::Owned(s),",
+        "        }",
+        "    }",
+        "}",
+    ]);
+
     for rust_type in rust_types.values() {
         match rust_type {
             rust::Type::Alias(ty) => {
@@ -406,7 +442,7 @@ fn codegen_struct(ty: &rust::Struct, _rust_types: &RustTypes, g: &mut Codegen) {
 fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes, g: &mut Codegen) {
     codegen_doc(ty.doc.as_deref(), g);
     g.ln("#[derive(Debug, Clone, PartialEq, Eq)]");
-    g.ln(f!("pub struct {}(Cow<'static, str>);", ty.name));
+    g.ln(f!("pub struct {}(CowStr);", ty.name));
     g.lf();
 
     g.ln(f!("impl {} {{", ty.name));
@@ -419,13 +455,13 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes, g: &mut Codegen
 
         g.ln("#[must_use]");
         g.ln("pub fn as_str(&self) -> &str {");
-        g.ln("&self.0");
+        g.ln("self.0.as_str()");
         g.ln("}");
         g.lf();
 
         g.ln("#[must_use]");
         g.ln("pub const fn from_static(s: &'static str) -> Self {");
-        g.ln("Self(Cow::Borrowed(s))");
+        g.ln("Self(CowStr::Borrowed(s))");
         g.ln("}");
         g.lf();
     }
@@ -434,14 +470,14 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes, g: &mut Codegen
 
     g.ln(f!("impl From<String> for {} {{", ty.name));
     g.ln("fn from(s: String) -> Self {");
-    g.ln("Self(Cow::from(s))");
+    g.ln("Self(CowStr::Owned(s))");
     g.ln("}");
     g.ln("}");
     g.lf();
 
     g.ln(f!("impl From<{}> for Cow<'static, str> {{", ty.name));
     g.ln(f!("fn from(s: {}) -> Self {{", ty.name));
-    g.ln("s.0");
+    g.ln("s.0.into()");
     g.ln("}");
     g.ln("}");
     g.lf();

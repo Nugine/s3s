@@ -9,6 +9,39 @@ use std::convert::Infallible;
 use std::fmt;
 use std::str::FromStr;
 
+// implement own Cow replacement so we can have StructuralEq
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+enum CowStr {
+    Borrowed(&'static str),
+    Owned(String),
+}
+
+impl CowStr {
+    fn as_str(&self) -> &str {
+        match self {
+            CowStr::Borrowed(s) => s,
+            CowStr::Owned(s) => s,
+        }
+    }
+}
+
+impl From<Cow<'static, str>> for CowStr {
+    fn from(cow: Cow<'static, str>) -> Self {
+        match cow {
+            Cow::Borrowed(s) => CowStr::Borrowed(s),
+            Cow::Owned(s) => CowStr::Owned(s),
+        }
+    }
+}
+
+impl From<CowStr> for Cow<'static, str> {
+    fn from(cow: CowStr) -> Self {
+        match cow {
+            CowStr::Borrowed(s) => Cow::Borrowed(s),
+            CowStr::Owned(s) => Cow::Owned(s),
+        }
+    }
+}
 pub type AbortDate = Timestamp;
 
 /// <p>Specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will
@@ -270,31 +303,31 @@ impl fmt::Debug for AnalyticsS3BucketDestination {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct AnalyticsS3ExportFileFormat(Cow<'static, str>);
+pub struct AnalyticsS3ExportFileFormat(CowStr);
 
 impl AnalyticsS3ExportFileFormat {
     pub const CSV: Self = Self::from_static("CSV");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for AnalyticsS3ExportFileFormat {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<AnalyticsS3ExportFileFormat> for Cow<'static, str> {
     fn from(s: AnalyticsS3ExportFileFormat) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -306,7 +339,7 @@ impl FromStr for AnalyticsS3ExportFileFormat {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ArchiveStatus(Cow<'static, str>);
+pub struct ArchiveStatus(CowStr);
 
 impl ArchiveStatus {
     pub const ARCHIVE_ACCESS: Self = Self::from_static("ARCHIVE_ACCESS");
@@ -315,24 +348,24 @@ impl ArchiveStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ArchiveStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ArchiveStatus> for Cow<'static, str> {
     fn from(s: ArchiveStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -367,7 +400,7 @@ impl fmt::Debug for Bucket {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct BucketAccelerateStatus(Cow<'static, str>);
+pub struct BucketAccelerateStatus(CowStr);
 
 impl BucketAccelerateStatus {
     pub const ENABLED: Self = Self::from_static("Enabled");
@@ -376,24 +409,24 @@ impl BucketAccelerateStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for BucketAccelerateStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<BucketAccelerateStatus> for Cow<'static, str> {
     fn from(s: BucketAccelerateStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -431,7 +464,7 @@ impl fmt::Debug for BucketAlreadyOwnedByYou {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct BucketCannedACL(Cow<'static, str>);
+pub struct BucketCannedACL(CowStr);
 
 impl BucketCannedACL {
     pub const AUTHENTICATED_READ: Self = Self::from_static("authenticated-read");
@@ -444,24 +477,24 @@ impl BucketCannedACL {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for BucketCannedACL {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<BucketCannedACL> for Cow<'static, str> {
     fn from(s: BucketCannedACL) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -491,7 +524,7 @@ impl fmt::Debug for BucketLifecycleConfiguration {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct BucketLocationConstraint(Cow<'static, str>);
+pub struct BucketLocationConstraint(CowStr);
 
 impl BucketLocationConstraint {
     pub const EU: Self = Self::from_static("EU");
@@ -548,24 +581,24 @@ impl BucketLocationConstraint {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for BucketLocationConstraint {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<BucketLocationConstraint> for Cow<'static, str> {
     fn from(s: BucketLocationConstraint) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -593,7 +626,7 @@ impl fmt::Debug for BucketLoggingStatus {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct BucketLogsPermission(Cow<'static, str>);
+pub struct BucketLogsPermission(CowStr);
 
 impl BucketLogsPermission {
     pub const FULL_CONTROL: Self = Self::from_static("FULL_CONTROL");
@@ -604,24 +637,24 @@ impl BucketLogsPermission {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for BucketLogsPermission {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<BucketLogsPermission> for Cow<'static, str> {
     fn from(s: BucketLogsPermission) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -635,7 +668,7 @@ impl FromStr for BucketLogsPermission {
 pub type BucketName = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct BucketVersioningStatus(Cow<'static, str>);
+pub struct BucketVersioningStatus(CowStr);
 
 impl BucketVersioningStatus {
     pub const ENABLED: Self = Self::from_static("Enabled");
@@ -644,24 +677,24 @@ impl BucketVersioningStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for BucketVersioningStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<BucketVersioningStatus> for Cow<'static, str> {
     fn from(s: BucketVersioningStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -920,7 +953,7 @@ impl fmt::Debug for Checksum {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ChecksumAlgorithm(Cow<'static, str>);
+pub struct ChecksumAlgorithm(CowStr);
 
 impl ChecksumAlgorithm {
     pub const CRC32: Self = Self::from_static("CRC32");
@@ -933,24 +966,24 @@ impl ChecksumAlgorithm {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ChecksumAlgorithm {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ChecksumAlgorithm> for Cow<'static, str> {
     fn from(s: ChecksumAlgorithm) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -968,31 +1001,31 @@ pub type ChecksumCRC32 = String;
 pub type ChecksumCRC32C = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ChecksumMode(Cow<'static, str>);
+pub struct ChecksumMode(CowStr);
 
 impl ChecksumMode {
     pub const ENABLED: Self = Self::from_static("ENABLED");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ChecksumMode {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ChecksumMode> for Cow<'static, str> {
     fn from(s: ChecksumMode) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -1307,7 +1340,7 @@ impl fmt::Debug for CompletedPart {
 pub type CompletedPartList = List<CompletedPart>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct CompressionType(Cow<'static, str>);
+pub struct CompressionType(CowStr);
 
 impl CompressionType {
     pub const BZIP2: Self = Self::from_static("BZIP2");
@@ -1318,24 +1351,24 @@ impl CompressionType {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for CompressionType {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<CompressionType> for Cow<'static, str> {
     fn from(s: CompressionType) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -2759,7 +2792,7 @@ impl fmt::Debug for DeleteMarkerReplication {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct DeleteMarkerReplicationStatus(Cow<'static, str>);
+pub struct DeleteMarkerReplicationStatus(CowStr);
 
 impl DeleteMarkerReplicationStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -2768,24 +2801,24 @@ impl DeleteMarkerReplicationStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for DeleteMarkerReplicationStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<DeleteMarkerReplicationStatus> for Cow<'static, str> {
     fn from(s: DeleteMarkerReplicationStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -3138,31 +3171,31 @@ pub type EnableRequestProgress = bool;
 /// characters that are not supported in XML 1.0, you can add this parameter to request that
 /// Amazon S3 encode the keys in the response.</p>
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct EncodingType(Cow<'static, str>);
+pub struct EncodingType(CowStr);
 
 impl EncodingType {
     pub const URL: Self = Self::from_static("url");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for EncodingType {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<EncodingType> for Cow<'static, str> {
     fn from(s: EncodingType) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -5194,7 +5227,7 @@ impl fmt::Debug for ExistingObjectReplication {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ExistingObjectReplicationStatus(Cow<'static, str>);
+pub struct ExistingObjectReplicationStatus(CowStr);
 
 impl ExistingObjectReplicationStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -5203,24 +5236,24 @@ impl ExistingObjectReplicationStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ExistingObjectReplicationStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ExistingObjectReplicationStatus> for Cow<'static, str> {
     fn from(s: ExistingObjectReplicationStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -5234,7 +5267,7 @@ impl FromStr for ExistingObjectReplicationStatus {
 pub type Expiration = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ExpirationStatus(Cow<'static, str>);
+pub struct ExpirationStatus(CowStr);
 
 impl ExpirationStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -5243,24 +5276,24 @@ impl ExpirationStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ExpirationStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ExpirationStatus> for Cow<'static, str> {
     fn from(s: ExpirationStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -5282,31 +5315,31 @@ pub type ExposeHeaders = List<ExposeHeader>;
 pub type Expression = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ExpressionType(Cow<'static, str>);
+pub struct ExpressionType(CowStr);
 
 impl ExpressionType {
     pub const SQL: Self = Self::from_static("SQL");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ExpressionType {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ExpressionType> for Cow<'static, str> {
     fn from(s: ExpressionType) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -5322,7 +5355,7 @@ pub type FetchOwner = bool;
 pub type FieldDelimiter = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct FileHeaderInfo(Cow<'static, str>);
+pub struct FileHeaderInfo(CowStr);
 
 impl FileHeaderInfo {
     pub const IGNORE: Self = Self::from_static("IGNORE");
@@ -5333,24 +5366,24 @@ impl FileHeaderInfo {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for FileHeaderInfo {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<FileHeaderInfo> for Cow<'static, str> {
     fn from(s: FileHeaderInfo) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -5392,7 +5425,7 @@ impl fmt::Debug for FilterRule {
 pub type FilterRuleList = List<FilterRule>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct FilterRuleName(Cow<'static, str>);
+pub struct FilterRuleName(CowStr);
 
 impl FilterRuleName {
     pub const PREFIX: Self = Self::from_static("prefix");
@@ -5401,24 +5434,24 @@ impl FilterRuleName {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for FilterRuleName {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<FilterRuleName> for Cow<'static, str> {
     fn from(s: FilterRuleName) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -7598,7 +7631,7 @@ impl fmt::Debug for InputSerialization {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct IntelligentTieringAccessTier(Cow<'static, str>);
+pub struct IntelligentTieringAccessTier(CowStr);
 
 impl IntelligentTieringAccessTier {
     pub const ARCHIVE_ACCESS: Self = Self::from_static("ARCHIVE_ACCESS");
@@ -7607,24 +7640,24 @@ impl IntelligentTieringAccessTier {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for IntelligentTieringAccessTier {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<IntelligentTieringAccessTier> for Cow<'static, str> {
     fn from(s: IntelligentTieringAccessTier) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -7730,7 +7763,7 @@ impl fmt::Debug for IntelligentTieringFilter {
 pub type IntelligentTieringId = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct IntelligentTieringStatus(Cow<'static, str>);
+pub struct IntelligentTieringStatus(CowStr);
 
 impl IntelligentTieringStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -7739,24 +7772,24 @@ impl IntelligentTieringStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for IntelligentTieringStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<IntelligentTieringStatus> for Cow<'static, str> {
     fn from(s: IntelligentTieringStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -7888,7 +7921,7 @@ impl fmt::Debug for InventoryFilter {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct InventoryFormat(Cow<'static, str>);
+pub struct InventoryFormat(CowStr);
 
 impl InventoryFormat {
     pub const CSV: Self = Self::from_static("CSV");
@@ -7899,24 +7932,24 @@ impl InventoryFormat {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for InventoryFormat {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<InventoryFormat> for Cow<'static, str> {
     fn from(s: InventoryFormat) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -7928,7 +7961,7 @@ impl FromStr for InventoryFormat {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct InventoryFrequency(Cow<'static, str>);
+pub struct InventoryFrequency(CowStr);
 
 impl InventoryFrequency {
     pub const DAILY: Self = Self::from_static("Daily");
@@ -7937,24 +7970,24 @@ impl InventoryFrequency {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for InventoryFrequency {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<InventoryFrequency> for Cow<'static, str> {
     fn from(s: InventoryFrequency) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -7968,7 +8001,7 @@ impl FromStr for InventoryFrequency {
 pub type InventoryId = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct InventoryIncludedObjectVersions(Cow<'static, str>);
+pub struct InventoryIncludedObjectVersions(CowStr);
 
 impl InventoryIncludedObjectVersions {
     pub const ALL: Self = Self::from_static("All");
@@ -7977,24 +8010,24 @@ impl InventoryIncludedObjectVersions {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for InventoryIncludedObjectVersions {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<InventoryIncludedObjectVersions> for Cow<'static, str> {
     fn from(s: InventoryIncludedObjectVersions) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -8006,7 +8039,7 @@ impl FromStr for InventoryIncludedObjectVersions {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct InventoryOptionalField(Cow<'static, str>);
+pub struct InventoryOptionalField(CowStr);
 
 impl InventoryOptionalField {
     pub const BUCKET_KEY_STATUS: Self = Self::from_static("BucketKeyStatus");
@@ -8037,24 +8070,24 @@ impl InventoryOptionalField {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for InventoryOptionalField {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<InventoryOptionalField> for Cow<'static, str> {
     fn from(s: InventoryOptionalField) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -8165,7 +8198,7 @@ impl fmt::Debug for JSONOutput {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct JSONType(Cow<'static, str>);
+pub struct JSONType(CowStr);
 
 impl JSONType {
     pub const DOCUMENT: Self = Self::from_static("DOCUMENT");
@@ -8174,24 +8207,24 @@ impl JSONType {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for JSONType {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<JSONType> for Cow<'static, str> {
     fn from(s: JSONType) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -9472,7 +9505,7 @@ impl fmt::Debug for LoggingEnabled {
 pub type MFA = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct MFADelete(Cow<'static, str>);
+pub struct MFADelete(CowStr);
 
 impl MFADelete {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -9481,24 +9514,24 @@ impl MFADelete {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for MFADelete {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<MFADelete> for Cow<'static, str> {
     fn from(s: MFADelete) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -9510,7 +9543,7 @@ impl FromStr for MFADelete {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct MFADeleteStatus(Cow<'static, str>);
+pub struct MFADeleteStatus(CowStr);
 
 impl MFADeleteStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -9519,24 +9552,24 @@ impl MFADeleteStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for MFADeleteStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<MFADeleteStatus> for Cow<'static, str> {
     fn from(s: MFADeleteStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -9562,7 +9595,7 @@ pub type Message = String;
 pub type Metadata = Map<MetadataKey, MetadataValue>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct MetadataDirective(Cow<'static, str>);
+pub struct MetadataDirective(CowStr);
 
 impl MetadataDirective {
     pub const COPY: Self = Self::from_static("COPY");
@@ -9571,24 +9604,24 @@ impl MetadataDirective {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for MetadataDirective {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<MetadataDirective> for Cow<'static, str> {
     fn from(s: MetadataDirective) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -9723,7 +9756,7 @@ pub enum MetricsFilter {
 pub type MetricsId = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct MetricsStatus(Cow<'static, str>);
+pub struct MetricsStatus(CowStr);
 
 impl MetricsStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -9732,24 +9765,24 @@ impl MetricsStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for MetricsStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<MetricsStatus> for Cow<'static, str> {
     fn from(s: MetricsStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10072,7 +10105,7 @@ impl fmt::Debug for ObjectAlreadyInActiveTierError {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectAttributes(Cow<'static, str>);
+pub struct ObjectAttributes(CowStr);
 
 impl ObjectAttributes {
     pub const CHECKSUM: Self = Self::from_static("Checksum");
@@ -10087,24 +10120,24 @@ impl ObjectAttributes {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectAttributes {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectAttributes> for Cow<'static, str> {
     fn from(s: ObjectAttributes) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10118,7 +10151,7 @@ impl FromStr for ObjectAttributes {
 pub type ObjectAttributesList = List<ObjectAttributes>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectCannedACL(Cow<'static, str>);
+pub struct ObjectCannedACL(CowStr);
 
 impl ObjectCannedACL {
     pub const AUTHENTICATED_READ: Self = Self::from_static("authenticated-read");
@@ -10137,24 +10170,24 @@ impl ObjectCannedACL {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectCannedACL {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectCannedACL> for Cow<'static, str> {
     fn from(s: ObjectCannedACL) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10223,31 +10256,31 @@ impl fmt::Debug for ObjectLockConfiguration {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectLockEnabled(Cow<'static, str>);
+pub struct ObjectLockEnabled(CowStr);
 
 impl ObjectLockEnabled {
     pub const ENABLED: Self = Self::from_static("Enabled");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectLockEnabled {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectLockEnabled> for Cow<'static, str> {
     fn from(s: ObjectLockEnabled) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10278,7 +10311,7 @@ impl fmt::Debug for ObjectLockLegalHold {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectLockLegalHoldStatus(Cow<'static, str>);
+pub struct ObjectLockLegalHoldStatus(CowStr);
 
 impl ObjectLockLegalHoldStatus {
     pub const OFF: Self = Self::from_static("OFF");
@@ -10287,24 +10320,24 @@ impl ObjectLockLegalHoldStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectLockLegalHoldStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectLockLegalHoldStatus> for Cow<'static, str> {
     fn from(s: ObjectLockLegalHoldStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10316,7 +10349,7 @@ impl FromStr for ObjectLockLegalHoldStatus {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectLockMode(Cow<'static, str>);
+pub struct ObjectLockMode(CowStr);
 
 impl ObjectLockMode {
     pub const COMPLIANCE: Self = Self::from_static("COMPLIANCE");
@@ -10325,24 +10358,24 @@ impl ObjectLockMode {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectLockMode {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectLockMode> for Cow<'static, str> {
     fn from(s: ObjectLockMode) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10378,7 +10411,7 @@ impl fmt::Debug for ObjectLockRetention {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectLockRetentionMode(Cow<'static, str>);
+pub struct ObjectLockRetentionMode(CowStr);
 
 impl ObjectLockRetentionMode {
     pub const COMPLIANCE: Self = Self::from_static("COMPLIANCE");
@@ -10387,24 +10420,24 @@ impl ObjectLockRetentionMode {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectLockRetentionMode {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectLockRetentionMode> for Cow<'static, str> {
     fn from(s: ObjectLockRetentionMode) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10461,7 +10494,7 @@ impl fmt::Debug for ObjectNotInActiveTierError {
 /// ACLs, such as the <code>bucket-owner-full-control</code> canned
 /// ACL or an equivalent form of this ACL expressed in the XML format.</p>
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectOwnership(Cow<'static, str>);
+pub struct ObjectOwnership(CowStr);
 
 impl ObjectOwnership {
     pub const BUCKET_OWNER_ENFORCED: Self = Self::from_static("BucketOwnerEnforced");
@@ -10472,24 +10505,24 @@ impl ObjectOwnership {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectOwnership {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectOwnership> for Cow<'static, str> {
     fn from(s: ObjectOwnership) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10558,7 +10591,7 @@ pub type ObjectSizeGreaterThanBytes = i64;
 pub type ObjectSizeLessThanBytes = i64;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectStorageClass(Cow<'static, str>);
+pub struct ObjectStorageClass(CowStr);
 
 impl ObjectStorageClass {
     pub const DEEP_ARCHIVE: Self = Self::from_static("DEEP_ARCHIVE");
@@ -10581,24 +10614,24 @@ impl ObjectStorageClass {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectStorageClass {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectStorageClass> for Cow<'static, str> {
     fn from(s: ObjectStorageClass) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10668,31 +10701,31 @@ pub type ObjectVersionId = String;
 pub type ObjectVersionList = List<ObjectVersion>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ObjectVersionStorageClass(Cow<'static, str>);
+pub struct ObjectVersionStorageClass(CowStr);
 
 impl ObjectVersionStorageClass {
     pub const STANDARD: Self = Self::from_static("STANDARD");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ObjectVersionStorageClass {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ObjectVersionStorageClass> for Cow<'static, str> {
     fn from(s: ObjectVersionStorageClass) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10765,31 +10798,31 @@ impl fmt::Debug for Owner {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct OwnerOverride(Cow<'static, str>);
+pub struct OwnerOverride(CowStr);
 
 impl OwnerOverride {
     pub const DESTINATION: Self = Self::from_static("Destination");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for OwnerOverride {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<OwnerOverride> for Cow<'static, str> {
     fn from(s: OwnerOverride) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10912,7 +10945,7 @@ pub type PartsCount = i32;
 pub type PartsList = List<ObjectPart>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Payer(Cow<'static, str>);
+pub struct Payer(CowStr);
 
 impl Payer {
     pub const BUCKET_OWNER: Self = Self::from_static("BucketOwner");
@@ -10921,24 +10954,24 @@ impl Payer {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for Payer {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<Payer> for Cow<'static, str> {
     fn from(s: Payer) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -10950,7 +10983,7 @@ impl FromStr for Payer {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Permission(Cow<'static, str>);
+pub struct Permission(CowStr);
 
 impl Permission {
     pub const FULL_CONTROL: Self = Self::from_static("FULL_CONTROL");
@@ -10965,24 +10998,24 @@ impl Permission {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for Permission {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<Permission> for Cow<'static, str> {
     fn from(s: Permission) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -11054,7 +11087,7 @@ impl fmt::Debug for ProgressEvent {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Protocol(Cow<'static, str>);
+pub struct Protocol(CowStr);
 
 impl Protocol {
     pub const HTTP: Self = Self::from_static("http");
@@ -11063,24 +11096,24 @@ impl Protocol {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for Protocol {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<Protocol> for Cow<'static, str> {
     fn from(s: Protocol) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -12837,7 +12870,7 @@ pub type QuoteCharacter = String;
 pub type QuoteEscapeCharacter = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct QuoteFields(Cow<'static, str>);
+pub struct QuoteFields(CowStr);
 
 impl QuoteFields {
     pub const ALWAYS: Self = Self::from_static("ALWAYS");
@@ -12846,24 +12879,24 @@ impl QuoteFields {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for QuoteFields {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<QuoteFields> for Cow<'static, str> {
     fn from(s: QuoteFields) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -13000,7 +13033,7 @@ impl fmt::Debug for ReplicaModifications {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ReplicaModificationsStatus(Cow<'static, str>);
+pub struct ReplicaModificationsStatus(CowStr);
 
 impl ReplicaModificationsStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -13009,24 +13042,24 @@ impl ReplicaModificationsStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ReplicaModificationsStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ReplicaModificationsStatus> for Cow<'static, str> {
     fn from(s: ReplicaModificationsStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -13193,7 +13226,7 @@ pub enum ReplicationRuleFilter {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ReplicationRuleStatus(Cow<'static, str>);
+pub struct ReplicationRuleStatus(CowStr);
 
 impl ReplicationRuleStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -13202,24 +13235,24 @@ impl ReplicationRuleStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ReplicationRuleStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ReplicationRuleStatus> for Cow<'static, str> {
     fn from(s: ReplicationRuleStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -13233,7 +13266,7 @@ impl FromStr for ReplicationRuleStatus {
 pub type ReplicationRules = List<ReplicationRule>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ReplicationStatus(Cow<'static, str>);
+pub struct ReplicationStatus(CowStr);
 
 impl ReplicationStatus {
     pub const COMPLETE: Self = Self::from_static("COMPLETE");
@@ -13246,24 +13279,24 @@ impl ReplicationStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ReplicationStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ReplicationStatus> for Cow<'static, str> {
     fn from(s: ReplicationStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -13295,7 +13328,7 @@ impl fmt::Debug for ReplicationTime {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ReplicationTimeStatus(Cow<'static, str>);
+pub struct ReplicationTimeStatus(CowStr);
 
 impl ReplicationTimeStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -13304,24 +13337,24 @@ impl ReplicationTimeStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ReplicationTimeStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ReplicationTimeStatus> for Cow<'static, str> {
     fn from(s: ReplicationTimeStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -13352,31 +13385,31 @@ impl fmt::Debug for ReplicationTimeValue {
 /// <p>If present, indicates that the requester was successfully charged for the
 /// request.</p>
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RequestCharged(Cow<'static, str>);
+pub struct RequestCharged(CowStr);
 
 impl RequestCharged {
     pub const REQUESTER: Self = Self::from_static("requester");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for RequestCharged {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<RequestCharged> for Cow<'static, str> {
     fn from(s: RequestCharged) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -13392,31 +13425,31 @@ impl FromStr for RequestCharged {
 /// objects from Requester Pays buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html">Downloading Objects in
 /// Requester Pays Buckets</a> in the <i>Amazon S3 User Guide</i>.</p>
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RequestPayer(Cow<'static, str>);
+pub struct RequestPayer(CowStr);
 
 impl RequestPayer {
     pub const REQUESTER: Self = Self::from_static("requester");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for RequestPayer {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<RequestPayer> for Cow<'static, str> {
     fn from(s: RequestPayer) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -13597,31 +13630,31 @@ impl fmt::Debug for RestoreRequest {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct RestoreRequestType(Cow<'static, str>);
+pub struct RestoreRequestType(CowStr);
 
 impl RestoreRequestType {
     pub const SELECT: Self = Self::from_static("SELECT");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for RestoreRequestType {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<RestoreRequestType> for Cow<'static, str> {
     fn from(s: RestoreRequestType) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -13960,7 +13993,7 @@ impl fmt::Debug for SelectParameters {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct ServerSideEncryption(Cow<'static, str>);
+pub struct ServerSideEncryption(CowStr);
 
 impl ServerSideEncryption {
     pub const AES256: Self = Self::from_static("AES256");
@@ -13969,24 +14002,24 @@ impl ServerSideEncryption {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for ServerSideEncryption {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<ServerSideEncryption> for Cow<'static, str> {
     fn from(s: ServerSideEncryption) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -14144,7 +14177,7 @@ impl fmt::Debug for SseKmsEncryptedObjects {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct SseKmsEncryptedObjectsStatus(Cow<'static, str>);
+pub struct SseKmsEncryptedObjectsStatus(CowStr);
 
 impl SseKmsEncryptedObjectsStatus {
     pub const DISABLED: Self = Self::from_static("Disabled");
@@ -14153,24 +14186,24 @@ impl SseKmsEncryptedObjectsStatus {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for SseKmsEncryptedObjectsStatus {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<SseKmsEncryptedObjectsStatus> for Cow<'static, str> {
     fn from(s: SseKmsEncryptedObjectsStatus) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -14224,7 +14257,7 @@ impl fmt::Debug for StatsEvent {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct StorageClass(Cow<'static, str>);
+pub struct StorageClass(CowStr);
 
 impl StorageClass {
     pub const DEEP_ARCHIVE: Self = Self::from_static("DEEP_ARCHIVE");
@@ -14247,24 +14280,24 @@ impl StorageClass {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for StorageClass {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<StorageClass> for Cow<'static, str> {
     fn from(s: StorageClass) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -14314,31 +14347,31 @@ impl fmt::Debug for StorageClassAnalysisDataExport {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct StorageClassAnalysisSchemaVersion(Cow<'static, str>);
+pub struct StorageClassAnalysisSchemaVersion(CowStr);
 
 impl StorageClassAnalysisSchemaVersion {
     pub const V_1: Self = Self::from_static("V_1");
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for StorageClassAnalysisSchemaVersion {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<StorageClassAnalysisSchemaVersion> for Cow<'static, str> {
     fn from(s: StorageClassAnalysisSchemaVersion) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -14387,7 +14420,7 @@ impl fmt::Debug for Tagging {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct TaggingDirective(Cow<'static, str>);
+pub struct TaggingDirective(CowStr);
 
 impl TaggingDirective {
     pub const COPY: Self = Self::from_static("COPY");
@@ -14396,24 +14429,24 @@ impl TaggingDirective {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for TaggingDirective {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<TaggingDirective> for Cow<'static, str> {
     fn from(s: TaggingDirective) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -14458,7 +14491,7 @@ pub type TargetGrants = List<TargetGrant>;
 pub type TargetPrefix = String;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Tier(Cow<'static, str>);
+pub struct Tier(CowStr);
 
 impl Tier {
     pub const BULK: Self = Self::from_static("Bulk");
@@ -14469,24 +14502,24 @@ impl Tier {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for Tier {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<Tier> for Cow<'static, str> {
     fn from(s: Tier) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -14590,7 +14623,7 @@ impl fmt::Debug for Transition {
 pub type TransitionList = List<Transition>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct TransitionStorageClass(Cow<'static, str>);
+pub struct TransitionStorageClass(CowStr);
 
 impl TransitionStorageClass {
     pub const DEEP_ARCHIVE: Self = Self::from_static("DEEP_ARCHIVE");
@@ -14607,24 +14640,24 @@ impl TransitionStorageClass {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for TransitionStorageClass {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<TransitionStorageClass> for Cow<'static, str> {
     fn from(s: TransitionStorageClass) -> Self {
-        s.0
+        s.0.into()
     }
 }
 
@@ -14636,7 +14669,7 @@ impl FromStr for TransitionStorageClass {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Type(Cow<'static, str>);
+pub struct Type(CowStr);
 
 impl Type {
     pub const AMAZON_CUSTOMER_BY_EMAIL: Self = Self::from_static("AmazonCustomerByEmail");
@@ -14647,24 +14680,24 @@ impl Type {
 
     #[must_use]
     pub fn as_str(&self) -> &str {
-        &self.0
+        self.0.as_str()
     }
 
     #[must_use]
     pub const fn from_static(s: &'static str) -> Self {
-        Self(Cow::Borrowed(s))
+        Self(CowStr::Borrowed(s))
     }
 }
 
 impl From<String> for Type {
     fn from(s: String) -> Self {
-        Self(Cow::from(s))
+        Self(CowStr::Owned(s))
     }
 }
 
 impl From<Type> for Cow<'static, str> {
     fn from(s: Type) -> Self {
-        s.0
+        s.0.into()
     }
 }
 

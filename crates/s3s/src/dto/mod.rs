@@ -56,3 +56,19 @@ impl From<ListObjectsInput> for ListObjectsV2Input {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_string_enum_matches() {
+        use super::generated::ObjectLockMode;
+
+        let mode = ObjectLockMode::from_static("GOVERNANCE");
+
+        match mode {
+            ObjectLockMode::GOVERNANCE => {}
+            _ => panic!("Expected ObjectLockMode::Governance"),
+        }
+    }
+}
