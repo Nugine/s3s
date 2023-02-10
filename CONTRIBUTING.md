@@ -18,6 +18,12 @@ cd s3s
 just dev
 ```
 
+#### Open documentation
+
+```bash
+just doc
+```
+
 #### Run the codegen
 
 ```bash
@@ -32,7 +38,13 @@ It should change nothing if you are running the latest code.
 Install `s3s-fs`
 
 ```bash
-just install
+cargo install --path crates/s3s-fs --features binary
+```
+
+You can also use the shortcut
+
+```bash
+just install-s3s-fs
 ```
 
 Run `s3s-fs` with example configuration
@@ -53,7 +65,7 @@ Then you can explore it with your favorite S3 client!
 Install `s3s-proxy`
 
 ```bash
-just install
+just install-s3s-proxy
 ```
 
 Run the combined server and save logs
@@ -65,5 +77,5 @@ Run the combined server and save logs
 Open a new terminal, then run the test suite
 
 ```bash
-./scripts/mint.sh
+./scripts/mint.sh | tee target/mint.log
 ```

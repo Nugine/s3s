@@ -15,9 +15,15 @@ download-model:
 codegen:
     ./scripts/codegen.sh
 
-install:
+install-s3s-fs:
     cargo install --offline --path crates/s3s-fs --features binary
+
+install-s3s-proxy:
     cargo install --offline --path crates/s3s-proxy
+
+install:
+    just install-s3s-fs
+    just install-s3s-proxy
 
 sync-version:
     cargo set-version -p s3s-codegen    0.0.0

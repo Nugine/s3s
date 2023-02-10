@@ -23,7 +23,7 @@ This experimental project intends to offer an ergonomic adapter for building S3-
 
 `s3s-aws` provides useful types and integration with [`aws-sdk-s3`](https://crates.io/crates/aws-sdk-s3).
 
-`s3s-fs` implements the S3 API based on file system, as a sample implementation. It is designed for integration testing. DO NOT USE IT IN PRODUCTION.
+`s3s-fs` implements the S3 API based on file system, as a sample implementation. It is designed for integration testing, which can be used to [mock an S3 client](https://github.com/Nugine/s3s/blob/main/crates/s3s-fs/tests/it_aws.rs). It also provides a binary for debugging. [Play it!](./CONTRIBUTING.md#play-the-test-server)
 
 ## How it works
 
@@ -35,7 +35,7 @@ The diagram above shows how `s3s` works.
 
 `s3s` converts operation outputs or errors to HTTP responses after calling the user-defined service.
 
-The data types, serialization and deserialization are generated from the smithy model in [aws-sdk-rust](https://github.com/awslabs/aws-sdk-rust) repository, with some manual hacks.
+The data types, serialization and deserialization are generated from the smithy model in [aws-sdk-rust](https://github.com/awslabs/aws-sdk-rust) repository. We apply manual hacks to fix some problems in [smithy server codegen](https://awslabs.github.io/smithy-rs/design/server/overview.html) and make `s3s` ready to use now.
 
 ## Contributing
 
