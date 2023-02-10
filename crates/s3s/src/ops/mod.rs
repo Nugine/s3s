@@ -17,6 +17,7 @@ use crate::stream::aggregate_unlimited;
 use crate::stream::VecByteStream;
 use crate::utils::is_base64_encoded;
 
+use std::borrow::Cow;
 use std::mem;
 use std::ops::Not;
 
@@ -179,6 +180,7 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
         let headers = extract_headers(req)?;
         let mime = extract_mime(&headers)?;
         let decoded_content_length = extract_decoded_content_length(&headers)?;
+        let decoded_uri_path = urlencoding::decode(req.uri().path()).map_err(|_| S3ErrorCode::InvalidURI)?;
         let body_transformed;
         {
             let mut scx = SignatureContext {
@@ -191,6 +193,7 @@ async fn call_inner(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, b
                 multipart: None,
                 body_transformed: false,
                 decoded_content_length,
+                decoded_uri_path,
             };
 
             scx.check().await?;
@@ -259,6 +262,7 @@ struct SignatureContext<'a> {
     multipart: Option<Multipart>,
     body_transformed: bool,
     decoded_content_length: Option<usize>,
+    decoded_uri_path: Cow<'a, str>,
 }
 
 impl SignatureContext<'_> {
@@ -348,7 +352,7 @@ impl SignatureContext<'_> {
         let signature = {
             let headers = self.headers.find_multiple(&presigned_url.signed_headers);
             let method = self.req.method();
-            let uri_path = self.req.uri().path();
+            let uri_path = &self.decoded_uri_path;
 
             let canonical_request = signature_v4::create_presigned_canonical_request(method, uri_path, qs.as_ref(), &headers);
 
@@ -394,7 +398,7 @@ impl SignatureContext<'_> {
 
         let signature = {
             let method = self.req.method();
-            let uri_path = self.req.uri().path();
+            let uri_path = &self.decoded_uri_path;
             let query_strings: &[(String, String)] = self.qs.as_ref().map_or(&[], AsRef::as_ref);
 
             // here requires that `auth.signed_headers` is sorted
