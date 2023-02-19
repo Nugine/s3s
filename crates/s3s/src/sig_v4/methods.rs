@@ -1,6 +1,7 @@
 //! Signature v4 methods
 
-use crate::header::AmzDate;
+use super::AmzDate;
+
 use crate::http::OrderedHeaders;
 use crate::utils::from_ascii;
 use crate::utils::stable_sort_by_first;
@@ -410,7 +411,7 @@ mod tests {
 
     use crate::http::OrderedHeaders;
     use crate::http::OrderedQs;
-    use crate::signature_v4::PresignedUrl;
+    use crate::sig_v4::PresignedUrl;
 
     #[test]
     fn example_get_object() {

@@ -1,8 +1,8 @@
 //! aws-chunked stream
 
 use crate::error::StdError;
-use crate::header::AmzDate;
-use crate::signature_v4;
+use crate::sig_v4::AmzDate;
+use crate::sig_v4;
 use crate::stream::{ByteStream, DynByteStream, RemainingLength};
 use crate::utils::SyncBoxFuture;
 
@@ -101,9 +101,9 @@ fn parse_chunk_meta(mut input: &[u8]) -> nom::IResult<&[u8], ChunkMeta<'_>> {
 
 /// check signature
 fn check_signature(ctx: &SignatureCtx, expected_signature: &[u8], chunk_data: &[Bytes]) -> Option<Box<str>> {
-    let string_to_sign = signature_v4::create_chunk_string_to_sign(&ctx.amz_date, &ctx.region, &ctx.prev_signature, chunk_data);
+    let string_to_sign = sig_v4::create_chunk_string_to_sign(&ctx.amz_date, &ctx.region, &ctx.prev_signature, chunk_data);
 
-    let chunk_signature = signature_v4::calculate_signature(&string_to_sign, &ctx.secret_key, &ctx.amz_date, &ctx.region);
+    let chunk_signature = sig_v4::calculate_signature(&string_to_sign, &ctx.secret_key, &ctx.amz_date, &ctx.region);
 
     (chunk_signature.as_bytes() == expected_signature).then(|| chunk_signature.into())
 }

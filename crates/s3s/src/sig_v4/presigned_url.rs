@@ -1,6 +1,8 @@
 //! presigned url information
 
-use crate::header::{AmzDate, CredentialV4};
+use super::CredentialV4;
+use super::AmzDate;
+
 use crate::http::OrderedQs;
 use crate::utils::is_sha256_checksum;
 

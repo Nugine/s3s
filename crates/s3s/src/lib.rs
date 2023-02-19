@@ -24,7 +24,7 @@ mod header;
 mod http;
 mod ops;
 mod s3_trait;
-mod signature_v4;
+mod sig_v4;
 mod xml;
 
 pub mod dto;

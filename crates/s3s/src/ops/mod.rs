@@ -4,15 +4,16 @@ pub use self::generated::*;
 use crate::auth::S3Auth;
 use crate::error::*;
 use crate::header;
-use crate::header::{AmzContentSha256, AmzDate, AuthorizationV4, CredentialV4};
 use crate::http;
 use crate::http::{AwsChunkedStream, Body, Multipart};
 use crate::http::{OrderedHeaders, OrderedQs};
 use crate::http::{Request, Response};
 use crate::path::{ParseS3PathError, S3Path};
 use crate::s3_trait::S3;
-use crate::signature_v4;
-use crate::signature_v4::PresignedUrl;
+use crate::sig_v4;
+use crate::sig_v4::PresignedUrl;
+use crate::sig_v4::{AmzContentSha256, AmzDate};
+use crate::sig_v4::{AuthorizationV4, CredentialV4};
 use crate::stream::aggregate_unlimited;
 use crate::stream::VecByteStream;
 use crate::utils::is_base64_encoded;
@@ -346,7 +347,7 @@ impl SignatureContext<'_> {
         let secret_key = auth.get_secret_key(credential.access_key_id).await?;
 
         let string_to_sign = info.policy;
-        let signature = signature_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region);
+        let signature = sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region);
 
         if signature != info.x_amz_signature {
             return Err(s3_error!(SignatureDoesNotMatch));
@@ -374,13 +375,13 @@ impl SignatureContext<'_> {
             let method = self.req.method();
             let uri_path = &self.decoded_uri_path;
 
-            let canonical_request = signature_v4::create_presigned_canonical_request(method, uri_path, qs.as_ref(), &headers);
+            let canonical_request = sig_v4::create_presigned_canonical_request(method, uri_path, qs.as_ref(), &headers);
 
             let region = presigned_url.credential.aws_region;
             let amz_date = &presigned_url.amz_date;
-            let string_to_sign = signature_v4::create_string_to_sign(&canonical_request, amz_date, region);
+            let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, amz_date, region);
 
-            signature_v4::calculate_signature(&string_to_sign, &secret_key, amz_date, region)
+            sig_v4::calculate_signature(&string_to_sign, &secret_key, amz_date, region)
         };
 
         if signature != presigned_url.signature {
@@ -425,11 +426,11 @@ impl SignatureContext<'_> {
             let headers = self.headers.find_multiple(&authorization.signed_headers);
 
             let canonical_request = if is_stream {
-                let payload = signature_v4::Payload::MultipleChunks;
-                signature_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
+                let payload = sig_v4::Payload::MultipleChunks;
+                sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             } else if matches!(*self.req.method(), Method::GET | Method::HEAD) {
-                let payload = signature_v4::Payload::Empty;
-                signature_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
+                let payload = sig_v4::Payload::Empty;
+                sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             } else {
                 let bytes = extract_full_body(self.req, self.body).await?;
 
@@ -440,19 +441,19 @@ impl SignatureContext<'_> {
                 }
 
                 let payload = if matches!(amz_content_sha256, AmzContentSha256::UnsignedPayload) {
-                    signature_v4::Payload::Unsigned
+                    sig_v4::Payload::Unsigned
                 } else if bytes.is_empty() {
-                    signature_v4::Payload::Empty
+                    sig_v4::Payload::Empty
                 } else {
-                    signature_v4::Payload::SingleChunk(&bytes)
+                    sig_v4::Payload::SingleChunk(&bytes)
                 };
 
-                signature_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
+                sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             };
 
             let region = authorization.credential.aws_region;
-            let string_to_sign = signature_v4::create_string_to_sign(&canonical_request, &amz_date, region);
-            signature_v4::calculate_signature(&string_to_sign, &secret_key, &amz_date, region)
+            let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, &amz_date, region);
+            sig_v4::calculate_signature(&string_to_sign, &secret_key, &amz_date, region)
         };
 
         if signature != authorization.signature {

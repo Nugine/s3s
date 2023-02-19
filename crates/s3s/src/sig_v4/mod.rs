@@ -8,5 +8,14 @@
 mod presigned_url;
 pub use self::presigned_url::*;
 
+mod authorization_v4;
+pub use self::authorization_v4::*;
+
+mod amz_content_sha256;
+pub use self::amz_content_sha256::*;
+
+mod amz_date;
+pub use self::amz_date::*;
+
 mod methods;
 pub use self::methods::*;
