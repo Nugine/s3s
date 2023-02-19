@@ -59,7 +59,7 @@ impl OrderedQs {
         let lower_bound = qs.partition_point(|x| x.0.as_str() < name);
 
         let mut iter = qs[lower_bound..].iter();
-        let val = iter.next()?.1.as_str();
+        let pair = iter.next()?;
 
         if let Some(following) = iter.next() {
             if following.0 == name {
@@ -67,7 +67,7 @@ impl OrderedQs {
             }
         }
 
-        Some(val)
+        (pair.0.as_str() == name).then_some(pair.1.as_str())
     }
 }
 
@@ -83,8 +83,27 @@ mod tests {
 
     #[test]
     fn tag() {
-        let query = "tagging";
-        let qs = OrderedQs::parse(query).unwrap();
-        assert_eq!(qs.as_ref(), &[("tagging".to_owned(), "".to_owned())]);
+        {
+            let query = "tagging";
+            let qs = OrderedQs::parse(query).unwrap();
+            assert_eq!(qs.as_ref(), &[("tagging".to_owned(), "".to_owned())]);
+
+            assert_eq!(qs.get_unique("taggin"), None);
+            assert_eq!(qs.get_unique("tagging"), Some(""));
+            assert_eq!(qs.get_unique("taggingg"), None);
+        }
+
+        {
+            let query = "tagging&tagging";
+            let qs = OrderedQs::parse(query).unwrap();
+            assert_eq!(
+                qs.as_ref(),
+                &[("tagging".to_owned(), "".to_owned()), ("tagging".to_owned(), "".to_owned())]
+            );
+
+            assert_eq!(qs.get_unique("taggin"), None);
+            assert_eq!(qs.get_unique("tagging"), None);
+            assert_eq!(qs.get_unique("taggingg"), None);
+        }
     }
 }
