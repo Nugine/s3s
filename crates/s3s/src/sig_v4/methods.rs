@@ -284,7 +284,7 @@ pub fn calculate_signature(string_to_sign: &str, secret_key: &str, amz_date: &Am
 
     // DateKey
     let date = amz_date.fmt_date();
-    let date_key = hmac_sha256(secret, date);
+    let date_key = hmac_sha256(secret, date.as_bytes());
 
     // DateRegionKey
     let date_region_key = hmac_sha256(date_key, region); // TODO: use a `Region` type

@@ -1,6 +1,9 @@
 //! x-amz-date
 
+use std::fmt::Write as _;
 use std::str::FromStr;
+
+use arrayvec::ArrayString;
 
 /// x-amz-date
 #[derive(Debug, Clone)]
@@ -79,19 +82,19 @@ impl AmzDate {
 
     /// `{YYYY}{MM}{DD}T{HH}{MM}{SS}Z`
     #[must_use]
-    pub fn fmt_iso8601(&self) -> String {
-        // TODO: small string
-        format!(
-            "{:04}{:02}{:02}T{:02}{:02}{:02}Z",
-            self.year, self.month, self.day, self.hour, self.minute, self.second
-        )
+    pub fn fmt_iso8601(&self) -> ArrayString<16> {
+        let mut buf = <ArrayString<16>>::new();
+        let (y, m, d, hh, mm, ss) = (self.year, self.month, self.day, self.hour, self.minute, self.second);
+        write!(&mut buf, "{y:04}{m:02}{d:02}T{hh:02}{mm:02}{ss:02}Z").unwrap();
+        buf
     }
 
     /// `{YYYY}{MM}{DD}`
     #[must_use]
-    pub fn fmt_date(&self) -> String {
-        // TODO: small string
-        format!("{:04}{:02}{:02}", self.year, self.month, self.day,)
+    pub fn fmt_date(&self) -> ArrayString<8> {
+        let mut buf = <ArrayString<8>>::new();
+        write!(&mut buf, "{:04}{:02}{:02}", self.year, self.month, self.day).unwrap();
+        buf
     }
 
     pub fn to_time(&self) -> Option<time::OffsetDateTime> {
