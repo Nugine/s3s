@@ -76,8 +76,10 @@ if __name__ == "__main__":
     for group in passed_groups:
         assert counts[group]["fail"] == 0
 
+    assert counts["minio-java"]["pass"] >= 17 # Won't fix
+
     # FIXME: E2E tests
+    # https://github.com/Nugine/s3s/issues/4
     assert counts["minio-dotnet"]["pass"] >= 1
-    assert counts["minio-java"]["pass"] >= 17
+    assert counts["minio-js"]["pass"] >= 0
     assert counts["versioning"]["pass"] >= 4
-    # assert counts["minio-js"]["pass"] >= 0
