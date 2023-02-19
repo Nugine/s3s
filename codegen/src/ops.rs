@@ -103,7 +103,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         "#![allow(clippy::borrow_interior_mutable_const)]",
         "",
         "use crate::dto::*;", //
-        "use crate::header::names::*;",
+        "use crate::header::*;",
         "use crate::http;",
         "use crate::error::*;",
         "use crate::path::S3Path;",

@@ -1,8 +1,8 @@
 //! aws-chunked stream
 
 use crate::error::StdError;
-use crate::sig_v4::AmzDate;
 use crate::sig_v4;
+use crate::sig_v4::AmzDate;
 use crate::stream::{ByteStream, DynByteStream, RemainingLength};
 use crate::utils::SyncBoxFuture;
 

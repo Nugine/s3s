@@ -45,7 +45,7 @@ fn serialize_error(x: S3Error) -> S3Result<Response> {
 fn extract_s3_path(req: &Request, decoded_uri_path: &str, base_domain: Option<&str>) -> S3Result<S3Path> {
     let uri_path = decoded_uri_path;
 
-    let result = match (base_domain, req.headers().get(crate::header::names::HOST)) {
+    let result = match (base_domain, req.headers().get(crate::header::HOST)) {
         (Some(base_domain), Some(val)) => {
             let on_err = |e| s3_error!(e, InvalidRequest, "invalid header: Host: {val:?}");
             let host = val.to_str().map_err(on_err)?;
@@ -90,7 +90,7 @@ fn extract_headers(req: &Request) -> S3Result<OrderedHeaders<'_>> {
 }
 
 fn extract_mime(hs: &OrderedHeaders<'_>) -> S3Result<Option<Mime>> {
-    let Some(content_type) = hs.get(crate::header::names::CONTENT_TYPE) else { return Ok(None) };
+    let Some(content_type) = hs.get(crate::header::CONTENT_TYPE) else { return Ok(None) };
     match content_type.parse::<Mime>() {
         Ok(x) => Ok(Some(x)),
         Err(e) => Err(invalid_request!(e, "invalid content type")),
@@ -98,7 +98,7 @@ fn extract_mime(hs: &OrderedHeaders<'_>) -> S3Result<Option<Mime>> {
 }
 
 fn extract_amz_content_sha256<'a>(hs: &'_ OrderedHeaders<'a>) -> S3Result<Option<AmzContentSha256<'a>>> {
-    let Some(val) = hs.get(crate::header::names::X_AMZ_CONTENT_SHA256) else { return Ok(None) };
+    let Some(val) = hs.get(crate::header::X_AMZ_CONTENT_SHA256) else { return Ok(None) };
     match AmzContentSha256::parse(val) {
         Ok(x) => Ok(Some(x)),
         Err(e) => {
@@ -111,7 +111,7 @@ fn extract_amz_content_sha256<'a>(hs: &'_ OrderedHeaders<'a>) -> S3Result<Option
 }
 
 fn extract_authorization_v4<'a>(hs: &'_ OrderedHeaders<'a>) -> S3Result<Option<AuthorizationV4<'a>>> {
-    let Some(val) = hs.get(crate::header::names::AUTHORIZATION) else { return Ok(None) };
+    let Some(val) = hs.get(crate::header::AUTHORIZATION) else { return Ok(None) };
     match AuthorizationV4::parse(val) {
         Ok(x) => Ok(Some(x)),
         Err(e) => Err(invalid_request!(e, "invalid header: authorization")),
@@ -119,7 +119,7 @@ fn extract_authorization_v4<'a>(hs: &'_ OrderedHeaders<'a>) -> S3Result<Option<A
 }
 
 fn extract_amz_date(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<AmzDate>> {
-    let Some(val) = hs.get(crate::header::names::X_AMZ_DATE) else { return Ok(None) };
+    let Some(val) = hs.get(crate::header::X_AMZ_DATE) else { return Ok(None) };
     match AmzDate::parse(val) {
         Ok(x) => Ok(Some(x)),
         Err(e) => Err(invalid_request!(e, "invalid header: x-amz-date")),
@@ -127,7 +127,7 @@ fn extract_amz_date(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<AmzDate>> {
 }
 
 fn extract_decoded_content_length(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<usize>> {
-    let Some(val) = hs.get(crate::header::names::X_AMZ_DECODED_CONTENT_LENGTH) else { return Ok(None) };
+    let Some(val) = hs.get(crate::header::X_AMZ_DECODED_CONTENT_LENGTH) else { return Ok(None) };
     match atoi::atoi::<usize>(val.as_bytes()) {
         Some(x) => Ok(Some(x)),
         None => Err(invalid_request!("invalid header: x-amz-decoded-content-length")),
@@ -224,7 +224,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
         }
         if body_transformed {
             // invalidate the original content length
-            if let Some(val) = req.headers_mut().get_mut(header::names::CONTENT_LENGTH) {
+            if let Some(val) = req.headers_mut().get_mut(header::CONTENT_LENGTH) {
                 *val = fmt_content_length(decoded_content_length.unwrap_or(0))
             }
         }

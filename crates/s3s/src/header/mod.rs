@@ -1,1 +1,2 @@
-pub mod names;
+mod generated;
+pub use self::generated::*;

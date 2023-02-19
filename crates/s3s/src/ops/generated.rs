@@ -5,7 +5,7 @@
 
 use crate::dto::*;
 use crate::error::*;
-use crate::header::names::*;
+use crate::header::*;
 use crate::http;
 use crate::path::S3Path;
 use crate::s3_trait::S3;

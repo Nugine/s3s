@@ -50,7 +50,7 @@ fn main() {
     }
 
     {
-        let path = "crates/s3s/src/header/names.rs";
+        let path = "crates/s3s/src/header/generated.rs";
         let mut gen = Codegen::create_file(path).unwrap();
         headers::codegen(&model, &mut gen);
     }
