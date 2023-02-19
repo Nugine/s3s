@@ -8,7 +8,7 @@ use smallvec::SmallVec;
 use crate::utils::stable_sort_by_first;
 
 /// Immutable http header container
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct OrderedHeaders<'a> {
     /// Ascending headers (header names are lowercase)
     headers: SmallVec<[(&'a str, &'a str); 16]>,

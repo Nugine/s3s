@@ -3,7 +3,7 @@
 use crate::utils::stable_sort_by_first;
 
 /// Immutable query string container
-#[derive(Debug, Clone)]
+#[derive(Debug, Default, Clone)]
 pub struct OrderedQs {
     /// Ascending query strings
     qs: Vec<(String, String)>,

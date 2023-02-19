@@ -4,21 +4,14 @@ use super::AmzDate;
 
 use crate::http::OrderedHeaders;
 use crate::utils::from_ascii;
+use crate::utils::hex_bytes32;
+use crate::utils::hmac_sha256;
 use crate::utils::stable_sort_by_first;
 
-use hex_simd::{AsOut, AsciiCase};
-use hmac::{Hmac, Mac};
 use hyper::body::Bytes;
 use hyper::Method;
 use sha2::{Digest, Sha256};
 use smallvec::SmallVec;
-
-/// `f(hex(src))`
-fn hex_bytes32<R>(src: impl AsRef<[u8]>, f: impl FnOnce(&str) -> R) -> R {
-    let buf: &mut [u8] = &mut [0; 64];
-    let ans = hex_simd::encode_as_str(src.as_ref(), buf.as_out(), AsciiCase::Lower);
-    f(ans)
-}
 
 /// `f(hex(sha256(data)))`
 fn hex_sha256<R>(data: &[u8], f: impl FnOnce(&str) -> R) -> R {
@@ -36,18 +29,8 @@ fn hex_sha256_chunk<R>(chunk: &[Bytes], f: impl FnOnce(&str) -> R) -> R {
     hex_bytes32(src, f)
 }
 
-/// `hmac_sha256(key, data)`
-fn hmac_sha256(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> impl AsRef<[u8]> {
-    #[allow(clippy::expect_used)]
-    let mut m = <Hmac<Sha256>>::new_from_slice(key.as_ref()).expect("HMAC can take key of any size");
-    m.update(data.as_ref());
-    m.finalize().into_bytes()
-}
-
-/// `hex(hmac_sha256(key, data))`
-fn hex_hmac_sha256(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> String {
-    let src = hmac_sha256(key, data);
-    hex_simd::encode_to_string(src, AsciiCase::Lower)
+fn hex(data: impl AsRef<[u8]>) -> String {
+    hex_simd::encode_to_string(data, hex_simd::AsciiCase::Lower)
 }
 
 /// custom uri encode
@@ -313,7 +296,7 @@ pub fn calculate_signature(string_to_sign: &str, secret_key: &str, amz_date: &Am
     let signing_key = hmac_sha256(date_region_service_key, "aws4_request");
 
     // Signature
-    hex_hmac_sha256(signing_key, string_to_sign)
+    hex(hmac_sha256(signing_key, string_to_sign))
 }
 
 /// create presigned canonical request

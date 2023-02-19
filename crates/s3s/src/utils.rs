@@ -2,6 +2,7 @@ use crate::dto::{Timestamp, TimestampFormat};
 
 use std::fmt::Write;
 use std::future::Future;
+use std::mem::MaybeUninit;
 use std::pin::Pin;
 
 use arrayvec::{ArrayString, ArrayVec};
@@ -98,4 +99,65 @@ where
     T: Ord,
 {
     v.sort_by(|lhs, rhs| lhs.0.cmp(&rhs.0));
+}
+
+pub mod parser {
+    pub struct Error;
+
+    pub fn parse<'a, T>(input: &'a str, f: impl FnOnce(&mut Parser<'a>) -> Result<T>) -> Result<T> {
+        let mut p = Parser::new(input);
+        let val = f(&mut p)?;
+        Ok(val)
+    }
+
+    pub struct Parser<'a> {
+        input: &'a str,
+    }
+
+    pub type Result<T, E = Error> = std::result::Result<T, E>;
+
+    impl<'a> Parser<'a> {
+        fn new(input: &'a str) -> Self {
+            Self { input }
+        }
+
+        pub fn nom<T>(&mut self, f: impl FnOnce(&'a str) -> nom::IResult<&'a str, T>) -> Result<T> {
+            match f(self.input) {
+                Ok((input, output)) => {
+                    self.input = input;
+                    Ok(output)
+                }
+                Err(_) => Err(Error),
+            }
+        }
+    }
+}
+
+/// `hmac_sha1(key, data)`
+pub fn hmac_sha1(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> impl AsRef<[u8]> {
+    use hmac::{Hmac, Mac};
+    use sha1::Sha1;
+
+    let mut m = <Hmac<Sha1>>::new_from_slice(key.as_ref()).unwrap();
+    m.update(data.as_ref());
+    m.finalize().into_bytes()
+}
+
+/// `hmac_sha256(key, data)`
+pub fn hmac_sha256(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> impl AsRef<[u8]> {
+    use hmac::{Hmac, Mac};
+    use sha2::Sha256;
+
+    let mut m = <Hmac<Sha256>>::new_from_slice(key.as_ref()).unwrap();
+    m.update(data.as_ref());
+    m.finalize().into_bytes()
+}
+
+/// `f(hex(src))`
+pub fn hex_bytes32<R>(src: impl AsRef<[u8]>, f: impl FnOnce(&str) -> R) -> R {
+    use hex_simd::{AsOut, AsciiCase};
+
+    let buf: &mut [_] = &mut [MaybeUninit::uninit(); 64];
+    let ans = hex_simd::encode_as_str(src.as_ref(), buf.as_out(), AsciiCase::Lower);
+    f(ans)
 }
