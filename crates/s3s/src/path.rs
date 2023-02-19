@@ -42,6 +42,30 @@ pub enum ParseS3PathError {
     KeyTooLong,
 }
 
+impl S3Path {
+    /// Create a new S3 path representing the root
+    #[inline(always)]
+    #[must_use]
+    pub fn root() -> Self {
+        Self::Root
+    }
+
+    /// Create a new S3 path representing the bucket
+    #[must_use]
+    pub fn bucket(bucket: &str) -> Self {
+        Self::Bucket { bucket: bucket.into() }
+    }
+
+    /// Create a new S3 path representing the object
+    #[must_use]
+    pub fn object(bucket: &str, key: &str) -> Self {
+        Self::Object {
+            bucket: bucket.into(),
+            key: key.into(),
+        }
+    }
+}
+
 /// See [bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
 #[must_use]
 pub fn check_bucket_name(name: &str) -> bool {
@@ -94,7 +118,7 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
     let Some(path) = uri_path.strip_prefix('/') else { return Err(ParseS3PathError::InvalidPath) };
 
     if path.is_empty() {
-        return Ok(S3Path::Root);
+        return Ok(S3Path::root());
     }
 
     let (bucket, key) = match path.split_once('/') {
@@ -108,7 +132,7 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
     }
 
     let key = match key {
-        None => return Ok(S3Path::Bucket { bucket: bucket.into() }),
+        None => return Ok(S3Path::bucket(bucket)),
         Some(k) => k,
     };
 
@@ -116,10 +140,7 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
         return Err(ParseS3PathError::KeyTooLong);
     }
 
-    Ok(S3Path::Object {
-        bucket: bucket.into(),
-        key: key.into(),
-    })
+    Ok(S3Path::object(bucket, key))
 }
 
 /// Parses a virtual-hosted-style request
@@ -178,26 +199,15 @@ mod tests {
         }
     }
 
-    fn bucket(bucket: &str) -> S3Path {
-        S3Path::Bucket { bucket: bucket.into() }
-    }
-
-    fn object(bucket: &str, key: &str) -> S3Path {
-        S3Path::Object {
-            bucket: bucket.into(),
-            key: key.into(),
-        }
-    }
-
     #[test]
     fn path_style() {
         let too_long_path = format!("/{}/{}", "asd", "b".repeat(2048).as_str());
 
         let cases = [
             ("/", Ok(S3Path::Root)),
-            ("/bucket", Ok(bucket("bucket"))),
-            ("/bucket/", Ok(bucket("bucket"))),
-            ("/bucket/dir/object", Ok(object("bucket", "dir/object"))),
+            ("/bucket", Ok(S3Path::bucket("bucket"))),
+            ("/bucket/", Ok(S3Path::bucket("bucket"))),
+            ("/bucket/dir/object", Ok(S3Path::object("bucket", "dir/object"))),
             ("asd", Err(ParseS3PathError::InvalidPath)),
             ("a/", Err(ParseS3PathError::InvalidPath)),
             ("/*", Err(ParseS3PathError::InvalidBucketName)),
@@ -216,7 +226,7 @@ mod tests {
             let host = "s3.us-east-1.amazonaws.com";
             let uri_path = "/example.com/homepage.html";
             let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
-            let expected = Ok(object("example.com", "homepage.html"));
+            let expected = Ok(S3Path::object("example.com", "homepage.html"));
             assert_eq!(ans, expected);
         }
 
@@ -225,7 +235,7 @@ mod tests {
             let host = "doc-example-bucket1.eu.s3.eu-west-1.amazonaws.com";
             let uri_path = "/homepage.html";
             let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
-            let expected = Ok(object("doc-example-bucket1.eu", "homepage.html"));
+            let expected = Ok(S3Path::object("doc-example-bucket1.eu", "homepage.html"));
             assert_eq!(ans, expected);
         }
 
@@ -234,7 +244,7 @@ mod tests {
             let host = "doc-example-bucket1.eu.s3.eu-west-1.amazonaws.com";
             let uri_path = "/";
             let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
-            let expected = Ok(bucket("doc-example-bucket1.eu"));
+            let expected = Ok(S3Path::bucket("doc-example-bucket1.eu"));
             assert_eq!(ans, expected);
         }
 
@@ -243,7 +253,7 @@ mod tests {
             let host = "example.com";
             let uri_path = "/homepage.html";
             let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
-            let expected = Ok(object("example.com", "homepage.html"));
+            let expected = Ok(S3Path::object("example.com", "homepage.html"));
             assert_eq!(ans, expected);
         }
     }
