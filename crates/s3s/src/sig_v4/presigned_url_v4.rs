@@ -18,7 +18,7 @@ pub struct PresignedUrlV4<'a> {
     /// amz date
     pub amz_date: AmzDate,
     /// expires
-    pub expires: u32,
+    pub expires: time::Duration,
     /// signed headers
     pub signed_headers: SmallVec<[&'a str; 16]>,
     /// signature
@@ -79,7 +79,7 @@ impl<'a> PresignedUrlV4<'a> {
 
         let amz_date = AmzDate::parse(info.x_amz_date).map_err(|_e| err())?;
 
-        let expires: u32 = info.x_amz_expires.parse().map_err(|_e| err())?;
+        let expires = parse_expires(info.x_amz_expires).ok_or_else(err)?;
 
         if !info.x_amz_signed_headers.is_ascii() {
             return Err(err());
@@ -100,4 +100,9 @@ impl<'a> PresignedUrlV4<'a> {
             signature,
         })
     }
+}
+
+fn parse_expires(s: &str) -> Option<time::Duration> {
+    let x = s.parse::<u32>().ok().filter(|&x| x > 0)?;
+    Some(time::Duration::new(x as i64, 0))
 }

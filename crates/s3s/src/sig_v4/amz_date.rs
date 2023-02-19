@@ -79,7 +79,8 @@ impl AmzDate {
 
     /// `{YYYY}{MM}{DD}T{HH}{MM}{SS}Z`
     #[must_use]
-    pub fn to_iso8601(&self) -> String {
+    pub fn fmt_iso8601(&self) -> String {
+        // TODO: small string
         format!(
             "{:04}{:02}{:02}T{:02}{:02}{:02}Z",
             self.year, self.month, self.day, self.hour, self.minute, self.second
@@ -88,7 +89,18 @@ impl AmzDate {
 
     /// `{YYYY}{MM}{DD}`
     #[must_use]
-    pub fn to_date(&self) -> String {
+    pub fn fmt_date(&self) -> String {
+        // TODO: small string
         format!("{:04}{:02}{:02}", self.year, self.month, self.day,)
+    }
+
+    pub fn to_time(&self) -> Option<time::OffsetDateTime> {
+        let y = self.year as i32;
+        let m: time::Month = self.month.try_into().ok()?;
+        let d = self.day;
+
+        let t = time::Date::from_calendar_date(y, m, d).ok()?;
+        let t = t.with_hms(self.hour, self.minute, self.second).ok()?;
+        Some(t.assume_utc())
     }
 }

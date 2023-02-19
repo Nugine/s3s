@@ -216,13 +216,13 @@ pub fn create_string_to_sign(canonical_request: &str, amz_date: &AmzDate, region
 
     {
         // <RequestDateTime>\n
-        ans.push_str(&amz_date.to_iso8601());
+        ans.push_str(&amz_date.fmt_iso8601());
         ans.push('\n');
     }
 
     {
         // <CredentialScope>\n
-        ans.push_str(&amz_date.to_date());
+        ans.push_str(&amz_date.fmt_date());
         ans.push('/');
         ans.push_str(region); // TODO: use a `Region` type
         ans.push_str("/s3/aws4_request\n");
@@ -244,11 +244,11 @@ pub fn create_chunk_string_to_sign(amz_date: &AmzDate, region: &str, prev_signat
         ans.push_str("AWS4-HMAC-SHA256-PAYLOAD\n");
     }
     {
-        ans.push_str(&amz_date.to_iso8601());
+        ans.push_str(&amz_date.fmt_iso8601());
         ans.push('\n');
     }
     {
-        ans.push_str(&amz_date.to_date());
+        ans.push_str(&amz_date.fmt_date());
         ans.push('/');
         ans.push_str(region); // TODO: use a `Region` type
         ans.push_str("/s3/aws4_request\n");
@@ -283,7 +283,7 @@ pub fn calculate_signature(string_to_sign: &str, secret_key: &str, amz_date: &Am
     };
 
     // DateKey
-    let date = amz_date.to_date();
+    let date = amz_date.fmt_date();
     let date_key = hmac_sha256(secret, date);
 
     // DateRegionKey

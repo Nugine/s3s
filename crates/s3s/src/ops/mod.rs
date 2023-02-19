@@ -385,10 +385,26 @@ impl SignatureContext<'_> {
         // ASK: how to use it?
         let _content_sha256: Option<AmzContentSha256<'_>> = extract_amz_content_sha256(&self.headers)?;
 
-        // FIXME: check expiration
+        {
+            // check expiration
+            let now = time::OffsetDateTime::now_utc();
+
+            let date = presigned_url
+                .amz_date
+                .to_time()
+                .ok_or_else(|| invalid_request!("invalid amz date"))?;
+
+            let duration = now - date;
+            if duration.is_positive().not() {
+                return Err(invalid_request!("invalid presigned url date"))?;
+            }
+
+            if duration > presigned_url.expires {
+                return Err(s3_error!(AccessDenied, "Request has expired"));
+            }
+        }
 
         let auth = require_auth(self.auth)?;
-
         let secret_key = auth.get_secret_key(presigned_url.credential.access_key_id).await?;
 
         let signature = {
