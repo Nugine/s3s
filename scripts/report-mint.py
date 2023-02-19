@@ -61,19 +61,23 @@ if __name__ == "__main__":
     name = "summary"
     print(f"{name:<20} passed {total_pass_count:>3}, failed {total_fail_count:>3}, na {total_na_count:>3}")
 
-    assert counts["aws-sdk-go"]["fail"] == 0
-    assert counts["aws-sdk-php"]["fail"] == 0
-    assert counts["aws-sdk-ruby"]["fail"] == 0
-    assert counts["mc"]["fail"] == 0
-    assert counts["minio-py"]["fail"] == 0
-    assert counts["s3cmd"]["fail"] == 0
-    assert counts["s3select"]["fail"] == 0
+    passed_groups = [
+        "aws-sdk-go",
+        "aws-sdk-php",
+        "aws-sdk-ruby",
+        "awscli",
+        "mc",
+        "minio-go",
+        "minio-py",
+        "s3cmd",
+        "s3select",
+    ]
+
+    for group in passed_groups:
+        assert counts[group]["fail"] == 0
 
     # FIXME: E2E tests
-    assert counts["awscli"]["pass"] >= 10
     assert counts["minio-dotnet"]["pass"] >= 1
-    assert counts["minio-go"]["pass"] >= 1
     assert counts["minio-java"]["pass"] >= 17
     assert counts["versioning"]["pass"] >= 4
-
     # assert counts["minio-js"]["pass"] >= 0
