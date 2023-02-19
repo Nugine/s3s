@@ -1,6 +1,6 @@
 [package]
 name = "s3s"
-version = "0.3.2"
+version = "0.3.3-dev"
 edition = "2021"
 description = "S3 Service Adapter"
 license = "Apache-2.0"
