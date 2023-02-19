@@ -10,7 +10,7 @@ use smallvec::SmallVec;
 
 /// Presigned url information
 #[derive(Debug)]
-pub struct PresignedUrl<'a> {
+pub struct PresignedUrlV4<'a> {
     /// algorithm
     pub algorithm: &'a str,
     /// credential
@@ -25,7 +25,7 @@ pub struct PresignedUrl<'a> {
     pub signature: &'a str,
 }
 
-/// [`PresignedUrl`]
+/// [`PresignedUrlV4`]
 #[derive(Debug, thiserror::Error)]
 #[error("ParsePresignedUrlError")]
 pub struct ParsePresignedUrlError {
@@ -63,7 +63,7 @@ impl<'a> PresignedQs<'a> {
     }
 }
 
-impl<'a> PresignedUrl<'a> {
+impl<'a> PresignedUrlV4<'a> {
     /// Parses `PresignedUrl` from query
     ///
     /// # Errors

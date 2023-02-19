@@ -394,7 +394,7 @@ mod tests {
 
     use crate::http::OrderedHeaders;
     use crate::http::OrderedQs;
-    use crate::sig_v4::PresignedUrl;
+    use crate::sig_v4::PresignedUrlV4;
 
     #[test]
     fn example_get_object() {
@@ -759,7 +759,7 @@ mod tests {
 
         let qs = OrderedQs::from_vec_unchecked(query_strings.iter().map(|&(n, v)| (n.to_owned(), v.to_owned())).collect());
 
-        let info = PresignedUrl::parse(&qs).unwrap();
+        let info = PresignedUrlV4::parse(&qs).unwrap();
 
         let canonical_request = create_presigned_canonical_request(&method, uri.path(), query_strings, &headers);
 

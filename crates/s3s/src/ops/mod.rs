@@ -11,7 +11,7 @@ use crate::http::{Request, Response};
 use crate::path::{ParseS3PathError, S3Path};
 use crate::s3_trait::S3;
 use crate::sig_v4;
-use crate::sig_v4::PresignedUrl;
+use crate::sig_v4::PresignedUrlV4;
 use crate::sig_v4::{AmzContentSha256, AmzDate};
 use crate::sig_v4::{AuthorizationV4, CredentialV4};
 use crate::stream::aggregate_unlimited;
@@ -361,7 +361,7 @@ impl SignatureContext<'_> {
     async fn check_presigned_url(&mut self) -> S3Result<()> {
         let qs = self.qs.unwrap(); // assume: qs has "X-Amz-Signature"
 
-        let presigned_url = PresignedUrl::parse(qs).map_err(|err| invalid_request!(err, "missing presigned fields"))?;
+        let presigned_url = PresignedUrlV4::parse(qs).map_err(|err| invalid_request!(err, "missing presigned fields"))?;
 
         // ASK: how to use it?
         let _content_sha256: Option<AmzContentSha256<'_>> = extract_amz_content_sha256(&self.headers)?;
