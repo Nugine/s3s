@@ -36,4 +36,5 @@ pub mod stream;
 pub use self::auth::*;
 pub use self::error::*;
 pub use self::http::{Body, Request, Response};
+pub use self::ops::Identity;
 pub use self::s3_trait::S3;

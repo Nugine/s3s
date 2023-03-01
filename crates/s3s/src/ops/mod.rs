@@ -36,7 +36,7 @@ use tracing::debug;
 pub trait Operation: Send + Sync + 'static {
     fn name(&self) -> &'static str;
 
-    async fn call(&self, s3: &dyn S3, req: &mut Request) -> S3Result<Response>;
+    async fn call(&self, s3: &dyn S3, identity: Identity, req: &mut Request) -> S3Result<Response>;
 }
 
 fn serialize_error(x: S3Error) -> S3Result<Response> {
@@ -172,15 +172,15 @@ fn fmt_content_length(len: usize) -> http::HeaderValue {
 }
 
 pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<Response> {
-    let op = match prepare(req, auth, base_domain).await {
-        Ok(op) => op,
+    let (op, identity) = match prepare(req, auth, base_domain).await {
+        Ok((op, identity)) => (op, identity),
         Err(err) => {
             debug!(?err, "failed to prepare");
             return serialize_error(err);
         }
     };
 
-    match op.call(s3, req).await {
+    match op.call(s3, identity, req).await {
         Ok(res) => Ok(res),
         Err(err) => {
             debug!(op = %op.name(), ?err, "op returns error");
@@ -189,7 +189,11 @@ pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, bas
     }
 }
 
-async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<&'static dyn Operation> {
+async fn prepare(
+    req: &mut Request,
+    auth: Option<&dyn S3Auth>,
+    base_domain: Option<&str>,
+) -> S3Result<(&'static dyn Operation, Identity)> {
     let decoded_uri_path = urlencoding::decode(req.uri().path())
         .map_err(|_| S3ErrorCode::InvalidURI)?
         .into_owned();
@@ -200,6 +204,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
     // check signature
     let mut body = mem::take(req.body_mut());
     let multipart: Option<Multipart>;
+    let identity: Identity;
     {
         let headers = extract_headers(req)?;
         let mime = extract_mime(&headers)?;
@@ -220,17 +225,17 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
                 base_domain,
             };
 
-            match scx.v2_check().await {
+            identity = match scx.v2_check().await {
                 Some(result) => {
                     debug!("checked signature v2");
-                    result?;
+                    result?
                 }
                 None => {
                     let result = scx.v4_check().await;
                     debug!("checked signature v4");
-                    result?;
+                    result?
                 }
-            }
+            };
 
             multipart = scx.multipart;
             body_transformed = scx.body_transformed;
@@ -279,7 +284,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
     }
     *req.body_mut() = body;
 
-    Ok(op)
+    Ok((op, identity))
 }
 
 struct SignatureContext<'a> {
@@ -296,13 +301,19 @@ struct SignatureContext<'a> {
     base_domain: Option<&'a str>,
 }
 
+#[derive(Debug, Default)]
+pub struct Identity {
+    pub access_key: String,
+    pub secret_key: String,
+}
+
 fn require_auth(auth: Option<&dyn S3Auth>) -> S3Result<&dyn S3Auth> {
     auth.ok_or_else(|| s3_error!(NotImplemented, "This service has no authentication provider"))
 }
 
 impl SignatureContext<'_> {
     #[tracing::instrument(skip(self))]
-    async fn v4_check(&mut self) -> S3Result<()> {
+    async fn v4_check(&mut self) -> S3Result<Identity> {
         // POST auth
         if self.req.method() == Method::POST {
             if let Some(ref mime) = self.mime {
@@ -326,7 +337,7 @@ impl SignatureContext<'_> {
         self.v4_check_header_auth().await
     }
 
-    async fn v4_check_post_signature(&mut self) -> S3Result<()> {
+    async fn v4_check_post_signature(&mut self) -> S3Result<Identity> {
         let auth = require_auth(self.auth)?;
 
         let multipart = {
@@ -363,10 +374,13 @@ impl SignatureContext<'_> {
 
         let amz_date = AmzDate::parse(info.x_amz_date).map_err(|_| invalid_request!("invalid field: x-amz-date"))?;
 
-        let secret_key = auth.get_secret_key(credential.access_key_id).await?;
+        let identity = Identity {
+            access_key: credential.access_key_id.to_string(),
+            secret_key: auth.get_secret_key(credential.access_key_id).await?,
+        };
 
         let string_to_sign = info.policy;
-        let signature = sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region);
+        let signature = sig_v4::calculate_signature(string_to_sign, &identity.secret_key, &amz_date, credential.aws_region);
 
         if signature != info.x_amz_signature {
             return Err(s3_error!(SignatureDoesNotMatch));
@@ -374,10 +388,10 @@ impl SignatureContext<'_> {
 
         self.multipart = Some(multipart);
 
-        Ok(())
+        Ok(identity)
     }
 
-    async fn v4_check_presigned_url(&mut self) -> S3Result<()> {
+    async fn v4_check_presigned_url(&mut self) -> S3Result<Identity> {
         let qs = self.qs.unwrap(); // assume: qs has "X-Amz-Signature"
 
         let presigned_url = PresignedUrlV4::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v4 fields"))?;
@@ -405,7 +419,11 @@ impl SignatureContext<'_> {
         }
 
         let auth = require_auth(self.auth)?;
-        let secret_key = auth.get_secret_key(presigned_url.credential.access_key_id).await?;
+
+        let identity = Identity {
+            access_key: presigned_url.credential.access_key_id.to_string(),
+            secret_key: auth.get_secret_key(presigned_url.credential.access_key_id).await?,
+        };
 
         let signature = {
             let headers = self.headers.find_multiple(&presigned_url.signed_headers);
@@ -418,18 +436,18 @@ impl SignatureContext<'_> {
             let amz_date = &presigned_url.amz_date;
             let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, amz_date, region);
 
-            sig_v4::calculate_signature(&string_to_sign, &secret_key, amz_date, region)
+            sig_v4::calculate_signature(&string_to_sign, &identity.secret_key, amz_date, region)
         };
 
         if signature != presigned_url.signature {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        Ok(())
+        Ok(identity)
     }
 
     #[tracing::instrument(skip(self))]
-    async fn v4_check_header_auth(&mut self) -> S3Result<()> {
+    async fn v4_check_header_auth(&mut self) -> S3Result<Identity> {
         let authorization: AuthorizationV4<'_> = match extract_authorization_v4(&self.headers)? {
             Some(mut a) => {
                 a.signed_headers.sort_unstable();
@@ -439,7 +457,7 @@ impl SignatureContext<'_> {
                 if self.auth.is_some() {
                     return Err(s3_error!(AccessDenied, "Signature is required"));
                 }
-                return Ok(());
+                return Ok(Identity::default());
             }
         };
 
@@ -448,8 +466,10 @@ impl SignatureContext<'_> {
         let amz_content_sha256 =
             extract_amz_content_sha256(&self.headers)?.ok_or_else(|| invalid_request!("missing header: x-amz-content-sha256"))?;
 
-        let secret_key = auth.get_secret_key(authorization.credential.access_key_id).await?;
-
+        let identity = Identity {
+            access_key: authorization.credential.access_key_id.to_string(),
+            secret_key: auth.get_secret_key(authorization.credential.access_key_id).await?,
+        };
         let amz_date = extract_amz_date(&self.headers)?.ok_or_else(|| invalid_request!("missing header: x-amz-date"))?;
 
         let is_stream = matches!(amz_content_sha256, AmzContentSha256::MultipleChunks);
@@ -490,7 +510,7 @@ impl SignatureContext<'_> {
 
             let region = authorization.credential.aws_region;
             let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, &amz_date, region);
-            sig_v4::calculate_signature(&string_to_sign, &secret_key, &amz_date, region)
+            sig_v4::calculate_signature(&string_to_sign, &identity.secret_key, &amz_date, region)
         };
 
         if signature != authorization.signature {
@@ -508,7 +528,7 @@ impl SignatureContext<'_> {
                 signature.into(),
                 amz_date,
                 authorization.credential.aws_region.into(),
-                secret_key.into(),
+                identity.secret_key.clone().into(),
                 decoded_content_length,
             );
 
@@ -518,11 +538,11 @@ impl SignatureContext<'_> {
             self.body_transformed = true;
         }
 
-        Ok(())
+        Ok(identity)
     }
 
     #[tracing::instrument(skip(self))]
-    async fn v2_check(&mut self) -> Option<S3Result<()>> {
+    async fn v2_check(&mut self) -> Option<S3Result<Identity>> {
         if let Some(qs) = self.qs {
             if qs.has("Signature") {
                 debug!("checking presigned url");
@@ -540,26 +560,30 @@ impl SignatureContext<'_> {
         None
     }
 
-    async fn v2_check_header_auth(&mut self, auth_v2: AuthorizationV2<'_>) -> S3Result<()> {
+    async fn v2_check_header_auth(&mut self, auth_v2: AuthorizationV2<'_>) -> S3Result<Identity> {
         let method = self.req.method();
         let uri_s3_path = extract_s3_path(self.req, self.req.uri().path(), self.base_domain)?;
 
         let date = sig_v2::get_date(&self.headers).ok_or_else(|| invalid_request!("missing date"))?;
 
         let auth = require_auth(self.auth)?;
-        let secret_key = auth.get_secret_key(auth_v2.access_key).await?;
+
+        let identity = Identity {
+            access_key: auth_v2.access_key.to_string(),
+            secret_key: auth.get_secret_key(auth_v2.access_key).await?,
+        };
 
         let string_to_sign = sig_v2::create_string_to_sign(method, date, &self.headers, &uri_s3_path, self.qs);
-        let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
+        let signature = sig_v2::calculate_signature(&identity.secret_key, &string_to_sign);
 
         if signature != auth_v2.signature {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        Ok(())
+        Ok(identity)
     }
 
-    async fn v2_check_presigned_url(&mut self) -> S3Result<()> {
+    async fn v2_check_presigned_url(&mut self) -> S3Result<Identity> {
         let qs = self.qs.unwrap(); // assume: qs has "Signature"
         let presigned_url = PresignedUrlV2::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v2 fields"))?;
 
@@ -571,17 +595,21 @@ impl SignatureContext<'_> {
         }
 
         let auth = require_auth(self.auth)?;
-        let secret_key = auth.get_secret_key(presigned_url.access_key).await?;
+
+        let identity = Identity {
+            access_key: presigned_url.access_key.to_string(),
+            secret_key: auth.get_secret_key(presigned_url.access_key).await?,
+        };
 
         let string_to_sign =
             sig_v2::create_string_to_sign(method, presigned_url.expires_str, &self.headers, &uri_s3_path, self.qs);
-        let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
+        let signature = sig_v2::calculate_signature(&identity.secret_key, &string_to_sign);
 
         if signature != presigned_url.signature {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        Ok(())
+        Ok(identity)
     }
 }
 

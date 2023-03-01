@@ -16,6 +16,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         "",
         "use s3s::S3;",
         "use s3s::S3Result;",
+        "use s3s::ops::Identity;",
         "",
         "use tracing::debug;",
         "",
@@ -30,7 +31,9 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         let s3s_output = f!("s3s::dto::{}", op.output);
 
         g.ln("#[tracing::instrument(skip(self, input))]");
-        g.ln(f!("async fn {method_name}(&self, input: {s3s_input}) -> S3Result<{s3s_output}> {{"));
+        g.ln(f!(
+            "async fn {method_name}(&self, input: {s3s_input}, _identity: Identity) -> S3Result<{s3s_output}> {{"
+        ));
 
         g.ln("debug!(?input);");
 

@@ -2,6 +2,7 @@
 
 use crate::dto::*;
 use crate::error::S3Result;
+use crate::ops::Identity;
 
 /// An async trait which represents the S3 API
 #[async_trait::async_trait]
@@ -45,7 +46,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn abort_multipart_upload(&self, _input: AbortMultipartUploadInput) -> S3Result<AbortMultipartUploadOutput> {
+    async fn abort_multipart_upload(
+        &self,
+        _input: AbortMultipartUploadInput,
+        _identity: Identity,
+    ) -> S3Result<AbortMultipartUploadOutput> {
         Err(s3_error!(NotImplemented, "AbortMultipartUpload is not implemented yet"))
     }
 
@@ -163,7 +168,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn complete_multipart_upload(&self, _input: CompleteMultipartUploadInput) -> S3Result<CompleteMultipartUploadOutput> {
+    async fn complete_multipart_upload(
+        &self,
+        _input: CompleteMultipartUploadInput,
+        _identity: Identity,
+    ) -> S3Result<CompleteMultipartUploadOutput> {
         Err(s3_error!(NotImplemented, "CompleteMultipartUpload is not implemented yet"))
     }
 
@@ -353,7 +362,7 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjectsExamples.html">Copying
     /// Objects</a>.</p>
-    async fn copy_object(&self, _input: CopyObjectInput) -> S3Result<CopyObjectOutput> {
+    async fn copy_object(&self, _input: CopyObjectInput, _identity: Identity) -> S3Result<CopyObjectOutput> {
         Err(s3_error!(NotImplemented, "CopyObject is not implemented yet"))
     }
 
@@ -504,7 +513,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn create_bucket(&self, _input: CreateBucketInput) -> S3Result<CreateBucketOutput> {
+    async fn create_bucket(&self, _input: CreateBucketInput, _identity: Identity) -> S3Result<CreateBucketOutput> {
         Err(s3_error!(NotImplemented, "CreateBucket is not implemented yet"))
     }
 
@@ -788,7 +797,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn create_multipart_upload(&self, _input: CreateMultipartUploadInput) -> S3Result<CreateMultipartUploadOutput> {
+    async fn create_multipart_upload(
+        &self,
+        _input: CreateMultipartUploadInput,
+        _identity: Identity,
+    ) -> S3Result<CreateMultipartUploadOutput> {
         Err(s3_error!(NotImplemented, "CreateMultipartUpload is not implemented yet"))
     }
 
@@ -810,7 +823,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket(&self, _input: DeleteBucketInput) -> S3Result<DeleteBucketOutput> {
+    async fn delete_bucket(&self, _input: DeleteBucketInput, _identity: Identity) -> S3Result<DeleteBucketOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucket is not implemented yet"))
     }
 
@@ -847,6 +860,7 @@ pub trait S3: Send + Sync + 'static {
     async fn delete_bucket_analytics_configuration(
         &self,
         _input: DeleteBucketAnalyticsConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<DeleteBucketAnalyticsConfigurationOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketAnalyticsConfiguration is not implemented yet"))
     }
@@ -873,7 +887,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_cors(&self, _input: DeleteBucketCorsInput) -> S3Result<DeleteBucketCorsOutput> {
+    async fn delete_bucket_cors(&self, _input: DeleteBucketCorsInput, _identity: Identity) -> S3Result<DeleteBucketCorsOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketCors is not implemented yet"))
     }
 
@@ -901,7 +915,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_encryption(&self, _input: DeleteBucketEncryptionInput) -> S3Result<DeleteBucketEncryptionOutput> {
+    async fn delete_bucket_encryption(
+        &self,
+        _input: DeleteBucketEncryptionInput,
+        _identity: Identity,
+    ) -> S3Result<DeleteBucketEncryptionOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketEncryption is not implemented yet"))
     }
 
@@ -931,6 +949,7 @@ pub trait S3: Send + Sync + 'static {
     async fn delete_bucket_intelligent_tiering_configuration(
         &self,
         _input: DeleteBucketIntelligentTieringConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<DeleteBucketIntelligentTieringConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -967,6 +986,7 @@ pub trait S3: Send + Sync + 'static {
     async fn delete_bucket_inventory_configuration(
         &self,
         _input: DeleteBucketInventoryConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<DeleteBucketInventoryConfigurationOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketInventoryConfiguration is not implemented yet"))
     }
@@ -997,7 +1017,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_lifecycle(&self, _input: DeleteBucketLifecycleInput) -> S3Result<DeleteBucketLifecycleOutput> {
+    async fn delete_bucket_lifecycle(
+        &self,
+        _input: DeleteBucketLifecycleInput,
+        _identity: Identity,
+    ) -> S3Result<DeleteBucketLifecycleOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketLifecycle is not implemented yet"))
     }
 
@@ -1040,6 +1064,7 @@ pub trait S3: Send + Sync + 'static {
     async fn delete_bucket_metrics_configuration(
         &self,
         _input: DeleteBucketMetricsConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<DeleteBucketMetricsConfigurationOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketMetricsConfiguration is not implemented yet"))
     }
@@ -1066,6 +1091,7 @@ pub trait S3: Send + Sync + 'static {
     async fn delete_bucket_ownership_controls(
         &self,
         _input: DeleteBucketOwnershipControlsInput,
+        _identity: Identity,
     ) -> S3Result<DeleteBucketOwnershipControlsOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketOwnershipControls is not implemented yet"))
     }
@@ -1103,7 +1129,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_policy(&self, _input: DeleteBucketPolicyInput) -> S3Result<DeleteBucketPolicyOutput> {
+    async fn delete_bucket_policy(
+        &self,
+        _input: DeleteBucketPolicyInput,
+        _identity: Identity,
+    ) -> S3Result<DeleteBucketPolicyOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketPolicy is not implemented yet"))
     }
 
@@ -1133,7 +1163,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_replication(&self, _input: DeleteBucketReplicationInput) -> S3Result<DeleteBucketReplicationOutput> {
+    async fn delete_bucket_replication(
+        &self,
+        _input: DeleteBucketReplicationInput,
+        _identity: Identity,
+    ) -> S3Result<DeleteBucketReplicationOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketReplication is not implemented yet"))
     }
 
@@ -1155,7 +1189,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_tagging(&self, _input: DeleteBucketTaggingInput) -> S3Result<DeleteBucketTaggingOutput> {
+    async fn delete_bucket_tagging(
+        &self,
+        _input: DeleteBucketTaggingInput,
+        _identity: Identity,
+    ) -> S3Result<DeleteBucketTaggingOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketTagging is not implemented yet"))
     }
 
@@ -1186,7 +1224,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_bucket_website(&self, _input: DeleteBucketWebsiteInput) -> S3Result<DeleteBucketWebsiteOutput> {
+    async fn delete_bucket_website(
+        &self,
+        _input: DeleteBucketWebsiteInput,
+        _identity: Identity,
+    ) -> S3Result<DeleteBucketWebsiteOutput> {
         Err(s3_error!(NotImplemented, "DeleteBucketWebsite is not implemented yet"))
     }
 
@@ -1221,7 +1263,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_object(&self, _input: DeleteObjectInput) -> S3Result<DeleteObjectOutput> {
+    async fn delete_object(&self, _input: DeleteObjectInput, _identity: Identity) -> S3Result<DeleteObjectOutput> {
         Err(s3_error!(NotImplemented, "DeleteObject is not implemented yet"))
     }
 
@@ -1250,7 +1292,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_object_tagging(&self, _input: DeleteObjectTaggingInput) -> S3Result<DeleteObjectTaggingOutput> {
+    async fn delete_object_tagging(
+        &self,
+        _input: DeleteObjectTaggingInput,
+        _identity: Identity,
+    ) -> S3Result<DeleteObjectTaggingOutput> {
         Err(s3_error!(NotImplemented, "DeleteObjectTagging is not implemented yet"))
     }
 
@@ -1311,7 +1357,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_objects(&self, _input: DeleteObjectsInput) -> S3Result<DeleteObjectsOutput> {
+    async fn delete_objects(&self, _input: DeleteObjectsInput, _identity: Identity) -> S3Result<DeleteObjectsOutput> {
         Err(s3_error!(NotImplemented, "DeleteObjects is not implemented yet"))
     }
 
@@ -1344,7 +1390,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn delete_public_access_block(&self, _input: DeletePublicAccessBlockInput) -> S3Result<DeletePublicAccessBlockOutput> {
+    async fn delete_public_access_block(
+        &self,
+        _input: DeletePublicAccessBlockInput,
+        _identity: Identity,
+    ) -> S3Result<DeletePublicAccessBlockOutput> {
         Err(s3_error!(NotImplemented, "DeletePublicAccessBlock is not implemented yet"))
     }
 
@@ -1378,6 +1428,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_accelerate_configuration(
         &self,
         _input: GetBucketAccelerateConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<GetBucketAccelerateConfigurationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketAccelerateConfiguration is not implemented yet"))
     }
@@ -1405,7 +1456,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_acl(&self, _input: GetBucketAclInput) -> S3Result<GetBucketAclOutput> {
+    async fn get_bucket_acl(&self, _input: GetBucketAclInput, _identity: Identity) -> S3Result<GetBucketAclOutput> {
         Err(s3_error!(NotImplemented, "GetBucketAcl is not implemented yet"))
     }
 
@@ -1442,6 +1493,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_analytics_configuration(
         &self,
         _input: GetBucketAnalyticsConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<GetBucketAnalyticsConfigurationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketAnalyticsConfiguration is not implemented yet"))
     }
@@ -1469,7 +1521,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_cors(&self, _input: GetBucketCorsInput) -> S3Result<GetBucketCorsOutput> {
+    async fn get_bucket_cors(&self, _input: GetBucketCorsInput, _identity: Identity) -> S3Result<GetBucketCorsOutput> {
         Err(s3_error!(NotImplemented, "GetBucketCors is not implemented yet"))
     }
 
@@ -1495,7 +1547,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_encryption(&self, _input: GetBucketEncryptionInput) -> S3Result<GetBucketEncryptionOutput> {
+    async fn get_bucket_encryption(
+        &self,
+        _input: GetBucketEncryptionInput,
+        _identity: Identity,
+    ) -> S3Result<GetBucketEncryptionOutput> {
         Err(s3_error!(NotImplemented, "GetBucketEncryption is not implemented yet"))
     }
 
@@ -1525,6 +1581,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_intelligent_tiering_configuration(
         &self,
         _input: GetBucketIntelligentTieringConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<GetBucketIntelligentTieringConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -1565,6 +1622,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_inventory_configuration(
         &self,
         _input: GetBucketInventoryConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<GetBucketInventoryConfigurationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketInventoryConfiguration is not implemented yet"))
     }
@@ -1628,6 +1686,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_lifecycle_configuration(
         &self,
         _input: GetBucketLifecycleConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<GetBucketLifecycleConfigurationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketLifecycleConfiguration is not implemented yet"))
     }
@@ -1653,7 +1712,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_location(&self, _input: GetBucketLocationInput) -> S3Result<GetBucketLocationOutput> {
+    async fn get_bucket_location(
+        &self,
+        _input: GetBucketLocationInput,
+        _identity: Identity,
+    ) -> S3Result<GetBucketLocationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketLocation is not implemented yet"))
     }
 
@@ -1673,7 +1736,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_logging(&self, _input: GetBucketLoggingInput) -> S3Result<GetBucketLoggingOutput> {
+    async fn get_bucket_logging(&self, _input: GetBucketLoggingInput, _identity: Identity) -> S3Result<GetBucketLoggingOutput> {
         Err(s3_error!(NotImplemented, "GetBucketLogging is not implemented yet"))
     }
 
@@ -1717,6 +1780,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_metrics_configuration(
         &self,
         _input: GetBucketMetricsConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<GetBucketMetricsConfigurationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketMetricsConfiguration is not implemented yet"))
     }
@@ -1745,6 +1809,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_notification_configuration(
         &self,
         _input: GetBucketNotificationConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<GetBucketNotificationConfigurationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketNotificationConfiguration is not implemented yet"))
     }
@@ -1770,6 +1835,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_bucket_ownership_controls(
         &self,
         _input: GetBucketOwnershipControlsInput,
+        _identity: Identity,
     ) -> S3Result<GetBucketOwnershipControlsOutput> {
         Err(s3_error!(NotImplemented, "GetBucketOwnershipControls is not implemented yet"))
     }
@@ -1801,7 +1867,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_policy(&self, _input: GetBucketPolicyInput) -> S3Result<GetBucketPolicyOutput> {
+    async fn get_bucket_policy(&self, _input: GetBucketPolicyInput, _identity: Identity) -> S3Result<GetBucketPolicyOutput> {
         Err(s3_error!(NotImplemented, "GetBucketPolicy is not implemented yet"))
     }
 
@@ -1836,7 +1902,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_policy_status(&self, _input: GetBucketPolicyStatusInput) -> S3Result<GetBucketPolicyStatusOutput> {
+    async fn get_bucket_policy_status(
+        &self,
+        _input: GetBucketPolicyStatusInput,
+        _identity: Identity,
+    ) -> S3Result<GetBucketPolicyStatusOutput> {
         Err(s3_error!(NotImplemented, "GetBucketPolicyStatus is not implemented yet"))
     }
 
@@ -1875,7 +1945,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_replication(&self, _input: GetBucketReplicationInput) -> S3Result<GetBucketReplicationOutput> {
+    async fn get_bucket_replication(
+        &self,
+        _input: GetBucketReplicationInput,
+        _identity: Identity,
+    ) -> S3Result<GetBucketReplicationOutput> {
         Err(s3_error!(NotImplemented, "GetBucketReplication is not implemented yet"))
     }
 
@@ -1890,7 +1964,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_request_payment(&self, _input: GetBucketRequestPaymentInput) -> S3Result<GetBucketRequestPaymentOutput> {
+    async fn get_bucket_request_payment(
+        &self,
+        _input: GetBucketRequestPaymentInput,
+        _identity: Identity,
+    ) -> S3Result<GetBucketRequestPaymentOutput> {
         Err(s3_error!(NotImplemented, "GetBucketRequestPayment is not implemented yet"))
     }
 
@@ -1926,7 +2004,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_tagging(&self, _input: GetBucketTaggingInput) -> S3Result<GetBucketTaggingOutput> {
+    async fn get_bucket_tagging(&self, _input: GetBucketTaggingInput, _identity: Identity) -> S3Result<GetBucketTaggingOutput> {
         Err(s3_error!(NotImplemented, "GetBucketTagging is not implemented yet"))
     }
 
@@ -1955,7 +2033,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_versioning(&self, _input: GetBucketVersioningInput) -> S3Result<GetBucketVersioningOutput> {
+    async fn get_bucket_versioning(
+        &self,
+        _input: GetBucketVersioningInput,
+        _identity: Identity,
+    ) -> S3Result<GetBucketVersioningOutput> {
         Err(s3_error!(NotImplemented, "GetBucketVersioning is not implemented yet"))
     }
 
@@ -1980,7 +2062,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_bucket_website(&self, _input: GetBucketWebsiteInput) -> S3Result<GetBucketWebsiteOutput> {
+    async fn get_bucket_website(&self, _input: GetBucketWebsiteInput, _identity: Identity) -> S3Result<GetBucketWebsiteOutput> {
         Err(s3_error!(NotImplemented, "GetBucketWebsite is not implemented yet"))
     }
 
@@ -2166,7 +2248,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object(&self, _input: GetObjectInput) -> S3Result<GetObjectOutput> {
+    async fn get_object(&self, _input: GetObjectInput, _identity: Identity) -> S3Result<GetObjectOutput> {
         Err(s3_error!(NotImplemented, "GetObject is not implemented yet"))
     }
 
@@ -2211,7 +2293,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_acl(&self, _input: GetObjectAclInput) -> S3Result<GetObjectAclOutput> {
+    async fn get_object_acl(&self, _input: GetObjectAclInput, _identity: Identity) -> S3Result<GetObjectAclOutput> {
         Err(s3_error!(NotImplemented, "GetObjectAcl is not implemented yet"))
     }
 
@@ -2371,7 +2453,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_attributes(&self, _input: GetObjectAttributesInput) -> S3Result<GetObjectAttributesOutput> {
+    async fn get_object_attributes(
+        &self,
+        _input: GetObjectAttributesInput,
+        _identity: Identity,
+    ) -> S3Result<GetObjectAttributesOutput> {
         Err(s3_error!(NotImplemented, "GetObjectAttributes is not implemented yet"))
     }
 
@@ -2387,7 +2473,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_legal_hold(&self, _input: GetObjectLegalHoldInput) -> S3Result<GetObjectLegalHoldOutput> {
+    async fn get_object_legal_hold(
+        &self,
+        _input: GetObjectLegalHoldInput,
+        _identity: Identity,
+    ) -> S3Result<GetObjectLegalHoldOutput> {
         Err(s3_error!(NotImplemented, "GetObjectLegalHold is not implemented yet"))
     }
 
@@ -2407,6 +2497,7 @@ pub trait S3: Send + Sync + 'static {
     async fn get_object_lock_configuration(
         &self,
         _input: GetObjectLockConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<GetObjectLockConfigurationOutput> {
         Err(s3_error!(NotImplemented, "GetObjectLockConfiguration is not implemented yet"))
     }
@@ -2422,7 +2513,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_retention(&self, _input: GetObjectRetentionInput) -> S3Result<GetObjectRetentionOutput> {
+    async fn get_object_retention(
+        &self,
+        _input: GetObjectRetentionInput,
+        _identity: Identity,
+    ) -> S3Result<GetObjectRetentionOutput> {
         Err(s3_error!(NotImplemented, "GetObjectRetention is not implemented yet"))
     }
 
@@ -2459,7 +2554,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_tagging(&self, _input: GetObjectTaggingInput) -> S3Result<GetObjectTaggingOutput> {
+    async fn get_object_tagging(&self, _input: GetObjectTaggingInput, _identity: Identity) -> S3Result<GetObjectTaggingOutput> {
         Err(s3_error!(NotImplemented, "GetObjectTagging is not implemented yet"))
     }
 
@@ -2480,7 +2575,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_object_torrent(&self, _input: GetObjectTorrentInput) -> S3Result<GetObjectTorrentOutput> {
+    async fn get_object_torrent(&self, _input: GetObjectTorrentInput, _identity: Identity) -> S3Result<GetObjectTorrentOutput> {
         Err(s3_error!(NotImplemented, "GetObjectTorrent is not implemented yet"))
     }
 
@@ -2524,7 +2619,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn get_public_access_block(&self, _input: GetPublicAccessBlockInput) -> S3Result<GetPublicAccessBlockOutput> {
+    async fn get_public_access_block(
+        &self,
+        _input: GetPublicAccessBlockInput,
+        _identity: Identity,
+    ) -> S3Result<GetPublicAccessBlockOutput> {
         Err(s3_error!(NotImplemented, "GetPublicAccessBlock is not implemented yet"))
     }
 
@@ -2544,7 +2643,7 @@ pub trait S3: Send + Sync + 'static {
     ///
     ///
     /// <p>To use this API against an access point, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form AccessPointName-AccountId.s3-accesspoint.Region.amazonaws.com. When using the Amazon Web Services SDKs, you provide the ARN in place of the bucket name. For more information see, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a>.</p>
-    async fn head_bucket(&self, _input: HeadBucketInput) -> S3Result<HeadBucketOutput> {
+    async fn head_bucket(&self, _input: HeadBucketInput, _identity: Identity) -> S3Result<HeadBucketOutput> {
         Err(s3_error!(NotImplemented, "HeadBucket is not implemented yet"))
     }
 
@@ -2665,7 +2764,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn head_object(&self, _input: HeadObjectInput) -> S3Result<HeadObjectOutput> {
+    async fn head_object(&self, _input: HeadObjectInput, _identity: Identity) -> S3Result<HeadObjectOutput> {
         Err(s3_error!(NotImplemented, "HeadObject is not implemented yet"))
     }
 
@@ -2712,6 +2811,7 @@ pub trait S3: Send + Sync + 'static {
     async fn list_bucket_analytics_configurations(
         &self,
         _input: ListBucketAnalyticsConfigurationsInput,
+        _identity: Identity,
     ) -> S3Result<ListBucketAnalyticsConfigurationsOutput> {
         Err(s3_error!(NotImplemented, "ListBucketAnalyticsConfigurations is not implemented yet"))
     }
@@ -2742,6 +2842,7 @@ pub trait S3: Send + Sync + 'static {
     async fn list_bucket_intelligent_tiering_configurations(
         &self,
         _input: ListBucketIntelligentTieringConfigurationsInput,
+        _identity: Identity,
     ) -> S3Result<ListBucketIntelligentTieringConfigurationsOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -2791,6 +2892,7 @@ pub trait S3: Send + Sync + 'static {
     async fn list_bucket_inventory_configurations(
         &self,
         _input: ListBucketInventoryConfigurationsInput,
+        _identity: Identity,
     ) -> S3Result<ListBucketInventoryConfigurationsOutput> {
         Err(s3_error!(NotImplemented, "ListBucketInventoryConfigurations is not implemented yet"))
     }
@@ -2839,13 +2941,14 @@ pub trait S3: Send + Sync + 'static {
     async fn list_bucket_metrics_configurations(
         &self,
         _input: ListBucketMetricsConfigurationsInput,
+        _identity: Identity,
     ) -> S3Result<ListBucketMetricsConfigurationsOutput> {
         Err(s3_error!(NotImplemented, "ListBucketMetricsConfigurations is not implemented yet"))
     }
 
     /// <p>Returns a list of all buckets owned by the authenticated sender of the request. To use
     /// this operation, you must have the <code>s3:ListAllMyBuckets</code> permission.</p>
-    async fn list_buckets(&self, _input: ListBucketsInput) -> S3Result<ListBucketsOutput> {
+    async fn list_buckets(&self, _input: ListBucketsInput, _identity: Identity) -> S3Result<ListBucketsOutput> {
         Err(s3_error!(NotImplemented, "ListBuckets is not implemented yet"))
     }
 
@@ -2900,7 +3003,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_multipart_uploads(&self, _input: ListMultipartUploadsInput) -> S3Result<ListMultipartUploadsOutput> {
+    async fn list_multipart_uploads(
+        &self,
+        _input: ListMultipartUploadsInput,
+        _identity: Identity,
+    ) -> S3Result<ListMultipartUploadsOutput> {
         Err(s3_error!(NotImplemented, "ListMultipartUploads is not implemented yet"))
     }
 
@@ -2943,7 +3050,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_object_versions(&self, _input: ListObjectVersionsInput) -> S3Result<ListObjectVersionsOutput> {
+    async fn list_object_versions(
+        &self,
+        _input: ListObjectVersionsInput,
+        _identity: Identity,
+    ) -> S3Result<ListObjectVersionsOutput> {
         Err(s3_error!(NotImplemented, "ListObjectVersions is not implemented yet"))
     }
 
@@ -2985,7 +3096,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_objects(&self, _input: ListObjectsInput) -> S3Result<ListObjectsOutput> {
+    async fn list_objects(&self, _input: ListObjectsInput, _identity: Identity) -> S3Result<ListObjectsOutput> {
         Err(s3_error!(NotImplemented, "ListObjects is not implemented yet"))
     }
 
@@ -3031,7 +3142,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_objects_v2(&self, _input: ListObjectsV2Input) -> S3Result<ListObjectsV2Output> {
+    async fn list_objects_v2(&self, _input: ListObjectsV2Input, _identity: Identity) -> S3Result<ListObjectsV2Output> {
         Err(s3_error!(NotImplemented, "ListObjectsV2 is not implemented yet"))
     }
 
@@ -3088,7 +3199,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn list_parts(&self, _input: ListPartsInput) -> S3Result<ListPartsOutput> {
+    async fn list_parts(&self, _input: ListPartsInput, _identity: Identity) -> S3Result<ListPartsOutput> {
         Err(s3_error!(NotImplemented, "ListParts is not implemented yet"))
     }
 
@@ -3141,6 +3252,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_accelerate_configuration(
         &self,
         _input: PutBucketAccelerateConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<PutBucketAccelerateConfigurationOutput> {
         Err(s3_error!(NotImplemented, "PutBucketAccelerateConfiguration is not implemented yet"))
     }
@@ -3341,7 +3453,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_acl(&self, _input: PutBucketAclInput) -> S3Result<PutBucketAclOutput> {
+    async fn put_bucket_acl(&self, _input: PutBucketAclInput, _identity: Identity) -> S3Result<PutBucketAclOutput> {
         Err(s3_error!(NotImplemented, "PutBucketAcl is not implemented yet"))
     }
 
@@ -3464,6 +3576,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_analytics_configuration(
         &self,
         _input: PutBucketAnalyticsConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<PutBucketAnalyticsConfigurationOutput> {
         Err(s3_error!(NotImplemented, "PutBucketAnalyticsConfiguration is not implemented yet"))
     }
@@ -3525,7 +3638,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_cors(&self, _input: PutBucketCorsInput) -> S3Result<PutBucketCorsOutput> {
+    async fn put_bucket_cors(&self, _input: PutBucketCorsInput, _identity: Identity) -> S3Result<PutBucketCorsOutput> {
         Err(s3_error!(NotImplemented, "PutBucketCors is not implemented yet"))
     }
 
@@ -3564,7 +3677,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_encryption(&self, _input: PutBucketEncryptionInput) -> S3Result<PutBucketEncryptionOutput> {
+    async fn put_bucket_encryption(
+        &self,
+        _input: PutBucketEncryptionInput,
+        _identity: Identity,
+    ) -> S3Result<PutBucketEncryptionOutput> {
         Err(s3_error!(NotImplemented, "PutBucketEncryption is not implemented yet"))
     }
 
@@ -3654,6 +3771,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_intelligent_tiering_configuration(
         &self,
         _input: PutBucketIntelligentTieringConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<PutBucketIntelligentTieringConfigurationOutput> {
         Err(s3_error!(
             NotImplemented,
@@ -3765,6 +3883,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_inventory_configuration(
         &self,
         _input: PutBucketInventoryConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<PutBucketInventoryConfigurationOutput> {
         Err(s3_error!(NotImplemented, "PutBucketInventoryConfiguration is not implemented yet"))
     }
@@ -3875,6 +3994,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_lifecycle_configuration(
         &self,
         _input: PutBucketLifecycleConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<PutBucketLifecycleConfigurationOutput> {
         Err(s3_error!(NotImplemented, "PutBucketLifecycleConfiguration is not implemented yet"))
     }
@@ -3964,7 +4084,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_logging(&self, _input: PutBucketLoggingInput) -> S3Result<PutBucketLoggingOutput> {
+    async fn put_bucket_logging(&self, _input: PutBucketLoggingInput, _identity: Identity) -> S3Result<PutBucketLoggingOutput> {
         Err(s3_error!(NotImplemented, "PutBucketLogging is not implemented yet"))
     }
 
@@ -4022,6 +4142,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_metrics_configuration(
         &self,
         _input: PutBucketMetricsConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<PutBucketMetricsConfigurationOutput> {
         Err(s3_error!(NotImplemented, "PutBucketMetricsConfiguration is not implemented yet"))
     }
@@ -4092,6 +4213,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_notification_configuration(
         &self,
         _input: PutBucketNotificationConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<PutBucketNotificationConfigurationOutput> {
         Err(s3_error!(NotImplemented, "PutBucketNotificationConfiguration is not implemented yet"))
     }
@@ -4116,6 +4238,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_bucket_ownership_controls(
         &self,
         _input: PutBucketOwnershipControlsInput,
+        _identity: Identity,
     ) -> S3Result<PutBucketOwnershipControlsOutput> {
         Err(s3_error!(NotImplemented, "PutBucketOwnershipControls is not implemented yet"))
     }
@@ -4150,7 +4273,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_policy(&self, _input: PutBucketPolicyInput) -> S3Result<PutBucketPolicyOutput> {
+    async fn put_bucket_policy(&self, _input: PutBucketPolicyInput, _identity: Identity) -> S3Result<PutBucketPolicyOutput> {
         Err(s3_error!(NotImplemented, "PutBucketPolicy is not implemented yet"))
     }
 
@@ -4224,7 +4347,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_replication(&self, _input: PutBucketReplicationInput) -> S3Result<PutBucketReplicationOutput> {
+    async fn put_bucket_replication(
+        &self,
+        _input: PutBucketReplicationInput,
+        _identity: Identity,
+    ) -> S3Result<PutBucketReplicationOutput> {
         Err(s3_error!(NotImplemented, "PutBucketReplication is not implemented yet"))
     }
 
@@ -4247,7 +4374,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_request_payment(&self, _input: PutBucketRequestPaymentInput) -> S3Result<PutBucketRequestPaymentOutput> {
+    async fn put_bucket_request_payment(
+        &self,
+        _input: PutBucketRequestPaymentInput,
+        _identity: Identity,
+    ) -> S3Result<PutBucketRequestPaymentOutput> {
         Err(s3_error!(NotImplemented, "PutBucketRequestPayment is not implemented yet"))
     }
 
@@ -4330,7 +4461,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_tagging(&self, _input: PutBucketTaggingInput) -> S3Result<PutBucketTaggingOutput> {
+    async fn put_bucket_tagging(&self, _input: PutBucketTaggingInput, _identity: Identity) -> S3Result<PutBucketTaggingOutput> {
         Err(s3_error!(NotImplemented, "PutBucketTagging is not implemented yet"))
     }
 
@@ -4383,7 +4514,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_bucket_versioning(&self, _input: PutBucketVersioningInput) -> S3Result<PutBucketVersioningOutput> {
+    async fn put_bucket_versioning(
+        &self,
+        _input: PutBucketVersioningInput,
+        _identity: Identity,
+    ) -> S3Result<PutBucketVersioningOutput> {
         Err(s3_error!(NotImplemented, "PutBucketVersioning is not implemented yet"))
     }
 
@@ -4513,7 +4648,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Amazon S3 has a limitation of 50 routing rules per website configuration. If you require more
     /// than 50 routing rules, you can use object redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html">Configuring an
     /// Object Redirect</a> in the <i>Amazon S3 User Guide</i>.</p>
-    async fn put_bucket_website(&self, _input: PutBucketWebsiteInput) -> S3Result<PutBucketWebsiteOutput> {
+    async fn put_bucket_website(&self, _input: PutBucketWebsiteInput, _identity: Identity) -> S3Result<PutBucketWebsiteOutput> {
         Err(s3_error!(NotImplemented, "PutBucketWebsite is not implemented yet"))
     }
 
@@ -4624,7 +4759,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_object(&self, _input: PutObjectInput) -> S3Result<PutObjectOutput> {
+    async fn put_object(&self, _input: PutObjectInput, _identity: Identity) -> S3Result<PutObjectOutput> {
         Err(s3_error!(NotImplemented, "PutObject is not implemented yet"))
     }
 
@@ -4810,7 +4945,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_object_acl(&self, _input: PutObjectAclInput) -> S3Result<PutObjectAclOutput> {
+    async fn put_object_acl(&self, _input: PutObjectAclInput, _identity: Identity) -> S3Result<PutObjectAclOutput> {
         Err(s3_error!(NotImplemented, "PutObjectAcl is not implemented yet"))
     }
 
@@ -4818,7 +4953,11 @@ pub trait S3: Send + Sync + 'static {
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking
     /// Objects</a>.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
-    async fn put_object_legal_hold(&self, _input: PutObjectLegalHoldInput) -> S3Result<PutObjectLegalHoldOutput> {
+    async fn put_object_legal_hold(
+        &self,
+        _input: PutObjectLegalHoldInput,
+        _identity: Identity,
+    ) -> S3Result<PutObjectLegalHoldOutput> {
         Err(s3_error!(NotImplemented, "PutObjectLegalHold is not implemented yet"))
     }
 
@@ -4846,6 +4985,7 @@ pub trait S3: Send + Sync + 'static {
     async fn put_object_lock_configuration(
         &self,
         _input: PutObjectLockConfigurationInput,
+        _identity: Identity,
     ) -> S3Result<PutObjectLockConfigurationOutput> {
         Err(s3_error!(NotImplemented, "PutObjectLockConfiguration is not implemented yet"))
     }
@@ -4856,7 +4996,11 @@ pub trait S3: Send + Sync + 'static {
     /// requires the <code>s3:BypassGovernanceRetention</code> permission.
     /// </p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
-    async fn put_object_retention(&self, _input: PutObjectRetentionInput) -> S3Result<PutObjectRetentionOutput> {
+    async fn put_object_retention(
+        &self,
+        _input: PutObjectRetentionInput,
+        _identity: Identity,
+    ) -> S3Result<PutObjectRetentionOutput> {
         Err(s3_error!(NotImplemented, "PutObjectRetention is not implemented yet"))
     }
 
@@ -4964,7 +5108,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_object_tagging(&self, _input: PutObjectTaggingInput) -> S3Result<PutObjectTaggingOutput> {
+    async fn put_object_tagging(&self, _input: PutObjectTaggingInput, _identity: Identity) -> S3Result<PutObjectTaggingOutput> {
         Err(s3_error!(NotImplemented, "PutObjectTagging is not implemented yet"))
     }
 
@@ -5013,7 +5157,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn put_public_access_block(&self, _input: PutPublicAccessBlockInput) -> S3Result<PutPublicAccessBlockOutput> {
+    async fn put_public_access_block(
+        &self,
+        _input: PutPublicAccessBlockInput,
+        _identity: Identity,
+    ) -> S3Result<PutPublicAccessBlockOutput> {
         Err(s3_error!(NotImplemented, "PutPublicAccessBlock is not implemented yet"))
     }
 
@@ -5302,7 +5450,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn restore_object(&self, _input: RestoreObjectInput) -> S3Result<RestoreObjectOutput> {
+    async fn restore_object(&self, _input: RestoreObjectInput, _identity: Identity) -> S3Result<RestoreObjectOutput> {
         Err(s3_error!(NotImplemented, "RestoreObject is not implemented yet"))
     }
 
@@ -5424,7 +5572,11 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn select_object_content(&self, _input: SelectObjectContentInput) -> S3Result<SelectObjectContentOutput> {
+    async fn select_object_content(
+        &self,
+        _input: SelectObjectContentInput,
+        _identity: Identity,
+    ) -> S3Result<SelectObjectContentOutput> {
         Err(s3_error!(NotImplemented, "SelectObjectContent is not implemented yet"))
     }
 
@@ -5566,7 +5718,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn upload_part(&self, _input: UploadPartInput) -> S3Result<UploadPartOutput> {
+    async fn upload_part(&self, _input: UploadPartInput, _identity: Identity) -> S3Result<UploadPartOutput> {
         Err(s3_error!(NotImplemented, "UploadPart is not implemented yet"))
     }
 
@@ -5747,7 +5899,7 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    async fn upload_part_copy(&self, _input: UploadPartCopyInput) -> S3Result<UploadPartCopyOutput> {
+    async fn upload_part_copy(&self, _input: UploadPartCopyInput, _identity: Identity) -> S3Result<UploadPartCopyOutput> {
         Err(s3_error!(NotImplemented, "UploadPartCopy is not implemented yet"))
     }
 
@@ -5774,7 +5926,11 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Example 2: PII Redaction - This Lambda function uses Amazon Comprehend, a natural language processing (NLP) service using machine learning to find insights and relationships in text. It automatically redacts personally identifiable information (PII) such as names, addresses, dates, credit card numbers, and social security numbers from documents in your Amazon S3 bucket. </p>
     /// <p>Example 3: Decompression - The Lambda function S3ObjectLambdaDecompression, is equipped to decompress objects stored in S3 in one of six compressed file formats including bzip2, gzip, snappy, zlib, zstandard and ZIP. </p>
     /// <p>For information on how to view and use these functions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-examples.html">Using Amazon Web Services built Lambda functions</a> in the <i>Amazon S3 User Guide</i>.</p>
-    async fn write_get_object_response(&self, _input: WriteGetObjectResponseInput) -> S3Result<WriteGetObjectResponseOutput> {
+    async fn write_get_object_response(
+        &self,
+        _input: WriteGetObjectResponseInput,
+        _identity: Identity,
+    ) -> S3Result<WriteGetObjectResponseOutput> {
         Err(s3_error!(NotImplemented, "WriteGetObjectResponse is not implemented yet"))
     }
 }

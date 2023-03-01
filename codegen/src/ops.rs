@@ -108,6 +108,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         "use crate::error::*;",
         "use crate::path::S3Path;",
         "use crate::s3_trait::S3;",
+        "use crate::ops::Identity;",
         "",
         "use std::borrow::Cow;",
         "",
@@ -600,12 +601,12 @@ fn codegen_op_http_call(op: &Operation, g: &mut Codegen) {
     g.ln("}");
     g.lf();
 
-    g.ln("async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {");
+    g.ln("async fn call(&self, s3: &dyn S3, identity: Identity, req: &mut http::Request) -> S3Result<http::Response> {");
 
     let method = op.name.to_snake_case();
 
     g.ln("let input = Self::deserialize_http(req)?;");
-    g.ln(f!("let result = s3.{method}(input).await;"));
+    g.ln(f!("let result = s3.{method}(input, identity).await;"));
 
     g.ln("let res = match result {");
     g.ln("Ok(output) => Self::serialize_http(output)?,");
