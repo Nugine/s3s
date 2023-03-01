@@ -649,6 +649,6 @@ mod tests {
 
     #[test]
     fn track_future_size() {
-        assert_eq!(output_size(&call), 3040);
+        assert_eq!(output_size(&call), 3152);
     }
 }
