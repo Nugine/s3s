@@ -1,5 +1,6 @@
 //! aws-chunked stream
 
+use crate::auth::SecretKey;
 use crate::error::StdError;
 use crate::sig_v4;
 use crate::sig_v4::AmzDate;
@@ -41,7 +42,7 @@ struct SignatureCtx {
     region: Box<str>,
 
     /// secret_key
-    secret_key: Box<str>,
+    secret_key: SecretKey,
 
     /// previous chunk's signature
     prev_signature: Box<str>,
@@ -115,7 +116,7 @@ impl AwsChunkedStream {
         seed_signature: Box<str>,
         amz_date: AmzDate,
         region: Box<str>,
-        secret_key: Box<str>,
+        secret_key: SecretKey,
         decoded_content_length: usize,
     ) -> Self
     where

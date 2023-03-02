@@ -52,7 +52,7 @@ fn config() -> &'static SdkConfig {
             fs::create_dir_all(FS_ROOT).unwrap();
             let fs = s3s_fs::FileSystem::new(FS_ROOT).unwrap();
 
-            let auth = s3s::SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key());
+            let auth = s3s::auth::SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key());
 
             let mut service = S3Service::new(Box::new(fs));
             service.set_auth(Box::new(auth));

@@ -18,7 +18,6 @@ mod utils;
 #[macro_use]
 mod error;
 
-mod auth;
 mod header;
 mod http;
 mod ops;
@@ -27,12 +26,12 @@ mod sig_v2;
 mod sig_v4;
 mod xml;
 
+pub mod auth;
 pub mod dto;
 pub mod path;
 pub mod service;
 pub mod stream;
 
-pub use self::auth::*;
 pub use self::error::*;
 pub use self::http::{Body, Request, Response};
 pub use self::s3_trait::S3;

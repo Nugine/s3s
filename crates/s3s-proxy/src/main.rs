@@ -1,8 +1,8 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all)]
 
+use s3s::auth::SimpleAuth;
 use s3s::service::S3Service;
-use s3s::SimpleAuth;
 
 use std::error::Error;
 use std::net::TcpListener;

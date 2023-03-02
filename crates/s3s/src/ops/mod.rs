@@ -508,7 +508,7 @@ impl SignatureContext<'_> {
                 signature.into(),
                 amz_date,
                 authorization.credential.aws_region.into(),
-                secret_key.into(),
+                secret_key,
                 decoded_content_length,
             );
 

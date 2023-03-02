@@ -2,6 +2,7 @@
 
 use super::AmzDate;
 
+use crate::auth::SecretKey;
 use crate::http::OrderedHeaders;
 use crate::utils::from_ascii;
 use crate::utils::hmac_sha256;
@@ -14,6 +15,7 @@ use hyper::body::Bytes;
 use hyper::Method;
 use sha2::{Digest, Sha256};
 use smallvec::SmallVec;
+use zeroize::Zeroize;
 
 /// `f(hex(src))`
 fn hex_bytes32<R>(src: &[u8; 32], f: impl FnOnce(&str) -> R) -> R {
@@ -283,8 +285,9 @@ pub fn create_chunk_string_to_sign(amz_date: &AmzDate, region: &str, prev_signat
 
 /// calculate signature
 #[must_use]
-pub fn calculate_signature(string_to_sign: &str, secret_key: &str, amz_date: &AmzDate, region: &str) -> String {
-    let secret = {
+pub fn calculate_signature(string_to_sign: &str, secret_key: &SecretKey, amz_date: &AmzDate, region: &str) -> String {
+    let mut secret = {
+        let secret_key = secret_key.expose();
         let mut buf = <SmallVec<[u8; 128]>>::with_capacity(secret_key.len().saturating_add(4));
         buf.extend_from_slice(b"AWS4");
         buf.extend_from_slice(secret_key.as_bytes());
@@ -293,7 +296,10 @@ pub fn calculate_signature(string_to_sign: &str, secret_key: &str, amz_date: &Am
 
     // DateKey
     let date = amz_date.fmt_date();
-    let date_key = hmac_sha256(secret, date.as_bytes());
+    let date_key = hmac_sha256(secret.as_slice(), date.as_bytes());
+
+    secret.zeroize();
+    drop(secret);
 
     // DateRegionKey
     let date_region_key = hmac_sha256(date_key, region); // TODO: use a `Region` type
@@ -408,7 +414,7 @@ mod tests {
     #[test]
     fn example_get_object() {
         // let access_key_id = "AKIAIOSFODNN7EXAMPLE";
-        let secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
@@ -454,14 +460,14 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
         assert_eq!(signature, "f0e8bdb87c964420e857bd35b5d6ed310bd44f0170aba48dd91039c6036bdb41");
     }
 
     #[test]
     fn example_put_object_single_chunk() {
         // let access_key_id = "AKIAIOSFODNN7EXAMPLE";
-        let secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
@@ -510,14 +516,14 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
         assert_eq!(signature, "98ad721746da40c64f1a55b78f14c238d841ea1380cd77a1b5971af0ece108bd");
     }
 
     #[test]
     fn example_put_object_multiple_chunks_seed_signature() {
         // let access_key_id = "AKIAIOSFODNN7EXAMPLE";
-        let secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
@@ -569,13 +575,13 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
         assert_eq!(signature, "4f232c4386841ef735655705268965c44a0e4690baa4adea153f7db9fa80a0a9",);
     }
 
     #[test]
     fn example_put_object_multiple_chunks_chunk_signature() {
-        let secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
         let timestamp = "20130524T000000Z";
         let region = "us-east-1";
         let date = AmzDate::parse(timestamp).unwrap();
@@ -596,7 +602,7 @@ mod tests {
             )
         );
 
-        let chunk1_signature = calculate_signature(&chunk1_string_to_sign, secret_access_key, &date, region);
+        let chunk1_signature = calculate_signature(&chunk1_string_to_sign, &secret_access_key, &date, region);
         assert_eq!(chunk1_signature, "ad80c730a21e5b8d04586a2213dd63b9a0e99e0e2307b0ade35a65485a288648");
 
         let chunk2_string_to_sign =
@@ -613,7 +619,7 @@ mod tests {
             )
         );
 
-        let chunk2_signature = calculate_signature(&chunk2_string_to_sign, secret_access_key, &date, region);
+        let chunk2_signature = calculate_signature(&chunk2_string_to_sign, &secret_access_key, &date, region);
         assert_eq!(chunk2_signature, "0055627c9e194cb4542bae2aa5492e3c1575bbb81b612b7d234b86a503ef5497");
 
         let chunk3_string_to_sign = create_chunk_string_to_sign(&date, region, &chunk2_signature, &[]);
@@ -629,14 +635,14 @@ mod tests {
             )
         );
 
-        let chunk3_signature = calculate_signature(&chunk3_string_to_sign, secret_access_key, &date, region);
+        let chunk3_signature = calculate_signature(&chunk3_string_to_sign, &secret_access_key, &date, region);
         assert_eq!(chunk3_signature, "b6c6ea8a5354eaf15b3cb7646744f4275b71ea724fed81ceb9323e279d449df9");
     }
 
     #[test]
     fn example_get_bucket_lifecycle_configuration() {
         // let access_key_id = "AKIAIOSFODNN7EXAMPLE";
-        let secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
@@ -680,14 +686,14 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
         assert_eq!(signature, "fea454ca298b7da1c68078a5d1bdbfbbe0d65c699e0f91ac7a200a0136783543");
     }
 
     #[test]
     fn example_list_objects() {
         // let access_key_id = "AKIAIOSFODNN7EXAMPLE";
-        let secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
@@ -732,7 +738,7 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
         assert_eq!(signature, "34b48302e7b5fa45bde8084f4b7868a86f0a534bc59db6670ed5711ef69dc6f7");
     }
 
@@ -741,7 +747,7 @@ mod tests {
         use hyper::Uri;
 
         // let access_key_id = "AKIAIOSFODNN7EXAMPLE";
-        let secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
 
         let method = Method::GET;
 
@@ -793,7 +799,7 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, secret_access_key, &info.amz_date, info.credential.aws_region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &info.amz_date, info.credential.aws_region);
         assert_eq!(signature, "aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404");
         assert_eq!(signature, info.signature);
     }
@@ -826,7 +832,7 @@ mod tests {
         let date = AmzDate::parse(x_amz_date).unwrap();
         let region = "us-east-1";
 
-        let secret_access_key = "minioadmin";
+        let secret_access_key = SecretKey::from("minioadmin");
 
         {
             let uri_path = req.uri().path();
@@ -841,7 +847,7 @@ mod tests {
 
             let string_to_sign = create_string_to_sign(&canonical_request, &date, region);
 
-            let signature = calculate_signature(&string_to_sign, secret_access_key, &date, region);
+            let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
             assert_eq!(signature, "96ad058ca27352e0fc2bd4efd8973792077570667bdaf749655f42e204bc649c");
         }
     }

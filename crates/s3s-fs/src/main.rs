@@ -4,8 +4,8 @@
 use s3s_fs::FileSystem;
 use s3s_fs::Result;
 
+use s3s::auth::SimpleAuth;
 use s3s::service::S3Service;
-use s3s::SimpleAuth;
 
 use std::net::TcpListener;
 use std::path::PathBuf;

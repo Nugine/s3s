@@ -1,3 +1,4 @@
+use crate::auth::SecretKey;
 use crate::http::OrderedHeaders;
 use crate::http::OrderedQs;
 use crate::path::S3Path;
@@ -11,8 +12,8 @@ fn base64(data: impl AsRef<[u8]>) -> String {
     base64_simd::STANDARD.encode_to_string(data)
 }
 
-pub fn calculate_signature(secret_key: &str, string_to_sign: &str) -> String {
-    base64(hmac_sha1(secret_key, string_to_sign))
+pub fn calculate_signature(secret_key: &SecretKey, string_to_sign: &str) -> String {
+    base64(hmac_sha1(secret_key.expose(), string_to_sign))
 }
 
 const INCLUDED_QUERY: &[&str] = &[
@@ -168,7 +169,7 @@ mod tests {
     #[test]
     fn examples() {
         let access_key = "AKIAIOSFODNN7EXAMPLE";
-        let secret_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+        let secret_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
 
         {
             // Object GET
@@ -179,7 +180,7 @@ mod tests {
             let qs = None;
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &s3_path, qs);
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
@@ -204,7 +205,7 @@ mod tests {
             let qs = None;
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &s3_path, qs);
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
@@ -229,7 +230,7 @@ mod tests {
             let qs = None;
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &s3_path, qs);
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
@@ -254,7 +255,7 @@ mod tests {
             let headers = OrderedHeaders::default();
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &s3_path, Some(&qs));
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
@@ -282,7 +283,7 @@ mod tests {
             let date = get_date(&headers).unwrap();
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &s3_path, qs);
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
@@ -319,7 +320,7 @@ mod tests {
             let date = get_date(&headers).unwrap();
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &s3_path, qs);
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
@@ -349,7 +350,7 @@ mod tests {
             let date = get_date(&headers).unwrap();
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &s3_path, qs);
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
@@ -374,7 +375,7 @@ mod tests {
             let date = get_date(&headers).unwrap();
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &uri_s3_path, qs);
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
@@ -406,7 +407,7 @@ mod tests {
             assert_eq!(presigned_url.access_key, access_key);
 
             let string_to_sign = create_string_to_sign(method, presigned_url.expires_str, &headers, &s3_path, Some(&qs));
-            let signature = calculate_signature(secret_key, &string_to_sign);
+            let signature = calculate_signature(&secret_key, &string_to_sign);
 
             assert_eq!(
                 string_to_sign,
