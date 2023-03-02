@@ -3,7 +3,6 @@
 use hyper::header::ToStrError;
 use hyper::http::HeaderValue;
 use hyper::HeaderMap;
-use smallvec::SmallVec;
 
 use crate::utils::stable_sort_by_first;
 
@@ -11,7 +10,7 @@ use crate::utils::stable_sort_by_first;
 #[derive(Debug, Default)]
 pub struct OrderedHeaders<'a> {
     /// Ascending headers (header names are lowercase)
-    headers: SmallVec<[(&'a str, &'a str); 16]>,
+    headers: Vec<(&'a str, &'a str)>,
 }
 
 impl<'a> OrderedHeaders<'a> {
@@ -26,7 +25,7 @@ impl<'a> OrderedHeaders<'a> {
             let is_valid = |c: u8| c == b'-' || c.is_ascii_lowercase() || c.is_ascii_digit();
             assert!(name.as_bytes().iter().copied().all(is_valid));
         }
-        let mut headers = SmallVec::new();
+        let mut headers = Vec::new();
         headers.extend_from_slice(slice);
         stable_sort_by_first(&mut headers);
         Self { headers }
@@ -37,7 +36,7 @@ impl<'a> OrderedHeaders<'a> {
     /// # Errors
     /// Returns [`ToStrError`] if header value cannot be converted to string slice
     pub fn from_headers(map: &'a HeaderMap<HeaderValue>) -> Result<Self, ToStrError> {
-        let mut headers: SmallVec<[(&'a str, &'a str); 16]> = SmallVec::with_capacity(map.len());
+        let mut headers: Vec<(&'a str, &'a str)> = Vec::with_capacity(map.len());
 
         for (name, value) in map.iter() {
             headers.push((name.as_str(), value.to_str()?));
@@ -84,7 +83,7 @@ impl<'a> OrderedHeaders<'a> {
     /// Finds headers by names. Time `O(mlogn)`
     #[must_use]
     pub fn find_multiple(&self, names: &[impl AsRef<str>]) -> Self {
-        let mut headers: SmallVec<[(&'a str, &'a str); 16]> = SmallVec::new();
+        let mut headers: Vec<(&'a str, &'a str)> = Vec::new();
         for name in names {
             for pair in self.get_all_pairs(name.as_ref()) {
                 headers.push(pair);

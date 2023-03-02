@@ -29,8 +29,11 @@ use std::ops::Not;
 
 use bytes::Bytes;
 use bytestring::ByteString;
+use hyper::http::HeaderValue;
+use hyper::HeaderMap;
 use hyper::Method;
 use hyper::StatusCode;
+use hyper::Uri;
 use mime::Mime;
 use tracing::debug;
 
@@ -58,12 +61,20 @@ fn serialize_error(x: S3Error) -> S3Result<Response> {
     Ok(res)
 }
 
-fn extract_s3_path(req: &Request, uri_path: &str, base_domain: Option<&str>) -> S3Result<S3Path> {
-    let result = match (base_domain, req.headers.get(crate::header::HOST)) {
-        (Some(base_domain), Some(val)) => {
-            let on_err = |e| s3_error!(e, InvalidRequest, "invalid header: Host: {val:?}");
-            let host = val.to_str().map_err(on_err)?;
+fn unknown_operation() -> S3Error {
+    S3Error::with_message(S3ErrorCode::NotImplemented, "Unknown operation")
+}
 
+fn extract_host(req: &Request) -> S3Result<Option<String>> {
+    let Some(val) = req.headers.get(crate::header::HOST) else { return Ok(None) };
+    let on_err = |e| s3_error!(e, InvalidRequest, "invalid header: Host: {val:?}");
+    let host = val.to_str().map_err(on_err)?;
+    Ok(Some(host.into()))
+}
+
+fn extract_s3_path(host: Option<&str>, uri_path: &str, base_domain: Option<&str>) -> S3Result<S3Path> {
+    let result = match (base_domain, host) {
+        (Some(base_domain), Some(host)) => {
             debug!(?base_domain, ?host, ?uri_path, "parsing virtual-hosted-style request");
             crate::path::parse_virtual_hosted_style(base_domain, host, uri_path)
         }
@@ -80,16 +91,12 @@ fn extract_s3_path(req: &Request, uri_path: &str, base_domain: Option<&str>) -> 
     })
 }
 
-fn extract_qs(req: &mut Request) -> S3Result<Option<OrderedQs>> {
-    let Some(query) = req.uri.query() else { return Ok(None) };
+fn extract_qs(req_uri: &Uri) -> S3Result<Option<OrderedQs>> {
+    let Some(query) = req_uri.query() else { return Ok(None) };
     match OrderedQs::parse(query) {
         Ok(ans) => Ok(Some(ans)),
         Err(source) => Err(S3Error::with_source(S3ErrorCode::InvalidURI, Box::new(source))),
     }
-}
-
-fn unknown_operation() -> S3Error {
-    S3Error::with_message(S3ErrorCode::NotImplemented, "Unknown operation")
 }
 
 fn check_query_pattern(qs: &OrderedQs, name: &str, val: &str) -> bool {
@@ -99,8 +106,8 @@ fn check_query_pattern(qs: &OrderedQs, name: &str, val: &str) -> bool {
     }
 }
 
-fn extract_headers(req: &Request) -> S3Result<OrderedHeaders<'_>> {
-    OrderedHeaders::from_headers(&req.headers).map_err(|source| invalid_request!(source, "invalid headers"))
+fn extract_headers(headers: &HeaderMap<HeaderValue>) -> S3Result<OrderedHeaders<'_>> {
+    OrderedHeaders::from_headers(headers).map_err(|source| invalid_request!(source, "invalid headers"))
 }
 
 fn extract_mime(hs: &OrderedHeaders<'_>) -> S3Result<Option<Mime>> {
@@ -140,6 +147,12 @@ fn extract_amz_date(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<AmzDate>> {
     }
 }
 
+fn extract_content_length(req: &Request) -> Option<u64> {
+    req.headers
+        .get(hyper::header::CONTENT_LENGTH)
+        .and_then(|val| atoi::atoi::<u64>(val.as_bytes()))
+}
+
 fn extract_decoded_content_length(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<usize>> {
     let Some(val) = hs.get_unique(crate::header::X_AMZ_DECODED_CONTENT_LENGTH) else { return Ok(None) };
     match atoi::atoi::<usize>(val.as_bytes()) {
@@ -148,15 +161,10 @@ fn extract_decoded_content_length(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option
     }
 }
 
-async fn extract_full_body(req: &Request, body: &mut Body) -> S3Result<Bytes> {
+async fn extract_full_body(content_length: Option<u64>, body: &mut Body) -> S3Result<Bytes> {
     if let Some(bytes) = body.bytes() {
         return Ok(bytes);
     }
-
-    let content_length = req
-        .headers
-        .get(hyper::header::CONTENT_LENGTH)
-        .and_then(|val| atoi::atoi::<u64>(val.as_bytes()));
 
     let bytes = body
         .store_all_unlimited()
@@ -202,67 +210,78 @@ pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, bas
 }
 
 async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<&'static dyn Operation> {
-    let decoded_uri_path = urlencoding::decode(req.uri.path())
-        .map_err(|_| S3ErrorCode::InvalidURI)?
-        .into_owned();
-
-    let s3_path = extract_s3_path(req, &decoded_uri_path, base_domain)?;
-    let qs = extract_qs(req)?;
-
-    // check signature
-    let mut body = mem::take(&mut req.body);
-    let multipart: Option<Multipart>;
+    let s3_path;
+    let mut content_length;
     {
-        let headers = extract_headers(req)?;
-        let mime = extract_mime(&headers)?;
-        let decoded_content_length = extract_decoded_content_length(&headers)?;
-        let body_transformed;
-        let credentials;
+        let decoded_uri_path = urlencoding::decode(req.uri.path())
+            .map_err(|_| S3ErrorCode::InvalidURI)?
+            .into_owned();
+
+        let host = extract_host(req)?;
+
+        req.s3ext.s3_path = Some(extract_s3_path(host.as_deref(), &decoded_uri_path, base_domain)?);
+        s3_path = req.s3ext.s3_path.as_ref().unwrap();
+
+        req.s3ext.qs = extract_qs(&req.uri)?;
+        content_length = extract_content_length(req);
+
+        let hs = extract_headers(&req.headers)?;
+        let mime = extract_mime(&hs)?;
+        let decoded_content_length = extract_decoded_content_length(&hs)?;
+
+        let body_changed;
+        let transformed_body;
         {
             let mut scx = SignatureContext {
                 auth,
-                req,
-                qs: qs.as_ref(),
-                headers,
-                mime,
-                body: &mut body,
-                multipart: None,
-                body_transformed: false,
-                decoded_content_length,
-                decoded_uri_path,
                 base_domain,
-                credentials: None,
+
+                req_method: &req.method,
+                req_uri: &req.uri,
+                req_body: &mut req.body,
+
+                qs: req.s3ext.qs.as_ref(),
+                hs,
+
+                decoded_uri_path,
+
+                host: host.as_deref(),
+                content_length,
+                decoded_content_length,
+                mime,
+
+                multipart: None,
+                transformed_body: None,
             };
 
-            match scx.v2_check().await {
-                Some(result) => {
-                    debug!("checked signature v2");
-                    result?;
-                }
-                None => {
-                    let result = scx.v4_check().await;
-                    debug!("checked signature v4");
-                    result?;
-                }
-            }
+            let credentials = scx.check().await?;
 
-            multipart = scx.multipart;
-            body_transformed = scx.body_transformed;
-            credentials = scx.credentials;
+            body_changed = scx.transformed_body.is_some() || scx.multipart.is_some();
+            transformed_body = scx.transformed_body;
+
+            req.s3ext.multipart = scx.multipart;
+            req.s3ext.credentials = credentials;
         }
-        let has_multipart = multipart.is_some();
-        if body_transformed {
+
+        if body_changed {
             // invalidate the original content length
             if let Some(val) = req.headers.get_mut(header::CONTENT_LENGTH) {
                 *val = fmt_content_length(decoded_content_length.unwrap_or(0))
             }
+            if let Some(val) = &mut content_length {
+                *val = 0;
+            }
         }
-        req.s3ext.credentials = credentials;
-        debug!(?body_transformed, ?decoded_content_length, ?has_multipart);
+        if let Some(body) = transformed_body {
+            req.body = body;
+        }
+
+        let has_multipart = req.s3ext.multipart.is_some();
+        debug!(?body_changed, ?decoded_content_length, ?has_multipart);
     }
 
     let (op, needs_full_body) = 'resolve: {
-        if let Some(mut multipart) = multipart {
+        if let Some(multipart) = &mut req.s3ext.multipart {
             if req.method == Method::POST {
                 match s3_path {
                     S3Path::Root => return Err(unknown_operation()),
@@ -272,7 +291,6 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
                         let file_stream = multipart.take_file_stream().expect("missing file stream");
                         let vec_bytes = aggregate_unlimited(file_stream).await.map_err(S3Error::internal_error)?;
                         let vec_stream = VecByteStream::new(vec_bytes);
-                        req.s3ext.multipart = Some(multipart);
                         req.s3ext.vec_stream = Some(vec_stream);
                         break 'resolve (&PutObject as &'static dyn Operation, false);
                     }
@@ -280,35 +298,38 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
                 }
             }
         }
-        resolve_route(req, &s3_path, qs.as_ref())?
+        resolve_route(req, s3_path, req.s3ext.qs.as_ref())?
     };
 
     debug!(op = %op.name(), ?s3_path, "resolved route");
 
-    req.s3ext.s3_path = Some(s3_path);
-    req.s3ext.qs = qs;
-
     if needs_full_body {
-        extract_full_body(req, &mut body).await?;
+        extract_full_body(content_length, &mut req.body).await?;
     }
-    req.body = body;
 
     Ok(op)
 }
 
 struct SignatureContext<'a> {
     auth: Option<&'a dyn S3Auth>,
-    req: &'a Request,
-    decoded_uri_path: String,
-    qs: Option<&'a OrderedQs>,
-    headers: OrderedHeaders<'a>,
-    mime: Option<Mime>,
-    body: &'a mut Body,
-    multipart: Option<Multipart>,
-    body_transformed: bool,
-    decoded_content_length: Option<usize>,
     base_domain: Option<&'a str>,
-    credentials: Option<Credentials>,
+
+    req_method: &'a Method,
+    req_uri: &'a Uri,
+    req_body: &'a mut Body,
+
+    qs: Option<&'a OrderedQs>,
+    hs: OrderedHeaders<'a>,
+
+    decoded_uri_path: String,
+
+    host: Option<&'a str>,
+    content_length: Option<u64>,
+    mime: Option<Mime>,
+    decoded_content_length: Option<usize>,
+
+    transformed_body: Option<Body>,
+    multipart: Option<Multipart>,
 }
 
 fn require_auth(auth: Option<&dyn S3Auth>) -> S3Result<&dyn S3Auth> {
@@ -316,14 +337,32 @@ fn require_auth(auth: Option<&dyn S3Auth>) -> S3Result<&dyn S3Auth> {
 }
 
 impl SignatureContext<'_> {
+    async fn check(&mut self) -> S3Result<Option<Credentials>> {
+        if let Some(result) = self.v2_check().await {
+            debug!("checked signature v2");
+            return result.map(Some);
+        }
+
+        if let Some(result) = self.v4_check().await {
+            debug!("checked signature v4");
+            return result.map(Some);
+        }
+
+        if self.auth.is_some() {
+            return Err(s3_error!(AccessDenied, "Signature is required"));
+        }
+
+        Ok(None)
+    }
+
     #[tracing::instrument(skip(self))]
-    async fn v4_check(&mut self) -> S3Result<()> {
+    async fn v4_check(&mut self) -> Option<S3Result<Credentials>> {
         // POST auth
-        if self.req.method == Method::POST {
+        if self.req_method == Method::POST {
             if let Some(ref mime) = self.mime {
                 if mime.type_() == mime::MULTIPART && mime.subtype() == mime::FORM_DATA {
                     debug!("checking post signature");
-                    return self.v4_check_post_signature().await;
+                    return Some(self.v4_check_post_signature().await);
                 }
             }
         }
@@ -332,16 +371,20 @@ impl SignatureContext<'_> {
         if let Some(qs) = self.qs {
             if qs.has("X-Amz-Signature") {
                 debug!("checking presigned url");
-                return self.v4_check_presigned_url().await;
+                return Some(self.v4_check_presigned_url().await);
             }
         }
 
         // header auth
-        debug!("checking header auth");
-        self.v4_check_header_auth().await
+        if self.hs.get_unique(crate::header::AUTHORIZATION).is_some() {
+            debug!("checking header auth");
+            return Some(self.v4_check_header_auth().await);
+        }
+
+        None
     }
 
-    async fn v4_check_post_signature(&mut self) -> S3Result<()> {
+    async fn v4_check_post_signature(&mut self) -> S3Result<Credentials> {
         let auth = require_auth(self.auth)?;
 
         let multipart = {
@@ -351,13 +394,10 @@ impl SignatureContext<'_> {
                 .get_param(mime::BOUNDARY)
                 .ok_or_else(|| invalid_request!("missing boundary"))?;
 
-            let body = mem::take(self.body);
-            let multipart = http::transform_multipart(body, boundary.as_str().as_bytes())
+            let body = mem::take(self.req_body);
+            http::transform_multipart(body, boundary.as_str().as_bytes())
                 .await
-                .map_err(|e| s3_error!(e, MalformedPOSTRequest))?;
-            self.body_transformed = true;
-
-            multipart
+                .map_err(|e| s3_error!(e, MalformedPOSTRequest))?
         };
 
         let info = PostSignatureInfo::extract(&multipart).ok_or_else(|| invalid_request!("missing required multipart fields"))?;
@@ -389,18 +429,16 @@ impl SignatureContext<'_> {
         }
 
         self.multipart = Some(multipart);
-        self.credentials = Some(Credentials { access_key, secret_key });
-
-        Ok(())
+        Ok(Credentials { access_key, secret_key })
     }
 
-    async fn v4_check_presigned_url(&mut self) -> S3Result<()> {
+    async fn v4_check_presigned_url(&mut self) -> S3Result<Credentials> {
         let qs = self.qs.unwrap(); // assume: qs has "X-Amz-Signature"
 
         let presigned_url = PresignedUrlV4::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v4 fields"))?;
 
         // ASK: how to use it?
-        let _content_sha256: Option<AmzContentSha256<'_>> = extract_amz_content_sha256(&self.headers)?;
+        let _content_sha256: Option<AmzContentSha256<'_>> = extract_amz_content_sha256(&self.hs)?;
 
         {
             // check expiration
@@ -426,8 +464,8 @@ impl SignatureContext<'_> {
         let secret_key = auth.get_secret_key(access_key).await?;
 
         let signature = {
-            let headers = self.headers.find_multiple(&presigned_url.signed_headers);
-            let method = &self.req.method;
+            let headers = self.hs.find_multiple(&presigned_url.signed_headers);
+            let method = &self.req_method;
             let uri_path = &self.decoded_uri_path;
 
             let canonical_request = sig_v4::create_presigned_canonical_request(method, uri_path, qs.as_ref(), &headers);
@@ -443,56 +481,49 @@ impl SignatureContext<'_> {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        self.credentials = Some(Credentials {
+        Ok(Credentials {
             access_key: access_key.into(),
             secret_key,
-        });
-        Ok(())
+        })
     }
 
     #[tracing::instrument(skip(self))]
-    async fn v4_check_header_auth(&mut self) -> S3Result<()> {
-        let authorization: AuthorizationV4<'_> = match extract_authorization_v4(&self.headers)? {
-            Some(mut a) => {
-                a.signed_headers.sort_unstable();
-                a
-            }
-            None => {
-                if self.auth.is_some() {
-                    return Err(s3_error!(AccessDenied, "Signature is required"));
-                }
-                return Ok(());
-            }
+    async fn v4_check_header_auth(&mut self) -> S3Result<Credentials> {
+        let authorization: AuthorizationV4<'_> = {
+            // assume: headers has "authorization"
+            let mut a = extract_authorization_v4(&self.hs)?.unwrap();
+            a.signed_headers.sort_unstable();
+            a
         };
 
         let auth = require_auth(self.auth)?;
 
         let amz_content_sha256 =
-            extract_amz_content_sha256(&self.headers)?.ok_or_else(|| invalid_request!("missing header: x-amz-content-sha256"))?;
+            extract_amz_content_sha256(&self.hs)?.ok_or_else(|| invalid_request!("missing header: x-amz-content-sha256"))?;
 
         let access_key = authorization.credential.access_key_id;
         let secret_key = auth.get_secret_key(access_key).await?;
 
-        let amz_date = extract_amz_date(&self.headers)?.ok_or_else(|| invalid_request!("missing header: x-amz-date"))?;
+        let amz_date = extract_amz_date(&self.hs)?.ok_or_else(|| invalid_request!("missing header: x-amz-date"))?;
 
         let is_stream = matches!(amz_content_sha256, AmzContentSha256::MultipleChunks);
 
         let signature = {
-            let method = &self.req.method;
+            let method = &self.req_method;
             let uri_path = &self.decoded_uri_path;
             let query_strings: &[(String, String)] = self.qs.as_ref().map_or(&[], AsRef::as_ref);
 
             // here requires that `auth.signed_headers` is sorted
-            let headers = self.headers.find_multiple(&authorization.signed_headers);
+            let headers = self.hs.find_multiple(&authorization.signed_headers);
 
             let canonical_request = if is_stream {
                 let payload = sig_v4::Payload::MultipleChunks;
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
-            } else if matches!(self.req.method, Method::GET | Method::HEAD) {
+            } else if matches!(*self.req_method, Method::GET | Method::HEAD) {
                 let payload = sig_v4::Payload::Empty;
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             } else {
-                let bytes = extract_full_body(self.req, self.body).await?;
+                let bytes = extract_full_body(self.content_length, self.req_body).await?;
 
                 if bytes.len() < 1024 {
                     debug!(len=?bytes.len(), body=?bytes, "extracted full body");
@@ -527,7 +558,7 @@ impl SignatureContext<'_> {
                 .ok_or_else(|| s3_error!(MissingContentLength, "missing header: x-amz-decoded-content-length"))?;
 
             let stream = AwsChunkedStream::new(
-                mem::take(self.body),
+                mem::take(self.req_body),
                 signature.into(),
                 amz_date,
                 authorization.credential.aws_region.into(),
@@ -537,19 +568,17 @@ impl SignatureContext<'_> {
 
             debug!(len=?stream.exact_remaining_length(), "aws-chunked");
 
-            *self.body = Body::from(stream.into_byte_stream());
-            self.body_transformed = true;
+            self.transformed_body = Some(Body::from(stream.into_byte_stream()));
         }
 
-        self.credentials = Some(Credentials {
+        Ok(Credentials {
             access_key: access_key.into(),
             secret_key,
-        });
-        Ok(())
+        })
     }
 
     #[tracing::instrument(skip(self))]
-    async fn v2_check(&mut self) -> Option<S3Result<()>> {
+    async fn v2_check(&mut self) -> Option<S3Result<Credentials>> {
         if let Some(qs) = self.qs {
             if qs.has("Signature") {
                 debug!("checking presigned url");
@@ -557,7 +586,7 @@ impl SignatureContext<'_> {
             }
         }
 
-        if let Some(auth) = self.headers.get_unique("authorization") {
+        if let Some(auth) = self.hs.get_unique(crate::header::AUTHORIZATION) {
             if let Ok(auth) = AuthorizationV2::parse(auth) {
                 debug!("checking header auth");
                 return Some(self.v2_check_header_auth(auth).await);
@@ -567,36 +596,35 @@ impl SignatureContext<'_> {
         None
     }
 
-    async fn v2_check_header_auth(&mut self, auth_v2: AuthorizationV2<'_>) -> S3Result<()> {
-        let method = &self.req.method;
-        let uri_s3_path = extract_s3_path(self.req, self.req.uri.path(), self.base_domain)?;
+    async fn v2_check_header_auth(&mut self, auth_v2: AuthorizationV2<'_>) -> S3Result<Credentials> {
+        let method = &self.req_method;
+        let uri_s3_path = extract_s3_path(self.host, self.req_uri.path(), self.base_domain)?;
 
-        let date = sig_v2::get_date(&self.headers).ok_or_else(|| invalid_request!("missing date"))?;
+        let date = sig_v2::get_date(&self.hs).ok_or_else(|| invalid_request!("missing date"))?;
 
         let auth = require_auth(self.auth)?;
         let access_key = auth_v2.access_key;
         let secret_key = auth.get_secret_key(access_key).await?;
 
-        let string_to_sign = sig_v2::create_string_to_sign(method, date, &self.headers, &uri_s3_path, self.qs);
+        let string_to_sign = sig_v2::create_string_to_sign(method, date, &self.hs, &uri_s3_path, self.qs);
         let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
 
         if signature != auth_v2.signature {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        self.credentials = Some(Credentials {
+        Ok(Credentials {
             access_key: access_key.into(),
             secret_key,
-        });
-        Ok(())
+        })
     }
 
-    async fn v2_check_presigned_url(&mut self) -> S3Result<()> {
+    async fn v2_check_presigned_url(&mut self) -> S3Result<Credentials> {
         let qs = self.qs.unwrap(); // assume: qs has "Signature"
         let presigned_url = PresignedUrlV2::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v2 fields"))?;
 
-        let method = &self.req.method;
-        let uri_s3_path = extract_s3_path(self.req, self.req.uri.path(), self.base_domain)?;
+        let method = &self.req_method;
+        let uri_s3_path = extract_s3_path(self.host, self.req_uri.path(), self.base_domain)?;
 
         if time::OffsetDateTime::now_utc() > presigned_url.expires_time {
             return Err(s3_error!(AccessDenied, "Request has expired"));
@@ -606,25 +634,25 @@ impl SignatureContext<'_> {
         let access_key = presigned_url.access_key;
         let secret_key = auth.get_secret_key(access_key).await?;
 
-        let string_to_sign =
-            sig_v2::create_string_to_sign(method, presigned_url.expires_str, &self.headers, &uri_s3_path, self.qs);
+        let string_to_sign = sig_v2::create_string_to_sign(method, presigned_url.expires_str, &self.hs, &uri_s3_path, self.qs);
         let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
 
         if signature != presigned_url.signature {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        self.credentials = Some(Credentials {
+        Ok(Credentials {
             access_key: access_key.into(),
             secret_key,
-        });
-        Ok(())
+        })
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    use crate::service::S3Service;
 
     pub trait OutputSize<A> {
         type Output;
@@ -658,6 +686,22 @@ mod tests {
 
     #[test]
     fn track_future_size() {
-        assert_eq!(output_size(&call), 3104);
+        let sizes = [
+            (output_size(&S3Service::call), 2632),
+            (output_size(&call), 1448),
+            (output_size(&prepare), 1360),
+            (output_size(&SignatureContext::check), 752),
+            (output_size(&SignatureContext::v2_check), 280),
+            (output_size(&SignatureContext::v2_check_presigned_url), 184),
+            (output_size(&SignatureContext::v2_check_header_auth), 184),
+            (output_size(&SignatureContext::v4_check), 728),
+            (output_size(&SignatureContext::v4_check_post_signature), 368),
+            (output_size(&SignatureContext::v4_check_presigned_url), 456),
+            (output_size(&SignatureContext::v4_check_header_auth), 632),
+        ];
+        // dbg!(&sizes);
+        for (size, expected) in sizes {
+            assert_eq!(size, expected);
+        }
     }
 }
