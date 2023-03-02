@@ -1,6 +1,7 @@
 mod generated;
 pub use self::generated::*;
 
+use crate::auth::Credentials;
 use crate::auth::S3Auth;
 use crate::error::*;
 use crate::header;
@@ -216,6 +217,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
         let mime = extract_mime(&headers)?;
         let decoded_content_length = extract_decoded_content_length(&headers)?;
         let body_transformed;
+        let credentials;
         {
             let mut scx = SignatureContext {
                 auth,
@@ -229,6 +231,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
                 decoded_content_length,
                 decoded_uri_path,
                 base_domain,
+                credentials: None,
             };
 
             match scx.v2_check().await {
@@ -245,14 +248,16 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
 
             multipart = scx.multipart;
             body_transformed = scx.body_transformed;
+            credentials = scx.credentials;
         }
+        let has_multipart = multipart.is_some();
         if body_transformed {
             // invalidate the original content length
             if let Some(val) = req.headers.get_mut(header::CONTENT_LENGTH) {
                 *val = fmt_content_length(decoded_content_length.unwrap_or(0))
             }
         }
-        let has_multipart = multipart.is_some();
+        req.s3ext.credentials = credentials;
         debug!(?body_transformed, ?decoded_content_length, ?has_multipart);
     }
 
@@ -303,6 +308,7 @@ struct SignatureContext<'a> {
     body_transformed: bool,
     decoded_content_length: Option<usize>,
     base_domain: Option<&'a str>,
+    credentials: Option<Credentials>,
 }
 
 fn require_auth(auth: Option<&dyn S3Auth>) -> S3Result<&dyn S3Auth> {
@@ -372,7 +378,8 @@ impl SignatureContext<'_> {
 
         let amz_date = AmzDate::parse(info.x_amz_date).map_err(|_| invalid_request!("invalid field: x-amz-date"))?;
 
-        let secret_key = auth.get_secret_key(credential.access_key_id).await?;
+        let access_key = credential.access_key_id.to_owned();
+        let secret_key = auth.get_secret_key(&access_key).await?;
 
         let string_to_sign = info.policy;
         let signature = sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region);
@@ -382,6 +389,7 @@ impl SignatureContext<'_> {
         }
 
         self.multipart = Some(multipart);
+        self.credentials = Some(Credentials { access_key, secret_key });
 
         Ok(())
     }
@@ -414,7 +422,8 @@ impl SignatureContext<'_> {
         }
 
         let auth = require_auth(self.auth)?;
-        let secret_key = auth.get_secret_key(presigned_url.credential.access_key_id).await?;
+        let access_key = presigned_url.credential.access_key_id;
+        let secret_key = auth.get_secret_key(access_key).await?;
 
         let signature = {
             let headers = self.headers.find_multiple(&presigned_url.signed_headers);
@@ -434,6 +443,10 @@ impl SignatureContext<'_> {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
+        self.credentials = Some(Credentials {
+            access_key: access_key.into(),
+            secret_key,
+        });
         Ok(())
     }
 
@@ -457,7 +470,8 @@ impl SignatureContext<'_> {
         let amz_content_sha256 =
             extract_amz_content_sha256(&self.headers)?.ok_or_else(|| invalid_request!("missing header: x-amz-content-sha256"))?;
 
-        let secret_key = auth.get_secret_key(authorization.credential.access_key_id).await?;
+        let access_key = authorization.credential.access_key_id;
+        let secret_key = auth.get_secret_key(access_key).await?;
 
         let amz_date = extract_amz_date(&self.headers)?.ok_or_else(|| invalid_request!("missing header: x-amz-date"))?;
 
@@ -517,7 +531,7 @@ impl SignatureContext<'_> {
                 signature.into(),
                 amz_date,
                 authorization.credential.aws_region.into(),
-                secret_key,
+                secret_key.clone(),
                 decoded_content_length,
             );
 
@@ -527,6 +541,10 @@ impl SignatureContext<'_> {
             self.body_transformed = true;
         }
 
+        self.credentials = Some(Credentials {
+            access_key: access_key.into(),
+            secret_key,
+        });
         Ok(())
     }
 
@@ -556,7 +574,8 @@ impl SignatureContext<'_> {
         let date = sig_v2::get_date(&self.headers).ok_or_else(|| invalid_request!("missing date"))?;
 
         let auth = require_auth(self.auth)?;
-        let secret_key = auth.get_secret_key(auth_v2.access_key).await?;
+        let access_key = auth_v2.access_key;
+        let secret_key = auth.get_secret_key(access_key).await?;
 
         let string_to_sign = sig_v2::create_string_to_sign(method, date, &self.headers, &uri_s3_path, self.qs);
         let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
@@ -565,6 +584,10 @@ impl SignatureContext<'_> {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
+        self.credentials = Some(Credentials {
+            access_key: access_key.into(),
+            secret_key,
+        });
         Ok(())
     }
 
@@ -580,7 +603,8 @@ impl SignatureContext<'_> {
         }
 
         let auth = require_auth(self.auth)?;
-        let secret_key = auth.get_secret_key(presigned_url.access_key).await?;
+        let access_key = presigned_url.access_key;
+        let secret_key = auth.get_secret_key(access_key).await?;
 
         let string_to_sign =
             sig_v2::create_string_to_sign(method, presigned_url.expires_str, &self.headers, &uri_s3_path, self.qs);
@@ -590,6 +614,10 @@ impl SignatureContext<'_> {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
+        self.credentials = Some(Credentials {
+            access_key: access_key.into(),
+            secret_key,
+        });
         Ok(())
     }
 }
@@ -630,6 +658,6 @@ mod tests {
 
     #[test]
     fn track_future_size() {
-        assert_eq!(output_size(&call), 3040);
+        assert_eq!(output_size(&call), 3104);
     }
 }
