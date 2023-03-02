@@ -699,7 +699,7 @@ mod tests {
             (output_size(&SignatureContext::v4_check_presigned_url), 456),
             (output_size(&SignatureContext::v4_check_header_auth), 632),
         ];
-        // dbg!(&sizes);
+        println!("{:?}", sizes);
         for (size, expected) in sizes {
             assert_eq!(size, expected);
         }
