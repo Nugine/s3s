@@ -2,7 +2,7 @@ use std::fmt;
 
 use zeroize::Zeroize;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct SecretKey(String);
 
 impl Zeroize for SecretKey {

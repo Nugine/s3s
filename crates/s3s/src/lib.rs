@@ -4,6 +4,7 @@
     clippy::all, //
     clippy::cargo, //
     clippy::must_use_candidate, //
+    clippy::self_named_module_files, //
 )]
 #![warn(
     clippy::dbg_macro, //

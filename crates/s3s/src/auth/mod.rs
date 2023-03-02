@@ -6,6 +6,9 @@ pub use self::secret_key::SecretKey;
 mod simple_auth;
 pub use self::simple_auth::SimpleAuth;
 
+mod credentials;
+pub use self::credentials::Credentials;
+
 use crate::error::S3Result;
 
 /// S3 Authentication Provider
