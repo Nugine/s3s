@@ -32,7 +32,7 @@ where
     T: TryFromHeaderValue,
     T::Error: std::error::Error + Send + Sync + 'static,
 {
-    let mut iter = req.headers().get_all(name).into_iter();
+    let mut iter = req.headers.get_all(name).into_iter();
     let Some(val) = iter.next() else { return Err(missing_header(name)) };
     let None = iter.next() else { return Err(duplicate_header(name)) } ;
 
@@ -44,7 +44,7 @@ where
     T: TryFromHeaderValue,
     T::Error: std::error::Error + Send + Sync + 'static,
 {
-    let mut iter = req.headers().get_all(name).into_iter();
+    let mut iter = req.headers.get_all(name).into_iter();
     let Some(val) = iter.next() else { return Ok(None) };
     let None = iter.next() else { return Err(duplicate_header(name)) } ;
 
@@ -55,7 +55,7 @@ where
 }
 
 pub fn parse_opt_header_timestamp(req: &Request, name: &HeaderName, fmt: TimestampFormat) -> S3Result<Option<Timestamp>> {
-    let mut iter = req.headers().get_all(name).into_iter();
+    let mut iter = req.headers.get_all(name).into_iter();
     let Some(val) = iter.next() else { return Ok(None) };
     let None = iter.next() else { return Err(duplicate_header(name)) } ;
 
@@ -72,7 +72,7 @@ where
     T::Error: std::error::Error + Send + Sync + 'static,
 {
     let mut list = List::new();
-    for val in req.headers().get_all(name) {
+    for val in req.headers.get_all(name) {
         let ans = T::try_from_header_value(val).map_err(|err| invalid_header(err, name, val))?;
         list.push(ans)
     }
@@ -98,7 +98,7 @@ pub fn parse_query<T: FromStr>(req: &Request, name: &str) -> S3Result<T>
 where
     T::Err: std::error::Error + Send + Sync + 'static,
 {
-    let Some(qs) = req.extensions().get::<OrderedQs>() else { return Err(missing_query(name)) };
+    let Some(qs) = req.extensions.get::<OrderedQs>() else { return Err(missing_query(name)) };
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Err(missing_query(name)) };
@@ -111,7 +111,7 @@ pub fn parse_opt_query<T: FromStr>(req: &Request, name: &str) -> S3Result<Option
 where
     T::Err: std::error::Error + Send + Sync + 'static,
 {
-    let Some(qs) = req.extensions().get::<OrderedQs>() else { return Ok(None) };
+    let Some(qs) = req.extensions.get::<OrderedQs>() else { return Ok(None) };
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Ok(None) };
@@ -121,7 +121,7 @@ where
 }
 
 pub fn parse_opt_query_timestamp(req: &Request, name: &str, fmt: TimestampFormat) -> S3Result<Option<Timestamp>> {
-    let Some(qs) = req.extensions().get::<OrderedQs>() else { return Ok(None) };
+    let Some(qs) = req.extensions.get::<OrderedQs>() else { return Ok(None) };
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Ok(None) };
@@ -132,13 +132,13 @@ pub fn parse_opt_query_timestamp(req: &Request, name: &str, fmt: TimestampFormat
 
 #[track_caller]
 pub fn unwrap_bucket(req: &mut Request) -> String {
-    let Some(S3Path::Bucket { bucket }) = req.extensions_mut().remove::<S3Path>() else { panic!("url parameter not found") };
+    let Some(S3Path::Bucket { bucket }) = req.extensions.remove::<S3Path>() else { panic!("url parameter not found") };
     bucket.into()
 }
 
 #[track_caller]
 pub fn unwrap_object(req: &mut Request) -> (String, String) {
-    let Some(S3Path::Object { bucket, key }) = req.extensions_mut().remove::<S3Path>() else { panic!("url parameter not found") };
+    let Some(S3Path::Object { bucket, key }) = req.extensions.remove::<S3Path>() else { panic!("url parameter not found") };
     (bucket.into(), key.into())
 }
 
@@ -160,7 +160,7 @@ pub fn take_xml_body<T>(req: &mut Request) -> S3Result<T>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
-    let bytes = req.body_mut().bytes().expect("full body not found");
+    let bytes = req.body.bytes().expect("full body not found");
     if bytes.is_empty() {
         return Err(S3ErrorCode::MissingRequestBodyError.into());
     }
@@ -175,7 +175,7 @@ pub fn take_opt_xml_body<T>(req: &mut Request) -> S3Result<Option<T>>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
-    let bytes = req.body_mut().bytes().expect("full body not found");
+    let bytes = req.body.bytes().expect("full body not found");
     if bytes.is_empty() {
         return Ok(None);
     }
@@ -187,7 +187,7 @@ where
 }
 
 pub fn take_string_body(req: &mut Request) -> S3Result<String> {
-    let bytes = req.body_mut().bytes().expect("full body not found");
+    let bytes = req.body.bytes().expect("full body not found");
     match from_utf8_vec(bytes.into()) {
         Some(s) => Ok(s),
         None => Err(invalid_request!("expected UTF-8 body")),
@@ -195,7 +195,7 @@ pub fn take_string_body(req: &mut Request) -> S3Result<String> {
 }
 
 pub fn take_stream_body(req: &mut Request) -> StreamingBlob {
-    let body = std::mem::take(req.body_mut());
+    let body = std::mem::take(&mut req.body);
     let size_hint = http_body::Body::size_hint(&body);
     debug!(?size_hint, "taking streaming blob");
     StreamingBlob::from(body)
@@ -203,7 +203,7 @@ pub fn take_stream_body(req: &mut Request) -> StreamingBlob {
 
 pub fn parse_opt_metadata(req: &Request) -> S3Result<Option<Metadata>> {
     let mut metadata = Metadata::default();
-    let map = req.headers();
+    let map = &req.headers;
     for name in map.keys() {
         let Some(key) = name.as_str().strip_prefix("x-amz-meta-") else { continue };
         if key.is_empty() {

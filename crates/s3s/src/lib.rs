@@ -33,5 +33,5 @@ pub mod service;
 pub mod stream;
 
 pub use self::error::*;
-pub use self::http::{Body, Request, Response};
+pub use self::http::Body;
 pub use self::s3_trait::S3;

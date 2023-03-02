@@ -19,8 +19,11 @@ pub use self::multipart::*;
 mod body;
 pub use self::body::*;
 
-pub type Request = hyper::Request<Body>;
-pub type Response = hyper::Response<Body>;
+mod request;
+pub use self::request::Request;
+
+mod response;
+pub use self::response::Response;
 
 pub use hyper::header::{HeaderName, HeaderValue, InvalidHeaderValue};
 pub use hyper::http::StatusCode;

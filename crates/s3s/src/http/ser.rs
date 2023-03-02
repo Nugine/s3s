@@ -19,7 +19,7 @@ where
     V::Error: std::error::Error + Send + Sync + 'static,
 {
     let val = value.try_into_header_value().map_err(S3Error::internal_error)?;
-    res.headers_mut().insert(name, val);
+    res.headers.insert(name, val);
     Ok(())
 }
 
@@ -31,7 +31,7 @@ where
 {
     if let Some(value) = value {
         let val = value.try_into_header_value().map_err(S3Error::internal_error)?;
-        res.headers_mut().insert(name, val);
+        res.headers.insert(name, val);
     }
     Ok(())
 }
@@ -42,7 +42,7 @@ where
 {
     if let Some(ref value) = value {
         let val = utils::fmt_timestamp(value, fmt, HeaderValue::from_bytes).map_err(S3Error::internal_error)?;
-        res.headers_mut().insert(name, val);
+        res.headers.insert(name, val);
     }
     Ok(())
 }
@@ -99,18 +99,18 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
             .and_then(|_| val.serialize(&mut ser))
             .map_err(S3Error::internal_error)?;
     }
-    *res.body_mut() = Body::from(buf);
-    res.headers_mut().insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
+    res.body = Body::from(buf);
+    res.headers.insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
     Ok(())
 }
 
 pub fn set_stream_body(res: &mut Response, stream: StreamingBlob) {
-    *res.body_mut() = Body::from(stream);
+    res.body = Body::from(stream);
 }
 
 pub fn set_event_stream_body(res: &mut Response, stream: SelectObjectContentEventStream) {
-    *res.body_mut() = Body::from(stream.into_byte_stream());
-    res.headers_mut()
+    res.body = Body::from(stream.into_byte_stream());
+    res.headers
         .insert(hyper::header::TRANSFER_ENCODING, HeaderValue::from_static("chunked"));
 }
 
@@ -121,7 +121,7 @@ pub fn add_opt_metadata(res: &mut Response, metadata: Option<Metadata>) -> S3Res
             write!(&mut buf, "x-amz-meta-{key}").unwrap();
             let name = HeaderName::from_bytes(buf.as_bytes()).map_err(S3Error::internal_error)?;
             let value = HeaderValue::try_from(val).map_err(S3Error::internal_error)?;
-            res.headers_mut().insert(name, value);
+            res.headers.insert(name, value);
             buf.clear();
         }
     }

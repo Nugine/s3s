@@ -322,8 +322,7 @@ impl AbortMultipartUpload {
     }
 
     pub fn serialize_http(x: AbortMultipartUploadOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
+        let mut res = http::Response::with_status(http::StatusCode::NO_CONTENT);
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
@@ -394,7 +393,7 @@ impl CompleteMultipartUpload {
     }
 
     pub fn serialize_http(x: CompleteMultipartUploadOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
@@ -566,7 +565,7 @@ impl CopyObject {
     }
 
     pub fn serialize_http(x: CopyObjectOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.copy_object_result {
             http::set_xml_body(&mut res, val)?;
         }
@@ -641,7 +640,7 @@ impl CreateBucket {
     }
 
     pub fn serialize_http(x: CreateBucketOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, LOCATION, x.location)?;
         Ok(res)
     }
@@ -768,7 +767,7 @@ impl CreateMultipartUpload {
     }
 
     pub fn serialize_http(x: CreateMultipartUploadOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         http::add_opt_header_timestamp(&mut res, X_AMZ_ABORT_DATE, x.abort_date, TimestampFormat::HttpDate)?;
         http::add_opt_header(&mut res, X_AMZ_ABORT_RULE_ID, x.abort_rule_id)?;
@@ -816,9 +815,7 @@ impl DeleteBucket {
     }
 
     pub fn serialize_http(_: DeleteBucketOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -857,9 +854,7 @@ impl DeleteBucketAnalyticsConfiguration {
     }
 
     pub fn serialize_http(_: DeleteBucketAnalyticsConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -895,9 +890,7 @@ impl DeleteBucketCors {
     }
 
     pub fn serialize_http(_: DeleteBucketCorsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -933,9 +926,7 @@ impl DeleteBucketEncryption {
     }
 
     pub fn serialize_http(_: DeleteBucketEncryptionOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -968,9 +959,7 @@ impl DeleteBucketIntelligentTieringConfiguration {
     }
 
     pub fn serialize_http(_: DeleteBucketIntelligentTieringConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1009,9 +998,7 @@ impl DeleteBucketInventoryConfiguration {
     }
 
     pub fn serialize_http(_: DeleteBucketInventoryConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1047,9 +1034,7 @@ impl DeleteBucketLifecycle {
     }
 
     pub fn serialize_http(_: DeleteBucketLifecycleOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1088,9 +1073,7 @@ impl DeleteBucketMetricsConfiguration {
     }
 
     pub fn serialize_http(_: DeleteBucketMetricsConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1126,9 +1109,7 @@ impl DeleteBucketOwnershipControls {
     }
 
     pub fn serialize_http(_: DeleteBucketOwnershipControlsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1164,9 +1145,7 @@ impl DeleteBucketPolicy {
     }
 
     pub fn serialize_http(_: DeleteBucketPolicyOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1202,9 +1181,7 @@ impl DeleteBucketReplication {
     }
 
     pub fn serialize_http(_: DeleteBucketReplicationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1240,9 +1217,7 @@ impl DeleteBucketTagging {
     }
 
     pub fn serialize_http(_: DeleteBucketTaggingOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1278,9 +1253,7 @@ impl DeleteBucketWebsite {
     }
 
     pub fn serialize_http(_: DeleteBucketWebsiteOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1330,8 +1303,7 @@ impl DeleteObject {
     }
 
     pub fn serialize_http(x: DeleteObjectOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
+        let mut res = http::Response::with_status(http::StatusCode::NO_CONTENT);
         http::add_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
@@ -1375,8 +1347,7 @@ impl DeleteObjectTagging {
     }
 
     pub fn serialize_http(x: DeleteObjectTaggingOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
+        let mut res = http::Response::with_status(http::StatusCode::NO_CONTENT);
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
         Ok(res)
     }
@@ -1430,7 +1401,7 @@ impl DeleteObjects {
     }
 
     pub fn serialize_http(x: DeleteObjectsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
@@ -1469,9 +1440,7 @@ impl DeletePublicAccessBlock {
     }
 
     pub fn serialize_http(_: DeletePublicAccessBlockOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -1507,7 +1476,7 @@ impl GetBucketAccelerateConfiguration {
     }
 
     pub fn serialize_http(x: GetBucketAccelerateConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -1545,7 +1514,7 @@ impl GetBucketAcl {
     }
 
     pub fn serialize_http(x: GetBucketAclOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -1586,7 +1555,7 @@ impl GetBucketAnalyticsConfiguration {
     }
 
     pub fn serialize_http(x: GetBucketAnalyticsConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.analytics_configuration {
             http::set_xml_body(&mut res, val)?;
         }
@@ -1626,7 +1595,7 @@ impl GetBucketCors {
     }
 
     pub fn serialize_http(x: GetBucketCorsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -1664,7 +1633,7 @@ impl GetBucketEncryption {
     }
 
     pub fn serialize_http(x: GetBucketEncryptionOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.server_side_encryption_configuration {
             http::set_xml_body(&mut res, val)?;
         }
@@ -1701,7 +1670,7 @@ impl GetBucketIntelligentTieringConfiguration {
     }
 
     pub fn serialize_http(x: GetBucketIntelligentTieringConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.intelligent_tiering_configuration {
             http::set_xml_body(&mut res, val)?;
         }
@@ -1744,7 +1713,7 @@ impl GetBucketInventoryConfiguration {
     }
 
     pub fn serialize_http(x: GetBucketInventoryConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.inventory_configuration {
             http::set_xml_body(&mut res, val)?;
         }
@@ -1784,7 +1753,7 @@ impl GetBucketLifecycleConfiguration {
     }
 
     pub fn serialize_http(x: GetBucketLifecycleConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -1822,7 +1791,7 @@ impl GetBucketLocation {
     }
 
     pub fn serialize_http(x: GetBucketLocationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -1860,7 +1829,7 @@ impl GetBucketLogging {
     }
 
     pub fn serialize_http(x: GetBucketLoggingOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -1901,7 +1870,7 @@ impl GetBucketMetricsConfiguration {
     }
 
     pub fn serialize_http(x: GetBucketMetricsConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.metrics_configuration {
             http::set_xml_body(&mut res, val)?;
         }
@@ -1941,7 +1910,7 @@ impl GetBucketNotificationConfiguration {
     }
 
     pub fn serialize_http(x: GetBucketNotificationConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -1979,7 +1948,7 @@ impl GetBucketOwnershipControls {
     }
 
     pub fn serialize_http(x: GetBucketOwnershipControlsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.ownership_controls {
             http::set_xml_body(&mut res, val)?;
         }
@@ -2019,9 +1988,9 @@ impl GetBucketPolicy {
     }
 
     pub fn serialize_http(x: GetBucketPolicyOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(val) = x.policy {
-            *res.body_mut() = http::Body::from(val);
+            res.body = http::Body::from(val);
         }
         Ok(res)
     }
@@ -2059,7 +2028,7 @@ impl GetBucketPolicyStatus {
     }
 
     pub fn serialize_http(x: GetBucketPolicyStatusOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.policy_status {
             http::set_xml_body(&mut res, val)?;
         }
@@ -2099,7 +2068,7 @@ impl GetBucketReplication {
     }
 
     pub fn serialize_http(x: GetBucketReplicationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.replication_configuration {
             http::set_xml_body(&mut res, val)?;
         }
@@ -2139,7 +2108,7 @@ impl GetBucketRequestPayment {
     }
 
     pub fn serialize_http(x: GetBucketRequestPaymentOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -2177,7 +2146,7 @@ impl GetBucketTagging {
     }
 
     pub fn serialize_http(x: GetBucketTaggingOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -2215,7 +2184,7 @@ impl GetBucketVersioning {
     }
 
     pub fn serialize_http(x: GetBucketVersioningOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -2253,7 +2222,7 @@ impl GetBucketWebsite {
     }
 
     pub fn serialize_http(x: GetBucketWebsiteOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -2352,7 +2321,7 @@ impl GetObject {
     }
 
     pub fn serialize_http(x: GetObjectOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(val) = x.body {
             http::set_stream_body(&mut res, val);
         }
@@ -2439,7 +2408,7 @@ impl GetObjectAcl {
     }
 
     pub fn serialize_http(x: GetObjectAclOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
@@ -2505,7 +2474,7 @@ impl GetObjectAttributes {
     }
 
     pub fn serialize_http(x: GetObjectAttributesOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         http::add_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
         http::add_opt_header_timestamp(&mut res, LAST_MODIFIED, x.last_modified, TimestampFormat::HttpDate)?;
@@ -2554,7 +2523,7 @@ impl GetObjectLegalHold {
     }
 
     pub fn serialize_http(x: GetObjectLegalHoldOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.legal_hold {
             http::set_xml_body(&mut res, val)?;
         }
@@ -2594,7 +2563,7 @@ impl GetObjectLockConfiguration {
     }
 
     pub fn serialize_http(x: GetObjectLockConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.object_lock_configuration {
             http::set_xml_body(&mut res, val)?;
         }
@@ -2641,7 +2610,7 @@ impl GetObjectRetention {
     }
 
     pub fn serialize_http(x: GetObjectRetentionOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.retention {
             http::set_xml_body(&mut res, val)?;
         }
@@ -2688,7 +2657,7 @@ impl GetObjectTagging {
     }
 
     pub fn serialize_http(x: GetObjectTaggingOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
         Ok(res)
@@ -2731,7 +2700,7 @@ impl GetObjectTorrent {
     }
 
     pub fn serialize_http(x: GetObjectTorrentOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(val) = x.body {
             http::set_stream_body(&mut res, val);
         }
@@ -2772,7 +2741,7 @@ impl GetPublicAccessBlock {
     }
 
     pub fn serialize_http(x: GetPublicAccessBlockOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.public_access_block_configuration {
             http::set_xml_body(&mut res, val)?;
         }
@@ -2812,7 +2781,7 @@ impl HeadBucket {
     }
 
     pub fn serialize_http(_: HeadBucketOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -2889,7 +2858,7 @@ impl HeadObject {
     }
 
     pub fn serialize_http(x: HeadObjectOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, ACCEPT_RANGES, x.accept_ranges)?;
         http::add_opt_header(&mut res, X_AMZ_ARCHIVE_STATUS, x.archive_status)?;
         http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
@@ -2968,7 +2937,7 @@ impl ListBucketAnalyticsConfigurations {
     }
 
     pub fn serialize_http(x: ListBucketAnalyticsConfigurationsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3006,7 +2975,7 @@ impl ListBucketIntelligentTieringConfigurations {
     }
 
     pub fn serialize_http(x: ListBucketIntelligentTieringConfigurationsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3047,7 +3016,7 @@ impl ListBucketInventoryConfigurations {
     }
 
     pub fn serialize_http(x: ListBucketInventoryConfigurationsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3088,7 +3057,7 @@ impl ListBucketMetricsConfigurations {
     }
 
     pub fn serialize_http(x: ListBucketMetricsConfigurationsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3119,7 +3088,7 @@ impl ListBuckets {
     }
 
     pub fn serialize_http(x: ListBucketsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3175,7 +3144,7 @@ impl ListMultipartUploads {
     }
 
     pub fn serialize_http(x: ListMultipartUploadsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3231,7 +3200,7 @@ impl ListObjectVersions {
     }
 
     pub fn serialize_http(x: ListObjectVersionsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3287,7 +3256,7 @@ impl ListObjects {
     }
 
     pub fn serialize_http(x: ListObjectsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3349,7 +3318,7 @@ impl ListObjectsV2 {
     }
 
     pub fn serialize_http(x: ListObjectsV2Output) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         Ok(res)
     }
@@ -3411,7 +3380,7 @@ impl ListParts {
     }
 
     pub fn serialize_http(x: ListPartsOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
         http::add_opt_header_timestamp(&mut res, X_AMZ_ABORT_DATE, x.abort_date, TimestampFormat::HttpDate)?;
         http::add_opt_header(&mut res, X_AMZ_ABORT_RULE_ID, x.abort_rule_id)?;
@@ -3458,7 +3427,7 @@ impl PutBucketAccelerateConfiguration {
     }
 
     pub fn serialize_http(_: PutBucketAccelerateConfigurationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3521,7 +3490,7 @@ impl PutBucketAcl {
     }
 
     pub fn serialize_http(_: PutBucketAclOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3563,7 +3532,7 @@ impl PutBucketAnalyticsConfiguration {
     }
 
     pub fn serialize_http(_: PutBucketAnalyticsConfigurationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3608,7 +3577,7 @@ impl PutBucketCors {
     }
 
     pub fn serialize_http(_: PutBucketCorsOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3653,7 +3622,7 @@ impl PutBucketEncryption {
     }
 
     pub fn serialize_http(_: PutBucketEncryptionOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3692,7 +3661,7 @@ impl PutBucketIntelligentTieringConfiguration {
     }
 
     pub fn serialize_http(_: PutBucketIntelligentTieringConfigurationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3734,7 +3703,7 @@ impl PutBucketInventoryConfiguration {
     }
 
     pub fn serialize_http(_: PutBucketInventoryConfigurationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3776,7 +3745,7 @@ impl PutBucketLifecycleConfiguration {
     }
 
     pub fn serialize_http(_: PutBucketLifecycleConfigurationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3821,7 +3790,7 @@ impl PutBucketLogging {
     }
 
     pub fn serialize_http(_: PutBucketLoggingOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3863,7 +3832,7 @@ impl PutBucketMetricsConfiguration {
     }
 
     pub fn serialize_http(_: PutBucketMetricsConfigurationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3906,7 +3875,7 @@ impl PutBucketNotificationConfiguration {
     }
 
     pub fn serialize_http(_: PutBucketNotificationConfigurationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3948,7 +3917,7 @@ impl PutBucketOwnershipControls {
     }
 
     pub fn serialize_http(_: PutBucketOwnershipControlsOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -3997,9 +3966,7 @@ impl PutBucketPolicy {
     }
 
     pub fn serialize_http(_: PutBucketPolicyOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
-        *res.status_mut() = http::StatusCode::NO_CONTENT;
-        Ok(res)
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
     }
 }
 
@@ -4047,7 +4014,7 @@ impl PutBucketReplication {
     }
 
     pub fn serialize_http(_: PutBucketReplicationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -4092,7 +4059,7 @@ impl PutBucketRequestPayment {
     }
 
     pub fn serialize_http(_: PutBucketRequestPaymentOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -4137,7 +4104,7 @@ impl PutBucketTagging {
     }
 
     pub fn serialize_http(_: PutBucketTaggingOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -4185,7 +4152,7 @@ impl PutBucketVersioning {
     }
 
     pub fn serialize_http(_: PutBucketVersioningOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -4230,7 +4197,7 @@ impl PutBucketWebsite {
     }
 
     pub fn serialize_http(_: PutBucketWebsiteOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -4255,7 +4222,7 @@ pub struct PutObject;
 
 impl PutObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectInput> {
-        if let Some(m) = req.extensions_mut().remove::<http::Multipart>() {
+        if let Some(m) = req.extensions.remove::<http::Multipart>() {
             return Self::deserialize_http_multipart(req, m);
         }
 
@@ -4384,7 +4351,7 @@ impl PutObject {
         let key = http::parse_field_value(&m, "key")?.ok_or_else(|| invalid_request!("missing key"))?;
 
         let vec_stream = req
-            .extensions_mut()
+            .extensions
             .remove::<crate::stream::VecByteStream>()
             .expect("missing vec stream");
 
@@ -4523,7 +4490,7 @@ impl PutObject {
     }
 
     pub fn serialize_http(x: PutObjectOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
@@ -4608,7 +4575,7 @@ impl PutObjectAcl {
     }
 
     pub fn serialize_http(x: PutObjectAclOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
@@ -4662,7 +4629,7 @@ impl PutObjectLegalHold {
     }
 
     pub fn serialize_http(x: PutObjectLegalHoldOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
@@ -4715,7 +4682,7 @@ impl PutObjectLockConfiguration {
     }
 
     pub fn serialize_http(x: PutObjectLockConfigurationOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
@@ -4773,7 +4740,7 @@ impl PutObjectRetention {
     }
 
     pub fn serialize_http(x: PutObjectRetentionOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
@@ -4827,7 +4794,7 @@ impl PutObjectTagging {
     }
 
     pub fn serialize_http(x: PutObjectTaggingOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
         Ok(res)
     }
@@ -4874,7 +4841,7 @@ impl PutPublicAccessBlock {
     }
 
     pub fn serialize_http(_: PutPublicAccessBlockOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -4923,7 +4890,7 @@ impl RestoreObject {
     }
 
     pub fn serialize_http(x: RestoreObjectOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_RESTORE_OUTPUT_PATH, x.restore_output_path)?;
         Ok(res)
@@ -4977,7 +4944,7 @@ impl SelectObjectContent {
     }
 
     pub fn serialize_http(x: SelectObjectContentOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(val) = x.payload {
             http::set_event_stream_body(&mut res, val);
         }
@@ -5062,7 +5029,7 @@ impl UploadPart {
     }
 
     pub fn serialize_http(x: UploadPartOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
@@ -5167,7 +5134,7 @@ impl UploadPartCopy {
     }
 
     pub fn serialize_http(x: UploadPartCopyOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::default();
+        let mut res = http::Response::with_status(http::StatusCode::OK);
         if let Some(ref val) = x.copy_part_result {
             http::set_xml_body(&mut res, val)?;
         }
@@ -5341,7 +5308,7 @@ impl WriteGetObjectResponse {
     }
 
     pub fn serialize_http(_: WriteGetObjectResponseOutput) -> S3Result<http::Response> {
-        Ok(http::Response::default())
+        Ok(http::Response::with_status(http::StatusCode::OK))
     }
 }
 
@@ -5367,7 +5334,7 @@ pub fn resolve_route(
     s3_path: &S3Path,
     qs: Option<&http::OrderedQs>,
 ) -> S3Result<(&'static dyn super::Operation, bool)> {
-    match req.method().clone() {
+    match req.method {
         hyper::Method::HEAD => match s3_path {
             S3Path::Root => Err(super::unknown_operation()),
             S3Path::Bucket { .. } => Ok((&HeadBucket as &'static dyn super::Operation, false)),
@@ -5504,7 +5471,7 @@ pub fn resolve_route(
                         return Ok((&DeleteObjects as &'static dyn super::Operation, true));
                     }
                 }
-                if req.headers().contains_key("x-amz-request-route") && req.headers().contains_key("x-amz-request-token") {
+                if req.headers.contains_key("x-amz-request-route") && req.headers.contains_key("x-amz-request-token") {
                     return Ok((&WriteGetObjectResponse as &'static dyn super::Operation, false));
                 }
                 Err(super::unknown_operation())
@@ -5612,7 +5579,7 @@ pub fn resolve_route(
                     }
                 }
                 if let Some(qs) = qs {
-                    if qs.has("uploadId") && req.headers().contains_key("x-amz-copy-source") {
+                    if qs.has("uploadId") && req.headers.contains_key("x-amz-copy-source") {
                         return Ok((&UploadPartCopy as &'static dyn super::Operation, false));
                     }
                 }
@@ -5621,7 +5588,7 @@ pub fn resolve_route(
                         return Ok((&UploadPart as &'static dyn super::Operation, false));
                     }
                 }
-                if req.headers().contains_key("x-amz-copy-source") {
+                if req.headers.contains_key("x-amz-copy-source") {
                     return Ok((&CopyObject as &'static dyn super::Operation, false));
                 }
                 Ok((&PutObject as &'static dyn super::Operation, false))

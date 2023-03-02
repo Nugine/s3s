@@ -1,6 +1,6 @@
 use crate::auth::S3Auth;
 use crate::error::{S3Error, S3Result};
-use crate::http::{Body, Request, Response};
+use crate::http::{Body, Request};
 use crate::s3_trait::S3;
 
 use std::convert::Infallible;
@@ -41,13 +41,15 @@ impl S3Service {
         skip(self, req),
         fields(start_time=?time::OffsetDateTime::now_utc())
     )]
-    pub async fn call(&self, mut req: Request) -> S3Result<Response> {
+    pub async fn call(&self, req: hyper::Request<Body>) -> S3Result<hyper::Response<Body>> {
         debug!(?req);
+
+        let mut req = Request::from(req);
 
         let s3 = &*self.s3;
         let auth = self.auth.as_deref();
         let base_domain = self.base_domain.as_deref();
-        let result = crate::ops::call(&mut req, s3, auth, base_domain).await;
+        let result = crate::ops::call(&mut req, s3, auth, base_domain).await.map(Into::into);
 
         match result {
             Ok(ref res) => debug!(?res),
@@ -82,7 +84,7 @@ impl AsRef<S3Service> for SharedS3Service {
 // TODO(blocking): GAT?
 // See https://github.com/tower-rs/tower/issues/636
 impl Service<hyper::Request<hyper::Body>> for SharedS3Service {
-    type Response = Response;
+    type Response = hyper::Response<Body>;
 
     type Error = S3Error;
 

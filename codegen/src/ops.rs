@@ -119,6 +119,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
 
 fn status_code_name(code: u16) -> &'static str {
     match code {
+        200 => "OK",
         204 => "NO_CONTENT",
         _ => unimplemented!(),
     }
@@ -220,7 +221,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                 g.ln("let mut res = http::Response::default();");
 
                 let code_name = status_code_name(op.http_code);
-                g.ln(f!("*res.status_mut() = http::StatusCode::{code_name};"));
+                g.ln(f!("res.status = http::StatusCode::{code_name};"));
 
                 g.ln("res");
             }
@@ -230,13 +231,9 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
         rust::Type::Struct(ty) => {
             if ty.fields.is_empty() {
                 g.ln(f!("pub fn serialize_http(_: {output}) -> S3Result<http::Response> {{"));
-                if op.http_code == 200 {
-                    g.ln("Ok(http::Response::default())");
-                } else {
-                    g.ln("let mut res = http::Response::default();");
+                {
                     let code_name = status_code_name(op.http_code);
-                    g.ln(f!("*res.status_mut() = http::StatusCode::{code_name};"));
-                    g.ln("Ok(res)");
+                    g.ln(f!("Ok(http::Response::with_status(http::StatusCode::{code_name}))"));
                 }
                 g.ln("}");
             } else {
@@ -247,11 +244,9 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                     assert!(["header", "metadata", "xml", "payload"].contains(&field.position.as_str()),);
                 }
 
-                g.ln("let mut res = http::Response::default();");
-
-                if op.http_code != 200 {
+                {
                     let code_name = status_code_name(op.http_code);
-                    g.ln(f!("*res.status_mut() = http::StatusCode::{code_name};"));
+                    g.ln(f!("let mut res = http::Response::with_status(http::StatusCode::{code_name});"));
                 }
 
                 if is_xml_output(ty) {
@@ -261,7 +256,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                         "Policy" => {
                             assert!(field.option_type);
                             g.ln(f!("if let Some(val) = x.{} {{", field.name));
-                            g.ln("*res.body_mut() = http::Body::from(val);");
+                            g.ln("res.body = http::Body::from(val);");
                             g.ln("}");
                         }
                         "StreamingBlob" => {
@@ -342,7 +337,7 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) {
 
                 if op.name == "PutObject" {
                     // POST object
-                    g.ln("if let Some(m) = req.extensions_mut().remove::<http::Multipart>() {");
+                    g.ln("if let Some(m) = req.extensions.remove::<http::Multipart>() {");
                     g.ln("    return Self::deserialize_http_multipart(req, m);");
                     g.ln("}");
                     g.lf();
@@ -512,7 +507,7 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes, g: &mut 
         "let bucket = http::unwrap_bucket(req);",
         "let key = http::parse_field_value(&m, \"key\")?.ok_or_else(|| invalid_request!(\"missing key\"))?;",
         "",
-        "let vec_stream = req.extensions_mut().remove::<crate::stream::VecByteStream>().expect(\"missing vec stream\");",
+        "let vec_stream = req.extensions.remove::<crate::stream::VecByteStream>().expect(\"missing vec stream\");",
         "",
         "let content_length = i64::try_from(vec_stream.exact_remaining_length()).map_err(|e|s3_error!(e, InvalidArgument, \"content-length overflow\"))?;",
         "",
@@ -779,7 +774,7 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         }
     };
 
-    g.ln("match req.method().clone() {");
+    g.ln("match req.method {");
     for &method in &methods {
         g.ln(f!("hyper::Method::{method} => match s3_path {{"));
 
@@ -901,7 +896,7 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
                                 if cond.is_empty().not() {
                                     cond.push_str(" && ");
                                 }
-                                cond.push_str(&f!("req.headers().contains_key(\"{h}\")"));
+                                cond.push_str(&f!("req.headers.contains_key(\"{h}\")"));
                             }
 
                             if qs.is_empty().not() {

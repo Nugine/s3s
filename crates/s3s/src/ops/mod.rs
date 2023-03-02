@@ -40,14 +40,14 @@ pub trait Operation: Send + Sync + 'static {
 }
 
 fn serialize_error(x: S3Error) -> S3Result<Response> {
-    let mut res = Response::default();
-    *res.status_mut() = x.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
+    let status = x.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
+    let mut res = Response::with_status(status);
     http::set_xml_body(&mut res, &x)?;
     Ok(res)
 }
 
 fn extract_s3_path(req: &Request, uri_path: &str, base_domain: Option<&str>) -> S3Result<S3Path> {
-    let result = match (base_domain, req.headers().get(crate::header::HOST)) {
+    let result = match (base_domain, req.headers.get(crate::header::HOST)) {
         (Some(base_domain), Some(val)) => {
             let on_err = |e| s3_error!(e, InvalidRequest, "invalid header: Host: {val:?}");
             let host = val.to_str().map_err(on_err)?;
@@ -69,7 +69,7 @@ fn extract_s3_path(req: &Request, uri_path: &str, base_domain: Option<&str>) -> 
 }
 
 fn extract_qs(req: &mut Request) -> S3Result<Option<OrderedQs>> {
-    let Some(query) = req.uri().query() else { return Ok(None) };
+    let Some(query) = req.uri.query() else { return Ok(None) };
     match OrderedQs::parse(query) {
         Ok(ans) => Ok(Some(ans)),
         Err(source) => Err(S3Error::with_source(S3ErrorCode::InvalidURI, Box::new(source))),
@@ -88,7 +88,7 @@ fn check_query_pattern(qs: &OrderedQs, name: &str, val: &str) -> bool {
 }
 
 fn extract_headers(req: &Request) -> S3Result<OrderedHeaders<'_>> {
-    OrderedHeaders::from_headers(req.headers()).map_err(|source| invalid_request!(source, "invalid headers"))
+    OrderedHeaders::from_headers(&req.headers).map_err(|source| invalid_request!(source, "invalid headers"))
 }
 
 fn extract_mime(hs: &OrderedHeaders<'_>) -> S3Result<Option<Mime>> {
@@ -142,7 +142,7 @@ async fn extract_full_body(req: &Request, body: &mut Body) -> S3Result<Bytes> {
     }
 
     let content_length = req
-        .headers()
+        .headers
         .get(hyper::header::CONTENT_LENGTH)
         .and_then(|val| atoi::atoi::<u64>(val.as_bytes()));
 
@@ -190,7 +190,7 @@ pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, bas
 }
 
 async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<&'static dyn Operation> {
-    let decoded_uri_path = urlencoding::decode(req.uri().path())
+    let decoded_uri_path = urlencoding::decode(req.uri.path())
         .map_err(|_| S3ErrorCode::InvalidURI)?
         .into_owned();
 
@@ -198,7 +198,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
     let qs = extract_qs(req)?;
 
     // check signature
-    let mut body = mem::take(req.body_mut());
+    let mut body = mem::take(&mut req.body);
     let multipart: Option<Multipart>;
     {
         let headers = extract_headers(req)?;
@@ -237,7 +237,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
         }
         if body_transformed {
             // invalidate the original content length
-            if let Some(val) = req.headers_mut().get_mut(header::CONTENT_LENGTH) {
+            if let Some(val) = req.headers.get_mut(header::CONTENT_LENGTH) {
                 *val = fmt_content_length(decoded_content_length.unwrap_or(0))
             }
         }
@@ -247,7 +247,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
 
     let (op, needs_full_body) = 'resolve: {
         if let Some(mut multipart) = multipart {
-            if req.method() == Method::POST {
+            if req.method == Method::POST {
                 match s3_path {
                     S3Path::Root => return Err(unknown_operation()),
                     S3Path::Bucket { .. } => {
@@ -256,8 +256,8 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
                         let file_stream = multipart.take_file_stream().expect("missing file stream");
                         let vec_bytes = aggregate_unlimited(file_stream).await.map_err(S3Error::internal_error)?;
                         let vec_stream = VecByteStream::new(vec_bytes);
-                        req.extensions_mut().insert(multipart);
-                        req.extensions_mut().insert(vec_stream);
+                        req.extensions.insert(multipart);
+                        req.extensions.insert(vec_stream);
                         break 'resolve (&PutObject as &'static dyn Operation, false);
                     }
                     S3Path::Object { .. } => return Err(s3_error!(MethodNotAllowed)),
@@ -269,15 +269,15 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
 
     debug!(op = %op.name(), ?s3_path, "resolved route");
 
-    req.extensions_mut().insert(s3_path);
+    req.extensions.insert(s3_path);
     if let Some(qs) = qs {
-        req.extensions_mut().insert(qs);
+        req.extensions.insert(qs);
     }
 
     if needs_full_body {
         extract_full_body(req, &mut body).await?;
     }
-    *req.body_mut() = body;
+    req.body = body;
 
     Ok(op)
 }
@@ -304,7 +304,7 @@ impl SignatureContext<'_> {
     #[tracing::instrument(skip(self))]
     async fn v4_check(&mut self) -> S3Result<()> {
         // POST auth
-        if self.req.method() == Method::POST {
+        if self.req.method == Method::POST {
             if let Some(ref mime) = self.mime {
                 if mime.type_() == mime::MULTIPART && mime.subtype() == mime::FORM_DATA {
                     debug!("checking post signature");
@@ -409,7 +409,7 @@ impl SignatureContext<'_> {
 
         let signature = {
             let headers = self.headers.find_multiple(&presigned_url.signed_headers);
-            let method = self.req.method();
+            let method = &self.req.method;
             let uri_path = &self.decoded_uri_path;
 
             let canonical_request = sig_v4::create_presigned_canonical_request(method, uri_path, qs.as_ref(), &headers);
@@ -455,7 +455,7 @@ impl SignatureContext<'_> {
         let is_stream = matches!(amz_content_sha256, AmzContentSha256::MultipleChunks);
 
         let signature = {
-            let method = self.req.method();
+            let method = &self.req.method;
             let uri_path = &self.decoded_uri_path;
             let query_strings: &[(String, String)] = self.qs.as_ref().map_or(&[], AsRef::as_ref);
 
@@ -465,7 +465,7 @@ impl SignatureContext<'_> {
             let canonical_request = if is_stream {
                 let payload = sig_v4::Payload::MultipleChunks;
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
-            } else if matches!(*self.req.method(), Method::GET | Method::HEAD) {
+            } else if matches!(self.req.method, Method::GET | Method::HEAD) {
                 let payload = sig_v4::Payload::Empty;
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             } else {
@@ -541,8 +541,8 @@ impl SignatureContext<'_> {
     }
 
     async fn v2_check_header_auth(&mut self, auth_v2: AuthorizationV2<'_>) -> S3Result<()> {
-        let method = self.req.method();
-        let uri_s3_path = extract_s3_path(self.req, self.req.uri().path(), self.base_domain)?;
+        let method = &self.req.method;
+        let uri_s3_path = extract_s3_path(self.req, self.req.uri.path(), self.base_domain)?;
 
         let date = sig_v2::get_date(&self.headers).ok_or_else(|| invalid_request!("missing date"))?;
 
@@ -563,8 +563,8 @@ impl SignatureContext<'_> {
         let qs = self.qs.unwrap(); // assume: qs has "Signature"
         let presigned_url = PresignedUrlV2::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v2 fields"))?;
 
-        let method = self.req.method();
-        let uri_s3_path = extract_s3_path(self.req, self.req.uri().path(), self.base_domain)?;
+        let method = &self.req.method;
+        let uri_s3_path = extract_s3_path(self.req, self.req.uri.path(), self.base_domain)?;
 
         if time::OffsetDateTime::now_utc() > presigned_url.expires_time {
             return Err(s3_error!(AccessDenied, "Request has expired"));
