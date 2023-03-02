@@ -9,7 +9,6 @@
     clippy::dbg_macro, //
 )]
 #![allow(
-    clippy::multiple_crate_versions, // FIXME(blocking): waiting for https://github.com/tokio-rs/tokio/pull/5386
     clippy::bool_assert_comparison,  // I don't like `assert!(!expression)`. It's very misleading.
 )]
 
