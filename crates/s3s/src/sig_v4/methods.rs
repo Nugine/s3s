@@ -4,19 +4,28 @@ use super::AmzDate;
 
 use crate::http::OrderedHeaders;
 use crate::utils::from_ascii;
-use crate::utils::hex_bytes32;
 use crate::utils::hmac_sha256;
 use crate::utils::stable_sort_by_first;
 
+use std::mem::MaybeUninit;
+
+use hex_simd::{AsOut, AsciiCase};
 use hyper::body::Bytes;
 use hyper::Method;
 use sha2::{Digest, Sha256};
 use smallvec::SmallVec;
 
+/// `f(hex(src))`
+fn hex_bytes32<R>(src: &[u8; 32], f: impl FnOnce(&str) -> R) -> R {
+    let buf: &mut [_] = &mut [MaybeUninit::uninit(); 64];
+    let ans = hex_simd::encode_as_str(src.as_ref(), buf.as_out(), AsciiCase::Lower);
+    f(ans)
+}
+
 /// `f(hex(sha256(data)))`
 fn hex_sha256<R>(data: &[u8], f: impl FnOnce(&str) -> R) -> R {
     let src = Sha256::digest(data);
-    hex_bytes32(src, f)
+    hex_bytes32(src.as_ref(), f)
 }
 
 /// `f(hex(sha256(chunk)))`
@@ -26,7 +35,7 @@ fn hex_sha256_chunk<R>(chunk: &[Bytes], f: impl FnOnce(&str) -> R) -> R {
         chunk.iter().for_each(|data| h.update(data));
         h.finalize()
     };
-    hex_bytes32(src, f)
+    hex_bytes32(src.as_ref(), f)
 }
 
 fn hex(data: impl AsRef<[u8]>) -> String {
