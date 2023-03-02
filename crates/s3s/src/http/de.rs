@@ -1,4 +1,4 @@
-use super::{Multipart, OrderedQs, Request};
+use super::{Multipart, Request};
 
 use crate::dto::{List, Metadata, StreamingBlob, Timestamp, TimestampFormat};
 use crate::error::*;
@@ -98,7 +98,7 @@ pub fn parse_query<T: FromStr>(req: &Request, name: &str) -> S3Result<T>
 where
     T::Err: std::error::Error + Send + Sync + 'static,
 {
-    let Some(qs) = req.extensions.get::<OrderedQs>() else { return Err(missing_query(name)) };
+    let Some(qs) = req.s3ext.qs.as_ref() else { return Err(missing_query(name)) };
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Err(missing_query(name)) };
@@ -111,7 +111,7 @@ pub fn parse_opt_query<T: FromStr>(req: &Request, name: &str) -> S3Result<Option
 where
     T::Err: std::error::Error + Send + Sync + 'static,
 {
-    let Some(qs) = req.extensions.get::<OrderedQs>() else { return Ok(None) };
+    let Some(qs) = req.s3ext.qs.as_ref() else { return Ok(None) };
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Ok(None) };
@@ -121,7 +121,7 @@ where
 }
 
 pub fn parse_opt_query_timestamp(req: &Request, name: &str, fmt: TimestampFormat) -> S3Result<Option<Timestamp>> {
-    let Some(qs) = req.extensions.get::<OrderedQs>() else { return Ok(None) };
+    let Some(qs) = req.s3ext.qs.as_ref() else { return Ok(None) };
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Ok(None) };
@@ -132,13 +132,13 @@ pub fn parse_opt_query_timestamp(req: &Request, name: &str, fmt: TimestampFormat
 
 #[track_caller]
 pub fn unwrap_bucket(req: &mut Request) -> String {
-    let Some(S3Path::Bucket { bucket }) = req.extensions.remove::<S3Path>() else { panic!("url parameter not found") };
+    let Some(S3Path::Bucket { bucket }) = req.s3ext.s3_path.take() else { panic!("s3 path not found") };
     bucket.into()
 }
 
 #[track_caller]
 pub fn unwrap_object(req: &mut Request) -> (String, String) {
-    let Some(S3Path::Object { bucket, key }) = req.extensions.remove::<S3Path>() else { panic!("url parameter not found") };
+    let Some(S3Path::Object { bucket, key }) = req.s3ext.s3_path.take() else { panic!("s3 path not found") };
     (bucket.into(), key.into())
 }
 

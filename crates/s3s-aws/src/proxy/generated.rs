@@ -4,6 +4,7 @@ use super::*;
 
 use crate::conv::{try_from_aws, try_into_aws};
 
+use s3s::S3Request;
 use s3s::S3Result;
 use s3s::S3;
 
@@ -11,11 +12,12 @@ use tracing::debug;
 
 #[async_trait::async_trait]
 impl S3 for Proxy {
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn abort_multipart_upload(
         &self,
-        input: s3s::dto::AbortMultipartUploadInput,
+        req: S3Request<s3s::dto::AbortMultipartUploadInput>,
     ) -> S3Result<s3s::dto::AbortMultipartUploadOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.abort_multipart_upload();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -34,11 +36,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn complete_multipart_upload(
         &self,
-        input: s3s::dto::CompleteMultipartUploadInput,
+        req: S3Request<s3s::dto::CompleteMultipartUploadInput>,
     ) -> S3Result<s3s::dto::CompleteMultipartUploadOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.complete_multipart_upload();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -65,8 +68,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn copy_object(&self, input: s3s::dto::CopyObjectInput) -> S3Result<s3s::dto::CopyObjectOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn copy_object(&self, req: S3Request<s3s::dto::CopyObjectInput>) -> S3Result<s3s::dto::CopyObjectOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.copy_object();
         b = b.set_acl(try_into_aws(input.acl)?);
@@ -121,8 +125,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn create_bucket(&self, input: s3s::dto::CreateBucketInput) -> S3Result<s3s::dto::CreateBucketOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn create_bucket(&self, req: S3Request<s3s::dto::CreateBucketInput>) -> S3Result<s3s::dto::CreateBucketOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.create_bucket();
         b = b.set_acl(try_into_aws(input.acl)?);
@@ -146,11 +151,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn create_multipart_upload(
         &self,
-        input: s3s::dto::CreateMultipartUploadInput,
+        req: S3Request<s3s::dto::CreateMultipartUploadInput>,
     ) -> S3Result<s3s::dto::CreateMultipartUploadOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.create_multipart_upload();
         b = b.set_acl(try_into_aws(input.acl)?);
@@ -194,8 +200,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn delete_bucket(&self, input: s3s::dto::DeleteBucketInput) -> S3Result<s3s::dto::DeleteBucketOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn delete_bucket(&self, req: S3Request<s3s::dto::DeleteBucketInput>) -> S3Result<s3s::dto::DeleteBucketOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -211,11 +218,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_analytics_configuration(
         &self,
-        input: s3s::dto::DeleteBucketAnalyticsConfigurationInput,
+        req: S3Request<s3s::dto::DeleteBucketAnalyticsConfigurationInput>,
     ) -> S3Result<s3s::dto::DeleteBucketAnalyticsConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_analytics_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -232,8 +240,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn delete_bucket_cors(&self, input: s3s::dto::DeleteBucketCorsInput) -> S3Result<s3s::dto::DeleteBucketCorsOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn delete_bucket_cors(
+        &self,
+        req: S3Request<s3s::dto::DeleteBucketCorsInput>,
+    ) -> S3Result<s3s::dto::DeleteBucketCorsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_cors();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -249,11 +261,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_encryption(
         &self,
-        input: s3s::dto::DeleteBucketEncryptionInput,
+        req: S3Request<s3s::dto::DeleteBucketEncryptionInput>,
     ) -> S3Result<s3s::dto::DeleteBucketEncryptionOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_encryption();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -269,11 +282,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_intelligent_tiering_configuration(
         &self,
-        input: s3s::dto::DeleteBucketIntelligentTieringConfigurationInput,
+        req: S3Request<s3s::dto::DeleteBucketIntelligentTieringConfigurationInput>,
     ) -> S3Result<s3s::dto::DeleteBucketIntelligentTieringConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_intelligent_tiering_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -289,11 +303,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_inventory_configuration(
         &self,
-        input: s3s::dto::DeleteBucketInventoryConfigurationInput,
+        req: S3Request<s3s::dto::DeleteBucketInventoryConfigurationInput>,
     ) -> S3Result<s3s::dto::DeleteBucketInventoryConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_inventory_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -310,11 +325,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_lifecycle(
         &self,
-        input: s3s::dto::DeleteBucketLifecycleInput,
+        req: S3Request<s3s::dto::DeleteBucketLifecycleInput>,
     ) -> S3Result<s3s::dto::DeleteBucketLifecycleOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_lifecycle();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -330,11 +346,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_metrics_configuration(
         &self,
-        input: s3s::dto::DeleteBucketMetricsConfigurationInput,
+        req: S3Request<s3s::dto::DeleteBucketMetricsConfigurationInput>,
     ) -> S3Result<s3s::dto::DeleteBucketMetricsConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_metrics_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -351,11 +368,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_ownership_controls(
         &self,
-        input: s3s::dto::DeleteBucketOwnershipControlsInput,
+        req: S3Request<s3s::dto::DeleteBucketOwnershipControlsInput>,
     ) -> S3Result<s3s::dto::DeleteBucketOwnershipControlsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_ownership_controls();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -371,11 +389,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_policy(
         &self,
-        input: s3s::dto::DeleteBucketPolicyInput,
+        req: S3Request<s3s::dto::DeleteBucketPolicyInput>,
     ) -> S3Result<s3s::dto::DeleteBucketPolicyOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_policy();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -391,11 +410,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_replication(
         &self,
-        input: s3s::dto::DeleteBucketReplicationInput,
+        req: S3Request<s3s::dto::DeleteBucketReplicationInput>,
     ) -> S3Result<s3s::dto::DeleteBucketReplicationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_replication();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -411,11 +431,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_tagging(
         &self,
-        input: s3s::dto::DeleteBucketTaggingInput,
+        req: S3Request<s3s::dto::DeleteBucketTaggingInput>,
     ) -> S3Result<s3s::dto::DeleteBucketTaggingOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_tagging();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -431,11 +452,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_website(
         &self,
-        input: s3s::dto::DeleteBucketWebsiteInput,
+        req: S3Request<s3s::dto::DeleteBucketWebsiteInput>,
     ) -> S3Result<s3s::dto::DeleteBucketWebsiteOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_website();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -451,8 +473,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn delete_object(&self, input: s3s::dto::DeleteObjectInput) -> S3Result<s3s::dto::DeleteObjectOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn delete_object(&self, req: S3Request<s3s::dto::DeleteObjectInput>) -> S3Result<s3s::dto::DeleteObjectOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_object();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -473,11 +496,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_object_tagging(
         &self,
-        input: s3s::dto::DeleteObjectTaggingInput,
+        req: S3Request<s3s::dto::DeleteObjectTaggingInput>,
     ) -> S3Result<s3s::dto::DeleteObjectTaggingOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_object_tagging();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -495,8 +519,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn delete_objects(&self, input: s3s::dto::DeleteObjectsInput) -> S3Result<s3s::dto::DeleteObjectsOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn delete_objects(&self, req: S3Request<s3s::dto::DeleteObjectsInput>) -> S3Result<s3s::dto::DeleteObjectsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_objects();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -517,11 +542,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn delete_public_access_block(
         &self,
-        input: s3s::dto::DeletePublicAccessBlockInput,
+        req: S3Request<s3s::dto::DeletePublicAccessBlockInput>,
     ) -> S3Result<s3s::dto::DeletePublicAccessBlockOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_public_access_block();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -537,11 +563,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_accelerate_configuration(
         &self,
-        input: s3s::dto::GetBucketAccelerateConfigurationInput,
+        req: S3Request<s3s::dto::GetBucketAccelerateConfigurationInput>,
     ) -> S3Result<s3s::dto::GetBucketAccelerateConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_accelerate_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -557,8 +584,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_bucket_acl(&self, input: s3s::dto::GetBucketAclInput) -> S3Result<s3s::dto::GetBucketAclOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_bucket_acl(&self, req: S3Request<s3s::dto::GetBucketAclInput>) -> S3Result<s3s::dto::GetBucketAclOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_acl();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -574,11 +602,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_analytics_configuration(
         &self,
-        input: s3s::dto::GetBucketAnalyticsConfigurationInput,
+        req: S3Request<s3s::dto::GetBucketAnalyticsConfigurationInput>,
     ) -> S3Result<s3s::dto::GetBucketAnalyticsConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_analytics_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -595,8 +624,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_bucket_cors(&self, input: s3s::dto::GetBucketCorsInput) -> S3Result<s3s::dto::GetBucketCorsOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_bucket_cors(&self, req: S3Request<s3s::dto::GetBucketCorsInput>) -> S3Result<s3s::dto::GetBucketCorsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_cors();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -612,11 +642,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_encryption(
         &self,
-        input: s3s::dto::GetBucketEncryptionInput,
+        req: S3Request<s3s::dto::GetBucketEncryptionInput>,
     ) -> S3Result<s3s::dto::GetBucketEncryptionOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_encryption();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -632,11 +663,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_intelligent_tiering_configuration(
         &self,
-        input: s3s::dto::GetBucketIntelligentTieringConfigurationInput,
+        req: S3Request<s3s::dto::GetBucketIntelligentTieringConfigurationInput>,
     ) -> S3Result<s3s::dto::GetBucketIntelligentTieringConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_intelligent_tiering_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -652,11 +684,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_inventory_configuration(
         &self,
-        input: s3s::dto::GetBucketInventoryConfigurationInput,
+        req: S3Request<s3s::dto::GetBucketInventoryConfigurationInput>,
     ) -> S3Result<s3s::dto::GetBucketInventoryConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_inventory_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -673,11 +706,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_lifecycle_configuration(
         &self,
-        input: s3s::dto::GetBucketLifecycleConfigurationInput,
+        req: S3Request<s3s::dto::GetBucketLifecycleConfigurationInput>,
     ) -> S3Result<s3s::dto::GetBucketLifecycleConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_lifecycle_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -693,8 +727,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_bucket_location(&self, input: s3s::dto::GetBucketLocationInput) -> S3Result<s3s::dto::GetBucketLocationOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_bucket_location(
+        &self,
+        req: S3Request<s3s::dto::GetBucketLocationInput>,
+    ) -> S3Result<s3s::dto::GetBucketLocationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_location();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -710,8 +748,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_bucket_logging(&self, input: s3s::dto::GetBucketLoggingInput) -> S3Result<s3s::dto::GetBucketLoggingOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_bucket_logging(
+        &self,
+        req: S3Request<s3s::dto::GetBucketLoggingInput>,
+    ) -> S3Result<s3s::dto::GetBucketLoggingOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_logging();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -727,11 +769,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_metrics_configuration(
         &self,
-        input: s3s::dto::GetBucketMetricsConfigurationInput,
+        req: S3Request<s3s::dto::GetBucketMetricsConfigurationInput>,
     ) -> S3Result<s3s::dto::GetBucketMetricsConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_metrics_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -748,11 +791,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_notification_configuration(
         &self,
-        input: s3s::dto::GetBucketNotificationConfigurationInput,
+        req: S3Request<s3s::dto::GetBucketNotificationConfigurationInput>,
     ) -> S3Result<s3s::dto::GetBucketNotificationConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_notification_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -768,11 +812,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_ownership_controls(
         &self,
-        input: s3s::dto::GetBucketOwnershipControlsInput,
+        req: S3Request<s3s::dto::GetBucketOwnershipControlsInput>,
     ) -> S3Result<s3s::dto::GetBucketOwnershipControlsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_ownership_controls();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -788,8 +833,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_bucket_policy(&self, input: s3s::dto::GetBucketPolicyInput) -> S3Result<s3s::dto::GetBucketPolicyOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_bucket_policy(
+        &self,
+        req: S3Request<s3s::dto::GetBucketPolicyInput>,
+    ) -> S3Result<s3s::dto::GetBucketPolicyOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_policy();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -805,11 +854,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_policy_status(
         &self,
-        input: s3s::dto::GetBucketPolicyStatusInput,
+        req: S3Request<s3s::dto::GetBucketPolicyStatusInput>,
     ) -> S3Result<s3s::dto::GetBucketPolicyStatusOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_policy_status();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -825,11 +875,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_replication(
         &self,
-        input: s3s::dto::GetBucketReplicationInput,
+        req: S3Request<s3s::dto::GetBucketReplicationInput>,
     ) -> S3Result<s3s::dto::GetBucketReplicationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_replication();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -845,11 +896,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_request_payment(
         &self,
-        input: s3s::dto::GetBucketRequestPaymentInput,
+        req: S3Request<s3s::dto::GetBucketRequestPaymentInput>,
     ) -> S3Result<s3s::dto::GetBucketRequestPaymentOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_request_payment();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -865,8 +917,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_bucket_tagging(&self, input: s3s::dto::GetBucketTaggingInput) -> S3Result<s3s::dto::GetBucketTaggingOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_bucket_tagging(
+        &self,
+        req: S3Request<s3s::dto::GetBucketTaggingInput>,
+    ) -> S3Result<s3s::dto::GetBucketTaggingOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_tagging();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -882,11 +938,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_bucket_versioning(
         &self,
-        input: s3s::dto::GetBucketVersioningInput,
+        req: S3Request<s3s::dto::GetBucketVersioningInput>,
     ) -> S3Result<s3s::dto::GetBucketVersioningOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_versioning();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -902,8 +959,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_bucket_website(&self, input: s3s::dto::GetBucketWebsiteInput) -> S3Result<s3s::dto::GetBucketWebsiteOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_bucket_website(
+        &self,
+        req: S3Request<s3s::dto::GetBucketWebsiteInput>,
+    ) -> S3Result<s3s::dto::GetBucketWebsiteOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_website();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -919,8 +980,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_object(&self, input: s3s::dto::GetObjectInput) -> S3Result<s3s::dto::GetObjectOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_object(&self, req: S3Request<s3s::dto::GetObjectInput>) -> S3Result<s3s::dto::GetObjectOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -955,8 +1017,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_object_acl(&self, input: s3s::dto::GetObjectAclInput) -> S3Result<s3s::dto::GetObjectAclOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_object_acl(&self, req: S3Request<s3s::dto::GetObjectAclInput>) -> S3Result<s3s::dto::GetObjectAclOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_acl();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -975,11 +1038,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_object_attributes(
         &self,
-        input: s3s::dto::GetObjectAttributesInput,
+        req: S3Request<s3s::dto::GetObjectAttributesInput>,
     ) -> S3Result<s3s::dto::GetObjectAttributesOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_attributes();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1004,11 +1068,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_object_legal_hold(
         &self,
-        input: s3s::dto::GetObjectLegalHoldInput,
+        req: S3Request<s3s::dto::GetObjectLegalHoldInput>,
     ) -> S3Result<s3s::dto::GetObjectLegalHoldOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_legal_hold();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1027,11 +1092,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_object_lock_configuration(
         &self,
-        input: s3s::dto::GetObjectLockConfigurationInput,
+        req: S3Request<s3s::dto::GetObjectLockConfigurationInput>,
     ) -> S3Result<s3s::dto::GetObjectLockConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_lock_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1047,11 +1113,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_object_retention(
         &self,
-        input: s3s::dto::GetObjectRetentionInput,
+        req: S3Request<s3s::dto::GetObjectRetentionInput>,
     ) -> S3Result<s3s::dto::GetObjectRetentionOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_retention();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1070,8 +1137,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_object_tagging(&self, input: s3s::dto::GetObjectTaggingInput) -> S3Result<s3s::dto::GetObjectTaggingOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_object_tagging(
+        &self,
+        req: S3Request<s3s::dto::GetObjectTaggingInput>,
+    ) -> S3Result<s3s::dto::GetObjectTaggingOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_tagging();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1090,8 +1161,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn get_object_torrent(&self, input: s3s::dto::GetObjectTorrentInput) -> S3Result<s3s::dto::GetObjectTorrentOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn get_object_torrent(
+        &self,
+        req: S3Request<s3s::dto::GetObjectTorrentInput>,
+    ) -> S3Result<s3s::dto::GetObjectTorrentOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_torrent();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1109,11 +1184,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn get_public_access_block(
         &self,
-        input: s3s::dto::GetPublicAccessBlockInput,
+        req: S3Request<s3s::dto::GetPublicAccessBlockInput>,
     ) -> S3Result<s3s::dto::GetPublicAccessBlockOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.get_public_access_block();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1129,8 +1205,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn head_bucket(&self, input: s3s::dto::HeadBucketInput) -> S3Result<s3s::dto::HeadBucketOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn head_bucket(&self, req: S3Request<s3s::dto::HeadBucketInput>) -> S3Result<s3s::dto::HeadBucketOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.head_bucket();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1146,8 +1223,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn head_object(&self, input: s3s::dto::HeadObjectInput) -> S3Result<s3s::dto::HeadObjectOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn head_object(&self, req: S3Request<s3s::dto::HeadObjectInput>) -> S3Result<s3s::dto::HeadObjectOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.head_object();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1176,11 +1254,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn list_bucket_analytics_configurations(
         &self,
-        input: s3s::dto::ListBucketAnalyticsConfigurationsInput,
+        req: S3Request<s3s::dto::ListBucketAnalyticsConfigurationsInput>,
     ) -> S3Result<s3s::dto::ListBucketAnalyticsConfigurationsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_bucket_analytics_configurations();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1197,11 +1276,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn list_bucket_intelligent_tiering_configurations(
         &self,
-        input: s3s::dto::ListBucketIntelligentTieringConfigurationsInput,
+        req: S3Request<s3s::dto::ListBucketIntelligentTieringConfigurationsInput>,
     ) -> S3Result<s3s::dto::ListBucketIntelligentTieringConfigurationsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_bucket_intelligent_tiering_configurations();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1217,11 +1297,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn list_bucket_inventory_configurations(
         &self,
-        input: s3s::dto::ListBucketInventoryConfigurationsInput,
+        req: S3Request<s3s::dto::ListBucketInventoryConfigurationsInput>,
     ) -> S3Result<s3s::dto::ListBucketInventoryConfigurationsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_bucket_inventory_configurations();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1238,11 +1319,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn list_bucket_metrics_configurations(
         &self,
-        input: s3s::dto::ListBucketMetricsConfigurationsInput,
+        req: S3Request<s3s::dto::ListBucketMetricsConfigurationsInput>,
     ) -> S3Result<s3s::dto::ListBucketMetricsConfigurationsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_bucket_metrics_configurations();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1259,8 +1341,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn list_buckets(&self, input: s3s::dto::ListBucketsInput) -> S3Result<s3s::dto::ListBucketsOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn list_buckets(&self, req: S3Request<s3s::dto::ListBucketsInput>) -> S3Result<s3s::dto::ListBucketsOutput> {
+        let input = req.input;
         debug!(?input);
         let result = self.0.list_buckets().send().await;
         match result {
@@ -1273,11 +1356,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn list_multipart_uploads(
         &self,
-        input: s3s::dto::ListMultipartUploadsInput,
+        req: S3Request<s3s::dto::ListMultipartUploadsInput>,
     ) -> S3Result<s3s::dto::ListMultipartUploadsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_multipart_uploads();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1299,11 +1383,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn list_object_versions(
         &self,
-        input: s3s::dto::ListObjectVersionsInput,
+        req: S3Request<s3s::dto::ListObjectVersionsInput>,
     ) -> S3Result<s3s::dto::ListObjectVersionsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_object_versions();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1325,8 +1410,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn list_objects(&self, input: s3s::dto::ListObjectsInput) -> S3Result<s3s::dto::ListObjectsOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn list_objects(&self, req: S3Request<s3s::dto::ListObjectsInput>) -> S3Result<s3s::dto::ListObjectsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_objects();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1348,8 +1434,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn list_objects_v2(&self, input: s3s::dto::ListObjectsV2Input) -> S3Result<s3s::dto::ListObjectsV2Output> {
+    #[tracing::instrument(skip(self, req))]
+    async fn list_objects_v2(&self, req: S3Request<s3s::dto::ListObjectsV2Input>) -> S3Result<s3s::dto::ListObjectsV2Output> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_objects_v2();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1373,8 +1460,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn list_parts(&self, input: s3s::dto::ListPartsInput) -> S3Result<s3s::dto::ListPartsOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn list_parts(&self, req: S3Request<s3s::dto::ListPartsInput>) -> S3Result<s3s::dto::ListPartsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.list_parts();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1398,11 +1486,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_accelerate_configuration(
         &self,
-        input: s3s::dto::PutBucketAccelerateConfigurationInput,
+        req: S3Request<s3s::dto::PutBucketAccelerateConfigurationInput>,
     ) -> S3Result<s3s::dto::PutBucketAccelerateConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_accelerate_configuration();
         b = b.set_accelerate_configuration(Some(try_into_aws(input.accelerate_configuration)?));
@@ -1420,8 +1509,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_bucket_acl(&self, input: s3s::dto::PutBucketAclInput) -> S3Result<s3s::dto::PutBucketAclOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_bucket_acl(&self, req: S3Request<s3s::dto::PutBucketAclInput>) -> S3Result<s3s::dto::PutBucketAclOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_acl();
         b = b.set_acl(try_into_aws(input.acl)?);
@@ -1446,11 +1536,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_analytics_configuration(
         &self,
-        input: s3s::dto::PutBucketAnalyticsConfigurationInput,
+        req: S3Request<s3s::dto::PutBucketAnalyticsConfigurationInput>,
     ) -> S3Result<s3s::dto::PutBucketAnalyticsConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_analytics_configuration();
         b = b.set_analytics_configuration(Some(try_into_aws(input.analytics_configuration)?));
@@ -1468,8 +1559,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_bucket_cors(&self, input: s3s::dto::PutBucketCorsInput) -> S3Result<s3s::dto::PutBucketCorsOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_bucket_cors(&self, req: S3Request<s3s::dto::PutBucketCorsInput>) -> S3Result<s3s::dto::PutBucketCorsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_cors();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1488,11 +1580,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_encryption(
         &self,
-        input: s3s::dto::PutBucketEncryptionInput,
+        req: S3Request<s3s::dto::PutBucketEncryptionInput>,
     ) -> S3Result<s3s::dto::PutBucketEncryptionOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_encryption();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1511,11 +1604,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_intelligent_tiering_configuration(
         &self,
-        input: s3s::dto::PutBucketIntelligentTieringConfigurationInput,
+        req: S3Request<s3s::dto::PutBucketIntelligentTieringConfigurationInput>,
     ) -> S3Result<s3s::dto::PutBucketIntelligentTieringConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_intelligent_tiering_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1532,11 +1626,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_inventory_configuration(
         &self,
-        input: s3s::dto::PutBucketInventoryConfigurationInput,
+        req: S3Request<s3s::dto::PutBucketInventoryConfigurationInput>,
     ) -> S3Result<s3s::dto::PutBucketInventoryConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_inventory_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1554,11 +1649,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_lifecycle_configuration(
         &self,
-        input: s3s::dto::PutBucketLifecycleConfigurationInput,
+        req: S3Request<s3s::dto::PutBucketLifecycleConfigurationInput>,
     ) -> S3Result<s3s::dto::PutBucketLifecycleConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_lifecycle_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1576,8 +1672,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_bucket_logging(&self, input: s3s::dto::PutBucketLoggingInput) -> S3Result<s3s::dto::PutBucketLoggingOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_bucket_logging(
+        &self,
+        req: S3Request<s3s::dto::PutBucketLoggingInput>,
+    ) -> S3Result<s3s::dto::PutBucketLoggingOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_logging();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1596,11 +1696,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_metrics_configuration(
         &self,
-        input: s3s::dto::PutBucketMetricsConfigurationInput,
+        req: S3Request<s3s::dto::PutBucketMetricsConfigurationInput>,
     ) -> S3Result<s3s::dto::PutBucketMetricsConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_metrics_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1618,11 +1719,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_notification_configuration(
         &self,
-        input: s3s::dto::PutBucketNotificationConfigurationInput,
+        req: S3Request<s3s::dto::PutBucketNotificationConfigurationInput>,
     ) -> S3Result<s3s::dto::PutBucketNotificationConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_notification_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1640,11 +1742,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_ownership_controls(
         &self,
-        input: s3s::dto::PutBucketOwnershipControlsInput,
+        req: S3Request<s3s::dto::PutBucketOwnershipControlsInput>,
     ) -> S3Result<s3s::dto::PutBucketOwnershipControlsOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_ownership_controls();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1662,8 +1765,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_bucket_policy(&self, input: s3s::dto::PutBucketPolicyInput) -> S3Result<s3s::dto::PutBucketPolicyOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_bucket_policy(
+        &self,
+        req: S3Request<s3s::dto::PutBucketPolicyInput>,
+    ) -> S3Result<s3s::dto::PutBucketPolicyOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_policy();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1683,11 +1790,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_replication(
         &self,
-        input: s3s::dto::PutBucketReplicationInput,
+        req: S3Request<s3s::dto::PutBucketReplicationInput>,
     ) -> S3Result<s3s::dto::PutBucketReplicationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_replication();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1707,11 +1815,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_request_payment(
         &self,
-        input: s3s::dto::PutBucketRequestPaymentInput,
+        req: S3Request<s3s::dto::PutBucketRequestPaymentInput>,
     ) -> S3Result<s3s::dto::PutBucketRequestPaymentOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_request_payment();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1730,8 +1839,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_bucket_tagging(&self, input: s3s::dto::PutBucketTaggingInput) -> S3Result<s3s::dto::PutBucketTaggingOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_bucket_tagging(
+        &self,
+        req: S3Request<s3s::dto::PutBucketTaggingInput>,
+    ) -> S3Result<s3s::dto::PutBucketTaggingOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_tagging();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1750,11 +1863,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_bucket_versioning(
         &self,
-        input: s3s::dto::PutBucketVersioningInput,
+        req: S3Request<s3s::dto::PutBucketVersioningInput>,
     ) -> S3Result<s3s::dto::PutBucketVersioningOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_versioning();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1774,8 +1888,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_bucket_website(&self, input: s3s::dto::PutBucketWebsiteInput) -> S3Result<s3s::dto::PutBucketWebsiteOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_bucket_website(
+        &self,
+        req: S3Request<s3s::dto::PutBucketWebsiteInput>,
+    ) -> S3Result<s3s::dto::PutBucketWebsiteOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_website();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1794,8 +1912,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_object(&self, input: s3s::dto::PutObjectInput) -> S3Result<s3s::dto::PutObjectOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_object(&self, req: S3Request<s3s::dto::PutObjectInput>) -> S3Result<s3s::dto::PutObjectOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object();
         b = b.set_acl(try_into_aws(input.acl)?);
@@ -1846,8 +1965,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_object_acl(&self, input: s3s::dto::PutObjectAclInput) -> S3Result<s3s::dto::PutObjectAclOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_object_acl(&self, req: S3Request<s3s::dto::PutObjectAclInput>) -> S3Result<s3s::dto::PutObjectAclOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_acl();
         b = b.set_acl(try_into_aws(input.acl)?);
@@ -1875,11 +1995,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_object_legal_hold(
         &self,
-        input: s3s::dto::PutObjectLegalHoldInput,
+        req: S3Request<s3s::dto::PutObjectLegalHoldInput>,
     ) -> S3Result<s3s::dto::PutObjectLegalHoldOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_legal_hold();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1901,11 +2022,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_object_lock_configuration(
         &self,
-        input: s3s::dto::PutObjectLockConfigurationInput,
+        req: S3Request<s3s::dto::PutObjectLockConfigurationInput>,
     ) -> S3Result<s3s::dto::PutObjectLockConfigurationOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_lock_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1926,11 +2048,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_object_retention(
         &self,
-        input: s3s::dto::PutObjectRetentionInput,
+        req: S3Request<s3s::dto::PutObjectRetentionInput>,
     ) -> S3Result<s3s::dto::PutObjectRetentionOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_retention();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1953,8 +2076,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn put_object_tagging(&self, input: s3s::dto::PutObjectTaggingInput) -> S3Result<s3s::dto::PutObjectTaggingOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn put_object_tagging(
+        &self,
+        req: S3Request<s3s::dto::PutObjectTaggingInput>,
+    ) -> S3Result<s3s::dto::PutObjectTaggingOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_tagging();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1976,11 +2103,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn put_public_access_block(
         &self,
-        input: s3s::dto::PutPublicAccessBlockInput,
+        req: S3Request<s3s::dto::PutPublicAccessBlockInput>,
     ) -> S3Result<s3s::dto::PutPublicAccessBlockOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.put_public_access_block();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -1999,8 +2127,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn restore_object(&self, input: s3s::dto::RestoreObjectInput) -> S3Result<s3s::dto::RestoreObjectOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn restore_object(&self, req: S3Request<s3s::dto::RestoreObjectInput>) -> S3Result<s3s::dto::RestoreObjectOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.restore_object();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -2021,11 +2150,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn select_object_content(
         &self,
-        input: s3s::dto::SelectObjectContentInput,
+        req: S3Request<s3s::dto::SelectObjectContentInput>,
     ) -> S3Result<s3s::dto::SelectObjectContentOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.select_object_content();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -2051,8 +2181,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn upload_part(&self, input: s3s::dto::UploadPartInput) -> S3Result<s3s::dto::UploadPartOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn upload_part(&self, req: S3Request<s3s::dto::UploadPartInput>) -> S3Result<s3s::dto::UploadPartOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.upload_part();
         b = b.set_body(try_into_aws(input.body)?);
@@ -2083,8 +2214,9 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
-    async fn upload_part_copy(&self, input: s3s::dto::UploadPartCopyInput) -> S3Result<s3s::dto::UploadPartCopyOutput> {
+    #[tracing::instrument(skip(self, req))]
+    async fn upload_part_copy(&self, req: S3Request<s3s::dto::UploadPartCopyInput>) -> S3Result<s3s::dto::UploadPartCopyOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.upload_part_copy();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
@@ -2117,11 +2249,12 @@ impl S3 for Proxy {
         }
     }
 
-    #[tracing::instrument(skip(self, input))]
+    #[tracing::instrument(skip(self, req))]
     async fn write_get_object_response(
         &self,
-        input: s3s::dto::WriteGetObjectResponseInput,
+        req: S3Request<s3s::dto::WriteGetObjectResponseInput>,
     ) -> S3Result<s3s::dto::WriteGetObjectResponseOutput> {
+        let input = req.input;
         debug!(?input);
         let mut b = self.0.write_get_object_response();
         b = b.set_accept_ranges(try_into_aws(input.accept_ranges)?);

@@ -9,6 +9,7 @@ use crate::http::{AwsChunkedStream, Body, Multipart};
 use crate::http::{OrderedHeaders, OrderedQs};
 use crate::http::{Request, Response};
 use crate::path::{ParseS3PathError, S3Path};
+use crate::request::S3Request;
 use crate::s3_trait::S3;
 use crate::sig_v2;
 use crate::sig_v2::AuthorizationV2;
@@ -37,6 +38,16 @@ pub trait Operation: Send + Sync + 'static {
     fn name(&self) -> &'static str;
 
     async fn call(&self, s3: &dyn S3, req: &mut Request) -> S3Result<Response>;
+}
+
+fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
+    let credentials = req.s3ext.credentials.take();
+    let extensions = mem::take(&mut req.extensions);
+    S3Request {
+        input,
+        credentials,
+        extensions,
+    }
 }
 
 fn serialize_error(x: S3Error) -> S3Result<Response> {
@@ -256,8 +267,8 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
                         let file_stream = multipart.take_file_stream().expect("missing file stream");
                         let vec_bytes = aggregate_unlimited(file_stream).await.map_err(S3Error::internal_error)?;
                         let vec_stream = VecByteStream::new(vec_bytes);
-                        req.extensions.insert(multipart);
-                        req.extensions.insert(vec_stream);
+                        req.s3ext.multipart = Some(multipart);
+                        req.s3ext.vec_stream = Some(vec_stream);
                         break 'resolve (&PutObject as &'static dyn Operation, false);
                     }
                     S3Path::Object { .. } => return Err(s3_error!(MethodNotAllowed)),
@@ -269,10 +280,8 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
 
     debug!(op = %op.name(), ?s3_path, "resolved route");
 
-    req.extensions.insert(s3_path);
-    if let Some(qs) = qs {
-        req.extensions.insert(qs);
-    }
+    req.s3ext.s3_path = Some(s3_path);
+    req.s3ext.qs = qs;
 
     if needs_full_body {
         extract_full_body(req, &mut body).await?;

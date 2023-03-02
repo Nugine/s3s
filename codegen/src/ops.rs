@@ -337,7 +337,7 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) {
 
                 if op.name == "PutObject" {
                     // POST object
-                    g.ln("if let Some(m) = req.extensions.remove::<http::Multipart>() {");
+                    g.ln("if let Some(m) = req.s3ext.multipart.take() {");
                     g.ln("    return Self::deserialize_http_multipart(req, m);");
                     g.ln("}");
                     g.lf();
@@ -507,7 +507,7 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes, g: &mut 
         "let bucket = http::unwrap_bucket(req);",
         "let key = http::parse_field_value(&m, \"key\")?.ok_or_else(|| invalid_request!(\"missing key\"))?;",
         "",
-        "let vec_stream = req.extensions.remove::<crate::stream::VecByteStream>().expect(\"missing vec stream\");",
+        "let vec_stream = req.s3ext.vec_stream.take().expect(\"missing vec stream\");",
         "",
         "let content_length = i64::try_from(vec_stream.exact_remaining_length()).map_err(|e|s3_error!(e, InvalidArgument, \"content-length overflow\"))?;",
         "",
@@ -600,7 +600,8 @@ fn codegen_op_http_call(op: &Operation, g: &mut Codegen) {
     let method = op.name.to_snake_case();
 
     g.ln("let input = Self::deserialize_http(req)?;");
-    g.ln(f!("let result = s3.{method}(input).await;"));
+    g.ln("let req = super::build_s3_request(input, req);");
+    g.ln(f!("let result = s3.{method}(req).await;"));
 
     g.ln("let res = match result {");
     g.ln("Ok(output) => Self::serialize_http(output)?,");

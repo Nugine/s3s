@@ -11,6 +11,7 @@ pub fn codegen(ops: &Operations, g: &mut Codegen) {
         "",
         "use crate::dto::*;",
         "use crate::error::S3Result;",
+        "use crate::request::S3Request;",
         "",
         "/// An async trait which represents the S3 API",
         "#[async_trait::async_trait]",
@@ -20,9 +21,11 @@ pub fn codegen(ops: &Operations, g: &mut Codegen) {
 
     for op in ops.values() {
         let method_name = op.name.to_snake_case();
+        let input = &op.input;
+        let output = &op.output;
 
         codegen_doc(op.doc.as_deref(), g);
-        g.ln(f!("async fn {method_name}(&self, _input: {}) -> S3Result<{}> {{", op.input, op.output));
+        g.ln(f!("async fn {method_name}(&self, _req: S3Request<{input}>) -> S3Result<{output}> {{"));
         g.ln(f!("Err(s3_error!(NotImplemented, \"{} is not implemented yet\"))", op.name));
         g.ln("}");
         g.lf();

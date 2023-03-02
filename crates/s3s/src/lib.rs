@@ -22,6 +22,7 @@ mod error;
 mod header;
 mod http;
 mod ops;
+mod request;
 mod s3_trait;
 mod sig_v2;
 mod sig_v4;
@@ -35,4 +36,5 @@ pub mod stream;
 
 pub use self::error::*;
 pub use self::http::Body;
+pub use self::request::S3Request;
 pub use self::s3_trait::S3;

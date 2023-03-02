@@ -15,6 +15,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         "use crate::conv::{try_from_aws, try_into_aws};",
         "",
         "use s3s::S3;",
+        "use s3s::S3Request;",
         "use s3s::S3Result;",
         "",
         "use tracing::debug;",
@@ -29,9 +30,12 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         let s3s_input = f!("s3s::dto::{}", op.input);
         let s3s_output = f!("s3s::dto::{}", op.output);
 
-        g.ln("#[tracing::instrument(skip(self, input))]");
-        g.ln(f!("async fn {method_name}(&self, input: {s3s_input}) -> S3Result<{s3s_output}> {{"));
+        g.ln("#[tracing::instrument(skip(self, req))]");
+        g.ln(f!(
+            "async fn {method_name}(&self, req: S3Request<{s3s_input}>) -> S3Result<{s3s_output}> {{"
+        ));
 
+        g.ln("let input = req.input;");
         g.ln("debug!(?input);");
 
         if op.smithy_input == "Unit" {
