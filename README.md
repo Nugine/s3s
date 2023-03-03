@@ -41,3 +41,9 @@ The data types, serialization and deserialization are generated from the smithy 
 
 + [Development Guide](./CONTRIBUTING.md)
 + [Code of Conduct](./CODE_OF_CONDUCT.md)
+
+## Sponsor
+
+If my open-source work has been helpful to you, please [sponsor me](https://github.com/Nugine#sponsor).
+
+Every little bit helps. Thank you!
