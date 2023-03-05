@@ -37,6 +37,12 @@ The diagram above shows how `s3s` works.
 
 The data types, serialization and deserialization are generated from the smithy model in [aws-sdk-rust](https://github.com/awslabs/aws-sdk-rust) repository. We apply manual hacks to fix some problems in [smithy server codegen](https://awslabs.github.io/smithy-rs/design/server/overview.html) and make `s3s` ready to use now.
 
+## Security
+
+`S3Service` and other adapters in this project have no security protection. If they are exposed to the Internet directly, they may be **attacked**.
+
+It is up to the user to implement security enhancements such as **HTTP body length limit**, rate limit and back pressure.
+
 ## Contributing
 
 + [Development Guide](./CONTRIBUTING.md)
