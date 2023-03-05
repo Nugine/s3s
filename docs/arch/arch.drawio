@@ -1,28 +1,22 @@
 <mxfile host="65bd71144e" scale="1" border="20">
     <diagram id="U-4mjK2Da4UuaZ3eeNt7" name="第 1 页">
-        <mxGraphModel dx="1006" dy="652" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#FFFFFF" math="0" shadow="0">
+        <mxGraphModel dx="1066" dy="652" grid="1" gridSize="20" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#FFFFFF" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="40" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;" parent="1" edge="1">
+                <mxCell id="40" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;startArrow=none;" parent="1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="80" y="479.5" as="sourcePoint"/>
+                        <mxPoint x="80" y="480" as="sourcePoint"/>
                         <mxPoint x="720" y="479.5" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="36" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="2" target="35" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="2" value="HTTP Request" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="200" y="140" width="120" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="3" value="HTTP Response" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="500" y="140" width="120" height="40" as="geometry"/>
-                </mxCell>
                 <mxCell id="4" value="hyper" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" parent="1" vertex="1">
                     <mxGeometry x="80" y="140" width="120" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Times New Roman;fontSize=12;" parent="1" source="6" target="12" edge="1">
+                <mxCell id="46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="6" target="12">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="6" value="deserialize" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -41,12 +35,6 @@
                 </mxCell>
                 <mxCell id="9" value="s3s" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" parent="1" vertex="1">
                     <mxGeometry x="80" y="320" width="120" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="24" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;rounded=0;" parent="1" source="12" target="21" edge="1">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="12" value="GetObjectInput" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="200" y="460" width="120" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="15" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Times New Roman;fontSize=12;" parent="1" source="13" target="7" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
@@ -70,7 +58,7 @@
                 <mxCell id="21" value="impl S3 for MyService" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
                     <mxGeometry x="280" y="540" width="200" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="23" value="get_object(input).await" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=12;" parent="1" vertex="1">
+                <mxCell id="23" value="get_object(req).await" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=12;" parent="1" vertex="1">
                     <mxGeometry x="280" y="580" width="200" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;" parent="1" source="26" target="28" edge="1">
@@ -102,11 +90,23 @@
                 <mxCell id="35" value="check signature" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="200" y="260" width="120" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="39" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;" parent="1" edge="1">
+                <mxCell id="39" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;startArrow=none;" parent="1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="80" y="220" as="sourcePoint"/>
                         <mxPoint x="720" y="220" as="targetPoint"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="45" style="edgeStyle=orthogonalEdgeStyle;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;rounded=0;" edge="1" parent="1" source="12" target="21">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="GetObjectInput, Credentials, ..." style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="460" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="HTTP Request" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="140" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="HTTP Response" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="140" width="120" height="40" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
