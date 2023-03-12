@@ -94,6 +94,7 @@ impl Service<hyper::Request<hyper::Body>> for SharedS3Service {
         Poll::Ready(Ok(())) // ASK: back pressure?
     }
 
+    #[allow(clippy::redundant_async_block)] // FIXME: https://github.com/rust-lang/rust-clippy/issues/10482
     fn call(&mut self, req: hyper::Request<hyper::Body>) -> Self::Future {
         let req = req.map(Body::from);
         let service = self.0.clone();
