@@ -63,6 +63,10 @@ impl S3Service {
     pub fn into_shared(self) -> SharedS3Service {
         SharedS3Service(Arc::new(self))
     }
+
+    async fn call_shared(self: Arc<Self>, req: hyper::Request<Body>) -> S3Result<hyper::Response<Body>> {
+        self.call(req).await
+    }
 }
 
 #[derive(Clone)]
@@ -94,11 +98,10 @@ impl Service<hyper::Request<hyper::Body>> for SharedS3Service {
         Poll::Ready(Ok(())) // ASK: back pressure?
     }
 
-    #[allow(clippy::redundant_async_block)] // FIXME: https://github.com/rust-lang/rust-clippy/issues/10482
     fn call(&mut self, req: hyper::Request<hyper::Body>) -> Self::Future {
         let req = req.map(Body::from);
         let service = self.0.clone();
-        Box::pin(async move { service.call(req).await })
+        Box::pin(service.call_shared(req))
     }
 }
 
