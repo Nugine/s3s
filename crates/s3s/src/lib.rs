@@ -11,6 +11,7 @@
 )]
 #![allow(
     clippy::bool_assert_comparison,  // I don't like `assert!(!expression)`. It's very misleading.
+    clippy::multiple_crate_versions, // Sometimes not fixable
 )]
 
 #[macro_use]
