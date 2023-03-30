@@ -272,10 +272,13 @@ impl S3 for FileSystem {
             }
 
             let file_meta = try_!(entry.metadata().await);
-            let creation_date = Timestamp::from(try_!(file_meta.created()));
+            // Not all filesystems/mounts provide all file attributes like created timestamp,
+            // therefore we try to fallback to modified if possible.
+            // See https://github.com/Nugine/s3s/pull/22 for more details.
+            let created_or_modified_date = Timestamp::from(try_!(file_meta.created().or(file_meta.modified())));
 
             let bucket = Bucket {
-                creation_date: Some(creation_date),
+                creation_date: Some(created_or_modified_date),
                 name: Some(name.to_owned()),
             };
             buckets.push(bucket);
