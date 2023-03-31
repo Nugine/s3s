@@ -1,9 +1,9 @@
 use hyper::{
     http::{Extensions, HeaderValue},
-    HeaderMap,
+    HeaderMap, Uri,
 };
 
-use crate::{auth::Credentials, http::OrderedQs};
+use crate::auth::Credentials;
 
 #[derive(Debug)]
 #[non_exhaustive]
@@ -22,8 +22,8 @@ pub struct S3Request<T> {
     // Headers
     pub headers: HeaderMap<HeaderValue>,
 
-    // Query parameters
-    pub query_parameter: Option<OrderedQs>,
+    // Raw URI
+    pub uri: Uri,
 }
 
 impl<T> S3Request<T> {
@@ -33,7 +33,7 @@ impl<T> S3Request<T> {
             credentials: Default::default(),
             extensions: Default::default(),
             headers: Default::default(),
-            query_parameter: Default::default(),
+            uri: Default::default(),
         }
     }
 
@@ -43,7 +43,7 @@ impl<T> S3Request<T> {
             credentials: self.credentials,
             extensions: self.extensions,
             headers: self.headers,
-            query_parameter: self.query_parameter,
+            uri: self.uri,
         }
     }
 }

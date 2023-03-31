@@ -48,14 +48,14 @@ fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
     let credentials = req.s3ext.credentials.take();
     let extensions = mem::take(&mut req.extensions);
     let headers = mem::take(&mut req.headers);
-    let query_parameter = req.s3ext.qs.take();
+    let uri = mem::take(&mut req.uri);
 
     S3Request {
         input,
         credentials,
         extensions,
         headers,
-        query_parameter,
+        uri,
     }
 }
 
