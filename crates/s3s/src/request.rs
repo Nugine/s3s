@@ -1,4 +1,7 @@
-use hyper::http::Extensions;
+use hyper::{
+    http::{Extensions, HeaderValue},
+    HeaderMap, Uri,
+};
 
 use crate::auth::Credentials;
 
@@ -15,6 +18,12 @@ pub struct S3Request<T> {
 
     /// Request extensions
     pub extensions: Extensions,
+
+    // Headers
+    pub headers: HeaderMap<HeaderValue>,
+
+    // Raw URI
+    pub uri: Uri,
 }
 
 impl<T> S3Request<T> {
@@ -23,6 +32,8 @@ impl<T> S3Request<T> {
             input,
             credentials: Default::default(),
             extensions: Default::default(),
+            headers: Default::default(),
+            uri: Default::default(),
         }
     }
 
@@ -31,6 +42,8 @@ impl<T> S3Request<T> {
             input: f(self.input),
             credentials: self.credentials,
             extensions: self.extensions,
+            headers: self.headers,
+            uri: self.uri,
         }
     }
 }
