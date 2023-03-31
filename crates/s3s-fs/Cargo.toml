@@ -44,7 +44,7 @@ uuid = { version = "1.3.0", features = ["v4"] }
 [dev-dependencies]
 anyhow = { version = "1.0.69", features = ["backtrace"] }
 aws-config = "0.54.1"
-aws-credential-types = { version = "0.54.1", features = ["test-util"] }
+aws-credential-types = { version = "0.55.0", features = ["test-util"] }
 aws-sdk-s3 = "0.24.0"
 once_cell = "1.17.1"
 s3s-aws = { version = "0.4.1-dev", path = "../s3s-aws" }
