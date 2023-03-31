@@ -2,13 +2,8 @@
 
 use super::*;
 
-use aws_sdk_s3::error::*;
-use aws_sdk_s3::input::*;
-use aws_sdk_s3::model::*;
-use aws_sdk_s3::output::*;
-
 impl AwsConversion for s3s::dto::AbortIncompleteMultipartUpload {
-    type Target = AbortIncompleteMultipartUpload;
+    type Target = aws_sdk_s3::types::AbortIncompleteMultipartUpload;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -25,7 +20,7 @@ impl AwsConversion for s3s::dto::AbortIncompleteMultipartUpload {
 }
 
 impl AwsConversion for s3s::dto::AbortMultipartUploadInput {
-    type Target = AbortMultipartUploadInput;
+    type Target = aws_sdk_s3::operation::abort_multipart_upload::AbortMultipartUploadInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -50,7 +45,7 @@ impl AwsConversion for s3s::dto::AbortMultipartUploadInput {
 }
 
 impl AwsConversion for s3s::dto::AbortMultipartUploadOutput {
-    type Target = AbortMultipartUploadOutput;
+    type Target = aws_sdk_s3::operation::abort_multipart_upload::AbortMultipartUploadOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -67,7 +62,7 @@ impl AwsConversion for s3s::dto::AbortMultipartUploadOutput {
 }
 
 impl AwsConversion for s3s::dto::AccelerateConfiguration {
-    type Target = AccelerateConfiguration;
+    type Target = aws_sdk_s3::types::AccelerateConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -84,7 +79,7 @@ impl AwsConversion for s3s::dto::AccelerateConfiguration {
 }
 
 impl AwsConversion for s3s::dto::AccessControlPolicy {
-    type Target = AccessControlPolicy;
+    type Target = aws_sdk_s3::types::AccessControlPolicy;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -103,7 +98,7 @@ impl AwsConversion for s3s::dto::AccessControlPolicy {
 }
 
 impl AwsConversion for s3s::dto::AccessControlTranslation {
-    type Target = AccessControlTranslation;
+    type Target = aws_sdk_s3::types::AccessControlTranslation;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -120,7 +115,7 @@ impl AwsConversion for s3s::dto::AccessControlTranslation {
 }
 
 impl AwsConversion for s3s::dto::AnalyticsAndOperator {
-    type Target = AnalyticsAndOperator;
+    type Target = aws_sdk_s3::types::AnalyticsAndOperator;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -139,7 +134,7 @@ impl AwsConversion for s3s::dto::AnalyticsAndOperator {
 }
 
 impl AwsConversion for s3s::dto::AnalyticsConfiguration {
-    type Target = AnalyticsConfiguration;
+    type Target = aws_sdk_s3::types::AnalyticsConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -160,7 +155,7 @@ impl AwsConversion for s3s::dto::AnalyticsConfiguration {
 }
 
 impl AwsConversion for s3s::dto::AnalyticsExportDestination {
-    type Target = AnalyticsExportDestination;
+    type Target = aws_sdk_s3::types::AnalyticsExportDestination;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -177,30 +172,30 @@ impl AwsConversion for s3s::dto::AnalyticsExportDestination {
 }
 
 impl AwsConversion for s3s::dto::AnalyticsFilter {
-    type Target = AnalyticsFilter;
+    type Target = aws_sdk_s3::types::AnalyticsFilter;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            AnalyticsFilter::And(v) => Self::And(try_from_aws(v)?),
-            AnalyticsFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
-            AnalyticsFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
-            _ => unimplemented!("unknown variant of AnalyticsFilter: {x:?}"),
+            aws_sdk_s3::types::AnalyticsFilter::And(v) => Self::And(try_from_aws(v)?),
+            aws_sdk_s3::types::AnalyticsFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
+            aws_sdk_s3::types::AnalyticsFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
+            _ => unimplemented!("unknown variant of aws_sdk_s3::types::AnalyticsFilter: {x:?}"),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
-            Self::And(v) => AnalyticsFilter::And(try_into_aws(v)?),
-            Self::Prefix(v) => AnalyticsFilter::Prefix(try_into_aws(v)?),
-            Self::Tag(v) => AnalyticsFilter::Tag(try_into_aws(v)?),
+            Self::And(v) => aws_sdk_s3::types::AnalyticsFilter::And(try_into_aws(v)?),
+            Self::Prefix(v) => aws_sdk_s3::types::AnalyticsFilter::Prefix(try_into_aws(v)?),
+            Self::Tag(v) => aws_sdk_s3::types::AnalyticsFilter::Tag(try_into_aws(v)?),
             _ => unimplemented!("unknown variant of AnalyticsFilter: {x:?}"),
         })
     }
 }
 
 impl AwsConversion for s3s::dto::AnalyticsS3BucketDestination {
-    type Target = AnalyticsS3BucketDestination;
+    type Target = aws_sdk_s3::types::AnalyticsS3BucketDestination;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -223,42 +218,42 @@ impl AwsConversion for s3s::dto::AnalyticsS3BucketDestination {
 }
 
 impl AwsConversion for s3s::dto::AnalyticsS3ExportFileFormat {
-    type Target = AnalyticsS3ExportFileFormat;
+    type Target = aws_sdk_s3::types::AnalyticsS3ExportFileFormat;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            AnalyticsS3ExportFileFormat::Csv => Self::from_static(Self::CSV),
-            AnalyticsS3ExportFileFormat::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::AnalyticsS3ExportFileFormat::Csv => Self::from_static(Self::CSV),
+            aws_sdk_s3::types::AnalyticsS3ExportFileFormat::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(AnalyticsS3ExportFileFormat::from(x.as_str()))
+        Ok(aws_sdk_s3::types::AnalyticsS3ExportFileFormat::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ArchiveStatus {
-    type Target = ArchiveStatus;
+    type Target = aws_sdk_s3::types::ArchiveStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ArchiveStatus::ArchiveAccess => Self::from_static(Self::ARCHIVE_ACCESS),
-            ArchiveStatus::DeepArchiveAccess => Self::from_static(Self::DEEP_ARCHIVE_ACCESS),
-            ArchiveStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ArchiveStatus::ArchiveAccess => Self::from_static(Self::ARCHIVE_ACCESS),
+            aws_sdk_s3::types::ArchiveStatus::DeepArchiveAccess => Self::from_static(Self::DEEP_ARCHIVE_ACCESS),
+            aws_sdk_s3::types::ArchiveStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ArchiveStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ArchiveStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::Bucket {
-    type Target = Bucket;
+    type Target = aws_sdk_s3::types::Bucket;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -277,25 +272,25 @@ impl AwsConversion for s3s::dto::Bucket {
 }
 
 impl AwsConversion for s3s::dto::BucketAccelerateStatus {
-    type Target = BucketAccelerateStatus;
+    type Target = aws_sdk_s3::types::BucketAccelerateStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketAccelerateStatus::Enabled => Self::from_static(Self::ENABLED),
-            BucketAccelerateStatus::Suspended => Self::from_static(Self::SUSPENDED),
-            BucketAccelerateStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::BucketAccelerateStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::BucketAccelerateStatus::Suspended => Self::from_static(Self::SUSPENDED),
+            aws_sdk_s3::types::BucketAccelerateStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(BucketAccelerateStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::BucketAccelerateStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::BucketAlreadyExists {
-    type Target = BucketAlreadyExists;
+    type Target = aws_sdk_s3::types::error::BucketAlreadyExists;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -311,7 +306,7 @@ impl AwsConversion for s3s::dto::BucketAlreadyExists {
 }
 
 impl AwsConversion for s3s::dto::BucketAlreadyOwnedByYou {
-    type Target = BucketAlreadyOwnedByYou;
+    type Target = aws_sdk_s3::types::error::BucketAlreadyOwnedByYou;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -327,27 +322,27 @@ impl AwsConversion for s3s::dto::BucketAlreadyOwnedByYou {
 }
 
 impl AwsConversion for s3s::dto::BucketCannedACL {
-    type Target = BucketCannedAcl;
+    type Target = aws_sdk_s3::types::BucketCannedAcl;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketCannedAcl::AuthenticatedRead => Self::from_static(Self::AUTHENTICATED_READ),
-            BucketCannedAcl::Private => Self::from_static(Self::PRIVATE),
-            BucketCannedAcl::PublicRead => Self::from_static(Self::PUBLIC_READ),
-            BucketCannedAcl::PublicReadWrite => Self::from_static(Self::PUBLIC_READ_WRITE),
-            BucketCannedAcl::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::BucketCannedAcl::AuthenticatedRead => Self::from_static(Self::AUTHENTICATED_READ),
+            aws_sdk_s3::types::BucketCannedAcl::Private => Self::from_static(Self::PRIVATE),
+            aws_sdk_s3::types::BucketCannedAcl::PublicRead => Self::from_static(Self::PUBLIC_READ),
+            aws_sdk_s3::types::BucketCannedAcl::PublicReadWrite => Self::from_static(Self::PUBLIC_READ_WRITE),
+            aws_sdk_s3::types::BucketCannedAcl::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(BucketCannedAcl::from(x.as_str()))
+        Ok(aws_sdk_s3::types::BucketCannedAcl::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::BucketLifecycleConfiguration {
-    type Target = BucketLifecycleConfiguration;
+    type Target = aws_sdk_s3::types::BucketLifecycleConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -364,49 +359,49 @@ impl AwsConversion for s3s::dto::BucketLifecycleConfiguration {
 }
 
 impl AwsConversion for s3s::dto::BucketLocationConstraint {
-    type Target = BucketLocationConstraint;
+    type Target = aws_sdk_s3::types::BucketLocationConstraint;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketLocationConstraint::Eu => Self::from_static(Self::EU),
-            BucketLocationConstraint::AfSouth1 => Self::from_static(Self::AF_SOUTH_1),
-            BucketLocationConstraint::ApEast1 => Self::from_static(Self::AP_EAST_1),
-            BucketLocationConstraint::ApNortheast1 => Self::from_static(Self::AP_NORTHEAST_1),
-            BucketLocationConstraint::ApNortheast2 => Self::from_static(Self::AP_NORTHEAST_2),
-            BucketLocationConstraint::ApNortheast3 => Self::from_static(Self::AP_NORTHEAST_3),
-            BucketLocationConstraint::ApSouth1 => Self::from_static(Self::AP_SOUTH_1),
-            BucketLocationConstraint::ApSoutheast1 => Self::from_static(Self::AP_SOUTHEAST_1),
-            BucketLocationConstraint::ApSoutheast2 => Self::from_static(Self::AP_SOUTHEAST_2),
-            BucketLocationConstraint::ApSoutheast3 => Self::from_static(Self::AP_SOUTHEAST_3),
-            BucketLocationConstraint::CaCentral1 => Self::from_static(Self::CA_CENTRAL_1),
-            BucketLocationConstraint::CnNorth1 => Self::from_static(Self::CN_NORTH_1),
-            BucketLocationConstraint::CnNorthwest1 => Self::from_static(Self::CN_NORTHWEST_1),
-            BucketLocationConstraint::EuCentral1 => Self::from_static(Self::EU_CENTRAL_1),
-            BucketLocationConstraint::EuNorth1 => Self::from_static(Self::EU_NORTH_1),
-            BucketLocationConstraint::EuSouth1 => Self::from_static(Self::EU_SOUTH_1),
-            BucketLocationConstraint::EuWest1 => Self::from_static(Self::EU_WEST_1),
-            BucketLocationConstraint::EuWest2 => Self::from_static(Self::EU_WEST_2),
-            BucketLocationConstraint::EuWest3 => Self::from_static(Self::EU_WEST_3),
-            BucketLocationConstraint::MeSouth1 => Self::from_static(Self::ME_SOUTH_1),
-            BucketLocationConstraint::SaEast1 => Self::from_static(Self::SA_EAST_1),
-            BucketLocationConstraint::UsEast2 => Self::from_static(Self::US_EAST_2),
-            BucketLocationConstraint::UsGovEast1 => Self::from_static(Self::US_GOV_EAST_1),
-            BucketLocationConstraint::UsGovWest1 => Self::from_static(Self::US_GOV_WEST_1),
-            BucketLocationConstraint::UsWest1 => Self::from_static(Self::US_WEST_1),
-            BucketLocationConstraint::UsWest2 => Self::from_static(Self::US_WEST_2),
-            BucketLocationConstraint::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::BucketLocationConstraint::Eu => Self::from_static(Self::EU),
+            aws_sdk_s3::types::BucketLocationConstraint::AfSouth1 => Self::from_static(Self::AF_SOUTH_1),
+            aws_sdk_s3::types::BucketLocationConstraint::ApEast1 => Self::from_static(Self::AP_EAST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::ApNortheast1 => Self::from_static(Self::AP_NORTHEAST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::ApNortheast2 => Self::from_static(Self::AP_NORTHEAST_2),
+            aws_sdk_s3::types::BucketLocationConstraint::ApNortheast3 => Self::from_static(Self::AP_NORTHEAST_3),
+            aws_sdk_s3::types::BucketLocationConstraint::ApSouth1 => Self::from_static(Self::AP_SOUTH_1),
+            aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast1 => Self::from_static(Self::AP_SOUTHEAST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast2 => Self::from_static(Self::AP_SOUTHEAST_2),
+            aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast3 => Self::from_static(Self::AP_SOUTHEAST_3),
+            aws_sdk_s3::types::BucketLocationConstraint::CaCentral1 => Self::from_static(Self::CA_CENTRAL_1),
+            aws_sdk_s3::types::BucketLocationConstraint::CnNorth1 => Self::from_static(Self::CN_NORTH_1),
+            aws_sdk_s3::types::BucketLocationConstraint::CnNorthwest1 => Self::from_static(Self::CN_NORTHWEST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::EuCentral1 => Self::from_static(Self::EU_CENTRAL_1),
+            aws_sdk_s3::types::BucketLocationConstraint::EuNorth1 => Self::from_static(Self::EU_NORTH_1),
+            aws_sdk_s3::types::BucketLocationConstraint::EuSouth1 => Self::from_static(Self::EU_SOUTH_1),
+            aws_sdk_s3::types::BucketLocationConstraint::EuWest1 => Self::from_static(Self::EU_WEST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::EuWest2 => Self::from_static(Self::EU_WEST_2),
+            aws_sdk_s3::types::BucketLocationConstraint::EuWest3 => Self::from_static(Self::EU_WEST_3),
+            aws_sdk_s3::types::BucketLocationConstraint::MeSouth1 => Self::from_static(Self::ME_SOUTH_1),
+            aws_sdk_s3::types::BucketLocationConstraint::SaEast1 => Self::from_static(Self::SA_EAST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::UsEast2 => Self::from_static(Self::US_EAST_2),
+            aws_sdk_s3::types::BucketLocationConstraint::UsGovEast1 => Self::from_static(Self::US_GOV_EAST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::UsGovWest1 => Self::from_static(Self::US_GOV_WEST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::UsWest1 => Self::from_static(Self::US_WEST_1),
+            aws_sdk_s3::types::BucketLocationConstraint::UsWest2 => Self::from_static(Self::US_WEST_2),
+            aws_sdk_s3::types::BucketLocationConstraint::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(BucketLocationConstraint::from(x.as_str()))
+        Ok(aws_sdk_s3::types::BucketLocationConstraint::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::BucketLoggingStatus {
-    type Target = BucketLoggingStatus;
+    type Target = aws_sdk_s3::types::BucketLoggingStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -423,44 +418,44 @@ impl AwsConversion for s3s::dto::BucketLoggingStatus {
 }
 
 impl AwsConversion for s3s::dto::BucketLogsPermission {
-    type Target = BucketLogsPermission;
+    type Target = aws_sdk_s3::types::BucketLogsPermission;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketLogsPermission::FullControl => Self::from_static(Self::FULL_CONTROL),
-            BucketLogsPermission::Read => Self::from_static(Self::READ),
-            BucketLogsPermission::Write => Self::from_static(Self::WRITE),
-            BucketLogsPermission::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::BucketLogsPermission::FullControl => Self::from_static(Self::FULL_CONTROL),
+            aws_sdk_s3::types::BucketLogsPermission::Read => Self::from_static(Self::READ),
+            aws_sdk_s3::types::BucketLogsPermission::Write => Self::from_static(Self::WRITE),
+            aws_sdk_s3::types::BucketLogsPermission::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(BucketLogsPermission::from(x.as_str()))
+        Ok(aws_sdk_s3::types::BucketLogsPermission::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::BucketVersioningStatus {
-    type Target = BucketVersioningStatus;
+    type Target = aws_sdk_s3::types::BucketVersioningStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            BucketVersioningStatus::Enabled => Self::from_static(Self::ENABLED),
-            BucketVersioningStatus::Suspended => Self::from_static(Self::SUSPENDED),
-            BucketVersioningStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::BucketVersioningStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::BucketVersioningStatus::Suspended => Self::from_static(Self::SUSPENDED),
+            aws_sdk_s3::types::BucketVersioningStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(BucketVersioningStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::BucketVersioningStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::CORSConfiguration {
-    type Target = CorsConfiguration;
+    type Target = aws_sdk_s3::types::CorsConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -477,7 +472,7 @@ impl AwsConversion for s3s::dto::CORSConfiguration {
 }
 
 impl AwsConversion for s3s::dto::CORSRule {
-    type Target = CorsRule;
+    type Target = aws_sdk_s3::types::CorsRule;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -504,7 +499,7 @@ impl AwsConversion for s3s::dto::CORSRule {
 }
 
 impl AwsConversion for s3s::dto::CSVInput {
-    type Target = CsvInput;
+    type Target = aws_sdk_s3::types::CsvInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -533,7 +528,7 @@ impl AwsConversion for s3s::dto::CSVInput {
 }
 
 impl AwsConversion for s3s::dto::CSVOutput {
-    type Target = CsvOutput;
+    type Target = aws_sdk_s3::types::CsvOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -558,7 +553,7 @@ impl AwsConversion for s3s::dto::CSVOutput {
 }
 
 impl AwsConversion for s3s::dto::Checksum {
-    type Target = Checksum;
+    type Target = aws_sdk_s3::types::Checksum;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -581,44 +576,44 @@ impl AwsConversion for s3s::dto::Checksum {
 }
 
 impl AwsConversion for s3s::dto::ChecksumAlgorithm {
-    type Target = ChecksumAlgorithm;
+    type Target = aws_sdk_s3::types::ChecksumAlgorithm;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ChecksumAlgorithm::Crc32 => Self::from_static(Self::CRC32),
-            ChecksumAlgorithm::Crc32C => Self::from_static(Self::CRC32C),
-            ChecksumAlgorithm::Sha1 => Self::from_static(Self::SHA1),
-            ChecksumAlgorithm::Sha256 => Self::from_static(Self::SHA256),
-            ChecksumAlgorithm::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ChecksumAlgorithm::Crc32 => Self::from_static(Self::CRC32),
+            aws_sdk_s3::types::ChecksumAlgorithm::Crc32C => Self::from_static(Self::CRC32C),
+            aws_sdk_s3::types::ChecksumAlgorithm::Sha1 => Self::from_static(Self::SHA1),
+            aws_sdk_s3::types::ChecksumAlgorithm::Sha256 => Self::from_static(Self::SHA256),
+            aws_sdk_s3::types::ChecksumAlgorithm::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ChecksumAlgorithm::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ChecksumAlgorithm::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ChecksumMode {
-    type Target = ChecksumMode;
+    type Target = aws_sdk_s3::types::ChecksumMode;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ChecksumMode::Enabled => Self::from_static(Self::ENABLED),
-            ChecksumMode::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ChecksumMode::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::ChecksumMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ChecksumMode::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ChecksumMode::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::CommonPrefix {
-    type Target = CommonPrefix;
+    type Target = aws_sdk_s3::types::CommonPrefix;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -635,7 +630,7 @@ impl AwsConversion for s3s::dto::CommonPrefix {
 }
 
 impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
-    type Target = CompleteMultipartUploadInput;
+    type Target = aws_sdk_s3::operation::complete_multipart_upload::CompleteMultipartUploadInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -676,7 +671,7 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
 }
 
 impl AwsConversion for s3s::dto::CompleteMultipartUploadOutput {
-    type Target = CompleteMultipartUploadOutput;
+    type Target = aws_sdk_s3::operation::complete_multipart_upload::CompleteMultipartUploadOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -719,7 +714,7 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadOutput {
 }
 
 impl AwsConversion for s3s::dto::CompletedMultipartUpload {
-    type Target = CompletedMultipartUpload;
+    type Target = aws_sdk_s3::types::CompletedMultipartUpload;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -736,7 +731,7 @@ impl AwsConversion for s3s::dto::CompletedMultipartUpload {
 }
 
 impl AwsConversion for s3s::dto::CompletedPart {
-    type Target = CompletedPart;
+    type Target = aws_sdk_s3::types::CompletedPart;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -763,26 +758,26 @@ impl AwsConversion for s3s::dto::CompletedPart {
 }
 
 impl AwsConversion for s3s::dto::CompressionType {
-    type Target = CompressionType;
+    type Target = aws_sdk_s3::types::CompressionType;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            CompressionType::Bzip2 => Self::from_static(Self::BZIP2),
-            CompressionType::Gzip => Self::from_static(Self::GZIP),
-            CompressionType::None => Self::from_static(Self::NONE),
-            CompressionType::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::CompressionType::Bzip2 => Self::from_static(Self::BZIP2),
+            aws_sdk_s3::types::CompressionType::Gzip => Self::from_static(Self::GZIP),
+            aws_sdk_s3::types::CompressionType::None => Self::from_static(Self::NONE),
+            aws_sdk_s3::types::CompressionType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(CompressionType::from(x.as_str()))
+        Ok(aws_sdk_s3::types::CompressionType::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::Condition {
-    type Target = Condition;
+    type Target = aws_sdk_s3::types::Condition;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -801,7 +796,7 @@ impl AwsConversion for s3s::dto::Condition {
 }
 
 impl AwsConversion for s3s::dto::ContinuationEvent {
-    type Target = ContinuationEvent;
+    type Target = aws_sdk_s3::types::ContinuationEvent;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -817,7 +812,7 @@ impl AwsConversion for s3s::dto::ContinuationEvent {
 }
 
 impl AwsConversion for s3s::dto::CopyObjectInput {
-    type Target = CopyObjectInput;
+    type Target = aws_sdk_s3::operation::copy_object::CopyObjectInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -914,7 +909,7 @@ impl AwsConversion for s3s::dto::CopyObjectInput {
 }
 
 impl AwsConversion for s3s::dto::CopyObjectOutput {
-    type Target = CopyObjectOutput;
+    type Target = aws_sdk_s3::operation::copy_object::CopyObjectOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -951,7 +946,7 @@ impl AwsConversion for s3s::dto::CopyObjectOutput {
 }
 
 impl AwsConversion for s3s::dto::CopyObjectResult {
-    type Target = CopyObjectResult;
+    type Target = aws_sdk_s3::types::CopyObjectResult;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -978,7 +973,7 @@ impl AwsConversion for s3s::dto::CopyObjectResult {
 }
 
 impl AwsConversion for s3s::dto::CopyPartResult {
-    type Target = CopyPartResult;
+    type Target = aws_sdk_s3::types::CopyPartResult;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1005,7 +1000,7 @@ impl AwsConversion for s3s::dto::CopyPartResult {
 }
 
 impl AwsConversion for s3s::dto::CreateBucketConfiguration {
-    type Target = CreateBucketConfiguration;
+    type Target = aws_sdk_s3::types::CreateBucketConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1022,7 +1017,7 @@ impl AwsConversion for s3s::dto::CreateBucketConfiguration {
 }
 
 impl AwsConversion for s3s::dto::CreateBucketInput {
-    type Target = CreateBucketInput;
+    type Target = aws_sdk_s3::operation::create_bucket::CreateBucketInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1057,7 +1052,7 @@ impl AwsConversion for s3s::dto::CreateBucketInput {
 }
 
 impl AwsConversion for s3s::dto::CreateBucketOutput {
-    type Target = CreateBucketOutput;
+    type Target = aws_sdk_s3::operation::create_bucket::CreateBucketOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1074,7 +1069,7 @@ impl AwsConversion for s3s::dto::CreateBucketOutput {
 }
 
 impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
-    type Target = CreateMultipartUploadInput;
+    type Target = aws_sdk_s3::operation::create_multipart_upload::CreateMultipartUploadInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1149,7 +1144,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
 }
 
 impl AwsConversion for s3s::dto::CreateMultipartUploadOutput {
-    type Target = CreateMultipartUploadOutput;
+    type Target = aws_sdk_s3::operation::create_multipart_upload::CreateMultipartUploadOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1190,7 +1185,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadOutput {
 }
 
 impl AwsConversion for s3s::dto::DefaultRetention {
-    type Target = DefaultRetention;
+    type Target = aws_sdk_s3::types::DefaultRetention;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1211,7 +1206,7 @@ impl AwsConversion for s3s::dto::DefaultRetention {
 }
 
 impl AwsConversion for s3s::dto::Delete {
-    type Target = Delete;
+    type Target = aws_sdk_s3::types::Delete;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1230,7 +1225,7 @@ impl AwsConversion for s3s::dto::Delete {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationInput {
-    type Target = DeleteBucketAnalyticsConfigurationInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_analytics_configuration::DeleteBucketAnalyticsConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1251,7 +1246,7 @@ impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationOutput {
-    type Target = DeleteBucketAnalyticsConfigurationOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_analytics_configuration::DeleteBucketAnalyticsConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1267,7 +1262,7 @@ impl AwsConversion for s3s::dto::DeleteBucketAnalyticsConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketCorsInput {
-    type Target = DeleteBucketCorsInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_cors::DeleteBucketCorsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1286,7 +1281,7 @@ impl AwsConversion for s3s::dto::DeleteBucketCorsInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketCorsOutput {
-    type Target = DeleteBucketCorsOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_cors::DeleteBucketCorsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1302,7 +1297,7 @@ impl AwsConversion for s3s::dto::DeleteBucketCorsOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketEncryptionInput {
-    type Target = DeleteBucketEncryptionInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_encryption::DeleteBucketEncryptionInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1321,7 +1316,7 @@ impl AwsConversion for s3s::dto::DeleteBucketEncryptionInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketEncryptionOutput {
-    type Target = DeleteBucketEncryptionOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_encryption::DeleteBucketEncryptionOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1337,7 +1332,7 @@ impl AwsConversion for s3s::dto::DeleteBucketEncryptionOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketInput {
-    type Target = DeleteBucketInput;
+    type Target = aws_sdk_s3::operation::delete_bucket::DeleteBucketInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1356,7 +1351,8 @@ impl AwsConversion for s3s::dto::DeleteBucketInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationInput {
-    type Target = DeleteBucketIntelligentTieringConfigurationInput;
+    type Target =
+        aws_sdk_s3::operation::delete_bucket_intelligent_tiering_configuration::DeleteBucketIntelligentTieringConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1375,7 +1371,8 @@ impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationInpu
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationOutput {
-    type Target = DeleteBucketIntelligentTieringConfigurationOutput;
+    type Target =
+        aws_sdk_s3::operation::delete_bucket_intelligent_tiering_configuration::DeleteBucketIntelligentTieringConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1391,7 +1388,7 @@ impl AwsConversion for s3s::dto::DeleteBucketIntelligentTieringConfigurationOutp
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationInput {
-    type Target = DeleteBucketInventoryConfigurationInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_inventory_configuration::DeleteBucketInventoryConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1412,7 +1409,7 @@ impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationOutput {
-    type Target = DeleteBucketInventoryConfigurationOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_inventory_configuration::DeleteBucketInventoryConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1428,7 +1425,7 @@ impl AwsConversion for s3s::dto::DeleteBucketInventoryConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketLifecycleInput {
-    type Target = DeleteBucketLifecycleInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_lifecycle::DeleteBucketLifecycleInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1447,7 +1444,7 @@ impl AwsConversion for s3s::dto::DeleteBucketLifecycleInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketLifecycleOutput {
-    type Target = DeleteBucketLifecycleOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_lifecycle::DeleteBucketLifecycleOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1463,7 +1460,7 @@ impl AwsConversion for s3s::dto::DeleteBucketLifecycleOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationInput {
-    type Target = DeleteBucketMetricsConfigurationInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_metrics_configuration::DeleteBucketMetricsConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1484,7 +1481,7 @@ impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationOutput {
-    type Target = DeleteBucketMetricsConfigurationOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_metrics_configuration::DeleteBucketMetricsConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1500,7 +1497,7 @@ impl AwsConversion for s3s::dto::DeleteBucketMetricsConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketOutput {
-    type Target = DeleteBucketOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket::DeleteBucketOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1516,7 +1513,7 @@ impl AwsConversion for s3s::dto::DeleteBucketOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsInput {
-    type Target = DeleteBucketOwnershipControlsInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_ownership_controls::DeleteBucketOwnershipControlsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1535,7 +1532,7 @@ impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsOutput {
-    type Target = DeleteBucketOwnershipControlsOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_ownership_controls::DeleteBucketOwnershipControlsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1551,7 +1548,7 @@ impl AwsConversion for s3s::dto::DeleteBucketOwnershipControlsOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketPolicyInput {
-    type Target = DeleteBucketPolicyInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_policy::DeleteBucketPolicyInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1570,7 +1567,7 @@ impl AwsConversion for s3s::dto::DeleteBucketPolicyInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketPolicyOutput {
-    type Target = DeleteBucketPolicyOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_policy::DeleteBucketPolicyOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1586,7 +1583,7 @@ impl AwsConversion for s3s::dto::DeleteBucketPolicyOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketReplicationInput {
-    type Target = DeleteBucketReplicationInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_replication::DeleteBucketReplicationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1605,7 +1602,7 @@ impl AwsConversion for s3s::dto::DeleteBucketReplicationInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketReplicationOutput {
-    type Target = DeleteBucketReplicationOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_replication::DeleteBucketReplicationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1621,7 +1618,7 @@ impl AwsConversion for s3s::dto::DeleteBucketReplicationOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketTaggingInput {
-    type Target = DeleteBucketTaggingInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_tagging::DeleteBucketTaggingInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1640,7 +1637,7 @@ impl AwsConversion for s3s::dto::DeleteBucketTaggingInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketTaggingOutput {
-    type Target = DeleteBucketTaggingOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_tagging::DeleteBucketTaggingOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1656,7 +1653,7 @@ impl AwsConversion for s3s::dto::DeleteBucketTaggingOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketWebsiteInput {
-    type Target = DeleteBucketWebsiteInput;
+    type Target = aws_sdk_s3::operation::delete_bucket_website::DeleteBucketWebsiteInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1675,7 +1672,7 @@ impl AwsConversion for s3s::dto::DeleteBucketWebsiteInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteBucketWebsiteOutput {
-    type Target = DeleteBucketWebsiteOutput;
+    type Target = aws_sdk_s3::operation::delete_bucket_website::DeleteBucketWebsiteOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1691,7 +1688,7 @@ impl AwsConversion for s3s::dto::DeleteBucketWebsiteOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteMarkerEntry {
-    type Target = DeleteMarkerEntry;
+    type Target = aws_sdk_s3::types::DeleteMarkerEntry;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1716,7 +1713,7 @@ impl AwsConversion for s3s::dto::DeleteMarkerEntry {
 }
 
 impl AwsConversion for s3s::dto::DeleteMarkerReplication {
-    type Target = DeleteMarkerReplication;
+    type Target = aws_sdk_s3::types::DeleteMarkerReplication;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1733,25 +1730,25 @@ impl AwsConversion for s3s::dto::DeleteMarkerReplication {
 }
 
 impl AwsConversion for s3s::dto::DeleteMarkerReplicationStatus {
-    type Target = DeleteMarkerReplicationStatus;
+    type Target = aws_sdk_s3::types::DeleteMarkerReplicationStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            DeleteMarkerReplicationStatus::Disabled => Self::from_static(Self::DISABLED),
-            DeleteMarkerReplicationStatus::Enabled => Self::from_static(Self::ENABLED),
-            DeleteMarkerReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::DeleteMarkerReplicationStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::DeleteMarkerReplicationStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::DeleteMarkerReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(DeleteMarkerReplicationStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::DeleteMarkerReplicationStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::DeleteObjectInput {
-    type Target = DeleteObjectInput;
+    type Target = aws_sdk_s3::operation::delete_object::DeleteObjectInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1780,7 +1777,7 @@ impl AwsConversion for s3s::dto::DeleteObjectInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteObjectOutput {
-    type Target = DeleteObjectOutput;
+    type Target = aws_sdk_s3::operation::delete_object::DeleteObjectOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1801,7 +1798,7 @@ impl AwsConversion for s3s::dto::DeleteObjectOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteObjectTaggingInput {
-    type Target = DeleteObjectTaggingInput;
+    type Target = aws_sdk_s3::operation::delete_object_tagging::DeleteObjectTaggingInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1824,7 +1821,7 @@ impl AwsConversion for s3s::dto::DeleteObjectTaggingInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteObjectTaggingOutput {
-    type Target = DeleteObjectTaggingOutput;
+    type Target = aws_sdk_s3::operation::delete_object_tagging::DeleteObjectTaggingOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1841,7 +1838,7 @@ impl AwsConversion for s3s::dto::DeleteObjectTaggingOutput {
 }
 
 impl AwsConversion for s3s::dto::DeleteObjectsInput {
-    type Target = DeleteObjectsInput;
+    type Target = aws_sdk_s3::operation::delete_objects::DeleteObjectsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1870,7 +1867,7 @@ impl AwsConversion for s3s::dto::DeleteObjectsInput {
 }
 
 impl AwsConversion for s3s::dto::DeleteObjectsOutput {
-    type Target = DeleteObjectsOutput;
+    type Target = aws_sdk_s3::operation::delete_objects::DeleteObjectsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1891,7 +1888,7 @@ impl AwsConversion for s3s::dto::DeleteObjectsOutput {
 }
 
 impl AwsConversion for s3s::dto::DeletePublicAccessBlockInput {
-    type Target = DeletePublicAccessBlockInput;
+    type Target = aws_sdk_s3::operation::delete_public_access_block::DeletePublicAccessBlockInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1910,7 +1907,7 @@ impl AwsConversion for s3s::dto::DeletePublicAccessBlockInput {
 }
 
 impl AwsConversion for s3s::dto::DeletePublicAccessBlockOutput {
-    type Target = DeletePublicAccessBlockOutput;
+    type Target = aws_sdk_s3::operation::delete_public_access_block::DeletePublicAccessBlockOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1926,7 +1923,7 @@ impl AwsConversion for s3s::dto::DeletePublicAccessBlockOutput {
 }
 
 impl AwsConversion for s3s::dto::DeletedObject {
-    type Target = DeletedObject;
+    type Target = aws_sdk_s3::types::DeletedObject;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1949,7 +1946,7 @@ impl AwsConversion for s3s::dto::DeletedObject {
 }
 
 impl AwsConversion for s3s::dto::Destination {
-    type Target = Destination;
+    type Target = aws_sdk_s3::types::Destination;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1978,24 +1975,24 @@ impl AwsConversion for s3s::dto::Destination {
 }
 
 impl AwsConversion for s3s::dto::EncodingType {
-    type Target = EncodingType;
+    type Target = aws_sdk_s3::types::EncodingType;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            EncodingType::Url => Self::from_static(Self::URL),
-            EncodingType::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::EncodingType::Url => Self::from_static(Self::URL),
+            aws_sdk_s3::types::EncodingType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(EncodingType::from(x.as_str()))
+        Ok(aws_sdk_s3::types::EncodingType::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::Encryption {
-    type Target = Encryption;
+    type Target = aws_sdk_s3::types::Encryption;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2016,7 +2013,7 @@ impl AwsConversion for s3s::dto::Encryption {
 }
 
 impl AwsConversion for s3s::dto::EncryptionConfiguration {
-    type Target = EncryptionConfiguration;
+    type Target = aws_sdk_s3::types::EncryptionConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2033,7 +2030,7 @@ impl AwsConversion for s3s::dto::EncryptionConfiguration {
 }
 
 impl AwsConversion for s3s::dto::EndEvent {
-    type Target = EndEvent;
+    type Target = aws_sdk_s3::types::EndEvent;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2049,7 +2046,7 @@ impl AwsConversion for s3s::dto::EndEvent {
 }
 
 impl AwsConversion for s3s::dto::Error {
-    type Target = Error;
+    type Target = aws_sdk_s3::types::Error;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2072,7 +2069,7 @@ impl AwsConversion for s3s::dto::Error {
 }
 
 impl AwsConversion for s3s::dto::ErrorDocument {
-    type Target = ErrorDocument;
+    type Target = aws_sdk_s3::types::ErrorDocument;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2089,7 +2086,7 @@ impl AwsConversion for s3s::dto::ErrorDocument {
 }
 
 impl AwsConversion for s3s::dto::EventBridgeConfiguration {
-    type Target = EventBridgeConfiguration;
+    type Target = aws_sdk_s3::types::EventBridgeConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2105,7 +2102,7 @@ impl AwsConversion for s3s::dto::EventBridgeConfiguration {
 }
 
 impl AwsConversion for s3s::dto::ExistingObjectReplication {
-    type Target = ExistingObjectReplication;
+    type Target = aws_sdk_s3::types::ExistingObjectReplication;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2122,79 +2119,79 @@ impl AwsConversion for s3s::dto::ExistingObjectReplication {
 }
 
 impl AwsConversion for s3s::dto::ExistingObjectReplicationStatus {
-    type Target = ExistingObjectReplicationStatus;
+    type Target = aws_sdk_s3::types::ExistingObjectReplicationStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ExistingObjectReplicationStatus::Disabled => Self::from_static(Self::DISABLED),
-            ExistingObjectReplicationStatus::Enabled => Self::from_static(Self::ENABLED),
-            ExistingObjectReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ExistingObjectReplicationStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::ExistingObjectReplicationStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::ExistingObjectReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ExistingObjectReplicationStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ExistingObjectReplicationStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ExpirationStatus {
-    type Target = ExpirationStatus;
+    type Target = aws_sdk_s3::types::ExpirationStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ExpirationStatus::Disabled => Self::from_static(Self::DISABLED),
-            ExpirationStatus::Enabled => Self::from_static(Self::ENABLED),
-            ExpirationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ExpirationStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::ExpirationStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::ExpirationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ExpirationStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ExpirationStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ExpressionType {
-    type Target = ExpressionType;
+    type Target = aws_sdk_s3::types::ExpressionType;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ExpressionType::Sql => Self::from_static(Self::SQL),
-            ExpressionType::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ExpressionType::Sql => Self::from_static(Self::SQL),
+            aws_sdk_s3::types::ExpressionType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ExpressionType::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ExpressionType::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::FileHeaderInfo {
-    type Target = FileHeaderInfo;
+    type Target = aws_sdk_s3::types::FileHeaderInfo;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            FileHeaderInfo::Ignore => Self::from_static(Self::IGNORE),
-            FileHeaderInfo::None => Self::from_static(Self::NONE),
-            FileHeaderInfo::Use => Self::from_static(Self::USE),
-            FileHeaderInfo::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::FileHeaderInfo::Ignore => Self::from_static(Self::IGNORE),
+            aws_sdk_s3::types::FileHeaderInfo::None => Self::from_static(Self::NONE),
+            aws_sdk_s3::types::FileHeaderInfo::Use => Self::from_static(Self::USE),
+            aws_sdk_s3::types::FileHeaderInfo::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(FileHeaderInfo::from(x.as_str()))
+        Ok(aws_sdk_s3::types::FileHeaderInfo::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::FilterRule {
-    type Target = FilterRule;
+    type Target = aws_sdk_s3::types::FilterRule;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2213,25 +2210,25 @@ impl AwsConversion for s3s::dto::FilterRule {
 }
 
 impl AwsConversion for s3s::dto::FilterRuleName {
-    type Target = FilterRuleName;
+    type Target = aws_sdk_s3::types::FilterRuleName;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            FilterRuleName::Prefix => Self::from_static(Self::PREFIX),
-            FilterRuleName::Suffix => Self::from_static(Self::SUFFIX),
-            FilterRuleName::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::FilterRuleName::Prefix => Self::from_static(Self::PREFIX),
+            aws_sdk_s3::types::FilterRuleName::Suffix => Self::from_static(Self::SUFFIX),
+            aws_sdk_s3::types::FilterRuleName::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(FilterRuleName::from(x.as_str()))
+        Ok(aws_sdk_s3::types::FilterRuleName::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationInput {
-    type Target = GetBucketAccelerateConfigurationInput;
+    type Target = aws_sdk_s3::operation::get_bucket_accelerate_configuration::GetBucketAccelerateConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2250,7 +2247,7 @@ impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationOutput {
-    type Target = GetBucketAccelerateConfigurationOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_accelerate_configuration::GetBucketAccelerateConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2267,7 +2264,7 @@ impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketAclInput {
-    type Target = GetBucketAclInput;
+    type Target = aws_sdk_s3::operation::get_bucket_acl::GetBucketAclInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2286,7 +2283,7 @@ impl AwsConversion for s3s::dto::GetBucketAclInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketAclOutput {
-    type Target = GetBucketAclOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_acl::GetBucketAclOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2305,7 +2302,7 @@ impl AwsConversion for s3s::dto::GetBucketAclOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationInput {
-    type Target = GetBucketAnalyticsConfigurationInput;
+    type Target = aws_sdk_s3::operation::get_bucket_analytics_configuration::GetBucketAnalyticsConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2326,7 +2323,7 @@ impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationOutput {
-    type Target = GetBucketAnalyticsConfigurationOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_analytics_configuration::GetBucketAnalyticsConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2343,7 +2340,7 @@ impl AwsConversion for s3s::dto::GetBucketAnalyticsConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketCorsInput {
-    type Target = GetBucketCorsInput;
+    type Target = aws_sdk_s3::operation::get_bucket_cors::GetBucketCorsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2362,7 +2359,7 @@ impl AwsConversion for s3s::dto::GetBucketCorsInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketCorsOutput {
-    type Target = GetBucketCorsOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_cors::GetBucketCorsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2379,7 +2376,7 @@ impl AwsConversion for s3s::dto::GetBucketCorsOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketEncryptionInput {
-    type Target = GetBucketEncryptionInput;
+    type Target = aws_sdk_s3::operation::get_bucket_encryption::GetBucketEncryptionInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2398,7 +2395,7 @@ impl AwsConversion for s3s::dto::GetBucketEncryptionInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketEncryptionOutput {
-    type Target = GetBucketEncryptionOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_encryption::GetBucketEncryptionOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2415,7 +2412,8 @@ impl AwsConversion for s3s::dto::GetBucketEncryptionOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationInput {
-    type Target = GetBucketIntelligentTieringConfigurationInput;
+    type Target =
+        aws_sdk_s3::operation::get_bucket_intelligent_tiering_configuration::GetBucketIntelligentTieringConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2434,7 +2432,8 @@ impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationOutput {
-    type Target = GetBucketIntelligentTieringConfigurationOutput;
+    type Target =
+        aws_sdk_s3::operation::get_bucket_intelligent_tiering_configuration::GetBucketIntelligentTieringConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2451,7 +2450,7 @@ impl AwsConversion for s3s::dto::GetBucketIntelligentTieringConfigurationOutput 
 }
 
 impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationInput {
-    type Target = GetBucketInventoryConfigurationInput;
+    type Target = aws_sdk_s3::operation::get_bucket_inventory_configuration::GetBucketInventoryConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2472,7 +2471,7 @@ impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationOutput {
-    type Target = GetBucketInventoryConfigurationOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_inventory_configuration::GetBucketInventoryConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2489,7 +2488,7 @@ impl AwsConversion for s3s::dto::GetBucketInventoryConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationInput {
-    type Target = GetBucketLifecycleConfigurationInput;
+    type Target = aws_sdk_s3::operation::get_bucket_lifecycle_configuration::GetBucketLifecycleConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2508,7 +2507,7 @@ impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationOutput {
-    type Target = GetBucketLifecycleConfigurationOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_lifecycle_configuration::GetBucketLifecycleConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2525,7 +2524,7 @@ impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketLocationInput {
-    type Target = GetBucketLocationInput;
+    type Target = aws_sdk_s3::operation::get_bucket_location::GetBucketLocationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2544,7 +2543,7 @@ impl AwsConversion for s3s::dto::GetBucketLocationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketLocationOutput {
-    type Target = GetBucketLocationOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_location::GetBucketLocationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2561,7 +2560,7 @@ impl AwsConversion for s3s::dto::GetBucketLocationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketLoggingInput {
-    type Target = GetBucketLoggingInput;
+    type Target = aws_sdk_s3::operation::get_bucket_logging::GetBucketLoggingInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2580,7 +2579,7 @@ impl AwsConversion for s3s::dto::GetBucketLoggingInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketLoggingOutput {
-    type Target = GetBucketLoggingOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_logging::GetBucketLoggingOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2597,7 +2596,7 @@ impl AwsConversion for s3s::dto::GetBucketLoggingOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationInput {
-    type Target = GetBucketMetricsConfigurationInput;
+    type Target = aws_sdk_s3::operation::get_bucket_metrics_configuration::GetBucketMetricsConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2618,7 +2617,7 @@ impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationOutput {
-    type Target = GetBucketMetricsConfigurationOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_metrics_configuration::GetBucketMetricsConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2635,7 +2634,7 @@ impl AwsConversion for s3s::dto::GetBucketMetricsConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationInput {
-    type Target = GetBucketNotificationConfigurationInput;
+    type Target = aws_sdk_s3::operation::get_bucket_notification_configuration::GetBucketNotificationConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2654,7 +2653,7 @@ impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationOutput {
-    type Target = GetBucketNotificationConfigurationOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_notification_configuration::GetBucketNotificationConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2677,7 +2676,7 @@ impl AwsConversion for s3s::dto::GetBucketNotificationConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketOwnershipControlsInput {
-    type Target = GetBucketOwnershipControlsInput;
+    type Target = aws_sdk_s3::operation::get_bucket_ownership_controls::GetBucketOwnershipControlsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2696,7 +2695,7 @@ impl AwsConversion for s3s::dto::GetBucketOwnershipControlsInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketOwnershipControlsOutput {
-    type Target = GetBucketOwnershipControlsOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_ownership_controls::GetBucketOwnershipControlsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2713,7 +2712,7 @@ impl AwsConversion for s3s::dto::GetBucketOwnershipControlsOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketPolicyInput {
-    type Target = GetBucketPolicyInput;
+    type Target = aws_sdk_s3::operation::get_bucket_policy::GetBucketPolicyInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2732,7 +2731,7 @@ impl AwsConversion for s3s::dto::GetBucketPolicyInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketPolicyOutput {
-    type Target = GetBucketPolicyOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_policy::GetBucketPolicyOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2749,7 +2748,7 @@ impl AwsConversion for s3s::dto::GetBucketPolicyOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketPolicyStatusInput {
-    type Target = GetBucketPolicyStatusInput;
+    type Target = aws_sdk_s3::operation::get_bucket_policy_status::GetBucketPolicyStatusInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2768,7 +2767,7 @@ impl AwsConversion for s3s::dto::GetBucketPolicyStatusInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketPolicyStatusOutput {
-    type Target = GetBucketPolicyStatusOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_policy_status::GetBucketPolicyStatusOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2785,7 +2784,7 @@ impl AwsConversion for s3s::dto::GetBucketPolicyStatusOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketReplicationInput {
-    type Target = GetBucketReplicationInput;
+    type Target = aws_sdk_s3::operation::get_bucket_replication::GetBucketReplicationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2804,7 +2803,7 @@ impl AwsConversion for s3s::dto::GetBucketReplicationInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketReplicationOutput {
-    type Target = GetBucketReplicationOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_replication::GetBucketReplicationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2821,7 +2820,7 @@ impl AwsConversion for s3s::dto::GetBucketReplicationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketRequestPaymentInput {
-    type Target = GetBucketRequestPaymentInput;
+    type Target = aws_sdk_s3::operation::get_bucket_request_payment::GetBucketRequestPaymentInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2840,7 +2839,7 @@ impl AwsConversion for s3s::dto::GetBucketRequestPaymentInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketRequestPaymentOutput {
-    type Target = GetBucketRequestPaymentOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_request_payment::GetBucketRequestPaymentOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2857,7 +2856,7 @@ impl AwsConversion for s3s::dto::GetBucketRequestPaymentOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketTaggingInput {
-    type Target = GetBucketTaggingInput;
+    type Target = aws_sdk_s3::operation::get_bucket_tagging::GetBucketTaggingInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2876,7 +2875,7 @@ impl AwsConversion for s3s::dto::GetBucketTaggingInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketTaggingOutput {
-    type Target = GetBucketTaggingOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_tagging::GetBucketTaggingOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2893,7 +2892,7 @@ impl AwsConversion for s3s::dto::GetBucketTaggingOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketVersioningInput {
-    type Target = GetBucketVersioningInput;
+    type Target = aws_sdk_s3::operation::get_bucket_versioning::GetBucketVersioningInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2912,7 +2911,7 @@ impl AwsConversion for s3s::dto::GetBucketVersioningInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketVersioningOutput {
-    type Target = GetBucketVersioningOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_versioning::GetBucketVersioningOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2931,7 +2930,7 @@ impl AwsConversion for s3s::dto::GetBucketVersioningOutput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketWebsiteInput {
-    type Target = GetBucketWebsiteInput;
+    type Target = aws_sdk_s3::operation::get_bucket_website::GetBucketWebsiteInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2950,7 +2949,7 @@ impl AwsConversion for s3s::dto::GetBucketWebsiteInput {
 }
 
 impl AwsConversion for s3s::dto::GetBucketWebsiteOutput {
-    type Target = GetBucketWebsiteOutput;
+    type Target = aws_sdk_s3::operation::get_bucket_website::GetBucketWebsiteOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2973,7 +2972,7 @@ impl AwsConversion for s3s::dto::GetBucketWebsiteOutput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectAclInput {
-    type Target = GetObjectAclInput;
+    type Target = aws_sdk_s3::operation::get_object_acl::GetObjectAclInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -2998,7 +2997,7 @@ impl AwsConversion for s3s::dto::GetObjectAclInput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectAclOutput {
-    type Target = GetObjectAclOutput;
+    type Target = aws_sdk_s3::operation::get_object_acl::GetObjectAclOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3019,7 +3018,7 @@ impl AwsConversion for s3s::dto::GetObjectAclOutput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectAttributesInput {
-    type Target = GetObjectAttributesInput;
+    type Target = aws_sdk_s3::operation::get_object_attributes::GetObjectAttributesInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3056,7 +3055,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesInput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectAttributesOutput {
-    type Target = GetObjectAttributesOutput;
+    type Target = aws_sdk_s3::operation::get_object_attributes::GetObjectAttributesOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3089,7 +3088,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesOutput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectAttributesParts {
-    type Target = GetObjectAttributesParts;
+    type Target = aws_sdk_s3::types::GetObjectAttributesParts;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3116,7 +3115,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesParts {
 }
 
 impl AwsConversion for s3s::dto::GetObjectInput {
-    type Target = GetObjectInput;
+    type Target = aws_sdk_s3::operation::get_object::GetObjectInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3173,7 +3172,7 @@ impl AwsConversion for s3s::dto::GetObjectInput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectLegalHoldInput {
-    type Target = GetObjectLegalHoldInput;
+    type Target = aws_sdk_s3::operation::get_object_legal_hold::GetObjectLegalHoldInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3198,7 +3197,7 @@ impl AwsConversion for s3s::dto::GetObjectLegalHoldInput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectLegalHoldOutput {
-    type Target = GetObjectLegalHoldOutput;
+    type Target = aws_sdk_s3::operation::get_object_legal_hold::GetObjectLegalHoldOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3215,7 +3214,7 @@ impl AwsConversion for s3s::dto::GetObjectLegalHoldOutput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectLockConfigurationInput {
-    type Target = GetObjectLockConfigurationInput;
+    type Target = aws_sdk_s3::operation::get_object_lock_configuration::GetObjectLockConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3234,7 +3233,7 @@ impl AwsConversion for s3s::dto::GetObjectLockConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectLockConfigurationOutput {
-    type Target = GetObjectLockConfigurationOutput;
+    type Target = aws_sdk_s3::operation::get_object_lock_configuration::GetObjectLockConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3251,7 +3250,7 @@ impl AwsConversion for s3s::dto::GetObjectLockConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectOutput {
-    type Target = GetObjectOutput;
+    type Target = aws_sdk_s3::operation::get_object::GetObjectOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3338,7 +3337,7 @@ impl AwsConversion for s3s::dto::GetObjectOutput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectRetentionInput {
-    type Target = GetObjectRetentionInput;
+    type Target = aws_sdk_s3::operation::get_object_retention::GetObjectRetentionInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3363,7 +3362,7 @@ impl AwsConversion for s3s::dto::GetObjectRetentionInput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectRetentionOutput {
-    type Target = GetObjectRetentionOutput;
+    type Target = aws_sdk_s3::operation::get_object_retention::GetObjectRetentionOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3380,7 +3379,7 @@ impl AwsConversion for s3s::dto::GetObjectRetentionOutput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectTaggingInput {
-    type Target = GetObjectTaggingInput;
+    type Target = aws_sdk_s3::operation::get_object_tagging::GetObjectTaggingInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3405,7 +3404,7 @@ impl AwsConversion for s3s::dto::GetObjectTaggingInput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectTaggingOutput {
-    type Target = GetObjectTaggingOutput;
+    type Target = aws_sdk_s3::operation::get_object_tagging::GetObjectTaggingOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3424,7 +3423,7 @@ impl AwsConversion for s3s::dto::GetObjectTaggingOutput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectTorrentInput {
-    type Target = GetObjectTorrentInput;
+    type Target = aws_sdk_s3::operation::get_object_torrent::GetObjectTorrentInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3447,7 +3446,7 @@ impl AwsConversion for s3s::dto::GetObjectTorrentInput {
 }
 
 impl AwsConversion for s3s::dto::GetObjectTorrentOutput {
-    type Target = GetObjectTorrentOutput;
+    type Target = aws_sdk_s3::operation::get_object_torrent::GetObjectTorrentOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3466,7 +3465,7 @@ impl AwsConversion for s3s::dto::GetObjectTorrentOutput {
 }
 
 impl AwsConversion for s3s::dto::GetPublicAccessBlockInput {
-    type Target = GetPublicAccessBlockInput;
+    type Target = aws_sdk_s3::operation::get_public_access_block::GetPublicAccessBlockInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3485,7 +3484,7 @@ impl AwsConversion for s3s::dto::GetPublicAccessBlockInput {
 }
 
 impl AwsConversion for s3s::dto::GetPublicAccessBlockOutput {
-    type Target = GetPublicAccessBlockOutput;
+    type Target = aws_sdk_s3::operation::get_public_access_block::GetPublicAccessBlockOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3502,7 +3501,7 @@ impl AwsConversion for s3s::dto::GetPublicAccessBlockOutput {
 }
 
 impl AwsConversion for s3s::dto::GlacierJobParameters {
-    type Target = GlacierJobParameters;
+    type Target = aws_sdk_s3::types::GlacierJobParameters;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3519,7 +3518,7 @@ impl AwsConversion for s3s::dto::GlacierJobParameters {
 }
 
 impl AwsConversion for s3s::dto::Grant {
-    type Target = Grant;
+    type Target = aws_sdk_s3::types::Grant;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3538,7 +3537,7 @@ impl AwsConversion for s3s::dto::Grant {
 }
 
 impl AwsConversion for s3s::dto::Grantee {
-    type Target = Grantee;
+    type Target = aws_sdk_s3::types::Grantee;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3563,7 +3562,7 @@ impl AwsConversion for s3s::dto::Grantee {
 }
 
 impl AwsConversion for s3s::dto::HeadBucketInput {
-    type Target = HeadBucketInput;
+    type Target = aws_sdk_s3::operation::head_bucket::HeadBucketInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3582,7 +3581,7 @@ impl AwsConversion for s3s::dto::HeadBucketInput {
 }
 
 impl AwsConversion for s3s::dto::HeadBucketOutput {
-    type Target = HeadBucketOutput;
+    type Target = aws_sdk_s3::operation::head_bucket::HeadBucketOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3598,7 +3597,7 @@ impl AwsConversion for s3s::dto::HeadBucketOutput {
 }
 
 impl AwsConversion for s3s::dto::HeadObjectInput {
-    type Target = HeadObjectInput;
+    type Target = aws_sdk_s3::operation::head_object::HeadObjectInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3643,7 +3642,7 @@ impl AwsConversion for s3s::dto::HeadObjectInput {
 }
 
 impl AwsConversion for s3s::dto::HeadObjectOutput {
-    type Target = HeadObjectOutput;
+    type Target = aws_sdk_s3::operation::head_object::HeadObjectOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3726,7 +3725,7 @@ impl AwsConversion for s3s::dto::HeadObjectOutput {
 }
 
 impl AwsConversion for s3s::dto::IndexDocument {
-    type Target = IndexDocument;
+    type Target = aws_sdk_s3::types::IndexDocument;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3743,7 +3742,7 @@ impl AwsConversion for s3s::dto::IndexDocument {
 }
 
 impl AwsConversion for s3s::dto::Initiator {
-    type Target = Initiator;
+    type Target = aws_sdk_s3::types::Initiator;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3762,7 +3761,7 @@ impl AwsConversion for s3s::dto::Initiator {
 }
 
 impl AwsConversion for s3s::dto::InputSerialization {
-    type Target = InputSerialization;
+    type Target = aws_sdk_s3::types::InputSerialization;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3785,25 +3784,25 @@ impl AwsConversion for s3s::dto::InputSerialization {
 }
 
 impl AwsConversion for s3s::dto::IntelligentTieringAccessTier {
-    type Target = IntelligentTieringAccessTier;
+    type Target = aws_sdk_s3::types::IntelligentTieringAccessTier;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            IntelligentTieringAccessTier::ArchiveAccess => Self::from_static(Self::ARCHIVE_ACCESS),
-            IntelligentTieringAccessTier::DeepArchiveAccess => Self::from_static(Self::DEEP_ARCHIVE_ACCESS),
-            IntelligentTieringAccessTier::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::IntelligentTieringAccessTier::ArchiveAccess => Self::from_static(Self::ARCHIVE_ACCESS),
+            aws_sdk_s3::types::IntelligentTieringAccessTier::DeepArchiveAccess => Self::from_static(Self::DEEP_ARCHIVE_ACCESS),
+            aws_sdk_s3::types::IntelligentTieringAccessTier::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(IntelligentTieringAccessTier::from(x.as_str()))
+        Ok(aws_sdk_s3::types::IntelligentTieringAccessTier::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::IntelligentTieringAndOperator {
-    type Target = IntelligentTieringAndOperator;
+    type Target = aws_sdk_s3::types::IntelligentTieringAndOperator;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3822,7 +3821,7 @@ impl AwsConversion for s3s::dto::IntelligentTieringAndOperator {
 }
 
 impl AwsConversion for s3s::dto::IntelligentTieringConfiguration {
-    type Target = IntelligentTieringConfiguration;
+    type Target = aws_sdk_s3::types::IntelligentTieringConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3845,7 +3844,7 @@ impl AwsConversion for s3s::dto::IntelligentTieringConfiguration {
 }
 
 impl AwsConversion for s3s::dto::IntelligentTieringFilter {
-    type Target = IntelligentTieringFilter;
+    type Target = aws_sdk_s3::types::IntelligentTieringFilter;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3866,25 +3865,25 @@ impl AwsConversion for s3s::dto::IntelligentTieringFilter {
 }
 
 impl AwsConversion for s3s::dto::IntelligentTieringStatus {
-    type Target = IntelligentTieringStatus;
+    type Target = aws_sdk_s3::types::IntelligentTieringStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            IntelligentTieringStatus::Disabled => Self::from_static(Self::DISABLED),
-            IntelligentTieringStatus::Enabled => Self::from_static(Self::ENABLED),
-            IntelligentTieringStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::IntelligentTieringStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::IntelligentTieringStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::IntelligentTieringStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(IntelligentTieringStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::IntelligentTieringStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::InvalidObjectState {
-    type Target = InvalidObjectState;
+    type Target = aws_sdk_s3::types::error::InvalidObjectState;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3903,7 +3902,7 @@ impl AwsConversion for s3s::dto::InvalidObjectState {
 }
 
 impl AwsConversion for s3s::dto::InventoryConfiguration {
-    type Target = InventoryConfiguration;
+    type Target = aws_sdk_s3::types::InventoryConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3932,7 +3931,7 @@ impl AwsConversion for s3s::dto::InventoryConfiguration {
 }
 
 impl AwsConversion for s3s::dto::InventoryDestination {
-    type Target = InventoryDestination;
+    type Target = aws_sdk_s3::types::InventoryDestination;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3949,7 +3948,7 @@ impl AwsConversion for s3s::dto::InventoryDestination {
 }
 
 impl AwsConversion for s3s::dto::InventoryEncryption {
-    type Target = InventoryEncryption;
+    type Target = aws_sdk_s3::types::InventoryEncryption;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3968,7 +3967,7 @@ impl AwsConversion for s3s::dto::InventoryEncryption {
 }
 
 impl AwsConversion for s3s::dto::InventoryFilter {
-    type Target = InventoryFilter;
+    type Target = aws_sdk_s3::types::InventoryFilter;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -3985,91 +3984,97 @@ impl AwsConversion for s3s::dto::InventoryFilter {
 }
 
 impl AwsConversion for s3s::dto::InventoryFormat {
-    type Target = InventoryFormat;
+    type Target = aws_sdk_s3::types::InventoryFormat;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            InventoryFormat::Csv => Self::from_static(Self::CSV),
-            InventoryFormat::Orc => Self::from_static(Self::ORC),
-            InventoryFormat::Parquet => Self::from_static(Self::PARQUET),
-            InventoryFormat::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::InventoryFormat::Csv => Self::from_static(Self::CSV),
+            aws_sdk_s3::types::InventoryFormat::Orc => Self::from_static(Self::ORC),
+            aws_sdk_s3::types::InventoryFormat::Parquet => Self::from_static(Self::PARQUET),
+            aws_sdk_s3::types::InventoryFormat::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(InventoryFormat::from(x.as_str()))
+        Ok(aws_sdk_s3::types::InventoryFormat::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::InventoryFrequency {
-    type Target = InventoryFrequency;
+    type Target = aws_sdk_s3::types::InventoryFrequency;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            InventoryFrequency::Daily => Self::from_static(Self::DAILY),
-            InventoryFrequency::Weekly => Self::from_static(Self::WEEKLY),
-            InventoryFrequency::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::InventoryFrequency::Daily => Self::from_static(Self::DAILY),
+            aws_sdk_s3::types::InventoryFrequency::Weekly => Self::from_static(Self::WEEKLY),
+            aws_sdk_s3::types::InventoryFrequency::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(InventoryFrequency::from(x.as_str()))
+        Ok(aws_sdk_s3::types::InventoryFrequency::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::InventoryIncludedObjectVersions {
-    type Target = InventoryIncludedObjectVersions;
+    type Target = aws_sdk_s3::types::InventoryIncludedObjectVersions;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            InventoryIncludedObjectVersions::All => Self::from_static(Self::ALL),
-            InventoryIncludedObjectVersions::Current => Self::from_static(Self::CURRENT),
-            InventoryIncludedObjectVersions::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::InventoryIncludedObjectVersions::All => Self::from_static(Self::ALL),
+            aws_sdk_s3::types::InventoryIncludedObjectVersions::Current => Self::from_static(Self::CURRENT),
+            aws_sdk_s3::types::InventoryIncludedObjectVersions::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(InventoryIncludedObjectVersions::from(x.as_str()))
+        Ok(aws_sdk_s3::types::InventoryIncludedObjectVersions::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::InventoryOptionalField {
-    type Target = InventoryOptionalField;
+    type Target = aws_sdk_s3::types::InventoryOptionalField;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            InventoryOptionalField::BucketKeyStatus => Self::from_static(Self::BUCKET_KEY_STATUS),
-            InventoryOptionalField::ChecksumAlgorithm => Self::from_static(Self::CHECKSUM_ALGORITHM),
-            InventoryOptionalField::ETag => Self::from_static(Self::E_TAG),
-            InventoryOptionalField::EncryptionStatus => Self::from_static(Self::ENCRYPTION_STATUS),
-            InventoryOptionalField::IntelligentTieringAccessTier => Self::from_static(Self::INTELLIGENT_TIERING_ACCESS_TIER),
-            InventoryOptionalField::IsMultipartUploaded => Self::from_static(Self::IS_MULTIPART_UPLOADED),
-            InventoryOptionalField::LastModifiedDate => Self::from_static(Self::LAST_MODIFIED_DATE),
-            InventoryOptionalField::ObjectLockLegalHoldStatus => Self::from_static(Self::OBJECT_LOCK_LEGAL_HOLD_STATUS),
-            InventoryOptionalField::ObjectLockMode => Self::from_static(Self::OBJECT_LOCK_MODE),
-            InventoryOptionalField::ObjectLockRetainUntilDate => Self::from_static(Self::OBJECT_LOCK_RETAIN_UNTIL_DATE),
-            InventoryOptionalField::ReplicationStatus => Self::from_static(Self::REPLICATION_STATUS),
-            InventoryOptionalField::Size => Self::from_static(Self::SIZE),
-            InventoryOptionalField::StorageClass => Self::from_static(Self::STORAGE_CLASS),
-            InventoryOptionalField::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::InventoryOptionalField::BucketKeyStatus => Self::from_static(Self::BUCKET_KEY_STATUS),
+            aws_sdk_s3::types::InventoryOptionalField::ChecksumAlgorithm => Self::from_static(Self::CHECKSUM_ALGORITHM),
+            aws_sdk_s3::types::InventoryOptionalField::ETag => Self::from_static(Self::E_TAG),
+            aws_sdk_s3::types::InventoryOptionalField::EncryptionStatus => Self::from_static(Self::ENCRYPTION_STATUS),
+            aws_sdk_s3::types::InventoryOptionalField::IntelligentTieringAccessTier => {
+                Self::from_static(Self::INTELLIGENT_TIERING_ACCESS_TIER)
+            }
+            aws_sdk_s3::types::InventoryOptionalField::IsMultipartUploaded => Self::from_static(Self::IS_MULTIPART_UPLOADED),
+            aws_sdk_s3::types::InventoryOptionalField::LastModifiedDate => Self::from_static(Self::LAST_MODIFIED_DATE),
+            aws_sdk_s3::types::InventoryOptionalField::ObjectLockLegalHoldStatus => {
+                Self::from_static(Self::OBJECT_LOCK_LEGAL_HOLD_STATUS)
+            }
+            aws_sdk_s3::types::InventoryOptionalField::ObjectLockMode => Self::from_static(Self::OBJECT_LOCK_MODE),
+            aws_sdk_s3::types::InventoryOptionalField::ObjectLockRetainUntilDate => {
+                Self::from_static(Self::OBJECT_LOCK_RETAIN_UNTIL_DATE)
+            }
+            aws_sdk_s3::types::InventoryOptionalField::ReplicationStatus => Self::from_static(Self::REPLICATION_STATUS),
+            aws_sdk_s3::types::InventoryOptionalField::Size => Self::from_static(Self::SIZE),
+            aws_sdk_s3::types::InventoryOptionalField::StorageClass => Self::from_static(Self::STORAGE_CLASS),
+            aws_sdk_s3::types::InventoryOptionalField::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(InventoryOptionalField::from(x.as_str()))
+        Ok(aws_sdk_s3::types::InventoryOptionalField::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::InventoryS3BucketDestination {
-    type Target = InventoryS3BucketDestination;
+    type Target = aws_sdk_s3::types::InventoryS3BucketDestination;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4094,7 +4099,7 @@ impl AwsConversion for s3s::dto::InventoryS3BucketDestination {
 }
 
 impl AwsConversion for s3s::dto::InventorySchedule {
-    type Target = InventorySchedule;
+    type Target = aws_sdk_s3::types::InventorySchedule;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4111,7 +4116,7 @@ impl AwsConversion for s3s::dto::InventorySchedule {
 }
 
 impl AwsConversion for s3s::dto::JSONInput {
-    type Target = JsonInput;
+    type Target = aws_sdk_s3::types::JsonInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4128,7 +4133,7 @@ impl AwsConversion for s3s::dto::JSONInput {
 }
 
 impl AwsConversion for s3s::dto::JSONOutput {
-    type Target = JsonOutput;
+    type Target = aws_sdk_s3::types::JsonOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4145,25 +4150,25 @@ impl AwsConversion for s3s::dto::JSONOutput {
 }
 
 impl AwsConversion for s3s::dto::JSONType {
-    type Target = JsonType;
+    type Target = aws_sdk_s3::types::JsonType;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            JsonType::Document => Self::from_static(Self::DOCUMENT),
-            JsonType::Lines => Self::from_static(Self::LINES),
-            JsonType::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::JsonType::Document => Self::from_static(Self::DOCUMENT),
+            aws_sdk_s3::types::JsonType::Lines => Self::from_static(Self::LINES),
+            aws_sdk_s3::types::JsonType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(JsonType::from(x.as_str()))
+        Ok(aws_sdk_s3::types::JsonType::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::LambdaFunctionConfiguration {
-    type Target = LambdaFunctionConfiguration;
+    type Target = aws_sdk_s3::types::LambdaFunctionConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4186,7 +4191,7 @@ impl AwsConversion for s3s::dto::LambdaFunctionConfiguration {
 }
 
 impl AwsConversion for s3s::dto::LifecycleRule {
-    type Target = LifecycleRule;
+    type Target = aws_sdk_s3::types::LifecycleRule;
     type Error = S3Error;
 
     #[allow(deprecated)]
@@ -4221,7 +4226,7 @@ impl AwsConversion for s3s::dto::LifecycleRule {
 }
 
 impl AwsConversion for s3s::dto::LifecycleRuleAndOperator {
-    type Target = LifecycleRuleAndOperator;
+    type Target = aws_sdk_s3::types::LifecycleRuleAndOperator;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4244,34 +4249,34 @@ impl AwsConversion for s3s::dto::LifecycleRuleAndOperator {
 }
 
 impl AwsConversion for s3s::dto::LifecycleRuleFilter {
-    type Target = LifecycleRuleFilter;
+    type Target = aws_sdk_s3::types::LifecycleRuleFilter;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            LifecycleRuleFilter::And(v) => Self::And(try_from_aws(v)?),
-            LifecycleRuleFilter::ObjectSizeGreaterThan(v) => Self::ObjectSizeGreaterThan(try_from_aws(v)?),
-            LifecycleRuleFilter::ObjectSizeLessThan(v) => Self::ObjectSizeLessThan(try_from_aws(v)?),
-            LifecycleRuleFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
-            LifecycleRuleFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
-            _ => unimplemented!("unknown variant of LifecycleRuleFilter: {x:?}"),
+            aws_sdk_s3::types::LifecycleRuleFilter::And(v) => Self::And(try_from_aws(v)?),
+            aws_sdk_s3::types::LifecycleRuleFilter::ObjectSizeGreaterThan(v) => Self::ObjectSizeGreaterThan(try_from_aws(v)?),
+            aws_sdk_s3::types::LifecycleRuleFilter::ObjectSizeLessThan(v) => Self::ObjectSizeLessThan(try_from_aws(v)?),
+            aws_sdk_s3::types::LifecycleRuleFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
+            aws_sdk_s3::types::LifecycleRuleFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
+            _ => unimplemented!("unknown variant of aws_sdk_s3::types::LifecycleRuleFilter: {x:?}"),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
-            Self::And(v) => LifecycleRuleFilter::And(try_into_aws(v)?),
-            Self::ObjectSizeGreaterThan(v) => LifecycleRuleFilter::ObjectSizeGreaterThan(try_into_aws(v)?),
-            Self::ObjectSizeLessThan(v) => LifecycleRuleFilter::ObjectSizeLessThan(try_into_aws(v)?),
-            Self::Prefix(v) => LifecycleRuleFilter::Prefix(try_into_aws(v)?),
-            Self::Tag(v) => LifecycleRuleFilter::Tag(try_into_aws(v)?),
+            Self::And(v) => aws_sdk_s3::types::LifecycleRuleFilter::And(try_into_aws(v)?),
+            Self::ObjectSizeGreaterThan(v) => aws_sdk_s3::types::LifecycleRuleFilter::ObjectSizeGreaterThan(try_into_aws(v)?),
+            Self::ObjectSizeLessThan(v) => aws_sdk_s3::types::LifecycleRuleFilter::ObjectSizeLessThan(try_into_aws(v)?),
+            Self::Prefix(v) => aws_sdk_s3::types::LifecycleRuleFilter::Prefix(try_into_aws(v)?),
+            Self::Tag(v) => aws_sdk_s3::types::LifecycleRuleFilter::Tag(try_into_aws(v)?),
             _ => unimplemented!("unknown variant of LifecycleRuleFilter: {x:?}"),
         })
     }
 }
 
 impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsInput {
-    type Target = ListBucketAnalyticsConfigurationsInput;
+    type Target = aws_sdk_s3::operation::list_bucket_analytics_configurations::ListBucketAnalyticsConfigurationsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4292,7 +4297,7 @@ impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsInput {
 }
 
 impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsOutput {
-    type Target = ListBucketAnalyticsConfigurationsOutput;
+    type Target = aws_sdk_s3::operation::list_bucket_analytics_configurations::ListBucketAnalyticsConfigurationsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4315,7 +4320,8 @@ impl AwsConversion for s3s::dto::ListBucketAnalyticsConfigurationsOutput {
 }
 
 impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsInput {
-    type Target = ListBucketIntelligentTieringConfigurationsInput;
+    type Target =
+        aws_sdk_s3::operation::list_bucket_intelligent_tiering_configurations::ListBucketIntelligentTieringConfigurationsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4334,7 +4340,8 @@ impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsInput
 }
 
 impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsOutput {
-    type Target = ListBucketIntelligentTieringConfigurationsOutput;
+    type Target =
+        aws_sdk_s3::operation::list_bucket_intelligent_tiering_configurations::ListBucketIntelligentTieringConfigurationsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4357,7 +4364,7 @@ impl AwsConversion for s3s::dto::ListBucketIntelligentTieringConfigurationsOutpu
 }
 
 impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsInput {
-    type Target = ListBucketInventoryConfigurationsInput;
+    type Target = aws_sdk_s3::operation::list_bucket_inventory_configurations::ListBucketInventoryConfigurationsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4378,7 +4385,7 @@ impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsInput {
 }
 
 impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsOutput {
-    type Target = ListBucketInventoryConfigurationsOutput;
+    type Target = aws_sdk_s3::operation::list_bucket_inventory_configurations::ListBucketInventoryConfigurationsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4401,7 +4408,7 @@ impl AwsConversion for s3s::dto::ListBucketInventoryConfigurationsOutput {
 }
 
 impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsInput {
-    type Target = ListBucketMetricsConfigurationsInput;
+    type Target = aws_sdk_s3::operation::list_bucket_metrics_configurations::ListBucketMetricsConfigurationsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4422,7 +4429,7 @@ impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsInput {
 }
 
 impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsOutput {
-    type Target = ListBucketMetricsConfigurationsOutput;
+    type Target = aws_sdk_s3::operation::list_bucket_metrics_configurations::ListBucketMetricsConfigurationsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4445,7 +4452,7 @@ impl AwsConversion for s3s::dto::ListBucketMetricsConfigurationsOutput {
 }
 
 impl AwsConversion for s3s::dto::ListBucketsInput {
-    type Target = ListBucketsInput;
+    type Target = aws_sdk_s3::operation::list_buckets::ListBucketsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4461,7 +4468,7 @@ impl AwsConversion for s3s::dto::ListBucketsInput {
 }
 
 impl AwsConversion for s3s::dto::ListBucketsOutput {
-    type Target = ListBucketsOutput;
+    type Target = aws_sdk_s3::operation::list_buckets::ListBucketsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4480,7 +4487,7 @@ impl AwsConversion for s3s::dto::ListBucketsOutput {
 }
 
 impl AwsConversion for s3s::dto::ListMultipartUploadsInput {
-    type Target = ListMultipartUploadsInput;
+    type Target = aws_sdk_s3::operation::list_multipart_uploads::ListMultipartUploadsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4511,7 +4518,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsInput {
 }
 
 impl AwsConversion for s3s::dto::ListMultipartUploadsOutput {
-    type Target = ListMultipartUploadsOutput;
+    type Target = aws_sdk_s3::operation::list_multipart_uploads::ListMultipartUploadsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4550,7 +4557,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsOutput {
 }
 
 impl AwsConversion for s3s::dto::ListObjectVersionsInput {
-    type Target = ListObjectVersionsInput;
+    type Target = aws_sdk_s3::operation::list_object_versions::ListObjectVersionsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4581,7 +4588,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsInput {
 }
 
 impl AwsConversion for s3s::dto::ListObjectVersionsOutput {
-    type Target = ListObjectVersionsOutput;
+    type Target = aws_sdk_s3::operation::list_object_versions::ListObjectVersionsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4622,7 +4629,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsOutput {
 }
 
 impl AwsConversion for s3s::dto::ListObjectsInput {
-    type Target = ListObjectsInput;
+    type Target = aws_sdk_s3::operation::list_objects::ListObjectsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4653,7 +4660,7 @@ impl AwsConversion for s3s::dto::ListObjectsInput {
 }
 
 impl AwsConversion for s3s::dto::ListObjectsOutput {
-    type Target = ListObjectsOutput;
+    type Target = aws_sdk_s3::operation::list_objects::ListObjectsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4688,7 +4695,7 @@ impl AwsConversion for s3s::dto::ListObjectsOutput {
 }
 
 impl AwsConversion for s3s::dto::ListObjectsV2Input {
-    type Target = ListObjectsV2Input;
+    type Target = aws_sdk_s3::operation::list_objects_v2::ListObjectsV2Input;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4723,7 +4730,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Input {
 }
 
 impl AwsConversion for s3s::dto::ListObjectsV2Output {
-    type Target = ListObjectsV2Output;
+    type Target = aws_sdk_s3::operation::list_objects_v2::ListObjectsV2Output;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4762,7 +4769,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Output {
 }
 
 impl AwsConversion for s3s::dto::ListPartsInput {
-    type Target = ListPartsInput;
+    type Target = aws_sdk_s3::operation::list_parts::ListPartsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4797,7 +4804,7 @@ impl AwsConversion for s3s::dto::ListPartsInput {
 }
 
 impl AwsConversion for s3s::dto::ListPartsOutput {
-    type Target = ListPartsOutput;
+    type Target = aws_sdk_s3::operation::list_parts::ListPartsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4842,7 +4849,7 @@ impl AwsConversion for s3s::dto::ListPartsOutput {
 }
 
 impl AwsConversion for s3s::dto::LoggingEnabled {
-    type Target = LoggingEnabled;
+    type Target = aws_sdk_s3::types::LoggingEnabled;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4863,61 +4870,61 @@ impl AwsConversion for s3s::dto::LoggingEnabled {
 }
 
 impl AwsConversion for s3s::dto::MFADelete {
-    type Target = MfaDelete;
+    type Target = aws_sdk_s3::types::MfaDelete;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MfaDelete::Disabled => Self::from_static(Self::DISABLED),
-            MfaDelete::Enabled => Self::from_static(Self::ENABLED),
-            MfaDelete::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::MfaDelete::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::MfaDelete::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::MfaDelete::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(MfaDelete::from(x.as_str()))
+        Ok(aws_sdk_s3::types::MfaDelete::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::MFADeleteStatus {
-    type Target = MfaDeleteStatus;
+    type Target = aws_sdk_s3::types::MfaDeleteStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MfaDeleteStatus::Disabled => Self::from_static(Self::DISABLED),
-            MfaDeleteStatus::Enabled => Self::from_static(Self::ENABLED),
-            MfaDeleteStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::MfaDeleteStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::MfaDeleteStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::MfaDeleteStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(MfaDeleteStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::MfaDeleteStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::MetadataDirective {
-    type Target = MetadataDirective;
+    type Target = aws_sdk_s3::types::MetadataDirective;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MetadataDirective::Copy => Self::from_static(Self::COPY),
-            MetadataDirective::Replace => Self::from_static(Self::REPLACE),
-            MetadataDirective::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::MetadataDirective::Copy => Self::from_static(Self::COPY),
+            aws_sdk_s3::types::MetadataDirective::Replace => Self::from_static(Self::REPLACE),
+            aws_sdk_s3::types::MetadataDirective::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(MetadataDirective::from(x.as_str()))
+        Ok(aws_sdk_s3::types::MetadataDirective::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::MetadataEntry {
-    type Target = MetadataEntry;
+    type Target = aws_sdk_s3::types::MetadataEntry;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4936,7 +4943,7 @@ impl AwsConversion for s3s::dto::MetadataEntry {
 }
 
 impl AwsConversion for s3s::dto::Metrics {
-    type Target = Metrics;
+    type Target = aws_sdk_s3::types::Metrics;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4955,7 +4962,7 @@ impl AwsConversion for s3s::dto::Metrics {
 }
 
 impl AwsConversion for s3s::dto::MetricsAndOperator {
-    type Target = MetricsAndOperator;
+    type Target = aws_sdk_s3::types::MetricsAndOperator;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4976,7 +4983,7 @@ impl AwsConversion for s3s::dto::MetricsAndOperator {
 }
 
 impl AwsConversion for s3s::dto::MetricsConfiguration {
-    type Target = MetricsConfiguration;
+    type Target = aws_sdk_s3::types::MetricsConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -4995,50 +5002,50 @@ impl AwsConversion for s3s::dto::MetricsConfiguration {
 }
 
 impl AwsConversion for s3s::dto::MetricsFilter {
-    type Target = MetricsFilter;
+    type Target = aws_sdk_s3::types::MetricsFilter;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MetricsFilter::AccessPointArn(v) => Self::AccessPointArn(try_from_aws(v)?),
-            MetricsFilter::And(v) => Self::And(try_from_aws(v)?),
-            MetricsFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
-            MetricsFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
-            _ => unimplemented!("unknown variant of MetricsFilter: {x:?}"),
+            aws_sdk_s3::types::MetricsFilter::AccessPointArn(v) => Self::AccessPointArn(try_from_aws(v)?),
+            aws_sdk_s3::types::MetricsFilter::And(v) => Self::And(try_from_aws(v)?),
+            aws_sdk_s3::types::MetricsFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
+            aws_sdk_s3::types::MetricsFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
+            _ => unimplemented!("unknown variant of aws_sdk_s3::types::MetricsFilter: {x:?}"),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
-            Self::AccessPointArn(v) => MetricsFilter::AccessPointArn(try_into_aws(v)?),
-            Self::And(v) => MetricsFilter::And(try_into_aws(v)?),
-            Self::Prefix(v) => MetricsFilter::Prefix(try_into_aws(v)?),
-            Self::Tag(v) => MetricsFilter::Tag(try_into_aws(v)?),
+            Self::AccessPointArn(v) => aws_sdk_s3::types::MetricsFilter::AccessPointArn(try_into_aws(v)?),
+            Self::And(v) => aws_sdk_s3::types::MetricsFilter::And(try_into_aws(v)?),
+            Self::Prefix(v) => aws_sdk_s3::types::MetricsFilter::Prefix(try_into_aws(v)?),
+            Self::Tag(v) => aws_sdk_s3::types::MetricsFilter::Tag(try_into_aws(v)?),
             _ => unimplemented!("unknown variant of MetricsFilter: {x:?}"),
         })
     }
 }
 
 impl AwsConversion for s3s::dto::MetricsStatus {
-    type Target = MetricsStatus;
+    type Target = aws_sdk_s3::types::MetricsStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            MetricsStatus::Disabled => Self::from_static(Self::DISABLED),
-            MetricsStatus::Enabled => Self::from_static(Self::ENABLED),
-            MetricsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::MetricsStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::MetricsStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::MetricsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(MetricsStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::MetricsStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::MultipartUpload {
-    type Target = MultipartUpload;
+    type Target = aws_sdk_s3::types::MultipartUpload;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5067,7 +5074,7 @@ impl AwsConversion for s3s::dto::MultipartUpload {
 }
 
 impl AwsConversion for s3s::dto::NoSuchBucket {
-    type Target = NoSuchBucket;
+    type Target = aws_sdk_s3::types::error::NoSuchBucket;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5083,7 +5090,7 @@ impl AwsConversion for s3s::dto::NoSuchBucket {
 }
 
 impl AwsConversion for s3s::dto::NoSuchKey {
-    type Target = NoSuchKey;
+    type Target = aws_sdk_s3::types::error::NoSuchKey;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5099,7 +5106,7 @@ impl AwsConversion for s3s::dto::NoSuchKey {
 }
 
 impl AwsConversion for s3s::dto::NoSuchUpload {
-    type Target = NoSuchUpload;
+    type Target = aws_sdk_s3::types::error::NoSuchUpload;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5115,7 +5122,7 @@ impl AwsConversion for s3s::dto::NoSuchUpload {
 }
 
 impl AwsConversion for s3s::dto::NoncurrentVersionExpiration {
-    type Target = NoncurrentVersionExpiration;
+    type Target = aws_sdk_s3::types::NoncurrentVersionExpiration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5134,7 +5141,7 @@ impl AwsConversion for s3s::dto::NoncurrentVersionExpiration {
 }
 
 impl AwsConversion for s3s::dto::NoncurrentVersionTransition {
-    type Target = NoncurrentVersionTransition;
+    type Target = aws_sdk_s3::types::NoncurrentVersionTransition;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5155,7 +5162,7 @@ impl AwsConversion for s3s::dto::NoncurrentVersionTransition {
 }
 
 impl AwsConversion for s3s::dto::NotFound {
-    type Target = NotFound;
+    type Target = aws_sdk_s3::types::error::NotFound;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5171,7 +5178,7 @@ impl AwsConversion for s3s::dto::NotFound {
 }
 
 impl AwsConversion for s3s::dto::NotificationConfiguration {
-    type Target = NotificationConfiguration;
+    type Target = aws_sdk_s3::types::NotificationConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5194,7 +5201,7 @@ impl AwsConversion for s3s::dto::NotificationConfiguration {
 }
 
 impl AwsConversion for s3s::dto::NotificationConfigurationFilter {
-    type Target = NotificationConfigurationFilter;
+    type Target = aws_sdk_s3::types::NotificationConfigurationFilter;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5211,7 +5218,7 @@ impl AwsConversion for s3s::dto::NotificationConfigurationFilter {
 }
 
 impl AwsConversion for s3s::dto::Object {
-    type Target = Object;
+    type Target = aws_sdk_s3::types::Object;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5240,7 +5247,7 @@ impl AwsConversion for s3s::dto::Object {
 }
 
 impl AwsConversion for s3s::dto::ObjectAlreadyInActiveTierError {
-    type Target = ObjectAlreadyInActiveTierError;
+    type Target = aws_sdk_s3::types::error::ObjectAlreadyInActiveTierError;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5256,51 +5263,51 @@ impl AwsConversion for s3s::dto::ObjectAlreadyInActiveTierError {
 }
 
 impl AwsConversion for s3s::dto::ObjectAttributes {
-    type Target = ObjectAttributes;
+    type Target = aws_sdk_s3::types::ObjectAttributes;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectAttributes::Checksum => Self::from_static(Self::CHECKSUM),
-            ObjectAttributes::Etag => Self::from_static(Self::ETAG),
-            ObjectAttributes::ObjectParts => Self::from_static(Self::OBJECT_PARTS),
-            ObjectAttributes::ObjectSize => Self::from_static(Self::OBJECT_SIZE),
-            ObjectAttributes::StorageClass => Self::from_static(Self::STORAGE_CLASS),
-            ObjectAttributes::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectAttributes::Checksum => Self::from_static(Self::CHECKSUM),
+            aws_sdk_s3::types::ObjectAttributes::Etag => Self::from_static(Self::ETAG),
+            aws_sdk_s3::types::ObjectAttributes::ObjectParts => Self::from_static(Self::OBJECT_PARTS),
+            aws_sdk_s3::types::ObjectAttributes::ObjectSize => Self::from_static(Self::OBJECT_SIZE),
+            aws_sdk_s3::types::ObjectAttributes::StorageClass => Self::from_static(Self::STORAGE_CLASS),
+            aws_sdk_s3::types::ObjectAttributes::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectAttributes::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectAttributes::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ObjectCannedACL {
-    type Target = ObjectCannedAcl;
+    type Target = aws_sdk_s3::types::ObjectCannedAcl;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectCannedAcl::AuthenticatedRead => Self::from_static(Self::AUTHENTICATED_READ),
-            ObjectCannedAcl::AwsExecRead => Self::from_static(Self::AWS_EXEC_READ),
-            ObjectCannedAcl::BucketOwnerFullControl => Self::from_static(Self::BUCKET_OWNER_FULL_CONTROL),
-            ObjectCannedAcl::BucketOwnerRead => Self::from_static(Self::BUCKET_OWNER_READ),
-            ObjectCannedAcl::Private => Self::from_static(Self::PRIVATE),
-            ObjectCannedAcl::PublicRead => Self::from_static(Self::PUBLIC_READ),
-            ObjectCannedAcl::PublicReadWrite => Self::from_static(Self::PUBLIC_READ_WRITE),
-            ObjectCannedAcl::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectCannedAcl::AuthenticatedRead => Self::from_static(Self::AUTHENTICATED_READ),
+            aws_sdk_s3::types::ObjectCannedAcl::AwsExecRead => Self::from_static(Self::AWS_EXEC_READ),
+            aws_sdk_s3::types::ObjectCannedAcl::BucketOwnerFullControl => Self::from_static(Self::BUCKET_OWNER_FULL_CONTROL),
+            aws_sdk_s3::types::ObjectCannedAcl::BucketOwnerRead => Self::from_static(Self::BUCKET_OWNER_READ),
+            aws_sdk_s3::types::ObjectCannedAcl::Private => Self::from_static(Self::PRIVATE),
+            aws_sdk_s3::types::ObjectCannedAcl::PublicRead => Self::from_static(Self::PUBLIC_READ),
+            aws_sdk_s3::types::ObjectCannedAcl::PublicReadWrite => Self::from_static(Self::PUBLIC_READ_WRITE),
+            aws_sdk_s3::types::ObjectCannedAcl::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectCannedAcl::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectCannedAcl::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ObjectIdentifier {
-    type Target = ObjectIdentifier;
+    type Target = aws_sdk_s3::types::ObjectIdentifier;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5319,7 +5326,7 @@ impl AwsConversion for s3s::dto::ObjectIdentifier {
 }
 
 impl AwsConversion for s3s::dto::ObjectLockConfiguration {
-    type Target = ObjectLockConfiguration;
+    type Target = aws_sdk_s3::types::ObjectLockConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5338,24 +5345,24 @@ impl AwsConversion for s3s::dto::ObjectLockConfiguration {
 }
 
 impl AwsConversion for s3s::dto::ObjectLockEnabled {
-    type Target = ObjectLockEnabled;
+    type Target = aws_sdk_s3::types::ObjectLockEnabled;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectLockEnabled::Enabled => Self::from_static(Self::ENABLED),
-            ObjectLockEnabled::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectLockEnabled::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::ObjectLockEnabled::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectLockEnabled::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectLockEnabled::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ObjectLockLegalHold {
-    type Target = ObjectLockLegalHold;
+    type Target = aws_sdk_s3::types::ObjectLockLegalHold;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5372,43 +5379,43 @@ impl AwsConversion for s3s::dto::ObjectLockLegalHold {
 }
 
 impl AwsConversion for s3s::dto::ObjectLockLegalHoldStatus {
-    type Target = ObjectLockLegalHoldStatus;
+    type Target = aws_sdk_s3::types::ObjectLockLegalHoldStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectLockLegalHoldStatus::Off => Self::from_static(Self::OFF),
-            ObjectLockLegalHoldStatus::On => Self::from_static(Self::ON),
-            ObjectLockLegalHoldStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectLockLegalHoldStatus::Off => Self::from_static(Self::OFF),
+            aws_sdk_s3::types::ObjectLockLegalHoldStatus::On => Self::from_static(Self::ON),
+            aws_sdk_s3::types::ObjectLockLegalHoldStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectLockLegalHoldStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectLockLegalHoldStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ObjectLockMode {
-    type Target = ObjectLockMode;
+    type Target = aws_sdk_s3::types::ObjectLockMode;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectLockMode::Compliance => Self::from_static(Self::COMPLIANCE),
-            ObjectLockMode::Governance => Self::from_static(Self::GOVERNANCE),
-            ObjectLockMode::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectLockMode::Compliance => Self::from_static(Self::COMPLIANCE),
+            aws_sdk_s3::types::ObjectLockMode::Governance => Self::from_static(Self::GOVERNANCE),
+            aws_sdk_s3::types::ObjectLockMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectLockMode::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectLockMode::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ObjectLockRetention {
-    type Target = ObjectLockRetention;
+    type Target = aws_sdk_s3::types::ObjectLockRetention;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5427,25 +5434,25 @@ impl AwsConversion for s3s::dto::ObjectLockRetention {
 }
 
 impl AwsConversion for s3s::dto::ObjectLockRetentionMode {
-    type Target = ObjectLockRetentionMode;
+    type Target = aws_sdk_s3::types::ObjectLockRetentionMode;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectLockRetentionMode::Compliance => Self::from_static(Self::COMPLIANCE),
-            ObjectLockRetentionMode::Governance => Self::from_static(Self::GOVERNANCE),
-            ObjectLockRetentionMode::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectLockRetentionMode::Compliance => Self::from_static(Self::COMPLIANCE),
+            aws_sdk_s3::types::ObjectLockRetentionMode::Governance => Self::from_static(Self::GOVERNANCE),
+            aws_sdk_s3::types::ObjectLockRetentionMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectLockRetentionMode::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectLockRetentionMode::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ObjectLockRule {
-    type Target = ObjectLockRule;
+    type Target = aws_sdk_s3::types::ObjectLockRule;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5462,7 +5469,7 @@ impl AwsConversion for s3s::dto::ObjectLockRule {
 }
 
 impl AwsConversion for s3s::dto::ObjectNotInActiveTierError {
-    type Target = ObjectNotInActiveTierError;
+    type Target = aws_sdk_s3::types::error::ObjectNotInActiveTierError;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5478,26 +5485,26 @@ impl AwsConversion for s3s::dto::ObjectNotInActiveTierError {
 }
 
 impl AwsConversion for s3s::dto::ObjectOwnership {
-    type Target = ObjectOwnership;
+    type Target = aws_sdk_s3::types::ObjectOwnership;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectOwnership::BucketOwnerEnforced => Self::from_static(Self::BUCKET_OWNER_ENFORCED),
-            ObjectOwnership::BucketOwnerPreferred => Self::from_static(Self::BUCKET_OWNER_PREFERRED),
-            ObjectOwnership::ObjectWriter => Self::from_static(Self::OBJECT_WRITER),
-            ObjectOwnership::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectOwnership::BucketOwnerEnforced => Self::from_static(Self::BUCKET_OWNER_ENFORCED),
+            aws_sdk_s3::types::ObjectOwnership::BucketOwnerPreferred => Self::from_static(Self::BUCKET_OWNER_PREFERRED),
+            aws_sdk_s3::types::ObjectOwnership::ObjectWriter => Self::from_static(Self::OBJECT_WRITER),
+            aws_sdk_s3::types::ObjectOwnership::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectOwnership::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectOwnership::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ObjectPart {
-    type Target = ObjectPart;
+    type Target = aws_sdk_s3::types::ObjectPart;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5524,32 +5531,32 @@ impl AwsConversion for s3s::dto::ObjectPart {
 }
 
 impl AwsConversion for s3s::dto::ObjectStorageClass {
-    type Target = ObjectStorageClass;
+    type Target = aws_sdk_s3::types::ObjectStorageClass;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectStorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
-            ObjectStorageClass::Glacier => Self::from_static(Self::GLACIER),
-            ObjectStorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
-            ObjectStorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
-            ObjectStorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
-            ObjectStorageClass::Outposts => Self::from_static(Self::OUTPOSTS),
-            ObjectStorageClass::ReducedRedundancy => Self::from_static(Self::REDUCED_REDUNDANCY),
-            ObjectStorageClass::Standard => Self::from_static(Self::STANDARD),
-            ObjectStorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
-            ObjectStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectStorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
+            aws_sdk_s3::types::ObjectStorageClass::Glacier => Self::from_static(Self::GLACIER),
+            aws_sdk_s3::types::ObjectStorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
+            aws_sdk_s3::types::ObjectStorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
+            aws_sdk_s3::types::ObjectStorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
+            aws_sdk_s3::types::ObjectStorageClass::Outposts => Self::from_static(Self::OUTPOSTS),
+            aws_sdk_s3::types::ObjectStorageClass::ReducedRedundancy => Self::from_static(Self::REDUCED_REDUNDANCY),
+            aws_sdk_s3::types::ObjectStorageClass::Standard => Self::from_static(Self::STANDARD),
+            aws_sdk_s3::types::ObjectStorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
+            aws_sdk_s3::types::ObjectStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectStorageClass::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectStorageClass::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ObjectVersion {
-    type Target = ObjectVersion;
+    type Target = aws_sdk_s3::types::ObjectVersion;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5582,24 +5589,24 @@ impl AwsConversion for s3s::dto::ObjectVersion {
 }
 
 impl AwsConversion for s3s::dto::ObjectVersionStorageClass {
-    type Target = ObjectVersionStorageClass;
+    type Target = aws_sdk_s3::types::ObjectVersionStorageClass;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ObjectVersionStorageClass::Standard => Self::from_static(Self::STANDARD),
-            ObjectVersionStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ObjectVersionStorageClass::Standard => Self::from_static(Self::STANDARD),
+            aws_sdk_s3::types::ObjectVersionStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ObjectVersionStorageClass::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ObjectVersionStorageClass::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::OutputLocation {
-    type Target = OutputLocation;
+    type Target = aws_sdk_s3::types::OutputLocation;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5614,7 +5621,7 @@ impl AwsConversion for s3s::dto::OutputLocation {
 }
 
 impl AwsConversion for s3s::dto::OutputSerialization {
-    type Target = OutputSerialization;
+    type Target = aws_sdk_s3::types::OutputSerialization;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5633,7 +5640,7 @@ impl AwsConversion for s3s::dto::OutputSerialization {
 }
 
 impl AwsConversion for s3s::dto::Owner {
-    type Target = Owner;
+    type Target = aws_sdk_s3::types::Owner;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5652,24 +5659,24 @@ impl AwsConversion for s3s::dto::Owner {
 }
 
 impl AwsConversion for s3s::dto::OwnerOverride {
-    type Target = OwnerOverride;
+    type Target = aws_sdk_s3::types::OwnerOverride;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            OwnerOverride::Destination => Self::from_static(Self::DESTINATION),
-            OwnerOverride::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::OwnerOverride::Destination => Self::from_static(Self::DESTINATION),
+            aws_sdk_s3::types::OwnerOverride::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(OwnerOverride::from(x.as_str()))
+        Ok(aws_sdk_s3::types::OwnerOverride::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::OwnershipControls {
-    type Target = OwnershipControls;
+    type Target = aws_sdk_s3::types::OwnershipControls;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5686,7 +5693,7 @@ impl AwsConversion for s3s::dto::OwnershipControls {
 }
 
 impl AwsConversion for s3s::dto::OwnershipControlsRule {
-    type Target = OwnershipControlsRule;
+    type Target = aws_sdk_s3::types::OwnershipControlsRule;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5703,7 +5710,7 @@ impl AwsConversion for s3s::dto::OwnershipControlsRule {
 }
 
 impl AwsConversion for s3s::dto::ParquetInput {
-    type Target = ParquetInput;
+    type Target = aws_sdk_s3::types::ParquetInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5719,7 +5726,7 @@ impl AwsConversion for s3s::dto::ParquetInput {
 }
 
 impl AwsConversion for s3s::dto::Part {
-    type Target = Part;
+    type Target = aws_sdk_s3::types::Part;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5750,46 +5757,46 @@ impl AwsConversion for s3s::dto::Part {
 }
 
 impl AwsConversion for s3s::dto::Payer {
-    type Target = Payer;
+    type Target = aws_sdk_s3::types::Payer;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Payer::BucketOwner => Self::from_static(Self::BUCKET_OWNER),
-            Payer::Requester => Self::from_static(Self::REQUESTER),
-            Payer::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::Payer::BucketOwner => Self::from_static(Self::BUCKET_OWNER),
+            aws_sdk_s3::types::Payer::Requester => Self::from_static(Self::REQUESTER),
+            aws_sdk_s3::types::Payer::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(Payer::from(x.as_str()))
+        Ok(aws_sdk_s3::types::Payer::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::Permission {
-    type Target = Permission;
+    type Target = aws_sdk_s3::types::Permission;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Permission::FullControl => Self::from_static(Self::FULL_CONTROL),
-            Permission::Read => Self::from_static(Self::READ),
-            Permission::ReadAcp => Self::from_static(Self::READ_ACP),
-            Permission::Write => Self::from_static(Self::WRITE),
-            Permission::WriteAcp => Self::from_static(Self::WRITE_ACP),
-            Permission::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::Permission::FullControl => Self::from_static(Self::FULL_CONTROL),
+            aws_sdk_s3::types::Permission::Read => Self::from_static(Self::READ),
+            aws_sdk_s3::types::Permission::ReadAcp => Self::from_static(Self::READ_ACP),
+            aws_sdk_s3::types::Permission::Write => Self::from_static(Self::WRITE),
+            aws_sdk_s3::types::Permission::WriteAcp => Self::from_static(Self::WRITE_ACP),
+            aws_sdk_s3::types::Permission::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(Permission::from(x.as_str()))
+        Ok(aws_sdk_s3::types::Permission::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::PolicyStatus {
-    type Target = PolicyStatus;
+    type Target = aws_sdk_s3::types::PolicyStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5806,7 +5813,7 @@ impl AwsConversion for s3s::dto::PolicyStatus {
 }
 
 impl AwsConversion for s3s::dto::Progress {
-    type Target = Progress;
+    type Target = aws_sdk_s3::types::Progress;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5827,7 +5834,7 @@ impl AwsConversion for s3s::dto::Progress {
 }
 
 impl AwsConversion for s3s::dto::ProgressEvent {
-    type Target = ProgressEvent;
+    type Target = aws_sdk_s3::types::ProgressEvent;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5844,25 +5851,25 @@ impl AwsConversion for s3s::dto::ProgressEvent {
 }
 
 impl AwsConversion for s3s::dto::Protocol {
-    type Target = Protocol;
+    type Target = aws_sdk_s3::types::Protocol;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Protocol::Http => Self::from_static(Self::HTTP),
-            Protocol::Https => Self::from_static(Self::HTTPS),
-            Protocol::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::Protocol::Http => Self::from_static(Self::HTTP),
+            aws_sdk_s3::types::Protocol::Https => Self::from_static(Self::HTTPS),
+            aws_sdk_s3::types::Protocol::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(Protocol::from(x.as_str()))
+        Ok(aws_sdk_s3::types::Protocol::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::PublicAccessBlockConfiguration {
-    type Target = PublicAccessBlockConfiguration;
+    type Target = aws_sdk_s3::types::PublicAccessBlockConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5885,7 +5892,7 @@ impl AwsConversion for s3s::dto::PublicAccessBlockConfiguration {
 }
 
 impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationInput {
-    type Target = PutBucketAccelerateConfigurationInput;
+    type Target = aws_sdk_s3::operation::put_bucket_accelerate_configuration::PutBucketAccelerateConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5908,7 +5915,7 @@ impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationOutput {
-    type Target = PutBucketAccelerateConfigurationOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_accelerate_configuration::PutBucketAccelerateConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5924,7 +5931,7 @@ impl AwsConversion for s3s::dto::PutBucketAccelerateConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketAclInput {
-    type Target = PutBucketAclInput;
+    type Target = aws_sdk_s3::operation::put_bucket_acl::PutBucketAclInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5961,7 +5968,7 @@ impl AwsConversion for s3s::dto::PutBucketAclInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketAclOutput {
-    type Target = PutBucketAclOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_acl::PutBucketAclOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -5977,7 +5984,7 @@ impl AwsConversion for s3s::dto::PutBucketAclOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationInput {
-    type Target = PutBucketAnalyticsConfigurationInput;
+    type Target = aws_sdk_s3::operation::put_bucket_analytics_configuration::PutBucketAnalyticsConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6000,7 +6007,7 @@ impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationOutput {
-    type Target = PutBucketAnalyticsConfigurationOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_analytics_configuration::PutBucketAnalyticsConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6016,7 +6023,7 @@ impl AwsConversion for s3s::dto::PutBucketAnalyticsConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketCorsInput {
-    type Target = PutBucketCorsInput;
+    type Target = aws_sdk_s3::operation::put_bucket_cors::PutBucketCorsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6041,7 +6048,7 @@ impl AwsConversion for s3s::dto::PutBucketCorsInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketCorsOutput {
-    type Target = PutBucketCorsOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_cors::PutBucketCorsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6057,7 +6064,7 @@ impl AwsConversion for s3s::dto::PutBucketCorsOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketEncryptionInput {
-    type Target = PutBucketEncryptionInput;
+    type Target = aws_sdk_s3::operation::put_bucket_encryption::PutBucketEncryptionInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6085,7 +6092,7 @@ impl AwsConversion for s3s::dto::PutBucketEncryptionInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketEncryptionOutput {
-    type Target = PutBucketEncryptionOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_encryption::PutBucketEncryptionOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6101,7 +6108,8 @@ impl AwsConversion for s3s::dto::PutBucketEncryptionOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationInput {
-    type Target = PutBucketIntelligentTieringConfigurationInput;
+    type Target =
+        aws_sdk_s3::operation::put_bucket_intelligent_tiering_configuration::PutBucketIntelligentTieringConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6125,7 +6133,8 @@ impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationOutput {
-    type Target = PutBucketIntelligentTieringConfigurationOutput;
+    type Target =
+        aws_sdk_s3::operation::put_bucket_intelligent_tiering_configuration::PutBucketIntelligentTieringConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6141,7 +6150,7 @@ impl AwsConversion for s3s::dto::PutBucketIntelligentTieringConfigurationOutput 
 }
 
 impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationInput {
-    type Target = PutBucketInventoryConfigurationInput;
+    type Target = aws_sdk_s3::operation::put_bucket_inventory_configuration::PutBucketInventoryConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6164,7 +6173,7 @@ impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationOutput {
-    type Target = PutBucketInventoryConfigurationOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_inventory_configuration::PutBucketInventoryConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6180,7 +6189,7 @@ impl AwsConversion for s3s::dto::PutBucketInventoryConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
-    type Target = PutBucketLifecycleConfigurationInput;
+    type Target = aws_sdk_s3::operation::put_bucket_lifecycle_configuration::PutBucketLifecycleConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6203,7 +6212,7 @@ impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationOutput {
-    type Target = PutBucketLifecycleConfigurationOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_lifecycle_configuration::PutBucketLifecycleConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6219,7 +6228,7 @@ impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketLoggingInput {
-    type Target = PutBucketLoggingInput;
+    type Target = aws_sdk_s3::operation::put_bucket_logging::PutBucketLoggingInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6244,7 +6253,7 @@ impl AwsConversion for s3s::dto::PutBucketLoggingInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketLoggingOutput {
-    type Target = PutBucketLoggingOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_logging::PutBucketLoggingOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6260,7 +6269,7 @@ impl AwsConversion for s3s::dto::PutBucketLoggingOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationInput {
-    type Target = PutBucketMetricsConfigurationInput;
+    type Target = aws_sdk_s3::operation::put_bucket_metrics_configuration::PutBucketMetricsConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6283,7 +6292,7 @@ impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationOutput {
-    type Target = PutBucketMetricsConfigurationOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_metrics_configuration::PutBucketMetricsConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6299,7 +6308,7 @@ impl AwsConversion for s3s::dto::PutBucketMetricsConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationInput {
-    type Target = PutBucketNotificationConfigurationInput;
+    type Target = aws_sdk_s3::operation::put_bucket_notification_configuration::PutBucketNotificationConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6322,7 +6331,7 @@ impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationOutput {
-    type Target = PutBucketNotificationConfigurationOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_notification_configuration::PutBucketNotificationConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6338,7 +6347,7 @@ impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketOwnershipControlsInput {
-    type Target = PutBucketOwnershipControlsInput;
+    type Target = aws_sdk_s3::operation::put_bucket_ownership_controls::PutBucketOwnershipControlsInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6361,7 +6370,7 @@ impl AwsConversion for s3s::dto::PutBucketOwnershipControlsInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketOwnershipControlsOutput {
-    type Target = PutBucketOwnershipControlsOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_ownership_controls::PutBucketOwnershipControlsOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6377,7 +6386,7 @@ impl AwsConversion for s3s::dto::PutBucketOwnershipControlsOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketPolicyInput {
-    type Target = PutBucketPolicyInput;
+    type Target = aws_sdk_s3::operation::put_bucket_policy::PutBucketPolicyInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6404,7 +6413,7 @@ impl AwsConversion for s3s::dto::PutBucketPolicyInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketPolicyOutput {
-    type Target = PutBucketPolicyOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_policy::PutBucketPolicyOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6420,7 +6429,7 @@ impl AwsConversion for s3s::dto::PutBucketPolicyOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketReplicationInput {
-    type Target = PutBucketReplicationInput;
+    type Target = aws_sdk_s3::operation::put_bucket_replication::PutBucketReplicationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6447,7 +6456,7 @@ impl AwsConversion for s3s::dto::PutBucketReplicationInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketReplicationOutput {
-    type Target = PutBucketReplicationOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_replication::PutBucketReplicationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6463,7 +6472,7 @@ impl AwsConversion for s3s::dto::PutBucketReplicationOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketRequestPaymentInput {
-    type Target = PutBucketRequestPaymentInput;
+    type Target = aws_sdk_s3::operation::put_bucket_request_payment::PutBucketRequestPaymentInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6488,7 +6497,7 @@ impl AwsConversion for s3s::dto::PutBucketRequestPaymentInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketRequestPaymentOutput {
-    type Target = PutBucketRequestPaymentOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_request_payment::PutBucketRequestPaymentOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6504,7 +6513,7 @@ impl AwsConversion for s3s::dto::PutBucketRequestPaymentOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketTaggingInput {
-    type Target = PutBucketTaggingInput;
+    type Target = aws_sdk_s3::operation::put_bucket_tagging::PutBucketTaggingInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6529,7 +6538,7 @@ impl AwsConversion for s3s::dto::PutBucketTaggingInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketTaggingOutput {
-    type Target = PutBucketTaggingOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_tagging::PutBucketTaggingOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6545,7 +6554,7 @@ impl AwsConversion for s3s::dto::PutBucketTaggingOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketVersioningInput {
-    type Target = PutBucketVersioningInput;
+    type Target = aws_sdk_s3::operation::put_bucket_versioning::PutBucketVersioningInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6572,7 +6581,7 @@ impl AwsConversion for s3s::dto::PutBucketVersioningInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketVersioningOutput {
-    type Target = PutBucketVersioningOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_versioning::PutBucketVersioningOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6588,7 +6597,7 @@ impl AwsConversion for s3s::dto::PutBucketVersioningOutput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketWebsiteInput {
-    type Target = PutBucketWebsiteInput;
+    type Target = aws_sdk_s3::operation::put_bucket_website::PutBucketWebsiteInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6613,7 +6622,7 @@ impl AwsConversion for s3s::dto::PutBucketWebsiteInput {
 }
 
 impl AwsConversion for s3s::dto::PutBucketWebsiteOutput {
-    type Target = PutBucketWebsiteOutput;
+    type Target = aws_sdk_s3::operation::put_bucket_website::PutBucketWebsiteOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6629,7 +6638,7 @@ impl AwsConversion for s3s::dto::PutBucketWebsiteOutput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectAclInput {
-    type Target = PutObjectAclInput;
+    type Target = aws_sdk_s3::operation::put_object_acl::PutObjectAclInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6672,7 +6681,7 @@ impl AwsConversion for s3s::dto::PutObjectAclInput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectAclOutput {
-    type Target = PutObjectAclOutput;
+    type Target = aws_sdk_s3::operation::put_object_acl::PutObjectAclOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6689,7 +6698,7 @@ impl AwsConversion for s3s::dto::PutObjectAclOutput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectInput {
-    type Target = PutObjectInput;
+    type Target = aws_sdk_s3::operation::put_object::PutObjectInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6778,7 +6787,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectLegalHoldInput {
-    type Target = PutObjectLegalHoldInput;
+    type Target = aws_sdk_s3::operation::put_object_legal_hold::PutObjectLegalHoldInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6809,7 +6818,7 @@ impl AwsConversion for s3s::dto::PutObjectLegalHoldInput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectLegalHoldOutput {
-    type Target = PutObjectLegalHoldOutput;
+    type Target = aws_sdk_s3::operation::put_object_legal_hold::PutObjectLegalHoldOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6826,7 +6835,7 @@ impl AwsConversion for s3s::dto::PutObjectLegalHoldOutput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectLockConfigurationInput {
-    type Target = PutObjectLockConfigurationInput;
+    type Target = aws_sdk_s3::operation::put_object_lock_configuration::PutObjectLockConfigurationInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6855,7 +6864,7 @@ impl AwsConversion for s3s::dto::PutObjectLockConfigurationInput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectLockConfigurationOutput {
-    type Target = PutObjectLockConfigurationOutput;
+    type Target = aws_sdk_s3::operation::put_object_lock_configuration::PutObjectLockConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6872,7 +6881,7 @@ impl AwsConversion for s3s::dto::PutObjectLockConfigurationOutput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectOutput {
-    type Target = PutObjectOutput;
+    type Target = aws_sdk_s3::operation::put_object::PutObjectOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6915,7 +6924,7 @@ impl AwsConversion for s3s::dto::PutObjectOutput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectRetentionInput {
-    type Target = PutObjectRetentionInput;
+    type Target = aws_sdk_s3::operation::put_object_retention::PutObjectRetentionInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6948,7 +6957,7 @@ impl AwsConversion for s3s::dto::PutObjectRetentionInput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectRetentionOutput {
-    type Target = PutObjectRetentionOutput;
+    type Target = aws_sdk_s3::operation::put_object_retention::PutObjectRetentionOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6965,7 +6974,7 @@ impl AwsConversion for s3s::dto::PutObjectRetentionOutput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectTaggingInput {
-    type Target = PutObjectTaggingInput;
+    type Target = aws_sdk_s3::operation::put_object_tagging::PutObjectTaggingInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -6996,7 +7005,7 @@ impl AwsConversion for s3s::dto::PutObjectTaggingInput {
 }
 
 impl AwsConversion for s3s::dto::PutObjectTaggingOutput {
-    type Target = PutObjectTaggingOutput;
+    type Target = aws_sdk_s3::operation::put_object_tagging::PutObjectTaggingOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7013,7 +7022,7 @@ impl AwsConversion for s3s::dto::PutObjectTaggingOutput {
 }
 
 impl AwsConversion for s3s::dto::PutPublicAccessBlockInput {
-    type Target = PutPublicAccessBlockInput;
+    type Target = aws_sdk_s3::operation::put_public_access_block::PutPublicAccessBlockInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7041,7 +7050,7 @@ impl AwsConversion for s3s::dto::PutPublicAccessBlockInput {
 }
 
 impl AwsConversion for s3s::dto::PutPublicAccessBlockOutput {
-    type Target = PutPublicAccessBlockOutput;
+    type Target = aws_sdk_s3::operation::put_public_access_block::PutPublicAccessBlockOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7057,7 +7066,7 @@ impl AwsConversion for s3s::dto::PutPublicAccessBlockOutput {
 }
 
 impl AwsConversion for s3s::dto::QueueConfiguration {
-    type Target = QueueConfiguration;
+    type Target = aws_sdk_s3::types::QueueConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7080,25 +7089,25 @@ impl AwsConversion for s3s::dto::QueueConfiguration {
 }
 
 impl AwsConversion for s3s::dto::QuoteFields {
-    type Target = QuoteFields;
+    type Target = aws_sdk_s3::types::QuoteFields;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            QuoteFields::Always => Self::from_static(Self::ALWAYS),
-            QuoteFields::Asneeded => Self::from_static(Self::ASNEEDED),
-            QuoteFields::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::QuoteFields::Always => Self::from_static(Self::ALWAYS),
+            aws_sdk_s3::types::QuoteFields::Asneeded => Self::from_static(Self::ASNEEDED),
+            aws_sdk_s3::types::QuoteFields::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(QuoteFields::from(x.as_str()))
+        Ok(aws_sdk_s3::types::QuoteFields::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::RecordsEvent {
-    type Target = RecordsEvent;
+    type Target = aws_sdk_s3::types::RecordsEvent;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7115,7 +7124,7 @@ impl AwsConversion for s3s::dto::RecordsEvent {
 }
 
 impl AwsConversion for s3s::dto::Redirect {
-    type Target = Redirect;
+    type Target = aws_sdk_s3::types::Redirect;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7140,7 +7149,7 @@ impl AwsConversion for s3s::dto::Redirect {
 }
 
 impl AwsConversion for s3s::dto::RedirectAllRequestsTo {
-    type Target = RedirectAllRequestsTo;
+    type Target = aws_sdk_s3::types::RedirectAllRequestsTo;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7159,7 +7168,7 @@ impl AwsConversion for s3s::dto::RedirectAllRequestsTo {
 }
 
 impl AwsConversion for s3s::dto::ReplicaModifications {
-    type Target = ReplicaModifications;
+    type Target = aws_sdk_s3::types::ReplicaModifications;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7176,25 +7185,25 @@ impl AwsConversion for s3s::dto::ReplicaModifications {
 }
 
 impl AwsConversion for s3s::dto::ReplicaModificationsStatus {
-    type Target = ReplicaModificationsStatus;
+    type Target = aws_sdk_s3::types::ReplicaModificationsStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicaModificationsStatus::Disabled => Self::from_static(Self::DISABLED),
-            ReplicaModificationsStatus::Enabled => Self::from_static(Self::ENABLED),
-            ReplicaModificationsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ReplicaModificationsStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::ReplicaModificationsStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::ReplicaModificationsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ReplicaModificationsStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ReplicaModificationsStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ReplicationConfiguration {
-    type Target = ReplicationConfiguration;
+    type Target = aws_sdk_s3::types::ReplicationConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7213,7 +7222,7 @@ impl AwsConversion for s3s::dto::ReplicationConfiguration {
 }
 
 impl AwsConversion for s3s::dto::ReplicationRule {
-    type Target = ReplicationRule;
+    type Target = aws_sdk_s3::types::ReplicationRule;
     type Error = S3Error;
 
     #[allow(deprecated)]
@@ -7248,7 +7257,7 @@ impl AwsConversion for s3s::dto::ReplicationRule {
 }
 
 impl AwsConversion for s3s::dto::ReplicationRuleAndOperator {
-    type Target = ReplicationRuleAndOperator;
+    type Target = aws_sdk_s3::types::ReplicationRuleAndOperator;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7267,68 +7276,68 @@ impl AwsConversion for s3s::dto::ReplicationRuleAndOperator {
 }
 
 impl AwsConversion for s3s::dto::ReplicationRuleFilter {
-    type Target = ReplicationRuleFilter;
+    type Target = aws_sdk_s3::types::ReplicationRuleFilter;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicationRuleFilter::And(v) => Self::And(try_from_aws(v)?),
-            ReplicationRuleFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
-            ReplicationRuleFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
-            _ => unimplemented!("unknown variant of ReplicationRuleFilter: {x:?}"),
+            aws_sdk_s3::types::ReplicationRuleFilter::And(v) => Self::And(try_from_aws(v)?),
+            aws_sdk_s3::types::ReplicationRuleFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
+            aws_sdk_s3::types::ReplicationRuleFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
+            _ => unimplemented!("unknown variant of aws_sdk_s3::types::ReplicationRuleFilter: {x:?}"),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
-            Self::And(v) => ReplicationRuleFilter::And(try_into_aws(v)?),
-            Self::Prefix(v) => ReplicationRuleFilter::Prefix(try_into_aws(v)?),
-            Self::Tag(v) => ReplicationRuleFilter::Tag(try_into_aws(v)?),
+            Self::And(v) => aws_sdk_s3::types::ReplicationRuleFilter::And(try_into_aws(v)?),
+            Self::Prefix(v) => aws_sdk_s3::types::ReplicationRuleFilter::Prefix(try_into_aws(v)?),
+            Self::Tag(v) => aws_sdk_s3::types::ReplicationRuleFilter::Tag(try_into_aws(v)?),
             _ => unimplemented!("unknown variant of ReplicationRuleFilter: {x:?}"),
         })
     }
 }
 
 impl AwsConversion for s3s::dto::ReplicationRuleStatus {
-    type Target = ReplicationRuleStatus;
+    type Target = aws_sdk_s3::types::ReplicationRuleStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicationRuleStatus::Disabled => Self::from_static(Self::DISABLED),
-            ReplicationRuleStatus::Enabled => Self::from_static(Self::ENABLED),
-            ReplicationRuleStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ReplicationRuleStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::ReplicationRuleStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::ReplicationRuleStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ReplicationRuleStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ReplicationRuleStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ReplicationStatus {
-    type Target = ReplicationStatus;
+    type Target = aws_sdk_s3::types::ReplicationStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicationStatus::Complete => Self::from_static(Self::COMPLETE),
-            ReplicationStatus::Failed => Self::from_static(Self::FAILED),
-            ReplicationStatus::Pending => Self::from_static(Self::PENDING),
-            ReplicationStatus::Replica => Self::from_static(Self::REPLICA),
-            ReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ReplicationStatus::Complete => Self::from_static(Self::COMPLETE),
+            aws_sdk_s3::types::ReplicationStatus::Failed => Self::from_static(Self::FAILED),
+            aws_sdk_s3::types::ReplicationStatus::Pending => Self::from_static(Self::PENDING),
+            aws_sdk_s3::types::ReplicationStatus::Replica => Self::from_static(Self::REPLICA),
+            aws_sdk_s3::types::ReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ReplicationStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ReplicationStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ReplicationTime {
-    type Target = ReplicationTime;
+    type Target = aws_sdk_s3::types::ReplicationTime;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7347,25 +7356,25 @@ impl AwsConversion for s3s::dto::ReplicationTime {
 }
 
 impl AwsConversion for s3s::dto::ReplicationTimeStatus {
-    type Target = ReplicationTimeStatus;
+    type Target = aws_sdk_s3::types::ReplicationTimeStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ReplicationTimeStatus::Disabled => Self::from_static(Self::DISABLED),
-            ReplicationTimeStatus::Enabled => Self::from_static(Self::ENABLED),
-            ReplicationTimeStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ReplicationTimeStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::ReplicationTimeStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::ReplicationTimeStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ReplicationTimeStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ReplicationTimeStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ReplicationTimeValue {
-    type Target = ReplicationTimeValue;
+    type Target = aws_sdk_s3::types::ReplicationTimeValue;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7382,41 +7391,41 @@ impl AwsConversion for s3s::dto::ReplicationTimeValue {
 }
 
 impl AwsConversion for s3s::dto::RequestCharged {
-    type Target = RequestCharged;
+    type Target = aws_sdk_s3::types::RequestCharged;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            RequestCharged::Requester => Self::from_static(Self::REQUESTER),
-            RequestCharged::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::RequestCharged::Requester => Self::from_static(Self::REQUESTER),
+            aws_sdk_s3::types::RequestCharged::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(RequestCharged::from(x.as_str()))
+        Ok(aws_sdk_s3::types::RequestCharged::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::RequestPayer {
-    type Target = RequestPayer;
+    type Target = aws_sdk_s3::types::RequestPayer;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            RequestPayer::Requester => Self::from_static(Self::REQUESTER),
-            RequestPayer::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::RequestPayer::Requester => Self::from_static(Self::REQUESTER),
+            aws_sdk_s3::types::RequestPayer::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(RequestPayer::from(x.as_str()))
+        Ok(aws_sdk_s3::types::RequestPayer::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::RequestPaymentConfiguration {
-    type Target = RequestPaymentConfiguration;
+    type Target = aws_sdk_s3::types::RequestPaymentConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7433,7 +7442,7 @@ impl AwsConversion for s3s::dto::RequestPaymentConfiguration {
 }
 
 impl AwsConversion for s3s::dto::RequestProgress {
-    type Target = RequestProgress;
+    type Target = aws_sdk_s3::types::RequestProgress;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7450,7 +7459,7 @@ impl AwsConversion for s3s::dto::RequestProgress {
 }
 
 impl AwsConversion for s3s::dto::RestoreObjectInput {
-    type Target = RestoreObjectInput;
+    type Target = aws_sdk_s3::operation::restore_object::RestoreObjectInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7479,7 +7488,7 @@ impl AwsConversion for s3s::dto::RestoreObjectInput {
 }
 
 impl AwsConversion for s3s::dto::RestoreObjectOutput {
-    type Target = RestoreObjectOutput;
+    type Target = aws_sdk_s3::operation::restore_object::RestoreObjectOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7498,7 +7507,7 @@ impl AwsConversion for s3s::dto::RestoreObjectOutput {
 }
 
 impl AwsConversion for s3s::dto::RestoreRequest {
-    type Target = RestoreRequest;
+    type Target = aws_sdk_s3::types::RestoreRequest;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7527,24 +7536,24 @@ impl AwsConversion for s3s::dto::RestoreRequest {
 }
 
 impl AwsConversion for s3s::dto::RestoreRequestType {
-    type Target = RestoreRequestType;
+    type Target = aws_sdk_s3::types::RestoreRequestType;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            RestoreRequestType::Select => Self::from_static(Self::SELECT),
-            RestoreRequestType::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::RestoreRequestType::Select => Self::from_static(Self::SELECT),
+            aws_sdk_s3::types::RestoreRequestType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(RestoreRequestType::from(x.as_str()))
+        Ok(aws_sdk_s3::types::RestoreRequestType::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::RoutingRule {
-    type Target = RoutingRule;
+    type Target = aws_sdk_s3::types::RoutingRule;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7563,7 +7572,7 @@ impl AwsConversion for s3s::dto::RoutingRule {
 }
 
 impl AwsConversion for s3s::dto::S3KeyFilter {
-    type Target = S3KeyFilter;
+    type Target = aws_sdk_s3::types::S3KeyFilter;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7580,7 +7589,7 @@ impl AwsConversion for s3s::dto::S3KeyFilter {
 }
 
 impl AwsConversion for s3s::dto::S3Location {
-    type Target = S3Location;
+    type Target = aws_sdk_s3::types::S3Location;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7611,7 +7620,7 @@ impl AwsConversion for s3s::dto::S3Location {
 }
 
 impl AwsConversion for s3s::dto::SSEKMS {
-    type Target = Ssekms;
+    type Target = aws_sdk_s3::types::Ssekms;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7628,7 +7637,7 @@ impl AwsConversion for s3s::dto::SSEKMS {
 }
 
 impl AwsConversion for s3s::dto::SSES3 {
-    type Target = Sses3;
+    type Target = aws_sdk_s3::types::Sses3;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7644,7 +7653,7 @@ impl AwsConversion for s3s::dto::SSES3 {
 }
 
 impl AwsConversion for s3s::dto::ScanRange {
-    type Target = ScanRange;
+    type Target = aws_sdk_s3::types::ScanRange;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7663,34 +7672,34 @@ impl AwsConversion for s3s::dto::ScanRange {
 }
 
 impl AwsConversion for s3s::dto::SelectObjectContentEvent {
-    type Target = SelectObjectContentEventStream;
+    type Target = aws_sdk_s3::types::SelectObjectContentEventStream;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            SelectObjectContentEventStream::Cont(v) => Self::Cont(try_from_aws(v)?),
-            SelectObjectContentEventStream::End(v) => Self::End(try_from_aws(v)?),
-            SelectObjectContentEventStream::Progress(v) => Self::Progress(try_from_aws(v)?),
-            SelectObjectContentEventStream::Records(v) => Self::Records(try_from_aws(v)?),
-            SelectObjectContentEventStream::Stats(v) => Self::Stats(try_from_aws(v)?),
-            _ => unimplemented!("unknown variant of SelectObjectContentEventStream: {x:?}"),
+            aws_sdk_s3::types::SelectObjectContentEventStream::Cont(v) => Self::Cont(try_from_aws(v)?),
+            aws_sdk_s3::types::SelectObjectContentEventStream::End(v) => Self::End(try_from_aws(v)?),
+            aws_sdk_s3::types::SelectObjectContentEventStream::Progress(v) => Self::Progress(try_from_aws(v)?),
+            aws_sdk_s3::types::SelectObjectContentEventStream::Records(v) => Self::Records(try_from_aws(v)?),
+            aws_sdk_s3::types::SelectObjectContentEventStream::Stats(v) => Self::Stats(try_from_aws(v)?),
+            _ => unimplemented!("unknown variant of aws_sdk_s3::types::SelectObjectContentEventStream: {x:?}"),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(match x {
-            Self::Cont(v) => SelectObjectContentEventStream::Cont(try_into_aws(v)?),
-            Self::End(v) => SelectObjectContentEventStream::End(try_into_aws(v)?),
-            Self::Progress(v) => SelectObjectContentEventStream::Progress(try_into_aws(v)?),
-            Self::Records(v) => SelectObjectContentEventStream::Records(try_into_aws(v)?),
-            Self::Stats(v) => SelectObjectContentEventStream::Stats(try_into_aws(v)?),
+            Self::Cont(v) => aws_sdk_s3::types::SelectObjectContentEventStream::Cont(try_into_aws(v)?),
+            Self::End(v) => aws_sdk_s3::types::SelectObjectContentEventStream::End(try_into_aws(v)?),
+            Self::Progress(v) => aws_sdk_s3::types::SelectObjectContentEventStream::Progress(try_into_aws(v)?),
+            Self::Records(v) => aws_sdk_s3::types::SelectObjectContentEventStream::Records(try_into_aws(v)?),
+            Self::Stats(v) => aws_sdk_s3::types::SelectObjectContentEventStream::Stats(try_into_aws(v)?),
             _ => unimplemented!("unknown variant of SelectObjectContentEvent: {x:?}"),
         })
     }
 }
 
 impl AwsConversion for s3s::dto::SelectObjectContentOutput {
-    type Target = SelectObjectContentOutput;
+    type Target = aws_sdk_s3::operation::select_object_content::SelectObjectContentOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7706,7 +7715,7 @@ impl AwsConversion for s3s::dto::SelectObjectContentOutput {
 }
 
 impl AwsConversion for s3s::dto::SelectParameters {
-    type Target = SelectParameters;
+    type Target = aws_sdk_s3::types::SelectParameters;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7729,25 +7738,25 @@ impl AwsConversion for s3s::dto::SelectParameters {
 }
 
 impl AwsConversion for s3s::dto::ServerSideEncryption {
-    type Target = ServerSideEncryption;
+    type Target = aws_sdk_s3::types::ServerSideEncryption;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            ServerSideEncryption::Aes256 => Self::from_static(Self::AES256),
-            ServerSideEncryption::AwsKms => Self::from_static(Self::AWS_KMS),
-            ServerSideEncryption::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::ServerSideEncryption::Aes256 => Self::from_static(Self::AES256),
+            aws_sdk_s3::types::ServerSideEncryption::AwsKms => Self::from_static(Self::AWS_KMS),
+            aws_sdk_s3::types::ServerSideEncryption::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(ServerSideEncryption::from(x.as_str()))
+        Ok(aws_sdk_s3::types::ServerSideEncryption::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::ServerSideEncryptionByDefault {
-    type Target = ServerSideEncryptionByDefault;
+    type Target = aws_sdk_s3::types::ServerSideEncryptionByDefault;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7766,7 +7775,7 @@ impl AwsConversion for s3s::dto::ServerSideEncryptionByDefault {
 }
 
 impl AwsConversion for s3s::dto::ServerSideEncryptionConfiguration {
-    type Target = ServerSideEncryptionConfiguration;
+    type Target = aws_sdk_s3::types::ServerSideEncryptionConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7783,7 +7792,7 @@ impl AwsConversion for s3s::dto::ServerSideEncryptionConfiguration {
 }
 
 impl AwsConversion for s3s::dto::ServerSideEncryptionRule {
-    type Target = ServerSideEncryptionRule;
+    type Target = aws_sdk_s3::types::ServerSideEncryptionRule;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7802,7 +7811,7 @@ impl AwsConversion for s3s::dto::ServerSideEncryptionRule {
 }
 
 impl AwsConversion for s3s::dto::SourceSelectionCriteria {
-    type Target = SourceSelectionCriteria;
+    type Target = aws_sdk_s3::types::SourceSelectionCriteria;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7821,7 +7830,7 @@ impl AwsConversion for s3s::dto::SourceSelectionCriteria {
 }
 
 impl AwsConversion for s3s::dto::SseKmsEncryptedObjects {
-    type Target = SseKmsEncryptedObjects;
+    type Target = aws_sdk_s3::types::SseKmsEncryptedObjects;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7838,25 +7847,25 @@ impl AwsConversion for s3s::dto::SseKmsEncryptedObjects {
 }
 
 impl AwsConversion for s3s::dto::SseKmsEncryptedObjectsStatus {
-    type Target = SseKmsEncryptedObjectsStatus;
+    type Target = aws_sdk_s3::types::SseKmsEncryptedObjectsStatus;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            SseKmsEncryptedObjectsStatus::Disabled => Self::from_static(Self::DISABLED),
-            SseKmsEncryptedObjectsStatus::Enabled => Self::from_static(Self::ENABLED),
-            SseKmsEncryptedObjectsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::SseKmsEncryptedObjectsStatus::Disabled => Self::from_static(Self::DISABLED),
+            aws_sdk_s3::types::SseKmsEncryptedObjectsStatus::Enabled => Self::from_static(Self::ENABLED),
+            aws_sdk_s3::types::SseKmsEncryptedObjectsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(SseKmsEncryptedObjectsStatus::from(x.as_str()))
+        Ok(aws_sdk_s3::types::SseKmsEncryptedObjectsStatus::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::Stats {
-    type Target = Stats;
+    type Target = aws_sdk_s3::types::Stats;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7877,7 +7886,7 @@ impl AwsConversion for s3s::dto::Stats {
 }
 
 impl AwsConversion for s3s::dto::StatsEvent {
-    type Target = StatsEvent;
+    type Target = aws_sdk_s3::types::StatsEvent;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7894,32 +7903,32 @@ impl AwsConversion for s3s::dto::StatsEvent {
 }
 
 impl AwsConversion for s3s::dto::StorageClass {
-    type Target = StorageClass;
+    type Target = aws_sdk_s3::types::StorageClass;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            StorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
-            StorageClass::Glacier => Self::from_static(Self::GLACIER),
-            StorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
-            StorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
-            StorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
-            StorageClass::Outposts => Self::from_static(Self::OUTPOSTS),
-            StorageClass::ReducedRedundancy => Self::from_static(Self::REDUCED_REDUNDANCY),
-            StorageClass::Standard => Self::from_static(Self::STANDARD),
-            StorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
-            StorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::StorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
+            aws_sdk_s3::types::StorageClass::Glacier => Self::from_static(Self::GLACIER),
+            aws_sdk_s3::types::StorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
+            aws_sdk_s3::types::StorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
+            aws_sdk_s3::types::StorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
+            aws_sdk_s3::types::StorageClass::Outposts => Self::from_static(Self::OUTPOSTS),
+            aws_sdk_s3::types::StorageClass::ReducedRedundancy => Self::from_static(Self::REDUCED_REDUNDANCY),
+            aws_sdk_s3::types::StorageClass::Standard => Self::from_static(Self::STANDARD),
+            aws_sdk_s3::types::StorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
+            aws_sdk_s3::types::StorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(StorageClass::from(x.as_str()))
+        Ok(aws_sdk_s3::types::StorageClass::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::StorageClassAnalysis {
-    type Target = StorageClassAnalysis;
+    type Target = aws_sdk_s3::types::StorageClassAnalysis;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7936,7 +7945,7 @@ impl AwsConversion for s3s::dto::StorageClassAnalysis {
 }
 
 impl AwsConversion for s3s::dto::StorageClassAnalysisDataExport {
-    type Target = StorageClassAnalysisDataExport;
+    type Target = aws_sdk_s3::types::StorageClassAnalysisDataExport;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7955,24 +7964,24 @@ impl AwsConversion for s3s::dto::StorageClassAnalysisDataExport {
 }
 
 impl AwsConversion for s3s::dto::StorageClassAnalysisSchemaVersion {
-    type Target = StorageClassAnalysisSchemaVersion;
+    type Target = aws_sdk_s3::types::StorageClassAnalysisSchemaVersion;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            StorageClassAnalysisSchemaVersion::V1 => Self::from_static(Self::V_1),
-            StorageClassAnalysisSchemaVersion::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::StorageClassAnalysisSchemaVersion::V1 => Self::from_static(Self::V_1),
+            aws_sdk_s3::types::StorageClassAnalysisSchemaVersion::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(StorageClassAnalysisSchemaVersion::from(x.as_str()))
+        Ok(aws_sdk_s3::types::StorageClassAnalysisSchemaVersion::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::Tag {
-    type Target = Tag;
+    type Target = aws_sdk_s3::types::Tag;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -7991,7 +8000,7 @@ impl AwsConversion for s3s::dto::Tag {
 }
 
 impl AwsConversion for s3s::dto::Tagging {
-    type Target = Tagging;
+    type Target = aws_sdk_s3::types::Tagging;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8008,25 +8017,25 @@ impl AwsConversion for s3s::dto::Tagging {
 }
 
 impl AwsConversion for s3s::dto::TaggingDirective {
-    type Target = TaggingDirective;
+    type Target = aws_sdk_s3::types::TaggingDirective;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            TaggingDirective::Copy => Self::from_static(Self::COPY),
-            TaggingDirective::Replace => Self::from_static(Self::REPLACE),
-            TaggingDirective::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::TaggingDirective::Copy => Self::from_static(Self::COPY),
+            aws_sdk_s3::types::TaggingDirective::Replace => Self::from_static(Self::REPLACE),
+            aws_sdk_s3::types::TaggingDirective::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(TaggingDirective::from(x.as_str()))
+        Ok(aws_sdk_s3::types::TaggingDirective::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::TargetGrant {
-    type Target = TargetGrant;
+    type Target = aws_sdk_s3::types::TargetGrant;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8045,26 +8054,26 @@ impl AwsConversion for s3s::dto::TargetGrant {
 }
 
 impl AwsConversion for s3s::dto::Tier {
-    type Target = Tier;
+    type Target = aws_sdk_s3::types::Tier;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Tier::Bulk => Self::from_static(Self::BULK),
-            Tier::Expedited => Self::from_static(Self::EXPEDITED),
-            Tier::Standard => Self::from_static(Self::STANDARD),
-            Tier::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::Tier::Bulk => Self::from_static(Self::BULK),
+            aws_sdk_s3::types::Tier::Expedited => Self::from_static(Self::EXPEDITED),
+            aws_sdk_s3::types::Tier::Standard => Self::from_static(Self::STANDARD),
+            aws_sdk_s3::types::Tier::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(Tier::from(x.as_str()))
+        Ok(aws_sdk_s3::types::Tier::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::Tiering {
-    type Target = Tiering;
+    type Target = aws_sdk_s3::types::Tiering;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8083,7 +8092,7 @@ impl AwsConversion for s3s::dto::Tiering {
 }
 
 impl AwsConversion for s3s::dto::TopicConfiguration {
-    type Target = TopicConfiguration;
+    type Target = aws_sdk_s3::types::TopicConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8106,7 +8115,7 @@ impl AwsConversion for s3s::dto::TopicConfiguration {
 }
 
 impl AwsConversion for s3s::dto::Transition {
-    type Target = Transition;
+    type Target = aws_sdk_s3::types::Transition;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8127,48 +8136,48 @@ impl AwsConversion for s3s::dto::Transition {
 }
 
 impl AwsConversion for s3s::dto::TransitionStorageClass {
-    type Target = TransitionStorageClass;
+    type Target = aws_sdk_s3::types::TransitionStorageClass;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            TransitionStorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
-            TransitionStorageClass::Glacier => Self::from_static(Self::GLACIER),
-            TransitionStorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
-            TransitionStorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
-            TransitionStorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
-            TransitionStorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
-            TransitionStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::TransitionStorageClass::DeepArchive => Self::from_static(Self::DEEP_ARCHIVE),
+            aws_sdk_s3::types::TransitionStorageClass::Glacier => Self::from_static(Self::GLACIER),
+            aws_sdk_s3::types::TransitionStorageClass::GlacierIr => Self::from_static(Self::GLACIER_IR),
+            aws_sdk_s3::types::TransitionStorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
+            aws_sdk_s3::types::TransitionStorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
+            aws_sdk_s3::types::TransitionStorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
+            aws_sdk_s3::types::TransitionStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(TransitionStorageClass::from(x.as_str()))
+        Ok(aws_sdk_s3::types::TransitionStorageClass::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::Type {
-    type Target = Type;
+    type Target = aws_sdk_s3::types::Type;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            Type::AmazonCustomerByEmail => Self::from_static(Self::AMAZON_CUSTOMER_BY_EMAIL),
-            Type::CanonicalUser => Self::from_static(Self::CANONICAL_USER),
-            Type::Group => Self::from_static(Self::GROUP),
-            Type::Unknown(_) => Self::from(x.as_str().to_owned()),
+            aws_sdk_s3::types::Type::AmazonCustomerByEmail => Self::from_static(Self::AMAZON_CUSTOMER_BY_EMAIL),
+            aws_sdk_s3::types::Type::CanonicalUser => Self::from_static(Self::CANONICAL_USER),
+            aws_sdk_s3::types::Type::Group => Self::from_static(Self::GROUP),
+            aws_sdk_s3::types::Type::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(Type::from(x.as_str()))
+        Ok(aws_sdk_s3::types::Type::from(x.as_str()))
     }
 }
 
 impl AwsConversion for s3s::dto::UploadPartCopyInput {
-    type Target = UploadPartCopyInput;
+    type Target = aws_sdk_s3::operation::upload_part_copy::UploadPartCopyInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8221,7 +8230,7 @@ impl AwsConversion for s3s::dto::UploadPartCopyInput {
 }
 
 impl AwsConversion for s3s::dto::UploadPartCopyOutput {
-    type Target = UploadPartCopyOutput;
+    type Target = aws_sdk_s3::operation::upload_part_copy::UploadPartCopyOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8252,7 +8261,7 @@ impl AwsConversion for s3s::dto::UploadPartCopyOutput {
 }
 
 impl AwsConversion for s3s::dto::UploadPartInput {
-    type Target = UploadPartInput;
+    type Target = aws_sdk_s3::operation::upload_part::UploadPartInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8301,7 +8310,7 @@ impl AwsConversion for s3s::dto::UploadPartInput {
 }
 
 impl AwsConversion for s3s::dto::UploadPartOutput {
-    type Target = UploadPartOutput;
+    type Target = aws_sdk_s3::operation::upload_part::UploadPartOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8338,7 +8347,7 @@ impl AwsConversion for s3s::dto::UploadPartOutput {
 }
 
 impl AwsConversion for s3s::dto::VersioningConfiguration {
-    type Target = VersioningConfiguration;
+    type Target = aws_sdk_s3::types::VersioningConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8357,7 +8366,7 @@ impl AwsConversion for s3s::dto::VersioningConfiguration {
 }
 
 impl AwsConversion for s3s::dto::WebsiteConfiguration {
-    type Target = WebsiteConfiguration;
+    type Target = aws_sdk_s3::types::WebsiteConfiguration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8380,7 +8389,7 @@ impl AwsConversion for s3s::dto::WebsiteConfiguration {
 }
 
 impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
-    type Target = WriteGetObjectResponseInput;
+    type Target = aws_sdk_s3::operation::write_get_object_response::WriteGetObjectResponseInput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -8475,7 +8484,7 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
 }
 
 impl AwsConversion for s3s::dto::WriteGetObjectResponseOutput {
-    type Target = WriteGetObjectResponseOutput;
+    type Target = aws_sdk_s3::operation::write_get_object_response::WriteGetObjectResponseOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {

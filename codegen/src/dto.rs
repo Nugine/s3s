@@ -192,6 +192,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     doc: shape.traits.doc().map(ToOwned::to_owned),
 
                     xml_name: shape.traits.xml_name().map(o),
+                    is_error_type: shape.traits.error().is_some(),
                 });
                 insert(name, ty);
             }
@@ -235,6 +236,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
             fields: ty.fields.iter().filter(|x| x.position == "xml").cloned().collect(),
             doc: ty.doc.clone(),
             xml_name: None,
+            is_error_type: false,
         };
 
         ty.fields.iter().for_each(|x| assert!(x.name != "request"));
@@ -270,6 +272,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                 fields: default(),
                 doc: None,
                 xml_name: None,
+                is_error_type: false,
             }
         } else {
             assert!(op.smithy_input.ends_with("Request"));
@@ -288,6 +291,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                 fields: default(),
                 doc: None,
                 xml_name: None,
+                is_error_type: false,
             }
         } else {
             if op.smithy_output == op.output {

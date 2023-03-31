@@ -231,4 +231,8 @@ impl Traits {
             .as_u64()
             .map(|v| v as u16)
     }
+
+    pub fn error(&self) -> Option<&str> {
+        self.get("smithy.api#error")?.as_str()
+    }
 }

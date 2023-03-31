@@ -11,11 +11,14 @@ use std::fs;
 
 use aws_config::SdkConfig;
 use aws_credential_types::provider::SharedCredentialsProvider;
-use aws_sdk_s3::model::*;
-use aws_sdk_s3::types::ByteStream;
+use aws_sdk_s3::config::Credentials;
+use aws_sdk_s3::config::Region;
+use aws_sdk_s3::primitives::ByteStream;
+use aws_sdk_s3::types::BucketLocationConstraint;
+use aws_sdk_s3::types::CompletedMultipartUpload;
+use aws_sdk_s3::types::CompletedPart;
+use aws_sdk_s3::types::CreateBucketConfiguration;
 use aws_sdk_s3::Client;
-use aws_sdk_s3::Credentials;
-use aws_sdk_s3::Region;
 
 use anyhow::Result;
 use once_cell::sync::Lazy;

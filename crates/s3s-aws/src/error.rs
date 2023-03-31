@@ -1,6 +1,7 @@
 macro_rules! wrap_sdk_error {
     ($e:expr) => {{
-        use aws_sdk_s3::types::SdkError;
+        use aws_sdk_s3::error::SdkError;
+        use aws_sdk_s3::operation::RequestId;
         use s3s::{S3Error, S3ErrorCode};
 
         let mut err = S3Error::new(S3ErrorCode::InternalError);

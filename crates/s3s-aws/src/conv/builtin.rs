@@ -56,7 +56,7 @@ impl<T: AwsConversion> AwsConversion for Vec<T> {
 }
 
 impl AwsConversion for s3s::dto::Timestamp {
-    type Target = aws_sdk_s3::types::DateTime;
+    type Target = aws_sdk_s3::primitives::DateTime;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -66,7 +66,7 @@ impl AwsConversion for s3s::dto::Timestamp {
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         use aws_smithy_types_convert::date_time::DateTimeExt;
-        Ok(aws_sdk_s3::types::DateTime::from_time(x.into()))
+        Ok(aws_sdk_s3::primitives::DateTime::from_time(x.into()))
     }
 }
 
@@ -110,7 +110,7 @@ impl AwsConversion for s3s::dto::Range {
 }
 
 impl AwsConversion for s3s::dto::Event {
-    type Target = aws_sdk_s3::model::Event;
+    type Target = aws_sdk_s3::types::Event;
     type Error = Infallible;
 
     fn try_from_aws(x: Self::Target) -> Result<Self, Self::Error> {
@@ -123,7 +123,7 @@ impl AwsConversion for s3s::dto::Event {
 }
 
 impl AwsConversion for s3s::dto::StreamingBlob {
-    type Target = aws_sdk_s3::types::ByteStream;
+    type Target = aws_sdk_s3::primitives::ByteStream;
     type Error = Infallible;
 
     fn try_from_aws(x: Self::Target) -> Result<Self, Self::Error> {
@@ -138,7 +138,7 @@ impl AwsConversion for s3s::dto::StreamingBlob {
 }
 
 impl AwsConversion for s3s::dto::Body {
-    type Target = aws_sdk_s3::types::Blob;
+    type Target = aws_sdk_s3::primitives::Blob;
     type Error = Infallible;
 
     fn try_from_aws(x: Self::Target) -> Result<Self, Self::Error> {
@@ -151,7 +151,7 @@ impl AwsConversion for s3s::dto::Body {
 }
 
 impl AwsConversion for s3s::dto::SelectObjectContentInput {
-    type Target = aws_sdk_s3::input::SelectObjectContentInput;
+    type Target = aws_sdk_s3::operation::select_object_content::SelectObjectContentInput;
 
     type Error = S3Error;
 
@@ -175,7 +175,7 @@ impl AwsConversion for s3s::dto::SelectObjectContentInput {
     }
 
     fn try_into_aws(x: Self) -> Result<Self::Target, Self::Error> {
-        aws_sdk_s3::input::SelectObjectContentInput::builder()
+        aws_sdk_s3::operation::select_object_content::SelectObjectContentInput::builder()
             .set_bucket(Some(x.bucket))
             .set_expected_bucket_owner(x.expected_bucket_owner)
             .set_key(Some(x.key))
@@ -194,7 +194,7 @@ impl AwsConversion for s3s::dto::SelectObjectContentInput {
 }
 
 impl AwsConversion for s3s::dto::LifecycleExpiration {
-    type Target = aws_sdk_s3::model::LifecycleExpiration;
+    type Target = aws_sdk_s3::types::LifecycleExpiration;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {

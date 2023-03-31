@@ -71,6 +71,7 @@ pub struct Struct {
     pub doc: Option<String>,
 
     pub xml_name: Option<String>,
+    pub is_error_type: bool,
 }
 
 #[derive(Debug, Clone)]

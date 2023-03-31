@@ -10,14 +10,14 @@ keywords = ["s3"]
 categories = ["web-programming", "web-programming::http-server"]
 
 [dependencies]
-async-trait = "0.1.64"
-aws-sdk-s3 = "0.24.0"
-aws-smithy-http = { version = "0.54.4", features = ["event-stream"] }
-aws-smithy-types = "0.54.4"
-aws-smithy-types-convert = { version = "0.54.4", features = ["convert-time"] }
+async-trait = "0.1.68"
+aws-sdk-s3 = "0.25.0"
+aws-smithy-http = { version = "0.55.0", features = ["event-stream"] }
+aws-smithy-types = "0.55.0"
+aws-smithy-types-convert = { version = "0.55.0", features = ["convert-time"] }
 bytes = "1.4.0"
-futures = { version = "0.3.26", default-features = false, features = ["std"] }
-hyper = "0.14.24"
+futures = { version = "0.3.28", default-features = false, features = ["std"] }
+hyper = "0.14.25"
 s3s = { version = "0.4.1-dev", path = "../s3s" }
 sync_wrapper = "0.1.2"
 tracing = "0.1.37"
