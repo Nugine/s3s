@@ -46,5 +46,8 @@ transform-stream = "0.3.0"
 urlencoding = "2.1.2"
 zeroize = "1.6.0"
 
+tokio = { version = "1.27.0", features = ["time"] }
+
+
 [dev-dependencies]
 tokio = { version = "1.27.0", features = ["full"] }

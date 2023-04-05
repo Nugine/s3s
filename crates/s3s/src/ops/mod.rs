@@ -211,7 +211,17 @@ pub async fn call(
         }
     };
 
-    match op.call(s3, req).await {
+    if op.name() == "CompleteMultipartUpload" {
+        return match CompleteMultipartUpload.call_shared(s3.clone(), req).await {
+            Ok(res) => Ok(res),
+            Err(err) => {
+                debug!(op = %op.name(), ?err, "op returns error");
+                serialize_error(err)
+            }
+        };
+    }
+
+    match op.call(&**s3, req).await {
         Ok(res) => Ok(res),
         Err(err) => {
             debug!(op = %op.name(), ?err, "op returns error");

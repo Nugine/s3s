@@ -104,6 +104,30 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
     Ok(())
 }
 
+pub async fn set_xml_sending_body(res: &mut Response) -> S3Result<hyper::body::Sender> {
+    res.headers.insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
+    let (mut sender, body) = hyper::Body::channel();
+    res.body = body.into();
+    let mut buf = Vec::with_capacity(256);
+    {
+        let mut ser = xml::Serializer::new(&mut buf);
+        ser.decl().map_err(S3Error::internal_error)?;
+    }
+
+    sender.send_data(buf.into()).await.map_err(S3Error::internal_error)?;
+    Ok(sender)
+}
+
+pub async fn send_xml_body<T: xml::Serialize>(res: &mut hyper::body::Sender, val: &T) -> S3Result {
+    let mut buf = Vec::with_capacity(256);
+    {
+        let mut ser = xml::Serializer::new(&mut buf);
+        val.serialize(&mut ser).map_err(S3Error::internal_error)?;
+    }
+    res.send_data(buf.into()).await.map_err(S3Error::internal_error)?;
+    Ok(())
+}
+
 pub fn set_stream_body(res: &mut Response, stream: StreamingBlob) {
     res.body = Body::from(stream);
 }
