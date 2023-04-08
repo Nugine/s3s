@@ -865,7 +865,7 @@ impl AwsConversion for s3s::dto::CopyObjectInput {
         let mut y = Self::Target::builder();
         y = y.set_acl(try_into_aws(x.acl)?);
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
-        y = y.set_bucket_key_enabled(Some(try_into_aws(x.bucket_key_enabled)?));
+        y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_cache_control(try_into_aws(x.cache_control)?);
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);
@@ -1045,7 +1045,7 @@ impl AwsConversion for s3s::dto::CreateBucketInput {
         y = y.set_grant_read_acp(try_into_aws(x.grant_read_acp)?);
         y = y.set_grant_write(try_into_aws(x.grant_write)?);
         y = y.set_grant_write_acp(try_into_aws(x.grant_write_acp)?);
-        y = y.set_object_lock_enabled_for_bucket(Some(try_into_aws(x.object_lock_enabled_for_bucket)?));
+        y = y.set_object_lock_enabled_for_bucket(try_into_aws(x.object_lock_enabled_for_bucket)?);
         y = y.set_object_ownership(try_into_aws(x.object_ownership)?);
         y.build().map_err(S3Error::internal_error)
     }
@@ -1111,7 +1111,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
         let mut y = Self::Target::builder();
         y = y.set_acl(try_into_aws(x.acl)?);
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
-        y = y.set_bucket_key_enabled(Some(try_into_aws(x.bucket_key_enabled)?));
+        y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_cache_control(try_into_aws(x.cache_control)?);
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);
@@ -1766,7 +1766,7 @@ impl AwsConversion for s3s::dto::DeleteObjectInput {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
-        y = y.set_bypass_governance_retention(Some(try_into_aws(x.bypass_governance_retention)?));
+        y = y.set_bypass_governance_retention(try_into_aws(x.bypass_governance_retention)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
         y = y.set_mfa(try_into_aws(x.mfa)?);
@@ -1856,7 +1856,7 @@ impl AwsConversion for s3s::dto::DeleteObjectsInput {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
-        y = y.set_bypass_governance_retention(Some(try_into_aws(x.bypass_governance_retention)?));
+        y = y.set_bypass_governance_retention(try_into_aws(x.bypass_governance_retention)?);
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
         y = y.set_delete(Some(try_into_aws(x.delete)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
@@ -3042,7 +3042,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
-        y = y.set_max_parts(Some(try_into_aws(x.max_parts)?));
+        y = y.set_max_parts(try_into_aws(x.max_parts)?);
         y = y.set_object_attributes(Some(try_into_aws(x.object_attributes)?));
         y = y.set_part_number_marker(try_into_aws(x.part_number_marker)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
@@ -3154,7 +3154,7 @@ impl AwsConversion for s3s::dto::GetObjectInput {
         y = y.set_if_none_match(try_into_aws(x.if_none_match)?);
         y = y.set_if_unmodified_since(try_into_aws(x.if_unmodified_since)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
-        y = y.set_part_number(Some(try_into_aws(x.part_number)?));
+        y = y.set_part_number(try_into_aws(x.part_number)?);
         y = y.set_range(try_into_aws(x.range)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_response_cache_control(try_into_aws(x.response_cache_control)?);
@@ -3630,7 +3630,7 @@ impl AwsConversion for s3s::dto::HeadObjectInput {
         y = y.set_if_none_match(try_into_aws(x.if_none_match)?);
         y = y.set_if_unmodified_since(try_into_aws(x.if_unmodified_since)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
-        y = y.set_part_number(Some(try_into_aws(x.part_number)?));
+        y = y.set_part_number(try_into_aws(x.part_number)?);
         y = y.set_range(try_into_aws(x.range)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_sse_customer_algorithm(try_into_aws(x.sse_customer_algorithm)?);
@@ -4510,7 +4510,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsInput {
         y = y.set_encoding_type(try_into_aws(x.encoding_type)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key_marker(try_into_aws(x.key_marker)?);
-        y = y.set_max_uploads(Some(try_into_aws(x.max_uploads)?));
+        y = y.set_max_uploads(try_into_aws(x.max_uploads)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_upload_id_marker(try_into_aws(x.upload_id_marker)?);
         y.build().map_err(S3Error::internal_error)
@@ -4580,7 +4580,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsInput {
         y = y.set_encoding_type(try_into_aws(x.encoding_type)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key_marker(try_into_aws(x.key_marker)?);
-        y = y.set_max_keys(Some(try_into_aws(x.max_keys)?));
+        y = y.set_max_keys(try_into_aws(x.max_keys)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_version_id_marker(try_into_aws(x.version_id_marker)?);
         y.build().map_err(S3Error::internal_error)
@@ -4652,7 +4652,7 @@ impl AwsConversion for s3s::dto::ListObjectsInput {
         y = y.set_encoding_type(try_into_aws(x.encoding_type)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_marker(try_into_aws(x.marker)?);
-        y = y.set_max_keys(Some(try_into_aws(x.max_keys)?));
+        y = y.set_max_keys(try_into_aws(x.max_keys)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y.build().map_err(S3Error::internal_error)
@@ -4720,8 +4720,8 @@ impl AwsConversion for s3s::dto::ListObjectsV2Input {
         y = y.set_delimiter(try_into_aws(x.delimiter)?);
         y = y.set_encoding_type(try_into_aws(x.encoding_type)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
-        y = y.set_fetch_owner(Some(try_into_aws(x.fetch_owner)?));
-        y = y.set_max_keys(Some(try_into_aws(x.max_keys)?));
+        y = y.set_fetch_owner(try_into_aws(x.fetch_owner)?);
+        y = y.set_max_keys(try_into_aws(x.max_keys)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_start_after(try_into_aws(x.start_after)?);
@@ -4792,7 +4792,7 @@ impl AwsConversion for s3s::dto::ListPartsInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
-        y = y.set_max_parts(Some(try_into_aws(x.max_parts)?));
+        y = y.set_max_parts(try_into_aws(x.max_parts)?);
         y = y.set_part_number_marker(try_into_aws(x.part_number_marker)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_sse_customer_algorithm(try_into_aws(x.sse_customer_algorithm)?);
@@ -6325,7 +6325,7 @@ impl AwsConversion for s3s::dto::PutBucketNotificationConfigurationInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_notification_configuration(Some(try_into_aws(x.notification_configuration)?));
-        y = y.set_skip_destination_validation(Some(try_into_aws(x.skip_destination_validation)?));
+        y = y.set_skip_destination_validation(try_into_aws(x.skip_destination_validation)?);
         y.build().map_err(S3Error::internal_error)
     }
 }
@@ -6404,7 +6404,7 @@ impl AwsConversion for s3s::dto::PutBucketPolicyInput {
         let mut y = Self::Target::builder();
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
-        y = y.set_confirm_remove_self_bucket_access(Some(try_into_aws(x.confirm_remove_self_bucket_access)?));
+        y = y.set_confirm_remove_self_bucket_access(try_into_aws(x.confirm_remove_self_bucket_access)?);
         y = y.set_content_md5(try_into_aws(x.content_md5)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_policy(Some(try_into_aws(x.policy)?));
@@ -6748,7 +6748,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
         y = y.set_acl(try_into_aws(x.acl)?);
         y = y.set_body(try_into_aws(x.body)?);
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
-        y = y.set_bucket_key_enabled(Some(try_into_aws(x.bucket_key_enabled)?));
+        y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_cache_control(try_into_aws(x.cache_control)?);
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
@@ -6758,7 +6758,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);
         y = y.set_content_encoding(try_into_aws(x.content_encoding)?);
         y = y.set_content_language(try_into_aws(x.content_language)?);
-        y = y.set_content_length(Some(try_into_aws(x.content_length)?));
+        y = y.set_content_length(try_into_aws(x.content_length)?);
         y = y.set_content_md5(try_into_aws(x.content_md5)?);
         y = y.set_content_type(try_into_aws(x.content_type)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
@@ -6944,7 +6944,7 @@ impl AwsConversion for s3s::dto::PutObjectRetentionInput {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
-        y = y.set_bypass_governance_retention(Some(try_into_aws(x.bypass_governance_retention)?));
+        y = y.set_bypass_governance_retention(try_into_aws(x.bypass_governance_retention)?);
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
         y = y.set_content_md5(try_into_aws(x.content_md5)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
@@ -8195,7 +8195,7 @@ impl AwsConversion for s3s::dto::UploadPartCopyInput {
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             expected_source_bucket_owner: try_from_aws(x.expected_source_bucket_owner)?,
             key: unwrap_from_aws(x.key, "key")?,
-            part_number: try_from_aws(x.part_number)?,
+            part_number: unwrap_from_aws(x.part_number, "part_number")?,
             request_payer: try_from_aws(x.request_payer)?,
             sse_customer_algorithm: try_from_aws(x.sse_customer_algorithm)?,
             sse_customer_key: try_from_aws(x.sse_customer_key)?,
@@ -8277,7 +8277,7 @@ impl AwsConversion for s3s::dto::UploadPartInput {
             content_md5: try_from_aws(x.content_md5)?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             key: unwrap_from_aws(x.key, "key")?,
-            part_number: try_from_aws(x.part_number)?,
+            part_number: unwrap_from_aws(x.part_number, "part_number")?,
             request_payer: try_from_aws(x.request_payer)?,
             sse_customer_algorithm: try_from_aws(x.sse_customer_algorithm)?,
             sse_customer_key: try_from_aws(x.sse_customer_key)?,
@@ -8295,7 +8295,7 @@ impl AwsConversion for s3s::dto::UploadPartInput {
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
-        y = y.set_content_length(Some(try_into_aws(x.content_length)?));
+        y = y.set_content_length(try_into_aws(x.content_length)?);
         y = y.set_content_md5(try_into_aws(x.content_md5)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
@@ -8441,7 +8441,7 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
         let mut y = Self::Target::builder();
         y = y.set_accept_ranges(try_into_aws(x.accept_ranges)?);
         y = y.set_body(try_into_aws(x.body)?);
-        y = y.set_bucket_key_enabled(Some(try_into_aws(x.bucket_key_enabled)?));
+        y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_cache_control(try_into_aws(x.cache_control)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
@@ -8450,10 +8450,10 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);
         y = y.set_content_encoding(try_into_aws(x.content_encoding)?);
         y = y.set_content_language(try_into_aws(x.content_language)?);
-        y = y.set_content_length(Some(try_into_aws(x.content_length)?));
+        y = y.set_content_length(try_into_aws(x.content_length)?);
         y = y.set_content_range(try_into_aws(x.content_range)?);
         y = y.set_content_type(try_into_aws(x.content_type)?);
-        y = y.set_delete_marker(Some(try_into_aws(x.delete_marker)?));
+        y = y.set_delete_marker(try_into_aws(x.delete_marker)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
         y = y.set_error_code(try_into_aws(x.error_code)?);
         y = y.set_error_message(try_into_aws(x.error_message)?);
@@ -8461,11 +8461,11 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
         y = y.set_expires(try_into_aws(x.expires)?);
         y = y.set_last_modified(try_into_aws(x.last_modified)?);
         y = y.set_metadata(try_into_aws(x.metadata)?);
-        y = y.set_missing_meta(Some(try_into_aws(x.missing_meta)?));
+        y = y.set_missing_meta(try_into_aws(x.missing_meta)?);
         y = y.set_object_lock_legal_hold_status(try_into_aws(x.object_lock_legal_hold_status)?);
         y = y.set_object_lock_mode(try_into_aws(x.object_lock_mode)?);
         y = y.set_object_lock_retain_until_date(try_into_aws(x.object_lock_retain_until_date)?);
-        y = y.set_parts_count(Some(try_into_aws(x.parts_count)?));
+        y = y.set_parts_count(try_into_aws(x.parts_count)?);
         y = y.set_replication_status(try_into_aws(x.replication_status)?);
         y = y.set_request_charged(try_into_aws(x.request_charged)?);
         y = y.set_request_route(Some(try_into_aws(x.request_route)?));
@@ -8475,9 +8475,9 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
         y = y.set_sse_customer_key_md5(try_into_aws(x.sse_customer_key_md5)?);
         y = y.set_ssekms_key_id(try_into_aws(x.ssekms_key_id)?);
         y = y.set_server_side_encryption(try_into_aws(x.server_side_encryption)?);
-        y = y.set_status_code(Some(try_into_aws(x.status_code)?));
+        y = y.set_status_code(try_into_aws(x.status_code)?);
         y = y.set_storage_class(try_into_aws(x.storage_class)?);
-        y = y.set_tag_count(Some(try_into_aws(x.tag_count)?));
+        y = y.set_tag_count(try_into_aws(x.tag_count)?);
         y = y.set_version_id(try_into_aws(x.version_id)?);
         y.build().map_err(S3Error::internal_error)
     }

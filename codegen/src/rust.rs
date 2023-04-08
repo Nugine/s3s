@@ -84,6 +84,7 @@ pub struct StructField {
 
     pub option_type: bool,
     pub default_value: Option<Value>,
+    pub is_required: bool,
 
     pub position: String,
 

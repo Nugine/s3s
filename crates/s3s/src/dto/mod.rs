@@ -48,7 +48,7 @@ impl From<ListObjectsInput> for ListObjectsV2Input {
             delimiter,
             encoding_type,
             expected_bucket_owner,
-            fetch_owner: false,
+            fetch_owner: None,
             max_keys,
             prefix,
             request_payer,

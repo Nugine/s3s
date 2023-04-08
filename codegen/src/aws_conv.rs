@@ -4,6 +4,8 @@ use crate::gen::Codegen;
 use crate::ops::Operations;
 use crate::rust;
 
+use std::ops::Not;
+
 use heck::ToSnakeCase;
 use heck::ToUpperCamelCase;
 
@@ -63,12 +65,29 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
 
                     if field.type_ == "SelectObjectContentEventStream" {
                         g.ln(f!("{s3s_field_name}: Some(crate::event_stream::from_aws(x.{aws_field_name})),"));
-                    } else if field.type_ == "StreamingBlob" {
+                        continue;
+                    }
+
+                    if field.type_ == "StreamingBlob" {
                         g.ln(f!("{s3s_field_name}: Some(try_from_aws(x.{aws_field_name})?),"));
-                    } else if field.option_type || field.default_value.is_some() {
-                        g.ln(f!("{s3s_field_name}: try_from_aws(x.{aws_field_name})?,"));
-                    } else {
+                        continue;
+                    }
+
+                    let needs_unwrap = 'unwrap: {
+                        if is_op_input(&ty.name, ops) && field.option_type.not() && field.is_required {
+                            break 'unwrap true;
+                        }
+                        field.option_type.not() && field.default_value.is_none()
+                    };
+
+                    if needs_unwrap {
                         g.ln(f!("{s3s_field_name}: unwrap_from_aws(x.{aws_field_name}, \"{s3s_field_name}\")?,"));
+                        continue;
+                    }
+
+                    // other cases
+                    {
+                        g.ln(f!("{s3s_field_name}: try_from_aws(x.{aws_field_name})?,"));
                     }
                 }
                 g.ln("})");

@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # https://github.com/awslabs/aws-sdk-rust/commits/main/aws-models/s3.json
-COMMIT=d85c1e7393b03e31fdc569bc07159dfc27812b9e
+COMMIT=fdec383fad0c276473b76339b52a6ae48f23b045
 
 mkdir -p target
 F="codegen/s3.json"
