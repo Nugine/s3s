@@ -75,7 +75,7 @@ impl S3 for Proxy {
         let mut b = self.0.copy_object();
         b = b.set_acl(try_into_aws(input.acl)?);
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
-        b = b.set_bucket_key_enabled(Some(try_into_aws(input.bucket_key_enabled)?));
+        b = b.set_bucket_key_enabled(try_into_aws(input.bucket_key_enabled)?);
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_content_disposition(try_into_aws(input.content_disposition)?);
@@ -138,7 +138,7 @@ impl S3 for Proxy {
         b = b.set_grant_read_acp(try_into_aws(input.grant_read_acp)?);
         b = b.set_grant_write(try_into_aws(input.grant_write)?);
         b = b.set_grant_write_acp(try_into_aws(input.grant_write_acp)?);
-        b = b.set_object_lock_enabled_for_bucket(Some(try_into_aws(input.object_lock_enabled_for_bucket)?));
+        b = b.set_object_lock_enabled_for_bucket(try_into_aws(input.object_lock_enabled_for_bucket)?);
         b = b.set_object_ownership(try_into_aws(input.object_ownership)?);
         let result = b.send().await;
         match result {
@@ -161,7 +161,7 @@ impl S3 for Proxy {
         let mut b = self.0.create_multipart_upload();
         b = b.set_acl(try_into_aws(input.acl)?);
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
-        b = b.set_bucket_key_enabled(Some(try_into_aws(input.bucket_key_enabled)?));
+        b = b.set_bucket_key_enabled(try_into_aws(input.bucket_key_enabled)?);
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_content_disposition(try_into_aws(input.content_disposition)?);
@@ -479,7 +479,7 @@ impl S3 for Proxy {
         debug!(?input);
         let mut b = self.0.delete_object();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
-        b = b.set_bypass_governance_retention(Some(try_into_aws(input.bypass_governance_retention)?));
+        b = b.set_bypass_governance_retention(try_into_aws(input.bypass_governance_retention)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
         b = b.set_mfa(try_into_aws(input.mfa)?);
@@ -525,7 +525,7 @@ impl S3 for Proxy {
         debug!(?input);
         let mut b = self.0.delete_objects();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
-        b = b.set_bypass_governance_retention(Some(try_into_aws(input.bypass_governance_retention)?));
+        b = b.set_bypass_governance_retention(try_into_aws(input.bypass_governance_retention)?);
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_delete(Some(try_into_aws(input.delete)?));
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
@@ -993,7 +993,7 @@ impl S3 for Proxy {
         b = b.set_if_none_match(try_into_aws(input.if_none_match)?);
         b = b.set_if_unmodified_since(try_into_aws(input.if_unmodified_since)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
-        b = b.set_part_number(Some(try_into_aws(input.part_number)?));
+        b = b.set_part_number(try_into_aws(input.part_number)?);
         b = b.set_range(try_into_aws(input.range)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_response_cache_control(try_into_aws(input.response_cache_control)?);
@@ -1049,7 +1049,7 @@ impl S3 for Proxy {
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
-        b = b.set_max_parts(Some(try_into_aws(input.max_parts)?));
+        b = b.set_max_parts(try_into_aws(input.max_parts)?);
         b = b.set_object_attributes(Some(try_into_aws(input.object_attributes)?));
         b = b.set_part_number_marker(try_into_aws(input.part_number_marker)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
@@ -1236,7 +1236,7 @@ impl S3 for Proxy {
         b = b.set_if_none_match(try_into_aws(input.if_none_match)?);
         b = b.set_if_unmodified_since(try_into_aws(input.if_unmodified_since)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
-        b = b.set_part_number(Some(try_into_aws(input.part_number)?));
+        b = b.set_part_number(try_into_aws(input.part_number)?);
         b = b.set_range(try_into_aws(input.range)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_sse_customer_algorithm(try_into_aws(input.sse_customer_algorithm)?);
@@ -1369,7 +1369,7 @@ impl S3 for Proxy {
         b = b.set_encoding_type(try_into_aws(input.encoding_type)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_key_marker(try_into_aws(input.key_marker)?);
-        b = b.set_max_uploads(Some(try_into_aws(input.max_uploads)?));
+        b = b.set_max_uploads(try_into_aws(input.max_uploads)?);
         b = b.set_prefix(try_into_aws(input.prefix)?);
         b = b.set_upload_id_marker(try_into_aws(input.upload_id_marker)?);
         let result = b.send().await;
@@ -1396,7 +1396,7 @@ impl S3 for Proxy {
         b = b.set_encoding_type(try_into_aws(input.encoding_type)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_key_marker(try_into_aws(input.key_marker)?);
-        b = b.set_max_keys(Some(try_into_aws(input.max_keys)?));
+        b = b.set_max_keys(try_into_aws(input.max_keys)?);
         b = b.set_prefix(try_into_aws(input.prefix)?);
         b = b.set_version_id_marker(try_into_aws(input.version_id_marker)?);
         let result = b.send().await;
@@ -1420,7 +1420,7 @@ impl S3 for Proxy {
         b = b.set_encoding_type(try_into_aws(input.encoding_type)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_marker(try_into_aws(input.marker)?);
-        b = b.set_max_keys(Some(try_into_aws(input.max_keys)?));
+        b = b.set_max_keys(try_into_aws(input.max_keys)?);
         b = b.set_prefix(try_into_aws(input.prefix)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         let result = b.send().await;
@@ -1444,8 +1444,8 @@ impl S3 for Proxy {
         b = b.set_delimiter(try_into_aws(input.delimiter)?);
         b = b.set_encoding_type(try_into_aws(input.encoding_type)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
-        b = b.set_fetch_owner(Some(try_into_aws(input.fetch_owner)?));
-        b = b.set_max_keys(Some(try_into_aws(input.max_keys)?));
+        b = b.set_fetch_owner(try_into_aws(input.fetch_owner)?);
+        b = b.set_max_keys(try_into_aws(input.max_keys)?);
         b = b.set_prefix(try_into_aws(input.prefix)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_start_after(try_into_aws(input.start_after)?);
@@ -1468,7 +1468,7 @@ impl S3 for Proxy {
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
-        b = b.set_max_parts(Some(try_into_aws(input.max_parts)?));
+        b = b.set_max_parts(try_into_aws(input.max_parts)?);
         b = b.set_part_number_marker(try_into_aws(input.part_number_marker)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_sse_customer_algorithm(try_into_aws(input.sse_customer_algorithm)?);
@@ -1730,7 +1730,7 @@ impl S3 for Proxy {
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_notification_configuration(Some(try_into_aws(input.notification_configuration)?));
-        b = b.set_skip_destination_validation(Some(try_into_aws(input.skip_destination_validation)?));
+        b = b.set_skip_destination_validation(try_into_aws(input.skip_destination_validation)?);
         let result = b.send().await;
         match result {
             Ok(output) => {
@@ -1775,7 +1775,7 @@ impl S3 for Proxy {
         let mut b = self.0.put_bucket_policy();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
-        b = b.set_confirm_remove_self_bucket_access(Some(try_into_aws(input.confirm_remove_self_bucket_access)?));
+        b = b.set_confirm_remove_self_bucket_access(try_into_aws(input.confirm_remove_self_bucket_access)?);
         b = b.set_content_md5(try_into_aws(input.content_md5)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_policy(Some(try_into_aws(input.policy)?));
@@ -1920,7 +1920,7 @@ impl S3 for Proxy {
         b = b.set_acl(try_into_aws(input.acl)?);
         b = b.set_body(try_into_aws(input.body)?);
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
-        b = b.set_bucket_key_enabled(Some(try_into_aws(input.bucket_key_enabled)?));
+        b = b.set_bucket_key_enabled(try_into_aws(input.bucket_key_enabled)?);
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);
@@ -1930,7 +1930,7 @@ impl S3 for Proxy {
         b = b.set_content_disposition(try_into_aws(input.content_disposition)?);
         b = b.set_content_encoding(try_into_aws(input.content_encoding)?);
         b = b.set_content_language(try_into_aws(input.content_language)?);
-        b = b.set_content_length(Some(try_into_aws(input.content_length)?));
+        b = b.set_content_length(try_into_aws(input.content_length)?);
         b = b.set_content_md5(try_into_aws(input.content_md5)?);
         b = b.set_content_type(try_into_aws(input.content_type)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
@@ -2057,7 +2057,7 @@ impl S3 for Proxy {
         debug!(?input);
         let mut b = self.0.put_object_retention();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
-        b = b.set_bypass_governance_retention(Some(try_into_aws(input.bypass_governance_retention)?));
+        b = b.set_bypass_governance_retention(try_into_aws(input.bypass_governance_retention)?);
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_content_md5(try_into_aws(input.content_md5)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
@@ -2193,7 +2193,7 @@ impl S3 for Proxy {
         b = b.set_checksum_crc32_c(try_into_aws(input.checksum_crc32c)?);
         b = b.set_checksum_sha1(try_into_aws(input.checksum_sha1)?);
         b = b.set_checksum_sha256(try_into_aws(input.checksum_sha256)?);
-        b = b.set_content_length(Some(try_into_aws(input.content_length)?));
+        b = b.set_content_length(try_into_aws(input.content_length)?);
         b = b.set_content_md5(try_into_aws(input.content_md5)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
@@ -2259,7 +2259,7 @@ impl S3 for Proxy {
         let mut b = self.0.write_get_object_response();
         b = b.set_accept_ranges(try_into_aws(input.accept_ranges)?);
         b = b.set_body(try_into_aws(input.body)?);
-        b = b.set_bucket_key_enabled(Some(try_into_aws(input.bucket_key_enabled)?));
+        b = b.set_bucket_key_enabled(try_into_aws(input.bucket_key_enabled)?);
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);
         b = b.set_checksum_crc32_c(try_into_aws(input.checksum_crc32c)?);
@@ -2268,10 +2268,10 @@ impl S3 for Proxy {
         b = b.set_content_disposition(try_into_aws(input.content_disposition)?);
         b = b.set_content_encoding(try_into_aws(input.content_encoding)?);
         b = b.set_content_language(try_into_aws(input.content_language)?);
-        b = b.set_content_length(Some(try_into_aws(input.content_length)?));
+        b = b.set_content_length(try_into_aws(input.content_length)?);
         b = b.set_content_range(try_into_aws(input.content_range)?);
         b = b.set_content_type(try_into_aws(input.content_type)?);
-        b = b.set_delete_marker(Some(try_into_aws(input.delete_marker)?));
+        b = b.set_delete_marker(try_into_aws(input.delete_marker)?);
         b = b.set_e_tag(try_into_aws(input.e_tag)?);
         b = b.set_error_code(try_into_aws(input.error_code)?);
         b = b.set_error_message(try_into_aws(input.error_message)?);
@@ -2279,11 +2279,11 @@ impl S3 for Proxy {
         b = b.set_expires(try_into_aws(input.expires)?);
         b = b.set_last_modified(try_into_aws(input.last_modified)?);
         b = b.set_metadata(try_into_aws(input.metadata)?);
-        b = b.set_missing_meta(Some(try_into_aws(input.missing_meta)?));
+        b = b.set_missing_meta(try_into_aws(input.missing_meta)?);
         b = b.set_object_lock_legal_hold_status(try_into_aws(input.object_lock_legal_hold_status)?);
         b = b.set_object_lock_mode(try_into_aws(input.object_lock_mode)?);
         b = b.set_object_lock_retain_until_date(try_into_aws(input.object_lock_retain_until_date)?);
-        b = b.set_parts_count(Some(try_into_aws(input.parts_count)?));
+        b = b.set_parts_count(try_into_aws(input.parts_count)?);
         b = b.set_replication_status(try_into_aws(input.replication_status)?);
         b = b.set_request_charged(try_into_aws(input.request_charged)?);
         b = b.set_request_route(Some(try_into_aws(input.request_route)?));
@@ -2293,9 +2293,9 @@ impl S3 for Proxy {
         b = b.set_sse_customer_key_md5(try_into_aws(input.sse_customer_key_md5)?);
         b = b.set_ssekms_key_id(try_into_aws(input.ssekms_key_id)?);
         b = b.set_server_side_encryption(try_into_aws(input.server_side_encryption)?);
-        b = b.set_status_code(Some(try_into_aws(input.status_code)?));
+        b = b.set_status_code(try_into_aws(input.status_code)?);
         b = b.set_storage_class(try_into_aws(input.storage_class)?);
-        b = b.set_tag_count(Some(try_into_aws(input.tag_count)?));
+        b = b.set_tag_count(try_into_aws(input.tag_count)?);
         b = b.set_version_id(try_into_aws(input.version_id)?);
         let result = b.send().await;
         match result {

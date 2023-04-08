@@ -395,8 +395,10 @@ impl S3 for FileSystem {
         let Some(body) = body else { return Err(s3_error!(IncompleteBody)) };
 
         if key.ends_with('/') {
-            if content_length != 0 {
-                return Err(s3_error!(UnexpectedContent, "Unexpected request body when creating a directory object."));
+            if let Some(len) = content_length {
+                if len > 0 {
+                    return Err(s3_error!(UnexpectedContent, "Unexpected request body when creating a directory object."));
+                }
             }
             let object_path = self.get_object_path(&bucket, &key)?;
             try_!(fs::create_dir_all(&object_path).await);

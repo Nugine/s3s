@@ -118,7 +118,7 @@ impl AwsConversion for s3s::dto::Event {
     }
 
     fn try_into_aws(x: Self) -> Result<Self::Target, Self::Error> {
-        Ok(Self::Target::from(x))
+        x.as_ref().parse()
     }
 }
 

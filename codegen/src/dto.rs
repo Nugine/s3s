@@ -16,12 +16,13 @@ pub fn to_type_name(shape_name: &str) -> &str {
 
 pub type RustTypes = BTreeMap<String, rust::Type>;
 
+#[deny(clippy::shadow_unrelated)]
 pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes {
     let mut space: BTreeMap<String, rust::Type> = default();
     let mut insert = |k: String, v: rust::Type| assert!(space.insert(k, v).is_none());
 
     for (shape_name, shape) in &model.shapes {
-        let name = match to_type_name(shape_name) {
+        let rs_shape_name = match to_type_name(shape_name) {
             "SelectObjectContentEventStream" => o("SelectObjectContentEvent"), // rename
             s => s.to_owned(),
         };
@@ -35,28 +36,28 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
             "Event",         //
         ];
 
-        if provided_types.contains(&name.as_str()) {
-            let ty = rust::Type::provided(&name);
-            insert(name, ty);
+        if provided_types.contains(&rs_shape_name.as_str()) {
+            let ty = rust::Type::provided(&rs_shape_name);
+            insert(rs_shape_name, ty);
             continue;
         }
 
         match shape {
             smithy::Shape::Boolean(shape) => {
-                let ty = rust::Type::alias(&name, "bool", shape.traits.doc());
-                insert(name, ty);
+                let ty = rust::Type::alias(&rs_shape_name, "bool", shape.traits.doc());
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Integer(shape) => {
-                let ty = rust::Type::alias(&name, "i32", shape.traits.doc());
-                insert(name, ty);
+                let ty = rust::Type::alias(&rs_shape_name, "i32", shape.traits.doc());
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Long(shape) => {
-                let ty = rust::Type::alias(&name, "i64", shape.traits.doc());
-                insert(name, ty);
+                let ty = rust::Type::alias(&rs_shape_name, "i64", shape.traits.doc());
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::String(shape) => {
-                let ty = rust::Type::alias(&name, "String", shape.traits.doc());
-                insert(name, ty);
+                let ty = rust::Type::alias(&rs_shape_name, "String", shape.traits.doc());
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Timestamp(shape) => {
                 let format = shape.traits.timestamp_format().map(|s| match s {
@@ -66,39 +67,39 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     _ => unimplemented!(),
                 });
                 let ty = rust::Type::Timestamp(rust::Timestamp {
-                    name: name.clone(),
+                    name: rs_shape_name.clone(),
                     format: format.map(o),
                     doc: shape.traits.doc().map(o),
                 });
-                insert(name, ty);
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Blob(_) => {
                 unimplemented!();
             }
             smithy::Shape::List(shape) => {
                 let ty = rust::Type::List(rust::List {
-                    name: name.clone(),
+                    name: rs_shape_name.clone(),
                     member: rust::ListMember {
                         type_: to_type_name(&shape.member.target).to_owned(),
                         xml_name: shape.member.traits.xml_name().map(o),
                     },
                     doc: shape.traits.doc().map(o),
                 });
-                insert(name, ty);
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Map(shape) => {
                 let ty = rust::Type::Map(rust::Map {
-                    name: name.clone(),
+                    name: rs_shape_name.clone(),
                     key_type: to_type_name(&shape.key.target).to_owned(),
                     value_type: to_type_name(&shape.value.target).to_owned(),
                     doc: shape.traits.doc().map(o),
                 });
-                insert(name, ty);
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Enum(shape) => {
                 let mut variants = Vec::new();
                 for (variant_name, variant) in &shape.members {
-                    let name = match variant_name.as_str() {
+                    let rs_variant_name = match variant_name.as_str() {
                         "CRC32C" => o("CRC32C"),
                         _ => variant_name.to_shouty_snake_case(),
                     };
@@ -107,23 +108,23 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     assert!(value.is_ascii());
 
                     let variant = rust::StrEnumVariant {
-                        name,
+                        name: rs_variant_name,
                         value,
                         doc: variant.traits.doc().map(o),
                     };
                     variants.push(variant);
                 }
                 let ty = rust::Type::StrEnum(rust::StrEnum {
-                    name: name.clone(),
+                    name: rs_shape_name.clone(),
                     variants,
                     doc: shape.traits.doc().map(o),
                 });
-                insert(name, ty);
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Structure(shape) => {
                 let mut fields = Vec::new();
                 for (field_name, field) in &shape.members {
-                    let name = if field_name == "Type" {
+                    let rs_field_name = if field_name == "Type" {
                         "type_".into()
                     } else {
                         field_name.to_snake_case()
@@ -132,11 +133,21 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     let field_type = to_type_name(&field.target).to_owned();
 
                     let default_value = field.traits.default_value().map(o);
+                    let is_required = field.traits.required();
 
-                    let option_type = {
-                        let mut optional = field.traits.required().not() && default_value.is_none();
-                        optional |= field_type == "StreamingBlob" && default_value.as_ref().unwrap() == "";
-                        optional
+                    let is_op_input = rs_shape_name
+                        .strip_suffix("Request")
+                        .map(|op| ops.contains_key(op))
+                        .unwrap_or(false);
+
+                    let option_type = 'optional: {
+                        if field_type == "StreamingBlob" && default_value.as_ref().unwrap() == "" {
+                            break 'optional true;
+                        }
+                        if is_op_input && is_required.not() {
+                            break 'optional true;
+                        }
+                        is_required.not() && default_value.is_none()
                     };
 
                     let position = {
@@ -168,7 +179,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     };
 
                     let field = rust::StructField {
-                        name,
+                        name: rs_field_name,
                         type_: field_type,
                         doc: field.traits.doc().map(o),
 
@@ -176,6 +187,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
 
                         option_type,
                         default_value,
+                        is_required,
 
                         position,
 
@@ -187,14 +199,14 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     fields.push(field);
                 }
                 let ty = rust::Type::Struct(rust::Struct {
-                    name: name.clone(),
+                    name: rs_shape_name.clone(),
                     fields,
                     doc: shape.traits.doc().map(ToOwned::to_owned),
 
                     xml_name: shape.traits.xml_name().map(o),
                     is_error_type: shape.traits.error().is_some(),
                 });
-                insert(name, ty);
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Union(shape) => {
                 let mut variants = Vec::new();
@@ -207,17 +219,24 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     variants.push(variant);
                 }
                 let ty = rust::Type::StructEnum(rust::StructEnum {
-                    name: name.clone(),
+                    name: rs_shape_name.clone(),
                     variants,
                     doc: shape.traits.doc().map(o),
                 });
-                insert(name, ty);
+                insert(rs_shape_name, ty);
             }
             smithy::Shape::Operation(_) => {}
             smithy::Shape::Service(_) => {}
         }
     }
 
+    patch_types(&mut space);
+    unify_operation_types(ops, &mut space);
+
+    space
+}
+
+fn patch_types(space: &mut RustTypes) {
     // patch LifecycleExpiration
     {
         let Some(rust::Type::Struct(ty)) = space.get_mut("LifecycleExpiration") else { panic!() };
@@ -249,6 +268,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
             camel_name: request.name.clone(),
             option_type: false,
             default_value: None,
+            is_required: false,
             position: o("payload"),
             http_header: None,
             http_query: None,
@@ -260,7 +280,9 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
         space.insert("SelectObjectContentInput".into(), rust::Type::Struct(ty));
         space.insert("SelectObjectContentRequest".into(), rust::Type::Struct(request));
     }
+}
 
+fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
     // unify operation input type
     for op in ops.values() {
         if op.name == "SelectObjectContent" {
@@ -303,8 +325,6 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
         };
         assert!(space.insert(op.output.clone(), rust::Type::Struct(output_ty)).is_none());
     }
-
-    space
 }
 
 pub fn codegen(rust_types: &RustTypes, g: &mut Codegen) {

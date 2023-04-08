@@ -432,8 +432,8 @@ impl CopyObject {
 
         let acl: Option<ObjectCannedACL> = http::parse_opt_header(req, &X_AMZ_ACL)?;
 
-        let bucket_key_enabled: BucketKeyEnabled =
-            http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED)?.unwrap_or(false);
+        let bucket_key_enabled: Option<BucketKeyEnabled> =
+            http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED)?;
 
         let cache_control: Option<CacheControl> = http::parse_opt_header(req, &CACHE_CONTROL)?;
 
@@ -623,8 +623,8 @@ impl CreateBucket {
 
         let grant_write_acp: Option<GrantWriteACP> = http::parse_opt_header(req, &X_AMZ_GRANT_WRITE_ACP)?;
 
-        let object_lock_enabled_for_bucket: ObjectLockEnabledForBucket =
-            http::parse_opt_header(req, &X_AMZ_BUCKET_OBJECT_LOCK_ENABLED)?.unwrap_or(false);
+        let object_lock_enabled_for_bucket: Option<ObjectLockEnabledForBucket> =
+            http::parse_opt_header(req, &X_AMZ_BUCKET_OBJECT_LOCK_ENABLED)?;
 
         let object_ownership: Option<ObjectOwnership> = http::parse_opt_header(req, &X_AMZ_OBJECT_OWNERSHIP)?;
 
@@ -675,8 +675,8 @@ impl CreateMultipartUpload {
 
         let acl: Option<ObjectCannedACL> = http::parse_opt_header(req, &X_AMZ_ACL)?;
 
-        let bucket_key_enabled: BucketKeyEnabled =
-            http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED)?.unwrap_or(false);
+        let bucket_key_enabled: Option<BucketKeyEnabled> =
+            http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED)?;
 
         let cache_control: Option<CacheControl> = http::parse_opt_header(req, &CACHE_CONTROL)?;
 
@@ -1298,8 +1298,8 @@ impl DeleteObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectInput> {
         let (bucket, key) = http::unwrap_object(req);
 
-        let bypass_governance_retention: BypassGovernanceRetention =
-            http::parse_opt_header(req, &X_AMZ_BYPASS_GOVERNANCE_RETENTION)?.unwrap_or(false);
+        let bypass_governance_retention: Option<BypassGovernanceRetention> =
+            http::parse_opt_header(req, &X_AMZ_BYPASS_GOVERNANCE_RETENTION)?;
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
@@ -1396,8 +1396,8 @@ impl DeleteObjects {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteObjectsInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let bypass_governance_retention: BypassGovernanceRetention =
-            http::parse_opt_header(req, &X_AMZ_BYPASS_GOVERNANCE_RETENTION)?.unwrap_or(false);
+        let bypass_governance_retention: Option<BypassGovernanceRetention> =
+            http::parse_opt_header(req, &X_AMZ_BYPASS_GOVERNANCE_RETENTION)?;
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
 
@@ -2307,7 +2307,7 @@ impl GetObject {
         let if_unmodified_since: Option<IfUnmodifiedSince> =
             http::parse_opt_header_timestamp(req, &IF_UNMODIFIED_SINCE, TimestampFormat::HttpDate)?;
 
-        let part_number: PartNumber = http::parse_opt_query(req, "partNumber")?.unwrap_or(0);
+        let part_number: Option<PartNumber> = http::parse_opt_query(req, "partNumber")?;
 
         let range: Option<Range> = http::parse_opt_header(req, &RANGE)?;
 
@@ -2484,7 +2484,7 @@ impl GetObjectAttributes {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        let max_parts: MaxParts = http::parse_opt_header(req, &X_AMZ_MAX_PARTS)?.unwrap_or(0);
+        let max_parts: Option<MaxParts> = http::parse_opt_header(req, &X_AMZ_MAX_PARTS)?;
 
         let object_attributes: ObjectAttributesList = http::parse_list_header(req, &X_AMZ_OBJECT_ATTRIBUTES)?;
 
@@ -2874,7 +2874,7 @@ impl HeadObject {
         let if_unmodified_since: Option<IfUnmodifiedSince> =
             http::parse_opt_header_timestamp(req, &IF_UNMODIFIED_SINCE, TimestampFormat::HttpDate)?;
 
-        let part_number: PartNumber = http::parse_opt_query(req, "partNumber")?.unwrap_or(0);
+        let part_number: Option<PartNumber> = http::parse_opt_query(req, "partNumber")?;
 
         let range: Option<Range> = http::parse_opt_header(req, &RANGE)?;
 
@@ -3183,7 +3183,7 @@ impl ListMultipartUploads {
 
         let key_marker: Option<KeyMarker> = http::parse_opt_query(req, "key-marker")?;
 
-        let max_uploads: MaxUploads = http::parse_opt_query(req, "max-uploads")?.unwrap_or(0);
+        let max_uploads: Option<MaxUploads> = http::parse_opt_query(req, "max-uploads")?;
 
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
@@ -3240,7 +3240,7 @@ impl ListObjectVersions {
 
         let key_marker: Option<KeyMarker> = http::parse_opt_query(req, "key-marker")?;
 
-        let max_keys: MaxKeys = http::parse_opt_query(req, "max-keys")?.unwrap_or(0);
+        let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
@@ -3297,7 +3297,7 @@ impl ListObjects {
 
         let marker: Option<Marker> = http::parse_opt_query(req, "marker")?;
 
-        let max_keys: MaxKeys = http::parse_opt_query(req, "max-keys")?.unwrap_or(0);
+        let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
@@ -3354,9 +3354,9 @@ impl ListObjectsV2 {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        let fetch_owner: FetchOwner = http::parse_opt_query(req, "fetch-owner")?.unwrap_or(false);
+        let fetch_owner: Option<FetchOwner> = http::parse_opt_query(req, "fetch-owner")?;
 
-        let max_keys: MaxKeys = http::parse_opt_query(req, "max-keys")?.unwrap_or(0);
+        let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
@@ -3411,7 +3411,7 @@ impl ListParts {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        let max_parts: MaxParts = http::parse_opt_query(req, "max-parts")?.unwrap_or(0);
+        let max_parts: Option<MaxParts> = http::parse_opt_query(req, "max-parts")?;
 
         let part_number_marker: Option<PartNumberMarker> = http::parse_opt_query(req, "part-number-marker")?;
 
@@ -3936,8 +3936,8 @@ impl PutBucketNotificationConfiguration {
 
         let notification_configuration: NotificationConfiguration = http::take_xml_body(req)?;
 
-        let skip_destination_validation: SkipValidation =
-            http::parse_opt_header(req, &X_AMZ_SKIP_DESTINATION_VALIDATION)?.unwrap_or(false);
+        let skip_destination_validation: Option<SkipValidation> =
+            http::parse_opt_header(req, &X_AMZ_SKIP_DESTINATION_VALIDATION)?;
 
         Ok(PutBucketNotificationConfigurationInput {
             bucket,
@@ -4021,8 +4021,8 @@ impl PutBucketPolicy {
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
 
-        let confirm_remove_self_bucket_access: ConfirmRemoveSelfBucketAccess =
-            http::parse_opt_header(req, &X_AMZ_CONFIRM_REMOVE_SELF_BUCKET_ACCESS)?.unwrap_or(false);
+        let confirm_remove_self_bucket_access: Option<ConfirmRemoveSelfBucketAccess> =
+            http::parse_opt_header(req, &X_AMZ_CONFIRM_REMOVE_SELF_BUCKET_ACCESS)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -4313,8 +4313,8 @@ impl PutObject {
 
         let body: Option<StreamingBlob> = Some(http::take_stream_body(req));
 
-        let bucket_key_enabled: BucketKeyEnabled =
-            http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED)?.unwrap_or(false);
+        let bucket_key_enabled: Option<BucketKeyEnabled> =
+            http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED)?;
 
         let cache_control: Option<CacheControl> = http::parse_opt_header(req, &CACHE_CONTROL)?;
 
@@ -4334,7 +4334,7 @@ impl PutObject {
 
         let content_language: Option<ContentLanguage> = http::parse_opt_header(req, &CONTENT_LANGUAGE)?;
 
-        let content_length: ContentLength = http::parse_opt_header(req, &CONTENT_LENGTH)?.unwrap_or(0);
+        let content_length: Option<ContentLength> = http::parse_opt_header(req, &CONTENT_LENGTH)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -4435,13 +4435,14 @@ impl PutObject {
 
         let content_length = i64::try_from(vec_stream.exact_remaining_length())
             .map_err(|e| s3_error!(e, InvalidArgument, "content-length overflow"))?;
+        let content_length = (content_length != 0).then_some(content_length);
 
         let body: Option<StreamingBlob> = Some(StreamingBlob::new(vec_stream));
 
         let acl: Option<ObjectCannedACL> = http::parse_field_value(&m, "x-amz-acl")?;
 
-        let bucket_key_enabled: BucketKeyEnabled =
-            http::parse_field_value(&m, "x-amz-server-side-encryption-bucket-key-enabled")?.unwrap_or(false);
+        let bucket_key_enabled: Option<BucketKeyEnabled> =
+            http::parse_field_value(&m, "x-amz-server-side-encryption-bucket-key-enabled")?;
 
         let cache_control: Option<CacheControl> = http::parse_field_value(&m, "cache-control")?;
 
@@ -4793,8 +4794,8 @@ impl PutObjectRetention {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectRetentionInput> {
         let (bucket, key) = http::unwrap_object(req);
 
-        let bypass_governance_retention: BypassGovernanceRetention =
-            http::parse_opt_header(req, &X_AMZ_BYPASS_GOVERNANCE_RETENTION)?.unwrap_or(false);
+        let bypass_governance_retention: Option<BypassGovernanceRetention> =
+            http::parse_opt_header(req, &X_AMZ_BYPASS_GOVERNANCE_RETENTION)?;
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
 
@@ -5074,7 +5075,7 @@ impl UploadPart {
 
         let checksum_sha256: Option<ChecksumSHA256> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_SHA256)?;
 
-        let content_length: ContentLength = http::parse_opt_header(req, &CONTENT_LENGTH)?.unwrap_or(0);
+        let content_length: Option<ContentLength> = http::parse_opt_header(req, &CONTENT_LENGTH)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5263,8 +5264,8 @@ impl WriteGetObjectResponse {
 
         let body: Option<StreamingBlob> = Some(http::take_stream_body(req));
 
-        let bucket_key_enabled: BucketKeyEnabled =
-            http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED)?.unwrap_or(false);
+        let bucket_key_enabled: Option<BucketKeyEnabled> =
+            http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED)?;
 
         let cache_control: Option<CacheControl> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_CACHE_CONTROL)?;
 
@@ -5282,13 +5283,13 @@ impl WriteGetObjectResponse {
 
         let content_language: Option<ContentLanguage> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_CONTENT_LANGUAGE)?;
 
-        let content_length: ContentLength = http::parse_opt_header(req, &CONTENT_LENGTH)?.unwrap_or(0);
+        let content_length: Option<ContentLength> = http::parse_opt_header(req, &CONTENT_LENGTH)?;
 
         let content_range: Option<ContentRange> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_CONTENT_RANGE)?;
 
         let content_type: Option<ContentType> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_CONTENT_TYPE)?;
 
-        let delete_marker: DeleteMarker = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_DELETE_MARKER)?.unwrap_or(false);
+        let delete_marker: Option<DeleteMarker> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_DELETE_MARKER)?;
 
         let e_tag: Option<ETag> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_E_TAG)?;
 
@@ -5306,7 +5307,7 @@ impl WriteGetObjectResponse {
 
         let metadata: Option<Metadata> = http::parse_opt_metadata(req)?;
 
-        let missing_meta: MissingMeta = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_MISSING_META)?.unwrap_or(0);
+        let missing_meta: Option<MissingMeta> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_MISSING_META)?;
 
         let object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus> =
             http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_OBJECT_LOCK_LEGAL_HOLD)?;
@@ -5319,7 +5320,7 @@ impl WriteGetObjectResponse {
             TimestampFormat::DateTime,
         )?;
 
-        let parts_count: PartsCount = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_MP_PARTS_COUNT)?.unwrap_or(0);
+        let parts_count: Option<PartsCount> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_MP_PARTS_COUNT)?;
 
         let replication_status: Option<ReplicationStatus> =
             http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_REPLICATION_STATUS)?;
@@ -5344,11 +5345,11 @@ impl WriteGetObjectResponse {
         let server_side_encryption: Option<ServerSideEncryption> =
             http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_SERVER_SIDE_ENCRYPTION)?;
 
-        let status_code: GetObjectResponseStatusCode = http::parse_opt_header(req, &X_AMZ_FWD_STATUS)?.unwrap_or(0);
+        let status_code: Option<GetObjectResponseStatusCode> = http::parse_opt_header(req, &X_AMZ_FWD_STATUS)?;
 
         let storage_class: Option<StorageClass> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_STORAGE_CLASS)?;
 
-        let tag_count: TagCount = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_TAGGING_COUNT)?.unwrap_or(0);
+        let tag_count: Option<TagCount> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_TAGGING_COUNT)?;
 
         let version_id: Option<ObjectVersionId> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_VERSION_ID)?;
 
