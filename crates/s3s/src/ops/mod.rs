@@ -697,22 +697,30 @@ mod tests {
 
     #[test]
     fn track_future_size() {
+        macro_rules! future_size {
+            ($f:path, $v:expr) => {
+                (stringify!($f), output_size(&$f), $v)
+            };
+        }
+
+        #[rustfmt::skip]
         let sizes = [
-            (output_size(&S3Service::call), 2616),
-            (output_size(&call), 1448),
-            (output_size(&prepare), 1360),
-            (output_size(&SignatureContext::check), 752),
-            (output_size(&SignatureContext::v2_check), 280),
-            (output_size(&SignatureContext::v2_check_presigned_url), 184),
-            (output_size(&SignatureContext::v2_check_header_auth), 184),
-            (output_size(&SignatureContext::v4_check), 728),
-            (output_size(&SignatureContext::v4_check_post_signature), 368),
-            (output_size(&SignatureContext::v4_check_presigned_url), 456),
-            (output_size(&SignatureContext::v4_check_header_auth), 632),
+            future_size!(S3Service::call,                           2616),
+            future_size!(call,                                      1432),
+            future_size!(prepare,                                   1360),
+            future_size!(SignatureContext::check,                   752),
+            future_size!(SignatureContext::v2_check,                280),
+            future_size!(SignatureContext::v2_check_presigned_url,  184),
+            future_size!(SignatureContext::v2_check_header_auth,    184),
+            future_size!(SignatureContext::v4_check,                728),
+            future_size!(SignatureContext::v4_check_post_signature, 368),
+            future_size!(SignatureContext::v4_check_presigned_url,  456),
+            future_size!(SignatureContext::v4_check_header_auth,    632),
         ];
-        println!("{:?}", sizes);
-        for (size, expected) in sizes {
-            assert_eq!(size, expected);
+
+        println!("{:#?}", sizes);
+        for (name, size, expected) in sizes {
+            assert_eq!(size, expected, "{name:?} size changed: prev {expected}, now {size}");
         }
     }
 }
