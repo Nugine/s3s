@@ -5,7 +5,7 @@ use s3s_fs::FileSystem;
 use s3s_fs::Result;
 
 use s3s::auth::SimpleAuth;
-use s3s::service::S3Service;
+use s3s::service::S3ServiceBuilder;
 
 use std::net::TcpListener;
 use std::path::PathBuf;
@@ -48,20 +48,25 @@ async fn main() -> Result {
     setup_tracing();
     let opt = Opt::parse();
 
-    // Setup S3 service
+    // Setup S3 provider
     let fs = FileSystem::new(opt.root)?;
-    let mut service = S3Service::new(Box::new(fs));
 
-    // Enable authentication
-    if let (Some(ak), Some(sk)) = (opt.access_key, opt.secret_key) {
-        let auth = SimpleAuth::from_single(ak, sk);
-        service.set_auth(Box::new(auth));
-    }
+    // Setup S3 service
+    let service = {
+        let mut b = S3ServiceBuilder::new(fs);
 
-    // Enable parsing virtual-hosted-style requests
-    if let Some(domain_name) = opt.domain_name {
-        service.set_base_domain(domain_name);
-    }
+        // Enable authentication
+        if let (Some(ak), Some(sk)) = (opt.access_key, opt.secret_key) {
+            b.set_auth(SimpleAuth::from_single(ak, sk));
+        }
+
+        // Enable parsing virtual-hosted-style requests
+        if let Some(domain_name) = opt.domain_name {
+            b.set_base_domain(domain_name);
+        }
+
+        b.build()
+    };
 
     // Run server
     let listener = TcpListener::bind((opt.host.as_str(), opt.port))?;

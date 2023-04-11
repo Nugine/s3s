@@ -4,7 +4,9 @@
     clippy::must_use_candidate, //
 )]
 
-use s3s::service::S3Service;
+use s3s::auth::SimpleAuth;
+use s3s::service::S3ServiceBuilder;
+use s3s_fs::FileSystem;
 
 use std::env;
 use std::fs;
@@ -49,21 +51,25 @@ fn config() -> &'static SdkConfig {
     static CONFIG: Lazy<SdkConfig> = Lazy::new(|| {
         setup_tracing();
 
+        // Fake credentials
         let cred = Credentials::for_tests();
 
-        let conn = {
-            fs::create_dir_all(FS_ROOT).unwrap();
-            let fs = s3s_fs::FileSystem::new(FS_ROOT).unwrap();
+        // Setup S3 provider
+        fs::create_dir_all(FS_ROOT).unwrap();
+        let fs = FileSystem::new(FS_ROOT).unwrap();
 
-            let auth = s3s::auth::SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key());
-
-            let mut service = S3Service::new(Box::new(fs));
-            service.set_auth(Box::new(auth));
-            service.set_base_domain(DOMAIN_NAME);
-
-            s3s_aws::Connector::from(service.into_shared())
+        // Setup S3 service
+        let service = {
+            let mut b = S3ServiceBuilder::new(fs);
+            b.set_auth(SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key()));
+            b.set_base_domain(DOMAIN_NAME);
+            b.build()
         };
 
+        // Convert to aws http connector
+        let conn = s3s_aws::Connector::from(service.into_shared());
+
+        // Setup aws sdk config
         SdkConfig::builder()
             .credentials_provider(SharedCredentialsProvider::new(cred))
             .http_connector(conn)

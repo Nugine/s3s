@@ -110,6 +110,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         "use crate::s3_trait::S3;",
         "",
         "use std::borrow::Cow;",
+        "use std::sync::Arc;",
         "",
     ]);
 
@@ -596,7 +597,7 @@ fn codegen_op_http_call(op: &Operation, g: &mut Codegen) {
     g.ln("}");
     g.lf();
 
-    g.ln("async fn call(&self, s3: &dyn S3, req: &mut http::Request) -> S3Result<http::Response> {");
+    g.ln("async fn call(&self, s3: &Arc<dyn S3>, req: &mut http::Request) -> S3Result<http::Response> {");
 
     let method = op.name.to_snake_case();
 

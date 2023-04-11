@@ -2,7 +2,7 @@
 #![deny(clippy::all)]
 
 use s3s::auth::SimpleAuth;
-use s3s::service::S3Service;
+use s3s::service::S3ServiceBuilder;
 
 use std::error::Error;
 use std::net::TcpListener;
@@ -42,22 +42,27 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
     setup_tracing();
     let opt = Opt::parse();
 
-    // Setup S3 service
+    // Setup S3 provider
     let conf = aws_config::from_env().endpoint_url(&opt.endpoint_url).load().await;
     let proxy = s3s_aws::Proxy::from(aws_sdk_s3::Client::new(&conf));
-    let mut service = S3Service::new(Box::new(proxy));
 
-    // Enable authentication
-    if let Some(cred_provider) = conf.credentials_provider() {
-        let cred = cred_provider.provide_credentials().await?;
-        let auth = SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key());
-        service.set_auth(Box::new(auth));
-    }
+    // Setup S3 service
+    let service = {
+        let mut b = S3ServiceBuilder::new(proxy);
 
-    // Enable parsing virtual-hosted-style requests
-    if let Some(domain_name) = opt.domain_name {
-        service.set_base_domain(domain_name);
-    }
+        // Enable authentication
+        if let Some(cred_provider) = conf.credentials_provider() {
+            let cred = cred_provider.provide_credentials().await?;
+            b.set_auth(SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key()));
+        }
+
+        // Enable parsing virtual-hosted-style requests
+        if let Some(domain_name) = opt.domain_name {
+            b.set_base_domain(domain_name);
+        }
+
+        b.build()
+    };
 
     // Run server
     let listener = TcpListener::bind((opt.host.as_str(), opt.port))?;
