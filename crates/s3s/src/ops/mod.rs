@@ -26,6 +26,7 @@ use crate::utils::is_base64_encoded;
 
 use std::mem;
 use std::ops::Not;
+use std::sync::Arc;
 
 use bytes::Bytes;
 use bytestring::ByteString;
@@ -41,7 +42,7 @@ use tracing::debug;
 pub trait Operation: Send + Sync + 'static {
     fn name(&self) -> &'static str;
 
-    async fn call(&self, s3: &dyn S3, req: &mut Request) -> S3Result<Response>;
+    async fn call(&self, s3: &Arc<dyn S3>, req: &mut Request) -> S3Result<Response>;
 }
 
 fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
@@ -196,7 +197,12 @@ fn fmt_content_length(len: usize) -> http::HeaderValue {
     }
 }
 
-pub async fn call(req: &mut Request, s3: &dyn S3, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<Response> {
+pub async fn call(
+    req: &mut Request,
+    s3: &Arc<dyn S3>,
+    auth: Option<&dyn S3Auth>,
+    base_domain: Option<&str>,
+) -> S3Result<Response> {
     let op = match prepare(req, auth, base_domain).await {
         Ok(op) => op,
         Err(err) => {
@@ -692,7 +698,7 @@ mod tests {
     #[test]
     fn track_future_size() {
         let sizes = [
-            (output_size(&S3Service::call), 2632),
+            (output_size(&S3Service::call), 2616),
             (output_size(&call), 1448),
             (output_size(&prepare), 1360),
             (output_size(&SignatureContext::check), 752),

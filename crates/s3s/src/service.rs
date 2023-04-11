@@ -12,30 +12,47 @@ use futures::future::BoxFuture;
 use hyper::service::Service;
 use tracing::{debug, error};
 
-pub struct S3Service {
-    s3: Box<dyn S3>,
+pub struct S3ServiceBuilder {
+    s3: Arc<dyn S3>,
     auth: Option<Box<dyn S3Auth>>,
     base_domain: Option<String>,
 }
 
-impl S3Service {
+impl S3ServiceBuilder {
     #[must_use]
-    pub fn new(s3: Box<dyn S3>) -> Self {
+    pub fn new(s3: impl S3) -> Self {
         Self {
-            s3,
+            s3: Arc::new(s3),
             auth: None,
             base_domain: None,
         }
     }
 
-    pub fn set_auth(&mut self, auth: Box<dyn S3Auth>) {
-        self.auth = Some(auth);
+    pub fn set_auth(&mut self, auth: impl S3Auth) {
+        self.auth = Some(Box::new(auth));
     }
 
     pub fn set_base_domain(&mut self, base_domain: impl Into<String>) {
         self.base_domain = Some(base_domain.into());
     }
 
+    #[must_use]
+    pub fn build(self) -> S3Service {
+        S3Service {
+            s3: self.s3,
+            auth: self.auth,
+            base_domain: self.base_domain,
+        }
+    }
+}
+
+pub struct S3Service {
+    s3: Arc<dyn S3>,
+    auth: Option<Box<dyn S3Auth>>,
+    base_domain: Option<String>,
+}
+
+impl S3Service {
     #[tracing::instrument(
         level = "debug",
         skip(self, req),
@@ -46,7 +63,7 @@ impl S3Service {
 
         let mut req = Request::from(req);
 
-        let s3 = &*self.s3;
+        let s3 = &self.s3;
         let auth = self.auth.as_deref();
         let base_domain = self.base_domain.as_deref();
         let result = crate::ops::call(&mut req, s3, auth, base_domain).await.map(Into::into);
@@ -95,7 +112,7 @@ impl Service<hyper::Request<hyper::Body>> for SharedS3Service {
     type Future = BoxFuture<'static, Result<Self::Response, Self::Error>>;
 
     fn poll_ready(&mut self, _: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-        Poll::Ready(Ok(())) // ASK: back pressure?
+        Poll::Ready(Ok(())) // TODO: back pressure?
     }
 
     fn call(&mut self, req: hyper::Request<hyper::Body>) -> Self::Future {
