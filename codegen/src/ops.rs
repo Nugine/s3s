@@ -251,7 +251,11 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes, g: &mut Codegen) 
                 }
 
                 if is_xml_output(ty) {
-                    g.ln("http::set_xml_body(&mut res, &x)?;");
+                    if op.name == "CompleteMultipartUpload" {
+                        g.ln("http::set_xml_body_no_decl(&mut res, &x)?;");
+                    } else {
+                        g.ln("http::set_xml_body(&mut res, &x)?;");
+                    }
                 } else if let Some(field) = ty.fields.iter().find(|x| x.position == "payload") {
                     match field.type_.as_str() {
                         "Policy" => {
@@ -603,13 +607,26 @@ fn codegen_op_http_call(op: &Operation, g: &mut Codegen) {
 
     g.ln("let input = Self::deserialize_http(req)?;");
     g.ln("let req = super::build_s3_request(input, req);");
-    g.ln(f!("let result = s3.{method}(req).await;"));
+    if op.name == "CompleteMultipartUpload" {
+        g.ln("let s3 = s3.clone();");
+        g.ln("let fut = async move {");
+        g.ln(f!("let result = s3.{method}(req).await;"));
+        g.ln("match result {");
+        g.ln("Ok(output) => Self::serialize_http(output).unwrap(),");
+        g.ln("Err(err) => super::serialize_error_no_decl(err).unwrap(),");
+        g.ln("}");
+        g.ln("};");
+        g.ln("let mut res = http::Response::with_status(http::StatusCode::OK);");
+        g.ln("http::set_keep_alive_xml_body(&mut res, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;");
+    } else {
+        g.ln(f!("let result = s3.{method}(req).await;"));
 
-    g.ln("let res = match result {");
-    g.ln("Ok(output) => Self::serialize_http(output)?,");
+        g.ln("let res = match result {");
+        g.ln("Ok(output) => Self::serialize_http(output)?,");
 
-    g.ln("Err(err) => super::serialize_error(err)?,");
-    g.ln("};");
+        g.ln("Err(err) => super::serialize_error(err)?,");
+        g.ln("};");
+    }
 
     g.ln("Ok(res)");
 

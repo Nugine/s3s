@@ -11,9 +11,6 @@ use crate::{utils, xml};
 use std::convert::Infallible;
 use std::fmt::Write as _;
 
-use futures::Future;
-
-use http_body::Body as HttpBody;
 use hyper::header::{IntoHeaderName, InvalidHeaderValue};
 
 pub fn add_header<N, V>(res: &mut Response, name: N, value: V) -> S3Result
@@ -110,16 +107,23 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
 
 pub fn set_keep_alive_xml_body(
     res: &mut Response,
-    fut: impl Future<Output = Response> + Send + Sync + 'static,
+    fut: impl std::future::Future<Output = Response> + Send + Sync + 'static,
     duration: std::time::Duration,
 ) -> S3Result {
-    let mut buf = Vec::with_capacity(256);
-    {
-        let mut ser = xml::Serializer::new(&mut buf);
-        ser.decl().map_err(S3Error::internal_error)?;
-    }
-    res.body = Body::http_body(KeepAliveBody::with_initial_body(fut, buf.into(), duration).boxed());
+    let mut buf = Vec::with_capacity(40);
+    let mut ser = xml::Serializer::new(&mut buf);
+    ser.decl().map_err(S3Error::internal_error)?;
+
+    res.body = Body::http_body(http_body::Body::boxed(KeepAliveBody::with_initial_body(fut, buf.into(), duration)));
     res.headers.insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
+    Ok(())
+}
+
+pub fn set_xml_body_no_decl<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result {
+    let mut buf = Vec::with_capacity(256);
+    let mut ser = xml::Serializer::new(&mut buf);
+    val.serialize(&mut ser).map_err(S3Error::internal_error)?;
+    res.body = Body::from(buf);
     Ok(())
 }
 

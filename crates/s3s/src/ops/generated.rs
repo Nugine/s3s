@@ -396,63 +396,13 @@ impl CompleteMultipartUpload {
 
     pub fn serialize_http(x: CompleteMultipartUploadOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
-        http::set_xml_body(&mut res, &x)?;
+        http::set_xml_body_no_decl(&mut res, &x)?;
         http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
-        Ok(res)
-    }
-
-    pub async fn call_shared(&self, s3: std::sync::Arc<dyn S3>, req: &mut http::Request) -> S3Result<http::Response> {
-        let input = Self::deserialize_http(req)?;
-        let req = super::build_s3_request(input, req);
-        let fut = async move {
-            let res = s3.complete_multipart_upload(req).await;
-            match res {
-                Ok(output) => {
-                    let mut res = http::Response::with_status(http::StatusCode::OK);
-
-                    let mut buf = Vec::with_capacity(256);
-
-                    let mut ser = crate::xml::Serializer::new(&mut buf);
-                    crate::xml::Serialize::serialize(&output, &mut ser)
-                        .map_err(S3Error::internal_error)
-                        .unwrap();
-
-                    res.body = crate::Body::from(buf);
-
-                    http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, output.bucket_key_enabled)
-                        .unwrap();
-                    http::add_opt_header(&mut res, X_AMZ_EXPIRATION, output.expiration).unwrap();
-                    http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, output.request_charged).unwrap();
-                    http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, output.ssekms_key_id).unwrap();
-                    http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, output.server_side_encryption).unwrap();
-                    http::add_opt_header(&mut res, X_AMZ_VERSION_ID, output.version_id).unwrap();
-
-                    res
-                }
-                Err(err) => {
-                    let mut res = http::Response::with_status(http::StatusCode::OK);
-
-                    let mut buf = Vec::with_capacity(256);
-
-                    let mut ser = crate::xml::Serializer::new(&mut buf);
-                    crate::xml::Serialize::serialize(&err, &mut ser)
-                        .map_err(S3Error::internal_error)
-                        .unwrap();
-
-                    res.body = crate::Body::from(buf);
-                    res
-                }
-            }
-        };
-
-        let mut res = http::Response::with_status(http::StatusCode::OK);
-        http::set_keep_alive_xml_body(&mut res, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;
-
         Ok(res)
     }
 }
@@ -466,11 +416,16 @@ impl super::Operation for CompleteMultipartUpload {
     async fn call(&self, s3: &Arc<dyn S3>, req: &mut http::Request) -> S3Result<http::Response> {
         let input = Self::deserialize_http(req)?;
         let req = super::build_s3_request(input, req);
-        let result = s3.complete_multipart_upload(req).await;
-        let res = match result {
-            Ok(output) => Self::serialize_http(output)?,
-            Err(err) => super::serialize_error(err)?,
+        let s3 = s3.clone();
+        let fut = async move {
+            let result = s3.complete_multipart_upload(req).await;
+            match result {
+                Ok(output) => Self::serialize_http(output).unwrap(),
+                Err(err) => super::serialize_error_no_decl(err).unwrap(),
+            }
         };
+        let mut res = http::Response::with_status(http::StatusCode::OK);
+        http::set_keep_alive_xml_body(&mut res, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;
         Ok(res)
     }
 }

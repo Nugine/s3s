@@ -67,6 +67,13 @@ fn serialize_error(x: S3Error) -> S3Result<Response> {
     Ok(res)
 }
 
+fn serialize_error_no_decl(x: S3Error) -> S3Result<Response> {
+    let status = x.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
+    let mut res = Response::with_status(status);
+    http::set_xml_body_no_decl(&mut res, &x)?;
+    Ok(res)
+}
+
 fn unknown_operation() -> S3Error {
     S3Error::with_message(S3ErrorCode::NotImplemented, "Unknown operation")
 }
@@ -211,17 +218,7 @@ pub async fn call(
         }
     };
 
-    if op.name() == "CompleteMultipartUpload" {
-        return match CompleteMultipartUpload.call_shared(s3.clone(), req).await {
-            Ok(res) => Ok(res),
-            Err(err) => {
-                debug!(op = %op.name(), ?err, "op returns error");
-                serialize_error(err)
-            }
-        };
-    }
-
-    match op.call(&**s3, req).await {
+    match op.call(s3, req).await {
         Ok(res) => Ok(res),
         Err(err) => {
             debug!(op = %op.name(), ?err, "op returns error");
