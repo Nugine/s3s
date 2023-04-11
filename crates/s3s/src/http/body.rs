@@ -67,6 +67,8 @@ impl Body {
             kind: Kind::DynStream { inner: stream },
         }
     }
+
+    #[must_use]
     pub fn http_body(body: http_body::combinators::BoxBody<Bytes, StdError>) -> Self {
         Self {
             kind: Kind::HttpBody { inner: body },

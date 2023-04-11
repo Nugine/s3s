@@ -76,9 +76,9 @@ where
         let this = self.project();
 
         if let Some(response) = this.response {
-            return Pin::new(&mut response.body).poll_trailers(cx);
+            Pin::new(&mut response.body).poll_trailers(cx)
         } else {
-            return Poll::Ready(Ok(None));
+            Poll::Ready(Ok(None))
         }
     }
 }
