@@ -1,3 +1,4 @@
+use hyper::body::HttpBody;
 use s3s::service::SharedS3Service;
 use s3s::{S3Error, S3Result};
 
@@ -59,7 +60,7 @@ fn convert_input(mut req: Request<SdkBody>) -> Request<s3s::Body> {
 
 fn convert_output(result: S3Result<Response<s3s::Body>>) -> Result<Response<SdkBody>, ConnectorError> {
     match result {
-        Ok(res) => Ok(res.map(|s3s_body| SdkBody::from(hyper::Body::from(s3s_body)))),
+        Ok(res) => Ok(res.map(|s3s_body| SdkBody::from_dyn(s3s_body.boxed()))),
         Err(e) => Err(on_err(e)),
     }
 }

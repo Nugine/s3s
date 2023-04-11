@@ -3,9 +3,6 @@
 #![allow(clippy::declare_interior_mutable_const)]
 #![allow(clippy::borrow_interior_mutable_const)]
 
-use bytes::Bytes;
-use futures::FutureExt;
-
 use crate::dto::*;
 use crate::error::*;
 use crate::header::*;
@@ -412,52 +409,49 @@ impl CompleteMultipartUpload {
     pub async fn call_shared(&self, s3: std::sync::Arc<dyn S3>, req: &mut http::Request) -> S3Result<http::Response> {
         let input = Self::deserialize_http(req)?;
         let req = super::build_s3_request(input, req);
-        let fut = async move { s3.complete_multipart_upload(req).await }.fuse();
-        let mut fut = Box::pin(fut);
-        futures::select! {
-            result = &mut fut => {
-                let res = match result {
-                    Ok(output) => Self::serialize_http(output)?,
-                    Err(err) => super::serialize_error(err)?,
-                };
-                return Ok(res)
-            }
-            _ = tokio::time::sleep(std::time::Duration::from_millis(100)).fuse() => {
-                ()
-            }
-        }
+        let fut = async move {
+            let res = s3.complete_multipart_upload(req).await;
+            match res {
+                Ok(output) => {
+                    let mut res = http::Response::with_status(http::StatusCode::OK);
 
-        let mut res = http::Response::with_status(http::StatusCode::OK);
-        let mut sender = http::set_xml_sending_body(&mut res).await?;
+                    let mut buf = Vec::with_capacity(256);
 
-        tokio::spawn(async move {
-            let mut interval = tokio::time::interval(std::time::Duration::from_millis(2));
-            loop {
-                futures::select! {
-                    _ = interval.tick().fuse() => {
-                        sender.send_data(Bytes::from_static(b" ")).await.unwrap();
-                    }
-                    res = &mut fut => {
-                        match res {
-                            Ok(output) => {
-                                http::send_xml_body(&mut sender, &output).await.unwrap();
-                                let mut tmp_res = http::Response::with_status(http::StatusCode::OK);
-                                http::add_header(&mut tmp_res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, output.bucket_key_enabled).unwrap();
-                                http::add_opt_header(&mut tmp_res, X_AMZ_EXPIRATION, output.expiration).unwrap();
-                                http::add_opt_header(&mut tmp_res, X_AMZ_REQUEST_CHARGED, output.request_charged).unwrap();
-                                http::add_opt_header(&mut tmp_res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, output.ssekms_key_id).unwrap();
-                                http::add_opt_header(&mut tmp_res, X_AMZ_SERVER_SIDE_ENCRYPTION, output.server_side_encryption).unwrap();
-                                http::add_opt_header(&mut tmp_res, X_AMZ_VERSION_ID, output.version_id).unwrap();
+                    let mut ser = crate::xml::Serializer::new(&mut buf);
+                    crate::xml::Serialize::serialize(&output, &mut ser)
+                        .map_err(S3Error::internal_error)
+                        .unwrap();
 
-                                sender.send_trailers(tmp_res.headers).await.unwrap();
-                            },
-                            Err(err) => http::send_xml_body(&mut sender, &err).await.unwrap(),
-                        };
-                        return
-                    }
+                    res.body = crate::Body::from(buf);
+
+                    http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, output.bucket_key_enabled)
+                        .unwrap();
+                    http::add_opt_header(&mut res, X_AMZ_EXPIRATION, output.expiration).unwrap();
+                    http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, output.request_charged).unwrap();
+                    http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, output.ssekms_key_id).unwrap();
+                    http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, output.server_side_encryption).unwrap();
+                    http::add_opt_header(&mut res, X_AMZ_VERSION_ID, output.version_id).unwrap();
+
+                    res
+                }
+                Err(err) => {
+                    let mut res = http::Response::with_status(http::StatusCode::OK);
+
+                    let mut buf = Vec::with_capacity(256);
+
+                    let mut ser = crate::xml::Serializer::new(&mut buf);
+                    crate::xml::Serialize::serialize(&err, &mut ser)
+                        .map_err(S3Error::internal_error)
+                        .unwrap();
+
+                    res.body = crate::Body::from(buf);
+                    res
                 }
             }
-        });
+        };
+
+        let mut res = http::Response::with_status(http::StatusCode::OK);
+        http::set_keep_alive_xml_body(&mut res, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;
 
         Ok(res)
     }

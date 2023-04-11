@@ -36,7 +36,11 @@ pin_project_lite::pin_project! {
         DynStream {
             #[pin]
             inner: DynByteStream
-        }
+        },
+        HttpBody {
+            #[pin]
+            inner: http_body::combinators::BoxBody<Bytes, StdError>,
+        },
     }
 }
 
@@ -61,6 +65,11 @@ impl Body {
     fn dyn_stream(stream: DynByteStream) -> Self {
         Self {
             kind: Kind::DynStream { inner: stream },
+        }
+    }
+    pub fn http_body(body: http_body::combinators::BoxBody<Bytes, StdError>) -> Self {
+        Self {
+            kind: Kind::HttpBody { inner: body },
         }
     }
 }
@@ -123,11 +132,22 @@ impl http_body::Body for Body {
                 Stream::poll_next(inner, cx)
                 //
             }
+            KindProj::HttpBody { inner } => {
+                http_body::Body::poll_data(inner, cx)
+                //
+            }
         }
     }
 
     fn poll_trailers(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<Option<hyper::HeaderMap>, Self::Error>> {
-        Poll::Ready(Ok(None)) // TODO: How to impl poll_trailers?
+        let mut this = self.project();
+        match this.kind.as_mut().project() {
+            KindProj::Empty => Poll::Ready(Ok(None)),
+            KindProj::Once { .. } => Poll::Ready(Ok(None)),
+            KindProj::Hyper { inner } => http_body::Body::poll_trailers(inner, _cx).map_err(|e| Box::new(e) as StdError),
+            KindProj::DynStream { .. } => Poll::Ready(Ok(None)),
+            KindProj::HttpBody { inner } => http_body::Body::poll_trailers(inner, _cx),
+        }
     }
 
     fn is_end_stream(&self) -> bool {
@@ -136,6 +156,7 @@ impl http_body::Body for Body {
             Kind::Once { inner } => inner.is_empty(),
             Kind::Hyper { inner } => http_body::Body::is_end_stream(inner),
             Kind::DynStream { inner } => inner.remaining_length().exact() == Some(0),
+            Kind::HttpBody { inner } => http_body::Body::is_end_stream(inner),
         }
     }
 
@@ -145,6 +166,7 @@ impl http_body::Body for Body {
             Kind::Once { inner } => http_body::SizeHint::with_exact(inner.len() as u64),
             Kind::Hyper { inner } => http_body::Body::size_hint(inner),
             Kind::DynStream { inner } => inner.remaining_length().into(),
+            Kind::HttpBody { inner } => http_body::Body::size_hint(inner),
         }
     }
 }
@@ -164,6 +186,7 @@ impl ByteStream for Body {
             Kind::Once { inner } => RemainingLength::new_exact(inner.len()),
             Kind::Hyper { inner } => http_body::Body::size_hint(inner).into(),
             Kind::DynStream { inner } => inner.remaining_length(),
+            Kind::HttpBody { inner } => http_body::Body::size_hint(inner).into(),
         }
     }
 }
@@ -182,6 +205,9 @@ impl fmt::Debug for Body {
             Kind::DynStream { inner } => {
                 d.field("dyn_stream", &"{..}");
                 d.field("remaining_length", &inner.remaining_length());
+            }
+            Kind::HttpBody { inner } => {
+                d.field("http_body", inner);
             }
         }
         d.finish()
@@ -206,20 +232,5 @@ impl Body {
             Kind::Once { inner } => Some(inner.clone()),
             _ => None,
         }
-    }
-
-    fn into_hyper(self) -> hyper::Body {
-        match self.kind {
-            Kind::Empty => hyper::Body::empty(),
-            Kind::Once { inner } => inner.into(),
-            Kind::Hyper { inner } => inner,
-            Kind::DynStream { inner } => hyper::Body::wrap_stream(inner),
-        }
-    }
-}
-
-impl From<Body> for hyper::Body {
-    fn from(value: Body) -> Self {
-        value.into_hyper()
     }
 }

@@ -35,6 +35,8 @@ pub mod path;
 pub mod service;
 pub mod stream;
 
+pub mod keep_alive_body;
+
 pub use self::error::*;
 pub use self::http::Body;
 pub use self::request::S3Request;
