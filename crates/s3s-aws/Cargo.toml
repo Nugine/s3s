@@ -11,7 +11,7 @@ categories = ["web-programming", "web-programming::http-server"]
 
 [dependencies]
 async-trait = "0.1.68"
-aws-sdk-s3 = "0.25.1"
+aws-sdk-s3 = "0.26.0"
 aws-smithy-http = { version = "0.55.0", features = ["event-stream"] }
 aws-smithy-types = "0.55.0"
 aws-smithy-types-convert = { version = "0.55.0", features = ["convert-time"] }
