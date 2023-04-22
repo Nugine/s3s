@@ -3,7 +3,19 @@ use std::fmt;
 use zeroize::Zeroize;
 
 #[derive(Clone, PartialEq, Eq)]
-pub struct SecretKey(String);
+pub struct SecretKey(Box<str>);
+
+impl SecretKey {
+    #[inline(always)]
+    fn new(s: impl Into<Box<str>>) -> Self {
+        Self(s.into())
+    }
+
+    #[must_use]
+    pub fn expose(&self) -> &str {
+        &self.0
+    }
+}
 
 impl Zeroize for SecretKey {
     fn zeroize(&mut self) {
@@ -11,15 +23,9 @@ impl Zeroize for SecretKey {
     }
 }
 
-impl SecretKey {
-    #[inline(always)]
-    fn new(s: String) -> Self {
-        Self(s)
-    }
-
-    #[must_use]
-    pub fn expose(&self) -> &str {
-        self.0.as_str()
+impl Drop for SecretKey {
+    fn drop(&mut self) {
+        self.zeroize();
     }
 }
 
@@ -31,13 +37,13 @@ impl From<String> for SecretKey {
 
 impl From<Box<str>> for SecretKey {
     fn from(value: Box<str>) -> Self {
-        Self::new(value.into())
+        Self::new(value)
     }
 }
 
 impl From<&str> for SecretKey {
     fn from(value: &str) -> Self {
-        Self::new(value.into())
+        Self::new(value)
     }
 }
 
