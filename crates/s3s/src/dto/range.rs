@@ -2,6 +2,10 @@
 
 use crate::http;
 use crate::utils::from_ascii;
+use crate::S3Error;
+use crate::S3ErrorCode;
+
+use std::ops;
 
 use atoi::FromRadix10Checked;
 
@@ -11,7 +15,7 @@ use atoi::FromRadix10Checked;
 ///
 /// See <https://www.rfc-editor.org/rfc/rfc9110.html#section-14.1.2>
 #[allow(clippy::exhaustive_enums)]
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Range {
     /// Int range in bytes. This range is **inclusive**.
     ///
@@ -39,6 +43,14 @@ pub struct ParseRangeError {
     _priv: (),
 }
 
+/// [`Range`]
+#[derive(Debug, thiserror::Error)]
+#[error("RangeNotSatisfiable")]
+pub struct RangeNotSatisfiable {
+    /// private place holder
+    _priv: (),
+}
+
 impl Range {
     /// Parses `Range` from header
     /// # Errors
@@ -55,6 +67,9 @@ impl Range {
 
         // int range
         let (first, s) = parse_u64_once(s).ok_or_else(err)?;
+        if first > (i64::MAX as u64) {
+            return Err(err());
+        }
 
         let [b'-', s @ ..] = s else { return Err(err()) };
 
@@ -65,6 +80,14 @@ impl Range {
 
         // int range inclusive
         let last = parse_u64_full(s).ok_or_else(err)?;
+        if last > (i64::MAX as u64) {
+            return Err(err());
+        }
+
+        if first > last {
+            return Err(err());
+        }
+
         Ok(Range::Int { first, last: Some(last) })
     }
 
@@ -77,6 +100,40 @@ impl Range {
             },
             Range::Suffix { length } => format!("bytes=-{length}"),
         }
+    }
+
+    pub fn check(&self, full_length: u64) -> Result<ops::Range<u64>, RangeNotSatisfiable> {
+        let err = || RangeNotSatisfiable { _priv: () };
+        match *self {
+            Range::Int { first, last } => match last {
+                Some(last) => {
+                    if first > last || last >= full_length {
+                        return Err(err());
+                    }
+                    // first <= last < full_length
+                    Ok(first..last + 1)
+                }
+                None => {
+                    if first > full_length {
+                        return Err(err());
+                    }
+                    Ok(first..full_length)
+                }
+            },
+            Range::Suffix { length } => {
+                if length > full_length {
+                    return Err(err());
+                }
+                Ok((full_length - length)..full_length)
+            }
+        }
+    }
+}
+
+impl From<RangeNotSatisfiable> for S3Error {
+    #[inline]
+    fn from(_: RangeNotSatisfiable) -> Self {
+        S3ErrorCode::InvalidRange.into()
     }
 }
 

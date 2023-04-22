@@ -162,43 +162,30 @@ impl S3 for FileSystem {
 
         let file_metadata = try_!(file.metadata().await);
         let last_modified = Timestamp::from(try_!(file_metadata.modified()));
+        let file_len = file_metadata.len();
 
-        let content_length = {
-            let file_len = file_metadata.len();
-            let content_len = match input.range {
-                None => file_len,
-                Some(Range::Int { first, last }) => {
-                    if first >= file_len {
-                        return Err(s3_error!(InvalidRange));
-                    }
-                    if let Some(last) = last {
-                        if last > file_len {
-                            return Err(s3_error!(InvalidRange));
-                        }
-                    }
-
-                    try_!(file.seek(io::SeekFrom::Start(first)).await);
-
-                    match last.and_then(|x| x.checked_add(1)) {
-                        Some(end) => end - first,
-                        None => file_len - first,
-                    }
-                }
-                Some(Range::Suffix { length }) => {
-                    if length > file_len || length > u64::MAX / 2 {
-                        return Err(s3_error!(InvalidRange));
-                    }
-
-                    let neg_offset = length.numeric_cast::<i64>().neg();
-                    try_!(file.seek(io::SeekFrom::End(neg_offset)).await);
-
-                    length
-                }
-            };
-            try_!(usize::try_from(content_len))
+        let content_length = match input.range {
+            None => file_len,
+            Some(range) => {
+                let file_range = range.check(file_len)?;
+                file_range.end - file_range.start
+            }
         };
+        let content_length_usize = try_!(usize::try_from(content_length));
+        let content_length_i64 = try_!(i64::try_from(content_length));
 
-        let body = bytes_stream(ReaderStream::with_capacity(file, 4096), content_length);
+        match input.range {
+            Some(Range::Int { first, .. }) => {
+                try_!(file.seek(io::SeekFrom::Start(first)).await);
+            }
+            Some(Range::Suffix { length }) => {
+                let neg_offset = length.numeric_cast::<i64>().neg();
+                try_!(file.seek(io::SeekFrom::End(neg_offset)).await);
+            }
+            None => {}
+        }
+
+        let body = bytes_stream(ReaderStream::with_capacity(file, 4096), content_length_usize);
 
         let object_metadata = self.load_metadata(&input.bucket, &input.key).await?;
 
@@ -206,7 +193,7 @@ impl S3 for FileSystem {
 
         let output = GetObjectOutput {
             body: Some(StreamingBlob::wrap(body)),
-            content_length: try_!(i64::try_from(content_length)),
+            content_length: content_length_i64,
             last_modified: Some(last_modified),
             metadata: object_metadata,
             e_tag: Some(format!("\"{md5_sum}\"")),
