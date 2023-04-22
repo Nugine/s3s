@@ -3,23 +3,31 @@
 use crate::http;
 use crate::utils::from_ascii;
 
+use atoi::FromRadix10Checked;
+
 /// HTTP Range header
 ///
+/// Amazon S3 doesn't support retrieving multiple ranges of data per GET request.
+///
 /// See <https://www.rfc-editor.org/rfc/rfc9110.html#section-14.1.2>
-#[allow(clippy::exhaustive_enums, missing_copy_implementations)]
-#[derive(Debug, Clone)]
+#[allow(clippy::exhaustive_enums)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Range {
-    /// Normal byte range
-    Normal {
-        /// first
+    /// Int range in bytes. This range is **inclusive**.
+    ///
+    /// See <https://www.rfc-editor.org/rfc/rfc9110.html#rule.int-range>
+    Int {
+        /// first position
         first: u64,
-        /// last
+        /// last position
         last: Option<u64>,
     },
-    /// Suffix byte range
+    /// Suffix range in bytes.
+    ///
+    /// See <https://www.rfc-editor.org/rfc/rfc9110.html#rule.suffix-range>
     Suffix {
-        /// last
-        last: u64,
+        /// suffix length
+        length: u64,
     },
 }
 
@@ -36,53 +44,38 @@ impl Range {
     /// # Errors
     /// Returns an error if the header is invalid
     pub fn parse(header: &str) -> Result<Self, ParseRangeError> {
-        /// nom parser
-        fn nom_parse(input: &str) -> nom::IResult<&str, Range> {
-            use nom::{
-                branch::alt,
-                bytes::complete::tag,
-                character::complete::digit1,
-                combinator::{all_consuming, map, map_res, opt},
-                sequence::tuple,
-            };
+        let err = || ParseRangeError { _priv: () };
+        let s = header.strip_prefix("bytes=").ok_or_else(err)?.as_bytes();
 
-            let normal_parser = map_res(
-                tuple((map_res(digit1, str::parse::<u64>), tag("-"), opt(map_res(digit1, str::parse::<u64>)))),
-                |ss: (u64, &str, Option<u64>)| {
-                    if let (first, Some(last)) = (ss.0, ss.2) {
-                        if first > last {
-                            return Err(ParseRangeError { _priv: () });
-                        }
-                    }
-                    Ok(Range::Normal { first: ss.0, last: ss.2 })
-                },
-            );
-
-            let suffix_parser = map(tuple((tag("-"), map_res(digit1, str::parse::<u64>))), |ss: (&str, u64)| Range::Suffix {
-                last: ss.1,
-            });
-
-            let mut parser = all_consuming(tuple((tag("bytes="), alt((normal_parser, suffix_parser)))));
-
-            let (input, (_, ans)) = parser(input)?;
-
-            Ok((input, ans))
+        if let [b'-', s @ ..] = s {
+            // suffix range
+            let length = parse_u64_full(s).ok_or_else(err)?;
+            return Ok(Range::Suffix { length });
         }
 
-        match nom_parse(header) {
-            Err(_) => Err(ParseRangeError { _priv: () }),
-            Ok((_, ans)) => Ok(ans),
+        // int range
+        let (first, s) = parse_u64_once(s).ok_or_else(err)?;
+
+        let [b'-', s @ ..] = s else { return Err(err()) };
+
+        if s.is_empty() {
+            // int range from
+            return Ok(Range::Int { first, last: None });
         }
+
+        // int range inclusive
+        let last = parse_u64_full(s).ok_or_else(err)?;
+        Ok(Range::Int { first, last: Some(last) })
     }
 
     #[must_use]
-    pub fn format_to_string(&self) -> String {
+    pub fn to_header_string(&self) -> String {
         match self {
-            Range::Normal { first, last } => match last {
+            Range::Int { first, last } => match last {
                 Some(last) => format!("bytes={first}-{last}"),
                 None => format!("bytes={first}-"),
             },
-            Range::Suffix { last } => format!("bytes=-{last}"),
+            Range::Suffix { length } => format!("bytes=-{length}"),
         }
     }
 }
@@ -96,52 +89,57 @@ impl http::TryFromHeaderValue for Range {
     }
 }
 
+fn parse_u64_full(s: &[u8]) -> Option<u64> {
+    match u64::from_radix_10_checked(s) {
+        (Some(x), pos) if pos == s.len() => Some(x),
+        _ => None,
+    }
+}
+
+fn parse_u64_once(s: &[u8]) -> Option<(u64, &[u8])> {
+    match u64::from_radix_10_checked(s) {
+        (Some(x), pos) if pos > 0 => Some((x, &s[pos..])),
+        _ => None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    fn range_int_inclusive(first: u64, last: u64) -> Range {
+        Range::Int { first, last: Some(last) }
+    }
+
+    fn range_int_from(first: u64) -> Range {
+        Range::Int { first, last: None }
+    }
+
+    fn range_suffix(length: u64) -> Range {
+        Range::Suffix { length }
+    }
+
     #[test]
     fn byte_range() {
-        {
-            let src = "bytes=0-499";
-            let result = Range::parse(src);
-            assert!(matches!(
-                result.unwrap(),
-                Range::Normal {
-                    first: 0,
-                    last: Some(499)
-                }
-            ));
-        }
-        {
-            let src = "bytes=0-499;";
-            let result = Range::parse(src);
-            let _ = result.unwrap_err();
-        }
-        {
-            let src = "bytes=9500-";
-            let result = Range::parse(src);
-            assert!(matches!(result.unwrap(), Range::Normal { first: 9500, last: None }));
-        }
-        {
-            let src = "bytes=9500-0-";
-            let result = Range::parse(src);
-            let _ = result.unwrap_err();
-        }
-        {
-            let src = "bytes=-500";
-            let result = Range::parse(src);
-            assert!(matches!(result.unwrap(), Range::Suffix { last: 500 }));
-        }
-        {
-            let src = "bytes=-500 ";
-            let result = Range::parse(src);
-            let _ = result.unwrap_err();
-        }
-        {
-            let src = "bytes=-1000000000000000000000000";
-            let result = Range::parse(src);
-            let _ = result.unwrap_err();
+        let cases = [
+            ("bytes=0-499", Ok(range_int_inclusive(0, 499))),
+            ("bytes=0-499;", Err(())),
+            ("bytes=9500-", Ok(range_int_from(9500))),
+            ("bytes=9500-0-", Err(())),
+            ("bytes=9500", Err(())),
+            ("bytes=0-0", Ok(range_int_inclusive(0, 0))),
+            ("bytes=-500", Ok(range_suffix(500))),
+            ("bytes=-500 ", Err(())),
+            ("bytes=-+500", Err(())),
+            ("bytes=-1000000000000000000000000", Err(())),
+        ];
+
+        for (input, expected) in cases.iter() {
+            let output = Range::parse(input);
+            match expected {
+                Ok(expected) => assert_eq!(output.unwrap(), *expected),
+                Err(_) => assert!(output.is_err()),
+            }
         }
     }
 }

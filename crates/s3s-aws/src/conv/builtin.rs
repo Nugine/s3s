@@ -105,7 +105,7 @@ impl AwsConversion for s3s::dto::Range {
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(x.format_to_string())
+        Ok(x.to_header_string())
     }
 }
 

@@ -167,7 +167,7 @@ impl S3 for FileSystem {
             let file_len = file_metadata.len();
             let content_len = match input.range {
                 None => file_len,
-                Some(Range::Normal { first, last }) => {
+                Some(Range::Int { first, last }) => {
                     if first >= file_len {
                         return Err(s3_error!(InvalidRange));
                     }
@@ -184,15 +184,15 @@ impl S3 for FileSystem {
                         None => file_len - first,
                     }
                 }
-                Some(Range::Suffix { last }) => {
-                    if last > file_len || last > u64::MAX / 2 {
+                Some(Range::Suffix { length }) => {
+                    if length > file_len || length > u64::MAX / 2 {
                         return Err(s3_error!(InvalidRange));
                     }
 
-                    let neg_offset = last.numeric_cast::<i64>().neg();
+                    let neg_offset = length.numeric_cast::<i64>().neg();
                     try_!(file.seek(io::SeekFrom::End(neg_offset)).await);
 
-                    last
+                    length
                 }
             };
             try_!(usize::try_from(content_len))
