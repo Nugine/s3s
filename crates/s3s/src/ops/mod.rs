@@ -705,17 +705,17 @@ mod tests {
 
         #[rustfmt::skip]
         let sizes = [
-            future_size!(S3Service::call,                           2616),
-            future_size!(call,                                      1432),
-            future_size!(prepare,                                   1360),
-            future_size!(SignatureContext::check,                   752),
+            future_size!(S3Service::call,                           2600),
+            future_size!(call,                                      1424),
+            future_size!(prepare,                                   1352),
+            future_size!(SignatureContext::check,                   744),
             future_size!(SignatureContext::v2_check,                280),
             future_size!(SignatureContext::v2_check_presigned_url,  184),
             future_size!(SignatureContext::v2_check_header_auth,    184),
-            future_size!(SignatureContext::v4_check,                728),
+            future_size!(SignatureContext::v4_check,                720),
             future_size!(SignatureContext::v4_check_post_signature, 368),
             future_size!(SignatureContext::v4_check_presigned_url,  456),
-            future_size!(SignatureContext::v4_check_header_auth,    632),
+            future_size!(SignatureContext::v4_check_header_auth,    624),
         ];
 
         println!("{:#?}", sizes);
