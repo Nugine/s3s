@@ -722,7 +722,7 @@ mod tests {
             future_size!(SignatureContext::v4_check_header_auth,    624),
         ];
 
-        println!("{:#?}", sizes);
+        println!("{sizes:#?}");
         for (name, size, expected) in sizes {
             assert_eq!(size, expected, "{name:?} size changed: prev {expected}, now {size}");
         }

@@ -17,11 +17,6 @@
 )]
 // TODO
 #![allow(
-    clippy::transmute_ptr_to_ptr,
-    clippy::trivially_copy_pass_by_ref,
-    clippy::unchecked_duration_subtraction,
-    clippy::unicode_not_nfc,
-    clippy::uninlined_format_args,
     clippy::unnecessary_box_returns,
     clippy::unnecessary_join,
     clippy::unnecessary_wraps,
