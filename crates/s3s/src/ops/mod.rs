@@ -212,13 +212,15 @@ pub async fn call(
         }
     };
 
-    match op.call(s3, req).await {
-        Ok(res) => Ok(res),
+    let resp = match op.call(s3, req).await {
+        Ok(resp) => resp,
         Err(err) => {
             debug!(op = %op.name(), ?err, "op returns error");
-            serialize_error(err)
+            return serialize_error(err);
         }
-    }
+    };
+
+    Ok(resp)
 }
 
 async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<&'static dyn Operation> {

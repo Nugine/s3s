@@ -16,7 +16,6 @@
 )]
 // TODO
 #![allow(
-    clippy::similar_names,
     clippy::single_match_else,
     clippy::stable_sort_primitive,
     clippy::string_add_assign,

@@ -606,13 +606,10 @@ fn codegen_op_http_call(op: &Operation, g: &mut Codegen) {
     g.ln("let req = super::build_s3_request(input, req);");
     g.ln(f!("let result = s3.{method}(req).await;"));
 
-    g.ln("let res = match result {");
-    g.ln("Ok(output) => Self::serialize_http(output)?,");
-
-    g.ln("Err(err) => super::serialize_error(err)?,");
-    g.ln("};");
-
-    g.ln("Ok(res)");
+    g.ln("match result {");
+    g.ln("Ok(output) => Self::serialize_http(output),");
+    g.ln("Err(err) => super::serialize_error(err),");
+    g.ln("}");
 
     g.ln("}");
     g.ln("}");
