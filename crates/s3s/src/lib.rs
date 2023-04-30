@@ -15,10 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::bool_to_int_with_if,
-    clippy::borrow_as_ptr,
-    clippy::case_sensitive_file_extension_comparisons,
-    clippy::cast_lossless,
     clippy::cast_possible_truncation,
     clippy::cast_possible_wrap,
     clippy::cast_precision_loss,

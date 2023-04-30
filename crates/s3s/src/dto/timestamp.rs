@@ -84,7 +84,7 @@ impl Timestamp {
                         9 => 1,
                         _ => return Err(ParseTimestampError::Overflow),
                     };
-                    let nanos = secs as i128 * 1_000_000_000 + (val * mul) as i128;
+                    let nanos = i128::from(secs) * 1_000_000_000 + i128::from(val * mul);
                     time::OffsetDateTime::from_unix_timestamp_nanos(nanos)?
                 }
                 None => {
