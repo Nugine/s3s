@@ -15,12 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::cast_ptr_alignment,
-    clippy::cast_sign_loss,
-    clippy::checked_conversions,
-    clippy::cloned_instead_of_copied,
-    clippy::copy_iterator,
-    clippy::default_trait_access,
     clippy::doc_link_with_quotes,
     clippy::doc_markdown,
     clippy::empty_enum,

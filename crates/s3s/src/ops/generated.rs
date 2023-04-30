@@ -4480,7 +4480,7 @@ impl PutObject {
         let grant_write_acp: Option<GrantWriteACP> = http::parse_field_value(&m, "x-amz-grant-write-acp")?;
 
         let metadata: Option<Metadata> = {
-            let mut metadata: Metadata = Default::default();
+            let mut metadata = Metadata::default();
             for (name, value) in m.fields() {
                 if let Some(key) = name.strip_prefix("x-amz-meta-") {
                     if key.is_empty() {

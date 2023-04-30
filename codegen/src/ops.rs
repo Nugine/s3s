@@ -565,7 +565,7 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes, g: &mut 
             "metadata" => {
                 assert!(field.option_type);
                 g.ln(f!("let {}: Option<{}> = {{", field.name, field.type_));
-                g.ln(f!("    let mut metadata: {} = Default::default();", field.type_));
+                g.ln(f!("    let mut metadata = {}::default();", field.type_));
                 g.ln("    for (name, value) in m.fields() {");
                 g.ln("        if let Some(key) = name.strip_prefix(\"x-amz-meta-\") {");
                 g.ln("            if key.is_empty() { continue; }");

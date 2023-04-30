@@ -151,3 +151,7 @@ pub fn hmac_sha256(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> [u8; 32] {
     m.update(data.as_ref());
     m.finalize().into_bytes().into()
 }
+
+pub fn default<T: Default>() -> T {
+    T::default()
+}
