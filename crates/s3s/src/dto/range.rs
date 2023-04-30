@@ -102,6 +102,9 @@ impl Range {
         }
     }
 
+    /// Checks if the range is satisfiable
+    /// # Errors
+    /// Returns an error if the range is not satisfiable
     pub fn check(&self, full_length: u64) -> Result<ops::Range<u64>, RangeNotSatisfiable> {
         let err = || RangeNotSatisfiable { _priv: () };
         match *self {

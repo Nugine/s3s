@@ -15,11 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::match_wild_err_arm,
-    clippy::match_wildcard_for_single_variants,
-    clippy::maybe_infinite_iter,
-    clippy::mismatching_type_param_order,
-    clippy::missing_errors_doc,
     clippy::missing_panics_doc,
     clippy::module_name_repetitions,
     clippy::must_use_candidate,

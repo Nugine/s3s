@@ -64,6 +64,10 @@ const RFC1123: &[FormatItem<'_>] =
 const RFC3339: &[FormatItem<'_>] = format_description!("[year]-[month]-[day]T[hour]:[minute]:[second].[subsecond digits:3]Z");
 
 impl Timestamp {
+    /// Parses `Timestamp` from string
+    ///
+    /// # Errors
+    /// Returns an error if the string is invalid
     pub fn parse(format: TimestampFormat, s: &str) -> Result<Self, ParseTimestampError> {
         let ans = match format {
             TimestampFormat::DateTime => time::OffsetDateTime::parse(s, &Rfc3339)?,
@@ -96,6 +100,10 @@ impl Timestamp {
         Ok(Self(ans))
     }
 
+    /// Formats `Timestamp` into a writer
+    ///
+    /// # Errors
+    /// Returns an error if the formatting fails
     pub fn format(&self, format: TimestampFormat, w: &mut impl io::Write) -> Result<(), FormatTimestampError> {
         match format {
             TimestampFormat::DateTime => {
