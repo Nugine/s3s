@@ -17,8 +17,6 @@
 )]
 // TODO
 #![allow(
-    clippy::unnested_or_patterns,
-    clippy::unreadable_literal,
     clippy::unsafe_derive_deserialize,
     clippy::unused_async,
     clippy::unused_self,

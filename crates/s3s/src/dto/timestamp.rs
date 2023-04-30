@@ -77,10 +77,10 @@ impl Timestamp {
                     let secs: i64 = secs.parse::<u64>()?.try_into().map_err(|_| ParseTimestampError::Overflow)?;
                     let val: u32 = frac.parse::<u32>()?;
                     let mul: u32 = match frac.len() {
-                        1 => 100000000,
-                        2 => 10000000,
-                        3 => 1000000,
-                        4 => 100000,
+                        1 => 100_000_000,
+                        2 => 10_000_000,
+                        3 => 1_000_000,
+                        4 => 100_000,
                         5 => 10000,
                         6 => 1000,
                         7 => 100,
