@@ -64,6 +64,7 @@ fn serialize_error(x: S3Error) -> S3Result<Response> {
     let status = x.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
     let mut res = Response::with_status(status);
     http::set_xml_body(&mut res, &x)?;
+    drop(x);
     Ok(res)
 }
 

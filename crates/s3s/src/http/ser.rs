@@ -40,8 +40,8 @@ pub fn add_opt_header_timestamp<N>(res: &mut Response, name: N, value: Option<Ti
 where
     N: IntoHeaderName,
 {
-    if let Some(ref value) = value {
-        let val = utils::fmt_timestamp(value, fmt, HeaderValue::from_bytes).map_err(S3Error::internal_error)?;
+    if let Some(value) = value {
+        let val = utils::fmt_timestamp(&value, fmt, HeaderValue::from_bytes).map_err(S3Error::internal_error)?;
         res.headers.insert(name, val);
     }
     Ok(())

@@ -2,6 +2,7 @@
 
 #![allow(clippy::declare_interior_mutable_const)]
 #![allow(clippy::borrow_interior_mutable_const)]
+#![allow(clippy::needless_pass_by_value)]
 
 use crate::dto::*;
 use crate::error::*;

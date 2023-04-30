@@ -12,17 +12,10 @@
 #![allow(
     clippy::bool_assert_comparison,  // I don't like `assert!(!expression)`. It's very misleading.
     clippy::multiple_crate_versions, // Sometimes not fixable
+    clippy::module_name_repetitions,
 )]
 // TODO
 #![allow(
-    clippy::module_name_repetitions,
-    clippy::must_use_candidate,
-    clippy::mut_mut,
-    clippy::naive_bytecount,
-    clippy::needless_bitwise_bool,
-    clippy::needless_continue,
-    clippy::needless_for_each,
-    clippy::needless_pass_by_value,
     clippy::no_effect_underscore_binding,
     clippy::no_mangle_with_rust_abi,
     clippy::option_option,

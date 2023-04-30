@@ -63,7 +63,7 @@ impl RemainingLength {
     }
 
     #[must_use]
-    fn from_size_hint(sz: http_body::SizeHint) -> Self {
+    fn from_size_hint(sz: &http_body::SizeHint) -> Self {
         // inaccurate conversion on 32-bit platforms
         let lower = usize::try_from(sz.lower()).unwrap_or(usize::MAX);
         let upper = sz.upper().and_then(|x| usize::try_from(x).ok());
@@ -79,7 +79,7 @@ impl From<RemainingLength> for http_body::SizeHint {
 
 impl From<http_body::SizeHint> for RemainingLength {
     fn from(value: http_body::SizeHint) -> Self {
-        Self::from_size_hint(value)
+        Self::from_size_hint(&value)
     }
 }
 
