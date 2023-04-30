@@ -64,6 +64,7 @@ fn serialize_error(x: S3Error) -> S3Result<Response> {
     let status = x.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
     let mut res = Response::with_status(status);
     http::set_xml_body(&mut res, &x)?;
+    drop(x);
     Ok(res)
 }
 
@@ -211,13 +212,15 @@ pub async fn call(
         }
     };
 
-    match op.call(s3, req).await {
-        Ok(res) => Ok(res),
+    let resp = match op.call(s3, req).await {
+        Ok(resp) => resp,
         Err(err) => {
             debug!(op = %op.name(), ?err, "op returns error");
-            serialize_error(err)
+            return serialize_error(err);
         }
-    }
+    };
+
+    Ok(resp)
 }
 
 async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<&'static dyn Operation> {
@@ -277,7 +280,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
         if body_changed {
             // invalidate the original content length
             if let Some(val) = req.headers.get_mut(header::CONTENT_LENGTH) {
-                *val = fmt_content_length(decoded_content_length.unwrap_or(0))
+                *val = fmt_content_length(decoded_content_length.unwrap_or(0));
             }
             if let Some(val) = &mut content_length {
                 *val = 0;
@@ -719,7 +722,7 @@ mod tests {
             future_size!(SignatureContext::v4_check_header_auth,    624),
         ];
 
-        println!("{:#?}", sizes);
+        println!("{sizes:#?}");
         for (name, size, expected) in sizes {
             assert_eq!(size, expected, "{name:?} size changed: prev {expected}, now {size}");
         }

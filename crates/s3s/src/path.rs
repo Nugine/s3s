@@ -44,7 +44,6 @@ pub enum ParseS3PathError {
 
 impl S3Path {
     /// Create a new S3 path representing the root
-    #[inline(always)]
     #[must_use]
     pub fn root() -> Self {
         Self::Root
@@ -131,10 +130,7 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
         return Err(ParseS3PathError::InvalidBucketName);
     }
 
-    let key = match key {
-        None => return Ok(S3Path::bucket(bucket)),
-        Some(k) => k,
-    };
+    let Some(key) = key else { return Ok(S3Path::bucket(bucket)) };
 
     if !check_key(key) {
         return Err(ParseS3PathError::KeyTooLong);

@@ -45,10 +45,10 @@ fn hex(data: impl AsRef<[u8]>) -> String {
 }
 
 /// custom uri encode
+#[allow(clippy::indexing_slicing, clippy::inline_always, clippy::unwrap_used)]
 fn uri_encode(output: &mut String, input: &str, encode_slash: bool) {
     /// hex uppercase
-    #[inline(always)]
-    #[allow(clippy::indexing_slicing)]
+    #[inline(always)] // perf
     fn to_hex(x: u8) -> u8 {
         b"0123456789ABCDEF"[usize::from(x)]
     }
@@ -75,7 +75,6 @@ fn uri_encode(output: &mut String, input: &str, encode_slash: bool) {
         }
     }
 
-    #[allow(clippy::unwrap_used)]
     let s = from_ascii(buf.as_ref()).unwrap();
     output.push_str(s);
 }
@@ -821,7 +820,7 @@ mod tests {
             ("x-amz-content-sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
             ("x-amz-date", x_amz_date),
         ];
-        for (name, value) in headers.iter() {
+        for (name, value) in &headers {
             req.headers_mut()
                 .insert(HeaderName::from_static(name), HeaderValue::from_static(value));
         }

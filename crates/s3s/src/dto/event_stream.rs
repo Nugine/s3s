@@ -70,7 +70,7 @@ impl Stream for Wrapper {
             Some(ev) => {
                 let result = event_into_bytes(ev);
                 if let Err(ref err) = result {
-                    debug!("SelectObjectContentEventStream: Error: {}", err)
+                    debug!("SelectObjectContentEventStream: Error: {}", err);
                 }
                 Poll::Ready(Some(result.map_err(|e| Box::new(e) as StdError)))
             }
@@ -123,7 +123,7 @@ impl Message {
                 Some(acc)
             });
 
-            let payload_len = self.payload.as_ref().map_or(0, |p| p.len());
+            let payload_len = self.payload.as_ref().map_or(0, Bytes::len);
 
             let total_len = headers_len
                 .and_then(|acc| acc.checked_add(4 + 4 + 4 + 4))
@@ -181,6 +181,7 @@ const CONTENT_TYPE: &str = ":content-type";
 
 impl ContinuationEvent {
     fn into_message(self) -> Message {
+        let _ = self;
         let headers = const_headers(&[
             (EVENT_TYPE, "Cont"),    //
             (MESSAGE_TYPE, "event"), //
@@ -192,6 +193,7 @@ impl ContinuationEvent {
 
 impl EndEvent {
     fn into_message(self) -> Message {
+        let _ = self;
         let headers = const_headers(&[
             (EVENT_TYPE, "End"),     //
             (MESSAGE_TYPE, "event"), //
@@ -274,12 +276,12 @@ fn request_level_error(e: &S3Error) -> Message {
     Message { headers, payload: None }
 }
 
-#[inline(always)]
+#[inline]
 fn static_str(s: &'static str) -> Bytes {
     Bytes::from_static(s.as_bytes())
 }
 
-#[inline(always)]
+#[inline]
 fn header(name: Bytes, value: Bytes) -> Header {
     Header { name, value }
 }

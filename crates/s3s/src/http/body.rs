@@ -189,7 +189,12 @@ impl fmt::Debug for Body {
 }
 
 impl Body {
-    // FIXME: unbounded memory allocation
+    /// Stores all bytes in memory.
+    ///
+    /// WARNING: This function may cause **unbounded memory allocation**.
+    ///
+    /// # Errors
+    /// Returns an error if `hyper` fails to read the body.
     pub async fn store_all_unlimited(&mut self) -> Result<Bytes, StdError> {
         if let Some(bytes) = self.bytes() {
             return Ok(bytes);

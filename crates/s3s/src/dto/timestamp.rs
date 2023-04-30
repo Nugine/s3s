@@ -64,6 +64,10 @@ const RFC1123: &[FormatItem<'_>] =
 const RFC3339: &[FormatItem<'_>] = format_description!("[year]-[month]-[day]T[hour]:[minute]:[second].[subsecond digits:3]Z");
 
 impl Timestamp {
+    /// Parses `Timestamp` from string
+    ///
+    /// # Errors
+    /// Returns an error if the string is invalid
     pub fn parse(format: TimestampFormat, s: &str) -> Result<Self, ParseTimestampError> {
         let ans = match format {
             TimestampFormat::DateTime => time::OffsetDateTime::parse(s, &Rfc3339)?,
@@ -73,10 +77,10 @@ impl Timestamp {
                     let secs: i64 = secs.parse::<u64>()?.try_into().map_err(|_| ParseTimestampError::Overflow)?;
                     let val: u32 = frac.parse::<u32>()?;
                     let mul: u32 = match frac.len() {
-                        1 => 100000000,
-                        2 => 10000000,
-                        3 => 1000000,
-                        4 => 100000,
+                        1 => 100_000_000,
+                        2 => 10_000_000,
+                        3 => 1_000_000,
+                        4 => 100_000,
                         5 => 10000,
                         6 => 1000,
                         7 => 100,
@@ -84,7 +88,7 @@ impl Timestamp {
                         9 => 1,
                         _ => return Err(ParseTimestampError::Overflow),
                     };
-                    let nanos = secs as i128 * 1_000_000_000 + (val * mul) as i128;
+                    let nanos = i128::from(secs) * 1_000_000_000 + i128::from(val * mul);
                     time::OffsetDateTime::from_unix_timestamp_nanos(nanos)?
                 }
                 None => {
@@ -96,6 +100,10 @@ impl Timestamp {
         Ok(Self(ans))
     }
 
+    /// Formats `Timestamp` into a writer
+    ///
+    /// # Errors
+    /// Returns an error if the formatting fails
     pub fn format(&self, format: TimestampFormat, w: &mut impl io::Write) -> Result<(), FormatTimestampError> {
         match format {
             TimestampFormat::DateTime => {
@@ -106,10 +114,14 @@ impl Timestamp {
             }
             TimestampFormat::EpochSeconds => {
                 let val = self.0.unix_timestamp_nanos();
-                let secs = (val / 1_000_000_000) as f64;
-                let nanos = (val % 1_000_000_000) as f64 / 1_000_000_000.0;
-                let ts = secs + nanos;
-                write!(w, "{ts}")?;
+
+                #[allow(clippy::cast_precision_loss)] // FIXME: accurate conversion?
+                {
+                    let secs = (val / 1_000_000_000) as f64;
+                    let nanos = (val % 1_000_000_000) as f64 / 1_000_000_000.0;
+                    let ts = secs + nanos;
+                    write!(w, "{ts}")?;
+                }
             }
         }
         Ok(())

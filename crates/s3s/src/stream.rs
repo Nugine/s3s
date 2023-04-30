@@ -22,6 +22,10 @@ pub struct RemainingLength {
 }
 
 impl RemainingLength {
+    /// Creates a new `RemainingLength` with the given lower and upper bounds.
+    ///
+    /// # Panics
+    /// This function asserts that `lower <= upper`.
     #[must_use]
     pub fn new(lower: usize, upper: Option<usize>) -> Self {
         if let Some(upper) = upper {
@@ -59,11 +63,11 @@ impl RemainingLength {
     }
 
     #[must_use]
-    fn from_size_hint(sz: http_body::SizeHint) -> Self {
-        Self {
-            lower: sz.lower() as usize,
-            upper: sz.upper().map(|x| x as usize),
-        }
+    fn from_size_hint(sz: &http_body::SizeHint) -> Self {
+        // inaccurate conversion on 32-bit platforms
+        let lower = usize::try_from(sz.lower()).unwrap_or(usize::MAX);
+        let upper = sz.upper().and_then(|x| usize::try_from(x).ok());
+        Self { lower, upper }
     }
 }
 
@@ -75,7 +79,7 @@ impl From<RemainingLength> for http_body::SizeHint {
 
 impl From<http_body::SizeHint> for RemainingLength {
     fn from(value: http_body::SizeHint) -> Self {
-        Self::from_size_hint(value)
+        Self::from_size_hint(&value)
     }
 }
 
@@ -136,7 +140,7 @@ where
     let mut vec = Vec::new();
     pin_mut!(stream);
     while let Some(result) = stream.next().await {
-        vec.push(result?)
+        vec.push(result?);
     }
     Ok(vec)
 }
@@ -150,8 +154,8 @@ impl VecByteStream {
     pub fn new(v: Vec<Bytes>) -> Self {
         let total = v
             .iter()
-            .map(|b| b.len())
-            .try_fold(0, |acc: usize, x| acc.checked_add(x))
+            .map(Bytes::len)
+            .try_fold(0, usize::checked_add)
             .expect("length overflow");
 
         Self {

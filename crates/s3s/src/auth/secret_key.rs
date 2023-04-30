@@ -6,7 +6,6 @@ use zeroize::Zeroize;
 pub struct SecretKey(Box<str>);
 
 impl SecretKey {
-    #[inline(always)]
     fn new(s: impl Into<Box<str>>) -> Self {
         Self(s.into())
     }

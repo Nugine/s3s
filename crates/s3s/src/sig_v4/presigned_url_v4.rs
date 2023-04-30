@@ -104,5 +104,5 @@ impl<'a> PresignedUrlV4<'a> {
 
 fn parse_expires(s: &str) -> Option<time::Duration> {
     let x = s.parse::<u32>().ok().filter(|&x| x > 0)?;
-    Some(time::Duration::new(x as i64, 0))
+    Some(time::Duration::new(i64::from(x), 0))
 }

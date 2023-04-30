@@ -12,7 +12,7 @@ pub fn from_ascii(s: &[u8]) -> Option<&str> {
 }
 
 /// TODO(blocking): SIMD
-/// https://github.com/rusticstuff/simdutf8/issues/73
+/// `https://github.com/rusticstuff/simdutf8/issues/73`
 pub fn from_utf8_vec(v: Vec<u8>) -> Option<String> {
     String::from_utf8(v).ok()
 }
@@ -150,4 +150,8 @@ pub fn hmac_sha256(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> [u8; 32] {
     let mut m = <Hmac<Sha256>>::new_from_slice(key.as_ref()).unwrap();
     m.update(data.as_ref());
     m.finalize().into_bytes().into()
+}
+
+pub fn default<T: Default>() -> T {
+    T::default()
 }

@@ -341,10 +341,8 @@ const fn unexpected_start() -> DeError {
 impl<'xml> DeserializeContent<'xml> for bool {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         d.text(|t| match t.as_ref() {
-            b"true" => Ok(true),
-            b"false" => Ok(false),
-            b"TRUE" => Ok(true),
-            b"FALSE" => Ok(false),
+            b"true" | b"TRUE" => Ok(true),
+            b"false" | b"FALSE" => Ok(false),
             _ => Err(DeError::InvalidContent),
         })
     }

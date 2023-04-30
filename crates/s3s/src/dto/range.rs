@@ -102,6 +102,10 @@ impl Range {
         }
     }
 
+    /// Checks if the range is satisfiable
+    /// # Errors
+    /// Returns an error if the range is not satisfiable
+    #[allow(clippy::range_plus_one)] // cannot be fixed
     pub fn check(&self, full_length: u64) -> Result<ops::Range<u64>, RangeNotSatisfiable> {
         let err = || RangeNotSatisfiable { _priv: () };
         match *self {
@@ -191,7 +195,7 @@ mod tests {
             ("bytes=-1000000000000000000000000", Err(())),
         ];
 
-        for (input, expected) in cases.iter() {
+        for (input, expected) in &cases {
             let output = Range::parse(input);
             match expected {
                 Ok(expected) => assert_eq!(output.unwrap(), *expected),

@@ -3,7 +3,7 @@
 #![deny(
     clippy::all, //
     clippy::cargo, //
-    clippy::must_use_candidate, //
+    clippy::pedantic, //
     clippy::self_named_module_files, //
 )]
 #![warn(
@@ -12,6 +12,10 @@
 #![allow(
     clippy::bool_assert_comparison,  // I don't like `assert!(!expression)`. It's very misleading.
     clippy::multiple_crate_versions, // Sometimes not fixable
+    clippy::module_name_repetitions,
+    clippy::single_match_else,
+    clippy::wildcard_imports,
+    clippy::let_underscore_untyped,
 )]
 
 #[macro_use]
