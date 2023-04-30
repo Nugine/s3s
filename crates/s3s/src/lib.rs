@@ -15,7 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::missing_panics_doc,
     clippy::module_name_repetitions,
     clippy::must_use_candidate,
     clippy::mut_mut,

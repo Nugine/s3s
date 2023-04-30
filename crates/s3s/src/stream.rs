@@ -22,6 +22,10 @@ pub struct RemainingLength {
 }
 
 impl RemainingLength {
+    /// Creates a new `RemainingLength` with the given lower and upper bounds.
+    ///
+    /// # Panics
+    /// This function asserts that `lower <= upper`.
     #[must_use]
     pub fn new(lower: usize, upper: Option<usize>) -> Self {
         if let Some(upper) = upper {
