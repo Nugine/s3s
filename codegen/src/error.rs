@@ -176,7 +176,6 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
         g.ln("];");
         g.lf();
 
-        g.ln("#[inline(always)]");
         g.ln("#[must_use]");
         g.ln("fn as_enum_tag(&self) -> usize {");
         g.ln("match self {");

@@ -13,12 +13,12 @@ macro_rules! identity_impl {
                 type Target = $ty;
                 type Error = Infallible;
 
-                #[inline(always)]
+                #[inline]
                 fn try_from_aws(x: Self::Target) -> Result<Self, Self::Error> {
                     Ok(x)
                 }
 
-                #[inline(always)]
+                #[inline]
                 fn try_into_aws(x: Self) -> Result<Self::Target, Self::Error> {
                     Ok(x)
                 }

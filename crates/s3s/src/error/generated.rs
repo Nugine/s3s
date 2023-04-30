@@ -576,7 +576,6 @@ impl S3ErrorCode {
         "UserKeyMustBeSpecified",
     ];
 
-    #[inline(always)]
     #[must_use]
     fn as_enum_tag(&self) -> usize {
         match self {

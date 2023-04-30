@@ -15,11 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::implicit_hasher,
-    clippy::inconsistent_struct_constructor,
-    clippy::index_refutable_slice,
-    clippy::inefficient_to_string,
-    clippy::inline_always,
     clippy::invalid_upcast_comparisons,
     clippy::items_after_statements,
     clippy::iter_not_returning_iterator,

@@ -274,12 +274,12 @@ fn request_level_error(e: &S3Error) -> Message {
     Message { headers, payload: None }
 }
 
-#[inline(always)]
+#[inline]
 fn static_str(s: &'static str) -> Bytes {
     Bytes::from_static(s.as_bytes())
 }
 
-#[inline(always)]
+#[inline]
 fn header(name: Bytes, value: Bytes) -> Header {
     Header { name, value }
 }

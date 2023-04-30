@@ -45,10 +45,10 @@ fn hex(data: impl AsRef<[u8]>) -> String {
 }
 
 /// custom uri encode
+#[allow(clippy::indexing_slicing, clippy::inline_always)]
 fn uri_encode(output: &mut String, input: &str, encode_slash: bool) {
     /// hex uppercase
-    #[inline(always)]
-    #[allow(clippy::indexing_slicing)]
+    #[inline(always)] // perf
     fn to_hex(x: u8) -> u8 {
         b"0123456789ABCDEF"[usize::from(x)]
     }

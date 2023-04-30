@@ -44,7 +44,6 @@ pub enum ParseS3PathError {
 
 impl S3Path {
     /// Create a new S3 path representing the root
-    #[inline(always)]
     #[must_use]
     pub fn root() -> Self {
         Self::Root
