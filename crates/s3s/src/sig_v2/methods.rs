@@ -166,6 +166,7 @@ mod tests {
         }
     }
 
+    #[allow(clippy::too_many_lines)]
     #[test]
     fn examples() {
         let access_key = "AKIAIOSFODNN7EXAMPLE";

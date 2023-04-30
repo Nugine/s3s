@@ -13,14 +13,10 @@
     clippy::bool_assert_comparison,  // I don't like `assert!(!expression)`. It's very misleading.
     clippy::multiple_crate_versions, // Sometimes not fixable
     clippy::module_name_repetitions,
+    clippy::single_match_else,
 )]
 // TODO
 #![allow(
-    clippy::single_match_else,
-    clippy::stable_sort_primitive,
-    clippy::string_add_assign,
-    clippy::struct_excessive_bools,
-    clippy::too_many_lines,
     clippy::transmute_ptr_to_ptr,
     clippy::trivially_copy_pass_by_ref,
     clippy::unchecked_duration_subtraction,
