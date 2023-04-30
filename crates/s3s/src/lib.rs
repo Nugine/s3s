@@ -15,12 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::empty_enum,
-    clippy::enum_glob_use,
-    clippy::expl_impl_clone_on_copy,
-    clippy::explicit_deref_methods,
-    clippy::explicit_into_iter_loop,
-    clippy::explicit_iter_loop,
     clippy::filter_map_next,
     clippy::flat_map_option,
     clippy::float_cmp,

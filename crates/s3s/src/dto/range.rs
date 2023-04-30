@@ -191,7 +191,7 @@ mod tests {
             ("bytes=-1000000000000000000000000", Err(())),
         ];
 
-        for (input, expected) in cases.iter() {
+        for (input, expected) in &cases {
             let output = Range::parse(input);
             match expected {
                 Ok(expected) => assert_eq!(output.unwrap(), *expected),

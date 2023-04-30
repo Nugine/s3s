@@ -821,7 +821,7 @@ mod tests {
             ("x-amz-content-sha256", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"),
             ("x-amz-date", x_amz_date),
         ];
-        for (name, value) in headers.iter() {
+        for (name, value) in &headers {
             req.headers_mut()
                 .insert(HeaderName::from_static(name), HeaderValue::from_static(value));
         }
