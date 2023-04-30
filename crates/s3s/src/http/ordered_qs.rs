@@ -86,7 +86,7 @@ mod tests {
         {
             let query = "tagging";
             let qs = OrderedQs::parse(query).unwrap();
-            assert_eq!(qs.as_ref(), &[("tagging".to_owned(), "".to_owned())]);
+            assert_eq!(qs.as_ref(), &[("tagging".to_owned(), String::new())]);
 
             assert_eq!(qs.get_unique("taggin"), None);
             assert_eq!(qs.get_unique("tagging"), Some(""));
@@ -98,7 +98,7 @@ mod tests {
             let qs = OrderedQs::parse(query).unwrap();
             assert_eq!(
                 qs.as_ref(),
-                &[("tagging".to_owned(), "".to_owned()), ("tagging".to_owned(), "".to_owned())]
+                &[("tagging".to_owned(), String::new()), ("tagging".to_owned(), String::new())]
             );
 
             assert_eq!(qs.get_unique("taggin"), None);

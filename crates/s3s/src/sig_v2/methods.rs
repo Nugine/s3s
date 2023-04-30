@@ -251,7 +251,7 @@ mod tests {
             let method = &Method::GET;
             let s3_path = S3Path::bucket("awsexamplebucket1");
             let date = "Tue, 27 Mar 2007 19:44:46 +0000";
-            let qs = OrderedQs::from_vec_unchecked(vec![("acl".into(), "".into())]);
+            let qs = OrderedQs::from_vec_unchecked(vec![("acl".into(), String::new())]);
             let headers = OrderedHeaders::default();
 
             let string_to_sign = create_string_to_sign(method, date, &headers, &s3_path, Some(&qs));

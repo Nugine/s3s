@@ -15,20 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::invalid_upcast_comparisons,
-    clippy::items_after_statements,
-    clippy::iter_not_returning_iterator,
-    clippy::large_digit_groups,
-    clippy::large_futures,
-    clippy::large_stack_arrays,
-    clippy::large_types_passed_by_value,
-    clippy::linkedlist,
-    clippy::macro_use_imports,
-    clippy::manual_assert,
-    clippy::manual_instant_elapsed,
-    clippy::manual_let_else,
-    clippy::manual_ok_or,
-    clippy::manual_string_new,
     clippy::many_single_char_names,
     clippy::map_unwrap_or,
     clippy::match_bool,
