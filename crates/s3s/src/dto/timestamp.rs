@@ -106,10 +106,14 @@ impl Timestamp {
             }
             TimestampFormat::EpochSeconds => {
                 let val = self.0.unix_timestamp_nanos();
-                let secs = (val / 1_000_000_000) as f64;
-                let nanos = (val % 1_000_000_000) as f64 / 1_000_000_000.0;
-                let ts = secs + nanos;
-                write!(w, "{ts}")?;
+
+                #[allow(clippy::cast_precision_loss)] // FIXME: accurate conversion?
+                {
+                    let secs = (val / 1_000_000_000) as f64;
+                    let nanos = (val % 1_000_000_000) as f64 / 1_000_000_000.0;
+                    let ts = secs + nanos;
+                    write!(w, "{ts}")?;
+                }
             }
         }
         Ok(())

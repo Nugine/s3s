@@ -15,8 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::cast_possible_wrap,
-    clippy::cast_precision_loss,
     clippy::cast_ptr_alignment,
     clippy::cast_sign_loss,
     clippy::checked_conversions,
