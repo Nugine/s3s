@@ -181,6 +181,7 @@ const CONTENT_TYPE: &str = ":content-type";
 
 impl ContinuationEvent {
     fn into_message(self) -> Message {
+        let _ = self;
         let headers = const_headers(&[
             (EVENT_TYPE, "Cont"),    //
             (MESSAGE_TYPE, "event"), //
@@ -192,6 +193,7 @@ impl ContinuationEvent {
 
 impl EndEvent {
     fn into_message(self) -> Message {
+        let _ = self;
         let headers = const_headers(&[
             (EVENT_TYPE, "End"),     //
             (MESSAGE_TYPE, "event"), //

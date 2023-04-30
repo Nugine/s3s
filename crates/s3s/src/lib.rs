@@ -14,16 +14,7 @@
     clippy::multiple_crate_versions, // Sometimes not fixable
     clippy::module_name_repetitions,
     clippy::single_match_else,
-)]
-// TODO
-#![allow(
-    clippy::unsafe_derive_deserialize,
-    clippy::unused_async,
-    clippy::unused_self,
-    clippy::used_underscore_binding,
-    clippy::verbose_bit_mask,
     clippy::wildcard_imports,
-    clippy::zero_sized_map_values
 )]
 
 #[macro_use]
