@@ -211,6 +211,7 @@ pub fn codegen(model: &smithy::Model, g: &mut Codegen) {
     }
 
     {
+        g.ln("#[allow(clippy::match_same_arms)]");
         g.ln("#[must_use]");
         g.ln("pub fn status_code(&self) -> Option<StatusCode> {");
 

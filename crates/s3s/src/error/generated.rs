@@ -754,6 +754,7 @@ impl S3ErrorCode {
         }
     }
 
+    #[allow(clippy::match_same_arms)]
     #[must_use]
     pub fn status_code(&self) -> Option<StatusCode> {
         match self {
