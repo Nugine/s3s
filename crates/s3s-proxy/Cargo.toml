@@ -5,13 +5,13 @@ edition = "2021"
 publish = false
 
 [dependencies]
-aws-config = "0.55.0"
-aws-credential-types = "0.55.0"
+aws-config = "0.55.1"
+aws-credential-types = "0.55.1"
 aws-sdk-s3 = "0.26.0"
-clap = { version = "4.2.1", features = ["derive"] }
-hyper = { version = "0.14.25", features = ["full"] }
+clap = { version = "4.2.5", features = ["derive"] }
+hyper = { version = "0.14.26", features = ["full"] }
 s3s = { version = "0.5.0-dev", path = "../s3s" }
 s3s-aws = { version = "0.5.0-dev", path = "../s3s-aws" }
-tokio = { version = "1.27.0", features = ["full"] }
+tokio = { version = "1.28.0", features = ["full"] }
 tracing = "0.1.37"
-tracing-subscriber = { version = "0.3.16", features = ["env-filter", "time"] }
+tracing-subscriber = { version = "0.3.17", features = ["env-filter", "time"] }
