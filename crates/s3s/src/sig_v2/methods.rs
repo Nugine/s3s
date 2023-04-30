@@ -162,7 +162,7 @@ mod tests {
     #[test]
     fn sorted() {
         for w in INCLUDED_QUERY.windows(2) {
-            assert!(w[0] < w[1], "{w:?}")
+            assert!(w[0] < w[1], "{w:?}");
         }
     }
 

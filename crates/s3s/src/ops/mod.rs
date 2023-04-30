@@ -278,7 +278,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
         if body_changed {
             // invalidate the original content length
             if let Some(val) = req.headers.get_mut(header::CONTENT_LENGTH) {
-                *val = fmt_content_length(decoded_content_length.unwrap_or(0))
+                *val = fmt_content_length(decoded_content_length.unwrap_or(0));
             }
             if let Some(val) = &mut content_length {
                 *val = 0;

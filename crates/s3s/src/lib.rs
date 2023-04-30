@@ -16,12 +16,6 @@
 )]
 // TODO
 #![allow(
-    clippy::redundant_else,
-    clippy::ref_binding_to_reference,
-    clippy::ref_option_ref,
-    clippy::return_self_not_must_use,
-    clippy::same_functions_in_if_condition,
-    clippy::semicolon_if_nothing_returned,
     clippy::similar_names,
     clippy::single_match_else,
     clippy::stable_sort_primitive,

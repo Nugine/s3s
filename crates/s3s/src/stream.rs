@@ -140,7 +140,7 @@ where
     let mut vec = Vec::new();
     pin_mut!(stream);
     while let Some(result) = stream.next().await {
-        vec.push(result?)
+        vec.push(result?);
     }
     Ok(vec)
 }

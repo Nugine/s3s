@@ -70,7 +70,7 @@ impl Stream for Wrapper {
             Some(ev) => {
                 let result = event_into_bytes(ev);
                 if let Err(ref err) = result {
-                    debug!("SelectObjectContentEventStream: Error: {}", err)
+                    debug!("SelectObjectContentEventStream: Error: {}", err);
                 }
                 Poll::Ready(Some(result.map_err(|e| Box::new(e) as StdError)))
             }

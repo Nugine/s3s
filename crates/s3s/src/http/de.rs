@@ -74,7 +74,7 @@ where
     let mut list = List::new();
     for val in req.headers.get_all(name) {
         let ans = T::try_from_header_value(val).map_err(|err| invalid_header(err, name, val))?;
-        list.push(ans)
+        list.push(ans);
     }
     Ok(list)
 }
