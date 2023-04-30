@@ -17,9 +17,6 @@
 )]
 // TODO
 #![allow(
-    clippy::unnecessary_box_returns,
-    clippy::unnecessary_join,
-    clippy::unnecessary_wraps,
     clippy::unnested_or_patterns,
     clippy::unreadable_literal,
     clippy::unsafe_derive_deserialize,

@@ -103,6 +103,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes, g: &mut Codegen) {
         "#![allow(clippy::borrow_interior_mutable_const)]",
         "#![allow(clippy::needless_pass_by_value)]",
         "#![allow(clippy::too_many_lines)]",
+        "#![allow(clippy::unnecessary_wraps)]",
         "",
         "use crate::dto::*;", //
         "use crate::header::*;",
