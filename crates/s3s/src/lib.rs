@@ -16,7 +16,6 @@
 )]
 // TODO
 #![allow(
-    clippy::redundant_closure_for_method_calls,
     clippy::redundant_else,
     clippy::ref_binding_to_reference,
     clippy::ref_option_ref,

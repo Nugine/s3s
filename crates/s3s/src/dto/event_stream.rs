@@ -123,7 +123,7 @@ impl Message {
                 Some(acc)
             });
 
-            let payload_len = self.payload.as_ref().map_or(0, |p| p.len());
+            let payload_len = self.payload.as_ref().map_or(0, Bytes::len);
 
             let total_len = headers_len
                 .and_then(|acc| acc.checked_add(4 + 4 + 4 + 4))

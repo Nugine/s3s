@@ -154,8 +154,8 @@ impl VecByteStream {
     pub fn new(v: Vec<Bytes>) -> Self {
         let total = v
             .iter()
-            .map(|b| b.len())
-            .try_fold(0, |acc: usize, x| acc.checked_add(x))
+            .map(Bytes::len)
+            .try_fold(0, usize::checked_add)
             .expect("length overflow");
 
         Self {

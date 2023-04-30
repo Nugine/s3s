@@ -5808,168 +5808,168 @@ impl<'xml> DeserializeContent<'xml> for WebsiteConfiguration {
 
 impl<'xml> Deserialize<'xml> for AccelerateConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("AccelerateConfiguration", |d| d.content())
+        d.named_element("AccelerateConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for AccessControlPolicy {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("AccessControlPolicy", |d| d.content())
+        d.named_element("AccessControlPolicy", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for AnalyticsConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("AnalyticsConfiguration", |d| d.content())
+        d.named_element("AnalyticsConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for BucketLifecycleConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("LifecycleConfiguration", |d| d.content())
+        d.named_element("LifecycleConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for BucketLoggingStatus {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("BucketLoggingStatus", |d| d.content())
+        d.named_element("BucketLoggingStatus", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for CORSConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("CORSConfiguration", |d| d.content())
+        d.named_element("CORSConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for CompletedMultipartUpload {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("CompleteMultipartUpload", |d| d.content())
+        d.named_element("CompleteMultipartUpload", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for CreateBucketConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("CreateBucketConfiguration", |d| d.content())
+        d.named_element("CreateBucketConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for Delete {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("Delete", |d| d.content())
+        d.named_element("Delete", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for IntelligentTieringConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("IntelligentTieringConfiguration", |d| d.content())
+        d.named_element("IntelligentTieringConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for InventoryConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("InventoryConfiguration", |d| d.content())
+        d.named_element("InventoryConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for MetricsConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("MetricsConfiguration", |d| d.content())
+        d.named_element("MetricsConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for NotificationConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("NotificationConfiguration", |d| d.content())
+        d.named_element("NotificationConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for ObjectLockConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("ObjectLockConfiguration", |d| d.content())
+        d.named_element("ObjectLockConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for ObjectLockLegalHold {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("LegalHold", |d| d.content())
+        d.named_element("LegalHold", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for ObjectLockRetention {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("Retention", |d| d.content())
+        d.named_element("Retention", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for OwnershipControls {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("OwnershipControls", |d| d.content())
+        d.named_element("OwnershipControls", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for Progress {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("Progress", |d| d.content())
+        d.named_element("Progress", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for PublicAccessBlockConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("PublicAccessBlockConfiguration", |d| d.content())
+        d.named_element("PublicAccessBlockConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for ReplicationConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("ReplicationConfiguration", |d| d.content())
+        d.named_element("ReplicationConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for RequestPaymentConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("RequestPaymentConfiguration", |d| d.content())
+        d.named_element("RequestPaymentConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for RestoreRequest {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("RestoreRequest", |d| d.content())
+        d.named_element("RestoreRequest", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for SelectObjectContentRequest {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("SelectObjectContentRequest", |d| d.content())
+        d.named_element("SelectObjectContentRequest", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for ServerSideEncryptionConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("ServerSideEncryptionConfiguration", |d| d.content())
+        d.named_element("ServerSideEncryptionConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for Stats {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("Stats", |d| d.content())
+        d.named_element("Stats", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for Tagging {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("Tagging", |d| d.content())
+        d.named_element("Tagging", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for VersioningConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("VersioningConfiguration", |d| d.content())
+        d.named_element("VersioningConfiguration", Deserializer::content)
     }
 }
 
 impl<'xml> Deserialize<'xml> for WebsiteConfiguration {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("WebsiteConfiguration", |d| d.content())
+        d.named_element("WebsiteConfiguration", Deserializer::content)
     }
 }
