@@ -4486,7 +4486,7 @@ impl PutObject {
                     if key.is_empty() {
                         continue;
                     }
-                    metadata.insert(key.to_owned(), value.to_owned());
+                    metadata.insert(key.to_owned(), value.clone());
                 }
             }
             if metadata.is_empty() {

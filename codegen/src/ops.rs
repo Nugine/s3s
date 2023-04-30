@@ -569,7 +569,7 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes, g: &mut 
                 g.ln("    for (name, value) in m.fields() {");
                 g.ln("        if let Some(key) = name.strip_prefix(\"x-amz-meta-\") {");
                 g.ln("            if key.is_empty() { continue; }");
-                g.ln("            metadata.insert(key.to_owned(), value.to_owned());");
+                g.ln("            metadata.insert(key.to_owned(), value.clone());");
                 g.ln("        }");
                 g.ln("    }");
                 g.ln("    if metadata.is_empty() { None } else { Some(metadata) }");

@@ -15,13 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::filter_map_next,
-    clippy::flat_map_option,
-    clippy::float_cmp,
-    clippy::fn_params_excessive_bools,
-    clippy::from_iter_instead_of_collect,
-    clippy::if_not_else,
-    clippy::implicit_clone,
     clippy::implicit_hasher,
     clippy::inconsistent_struct_constructor,
     clippy::index_refutable_slice,
