@@ -15,8 +15,6 @@
 )]
 // TODO
 #![allow(
-    clippy::doc_link_with_quotes,
-    clippy::doc_markdown,
     clippy::empty_enum,
     clippy::enum_glob_use,
     clippy::expl_impl_clone_on_copy,

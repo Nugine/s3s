@@ -12,7 +12,7 @@ pub fn from_ascii(s: &[u8]) -> Option<&str> {
 }
 
 /// TODO(blocking): SIMD
-/// https://github.com/rusticstuff/simdutf8/issues/73
+/// `https://github.com/rusticstuff/simdutf8/issues/73`
 pub fn from_utf8_vec(v: Vec<u8>) -> Option<String> {
     String::from_utf8(v).ok()
 }
