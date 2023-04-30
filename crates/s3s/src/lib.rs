@@ -15,6 +15,7 @@
     clippy::module_name_repetitions,
     clippy::single_match_else,
     clippy::wildcard_imports,
+    clippy::let_underscore_untyped,
 )]
 
 #[macro_use]
