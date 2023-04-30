@@ -16,12 +16,6 @@
 )]
 // TODO
 #![allow(
-    clippy::no_effect_underscore_binding,
-    clippy::no_mangle_with_rust_abi,
-    clippy::option_option,
-    clippy::ptr_as_ptr,
-    clippy::range_minus_one,
-    clippy::range_plus_one,
     clippy::redundant_closure_for_method_calls,
     clippy::redundant_else,
     clippy::ref_binding_to_reference,
