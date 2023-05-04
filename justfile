@@ -26,11 +26,9 @@ install:
     just install-s3s-proxy
 
 sync-version:
-    cargo set-version -p s3s-codegen    0.0.0
-    cargo set-version -p s3s            0.5.0-dev
-    cargo set-version -p s3s-aws        0.5.0-dev
-    cargo set-version -p s3s-fs         0.5.0-dev
-    cargo set-version -p s3s-proxy      0.0.0
+    cargo set-version -p s3s            0.5.0
+    cargo set-version -p s3s-aws        0.5.0
+    cargo set-version -p s3s-fs         0.5.0
 
 publish:
     cargo publish -p s3s
