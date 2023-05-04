@@ -35,7 +35,7 @@ It should change nothing if you are running the latest code.
 
 #### Play the test server
 
-Install `s3s-fs`
+Install `s3s-fs` from source
 
 ```bash
 cargo install --path crates/s3s-fs --features binary
@@ -47,11 +47,19 @@ You can also use the shortcut
 just install-s3s-fs
 ```
 
-Run `s3s-fs` with example configuration
+Or install from crates.io
+
+```bash
+cargo install s3s-fs --features binary
+```
+
+Run `s3s-fs` with [example configuration](./scripts/s3s-fs.sh)
 
 ```bash
 ./scripts/s3s-fs.sh
 ```
+
+Credentials used in the example configuration:
 
 ```
 Access Key: AKEXAMPLES3S
