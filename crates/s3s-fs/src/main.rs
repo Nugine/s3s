@@ -70,13 +70,17 @@ async fn main() -> Result {
 
     // Run server
     let listener = TcpListener::bind((opt.host.as_str(), opt.port))?;
+    let local_addr = listener.local_addr()?;
+
     let server = Server::from_tcp(listener)?.serve(service.into_shared().into_make_service());
 
-    info!("server is running at http://{}:{}/", opt.host, opt.port);
-    let task = tokio::spawn(server);
+    info!("server is running at http://{local_addr}");
+    server.with_graceful_shutdown(shutdown_signal()).await?;
 
-    tokio::signal::ctrl_c().await?;
-    task.abort();
-
+    info!("server is stopped");
     Ok(())
+}
+
+async fn shutdown_signal() {
+    let _ = tokio::signal::ctrl_c().await;
 }
