@@ -16,8 +16,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To verify that all parts have been removed, so you don't get charged for the part
     /// storage, you should call the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html">ListParts</a> action and ensure that
     /// the parts list is empty.</p>
-    /// <p>For information about permissions required to use the multipart upload, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload
-    /// and Permissions</a>.</p>
+    /// <p>For information about permissions required to use the multipart upload, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload and
+    /// Permissions</a>.</p>
     /// <p>The following operations are related to <code>AbortMultipartUpload</code>:</p>
     /// <ul>
     /// <li>
@@ -53,36 +53,28 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
     /// <p>You first initiate the multipart upload and then upload all parts using the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html">UploadPart</a>
     /// operation. After successfully uploading all relevant parts of an upload, you call this
-    /// action to complete the upload. Upon receiving this request, Amazon S3 concatenates all the
-    /// parts in ascending order by part number to create a new object. In the Complete Multipart
-    /// Upload request, you must provide the parts list. You must ensure that the parts list is
-    /// complete. This action concatenates the parts that you provide in the list. For each part in
-    /// the list, you must provide the part number and the <code>ETag</code> value, returned after
-    /// that part was uploaded.</p>
+    /// action to complete the upload. Upon receiving this request, Amazon S3 concatenates all
+    /// the parts in ascending order by part number to create a new object. In the Complete
+    /// Multipart Upload request, you must provide the parts list. You must ensure that the parts
+    /// list is complete. This action concatenates the parts that you provide in the list. For
+    /// each part in the list, you must provide the part number and the <code>ETag</code> value,
+    /// returned after that part was uploaded.</p>
     /// <p>Processing of a Complete Multipart Upload request could take several minutes to
     /// complete. After Amazon S3 begins processing the request, it sends an HTTP response header that
     /// specifies a 200 OK response. While processing is in progress, Amazon S3 periodically sends white
-    /// space characters to keep the connection from timing out. A request could fail after the
-    /// initial 200 OK response has been sent. This means that a <code>200 OK</code> response can
-    /// contain either a success or an error. If you call the S3 API directly, make sure to design
-    /// your application to parse the contents of the response and handle it appropriately. If you
-    /// use Amazon Web Services SDKs, SDKs handle this condition. The SDKs detect the embedded error and apply
-    /// error handling per your configuration settings (including automatically retrying the
-    /// request as appropriate). If the condition persists, the SDKs throws an exception (or, for
-    /// the SDKs that don't use exceptions, they return the error). </p>
+    /// space characters to keep the connection from timing out. Because a request could fail after
+    /// the initial 200 OK response has been sent, it is important that you check the response body
+    /// to determine whether the request succeeded.</p>
     /// <p>Note that if <code>CompleteMultipartUpload</code> fails, applications should be prepared
-    /// to retry the failed requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ErrorBestPractices.html">Amazon S3 Error Best
-    /// Practices</a>.</p>
+    /// to retry the failed requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ErrorBestPractices.html">Amazon S3 Error Best Practices</a>.</p>
     /// <important>
-    /// <p>You cannot use <code>Content-Type: application/x-www-form-urlencoded</code> with
-    /// Complete Multipart Upload requests. Also, if you do not provide a
-    /// <code>Content-Type</code> header, <code>CompleteMultipartUpload</code> returns a 200
-    /// OK response.</p>
+    /// <p>You cannot use <code>Content-Type: application/x-www-form-urlencoded</code> with Complete
+    /// Multipart Upload requests. Also, if you do not provide a <code>Content-Type</code> header, <code>CompleteMultipartUpload</code> returns a 200 OK response.</p>
     /// </important>
     /// <p>For more information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart
     /// Upload</a>.</p>
-    /// <p>For information about permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload
-    /// and Permissions</a>.</p>
+    /// <p>For information about permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload and
+    /// Permissions</a>.</p>
     /// <p>
     /// <code>CompleteMultipartUpload</code> has the following special errors:</p>
     /// <ul>
@@ -186,20 +178,15 @@ pub trait S3: Send + Sync + 'static {
     /// </note>
     /// <p>All copy requests must be authenticated. Additionally, you must have
     /// <i>read</i> access to the source object and <i>write</i>
-    /// access to the destination bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html">REST Authentication</a>. Both the
-    /// Region that you want to copy the object from and the Region that you want to copy the
-    /// object to must be enabled for your account.</p>
+    /// access to the destination bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAuthentication.html">REST Authentication</a>. Both the Region
+    /// that you want to copy the object from and the Region that you want to copy the object to
+    /// must be enabled for your account.</p>
     /// <p>A copy request might return an error when Amazon S3 receives the copy request or while Amazon S3
     /// is copying the files. If the error occurs before the copy action starts, you receive a
     /// standard Amazon S3 error. If the error occurs during the copy operation, the error response is
     /// embedded in the <code>200 OK</code> response. This means that a <code>200 OK</code>
-    /// response can contain either a success or an error. If you call the S3 API directly, make
-    /// sure to design your application to parse the contents of the response and handle it
-    /// appropriately. If you use Amazon Web Services SDKs, SDKs handle this condition. The SDKs detect the
-    /// embedded error and apply error handling per your configuration settings (including
-    /// automatically retrying the request as appropriate). If the condition persists, the SDKs
-    /// throws an exception (or, for the SDKs that don't use exceptions, they return the
-    /// error).</p>
+    /// response can contain either a success or an error. Design your application to parse the
+    /// contents of the response and handle it appropriately.</p>
     /// <p>If the copy is successful, you receive a response with information about the copied
     /// object.</p>
     /// <note>
@@ -212,8 +199,7 @@ pub trait S3: Send + Sync + 'static {
     /// <important>
     /// <p>Amazon S3 transfer acceleration does not support cross-Region copies. If you request a
     /// cross-Region copy using a transfer acceleration endpoint, you get a 400 <code>Bad
-    /// Request</code> error. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer
-    /// Acceleration</a>.</p>
+    /// Request</code> error. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a>.</p>
     /// </important>
     /// <p>
     /// <b>Metadata</b>
@@ -230,11 +216,6 @@ pub trait S3: Send + Sync + 'static {
     /// Policy</a> in the <i>Amazon S3 User Guide</i>. For a complete list of
     /// Amazon S3-specific condition keys, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/list_amazons3.html">Actions, Resources, and Condition Keys for
     /// Amazon S3</a>.</p>
-    /// <note>
-    /// <p>
-    /// <code>x-amz-website-redirect-location</code> is unique to each object and must be
-    /// specified in the request headers to copy the value.</p>
-    /// </note>
     /// <p>
     /// <b>x-amz-copy-source-if Headers</b>
     /// </p>
@@ -299,27 +280,14 @@ pub trait S3: Send + Sync + 'static {
     /// <p>
     /// <b>Server-side encryption</b>
     /// </p>
-    /// <p>Amazon S3 automatically encrypts all new objects that are copied to an S3 bucket. When
-    /// copying an object, if you don't specify encryption information in your copy request, the
-    /// encryption setting of the target object is set to the default encryption configuration of
-    /// the destination bucket. By default, all buckets have a base level of encryption
-    /// configuration that uses server-side encryption with Amazon S3 managed keys (SSE-S3). If the
-    /// destination bucket has a default encryption configuration that uses server-side encryption
-    /// with an Key Management Service (KMS) key (SSE-KMS), or a customer-provided encryption key (SSE-C),
-    /// Amazon S3 uses the corresponding KMS key, or a customer-provided key to encrypt the target
-    /// object copy. When you perform a CopyObject operation, if you want to use a different type
-    /// of encryption setting for the target object, you can use other appropriate
-    /// encryption-related headers to encrypt the target object with a KMS key, an Amazon S3 managed
-    /// key, or a customer-provided key. With server-side encryption, Amazon S3 encrypts your data as it
-    /// writes it to disks in its data centers and decrypts the data when you access it. If the
-    /// encryption setting in your request is different from the default encryption configuration
-    /// of the destination bucket, the encryption setting in your request takes precedence. If the
-    /// source object for the copy is stored in Amazon S3 using SSE-C, you must provide the necessary
-    /// encryption information in your request so that Amazon S3 can decrypt the object for copying. For
-    /// more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using Server-Side
-    /// Encryption</a>.</p>
-    /// <p>If a target object uses SSE-KMS, you can enable an S3 Bucket Key for the object. For
-    /// more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>When you perform a CopyObject operation, you can optionally use the appropriate encryption-related
+    /// headers to encrypt the object using server-side encryption with Amazon Web Services managed encryption keys
+    /// (SSE-S3 or SSE-KMS) or a customer-provided encryption key. With server-side encryption, Amazon S3
+    /// encrypts your data as it writes it to disks in its data centers and decrypts the data when
+    /// you access it. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using
+    /// Server-Side Encryption</a>.</p>
+    /// <p>If a target object uses SSE-KMS, you can enable an S3 Bucket Key for the object. For more
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
     /// <b>Access Control List (ACL)-Specific Request
     /// Headers</b>
@@ -331,29 +299,29 @@ pub trait S3: Send + Sync + 'static {
     /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-using-rest-api.html">Managing ACLs Using the REST
     /// API</a>. </p>
     /// <p>If the bucket that you're copying objects to uses the bucket owner enforced setting for
-    /// S3 Object Ownership, ACLs are disabled and no longer affect permissions. Buckets that use
-    /// this setting only accept PUT requests that don't specify an ACL or PUT requests that
-    /// specify bucket owner full control ACLs, such as the <code>bucket-owner-full-control</code>
-    /// canned ACL or an equivalent form of this ACL expressed in the XML format.</p>
+    /// S3 Object Ownership, ACLs are disabled and no longer affect permissions. Buckets that
+    /// use this setting only accept PUT requests that don't specify an ACL or PUT requests that
+    /// specify bucket owner full control ACLs, such as the <code>bucket-owner-full-control</code> canned
+    /// ACL or an equivalent form of this ACL expressed in the XML format.</p>
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html"> Controlling ownership of
     /// objects and disabling ACLs</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <note>
-    /// <p>If your bucket uses the bucket owner enforced setting for Object Ownership, all
-    /// objects written to the bucket by any account will be owned by the bucket owner.</p>
+    /// <p>If your bucket uses the bucket owner enforced setting for Object Ownership,
+    /// all objects written to the bucket by any account will be owned by the bucket owner.</p>
     /// </note>
     /// <p>
     /// <b>Checksums</b>
     /// </p>
-    /// <p>When copying an object, if it has a checksum, that checksum will be copied to the new
-    /// object by default. When you copy the object over, you may optionally specify a different
-    /// checksum algorithm to use with the <code>x-amz-checksum-algorithm</code> header.</p>
+    /// <p>When copying an object, if it has a checksum, that checksum will be copied to the new object
+    /// by default. When you copy the object over, you may optionally specify a different checksum
+    /// algorithm to use with the <code>x-amz-checksum-algorithm</code> header.</p>
     /// <p>
     /// <b>Storage Class Options</b>
     /// </p>
-    /// <p>You can use the <code>CopyObject</code> action to change the storage class of an object
-    /// that is already stored in Amazon S3 using the <code>StorageClass</code> parameter. For more
-    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// <p>You can use the <code>CopyObject</code> action to change the storage class of an
+    /// object that is already stored in Amazon S3 using the <code>StorageClass</code> parameter. For
+    /// more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage
+    /// Classes</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
     /// <b>Versioning</b>
     /// </p>
@@ -382,7 +350,8 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjectsExamples.html">Copying Objects</a>.</p>
+    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CopyingObjectsExamples.html">Copying
+    /// Objects</a>.</p>
     async fn copy_object(&self, _req: S3Request<CopyObjectInput>) -> S3Result<CopyObjectOutput> {
         Err(s3_error!(NotImplemented, "CopyObject is not implemented yet"))
     }
@@ -391,8 +360,7 @@ pub trait S3: Send + Sync + 'static {
     /// valid Amazon Web Services Access Key ID to authenticate requests. Anonymous requests are never allowed to
     /// create buckets. By creating the bucket, you become the bucket owner.</p>
     /// <p>Not every string is an acceptable bucket name. For information about bucket naming
-    /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html">Bucket naming
-    /// rules</a>.</p>
+    /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html">Bucket naming rules</a>.</p>
     /// <p>If you want to create an Amazon S3 on Outposts bucket, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_CreateBucket.html">Create Bucket</a>. </p>
     /// <p>By default, the bucket is created in the US East (N. Virginia) Region. You can
     /// optionally specify a Region in the request body. You might choose a Region to optimize
@@ -406,15 +374,13 @@ pub trait S3: Send + Sync + 'static {
     /// Signature Version 4 must use us-east-1 as the Region, even if the location constraint in
     /// the request specifies another Region where the bucket is to be created. If you create a
     /// bucket in a Region other than US East (N. Virginia), your application must be able to
-    /// handle 307 redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html">Virtual hosting of
-    /// buckets</a>.</p>
+    /// handle 307 redirect. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html">Virtual hosting of buckets</a>.</p>
     /// </note>
     /// <p>
     /// <b>Access control lists (ACLs)</b>
     /// </p>
-    /// <p>When creating a bucket using this operation, you can optionally configure the bucket ACL
-    /// to specify the accounts or groups that should be granted specific permissions on the
-    /// bucket.</p>
+    /// <p>When creating a bucket using this operation, you can optionally configure the bucket ACL to specify the accounts or
+    /// groups that should be granted specific permissions on the bucket.</p>
     /// <important>
     /// <p>If your CreateBucket request sets bucket owner enforced for S3 Object Ownership and
     /// specifies a bucket ACL that provides access to an external Amazon Web Services account, your request
@@ -423,8 +389,7 @@ pub trait S3: Send + Sync + 'static {
     /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Controlling object
     /// ownership</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// </important>
-    /// <p>There are two ways to grant the appropriate permissions using the request
-    /// headers.</p>
+    /// <p>There are two ways to grant the appropriate permissions using the request headers.</p>
     /// <ul>
     /// <li>
     /// <p>Specify a canned ACL using the <code>x-amz-acl</code> request header. Amazon S3
@@ -437,15 +402,14 @@ pub trait S3: Send + Sync + 'static {
     /// <code>x-amz-grant-write</code>, <code>x-amz-grant-read-acp</code>,
     /// <code>x-amz-grant-write-acp</code>, and <code>x-amz-grant-full-control</code>
     /// headers. These headers map to the set of permissions Amazon S3 supports in an ACL. For
-    /// more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html">Access control list (ACL)
-    /// overview</a>.</p>
+    /// more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html">Access control list
+    /// (ACL) overview</a>.</p>
     /// <p>You specify each grantee as a type=value pair, where the type is one of the
     /// following:</p>
     /// <ul>
     /// <li>
     /// <p>
-    /// <code>id</code> – if the value specified is the canonical user ID of an
-    /// Amazon Web Services account</p>
+    /// <code>id</code> – if the value specified is the canonical user ID of an Amazon Web Services account</p>
     /// </li>
     /// <li>
     /// <p>
@@ -501,17 +465,14 @@ pub trait S3: Send + Sync + 'static {
     /// <p>
     /// <b>Permissions</b>
     /// </p>
-    /// <p>In addition to <code>s3:CreateBucket</code>, the following permissions are required when
-    /// your CreateBucket includes specific headers:</p>
+    /// <p>In addition to <code>s3:CreateBucket</code>, the following permissions are required when your CreateBucket includes specific headers:</p>
     /// <ul>
     /// <li>
     /// <p>
-    /// <b>ACLs</b> - If your <code>CreateBucket</code> request
-    /// specifies ACL permissions and the ACL is public-read, public-read-write,
-    /// authenticated-read, or if you specify access permissions explicitly through any other
-    /// ACL, both <code>s3:CreateBucket</code> and <code>s3:PutBucketAcl</code> permissions
-    /// are needed. If the ACL the <code>CreateBucket</code> request is private or doesn't
-    /// specify any ACLs, only <code>s3:CreateBucket</code> permission is needed. </p>
+    /// <b>ACLs</b> - If your <code>CreateBucket</code> request specifies ACL permissions and the ACL is public-read, public-read-write,
+    /// authenticated-read, or if you specify access permissions explicitly through any other ACL, both
+    /// <code>s3:CreateBucket</code> and <code>s3:PutBucketAcl</code> permissions are needed. If the ACL the
+    /// <code>CreateBucket</code> request is private or doesn't specify any ACLs, only <code>s3:CreateBucket</code> permission is needed. </p>
     /// </li>
     /// <li>
     /// <p>
@@ -554,56 +515,39 @@ pub trait S3: Send + Sync + 'static {
     /// <p>If you have configured a lifecycle rule to abort incomplete multipart uploads, the
     /// upload must complete within the number of days specified in the bucket lifecycle
     /// configuration. Otherwise, the incomplete multipart upload becomes eligible for an abort
-    /// action and Amazon S3 aborts the multipart upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a>.</p>
+    /// action and Amazon S3 aborts the multipart upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">Aborting
+    /// Incomplete Multipart Uploads Using a Bucket Lifecycle Policy</a>.</p>
     /// <p>For information about the permissions required to use the multipart upload API, see
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart
-    /// Upload and Permissions</a>.</p>
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload and
+    /// Permissions</a>.</p>
     /// <p>For request signing, multipart upload is just a series of regular requests. You initiate
     /// a multipart upload, send one or more requests to upload parts, and then complete the
     /// multipart upload process. You sign each request individually. There is nothing special
-    /// about signing multipart upload requests. For more information about signing, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (Amazon Web Services Signature Version 4)</a>.</p>
+    /// about signing multipart upload requests. For more information about signing, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating
+    /// Requests (Amazon Web Services Signature Version 4)</a>.</p>
     /// <note>
-    /// <p>After you initiate a multipart upload and upload one or more parts, to stop being
+    /// <p> After you initiate a multipart upload and upload one or more parts, to stop being
     /// charged for storing the uploaded parts, you must either complete or abort the multipart
     /// upload. Amazon S3 frees up the space used to store the parts and stop charging you for
     /// storing them only after you either complete or abort a multipart upload. </p>
     /// </note>
-    /// <p>Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it
-    /// writes it to disks in its data centers and decrypts it when you access it. Amazon S3
-    /// automatically encrypts all new objects that are uploaded to an S3 bucket. When doing a
-    /// multipart upload, if you don't specify encryption information in your request, the
-    /// encryption setting of the uploaded parts is set to the default encryption configuration of
-    /// the destination bucket. By default, all buckets have a base level of encryption
-    /// configuration that uses server-side encryption with Amazon S3 managed keys (SSE-S3). If the
-    /// destination bucket has a default encryption configuration that uses server-side encryption
-    /// with an Key Management Service (KMS) key (SSE-KMS), or a customer-provided encryption key (SSE-C),
-    /// Amazon S3 uses the corresponding KMS key, or a customer-provided key to encrypt the uploaded
-    /// parts. When you perform a CreateMultipartUpload operation, if you want to use a different
-    /// type of encryption setting for the uploaded parts, you can request that Amazon S3 encrypts the
-    /// object with a KMS key, an Amazon S3 managed key, or a customer-provided key. If the encryption
-    /// setting in your request is different from the default encryption configuration of the
-    /// destination bucket, the encryption setting in your request takes precedence. If you choose
-    /// to provide your own encryption key, the request headers you provide in <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html">UploadPart</a>
-    /// and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a> requests must
-    /// match the headers you used in the request to initiate the upload by using
-    /// <code>CreateMultipartUpload</code>. you can request that Amazon S3
-    /// save the uploaded parts encrypted with server-side encryption with an Amazon S3 managed key
-    /// (SSE-S3), an Key Management Service (KMS) key (SSE-KMS), or a customer-provided encryption key
-    /// (SSE-C). </p>
-    /// <p>To perform a multipart upload with encryption by using an Amazon Web Services KMS key, the requester
-    /// must have permission to the <code>kms:Decrypt</code> and <code>kms:GenerateDataKey*</code>
+    /// <p>You can optionally request server-side encryption. For server-side encryption, Amazon S3
+    /// encrypts your data as it writes it to disks in its data centers and decrypts it when you
+    /// access it. You can provide your own encryption key, or use Amazon Web Services KMS keys or Amazon S3-managed encryption keys. If you choose to provide
+    /// your own encryption key, the request headers you provide in <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html">UploadPart</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a> requests must match the headers you used in the request to
+    /// initiate the upload by using <code>CreateMultipartUpload</code>. </p>
+    /// <p>To perform a multipart upload with encryption using an Amazon Web Services KMS key, the requester must
+    /// have permission to the <code>kms:Decrypt</code> and <code>kms:GenerateDataKey*</code>
     /// actions on the key. These permissions are required because Amazon S3 must decrypt and read data
     /// from the encrypted file parts before it completes the multipart upload. For more
     /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html#mpuAndPermissions">Multipart upload API
-    /// and permissions</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html">Protecting data using
-    /// server-side encryption with Amazon Web Services KMS</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
-    /// <p>If your Identity and Access Management (IAM) user or role is in the same Amazon Web Services account as the KMS key,
-    /// then you must have these permissions on the key policy. If your IAM user or role belongs
-    /// to a different account than the key, then you must have the permissions on both the key
-    /// policy and your IAM user or role.</p>
-    /// <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side
-    /// Encryption</a>.</p>
+    /// and permissions</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>If your Identity and Access Management (IAM) user or role is in the same Amazon Web Services account
+    /// as the KMS key, then you must have these permissions on the key policy. If your IAM
+    /// user or role belongs to a different account than the key, then you must have the
+    /// permissions on both the key policy and your IAM user or role.</p>
+    /// <p> For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting
+    /// Data Using Server-Side Encryption</a>.</p>
     /// <dl>
     /// <dt>Access Permissions</dt>
     /// <dd>
@@ -613,8 +557,7 @@ pub trait S3: Send + Sync + 'static {
     /// <ul>
     /// <li>
     /// <p>Specify a canned ACL with the <code>x-amz-acl</code> request header. For
-    /// more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned
-    /// ACL</a>.</p>
+    /// more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
     /// </li>
     /// <li>
     /// <p>Specify access permissions explicitly with the
@@ -622,7 +565,8 @@ pub trait S3: Send + Sync + 'static {
     /// <code>x-amz-grant-write-acp</code>, and
     /// <code>x-amz-grant-full-control</code> headers. These parameters map to
     /// the set of permissions that Amazon S3 supports in an ACL. For more information,
-    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>.</p>
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL)
+    /// Overview</a>.</p>
     /// </li>
     /// </ul>
     /// <p>You can use either a canned ACL or specify access permissions explicitly. You
@@ -630,19 +574,16 @@ pub trait S3: Send + Sync + 'static {
     /// </dd>
     /// <dt>Server-Side- Encryption-Specific Request Headers</dt>
     /// <dd>
-    /// <p>Amazon S3 encrypts data
-    /// by using server-side encryption with an Amazon S3 managed key (SSE-S3) by default. Server-side encryption is for data encryption at rest. Amazon S3 encrypts
+    /// <p>You can optionally tell Amazon S3 to encrypt data at rest using server-side
+    /// encryption. Server-side encryption is for data encryption at rest. Amazon S3 encrypts
     /// your data as it writes it to disks in its data centers and decrypts it when you
-    /// access it. You can request that Amazon S3 encrypts
-    /// data at rest by using server-side encryption with other key options. The option you use depends on
-    /// whether you want to use KMS keys (SSE-KMS) or provide your own encryption keys
-    /// (SSE-C).</p>
+    /// access it. The option you use depends on whether you want to use Amazon Web Services managed
+    /// encryption keys or provide your own encryption key. </p>
     /// <ul>
     /// <li>
-    /// <p>Use KMS keys (SSE-KMS) that include the Amazon Web Services managed key
-    /// (<code>aws/s3</code>) and KMS customer managed keys stored in Key Management Service (KMS) – If you
-    /// want Amazon Web Services to manage the keys used to encrypt data, specify the following
-    /// headers in the request.</p>
+    /// <p>Use encryption keys managed by Amazon S3 or customer managed key stored
+    /// in Amazon Web Services Key Management Service (Amazon Web Services KMS) – If you want Amazon Web Services to manage the keys
+    /// used to encrypt data, specify the following headers in the request.</p>
     /// <ul>
     /// <li>
     /// <p>
@@ -663,22 +604,18 @@ pub trait S3: Send + Sync + 'static {
     /// <note>
     /// <p>If you specify <code>x-amz-server-side-encryption:aws:kms</code>, but
     /// don't provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>,
-    /// Amazon S3 uses the Amazon Web Services managed key (<code>aws/s3</code> key) in KMS to
-    /// protect the data.</p>
+    /// Amazon S3 uses the Amazon Web Services managed key in Amazon Web Services KMS to protect the data.</p>
     /// </note>
     /// <important>
-    /// <p>All <code>GET</code> and <code>PUT</code> requests for an object protected
-    /// by KMS fail if you don't make them by using Secure Sockets Layer (SSL),
-    /// Transport Layer Security (TLS), or Signature Version 4.</p>
+    /// <p>All GET and PUT requests for an object protected by Amazon Web Services KMS fail if
+    /// you don't make them with SSL or by using SigV4.</p>
     /// </important>
-    /// <p>For more information about server-side encryption with KMS keys
-    /// (SSE-KMS), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html">Protecting Data
-    /// Using Server-Side Encryption with KMS keys</a>.</p>
+    /// <p>For more information about server-side encryption with KMS key (SSE-KMS),
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with KMS keys</a>.</p>
     /// </li>
     /// <li>
-    /// <p>Use customer-provided encryption keys (SSE-C) – If you want to manage
-    /// your own encryption keys, provide all the following headers in the
-    /// request.</p>
+    /// <p>Use customer-provided encryption keys – If you want to manage your own
+    /// encryption keys, provide all the following headers in the request.</p>
     /// <ul>
     /// <li>
     /// <p>
@@ -696,10 +633,8 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    /// <p>For more information about server-side encryption with customer-provided
-    /// encryption keys (SSE-C), see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html">
-    /// Protecting data using server-side encryption with customer-provided
-    /// encryption keys (SSE-C)</a>.</p>
+    /// <p>For more information about server-side encryption with KMS keys (SSE-KMS),
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html">Protecting Data Using Server-Side Encryption with KMS keys</a>.</p>
     /// </li>
     /// </ul>
     /// </dd>
@@ -707,11 +642,10 @@ pub trait S3: Send + Sync + 'static {
     /// <dd>
     /// <p>You also can use the following access control–related headers with this
     /// operation. By default, all objects are private. Only the owner has full access
-    /// control. When adding a new object, you can grant permissions to individual
-    /// Amazon Web Services accounts or to predefined groups defined by Amazon S3. These permissions are then
-    /// added to the access control list (ACL) on the object. For more information, see
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this operation, you can grant access permissions
-    /// using one of the following two methods:</p>
+    /// control. When adding a new object, you can grant permissions to individual Amazon Web Services accounts or to predefined groups defined by Amazon S3. These permissions are then added
+    /// to the access control list (ACL) on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. With this
+    /// operation, you can grant access permissions using one of the following two
+    /// methods:</p>
     /// <ul>
     /// <li>
     /// <p>Specify a canned ACL (<code>x-amz-acl</code>) — Amazon S3 supports a set of
@@ -724,9 +658,10 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Specify access permissions explicitly — To explicitly grant access
     /// permissions to specific Amazon Web Services accounts or groups, use the following headers.
     /// Each header maps to specific permissions that Amazon S3 supports in an ACL. For
-    /// more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL)
-    /// Overview</a>. In the header, you specify a list of grantees who get
-    /// the specific permission. To grant permissions explicitly, use:</p>
+    /// more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access
+    /// Control List (ACL) Overview</a>. In the header, you specify a list of
+    /// grantees who get the specific permission. To grant permissions explicitly,
+    /// use:</p>
     /// <ul>
     /// <li>
     /// <p>
@@ -872,8 +807,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutAnalyticsConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>For information about the Amazon S3 analytics feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3 Analytics – Storage Class
     /// Analysis</a>. </p>
     /// <p>The following operations are related to
@@ -906,8 +841,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permission to perform the
     /// <code>s3:PutBucketCORS</code> action. The bucket owner has this permission by default
     /// and can grant this permission to others. </p>
-    /// <p>For information about <code>cors</code>, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling Cross-Origin Resource Sharing</a> in
-    /// the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>For information about <code>cors</code>, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling
+    /// Cross-Origin Resource Sharing</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p class="title">
     /// <b>Related Resources:</b>
     /// </p>
@@ -927,16 +862,14 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "DeleteBucketCors is not implemented yet"))
     }
 
-    /// <p>This implementation of the DELETE action resets the default encryption for the
-    /// bucket as server-side encryption with Amazon S3 managed keys (SSE-S3). For information about the
-    /// bucket default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Bucket Default Encryption</a>
-    /// in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>This implementation of the DELETE action removes default encryption from the bucket.
+    /// For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a> in the
+    /// <i>Amazon S3 User Guide</i>.</p>
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to your Amazon S3 Resources</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to your Amazon S3
+    /// Resources</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p class="title">
     /// <b>Related Resources</b>
     /// </p>
@@ -963,7 +896,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>The S3 Intelligent-Tiering storage class is designed to optimize storage costs by automatically moving data to the most cost-effective storage access tier, without performance impact or operational overhead. S3 Intelligent-Tiering delivers automatic cost savings in three low latency and high throughput access tiers. To get the lowest storage cost on data that can be accessed in minutes to hours, you can choose to activate additional archiving capabilities.</p>
     /// <p>The S3 Intelligent-Tiering storage class is  the ideal storage class for data with unknown, changing, or unpredictable access patterns, independent of object size or retention period. If the size of an object is less than 128 KB, it is not monitored and not eligible for auto-tiering. Smaller objects can be stored, but they are always charged at the Frequent Access tier rates in the S3 Intelligent-Tiering storage class.</p>
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for automatically optimizing frequently and infrequently accessed objects</a>.</p>
-    /// <p>Operations related to <code>DeleteBucketIntelligentTieringConfiguration</code> include: </p>
+    /// <p>Operations related to
+    /// <code>DeleteBucketIntelligentTieringConfiguration</code> include: </p>
     /// <ul>
     /// <li>
     /// <p>
@@ -996,8 +930,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutInventoryConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>For information about the Amazon S3 inventory feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html">Amazon S3 Inventory</a>.</p>
     /// <p>Operations related to <code>DeleteBucketInventoryConfiguration</code> include: </p>
     /// <ul>
@@ -1033,7 +967,8 @@ pub trait S3: Send + Sync + 'static {
     /// permission and the bucket owner can grant this permission to others.</p>
     /// <p>There is usually some time lag before lifecycle configuration deletion is fully
     /// propagated to all the Amazon S3 systems.</p>
-    /// <p>For more information about the object expiration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#intro-lifecycle-rules-actions">Elements to Describe Lifecycle Actions</a>.</p>
+    /// <p>For more information about the object expiration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html#intro-lifecycle-rules-actions">Elements to
+    /// Describe Lifecycle Actions</a>.</p>
     /// <p>Related actions include:</p>
     /// <ul>
     /// <li>
@@ -1060,10 +995,9 @@ pub trait S3: Send + Sync + 'static {
     /// <p> To use this operation, you must have permissions to perform the
     /// <code>s3:PutMetricsConfiguration</code> action. The bucket owner has this permission by
     /// default. The bucket owner can grant this permission to others. For more information about
-    /// permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
-    /// <p>For information about CloudWatch request metrics for Amazon S3, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with
-    /// Amazon CloudWatch</a>. </p>
+    /// permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
+    /// <p>For information about CloudWatch request metrics for Amazon S3, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon CloudWatch</a>. </p>
     /// <p>The following operations are related to
     /// <code>DeleteBucketMetricsConfiguration</code>:</p>
     /// <ul>
@@ -1084,7 +1018,8 @@ pub trait S3: Send + Sync + 'static {
     /// </li>
     /// <li>
     /// <p>
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon CloudWatch</a>
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon
+    /// CloudWatch</a>
     /// </p>
     /// </li>
     /// </ul>
@@ -1097,8 +1032,8 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Removes <code>OwnershipControls</code> for an Amazon S3 bucket. To use this operation, you
     /// must have the <code>s3:PutBucketOwnershipControls</code> permission. For more information
-    /// about Amazon S3 permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a
-    /// Policy</a>.</p>
+    /// about Amazon S3 permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying
+    /// Permissions in a Policy</a>.</p>
     /// <p>For information about Amazon S3 Object Ownership, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/about-object-ownership.html">Using Object Ownership</a>. </p>
     /// <p>The following operations are related to
     /// <code>DeleteBucketOwnershipControls</code>:</p>
@@ -1159,14 +1094,13 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutReplicationConfiguration</code> action. The bucket owner has these
     /// permissions by default and can grant it to others. For more information about permissions,
-    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>. </p>
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>. </p>
     /// <note>
     /// <p>It can take a while for the deletion of a replication configuration to fully
     /// propagate.</p>
     /// </note>
-    /// <p> For information about replication configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html">Replication</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// <p> For information about replication configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html">Replication</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>The following operations are related to <code>DeleteBucketReplication</code>:</p>
     /// <ul>
     /// <li>
@@ -1239,21 +1173,21 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Removes the null version (if there is one) of an object and inserts a delete marker,
     /// which becomes the latest version of the object. If there isn't a null version, Amazon S3 does
     /// not remove any objects but will still respond that the command was successful.</p>
-    /// <p>To remove a specific version, you must use the version Id subresource. Using this
-    /// subresource permanently deletes the version. If the object deleted is a delete marker, Amazon S3
-    /// sets the response header, <code>x-amz-delete-marker</code>, to true. </p>
+    /// <p>To remove a specific version, you must be the bucket owner and you must use the version
+    /// Id subresource. Using this subresource permanently deletes the version. If the object
+    /// deleted is a delete marker, Amazon S3 sets the response header,
+    /// <code>x-amz-delete-marker</code>, to true. </p>
     /// <p>If the object you want to delete is in a bucket where the bucket versioning
     /// configuration is MFA Delete enabled, you must include the <code>x-amz-mfa</code> request
     /// header in the DELETE <code>versionId</code> request. Requests that include
     /// <code>x-amz-mfa</code> must use HTTPS. </p>
-    /// <p> For more information about MFA Delete, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMFADelete.html">Using MFA Delete</a>. To see sample
-    /// requests that use versioning, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectDELETE.html#ExampleVersionObjectDelete">Sample
-    /// Request</a>. </p>
-    /// <p>You can delete objects by explicitly calling DELETE Object or configure its lifecycle
-    /// (<a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html">PutBucketLifecycle</a>) to enable Amazon S3 to remove them for you. If you want to block
-    /// users or accounts from removing or deleting objects from your bucket, you must deny them
-    /// the <code>s3:DeleteObject</code>, <code>s3:DeleteObjectVersion</code>, and
-    /// <code>s3:PutLifeCycleConfiguration</code> actions. </p>
+    /// <p> For more information about MFA Delete, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMFADelete.html">Using MFA Delete</a>. To see sample requests that use versioning, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectDELETE.html#ExampleVersionObjectDelete">Sample Request</a>. </p>
+    /// <p>You can delete objects by explicitly calling DELETE Object or configure its
+    /// lifecycle (<a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html">PutBucketLifecycle</a>) to
+    /// enable Amazon S3 to remove them for you. If you want to block users or accounts from removing or
+    /// deleting objects from your bucket, you must deny them the <code>s3:DeleteObject</code>,
+    /// <code>s3:DeleteObjectVersion</code>, and <code>s3:PutLifeCycleConfiguration</code>
+    /// actions. </p>
     /// <p>The following action is related to <code>DeleteObject</code>:</p>
     /// <ul>
     /// <li>
@@ -1267,13 +1201,15 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Removes the entire tag set from the specified object. For more information about
-    /// managing object tags, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html"> Object Tagging</a>.</p>
+    /// managing object tags, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html"> Object
+    /// Tagging</a>.</p>
     /// <p>To use this operation, you must have permission to perform the
     /// <code>s3:DeleteObjectTagging</code> action.</p>
     /// <p>To delete tags of a specific object version, add the <code>versionId</code> query
     /// parameter in the request. You will need permission for the
     /// <code>s3:DeleteObjectVersionTagging</code> action.</p>
-    /// <p>The following operations are related to <code>DeleteObjectTagging</code>:</p>
+    /// <p>The following operations are related to
+    /// <code>DeleteBucketMetricsConfiguration</code>:</p>
     /// <ul>
     /// <li>
     /// <p>
@@ -1291,27 +1227,28 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>This action enables you to delete multiple objects from a bucket using a single HTTP
-    /// request. If you know the object keys that you want to delete, then this action provides a
-    /// suitable alternative to sending individual delete requests, reducing per-request
+    /// request. If you know the object keys that you want to delete, then this action provides
+    /// a suitable alternative to sending individual delete requests, reducing per-request
     /// overhead.</p>
     /// <p>The request contains a list of up to 1000 keys that you want to delete. In the XML, you
     /// provide the object key names, and optionally, version IDs if you want to delete a specific
     /// version of the object from a versioning-enabled bucket. For each key, Amazon S3 performs a
-    /// delete action and returns the result of that delete, success, or failure, in the response.
-    /// Note that if the object specified in the request is not found, Amazon S3 returns the result as
-    /// deleted.</p>
+    /// delete action and returns the result of that delete, success, or failure, in the
+    /// response. Note that if the object specified in the request is not found, Amazon S3 returns the
+    /// result as deleted.</p>
     /// <p> The action supports two modes for the response: verbose and quiet. By default, the
-    /// action uses verbose mode in which the response includes the result of deletion of each key
-    /// in your request. In quiet mode the response includes only keys where the delete action
-    /// encountered an error. For a successful deletion, the action does not return any information
-    /// about the delete in the response body.</p>
-    /// <p>When performing this action on an MFA Delete enabled bucket, that attempts to delete any
-    /// versioned objects, you must include an MFA token. If you do not provide one, the entire
+    /// action uses verbose mode in which the response includes the result of deletion of each
+    /// key in your request. In quiet mode the response includes only keys where the delete
+    /// action encountered an error. For a successful deletion, the action does not return
+    /// any information about the delete in the response body.</p>
+    /// <p>When performing this action on an MFA Delete enabled bucket, that attempts to delete
+    /// any versioned objects, you must include an MFA token. If you do not provide one, the entire
     /// request will fail, even if there are non-versioned objects you are trying to delete. If you
     /// provide an invalid token, whether there are versioned keys in the request or not, the
     /// entire Multi-Object Delete request will fail. For information about MFA Delete, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html#MultiFactorAuthenticationDelete"> MFA
     /// Delete</a>.</p>
-    /// <p>Finally, the Content-MD5 header is required for all Multi-Object Delete requests. Amazon S3 uses the header value to ensure that your request body has not been altered in
+    /// <p>Finally, the Content-MD5 header is required for all Multi-Object Delete requests. Amazon
+    /// S3 uses the header value to ensure that your request body has not been altered in
     /// transit.</p>
     /// <p>The following operations are related to <code>DeleteObjects</code>:</p>
     /// <ul>
@@ -1347,8 +1284,8 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Removes the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket. To use this
     /// operation, you must have the <code>s3:PutBucketPublicAccessBlock</code> permission. For
-    /// more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>The following operations are related to <code>DeletePublicAccessBlock</code>:</p>
     /// <ul>
     /// <li>
@@ -1387,16 +1324,15 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permission to perform the
     /// <code>s3:GetAccelerateConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to your Amazon S3 Resources</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to your Amazon S3
+    /// Resources</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>You set the Transfer Acceleration state of an existing bucket to <code>Enabled</code> or
     /// <code>Suspended</code> by using the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketAccelerateConfiguration.html">PutBucketAccelerateConfiguration</a> operation. </p>
     /// <p>A GET <code>accelerate</code> request does not return a state value for a bucket that
     /// has no transfer acceleration state. A bucket has no Transfer Acceleration state if a state
     /// has never been set on the bucket. </p>
-    /// <p>For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a> in
-    /// the Amazon S3 User Guide.</p>
+    /// <p>For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a> in the
+    /// Amazon S3 User Guide.</p>
     /// <p class="title">
     /// <b>Related Resources</b>
     /// </p>
@@ -1414,19 +1350,17 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "GetBucketAccelerateConfiguration is not implemented yet"))
     }
 
-    /// <p>This implementation of the <code>GET</code> action uses the <code>acl</code> subresource
-    /// to return the access control list (ACL) of a bucket. To use <code>GET</code> to return the
-    /// ACL of the bucket, you must have <code>READ_ACP</code> access to the bucket. If
+    /// <p>This implementation of the <code>GET</code> action uses the <code>acl</code>
+    /// subresource to return the access control list (ACL) of a bucket. To use <code>GET</code> to
+    /// return the ACL of the bucket, you must have <code>READ_ACP</code> access to the bucket. If
     /// <code>READ_ACP</code> permission is granted to the anonymous user, you can return the
     /// ACL of the bucket without using an authorization header.</p>
-    /// <p>To use this API against an access point, provide the alias of the access point in place of the bucket name.</p>
     /// <note>
     /// <p>If your bucket uses the bucket owner enforced setting for S3 Object Ownership,
-    /// requests to read ACLs are still supported and return the
-    /// <code>bucket-owner-full-control</code> ACL with the owner being the account that
-    /// created the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html"> Controlling object
-    /// ownership and disabling ACLs</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// requests to read ACLs are still supported and return the <code>bucket-owner-full-control</code>
+    /// ACL with the owner being the account that created the bucket. For more information, see
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">
+    /// Controlling object ownership and disabling ACLs</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// </note>
     /// <p class="title">
     /// <b>Related Resources</b>
@@ -1442,14 +1376,13 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "GetBucketAcl is not implemented yet"))
     }
 
-    /// <p>This implementation of the GET action returns an analytics configuration (identified by
-    /// the analytics configuration ID) from the bucket.</p>
+    /// <p>This implementation of the GET action returns an analytics configuration (identified
+    /// by the analytics configuration ID) from the bucket.</p>
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:GetAnalyticsConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources"> Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a> in the
-    /// <i>Amazon S3 User Guide</i>. </p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources"> Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a> in the <i>Amazon S3 User Guide</i>. </p>
     /// <p>For information about Amazon S3 analytics feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3 Analytics – Storage Class
     /// Analysis</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p class="title">
@@ -1484,7 +1417,6 @@ pub trait S3: Send + Sync + 'static {
     /// <p> To use this operation, you must have permission to perform the
     /// <code>s3:GetBucketCORS</code> action. By default, the bucket owner has this permission
     /// and can grant it to others.</p>
-    /// <p>To use this API against an access point, provide the alias of the access point in place of the bucket name.</p>
     /// <p> For more information about CORS, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html"> Enabling Cross-Origin Resource
     /// Sharing</a>.</p>
     /// <p>The following operations are related to <code>GetBucketCors</code>:</p>
@@ -1504,15 +1436,15 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "GetBucketCors is not implemented yet"))
     }
 
-    /// <p>Returns the default encryption configuration for an Amazon S3 bucket. By default, all buckets have a default encryption configuration that
-    /// uses server-side encryption with Amazon S3 managed keys (SSE-S3). For information
-    /// about the bucket default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Bucket
-    /// Default Encryption</a> in the <i>Amazon S3 User Guide</i>.</p>
-    /// <p>To use this operation, you must have permission to perform the
+    /// <p>Returns the default encryption configuration for an Amazon S3 bucket. If the bucket does not
+    /// have a default encryption configuration, GetBucketEncryption returns
+    /// <code>ServerSideEncryptionConfigurationNotFoundError</code>. </p>
+    /// <p>For information about the Amazon S3 default encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Default Bucket Encryption</a>.</p>
+    /// <p> To use this operation, you must have permission to perform the
     /// <code>s3:GetEncryptionConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>The following operations are related to <code>GetBucketEncryption</code>:</p>
     /// <ul>
     /// <li>
@@ -1534,7 +1466,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>The S3 Intelligent-Tiering storage class is designed to optimize storage costs by automatically moving data to the most cost-effective storage access tier, without performance impact or operational overhead. S3 Intelligent-Tiering delivers automatic cost savings in three low latency and high throughput access tiers. To get the lowest storage cost on data that can be accessed in minutes to hours, you can choose to activate additional archiving capabilities.</p>
     /// <p>The S3 Intelligent-Tiering storage class is  the ideal storage class for data with unknown, changing, or unpredictable access patterns, independent of object size or retention period. If the size of an object is less than 128 KB, it is not monitored and not eligible for auto-tiering. Smaller objects can be stored, but they are always charged at the Frequent Access tier rates in the S3 Intelligent-Tiering storage class.</p>
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for automatically optimizing frequently and infrequently accessed objects</a>.</p>
-    /// <p>Operations related to <code>GetBucketIntelligentTieringConfiguration</code> include: </p>
+    /// <p>Operations related to
+    /// <code>GetBucketIntelligentTieringConfiguration</code> include: </p>
     /// <ul>
     /// <li>
     /// <p>
@@ -1567,8 +1500,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:GetInventoryConfiguration</code> action. The bucket owner has this permission
     /// by default and can grant this permission to others. For more information about permissions,
-    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>For information about the Amazon S3 inventory feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html">Amazon S3 Inventory</a>.</p>
     /// <p>The following operations are related to
     /// <code>GetBucketInventoryConfiguration</code>:</p>
@@ -1605,13 +1538,13 @@ pub trait S3: Send + Sync + 'static {
     /// works. For the earlier action, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html">GetBucketLifecycle</a>.</p>
     /// </note>
     /// <p>Returns the lifecycle configuration information set on the bucket. For information about
-    /// lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle
-    /// Management</a>.</p>
+    /// lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object
+    /// Lifecycle Management</a>.</p>
     /// <p>To use this operation, you must have permission to perform the
     /// <code>s3:GetLifecycleConfiguration</code> action. The bucket owner has this permission,
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>
     /// <code>GetBucketLifecycleConfiguration</code> has the following special error:</p>
     /// <ul>
@@ -1662,10 +1595,6 @@ pub trait S3: Send + Sync + 'static {
     /// request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html">CreateBucket</a>.</p>
     /// <p>To use this implementation of the operation, you must be the bucket owner.</p>
     /// <p>To use this API against an access point, provide the alias of the access point in place of the bucket name.</p>
-    /// <note>
-    /// <p>For requests made using Amazon Web Services Signature Version 4 (SigV4), we recommend that you use
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadBucket.html">HeadBucket</a> to return the bucket Region instead of GetBucketLocation.</p>
-    /// </note>
     /// <p>The following operations are related to <code>GetBucketLocation</code>:</p>
     /// <ul>
     /// <li>
@@ -1684,7 +1613,7 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Returns the logging status of a bucket and the permissions users have to view and modify
-    /// that status.</p>
+    /// that status. To use GET, you must be the bucket owner.</p>
     /// <p>The following operations are related to <code>GetBucketLogging</code>:</p>
     /// <ul>
     /// <li>
@@ -1707,10 +1636,10 @@ pub trait S3: Send + Sync + 'static {
     /// <p> To use this operation, you must have permissions to perform the
     /// <code>s3:GetMetricsConfiguration</code> action. The bucket owner has this permission by
     /// default. The bucket owner can grant this permission to others. For more information about
-    /// permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
-    /// <p> For information about CloudWatch request metrics for Amazon S3, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring
-    /// Metrics with Amazon CloudWatch</a>.</p>
+    /// permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
+    /// <p> For information about CloudWatch request metrics for Amazon S3, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon
+    /// CloudWatch</a>.</p>
     /// <p>The following operations are related to
     /// <code>GetBucketMetricsConfiguration</code>:</p>
     /// <ul>
@@ -1731,7 +1660,8 @@ pub trait S3: Send + Sync + 'static {
     /// </li>
     /// <li>
     /// <p>
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon CloudWatch</a>
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon
+    /// CloudWatch</a>
     /// </p>
     /// </li>
     /// </ul>
@@ -1749,10 +1679,9 @@ pub trait S3: Send + Sync + 'static {
     /// bucket. However, the bucket owner can use a bucket policy to grant permission to other
     /// users to read this configuration with the <code>s3:GetBucketNotification</code>
     /// permission.</p>
-    /// <p>To use this API against an access point, provide the alias of the access point in place of the bucket name.</p>
     /// <p>For more information about setting and reading the notification configuration on a
-    /// bucket, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Setting Up Notification of Bucket Events</a>. For more information about bucket
-    /// policies, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html">Using Bucket Policies</a>.</p>
+    /// bucket, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Setting Up Notification of
+    /// Bucket Events</a>. For more information about bucket policies, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html">Using Bucket Policies</a>.</p>
     /// <p>The following action is related to <code>GetBucketNotification</code>:</p>
     /// <ul>
     /// <li>
@@ -1770,10 +1699,9 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Retrieves <code>OwnershipControls</code> for an Amazon S3 bucket. To use this operation, you
     /// must have the <code>s3:GetBucketOwnershipControls</code> permission. For more information
-    /// about Amazon S3 permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html">Specifying permissions in a
-    /// policy</a>. </p>
-    /// <p>For information about Amazon S3 Object Ownership, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Using Object
-    /// Ownership</a>. </p>
+    /// about Amazon S3 permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html">Specifying
+    /// permissions in a policy</a>. </p>
+    /// <p>For information about Amazon S3 Object Ownership, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Using Object Ownership</a>. </p>
     /// <p>The following operations are related to <code>GetBucketOwnershipControls</code>:</p>
     /// <ul>
     /// <li>
@@ -1807,7 +1735,6 @@ pub trait S3: Send + Sync + 'static {
     /// always use this operation, even if the policy explicitly denies the root user the
     /// ability to perform this action.</p>
     /// </important>
-    /// <p>To use this API against an access point, provide the alias of the access point in place of the bucket name.</p>
     /// <p>For more information about bucket policies, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-iam-policies.html">Using Bucket Policies and User
     /// Policies</a>.</p>
     /// <p>The following action is related to <code>GetBucketPolicy</code>:</p>
@@ -1893,8 +1820,7 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Returns the request payment configuration of a bucket. To use this version of the
-    /// operation, you must be the bucket owner. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html">Requester Pays
-    /// Buckets</a>.</p>
+    /// operation, you must be the bucket owner. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html">Requester Pays Buckets</a>.</p>
     /// <p>The following operations are related to <code>GetBucketRequestPayment</code>:</p>
     /// <ul>
     /// <li>
@@ -1973,7 +1899,8 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Returns the website configuration for a bucket. To host website on Amazon S3, you can
     /// configure a bucket as website by adding a website configuration. For more information about
-    /// hosting websites, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Hosting Websites on Amazon S3</a>. </p>
+    /// hosting websites, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">Hosting Websites on
+    /// Amazon S3</a>. </p>
     /// <p>This GET action requires the <code>S3:GetBucketWebsite</code> permission. By default,
     /// only the bucket owner can read the bucket website configuration. However, bucket owners can
     /// allow other users to read the website configuration by writing a bucket policy granting
@@ -2009,19 +1936,18 @@ pub trait S3: Send + Sync + 'static {
     /// have the object <code>photos/2006/February/sample.jpg</code> in the bucket named
     /// <code>examplebucket</code>, specify the resource as
     /// <code>/examplebucket/photos/2006/February/sample.jpg</code>. For more information about
-    /// request types, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html#VirtualHostingSpecifyBucket">HTTP Host
-    /// Header Bucket Specification</a>.</p>
+    /// request types, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html#VirtualHostingSpecifyBucket">HTTP Host Header Bucket Specification</a>.</p>
     /// <p>For more information about returning the ACL of an object, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectAcl.html">GetObjectAcl</a>.</p>
     /// <p>If the object you are retrieving is stored in the S3 Glacier or
     /// S3 Glacier Deep Archive storage class, or S3 Intelligent-Tiering Archive or
     /// S3 Intelligent-Tiering Deep Archive tiers, before you can retrieve the object you must first restore a
     /// copy using <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html">RestoreObject</a>. Otherwise, this action returns an
-    /// <code>InvalidObjectState</code> error. For information about restoring archived objects,
-    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring
-    /// Archived Objects</a>.</p>
+    /// <code>InvalidObjectStateError</code> error. For information about restoring archived
+    /// objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived
+    /// Objects</a>.</p>
     /// <p>Encryption request headers, like <code>x-amz-server-side-encryption</code>, should not
-    /// be sent for GET requests if your object uses server-side encryption with KMS keys
-    /// (SSE-KMS) or server-side encryption with Amazon S3–managed encryption keys (SSE-S3). If your
+    /// be sent for GET requests if your object uses server-side encryption with KMS keys (SSE-KMS)
+    /// or server-side encryption with Amazon S3–managed encryption keys (SSE-S3). If your
     /// object does use these types of keys, you’ll get an HTTP 400 BadRequest error.</p>
     /// <p>If you encrypt an object by using server-side encryption with customer-provided
     /// encryption keys (SSE-C) when you store the object in Amazon S3, then when you GET the object,
@@ -2037,19 +1963,19 @@ pub trait S3: Send + Sync + 'static {
     /// <p>x-amz-server-side-encryption-customer-key-MD5</p>
     /// </li>
     /// </ul>
-    /// <p>For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption
-    /// (Using Customer-Provided Encryption Keys)</a>.</p>
-    /// <p>Assuming you have the relevant permission to read object tags, the response also returns
-    /// the <code>x-amz-tagging-count</code> header that provides the count of number of tags
+    /// <p>For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption (Using
+    /// Customer-Provided Encryption Keys)</a>.</p>
+    /// <p>Assuming you have the relevant permission to read object tags, the response also returns the
+    /// <code>x-amz-tagging-count</code> header that provides the count of number of tags
     /// associated with the object. You can use <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObjectTagging.html">GetObjectTagging</a> to retrieve
     /// the tag set associated with an object.</p>
     /// <p>
     /// <b>Permissions</b>
     /// </p>
     /// <p>You need the relevant read object (or version) permission for this operation. For more
-    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a
-    /// Policy</a>. If the object you request does not exist, the error Amazon S3 returns depends
-    /// on whether you also have the <code>s3:ListBucket</code> permission.</p>
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions
+    /// in a Policy</a>. If the object you request does not exist, the error Amazon S3 returns
+    /// depends on whether you also have the <code>s3:ListBucket</code> permission.</p>
     /// <ul>
     /// <li>
     /// <p>If you have the <code>s3:ListBucket</code> permission on the bucket, Amazon S3 will
@@ -2068,12 +1994,11 @@ pub trait S3: Send + Sync + 'static {
     /// <note>
     /// <ul>
     /// <li>
-    /// <p> If you supply a <code>versionId</code>, you need the
-    /// <code>s3:GetObjectVersion</code> permission to access a specific version of an
-    /// object. If you request a specific version, you do not need to have the
-    /// <code>s3:GetObject</code> permission. If you request the current version
-    /// without a specific version ID, only <code>s3:GetObject</code> permission is
-    /// required. <code>s3:GetObjectVersion</code> permission won't be required.</p>
+    /// <p>
+    /// If you supply a <code>versionId</code>, you need the <code>s3:GetObjectVersion</code> permission to
+    /// access a specific version of an object. If you request a specific version, you do not need to have
+    /// the <code>s3:GetObject</code> permission.
+    /// </p>
     /// </li>
     /// <li>
     /// <p>If the current version of the object is a delete marker, Amazon S3 behaves as if the
@@ -2176,11 +2101,10 @@ pub trait S3: Send + Sync + 'static {
     /// return ACL information about a different version, use the versionId subresource.</p>
     /// <note>
     /// <p>If your bucket uses the bucket owner enforced setting for S3 Object Ownership,
-    /// requests to read ACLs are still supported and return the
-    /// <code>bucket-owner-full-control</code> ACL with the owner being the account that
-    /// created the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html"> Controlling object
-    /// ownership and disabling ACLs</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// requests to read ACLs are still supported and return the <code>bucket-owner-full-control</code>
+    /// ACL with the owner being the account that created the bucket. For more information, see
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">
+    /// Controlling object ownership and disabling ACLs</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// </note>
     /// <p>The following operations are related to <code>GetObjectAcl</code>:</p>
     /// <ul>
@@ -2213,9 +2137,12 @@ pub trait S3: Send + Sync + 'static {
     /// action is useful if you're interested only in an object's metadata. To use
     /// <code>GetObjectAttributes</code>, you must have READ access to the object.</p>
     /// <p>
-    /// <code>GetObjectAttributes</code> combines the functionality of <code>HeadObject</code>
-    /// and <code>ListParts</code>. All of the data returned with each of those individual calls
-    /// can be returned with a single call to <code>GetObjectAttributes</code>.</p>
+    /// <code>GetObjectAttributes</code> combines the functionality of
+    /// <code>GetObjectAcl</code>, <code>GetObjectLegalHold</code>,
+    /// <code>GetObjectLockConfiguration</code>, <code>GetObjectRetention</code>,
+    /// <code>GetObjectTagging</code>, <code>HeadObject</code>, and <code>ListParts</code>. All
+    /// of the data returned with each of those individual calls can be returned with a single call
+    /// to <code>GetObjectAttributes</code>.</p>
     /// <p>If you encrypt an object by using server-side encryption with customer-provided
     /// encryption keys (SSE-C) when you store the object in Amazon S3, then when you retrieve the
     /// metadata from the object, you must use the following headers:</p>
@@ -2242,24 +2169,25 @@ pub trait S3: Send + Sync + 'static {
     /// <note>
     /// <ul>
     /// <li>
-    /// <p>Encryption request headers, such as <code>x-amz-server-side-encryption</code>,
-    /// should not be sent for GET requests if your object uses server-side encryption
-    /// with Amazon Web Services KMS keys stored in Amazon Web Services Key Management Service (SSE-KMS) or
-    /// server-side encryption with Amazon S3 managed keys (SSE-S3). If your object does use
-    /// these types of keys, you'll get an HTTP <code>400 Bad Request</code> error.</p>
+    /// <p>Encryption request headers, such as
+    /// <code>x-amz-server-side-encryption</code>, should not be sent for GET requests
+    /// if your object uses server-side encryption with Amazon Web Services KMS keys stored in Amazon Web Services Key
+    /// Management Service (SSE-KMS) or server-side encryption with Amazon S3 managed
+    /// encryption keys (SSE-S3). If your object does use these types of keys, you'll get
+    /// an HTTP <code>400 Bad Request</code> error.</p>
     /// </li>
     /// <li>
-    /// <p> The last modified property in this case is the creation date of the
-    /// object.</p>
+    /// <p>
+    /// The last modified property in this case is the creation date of the object.</p>
     /// </li>
     /// </ul>
     /// </note>
     /// <p>Consider the following when using request headers:</p>
     /// <ul>
     /// <li>
-    /// <p> If both of the <code>If-Match</code> and <code>If-Unmodified-Since</code> headers
-    /// are present in the request as follows, then Amazon S3 returns the HTTP status code
-    /// <code>200 OK</code> and the data requested:</p>
+    /// <p> If both of the <code>If-Match</code> and <code>If-Unmodified-Since</code>
+    /// headers are present in the request as follows, then Amazon S3 returns the HTTP
+    /// status code <code>200 OK</code> and the data requested:</p>
     /// <ul>
     /// <li>
     /// <p>
@@ -2279,7 +2207,8 @@ pub trait S3: Send + Sync + 'static {
     /// <ul>
     /// <li>
     /// <p>
-    /// <code>If-None-Match</code> condition evaluates to <code>false</code>.</p>
+    /// <code>If-None-Match</code> condition evaluates to
+    /// <code>false</code>.</p>
     /// </li>
     /// <li>
     /// <p>
@@ -2303,12 +2232,12 @@ pub trait S3: Send + Sync + 'static {
     /// have the <code>s3:ListBucket</code> permission.</p>
     /// <ul>
     /// <li>
-    /// <p>If you have the <code>s3:ListBucket</code> permission on the bucket, Amazon S3 returns
-    /// an HTTP status code <code>404 Not Found</code> ("no such key") error.</p>
+    /// <p>If you have the <code>s3:ListBucket</code> permission on the bucket, Amazon S3
+    /// returns an HTTP status code <code>404 Not Found</code> ("no such key") error.</p>
     /// </li>
     /// <li>
-    /// <p>If you don't have the <code>s3:ListBucket</code> permission, Amazon S3 returns an HTTP
-    /// status code <code>403 Forbidden</code> ("access denied") error.</p>
+    /// <p>If you don't have the <code>s3:ListBucket</code> permission, Amazon S3 returns an
+    /// HTTP status code <code>403 Forbidden</code> ("access denied") error.</p>
     /// </li>
     /// </ul>
     /// <p>The following actions are related to <code>GetObjectAttributes</code>:</p>
@@ -2375,7 +2304,8 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock
     /// configuration will be applied by default to every new object placed in the specified
-    /// bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking Objects</a>.</p>
+    /// bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking
+    /// Objects</a>.</p>
     /// <p>The following action is related to <code>GetObjectLockConfiguration</code>:</p>
     /// <ul>
     /// <li>
@@ -2391,8 +2321,7 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "GetObjectLockConfiguration is not implemented yet"))
     }
 
-    /// <p>Retrieves an object's retention settings. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking
-    /// Objects</a>.</p>
+    /// <p>Retrieves an object's retention settings. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking Objects</a>.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
     /// <p>The following action is related to <code>GetObjectRetention</code>:</p>
     /// <ul>
@@ -2409,11 +2338,11 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Returns the tag-set of an object. You send the GET request against the tagging
     /// subresource associated with the object.</p>
     /// <p>To use this operation, you must have permission to perform the
-    /// <code>s3:GetObjectTagging</code> action. By default, the GET action returns information
-    /// about current version of an object. For a versioned bucket, you can have multiple versions
-    /// of an object in your bucket. To retrieve tags of any other version, use the versionId query
-    /// parameter. You also need permission for the <code>s3:GetObjectVersionTagging</code>
-    /// action.</p>
+    /// <code>s3:GetObjectTagging</code> action. By default, the GET action returns
+    /// information about current version of an object. For a versioned bucket, you can have
+    /// multiple versions of an object in your bucket. To retrieve tags of any other version, use
+    /// the versionId query parameter. You also need permission for the
+    /// <code>s3:GetObjectVersionTagging</code> action.</p>
     /// <p> By default, the bucket owner has this permission and can grant this permission to
     /// others.</p>
     /// <p> For information about the Amazon S3 object tagging feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</p>
@@ -2440,7 +2369,7 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Returns torrent files from a bucket. BitTorrent can save you bandwidth when you're
-    /// distributing large files.</p>
+    /// distributing large files. For more information about BitTorrent, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3Torrent.html">Using BitTorrent with Amazon S3</a>.</p>
     /// <note>
     /// <p>You can get torrent only for objects that are less than 5 GB in size, and that are
     /// not encrypted using server-side encryption with a customer-provided encryption
@@ -2501,36 +2430,29 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "GetPublicAccessBlock is not implemented yet"))
     }
 
-    /// <p>This action is useful to determine if a bucket exists and you have permission to access
-    /// it. The action returns a <code>200 OK</code> if the bucket exists and you have permission
-    /// to access it.</p>
-    /// <p>If the bucket does not exist or you do not have permission to access it, the
-    /// <code>HEAD</code> request returns a generic <code>400 Bad Request</code>, <code>403
-    /// Forbidden</code> or <code>404 Not Found</code> code. A message body is not included, so
-    /// you cannot determine the exception beyond these error codes.</p>
+    /// <p>This action is useful to determine if a bucket exists and you have permission to
+    /// access it. The action returns a <code>200 OK</code> if the bucket exists and you have
+    /// permission to access it.</p>
+    /// <p>If the bucket does not exist or you do not have permission to access it, the <code>HEAD</code> request
+    /// returns a generic <code>404 Not Found</code> or <code>403 Forbidden</code> code. A message body is not
+    /// included, so you cannot determine the exception beyond these error codes.</p>
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:ListBucket</code> action. The bucket owner has this permission by default and
-    /// can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
-    /// <p>To use this API against an access point, you must provide the alias of the access point in place of the
-    /// bucket name or specify the access point ARN. When using the access point ARN, you must direct requests to
-    /// the access point hostname. The access point hostname takes the form
-    /// AccessPointName-AccountId.s3-accesspoint.Region.amazonaws.com. When using the Amazon Web Services SDKs,
-    /// you provide the ARN in place of the bucket name. For more information see, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using
-    /// access points</a>.</p>
+    /// can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
+    /// <p>To use this API against an access point, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form AccessPointName-AccountId.s3-accesspoint.Region.amazonaws.com. When using the Amazon Web Services SDKs, you provide the ARN in place of the bucket name. For more information see, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a>.</p>
     async fn head_bucket(&self, _req: S3Request<HeadBucketInput>) -> S3Result<HeadBucketOutput> {
         Err(s3_error!(NotImplemented, "HeadBucket is not implemented yet"))
     }
 
-    /// <p>The HEAD action retrieves metadata from an object without returning the object itself.
-    /// This action is useful if you're only interested in an object's metadata. To use HEAD, you
-    /// must have READ access to the object.</p>
+    /// <p>The HEAD action retrieves metadata from an object without returning the object
+    /// itself. This action is useful if you're only interested in an object's metadata. To use
+    /// HEAD, you must have READ access to the object.</p>
     /// <p>A <code>HEAD</code> request has the same options as a <code>GET</code> action on an
     /// object. The response is identical to the <code>GET</code> response except that there is no
     /// response body. Because of this, if the <code>HEAD</code> request generates an error, it
-    /// returns a generic <code>400 Bad Request</code>, <code>403 Forbidden</code> or <code>404 Not
-    /// Found</code> code. It is not possible to retrieve the exact exception beyond these error
-    /// codes.</p>
+    /// returns a generic <code>404 Not Found</code> or <code>403 Forbidden</code> code. It is not
+    /// possible to retrieve the exact exception beyond these error codes.</p>
     /// <p>If you encrypt an object by using server-side encryption with customer-provided
     /// encryption keys (SSE-C) when you store the object in Amazon S3, then when you retrieve the
     /// metadata from the object, you must use the following headers:</p>
@@ -2545,25 +2467,25 @@ pub trait S3: Send + Sync + 'static {
     /// <p>x-amz-server-side-encryption-customer-key-MD5</p>
     /// </li>
     /// </ul>
-    /// <p>For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption
-    /// (Using Customer-Provided Encryption Keys)</a>.</p>
+    /// <p>For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption (Using
+    /// Customer-Provided Encryption Keys)</a>.</p>
     /// <note>
     /// <ul>
     /// <li>
-    /// <p>Encryption request headers, like <code>x-amz-server-side-encryption</code>,
-    /// should not be sent for GET requests if your object uses server-side encryption
-    /// with KMS keys (SSE-KMS) or server-side encryption with Amazon S3–managed encryption
-    /// keys (SSE-S3). If your object does use these types of keys, you’ll get an HTTP 400
-    /// BadRequest error.</p>
+    /// <p>Encryption request headers, like <code>x-amz-server-side-encryption</code>, should
+    /// not be sent for GET requests if your object uses server-side encryption with KMS keys (SSE-KMS)
+    /// or server-side encryption with Amazon S3–managed encryption keys
+    /// (SSE-S3). If your object does use these types of keys, you’ll get an HTTP 400 BadRequest
+    /// error.</p>
     /// </li>
     /// <li>
-    /// <p> The last modified property in this case is the creation date of the
-    /// object.</p>
+    /// <p>
+    /// The last modified property in this case is the creation date of the object.</p>
     /// </li>
     /// </ul>
     /// </note>
-    /// <p>Request headers are limited to 8 KB in size. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTCommonRequestHeaders.html">Common
-    /// Request Headers</a>.</p>
+    /// <p>Request headers are limited to 8 KB in size. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTCommonRequestHeaders.html">Common Request
+    /// Headers</a>.</p>
     /// <p>Consider the following when using request headers:</p>
     /// <ul>
     /// <li>
@@ -2607,9 +2529,9 @@ pub trait S3: Send + Sync + 'static {
     /// <b>Permissions</b>
     /// </p>
     /// <p>You need the relevant read object (or version) permission for this operation. For more
-    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a
-    /// Policy</a>. If the object you request does not exist, the error Amazon S3 returns depends
-    /// on whether you also have the s3:ListBucket permission.</p>
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions
+    /// in a Policy</a>. If the object you request does not exist, the error Amazon S3 returns
+    /// depends on whether you also have the s3:ListBucket permission.</p>
     /// <ul>
     /// <li>
     /// <p>If you have the <code>s3:ListBucket</code> permission on the bucket, Amazon S3 returns
@@ -2639,8 +2561,8 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Lists the analytics configurations for the bucket. You can have up to 1,000 analytics
     /// configurations per bucket.</p>
-    /// <p>This action supports list pagination and does not return more than 100 configurations at
-    /// a time. You should always check the <code>IsTruncated</code> element in the response. If
+    /// <p>This action supports list pagination and does not return more than 100 configurations
+    /// at a time. You should always check the <code>IsTruncated</code> element in the response. If
     /// there are no more configurations to list, <code>IsTruncated</code> is set to false. If
     /// there are more configurations to list, <code>IsTruncated</code> is set to true, and there
     /// will be a value in <code>NextContinuationToken</code>. You use the
@@ -2650,8 +2572,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:GetAnalyticsConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>For information about Amazon S3 analytics feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3 Analytics – Storage Class
     /// Analysis</a>. </p>
     /// <p>The following operations are related to
@@ -2684,7 +2606,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>The S3 Intelligent-Tiering storage class is designed to optimize storage costs by automatically moving data to the most cost-effective storage access tier, without performance impact or operational overhead. S3 Intelligent-Tiering delivers automatic cost savings in three low latency and high throughput access tiers. To get the lowest storage cost on data that can be accessed in minutes to hours, you can choose to activate additional archiving capabilities.</p>
     /// <p>The S3 Intelligent-Tiering storage class is  the ideal storage class for data with unknown, changing, or unpredictable access patterns, independent of object size or retention period. If the size of an object is less than 128 KB, it is not monitored and not eligible for auto-tiering. Smaller objects can be stored, but they are always charged at the Frequent Access tier rates in the S3 Intelligent-Tiering storage class.</p>
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for automatically optimizing frequently and infrequently accessed objects</a>.</p>
-    /// <p>Operations related to <code>ListBucketIntelligentTieringConfigurations</code> include: </p>
+    /// <p>Operations related to
+    /// <code>ListBucketIntelligentTieringConfigurations</code> include: </p>
     /// <ul>
     /// <li>
     /// <p>
@@ -2714,9 +2637,9 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Returns a list of inventory configurations for the bucket. You can have up to 1,000
     /// analytics configurations per bucket.</p>
-    /// <p>This action supports list pagination and does not return more than 100 configurations at
-    /// a time. Always check the <code>IsTruncated</code> element in the response. If there are no
-    /// more configurations to list, <code>IsTruncated</code> is set to false. If there are more
+    /// <p>This action supports list pagination and does not return more than 100 configurations
+    /// at a time. Always check the <code>IsTruncated</code> element in the response. If there are
+    /// no more configurations to list, <code>IsTruncated</code> is set to false. If there are more
     /// configurations to list, <code>IsTruncated</code> is set to true, and there is a value in
     /// <code>NextContinuationToken</code>. You use the <code>NextContinuationToken</code> value
     /// to continue the pagination of the list by passing the value in continuation-token in the
@@ -2724,8 +2647,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p> To use this operation, you must have permissions to perform the
     /// <code>s3:GetInventoryConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>For information about the Amazon S3 inventory feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html">Amazon S3 Inventory</a>
     /// </p>
     /// <p>The following operations are related to
@@ -2757,9 +2680,9 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Lists the metrics configurations for the bucket. The metrics configurations are only for
     /// the request metrics of the bucket and do not provide information on daily storage metrics.
     /// You can have up to 1,000 configurations per bucket.</p>
-    /// <p>This action supports list pagination and does not return more than 100 configurations at
-    /// a time. Always check the <code>IsTruncated</code> element in the response. If there are no
-    /// more configurations to list, <code>IsTruncated</code> is set to false. If there are more
+    /// <p>This action supports list pagination and does not return more than 100 configurations
+    /// at a time. Always check the <code>IsTruncated</code> element in the response. If there are
+    /// no more configurations to list, <code>IsTruncated</code> is set to false. If there are more
     /// configurations to list, <code>IsTruncated</code> is set to true, and there is a value in
     /// <code>NextContinuationToken</code>. You use the <code>NextContinuationToken</code> value
     /// to continue the pagination of the list by passing the value in
@@ -2767,10 +2690,11 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:GetMetricsConfiguration</code> action. The bucket owner has this permission by
     /// default. The bucket owner can grant this permission to others. For more information about
-    /// permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>For more information about metrics configurations and CloudWatch request metrics, see
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon CloudWatch</a>.</p>
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon
+    /// CloudWatch</a>.</p>
     /// <p>The following operations are related to
     /// <code>ListBucketMetricsConfigurations</code>:</p>
     /// <ul>
@@ -2798,9 +2722,7 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Returns a list of all buckets owned by the authenticated sender of the request. To use
-    /// this operation, you must have the <code>s3:ListAllMyBuckets</code> permission. </p>
-    /// <p>For information about Amazon S3 buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-buckets-s3.html">Creating, configuring, and
-    /// working with Amazon S3 buckets</a>.</p>
+    /// this operation, you must have the <code>s3:ListAllMyBuckets</code> permission.</p>
     async fn list_buckets(&self, _req: S3Request<ListBucketsInput>) -> S3Result<ListBucketsOutput> {
         Err(s3_error!(NotImplemented, "ListBuckets is not implemented yet"))
     }
@@ -2821,8 +2743,8 @@ pub trait S3: Send + Sync + 'static {
     /// upload initiation time.</p>
     /// <p>For more information on multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart
     /// Upload</a>.</p>
-    /// <p>For information on permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload
-    /// and Permissions</a>.</p>
+    /// <p>For information on permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload and
+    /// Permissions</a>.</p>
     /// <p>The following operations are related to <code>ListMultipartUploads</code>:</p>
     /// <ul>
     /// <li>
@@ -2859,8 +2781,10 @@ pub trait S3: Send + Sync + 'static {
     /// parameters as selection criteria to return metadata about a subset of all the object
     /// versions.</p>
     /// <important>
-    /// <p> To use this operation, you must have permissions to perform the
-    /// <code>s3:ListBucketVersions</code> action. Be aware of the name difference. </p>
+    /// <p>
+    /// To use this operation, you must have permissions to perform the
+    /// <code>s3:ListBucketVersions</code> action. Be aware of the name difference.
+    /// </p>
     /// </important>
     /// <note>
     /// <p> A 200 OK response can contain valid or invalid XML. Make sure to design your
@@ -2868,7 +2792,8 @@ pub trait S3: Send + Sync + 'static {
     /// </note>
     /// <p>To use this operation, you must have READ access to the bucket.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
-    /// <p>The following operations are related to <code>ListObjectVersions</code>:</p>
+    /// <p>The following operations are related to
+    /// <code>ListObjectVersions</code>:</p>
     /// <ul>
     /// <li>
     /// <p>
@@ -2935,23 +2860,24 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "ListObjects is not implemented yet"))
     }
 
-    /// <p>Returns some or all (up to 1,000) of the objects in a bucket with each request. You can
-    /// use the request parameters as selection criteria to return a subset of the objects in a
-    /// bucket. A <code>200 OK</code> response can contain valid or invalid XML. Make sure to
-    /// design your application to parse the contents of the response and handle it appropriately.
+    /// <p>Returns some or all (up to 1,000) of the objects in a bucket with each request. You can use
+    /// the request parameters as selection criteria to return a subset of the objects in a bucket. A
+    /// <code>200 OK</code> response can contain valid or invalid XML. Make sure to design your
+    /// application to parse the contents of the response and handle it appropriately.
     /// Objects are returned sorted in an ascending order of the respective key names in the list.
     /// For more information about listing objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ListingKeysUsingAPIs.html">Listing object keys
     /// programmatically</a>
     /// </p>
     /// <p>To use this operation, you must have READ access to the bucket.</p>
-    /// <p>To use this action in an Identity and Access Management (IAM) policy, you must have permissions to perform
-    /// the <code>s3:ListBucket</code> action. The bucket owner has this permission by default and
-    /// can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// <p>To use this action in an Identity and Access Management (IAM) policy, you must
+    /// have permissions to perform the <code>s3:ListBucket</code> action. The bucket owner has
+    /// this permission by default and can grant this permission to others. For more information
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <important>
-    /// <p>This section describes the latest revision of this action. We recommend that you use
-    /// this revised API for application development. For backward compatibility, Amazon S3 continues
-    /// to support the prior version of this API, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html">ListObjects</a>.</p>
+    /// <p>This section describes the latest revision of this action. We recommend that you use this
+    /// revised API for application development. For backward compatibility, Amazon S3 continues to
+    /// support the prior version of this API, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html">ListObjects</a>.</p>
     /// </important>
     /// <p>To get a list of your buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListBuckets.html">ListBuckets</a>.</p>
     /// <p>The following operations are related to <code>ListObjectsV2</code>:</p>
@@ -2987,11 +2913,12 @@ pub trait S3: Send + Sync + 'static {
     /// requests you can include the part-number-marker query string parameter and set its value to
     /// the <code>NextPartNumberMarker</code> field value from the previous response.</p>
     /// <p>If the upload was created using a checksum algorithm, you will need to have permission
-    /// to the <code>kms:Decrypt</code> action for the request to succeed. </p>
+    /// to the <code>kms:Decrypt</code> action for the request to succeed.
+    /// </p>
     /// <p>For more information on multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart
     /// Upload</a>.</p>
-    /// <p>For information on permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload
-    /// and Permissions</a>.</p>
+    /// <p>For information on permissions required to use the multipart upload API, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload and
+    /// Permissions</a>.</p>
     /// <p>The following operations are related to <code>ListParts</code>:</p>
     /// <ul>
     /// <li>
@@ -3046,14 +2973,13 @@ pub trait S3: Send + Sync + 'static {
     /// <p> Suspended – Disables accelerated data transfers to the bucket.</p>
     /// </li>
     /// </ul>
-    /// <p>The <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html">GetBucketAccelerateConfiguration</a> action returns the transfer acceleration state
-    /// of a bucket.</p>
+    /// <p>The <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.html">GetBucketAccelerateConfiguration</a> action returns the transfer acceleration
+    /// state of a bucket.</p>
     /// <p>After setting the Transfer Acceleration state of a bucket to Enabled, it might take up
     /// to thirty minutes before the data transfer rates to the bucket increase.</p>
     /// <p> The name of the bucket used for Transfer Acceleration must be DNS-compliant and must
     /// not contain periods (".").</p>
-    /// <p> For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer
-    /// Acceleration</a>.</p>
+    /// <p> For more information about transfer acceleration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Transfer Acceleration</a>.</p>
     /// <p>The following operations are related to
     /// <code>PutBucketAccelerateConfiguration</code>:</p>
     /// <ul>
@@ -3076,8 +3002,8 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Sets the permissions on an existing bucket using access control lists (ACL). For more
-    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. To set the ACL of a
-    /// bucket, you must have <code>WRITE_ACP</code> permission.</p>
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Using ACLs</a>. To set
+    /// the ACL of a bucket, you must have <code>WRITE_ACP</code> permission.</p>
     /// <p>You can use one of the following two ways to set a bucket's permissions:</p>
     /// <ul>
     /// <li>
@@ -3096,12 +3022,11 @@ pub trait S3: Send + Sync + 'static {
     /// that updates a bucket ACL using the request body, then you can continue to use that
     /// approach.</p>
     /// <important>
-    /// <p>If your bucket uses the bucket owner enforced setting for S3 Object Ownership, ACLs
-    /// are disabled and no longer affect permissions. You must use policies to grant access to
-    /// your bucket and the objects in it. Requests to set ACLs or update ACLs fail and return
-    /// the <code>AccessControlListNotSupported</code> error code. Requests to read ACLs are
-    /// still supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Controlling object
-    /// ownership</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>If your bucket uses the bucket owner enforced setting for S3 Object Ownership, ACLs are disabled and no longer affect permissions.
+    /// You must use policies to grant access to your bucket and the objects in it. Requests to set ACLs or update ACLs fail and
+    /// return the <code>AccessControlListNotSupported</code> error code. Requests to read ACLs are still supported.
+    /// For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Controlling object ownership</a>
+    /// in the <i>Amazon S3 User Guide</i>.</p>
     /// </important>
     /// <p>
     /// <b>Access Permissions</b>
@@ -3113,8 +3038,7 @@ pub trait S3: Send + Sync + 'static {
     /// a set of predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL
     /// has a predefined set of grantees and permissions. Specify the canned ACL name as the
     /// value of <code>x-amz-acl</code>. If you use this header, you cannot use other access
-    /// control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned
-    /// ACL</a>.</p>
+    /// control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
     /// </li>
     /// <li>
     /// <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>,
@@ -3123,15 +3047,14 @@ pub trait S3: Send + Sync + 'static {
     /// specify explicit access permissions and grantees (Amazon Web Services accounts or Amazon S3 groups) who
     /// will receive the permission. If you use these ACL-specific headers, you cannot use
     /// the <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the
-    /// set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control
-    /// List (ACL) Overview</a>.</p>
+    /// set of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL)
+    /// Overview</a>.</p>
     /// <p>You specify each grantee as a type=value pair, where the type is one of the
     /// following:</p>
     /// <ul>
     /// <li>
     /// <p>
-    /// <code>id</code> – if the value specified is the canonical user ID of an
-    /// Amazon Web Services account</p>
+    /// <code>id</code> – if the value specified is the canonical user ID of an Amazon Web Services account</p>
     /// </li>
     /// <li>
     /// <p>
@@ -3211,7 +3134,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>By Email address:</p>
     /// <p>
     /// <code>&lt;Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    /// xsi:type="AmazonCustomerByEmail"><EmailAddress><>Grantees@email.com<></EmailAddress>&&lt;/Grantee&gt;</code>
+    /// xsi:type="AmazonCustomerByEmail"><EmailAddress><>Grantees@email.com<></EmailAddress>lt;/Grantee></code>
     /// </p>
     /// <p>The grantee is resolved to the CanonicalUser and, in a response to a GET Object
     /// acl request, appears as the CanonicalUser. </p>
@@ -3279,8 +3202,8 @@ pub trait S3: Send + Sync + 'static {
     /// selecting data export, you specify a destination bucket and an optional destination prefix
     /// where the file is written. You can export the data to a destination bucket in a different
     /// account. However, the destination bucket must be in the same Region as the bucket that you
-    /// are making the PUT analytics configuration to. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3
-    /// Analytics – Storage Class Analysis</a>. </p>
+    /// are making the PUT analytics configuration to. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/analytics-storage-class.html">Amazon S3 Analytics – Storage Class
+    /// Analysis</a>. </p>
     /// <important>
     /// <p>You must create a bucket policy on the destination bucket where the exported file is
     /// written to grant permissions to Amazon S3 to write objects to the bucket. For an example
@@ -3289,8 +3212,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutAnalyticsConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p class="title">
     /// <b>Special Errors</b>
     /// </p>
@@ -3417,8 +3340,8 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    /// <p> For more information about CORS, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling Cross-Origin Resource Sharing</a> in
-    /// the <i>Amazon S3 User Guide</i>.</p>
+    /// <p> For more information about CORS, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling
+    /// Cross-Origin Resource Sharing</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p class="title">
     /// <b>Related Resources</b>
     /// </p>
@@ -3443,27 +3366,25 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "PutBucketCors is not implemented yet"))
     }
 
-    /// <p>This action uses the <code>encryption</code> subresource to configure default encryption
-    /// and Amazon S3 Bucket Keys for an existing bucket.</p>
-    /// <p>By default, all buckets have a default encryption configuration that
-    /// uses server-side encryption with Amazon S3 managed keys (SSE-S3).
-    /// You can optionally configure default encryption for a bucket by using server-side
-    /// encryption with an Amazon Web Services KMS key (SSE-KMS) or a customer-provided key (SSE-C). If you specify default encryption by using
-    /// SSE-KMS, you can also configure Amazon S3 Bucket Keys. For information about bucket default encryption,
-    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3
-    /// bucket default encryption</a> in the <i>Amazon S3 User Guide</i>. For more
-    /// information about S3 Bucket Keys, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// <p>This action uses the <code>encryption</code> subresource to configure default
+    /// encryption and Amazon S3 Bucket Key for an existing bucket.</p>
+    /// <p>Default encryption for a bucket can use server-side encryption with Amazon S3-managed keys
+    /// (SSE-S3) or customer managed keys (SSE-KMS). If you specify default encryption
+    /// using SSE-KMS, you can also configure Amazon S3 Bucket Key. When the default encryption is SSE-KMS, if
+    /// you upload an object to the bucket and do not specify the KMS key to use for encryption, Amazon S3
+    /// uses the default Amazon Web Services managed KMS key for your account. For information about default
+    /// encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 default bucket encryption</a>
+    /// in the <i>Amazon S3 User Guide</i>. For more information about S3 Bucket Keys,
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <important>
-    /// <p>This action requires Amazon Web Services Signature Version 4. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">
-    /// Authenticating Requests (Amazon Web Services Signature Version 4)</a>. </p>
+    /// <p>This action requires Amazon Web Services Signature Version 4. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html"> Authenticating Requests (Amazon Web Services Signature
+    /// Version 4)</a>. </p>
     /// </important>
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutEncryptionConfiguration</code> action. The bucket owner has this permission
     /// by default. The bucket owner can grant this permission to others. For more information
-    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a> in the
-    /// <i>Amazon S3 User Guide</i>. </p>
+    /// about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a> in the Amazon S3 User Guide. </p>
     /// <p class="title">
     /// <b>Related Resources</b>
     /// </p>
@@ -3483,12 +3404,13 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "PutBucketEncryption is not implemented yet"))
     }
 
-    /// <p>Puts a S3 Intelligent-Tiering configuration to the specified bucket. You can have up to
-    /// 1,000 S3 Intelligent-Tiering configurations per bucket.</p>
+    /// <p>Puts a S3 Intelligent-Tiering configuration to the specified bucket.
+    /// You can have up to 1,000 S3 Intelligent-Tiering configurations per bucket.</p>
     /// <p>The S3 Intelligent-Tiering storage class is designed to optimize storage costs by automatically moving data to the most cost-effective storage access tier, without performance impact or operational overhead. S3 Intelligent-Tiering delivers automatic cost savings in three low latency and high throughput access tiers. To get the lowest storage cost on data that can be accessed in minutes to hours, you can choose to activate additional archiving capabilities.</p>
     /// <p>The S3 Intelligent-Tiering storage class is  the ideal storage class for data with unknown, changing, or unpredictable access patterns, independent of object size or retention period. If the size of an object is less than 128 KB, it is not monitored and not eligible for auto-tiering. Smaller objects can be stored, but they are always charged at the Frequent Access tier rates in the S3 Intelligent-Tiering storage class.</p>
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class for automatically optimizing frequently and infrequently accessed objects</a>.</p>
-    /// <p>Operations related to <code>PutBucketIntelligentTieringConfiguration</code> include: </p>
+    /// <p>Operations related to
+    /// <code>PutBucketIntelligentTieringConfiguration</code> include: </p>
     /// <ul>
     /// <li>
     /// <p>
@@ -3508,8 +3430,8 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     /// <note>
     /// <p>You only need S3 Intelligent-Tiering enabled on a bucket if you want to automatically
-    /// move objects stored in the S3 Intelligent-Tiering storage class to the Archive Access
-    /// or Deep Archive Access tier.</p>
+    /// move objects stored in the S3 Intelligent-Tiering storage class to the
+    /// Archive Access or Deep Archive Access tier.</p>
     /// </note>
     /// <p class="title">
     /// <b>Special Errors</b>
@@ -3558,8 +3480,8 @@ pub trait S3: Send + Sync + 'static {
     /// <li>
     /// <p>
     /// <i>Cause:</i> You are not the owner of the specified bucket,
-    /// or you do not have the <code>s3:PutIntelligentTieringConfiguration</code>
-    /// bucket permission to set the configuration on the bucket. </p>
+    /// or you do not have the <code>s3:PutIntelligentTieringConfiguration</code> bucket
+    /// permission to set the configuration on the bucket. </p>
     /// </li>
     /// </ul>
     /// </li>
@@ -3587,31 +3509,19 @@ pub trait S3: Send + Sync + 'static {
     /// the <i>destination</i> bucket where you want the inventory to be stored, and
     /// whether to generate the inventory daily or weekly. You can also configure what object
     /// metadata to include and whether to inventory all object versions or only current versions.
-    /// For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html">Amazon S3 Inventory</a> in the
-    /// Amazon S3 User Guide.</p>
+    /// For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-inventory.html">Amazon S3
+    /// Inventory</a> in the Amazon S3 User Guide.</p>
     /// <important>
     /// <p>You must create a bucket policy on the <i>destination</i> bucket to
     /// grant permissions to Amazon S3 to write objects to the bucket in the defined location. For an
-    /// example policy, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9"> Granting Permissions for Amazon S3 Inventory and Storage Class Analysis</a>.</p>
+    /// example policy, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html#example-bucket-policies-use-case-9">
+    /// Granting Permissions for Amazon S3 Inventory and Storage Class Analysis</a>.</p>
     /// </important>
-    /// <p>
-    /// <b>Permissions</b>
-    /// </p>
-    /// <p>To use this operation, you must have permission to perform the
+    /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutInventoryConfiguration</code> action. The bucket owner has this permission
-    /// by default and can grant this permission to others. </p>
-    /// <p>The <code>s3:PutInventoryConfiguration</code> permission allows a user to create an
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-inventory.html">S3
-    /// Inventory</a> report that includes all object metadata fields available and to
-    /// specify the destination bucket to store the inventory. A user with read access to objects
-    /// in the destination bucket can also access all object metadata fields that are available in
-    /// the inventory report. </p>
-    /// <p>To restrict access to an inventory report, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html#example-bucket-policies-use-case-10">Restricting access to an Amazon S3 Inventory report</a> in the
-    /// <i>Amazon S3 User Guide</i>. For more information about the metadata fields
-    /// available in S3 Inventory, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-inventory.html#storage-inventory-contents">Amazon S3
-    /// Inventory lists</a> in the <i>Amazon S3 User Guide</i>. For more
-    /// information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions related to bucket subresource operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Identity and
-    /// access management in Amazon S3</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// by default and can grant this permission to others. For more information about permissions,
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a> in the Amazon S3 User Guide.</p>
     /// <p class="title">
     /// <b>Special Errors</b>
     /// </p>
@@ -3693,10 +3603,10 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Creates a new lifecycle configuration for the bucket or replaces an existing lifecycle
-    /// configuration. Keep in mind that this will overwrite an existing lifecycle configuration,
-    /// so if you want to retain any configuration details, they must be included in the new
-    /// lifecycle configuration. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html">Managing
-    /// your storage lifecycle</a>.</p>
+    /// configuration. Keep in mind that this will overwrite an existing lifecycle configuration, so if
+    /// you want to retain any configuration details, they must be included in the new lifecycle
+    /// configuration. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html">Managing your storage
+    /// lifecycle</a>.</p>
     /// <note>
     /// <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an
     /// object key name prefix, one or more object tags, or a combination of both. Accordingly,
@@ -3728,8 +3638,8 @@ pub trait S3: Send + Sync + 'static {
     /// versions.</p>
     /// </li>
     /// </ul>
-    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>
-    /// and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html">Lifecycle Configuration Elements</a>.</p>
+    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object
+    /// Lifecycle Management</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/intro-lifecycle-rules.html">Lifecycle Configuration Elements</a>.</p>
     /// <p>
     /// <b>Permissions</b>
     /// </p>
@@ -3759,8 +3669,8 @@ pub trait S3: Send + Sync + 'static {
     /// </p>
     /// </li>
     /// </ul>
-    /// <p>For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to
-    /// Your Amazon S3 Resources</a>.</p>
+    /// <p>For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>The following are related to <code>PutBucketLifecycleConfiguration</code>:</p>
     /// <ul>
     /// <li>
@@ -3788,18 +3698,15 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and
-    /// modify the logging parameters. All logs are saved to buckets in the same Amazon Web Services Region as
-    /// the source bucket. To set the logging status of a bucket, you must be the bucket
-    /// owner.</p>
-    /// <p>The bucket owner is automatically granted FULL_CONTROL to all logs. You use the
-    /// <code>Grantee</code> request element to grant access to other people. The
+    /// modify the logging parameters. All logs are saved to buckets in the same Amazon Web Services Region as the
+    /// source bucket. To set the logging status of a bucket, you must be the bucket owner.</p>
+    /// <p>The bucket owner is automatically granted FULL_CONTROL to all logs. You use the <code>Grantee</code> request element to grant access to other people. The
     /// <code>Permissions</code> request element specifies the kind of access the grantee has to
     /// the logs.</p>
     /// <important>
-    /// <p>If the target bucket for log delivery uses the bucket owner enforced setting for S3
-    /// Object Ownership, you can't use the <code>Grantee</code> request element to grant access
-    /// to others. Permissions can only be granted using policies. For more information, see
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html#grant-log-delivery-permissions-general">Permissions for server access log delivery</a> in the
+    /// <p>If the target bucket for log delivery uses the bucket owner enforced
+    /// setting for S3 Object Ownership, you can't use the <code>Grantee</code> request element
+    /// to grant access to others. Permissions can only be granted using policies. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html#grant-log-delivery-permissions-general">Permissions for server access log delivery</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     /// </important>
     /// <p>
@@ -3840,8 +3747,7 @@ pub trait S3: Send + Sync + 'static {
     /// <code>&lt;BucketLoggingStatus xmlns="http://doc.s3.amazonaws.com/2006-03-01"
     /// /></code>
     /// </p>
-    /// <p>For more information about server access logging, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html">Server Access Logging</a> in the
-    /// <i>Amazon S3 User Guide</i>. </p>
+    /// <p>For more information about server access logging, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html">Server Access Logging</a> in the <i>Amazon S3 User Guide</i>. </p>
     /// <p>For more information about creating a bucket, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html">CreateBucket</a>. For more
     /// information about returning the logging status of a bucket, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLogging.html">GetBucketLogging</a>.</p>
     /// <p>The following operations are related to <code>PutBucketLogging</code>:</p>
@@ -3878,10 +3784,10 @@ pub trait S3: Send + Sync + 'static {
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutMetricsConfiguration</code> action. The bucket owner has this permission by
     /// default. The bucket owner can grant this permission to others. For more information about
-    /// permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
-    /// <p>For information about CloudWatch request metrics for Amazon S3, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring
-    /// Metrics with Amazon CloudWatch</a>.</p>
+    /// permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
+    /// <p>For information about CloudWatch request metrics for Amazon S3, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cloudwatch-monitoring.html">Monitoring Metrics with Amazon
+    /// CloudWatch</a>.</p>
     /// <p>The following operations are related to
     /// <code>PutBucketMetricsConfiguration</code>:</p>
     /// <ul>
@@ -3940,19 +3846,19 @@ pub trait S3: Send + Sync + 'static {
     /// <p>
     /// <code>&lt;/NotificationConfiguration&gt;</code>
     /// </p>
-    /// <p>This action replaces the existing notification configuration with the configuration you
-    /// include in the request body.</p>
+    /// <p>This action replaces the existing notification configuration with the configuration
+    /// you include in the request body.</p>
     /// <p>After Amazon S3 receives this request, it first verifies that any Amazon Simple Notification
     /// Service (Amazon SNS) or Amazon Simple Queue Service (Amazon SQS) destination exists, and
     /// that the bucket owner has permission to publish to it by sending a test notification. In
     /// the case of Lambda destinations, Amazon S3 verifies that the Lambda function permissions
     /// grant Amazon S3 permission to invoke the function from the Amazon S3 bucket. For more information,
-    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Notifications for Amazon S3 Events</a>.</p>
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Notifications for Amazon S3
+    /// Events</a>.</p>
     /// <p>You can disable notifications by adding the empty NotificationConfiguration
     /// element.</p>
-    /// <p>For more information about the number of event notification configurations that you can
-    /// create per bucket, see <a href="https://docs.aws.amazon.com/general/latest/gr/s3.html#limits_s3">Amazon S3 service quotas</a> in <i>Amazon Web Services
-    /// General Reference</i>.</p>
+    /// <p>For more information about the number of event notification configurations that you can create per bucket, see
+    /// <a href="https://docs.aws.amazon.com/general/latest/gr/s3.html#limits_s3">Amazon S3 service quotas</a> in <i>Amazon Web Services General Reference</i>.</p>
     /// <p>By default, only the bucket owner can configure notifications on a bucket. However,
     /// bucket owners can use a bucket policy to grant permission to other users to set this
     /// configuration with <code>s3:PutBucketNotification</code> permission.</p>
@@ -3960,8 +3866,8 @@ pub trait S3: Send + Sync + 'static {
     /// <p>The PUT notification is an atomic operation. For example, suppose your notification
     /// configuration includes SNS topic, SQS queue, and Lambda function configurations. When
     /// you send a PUT request with this configuration, Amazon S3 sends test messages to your SNS
-    /// topic. If the message fails, the entire PUT action will fail, and Amazon S3 will not add the
-    /// configuration to your bucket.</p>
+    /// topic. If the message fails, the entire PUT action will fail, and Amazon S3 will not add
+    /// the configuration to your bucket.</p>
     /// </note>
     /// <p>
     /// <b>Responses</b>
@@ -3989,10 +3895,8 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Creates or modifies <code>OwnershipControls</code> for an Amazon S3 bucket. To use this
     /// operation, you must have the <code>s3:PutBucketOwnershipControls</code> permission. For
-    /// more information about Amazon S3 permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/using-with-s3-actions.html">Specifying permissions in a
-    /// policy</a>. </p>
-    /// <p>For information about Amazon S3 Object Ownership, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/about-object-ownership.html">Using object
-    /// ownership</a>. </p>
+    /// more information about Amazon S3 permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/using-with-s3-actions.html">Specifying permissions in a policy</a>. </p>
+    /// <p>For information about Amazon S3 Object Ownership, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/about-object-ownership.html">Using object ownership</a>. </p>
     /// <p>The following operations are related to <code>PutBucketOwnershipControls</code>:</p>
     /// <ul>
     /// <li>
@@ -4026,8 +3930,7 @@ pub trait S3: Send + Sync + 'static {
     /// always use this operation, even if the policy explicitly denies the root user the
     /// ability to perform this action. </p>
     /// </important>
-    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html">Bucket policy
-    /// examples</a>.</p>
+    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html">Bucket policy examples</a>.</p>
     /// <p>The following operations are related to <code>PutBucketPolicy</code>:</p>
     /// <ul>
     /// <li>
@@ -4070,8 +3973,8 @@ pub trait S3: Send + Sync + 'static {
     /// <b>Handling Replication of Encrypted Objects</b>
     /// </p>
     /// <p>By default, Amazon S3 doesn't replicate objects that are stored at rest using server-side
-    /// encryption with KMS keys. To replicate Amazon Web Services KMS-encrypted objects, add the following:
-    /// <code>SourceSelectionCriteria</code>, <code>SseKmsEncryptedObjects</code>,
+    /// encryption with KMS keys. To replicate Amazon Web Services KMS-encrypted objects, add the
+    /// following: <code>SourceSelectionCriteria</code>, <code>SseKmsEncryptedObjects</code>,
     /// <code>Status</code>, <code>EncryptionConfiguration</code>, and
     /// <code>ReplicaKmsKeyID</code>. For information about replication configuration, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-config-for-kms-objects.html">Replicating Objects
@@ -4082,15 +3985,14 @@ pub trait S3: Send + Sync + 'static {
     /// <p>
     /// <b>Permissions</b>
     /// </p>
-    /// <p>To create a <code>PutBucketReplication</code> request, you must have
-    /// <code>s3:PutReplicationConfiguration</code> permissions for the bucket.
-    ///
+    /// <p>To create a <code>PutBucketReplication</code> request, you must have <code>s3:PutReplicationConfiguration</code>
+    /// permissions for the bucket.
     /// </p>
-    /// <p>By default, a resource owner, in this case the Amazon Web Services account that created the bucket,
-    /// can perform this operation. The resource owner can also grant others permissions to perform
-    /// the operation. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a
-    /// Policy</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to
-    /// Your Amazon S3 Resources</a>.</p>
+    /// <p>By default, a resource owner, in this case the Amazon Web Services account that created the bucket, can
+    /// perform this operation. The resource owner can also grant others permissions to perform the
+    /// operation. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a Policy</a>
+    /// and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your
+    /// Amazon S3 Resources</a>.</p>
     /// <note>
     /// <p>To perform this operation, the user or role performing the action must have the
     /// <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_passrole.html">iam:PassRole</a> permission.</p>
@@ -4138,23 +4040,23 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Sets the tags for a bucket.</p>
-    /// <p>Use tags to organize your Amazon Web Services bill to reflect your own cost structure. To do this,
-    /// sign up to get your Amazon Web Services account bill with tag key values included. Then, to see the cost
-    /// of combined resources, organize your billing information according to resources with the
-    /// same tag key values. For example, you can tag several resources with a specific application
+    /// <p>Use tags to organize your Amazon Web Services bill to reflect your own cost structure. To do this, sign
+    /// up to get your Amazon Web Services account bill with tag key values included. Then, to see the cost of
+    /// combined resources, organize your billing information according to resources with the same
+    /// tag key values. For example, you can tag several resources with a specific application
     /// name, and then organize your billing information to see the total cost of that application
-    /// across several services. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Cost Allocation and
-    /// Tagging</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CostAllocTagging.html">Using Cost Allocation in Amazon S3 Bucket
+    /// across several services. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Cost Allocation
+    /// and Tagging</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/CostAllocTagging.html">Using Cost Allocation in Amazon S3 Bucket
     /// Tags</a>.</p>
     /// <note>
-    /// <p> When this operation sets the tags for a bucket, it will overwrite any current tags
-    /// the bucket already has. You cannot use this operation to add tags to an existing list of
-    /// tags.</p>
+    /// <p>
+    /// When this operation sets the tags for a bucket, it will overwrite any current tags the
+    /// bucket already has. You cannot use this operation to add tags to an existing list of tags.</p>
     /// </note>
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:PutBucketTagging</code> action. The bucket owner has this permission by default
-    /// and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a>.</p>
+    /// and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a>.</p>
     /// <p>
     /// <code>PutBucketTagging</code> has the following special errors:</p>
     /// <ul>
@@ -4227,10 +4129,10 @@ pub trait S3: Send + Sync + 'static {
     /// <p>If the versioning state has never been set on a bucket, it has no versioning state; a
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html">GetBucketVersioning</a> request does not return a versioning state value.</p>
     /// <p>In order to enable MFA Delete, you must be the bucket owner. If you are the bucket owner
-    /// and want to enable MFA Delete in the bucket versioning configuration, you must include the
-    /// <code>x-amz-mfa request</code> header and the <code>Status</code> and the
-    /// <code>MfaDelete</code> request elements in a request to set the versioning state of the
-    /// bucket.</p>
+    /// and want to enable MFA Delete in the bucket versioning configuration, you must
+    /// include the <code>x-amz-mfa request</code> header and the
+    /// <code>Status</code> and the <code>MfaDelete</code> request elements in a request to set
+    /// the versioning state of the bucket.</p>
     /// <important>
     /// <p>If you have an object expiration lifecycle policy in your non-versioned bucket and
     /// you want to maintain the same permanent delete behavior when you enable versioning, you
@@ -4391,16 +4293,12 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Adds an object to a bucket. You must have WRITE permissions on a bucket to add an object
     /// to it.</p>
-    /// <note>
     /// <p>Amazon S3 never adds partial objects; if you receive a success response, Amazon S3 added the
-    /// entire object to the bucket. You cannot use <code>PutObject</code> to only update a
-    /// single piece of metadata for an existing object. You must put the entire object with
-    /// updated metadata if you want to update some values.</p>
-    /// </note>
+    /// entire object to the bucket.</p>
     /// <p>Amazon S3 is a distributed system. If it receives multiple write requests for the same object
-    /// simultaneously, it overwrites all but the last object written. To prevent objects from
-    /// being deleted or overwritten, you can use <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html">Amazon S3 Object
-    /// Lock</a>.</p>
+    /// simultaneously, it overwrites all but the last object written. Amazon S3 does not provide object
+    /// locking; if you need this, make sure to build it into your application layer or use
+    /// versioning instead.</p>
     /// <p>To ensure that data is not corrupted traversing the network, use the
     /// <code>Content-MD5</code> header. When you use this header, Amazon S3 checks the object
     /// against the provided MD5 value and, if they do not match, returns an error. Additionally,
@@ -4417,56 +4315,69 @@ pub trait S3: Send + Sync + 'static {
     /// you must have the <code>s3:PutObjectAcl</code> in your IAM permissions.</p>
     /// </li>
     /// <li>
-    /// <p>To successfully set the tag-set with your <code>PutObject</code> request, you
-    /// must have the <code>s3:PutObjectTagging</code> in your IAM permissions.</p>
-    /// </li>
-    /// <li>
-    /// <p> The <code>Content-MD5</code> header is required for any request to upload an
-    /// object with a retention period configured using Amazon S3 Object Lock. For more
-    /// information about Amazon S3 Object Lock, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html">Amazon S3 Object Lock
-    /// Overview</a> in the <i>Amazon S3 User Guide</i>. </p>
+    /// <p> The <code>Content-MD5</code> header is required for any request to upload an object
+    /// with a retention period configured using Amazon S3 Object Lock. For more information about
+    /// Amazon S3 Object Lock, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock-overview.html">Amazon S3 Object Lock Overview</a>
+    /// in the <i>Amazon S3 User Guide</i>. </p>
     /// </li>
     /// </ul>
     /// </note>
-    /// <p>You have three mutually exclusive options to protect data using server-side encryption
-    /// in Amazon S3, depending on how you choose to manage the encryption keys. Specifically, the
-    /// encryption key options are Amazon S3 managed keys (SSE-S3), Amazon Web Services KMS keys (SSE-KMS), and
-    /// customer-provided keys (SSE-C). Amazon S3 encrypts data with server-side encryption by using
-    /// Amazon S3 managed keys (SSE-S3) by default. You can optionally tell Amazon S3 to encrypt data at by
-    /// rest using server-side encryption with other key options. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using
-    /// Server-Side Encryption</a>.</p>
-    /// <p>When adding a new object, you can use headers to grant ACL-based permissions to
-    /// individual Amazon Web Services accounts or to predefined groups defined by Amazon S3. These permissions are
-    /// then added to the ACL on the object. By default, all objects are private. Only the owner
-    /// has full access control. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>
-    /// and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-using-rest-api.html">Managing
-    /// ACLs Using the REST API</a>. </p>
+    /// <p>
+    /// <b>Server-side Encryption</b>
+    /// </p>
+    /// <p>You can optionally request server-side encryption. With server-side encryption, Amazon S3 encrypts
+    /// your data as it writes it to disks in its data centers and decrypts the data
+    /// when you access it. You have the option to provide your own encryption key or use Amazon Web Services
+    /// managed encryption keys (SSE-S3 or SSE-KMS). For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side
+    /// Encryption</a>.</p>
+    /// <p>If you request server-side encryption using Amazon Web Services Key Management Service (SSE-KMS), you can enable
+    /// an S3 Bucket Key at the object-level. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the
+    /// <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>Access Control List (ACL)-Specific Request
+    /// Headers</b>
+    /// </p>
+    /// <p>You can use headers to grant ACL- based permissions. By default, all objects are
+    /// private. Only the owner has full access control. When adding a new object, you can grant
+    /// permissions to individual Amazon Web Services accounts or to predefined groups defined by Amazon S3. These
+    /// permissions are then added to the ACL on the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List
+    /// (ACL) Overview</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-using-rest-api.html">Managing ACLs Using the REST
+    /// API</a>. </p>
     /// <p>If the bucket that you're uploading objects to uses the bucket owner enforced setting
     /// for S3 Object Ownership, ACLs are disabled and no longer affect permissions. Buckets that
     /// use this setting only accept PUT requests that don't specify an ACL or PUT requests that
-    /// specify bucket owner full control ACLs, such as the <code>bucket-owner-full-control</code>
-    /// canned ACL or an equivalent form of this ACL expressed in the XML format. PUT requests that
-    /// contain other ACLs (for example, custom grants to certain Amazon Web Services accounts) fail and return a
-    /// <code>400</code> error with the error code <code>AccessControlListNotSupported</code>.
-    /// For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html"> Controlling ownership of
+    /// specify bucket owner full control ACLs, such as the <code>bucket-owner-full-control</code> canned
+    /// ACL or an equivalent form of this ACL expressed in the XML format. PUT requests that contain other
+    /// ACLs (for example, custom grants to certain Amazon Web Services accounts) fail and return a
+    /// <code>400</code> error with the error code
+    /// <code>AccessControlListNotSupported</code>.</p>
+    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html"> Controlling ownership of
     /// objects and disabling ACLs</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <note>
-    /// <p>If your bucket uses the bucket owner enforced setting for Object Ownership, all
-    /// objects written to the bucket by any account will be owned by the bucket owner.</p>
+    /// <p>If your bucket uses the bucket owner enforced setting for Object Ownership,
+    /// all objects written to the bucket by any account will be owned by the bucket owner.</p>
     /// </note>
+    /// <p>
+    /// <b>Storage Class Options</b>
+    /// </p>
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The
     /// STANDARD storage class provides high durability and high availability. Depending on
     /// performance needs, you can specify a different Storage Class. Amazon S3 on Outposts only uses
     /// the OUTPOSTS Storage Class. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>Versioning</b>
+    /// </p>
     /// <p>If you enable versioning for a bucket, Amazon S3 automatically generates a unique version ID
     /// for the object being stored. Amazon S3 returns this ID in the response. When you enable
     /// versioning for a bucket, if Amazon S3 receives multiple write requests for the same object
-    /// simultaneously, it stores all of the objects. For more information about versioning, see
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/AddingObjectstoVersioningEnabledBuckets.html">Adding Objects to
+    /// simultaneously, it stores all of the objects.</p>
+    /// <p>For more information about versioning, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/AddingObjectstoVersioningEnabledBuckets.html">Adding Objects to
     /// Versioning Enabled Buckets</a>. For information about returning the versioning state
     /// of a bucket, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketVersioning.html">GetBucketVersioning</a>. </p>
-    /// <p>For more information about related Amazon S3 APIs, see the following:</p>
+    /// <p class="title">
+    /// <b>Related Resources</b>
+    /// </p>
     /// <ul>
     /// <li>
     /// <p>
@@ -4488,18 +4399,16 @@ pub trait S3: Send + Sync + 'static {
     /// permission to set the ACL of an object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#permissions">What
     /// permissions can I grant?</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
-    /// <p>Depending on your application needs, you can choose to set the ACL on an object using
-    /// either the request body or the headers. For example, if you have an existing application
-    /// that updates a bucket ACL using the request body, you can continue to use that approach.
-    /// For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a>
-    /// in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>Depending on your application needs, you can choose to set
+    /// the ACL on an object using either the request body or the headers. For example, if you have
+    /// an existing application that updates a bucket ACL using the request body, you can continue
+    /// to use that approach. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL) Overview</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <important>
-    /// <p>If your bucket uses the bucket owner enforced setting for S3 Object Ownership, ACLs
-    /// are disabled and no longer affect permissions. You must use policies to grant access to
-    /// your bucket and the objects in it. Requests to set ACLs or update ACLs fail and return
-    /// the <code>AccessControlListNotSupported</code> error code. Requests to read ACLs are
-    /// still supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Controlling object
-    /// ownership</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>If your bucket uses the bucket owner enforced setting for S3 Object Ownership, ACLs are disabled and no longer affect permissions.
+    /// You must use policies to grant access to your bucket and the objects in it. Requests to set ACLs or update ACLs fail and
+    /// return the <code>AccessControlListNotSupported</code> error code. Requests to read ACLs are still supported.
+    /// For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Controlling object ownership</a>
+    /// in the <i>Amazon S3 User Guide</i>.</p>
     /// </important>
     /// <p>
     /// <b>Access Permissions</b>
@@ -4511,8 +4420,7 @@ pub trait S3: Send + Sync + 'static {
     /// a set of predefined ACLs, known as canned ACLs. Each canned ACL has a predefined set
     /// of grantees and permissions. Specify the canned ACL name as the value of
     /// <code>x-amz-ac</code>l. If you use this header, you cannot use other access
-    /// control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned
-    /// ACL</a>.</p>
+    /// control-specific headers in your request. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
     /// </li>
     /// <li>
     /// <p>Specify access permissions explicitly with the <code>x-amz-grant-read</code>,
@@ -4521,15 +4429,14 @@ pub trait S3: Send + Sync + 'static {
     /// specify explicit access permissions and grantees (Amazon Web Services accounts or Amazon S3 groups) who
     /// will receive the permission. If you use these ACL-specific headers, you cannot use
     /// <code>x-amz-acl</code> header to set a canned ACL. These parameters map to the set
-    /// of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control
-    /// List (ACL) Overview</a>.</p>
+    /// of permissions that Amazon S3 supports in an ACL. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">Access Control List (ACL)
+    /// Overview</a>.</p>
     /// <p>You specify each grantee as a type=value pair, where the type is one of the
     /// following:</p>
     /// <ul>
     /// <li>
     /// <p>
-    /// <code>id</code> – if the value specified is the canonical user ID of an
-    /// Amazon Web Services account</p>
+    /// <code>id</code> – if the value specified is the canonical user ID of an Amazon Web Services account</p>
     /// </li>
     /// <li>
     /// <p>
@@ -4680,7 +4587,8 @@ pub trait S3: Send + Sync + 'static {
 
     /// <p>Places an Object Lock configuration on the specified bucket. The rule specified in the
     /// Object Lock configuration will be applied by default to every new object placed in the
-    /// specified bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking Objects</a>. </p>
+    /// specified bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking Objects</a>.
+    /// </p>
     /// <note>
     /// <ul>
     /// <li>
@@ -4688,13 +4596,13 @@ pub trait S3: Send + Sync + 'static {
     /// period.</p>
     /// </li>
     /// <li>
-    /// <p>The <code>DefaultRetention</code> period can be either <code>Days</code> or
-    /// <code>Years</code> but you must select one. You cannot specify
-    /// <code>Days</code> and <code>Years</code> at the same time.</p>
+    /// <p>The <code>DefaultRetention</code> period can be either <code>Days</code>
+    /// or <code>Years</code> but you must select one. You cannot specify <code>Days</code>
+    /// and <code>Years</code> at the same time.</p>
     /// </li>
     /// <li>
-    /// <p>You can only enable Object Lock for new buckets. If you want to turn on Object
-    /// Lock for an existing bucket, contact Amazon Web Services Support.</p>
+    /// <p>You can only enable Object Lock for new buckets. If you want to turn on
+    /// Object Lock for an existing bucket, contact Amazon Web Services Support.</p>
     /// </li>
     /// </ul>
     /// </note>
@@ -4706,9 +4614,10 @@ pub trait S3: Send + Sync + 'static {
     }
 
     /// <p>Places an Object Retention configuration on an object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Locking Objects</a>.
-    /// Users or accounts require the <code>s3:PutObjectRetention</code> permission in order to
-    /// place an Object Retention configuration on objects. Bypassing a Governance Retention
-    /// configuration requires the <code>s3:BypassGovernanceRetention</code> permission. </p>
+    /// Users or accounts require the <code>s3:PutObjectRetention</code> permission in order to place
+    /// an Object Retention configuration on objects. Bypassing a Governance Retention configuration
+    /// requires the <code>s3:BypassGovernanceRetention</code> permission.
+    /// </p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
     async fn put_object_retention(&self, _req: S3Request<PutObjectRetentionInput>) -> S3Result<PutObjectRetentionOutput> {
         Err(s3_error!(NotImplemented, "PutObjectRetention is not implemented yet"))
@@ -4741,8 +4650,7 @@ pub trait S3: Send + Sync + 'static {
     /// <li>
     /// <p>
     /// <i>Cause: The tag provided was not a valid tag. This error can occur
-    /// if the tag did not pass input validation. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object
-    /// Tagging</a>.</i>
+    /// if the tag did not pass input validation. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-tagging.html">Object Tagging</a>.</i>
     /// </p>
     /// </li>
     /// </ul>
@@ -4770,8 +4678,8 @@ pub trait S3: Send + Sync + 'static {
     /// </li>
     /// <li>
     /// <p>
-    /// <i>Cause: A conflicting conditional action is currently in progress
-    /// against this resource. Please try again.</i>
+    /// <i>Cause: A conflicting conditional action is currently in
+    /// progress against this resource. Please try again.</i>
     /// </p>
     /// </li>
     /// </ul>
@@ -4869,13 +4777,27 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     /// <p>To use this operation, you must have permissions to perform the
     /// <code>s3:RestoreObject</code> action. The bucket owner has this permission by default
-    /// and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing
-    /// Access Permissions to Your Amazon S3 Resources</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
-    /// <p>For more information about the <code>S3</code> structure in the request body, see the
-    /// following:</p>
+    /// and can grant this permission to others. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-with-s3-actions.html#using-with-s3-actions-related-to-bucket-subresources">Permissions Related to Bucket Subresource Operations</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-access-control.html">Managing Access Permissions to Your Amazon S3
+    /// Resources</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>Querying Archives with Select Requests</b>
+    /// </p>
+    /// <p>You use a select type of request to perform SQL queries on archived objects. The
+    /// archived objects that are being queried by the select request must be formatted as
+    /// uncompressed comma-separated values (CSV) files. You can run queries and custom analytics
+    /// on your archived data without having to restore your data to a hotter Amazon S3 tier. For an
+    /// overview about select requests, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>When making a select request, do the following:</p>
     /// <ul>
     /// <li>
+    /// <p>Define an output location for the select query's output. This must be an Amazon S3
+    /// bucket in the same Amazon Web Services Region as the bucket that contains the archive object that is
+    /// being queried. The Amazon Web Services account that initiates the job must have permissions to write
+    /// to the S3 bucket. You can specify the storage class and encryption for the output
+    /// objects stored in the bucket. For more information about output, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/querying-glacier-archives.html">Querying Archived Objects</a>
+    /// in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>For more information about the <code>S3</code> structure in the request body, see
+    /// the following:</p>
     /// <ul>
     /// <li>
     /// <p>
@@ -4884,8 +4806,8 @@ pub trait S3: Send + Sync + 'static {
     /// </li>
     /// <li>
     /// <p>
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Managing Access with ACLs</a> in the
-    /// <i>Amazon S3 User Guide</i>
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html">Managing Access with
+    /// ACLs</a> in the <i>Amazon S3 User Guide</i>
     /// </p>
     /// </li>
     /// <li>
@@ -4929,6 +4851,8 @@ pub trait S3: Send + Sync + 'static {
     /// </ul>
     /// </li>
     /// </ul>
+    /// <p>For more information about using SQL with S3 Glacier Select restore, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for Amazon S3 Select and
+    /// S3 Glacier Select</a> in the <i>Amazon S3 User Guide</i>. </p>
     /// <p>When making a select request, you can also do the following:</p>
     /// <ul>
     /// <li>
@@ -4948,7 +4872,7 @@ pub trait S3: Send + Sync + 'static {
     /// </li>
     /// <li>
     /// <p>You can issue more than one select request on the same Amazon S3 object. Amazon S3 doesn't
-    /// duplicate requests, so avoid issuing duplicate requests.</p>
+    /// deduplicate requests, so avoid issuing duplicate requests.</p>
     /// </li>
     /// <li>
     /// <p> Amazon S3 accepts a select request even if the object has already been restored. A
@@ -4958,69 +4882,65 @@ pub trait S3: Send + Sync + 'static {
     /// <p>
     /// <b>Restoring objects</b>
     /// </p>
-    /// <p>Objects that you archive to the S3 Glacier Flexible Retrieval or
+    /// <p>Objects that you archive to the S3 Glacier or
     /// S3 Glacier Deep Archive storage class, and S3 Intelligent-Tiering Archive or
-    /// S3 Intelligent-Tiering Deep Archive tiers, are not accessible in real time. For objects in the
-    /// S3 Glacier Flexible Retrieval or S3 Glacier Deep Archive storage
-    /// classes, you must first initiate a restore request, and then wait until a temporary copy of
-    /// the object is available. If you want a permanent copy of the object, create a copy of it in
-    /// the Amazon S3 Standard storage class in your S3 bucket. To access an archived object, you must
-    /// restore the object for the duration (number of days) that you specify. For objects in the
-    /// Archive Access or Deep Archive Access tiers of S3 Intelligent-Tiering, you must first
-    /// initiate a restore request, and then wait until the object is moved into the Frequent
-    /// Access tier.</p>
+    /// S3 Intelligent-Tiering Deep Archive tiers are not accessible in real time. For objects in
+    /// Archive Access or Deep Archive Access tiers you must first initiate a restore request, and
+    /// then wait until the object is moved into the Frequent Access tier. For objects in
+    /// S3 Glacier or S3 Glacier Deep Archive storage classes you must
+    /// first initiate a restore request, and then wait until a temporary copy of the object is
+    /// available. To access an archived object, you must restore the object for the duration
+    /// (number of days) that you specify.</p>
     /// <p>To restore a specific object version, you can provide a version ID. If you don't provide
     /// a version ID, Amazon S3 restores the current version.</p>
-    /// <p>When restoring an archived object, you can specify one of the following data access tier
-    /// options in the <code>Tier</code> element of the request body: </p>
+    /// <p>When restoring an archived object (or using a select request), you can specify one of
+    /// the following data access tier options in the <code>Tier</code> element of the request
+    /// body: </p>
     /// <ul>
     /// <li>
     /// <p>
     /// <code>Expedited</code> - Expedited retrievals allow you to quickly access your
-    /// data stored in the S3 Glacier Flexible Retrieval storage class or
-    /// S3 Intelligent-Tiering Archive tier when occasional urgent requests for a subset of archives
-    /// are required. For all but the largest archived objects (250 MB+), data accessed using
-    /// Expedited retrievals is typically made available within 1–5 minutes. Provisioned
-    /// capacity ensures that retrieval capacity for Expedited retrievals is available when
-    /// you need it. Expedited retrievals and provisioned capacity are not available for
-    /// objects stored in the S3 Glacier Deep Archive storage class or
-    /// S3 Intelligent-Tiering Deep Archive tier.</p>
+    /// data stored in the S3 Glacier storage class or S3 Intelligent-Tiering Archive
+    /// tier when occasional urgent requests for a subset of archives are required. For all
+    /// but the largest archived objects (250 MB+), data accessed using Expedited retrievals
+    /// is typically made available within 1–5 minutes. Provisioned capacity ensures that
+    /// retrieval capacity for Expedited retrievals is available when you need it. Expedited
+    /// retrievals and provisioned capacity are not available for objects stored in the
+    /// S3 Glacier Deep Archive storage class or S3 Intelligent-Tiering Deep Archive tier.</p>
     /// </li>
     /// <li>
     /// <p>
     /// <code>Standard</code> - Standard retrievals allow you to access any of your
     /// archived objects within several hours. This is the default option for retrieval
     /// requests that do not specify the retrieval option. Standard retrievals typically
-    /// finish within 3–5 hours for objects stored in the S3 Glacier Flexible
-    /// Retrieval storage class or S3 Intelligent-Tiering Archive tier. They typically finish within
-    /// 12 hours for objects stored in the S3 Glacier Deep Archive storage class or
+    /// finish within 3–5 hours for objects stored in the S3 Glacier storage
+    /// class or S3 Intelligent-Tiering Archive tier. They typically finish within 12 hours for
+    /// objects stored in the S3 Glacier Deep Archive storage class or
     /// S3 Intelligent-Tiering Deep Archive tier. Standard retrievals are free for objects stored in
     /// S3 Intelligent-Tiering.</p>
     /// </li>
     /// <li>
     /// <p>
-    /// <code>Bulk</code> - Bulk retrievals free for objects stored in the S3 Glacier
-    /// Flexible Retrieval and S3 Intelligent-Tiering storage classes, enabling you to
-    /// retrieve large amounts, even petabytes, of data at no cost. Bulk retrievals typically
-    /// finish within 5–12 hours for objects stored in the S3 Glacier
-    /// Flexible Retrieval storage class or S3 Intelligent-Tiering Archive tier. Bulk retrievals are
-    /// also the lowest-cost retrieval option when restoring objects from
-    /// S3 Glacier Deep Archive. They typically finish within 48 hours for objects
-    /// stored in the S3 Glacier Deep Archive storage class or S3 Intelligent-Tiering Deep Archive
-    /// tier. </p>
+    /// <code>Bulk</code> - Bulk retrievals are the lowest-cost retrieval option in
+    /// S3 Glacier, enabling you to retrieve large amounts, even petabytes, of data
+    /// inexpensively. Bulk retrievals typically finish within 5–12 hours for objects stored
+    /// in the S3 Glacier storage class or S3 Intelligent-Tiering Archive tier. They
+    /// typically finish within 48 hours for objects stored in the
+    /// S3 Glacier Deep Archive storage class or S3 Intelligent-Tiering Deep Archive tier. Bulk
+    /// retrievals are free for objects stored in S3 Intelligent-Tiering.</p>
     /// </li>
     /// </ul>
     /// <p>For more information about archive retrieval options and provisioned capacity for
-    /// <code>Expedited</code> data access, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived Objects</a> in
-    /// the <i>Amazon S3 User Guide</i>. </p>
+    /// <code>Expedited</code> data access, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived Objects</a> in the <i>Amazon S3 User Guide</i>. </p>
     /// <p>You can use Amazon S3 restore speed upgrade to change the restore speed to a faster speed
-    /// while it is in progress. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html#restoring-objects-upgrade-tier.title.html"> Upgrading the speed of an in-progress restore</a> in the
+    /// while it is in progress. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html#restoring-objects-upgrade-tier.title.html">
+    /// Upgrading the speed of an in-progress restore</a> in the
     /// <i>Amazon S3 User Guide</i>. </p>
     /// <p>To get the status of object restoration, you can send a <code>HEAD</code> request.
     /// Operations return the <code>x-amz-restore</code> header, which provides information about
     /// the restoration status, in the response. You can use Amazon S3 event notifications to notify you
-    /// when a restore is initiated or completed. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Amazon S3
-    /// Event Notifications</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// when a restore is initiated or completed. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Amazon S3 Event Notifications</a> in
+    /// the <i>Amazon S3 User Guide</i>.</p>
     /// <p>After restoring an archived object, you can update the restoration period by reissuing
     /// the request with a new period. Amazon S3 updates the restoration period relative to the current
     /// time and charges only for the request-there are no data transfer charges. You cannot
@@ -5030,13 +4950,13 @@ pub trait S3: Send + Sync + 'static {
     /// action, the object expiration overrides the life span that you specify in a restore
     /// request. For example, if you restore an object copy for 10 days, but the object is
     /// scheduled to expire in 3 days, Amazon S3 deletes the object in 3 days. For more information
-    /// about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html">PutBucketLifecycleConfiguration</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>
-    /// in <i>Amazon S3 User Guide</i>.</p>
+    /// about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycleConfiguration.html">PutBucketLifecycleConfiguration</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a> in
+    /// <i>Amazon S3 User Guide</i>.</p>
     /// <p>
     /// <b>Responses</b>
     /// </p>
-    /// <p>A successful action returns either the <code>200 OK</code> or <code>202 Accepted</code>
-    /// status code. </p>
+    /// <p>A successful action returns either the <code>200 OK</code> or <code>202
+    /// Accepted</code> status code. </p>
     /// <ul>
     /// <li>
     /// <p>If the object is not previously restored, then Amazon S3 returns <code>202
@@ -5118,6 +5038,13 @@ pub trait S3: Send + Sync + 'static {
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketNotificationConfiguration.html">GetBucketNotificationConfiguration</a>
     /// </p>
     /// </li>
+    /// <li>
+    /// <p>
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html">SQL Reference for
+    /// Amazon S3 Select and S3 Glacier Select </a> in the
+    /// <i>Amazon S3 User Guide</i>
+    /// </p>
+    /// </li>
     /// </ul>
     async fn restore_object(&self, _req: S3Request<RestoreObjectInput>) -> S3Result<RestoreObjectOutput> {
         Err(s3_error!(NotImplemented, "RestoreObject is not implemented yet"))
@@ -5130,16 +5057,19 @@ pub trait S3: Send + Sync + 'static {
     /// specified SQL expression. You must also specify the data serialization format for the
     /// response.</p>
     /// <p>This action is not supported by Amazon S3 on Outposts.</p>
-    /// <p>For more information about Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html">Selecting Content from
+    /// <p>For more information about Amazon S3 Select,
+    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/selecting-content-from-objects.html">Selecting Content from
     /// Objects</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-glacier-select-sql-reference-select.html">SELECT
     /// Command</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>For more information about using SQL with Amazon S3 Select, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-glacier-select-sql-reference.html"> SQL Reference for Amazon S3 Select
+    /// and S3 Glacier Select</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p></p>
     /// <p>
     /// <b>Permissions</b>
     /// </p>
     /// <p>You must have <code>s3:GetObject</code> permission for this operation. Amazon S3 Select does
-    /// not support anonymous access. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying
-    /// Permissions in a Policy</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// not support anonymous access. For more information about permissions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/using-with-s3-actions.html">Specifying Permissions in a Policy</a>
+    /// in the <i>Amazon S3 User Guide</i>.</p>
     /// <p></p>
     /// <p>
     /// <i>Object Data Formats</i>
@@ -5170,13 +5100,14 @@ pub trait S3: Send + Sync + 'static {
     /// <i>Server-side encryption</i> - Amazon S3 Select supports querying
     /// objects that are protected with server-side encryption.</p>
     /// <p>For objects that are encrypted with customer-provided encryption keys (SSE-C), you
-    /// must use HTTPS, and you must use the headers that are documented in the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a>. For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side
-    /// Encryption (Using Customer-Provided Encryption Keys)</a> in the
+    /// must use HTTPS, and you must use the headers that are documented in the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a>. For more information about SSE-C, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html">Server-Side Encryption
+    /// (Using Customer-Provided Encryption Keys)</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
-    /// <p>For objects that are encrypted with Amazon S3 managed keys (SSE-S3) and Amazon Web Services KMS keys
-    /// (SSE-KMS), server-side encryption is handled transparently, so you don't need to
-    /// specify anything. For more information about server-side encryption, including SSE-S3
-    /// and SSE-KMS, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using
+    /// <p>For objects that are encrypted with Amazon S3 managed encryption keys (SSE-S3) and
+    /// Amazon Web Services KMS keys (SSE-KMS),
+    /// server-side encryption is handled transparently, so you don't need to specify
+    /// anything. For more information about server-side encryption, including SSE-S3 and
+    /// SSE-KMS, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using
     /// Server-Side Encryption</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// </li>
     /// </ul>
@@ -5203,8 +5134,8 @@ pub trait S3: Send + Sync + 'static {
     /// <li>
     /// <p>GLACIER, DEEP_ARCHIVE and REDUCED_REDUNDANCY storage classes: You cannot specify
     /// the GLACIER, DEEP_ARCHIVE, or <code>REDUCED_REDUNDANCY</code> storage classes. For
-    /// more information, about storage classes see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#storage-class-intro">Storage
-    /// Classes</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// more information, about storage classes see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#storage-class-intro">Storage Classes</a>
+    /// in the <i>Amazon S3 User Guide</i>.</p>
     /// </li>
     /// </ul>
     /// <p></p>
@@ -5252,15 +5183,14 @@ pub trait S3: Send + Sync + 'static {
     /// identifies a part and also defines its position within the object being created. If you
     /// upload a new part using the same part number that was used with a previous part, the
     /// previously uploaded part is overwritten.</p>
-    /// <p>For information about maximum and minimum part sizes and other multipart upload
-    /// specifications, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html">Multipart upload limits</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>For information about maximum and minimum part sizes and other multipart upload specifications, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html">Multipart upload limits</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>To ensure that data is not corrupted when traversing the network, specify the
     /// <code>Content-MD5</code> header in the upload part request. Amazon S3 checks the part data
     /// against the provided MD5 value. If they do not match, Amazon S3 returns an error. </p>
     /// <p>If the upload request is signed with Signature Version 4, then Amazon Web Services S3 uses the
     /// <code>x-amz-content-sha256</code> header as a checksum instead of
-    /// <code>Content-MD5</code>. For more information see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html">Authenticating
-    /// Requests: Using the Authorization Header (Amazon Web Services Signature Version 4)</a>. </p>
+    /// <code>Content-MD5</code>. For more information see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-auth-using-authorization-header.html">Authenticating Requests: Using the Authorization Header (Amazon Web Services Signature Version
+    /// 4)</a>. </p>
     /// <p>
     /// <b>Note:</b> After you initiate multipart upload and upload
     /// one or more parts, you must either complete or abort multipart upload in order to stop
@@ -5270,29 +5200,23 @@ pub trait S3: Send + Sync + 'static {
     /// <p>For more information on multipart uploads, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html">Multipart Upload Overview</a> in the
     /// <i>Amazon S3 User Guide </i>.</p>
     /// <p>For information on the permissions required to use the multipart upload API, go to
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart
-    /// Upload and Permissions</a> in the <i>Amazon S3 User Guide</i>.</p>
-    /// <p>Server-side encryption is for data encryption at rest. Amazon S3 encrypts your data as it
-    /// writes it to disks in its data centers and decrypts it when you access it. You have three
-    /// mutually exclusive options to protect data using server-side encryption in Amazon S3, depending
-    /// on how you choose to manage the encryption keys. Specifically, the encryption key options
-    /// are Amazon S3 managed keys (SSE-S3), Amazon Web Services KMS keys (SSE-KMS), and Customer-Provided Keys
-    /// (SSE-C). Amazon S3 encrypts data with server-side encryption using Amazon S3 managed keys (SSE-S3) by
-    /// default. You can optionally tell Amazon S3 to encrypt data at rest using server-side encryption
-    /// with other key options. The option you use depends on whether you want to use KMS keys
-    /// (SSE-KMS) or provide your own encryption key (SSE-C). If you choose to provide your own
-    /// encryption key, the request headers you provide in the request must match the headers you
-    /// used in the request to initiate the upload by using <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html">CreateMultipartUpload</a>.
-    /// For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side
-    /// Encryption</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload and
+    /// Permissions</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>You can optionally request server-side encryption where Amazon S3 encrypts your data as it
+    /// writes it to disks in its data centers and decrypts it for you when you access it. You have
+    /// the option of providing your own encryption key, or you can use the Amazon Web Services managed encryption
+    /// keys. If you choose to provide your own encryption key, the request headers you provide in
+    /// the request must match the headers you used in the request to initiate the upload by using
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html">CreateMultipartUpload</a>. For more information, go to <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side Encryption</a> in
+    /// the <i>Amazon S3 User Guide</i>.</p>
     /// <p>Server-side encryption is supported by the S3 Multipart Upload actions. Unless you are
-    /// using a customer-provided encryption key (SSE-C), you don't need to specify the encryption
+    /// using a customer-provided encryption key, you don't need to specify the encryption
     /// parameters in each UploadPart request. Instead, you only need to specify the server-side
     /// encryption parameters in the initial Initiate Multipart request. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateMultipartUpload.html">CreateMultipartUpload</a>.</p>
-    /// <p>If you requested server-side encryption using a customer-provided encryption key (SSE-C)
-    /// in your initiate multipart upload request, you must provide identical encryption
-    /// information in each part upload using the following headers.</p>
+    /// <p>If you requested server-side encryption using a customer-provided encryption key in your
+    /// initiate multipart upload request, you must provide identical encryption information in
+    /// each part upload using the following headers.</p>
     /// <ul>
     /// <li>
     /// <p>x-amz-server-side-encryption-customer-algorithm</p>
@@ -5373,8 +5297,7 @@ pub trait S3: Send + Sync + 'static {
     /// data source by adding the request header <code>x-amz-copy-source</code> in your request and
     /// a byte range by adding the request header <code>x-amz-copy-source-range</code> in your
     /// request. </p>
-    /// <p>For information about maximum and minimum part sizes and other multipart upload
-    /// specifications, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html">Multipart upload limits</a> in the <i>Amazon S3 User Guide</i>. </p>
+    /// <p>For information about maximum and minimum part sizes and other multipart upload specifications, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/qfacts.html">Multipart upload limits</a> in the <i>Amazon S3 User Guide</i>. </p>
     /// <note>
     /// <p>Instead of using an existing object as part data, you might use the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPart.html">UploadPart</a>
     /// action and provide data in your request.</p>
@@ -5386,14 +5309,13 @@ pub trait S3: Send + Sync + 'static {
     /// following:</p>
     /// <ul>
     /// <li>
-    /// <p>For conceptual information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading
-    /// Objects Using Multipart Upload</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// <p>For conceptual information about multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/uploadobjusingmpu.html">Uploading Objects Using Multipart
+    /// Upload</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// </li>
     /// <li>
     /// <p>For information about permissions required to use the multipart upload API, see
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload and Permissions</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload  and
+    /// Permissions</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// </li>
     /// <li>
     /// <p>For information about copying objects using a single atomic action vs. a multipart
@@ -5542,8 +5464,9 @@ pub trait S3: Send + Sync + 'static {
         Err(s3_error!(NotImplemented, "UploadPartCopy is not implemented yet"))
     }
 
-    /// <p>Passes transformed objects to a <code>GetObject</code> operation when using Object Lambda access points. For
-    /// information about Object Lambda access points, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/transforming-objects.html">Transforming objects with
+    /// <p>Passes transformed
+    /// objects to a <code>GetObject</code> operation when using Object Lambda access points. For information about
+    /// Object Lambda access points, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/transforming-objects.html">Transforming objects with
     /// Object Lambda access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>This operation supports metadata that can be returned by <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetObject.html">GetObject</a>, in addition to
     /// <code>RequestRoute</code>, <code>RequestToken</code>, <code>StatusCode</code>,
@@ -5553,29 +5476,17 @@ pub trait S3: Send + Sync + 'static {
     /// <code>GetObject</code>. When <code>WriteGetObjectResponse</code> is called by a
     /// customer-owned Lambda function, the metadata returned to the end user
     /// <code>GetObject</code> call might differ from what Amazon S3 would normally return.</p>
-    /// <p>You can include any number of metadata headers. When including a metadata header, it
-    /// should be prefaced with <code>x-amz-meta</code>. For example,
-    /// <code>x-amz-meta-my-custom-header: MyCustomValue</code>. The primary use case for this
-    /// is to forward <code>GetObject</code> metadata.</p>
-    /// <p>Amazon Web Services provides some prebuilt Lambda functions that you can use with S3 Object Lambda to
-    /// detect and redact personally identifiable information (PII) and decompress S3 objects.
-    /// These Lambda functions are available in the Amazon Web Services Serverless Application Repository, and
-    /// can be selected through the Amazon Web Services Management Console when you create your Object Lambda access point.</p>
-    /// <p>Example 1: PII Access Control - This Lambda function uses Amazon Comprehend, a
-    /// natural language processing (NLP) service using machine learning to find insights and
-    /// relationships in text. It automatically detects personally identifiable information (PII)
-    /// such as names, addresses, dates, credit card numbers, and social security numbers from
-    /// documents in your Amazon S3 bucket. </p>
-    /// <p>Example 2: PII Redaction - This Lambda function uses Amazon Comprehend, a natural
-    /// language processing (NLP) service using machine learning to find insights and relationships
-    /// in text. It automatically redacts personally identifiable information (PII) such as names,
-    /// addresses, dates, credit card numbers, and social security numbers from documents in your
-    /// Amazon S3 bucket. </p>
-    /// <p>Example 3: Decompression - The Lambda function S3ObjectLambdaDecompression, is
-    /// equipped to decompress objects stored in S3 in one of six compressed file formats including
-    /// bzip2, gzip, snappy, zlib, zstandard and ZIP. </p>
-    /// <p>For information on how to view and use these functions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-examples.html">Using Amazon Web Services built Lambda
-    /// functions</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>You can include any number of metadata headers. When including a metadata header, it should be
+    /// prefaced with <code>x-amz-meta</code>. For example, <code>x-amz-meta-my-custom-header: MyCustomValue</code>.
+    /// The primary use case for this is to forward <code>GetObject</code> metadata.</p>
+    /// <p>Amazon Web Services provides some prebuilt Lambda functions that you can use with S3 Object Lambda to detect and redact
+    /// personally identifiable information (PII) and decompress S3 objects. These Lambda functions
+    /// are available in the Amazon Web Services Serverless Application Repository, and can be selected through the Amazon Web Services Management Console when you create your
+    /// Object Lambda access point.</p>
+    /// <p>Example 1: PII Access Control - This Lambda function uses Amazon Comprehend, a natural language processing (NLP) service using machine learning to find insights and relationships in text. It automatically detects personally identifiable information (PII) such as names, addresses, dates, credit card numbers, and social security numbers from documents in your Amazon S3 bucket. </p>
+    /// <p>Example 2: PII Redaction - This Lambda function uses Amazon Comprehend, a natural language processing (NLP) service using machine learning to find insights and relationships in text. It automatically redacts personally identifiable information (PII) such as names, addresses, dates, credit card numbers, and social security numbers from documents in your Amazon S3 bucket. </p>
+    /// <p>Example 3: Decompression - The Lambda function S3ObjectLambdaDecompression, is equipped to decompress objects stored in S3 in one of six compressed file formats including bzip2, gzip, snappy, zlib, zstandard and ZIP. </p>
+    /// <p>For information on how to view and use these functions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/olap-examples.html">Using Amazon Web Services built Lambda functions</a> in the <i>Amazon S3 User Guide</i>.</p>
     async fn write_get_object_response(
         &self,
         _req: S3Request<WriteGetObjectResponseInput>,
