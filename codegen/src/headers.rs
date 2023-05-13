@@ -1,11 +1,10 @@
-use crate::default;
 use crate::smithy;
-
-use codegen_tools::{g, glines};
 
 use std::collections::BTreeSet;
 
+use codegen_writer::{g, glines};
 use heck::ToShoutySnakeCase;
+use rust_utils::default;
 
 pub fn codegen(model: &smithy::Model) {
     let mut headers: BTreeSet<&str> = default();

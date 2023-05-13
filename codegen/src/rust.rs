@@ -1,8 +1,7 @@
-use codegen_tools::g;
-
 use std::fmt;
 use std::format as f;
 
+use codegen_writer::g;
 use serde_json::Value;
 
 #[derive(Debug, Clone)]

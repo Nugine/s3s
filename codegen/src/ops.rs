@@ -1,18 +1,18 @@
 use crate::dto::RustTypes;
 use crate::rust::default_value_literal;
 use crate::xml::{is_xml_output, is_xml_payload};
-use crate::{default, headers, o};
 use crate::{dto, rust, smithy};
-
-use codegen_tools::g;
-use codegen_tools::glines;
+use crate::{headers, o};
 
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::format as f;
 use std::ops::Not;
 
+use codegen_writer::g;
+use codegen_writer::glines;
 use heck::ToSnakeCase;
+use rust_utils::default;
 
 #[derive(Debug)]
 pub struct Operation {

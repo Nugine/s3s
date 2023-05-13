@@ -1,9 +1,8 @@
 use crate::ops::Operations;
 use crate::rust::codegen_doc;
 
-use codegen_tools::g;
-use codegen_tools::glines;
-
+use codegen_writer::g;
+use codegen_writer::glines;
 use heck::ToSnakeCase;
 
 pub fn codegen(ops: &Operations) {

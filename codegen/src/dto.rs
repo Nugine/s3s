@@ -1,16 +1,15 @@
-use crate::default;
 use crate::o;
 use crate::ops::Operations;
 use crate::rust::codegen_doc;
 use crate::{rust, smithy};
 
-use codegen_tools::g;
-use codegen_tools::glines;
-
 use std::collections::BTreeMap;
 use std::ops::Not;
 
+use codegen_writer::g;
+use codegen_writer::glines;
 use heck::{ToShoutySnakeCase, ToSnakeCase};
+use rust_utils::default;
 use serde_json::Value;
 
 pub fn to_type_name(shape_name: &str) -> &str {

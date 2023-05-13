@@ -2,12 +2,11 @@ use crate::dto::RustTypes;
 use crate::ops::Operations;
 use crate::rust;
 
-use codegen_tools::g;
-use codegen_tools::glines;
-
 use std::format as f;
 use std::ops::Not;
 
+use codegen_writer::g;
+use codegen_writer::glines;
 use heck::ToSnakeCase;
 use heck::ToUpperCamelCase;
 

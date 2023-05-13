@@ -2,11 +2,10 @@ use crate::dto::RustTypes;
 use crate::ops::Operations;
 use crate::rust;
 
-use codegen_tools::g;
-use codegen_tools::glines;
-
 use std::format as f;
 
+use codegen_writer::g;
+use codegen_writer::glines;
 use heck::ToSnakeCase;
 
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
