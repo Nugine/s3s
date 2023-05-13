@@ -308,6 +308,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
                         req.s3ext.vec_stream = Some(vec_stream);
                         break 'resolve (&PutObject as &'static dyn Operation, false);
                     }
+                    // FIXME: POST /bucket/key hits this branch
                     S3Path::Object { .. } => return Err(s3_error!(MethodNotAllowed)),
                 }
             }

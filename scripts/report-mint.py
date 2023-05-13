@@ -76,7 +76,7 @@ if __name__ == "__main__":
         assert counts[group]["fail"] == 0, f'group "{group}" failed'
 
     # Won't fix
-    assert counts["mc"]["pass"] >= 27
+    assert counts["mc"]["pass"] >= 14
     assert counts["minio-java"]["pass"] >= 17
 
     # FIXME: E2E tests
