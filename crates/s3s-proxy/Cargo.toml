@@ -12,6 +12,6 @@ clap = { version = "4.2.7", features = ["derive"] }
 hyper = { version = "0.14.26", features = ["full"] }
 s3s = { version = "0.5.1-dev", path = "../s3s" }
 s3s-aws = { version = "0.5.1-dev", path = "../s3s-aws" }
-tokio = { version = "1.28.0", features = ["full"] }
+tokio = { version = "1.28.1", features = ["full"] }
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter", "time"] }
