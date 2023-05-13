@@ -6,17 +6,6 @@ use std::pin::Pin;
 
 use arrayvec::{ArrayString, ArrayVec};
 
-/// TODO(blocking): use `unicode_simd::from_ascii`
-pub fn from_ascii(s: &[u8]) -> Option<&str> {
-    ascii::AsciiStr::from_ascii(s).ok().map(ascii::AsciiStr::as_str)
-}
-
-/// TODO(blocking): SIMD
-/// `https://github.com/rusticstuff/simdutf8/issues/73`
-pub fn from_utf8_vec(v: Vec<u8>) -> Option<String> {
-    String::from_utf8(v).ok()
-}
-
 /// on-stack formatting
 pub const fn fmt_boolean(val: bool) -> &'static str {
     if val {

@@ -4,12 +4,12 @@ use crate::dto::{List, Metadata, StreamingBlob, Timestamp, TimestampFormat};
 use crate::error::*;
 use crate::http::{HeaderName, HeaderValue};
 use crate::path::S3Path;
-use crate::utils::from_utf8_vec;
 use crate::xml;
 
 use std::fmt;
 use std::str::FromStr;
 
+use rust_utils::string_from_utf8;
 use tracing::debug;
 
 fn missing_header(name: &HeaderName) -> S3Error {
@@ -188,7 +188,7 @@ where
 
 pub fn take_string_body(req: &mut Request) -> S3Result<String> {
     let bytes = req.body.bytes().expect("full body not found");
-    match from_utf8_vec(bytes.into()) {
+    match string_from_utf8(bytes.into()) {
         Some(s) => Ok(s),
         None => Err(invalid_request!("expected UTF-8 body")),
     }

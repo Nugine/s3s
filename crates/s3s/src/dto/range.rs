@@ -1,13 +1,13 @@
 //! HTTP Range header
 
 use crate::http;
-use crate::utils::from_ascii;
 use crate::S3Error;
 use crate::S3ErrorCode;
 
 use std::ops;
 
 use atoi::FromRadix10Checked;
+use rust_utils::str_from_ascii;
 
 /// HTTP Range header
 ///
@@ -145,7 +145,7 @@ impl http::TryFromHeaderValue for Range {
     type Error = ParseRangeError;
 
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        let header = from_ascii(val.as_bytes()).ok_or(ParseRangeError { _priv: () })?;
+        let header = str_from_ascii(val.as_bytes()).ok_or(ParseRangeError { _priv: () })?;
         Self::parse(header)
     }
 }

@@ -4,7 +4,6 @@ use super::AmzDate;
 
 use crate::auth::SecretKey;
 use crate::http::OrderedHeaders;
-use crate::utils::from_ascii;
 use crate::utils::hmac_sha256;
 use crate::utils::stable_sort_by_first;
 
@@ -13,6 +12,7 @@ use std::mem::MaybeUninit;
 use hex_simd::{AsOut, AsciiCase};
 use hyper::body::Bytes;
 use hyper::Method;
+use rust_utils::str_from_ascii;
 use sha2::{Digest, Sha256};
 use smallvec::SmallVec;
 use zeroize::Zeroize;
@@ -75,7 +75,7 @@ fn uri_encode(output: &mut String, input: &str, encode_slash: bool) {
         }
     }
 
-    let s = from_ascii(buf.as_ref()).unwrap();
+    let s = str_from_ascii(buf.as_ref()).unwrap();
     output.push_str(s);
 }
 
