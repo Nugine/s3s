@@ -23,6 +23,7 @@ use futures::TryStreamExt;
 use md5::{Digest, Md5};
 use numeric_cast::NumericCast;
 use path_absolutize::Absolutize;
+use rust_utils::default::default;
 use tracing::debug;
 
 #[async_trait::async_trait]
@@ -302,8 +303,8 @@ impl S3 for FileSystem {
             return Err(s3_error!(NoSuchBucket));
         }
 
-        let mut objects: Vec<Object> = Default::default();
-        let mut dir_queue: VecDeque<PathBuf> = Default::default();
+        let mut objects: Vec<Object> = default();
+        let mut dir_queue: VecDeque<PathBuf> = default();
         dir_queue.push_back(path.clone());
 
         while let Some(dir) = dir_queue.pop_front() {

@@ -1,5 +1,5 @@
 #![forbid(unsafe_code)]
-#![deny(clippy::all)]
+#![deny(clippy::all, clippy::pedantic)]
 
 use s3s_fs::FileSystem;
 use s3s_fs::Result;
@@ -40,7 +40,7 @@ fn setup_tracing() {
     tracing_subscriber::fmt()
         .pretty()
         .with_env_filter(EnvFilter::from_default_env())
-        .init()
+        .init();
 }
 
 #[tokio::main]
