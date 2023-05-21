@@ -1,8 +1,12 @@
 #![forbid(unsafe_code)]
 #![deny(
     clippy::all, //
-    clippy::must_use_candidate, //
     clippy::cargo, //
+    clippy::pedantic, //
+)]
+#![allow(
+    clippy::wildcard_imports,
+    clippy::missing_errors_doc, // TODO: docs
 )]
 
 #[macro_use]
