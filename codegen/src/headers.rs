@@ -4,7 +4,7 @@ use std::collections::BTreeSet;
 
 use codegen_writer::{g, glines};
 use heck::ToShoutySnakeCase;
-use rust_utils::default;
+use rust_utils::default::default;
 
 pub fn codegen(model: &smithy::Model) {
     let mut headers: BTreeSet<&str> = default();
