@@ -27,6 +27,8 @@ macro_rules! wrap_sdk_error {
     }};
 }
 
+// FIXME: this is actually an overloaded function
+
 pub struct SetStatusCode<'a, 'b, E, R>(pub &'a mut s3s::S3Error, pub &'b aws_smithy_http::result::ServiceError<E, R>);
 
 impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_http::operation::Response> {
@@ -37,5 +39,6 @@ impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_http::operation::Response> {
 }
 
 impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_http::event_stream::RawMessage> {
+    #[allow(clippy::unused_self)]
     pub fn call(self) {}
 }
