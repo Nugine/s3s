@@ -325,6 +325,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
     g!();
 }
 
+#[allow(clippy::too_many_lines)]
 fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes) {
     let input = op.input.as_str();
     let rust_type = &rust_types[input];
@@ -688,10 +689,10 @@ fn collect_routes<'a>(ops: &'a Operations, rust_types: &'a RustTypes) -> HashMap
     for map in ans.values_mut() {
         for vec in map.values_mut() {
             vec.sort_by_key(|r| {
-                let has_qt = r.query_tag.is_some();
-                let has_qp = r.query_patterns.is_empty().not();
+                let has_query_tag = r.query_tag.is_some();
+                let has_query_patterns = r.query_patterns.is_empty().not();
 
-                let priority = match (has_qt, has_qp) {
+                let priority = match (has_query_tag, has_query_patterns) {
                     (true, true) => 1,
                     (true, false) => 2,
                     (false, true) => 3,
@@ -754,6 +755,7 @@ fn needs_full_body(op: &Operation, rust_types: &RustTypes) -> bool {
     has_xml_payload || has_string_payload
 }
 
+#[allow(clippy::too_many_lines)]
 fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
     let routes = collect_routes(ops, rust_types);
 
@@ -836,20 +838,20 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
 
                         g!("if let Some(qs) = qs {{");
                         for route in group {
-                            let has_qt = route.query_tag.is_some();
-                            let has_qp = route.query_patterns.is_empty().not();
+                            let has_query_tag = route.query_tag.is_some();
+                            let has_query_patterns = route.query_patterns.is_empty().not();
 
                             let qp = route.query_patterns.as_slice();
 
-                            if has_qt {
+                            if has_query_tag {
                                 let tag = route.query_tag.as_deref().unwrap();
                                 assert!(tag.as_bytes().iter().all(|&x| x == b'-' || x.is_ascii_alphabetic()), "{tag}");
                             }
-                            if has_qp {
+                            if has_query_patterns {
                                 assert!(qp.len() <= 1);
                             }
 
-                            match (has_qt, has_qp) {
+                            match (has_query_tag, has_query_patterns) {
                                 (true, true) => {
                                     assert_eq!(route.op.name, "SelectObjectContent");
 
@@ -879,10 +881,10 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
                         g!("}}");
 
                         for route in group {
-                            let has_qt = route.query_tag.is_some();
-                            let has_qp = route.query_patterns.is_empty().not();
+                            let has_query_tag = route.query_tag.is_some();
+                            let has_query_patterns = route.query_patterns.is_empty().not();
 
-                            if has_qt || has_qp {
+                            if has_query_tag || has_query_patterns {
                                 continue;
                             }
 

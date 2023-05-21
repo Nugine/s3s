@@ -19,6 +19,7 @@ pub fn to_type_name(shape_name: &str) -> &str {
 pub type RustTypes = BTreeMap<String, rust::Type>;
 
 #[deny(clippy::shadow_unrelated)]
+#[allow(clippy::too_many_lines)]
 pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes {
     let mut space: BTreeMap<String, rust::Type> = default();
     let mut insert = |k: String, v: rust::Type| assert!(space.insert(k, v).is_none());
@@ -137,10 +138,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     let default_value = field.traits.default_value().map(o);
                     let is_required = field.traits.required();
 
-                    let is_op_input = rs_shape_name
-                        .strip_suffix("Request")
-                        .map(|op| ops.contains_key(op))
-                        .unwrap_or(false);
+                    let is_op_input = rs_shape_name.strip_suffix("Request").map_or(false, |op| ops.contains_key(op));
 
                     let option_type = 'optional: {
                         if field_type == "StreamingBlob" && default_value.as_ref().unwrap() == "" {
@@ -185,7 +183,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                         type_: field_type,
                         doc: field.traits.doc().map(o),
 
-                        camel_name: field_name.to_owned(),
+                        camel_name: field_name.clone(),
 
                         option_type,
                         default_value,
@@ -214,7 +212,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                 let mut variants = Vec::new();
                 for (variant_name, variant) in &shape.members {
                     let variant = rust::StructEnumVariant {
-                        name: variant_name.to_owned(),
+                        name: variant_name.clone(),
                         type_: to_type_name(&variant.target).to_owned(),
                         doc: variant.traits.doc().map(o),
                     };

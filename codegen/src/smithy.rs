@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 
+use numeric_cast::numeric_cast;
 use serde::Deserialize;
 use serde_json::{Map, Value};
 
@@ -229,7 +230,7 @@ impl Traits {
             .as_object()?
             .get("code")?
             .as_u64()
-            .map(|v| v as u16)
+            .map(numeric_cast::<_, u16>)
     }
 
     pub fn error(&self) -> Option<&str> {

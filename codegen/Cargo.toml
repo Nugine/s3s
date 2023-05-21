@@ -8,6 +8,7 @@ publish = false
 codegen-writer = "0.1.0"
 heck = "0.4.1"
 nugine-rust-utils = "0.1.2"
+numeric_cast = "0.2.1"
 regex = "1.8.1"
 serde = { version = "1.0.163", features = ["derive"] }
 serde_json = { version = "1.0.96", features = ["preserve_order"] }
