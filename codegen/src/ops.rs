@@ -604,15 +604,30 @@ fn codegen_op_http_call(op: &Operation) {
     let method = op.name.to_snake_case();
 
     g!("let input = Self::deserialize_http(req)?;");
-    g!("let req = super::build_s3_request(input, req);");
-    g!("let result = s3.{method}(req).await;");
+    g!("let s3_req = super::build_s3_request(input, req);");
+
+    if op.name == "GetObject" {
+        g!("let overrided_headers = super::get_object::extract_overrided_response_headers(&s3_req)?;");
+    }
+
+    g!("let result = s3.{method}(s3_req).await;");
 
     glines![
-        "match result {",
-        "    Ok(resp) => super::serialize_s3_response(resp, Self::serialize_http),",
-        "    Err(err) => super::serialize_error(err),",
-        "}",
+        "let s3_resp = match result {",
+        "    Ok(val) => val,",
+        "    Err(err) => return super::serialize_error(err),",
+        "};",
     ];
+
+    g!("let mut resp = Self::serialize_http(s3_resp.output)?;");
+
+    if op.name == "GetObject" {
+        g!("resp.headers.extend(overrided_headers);");
+    }
+
+    g!("resp.headers.extend(s3_resp.headers);");
+    g!("resp.extensions.extend(s3_resp.extensions);");
+    g!("Ok(resp)");
 
     g!("}}");
     g!("}}");
