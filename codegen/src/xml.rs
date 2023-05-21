@@ -8,7 +8,7 @@ use std::ops::Not;
 
 use codegen_writer::g;
 use codegen_writer::glines;
-use rust_utils::default;
+use rust_utils::default::default;
 
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     glines![

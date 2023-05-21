@@ -11,7 +11,7 @@ use std::io::Write;
 
 use quick_xml::events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event};
 use quick_xml::writer::Writer;
-use rust_utils::str_from_ascii;
+use rust_utils::str::StrExt;
 
 /// A data type that can be serialized with AWS restXml serializer
 pub trait Serialize {
@@ -116,7 +116,7 @@ impl<W: Write> Serializer<W> {
     }
 
     pub fn timestamp(&mut self, name: &str, val: &Timestamp, fmt: TimestampFormat) -> SerResult {
-        utils::fmt_timestamp(val, fmt, |b| self.content(name, str_from_ascii(b).unwrap()))
+        utils::fmt_timestamp(val, fmt, |b| self.content(name, str::from_ascii_simd(b).unwrap()))
     }
 }
 

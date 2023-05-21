@@ -8,7 +8,7 @@ use codegen_writer::g;
 use codegen_writer::glines;
 use heck::ToShoutySnakeCase;
 use regex::Regex;
-use rust_utils::default;
+use rust_utils::default::default;
 
 struct Error {
     code: String,

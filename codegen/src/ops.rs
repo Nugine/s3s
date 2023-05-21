@@ -12,7 +12,7 @@ use std::ops::Not;
 use codegen_writer::g;
 use codegen_writer::glines;
 use heck::ToSnakeCase;
-use rust_utils::default;
+use rust_utils::default::default;
 
 #[derive(Debug)]
 pub struct Operation {

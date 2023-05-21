@@ -9,7 +9,7 @@ use std::ops::Not;
 use codegen_writer::g;
 use codegen_writer::glines;
 use heck::{ToShoutySnakeCase, ToSnakeCase};
-use rust_utils::default;
+use rust_utils::default::default;
 use serde_json::Value;
 
 pub fn to_type_name(shape_name: &str) -> &str {

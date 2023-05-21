@@ -12,7 +12,7 @@ use std::mem::MaybeUninit;
 use hex_simd::{AsOut, AsciiCase};
 use hyper::body::Bytes;
 use hyper::Method;
-use rust_utils::str_from_ascii;
+use rust_utils::str::StrExt;
 use sha2::{Digest, Sha256};
 use smallvec::SmallVec;
 use zeroize::Zeroize;
@@ -75,7 +75,7 @@ fn uri_encode(output: &mut String, input: &str, encode_slash: bool) {
         }
     }
 
-    let s = str_from_ascii(buf.as_ref()).unwrap();
+    let s = str::from_ascii_simd(buf.as_ref()).unwrap();
     output.push_str(s);
 }
 
