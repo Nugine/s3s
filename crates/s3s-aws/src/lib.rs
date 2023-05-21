@@ -1,8 +1,14 @@
 #![forbid(unsafe_code)]
 #![deny(
     clippy::all, //
-    clippy::must_use_candidate, //
     clippy::cargo, //
+    clippy::pedantic, //
+)]
+#![allow(
+    clippy::module_name_repetitions,//
+    clippy::match_same_arms, //
+    clippy::missing_errors_doc, // TODO: docs
+    clippy::wildcard_imports, //
 )]
 
 #[macro_use]
