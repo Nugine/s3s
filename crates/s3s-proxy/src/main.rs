@@ -1,5 +1,5 @@
 #![forbid(unsafe_code)]
-#![deny(clippy::all)]
+#![deny(clippy::all, clippy::pedantic)]
 
 use s3s::auth::SimpleAuth;
 use s3s::service::S3ServiceBuilder;
@@ -34,7 +34,7 @@ fn setup_tracing() {
     tracing_subscriber::fmt()
         .pretty()
         .with_env_filter(EnvFilter::from_default_env())
-        .init()
+        .init();
 }
 
 #[tokio::main]
