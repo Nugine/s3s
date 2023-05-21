@@ -1,8 +1,15 @@
 #![forbid(unsafe_code)]
 #![deny(
     clippy::all, //
-    clippy::must_use_candidate, //
-    clippy::semicolon_if_nothing_returned, //
+    clippy::pedantic, //
+)]
+#![warn(
+    clippy::dbg_macro, //
+)]
+#![allow(
+    clippy::single_match_else, //
+    clippy::wildcard_imports,
+    clippy::match_same_arms,
 )]
 
 mod rust;

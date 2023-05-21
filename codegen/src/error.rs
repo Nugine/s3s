@@ -29,7 +29,7 @@ fn collect_errors(model: &smithy::Model) -> Errors {
 
     let mut errors: BTreeMap<String, Error> = default();
 
-    let mut iter = error_code_doc.lines().map(|line| line.trim());
+    let mut iter = error_code_doc.lines().map(str::trim);
     while let Some(line) = iter.next() {
         let code = {
             let Some(cap) = pattern.captures(line) else { continue };
@@ -118,6 +118,7 @@ fn collect_errors(model: &smithy::Model) -> Errors {
     errors
 }
 
+#[allow(clippy::too_many_lines)]
 pub fn codegen(model: &smithy::Model) {
     let errors = collect_errors(model);
 

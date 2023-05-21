@@ -35,6 +35,7 @@ pub fn is_xml_output(ty: &rust::Struct) -> bool {
     ty.xml_name.is_some() || ty.fields.iter().any(|field| field.position == "xml")
 }
 
+#[allow(clippy::too_many_lines)]
 fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes) {
     let mut root_type_names: BTreeSet<&str> = default();
     let mut field_type_names: BTreeSet<&str> = default();
@@ -157,7 +158,10 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes) {
                         g!("s.content(\"{xml_name}\", val)?;");
                         g!("}}");
                     } else {
-                        let default_is_zero = field.default_value.as_ref().and_then(|v| v.as_u64()) == Some(0);
+                        let default_is_zero = match field.default_value.as_ref() {
+                            Some(v) => v.as_u64() == Some(0),
+                            None => false,
+                        };
                         let skip_zero = default_is_zero && ty.name == "DefaultRetention"; // ASK: the real condition?
 
                         if skip_zero {
@@ -224,6 +228,7 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes) {
     }
 }
 
+#[allow(clippy::too_many_lines)]
 fn codegen_xml_de(ops: &Operations, rust_types: &RustTypes) {
     let mut root_type_names: BTreeMap<&str, Option<&str>> = default();
     let mut field_type_names: BTreeSet<&str> = default();
