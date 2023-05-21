@@ -16,6 +16,8 @@ pub struct S3Request<T> {
     pub credentials: Option<Credentials>,
 
     /// Request extensions
+    ///
+    /// It is used to pass custom data between middlewares.
     pub extensions: Extensions,
 
     // Headers
@@ -26,7 +28,7 @@ pub struct S3Request<T> {
 }
 
 impl<T> S3Request<T> {
-    pub fn from_input(input: T) -> Self {
+    pub fn new(input: T) -> Self {
         Self {
             input,
             credentials: default(),

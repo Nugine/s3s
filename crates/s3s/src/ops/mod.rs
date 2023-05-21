@@ -11,10 +11,10 @@ use crate::http::{OrderedHeaders, OrderedQs};
 use crate::http::{Request, Response};
 use crate::path::{ParseS3PathError, S3Path};
 use crate::request::S3Request;
+use crate::response::S3Response;
 use crate::s3_trait::S3;
 use crate::sig_v2;
-use crate::sig_v2::AuthorizationV2;
-use crate::sig_v2::PresignedUrlV2;
+use crate::sig_v2::{AuthorizationV2, PresignedUrlV2};
 use crate::sig_v4;
 use crate::sig_v4::PostSignatureInfo;
 use crate::sig_v4::PresignedUrlV4;
@@ -58,6 +58,19 @@ fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
         headers,
         uri,
     }
+}
+
+fn serialize_s3_response<T>(resp: S3Response<T>, f: impl FnOnce(T) -> S3Result<http::Response>) -> S3Result<http::Response> {
+    let S3Response {
+        output,
+        headers,
+        extensions,
+    } = resp;
+
+    let mut ans = f(output)?;
+    ans.headers.extend(headers);
+    ans.extensions.extend(extensions);
+    Ok(ans)
 }
 
 fn serialize_error(x: S3Error) -> S3Result<Response> {

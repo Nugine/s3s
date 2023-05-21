@@ -17,7 +17,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
         "use crate::conv::{try_from_aws, try_into_aws};",
         "",
         "use s3s::S3;",
-        "use s3s::S3Request;",
+        "use s3s::{S3Request, S3Response};",
         "use s3s::S3Result;",
         "",
         "use tracing::debug;",
@@ -33,7 +33,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
         let s3s_output = f!("s3s::dto::{}", op.output);
 
         g!("#[tracing::instrument(skip(self, req))]");
-        g!("async fn {method_name}(&self, req: S3Request<{s3s_input}>) -> S3Result<{s3s_output}> {{");
+        g!("async fn {method_name}(&self, req: S3Request<{s3s_input}>) -> S3Result<S3Response<{s3s_output}>> {{");
 
         g!("let input = req.input;");
         g!("debug!(?input);");
@@ -89,7 +89,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
             "    Ok(output) => {",
             "        let output = try_from_aws(output)?;",
             "        debug!(?output);",
-            "        Ok(output)",
+            "        Ok(S3Response::new(output))",
             "    },",
             "    Err(e) => Err(wrap_sdk_error!(e)),",
             "}",

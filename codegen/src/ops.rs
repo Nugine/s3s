@@ -608,7 +608,7 @@ fn codegen_op_http_call(op: &Operation) {
 
     glines![
         "match result {",
-        "    Ok(output) => Self::serialize_http(output),",
+        "    Ok(resp) => super::serialize_s3_response(resp, Self::serialize_http),",
         "    Err(err) => super::serialize_error(err),",
         "}",
     ];

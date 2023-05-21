@@ -1,5 +1,6 @@
 use super::Body;
 
+use hyper::http::Extensions;
 use hyper::http::HeaderValue;
 use hyper::HeaderMap;
 use hyper::StatusCode;
@@ -9,6 +10,7 @@ pub struct Response {
     pub status: StatusCode,
     pub headers: HeaderMap<HeaderValue>,
     pub body: Body,
+    pub extensions: Extensions,
 }
 
 impl From<Response> for hyper::Response<Body> {
@@ -17,6 +19,7 @@ impl From<Response> for hyper::Response<Body> {
         *ans.status_mut() = res.status;
         *ans.headers_mut() = res.headers;
         *ans.body_mut() = res.body;
+        *ans.extensions_mut() = res.extensions;
         ans
     }
 }

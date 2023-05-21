@@ -4,9 +4,9 @@ use super::*;
 
 use crate::conv::{try_from_aws, try_into_aws};
 
-use s3s::S3Request;
 use s3s::S3Result;
 use s3s::S3;
+use s3s::{S3Request, S3Response};
 
 use tracing::debug;
 
@@ -16,7 +16,7 @@ impl S3 for Proxy {
     async fn abort_multipart_upload(
         &self,
         req: S3Request<s3s::dto::AbortMultipartUploadInput>,
-    ) -> S3Result<s3s::dto::AbortMultipartUploadOutput> {
+    ) -> S3Result<S3Response<s3s::dto::AbortMultipartUploadOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.abort_multipart_upload();
@@ -30,7 +30,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -40,7 +40,7 @@ impl S3 for Proxy {
     async fn complete_multipart_upload(
         &self,
         req: S3Request<s3s::dto::CompleteMultipartUploadInput>,
-    ) -> S3Result<s3s::dto::CompleteMultipartUploadOutput> {
+    ) -> S3Result<S3Response<s3s::dto::CompleteMultipartUploadOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.complete_multipart_upload();
@@ -62,14 +62,14 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn copy_object(&self, req: S3Request<s3s::dto::CopyObjectInput>) -> S3Result<s3s::dto::CopyObjectOutput> {
+    async fn copy_object(&self, req: S3Request<s3s::dto::CopyObjectInput>) -> S3Result<S3Response<s3s::dto::CopyObjectOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.copy_object();
@@ -119,14 +119,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn create_bucket(&self, req: S3Request<s3s::dto::CreateBucketInput>) -> S3Result<s3s::dto::CreateBucketOutput> {
+    async fn create_bucket(
+        &self,
+        req: S3Request<s3s::dto::CreateBucketInput>,
+    ) -> S3Result<S3Response<s3s::dto::CreateBucketOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.create_bucket();
@@ -145,7 +148,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -155,7 +158,7 @@ impl S3 for Proxy {
     async fn create_multipart_upload(
         &self,
         req: S3Request<s3s::dto::CreateMultipartUploadInput>,
-    ) -> S3Result<s3s::dto::CreateMultipartUploadOutput> {
+    ) -> S3Result<S3Response<s3s::dto::CreateMultipartUploadOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.create_multipart_upload();
@@ -194,14 +197,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn delete_bucket(&self, req: S3Request<s3s::dto::DeleteBucketInput>) -> S3Result<s3s::dto::DeleteBucketOutput> {
+    async fn delete_bucket(
+        &self,
+        req: S3Request<s3s::dto::DeleteBucketInput>,
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket();
@@ -212,7 +218,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -222,7 +228,7 @@ impl S3 for Proxy {
     async fn delete_bucket_analytics_configuration(
         &self,
         req: S3Request<s3s::dto::DeleteBucketAnalyticsConfigurationInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketAnalyticsConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketAnalyticsConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_analytics_configuration();
@@ -234,7 +240,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -244,7 +250,7 @@ impl S3 for Proxy {
     async fn delete_bucket_cors(
         &self,
         req: S3Request<s3s::dto::DeleteBucketCorsInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketCorsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketCorsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_cors();
@@ -255,7 +261,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -265,7 +271,7 @@ impl S3 for Proxy {
     async fn delete_bucket_encryption(
         &self,
         req: S3Request<s3s::dto::DeleteBucketEncryptionInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketEncryptionOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketEncryptionOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_encryption();
@@ -276,7 +282,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -286,7 +292,7 @@ impl S3 for Proxy {
     async fn delete_bucket_intelligent_tiering_configuration(
         &self,
         req: S3Request<s3s::dto::DeleteBucketIntelligentTieringConfigurationInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketIntelligentTieringConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketIntelligentTieringConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_intelligent_tiering_configuration();
@@ -297,7 +303,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -307,7 +313,7 @@ impl S3 for Proxy {
     async fn delete_bucket_inventory_configuration(
         &self,
         req: S3Request<s3s::dto::DeleteBucketInventoryConfigurationInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketInventoryConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketInventoryConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_inventory_configuration();
@@ -319,7 +325,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -329,7 +335,7 @@ impl S3 for Proxy {
     async fn delete_bucket_lifecycle(
         &self,
         req: S3Request<s3s::dto::DeleteBucketLifecycleInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketLifecycleOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketLifecycleOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_lifecycle();
@@ -340,7 +346,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -350,7 +356,7 @@ impl S3 for Proxy {
     async fn delete_bucket_metrics_configuration(
         &self,
         req: S3Request<s3s::dto::DeleteBucketMetricsConfigurationInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketMetricsConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketMetricsConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_metrics_configuration();
@@ -362,7 +368,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -372,7 +378,7 @@ impl S3 for Proxy {
     async fn delete_bucket_ownership_controls(
         &self,
         req: S3Request<s3s::dto::DeleteBucketOwnershipControlsInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketOwnershipControlsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketOwnershipControlsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_ownership_controls();
@@ -383,7 +389,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -393,7 +399,7 @@ impl S3 for Proxy {
     async fn delete_bucket_policy(
         &self,
         req: S3Request<s3s::dto::DeleteBucketPolicyInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketPolicyOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketPolicyOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_policy();
@@ -404,7 +410,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -414,7 +420,7 @@ impl S3 for Proxy {
     async fn delete_bucket_replication(
         &self,
         req: S3Request<s3s::dto::DeleteBucketReplicationInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketReplicationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketReplicationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_replication();
@@ -425,7 +431,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -435,7 +441,7 @@ impl S3 for Proxy {
     async fn delete_bucket_tagging(
         &self,
         req: S3Request<s3s::dto::DeleteBucketTaggingInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketTaggingOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketTaggingOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_tagging();
@@ -446,7 +452,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -456,7 +462,7 @@ impl S3 for Proxy {
     async fn delete_bucket_website(
         &self,
         req: S3Request<s3s::dto::DeleteBucketWebsiteInput>,
-    ) -> S3Result<s3s::dto::DeleteBucketWebsiteOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketWebsiteOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_bucket_website();
@@ -467,14 +473,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn delete_object(&self, req: S3Request<s3s::dto::DeleteObjectInput>) -> S3Result<s3s::dto::DeleteObjectOutput> {
+    async fn delete_object(
+        &self,
+        req: S3Request<s3s::dto::DeleteObjectInput>,
+    ) -> S3Result<S3Response<s3s::dto::DeleteObjectOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_object();
@@ -490,7 +499,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -500,7 +509,7 @@ impl S3 for Proxy {
     async fn delete_object_tagging(
         &self,
         req: S3Request<s3s::dto::DeleteObjectTaggingInput>,
-    ) -> S3Result<s3s::dto::DeleteObjectTaggingOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeleteObjectTaggingOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_object_tagging();
@@ -513,14 +522,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn delete_objects(&self, req: S3Request<s3s::dto::DeleteObjectsInput>) -> S3Result<s3s::dto::DeleteObjectsOutput> {
+    async fn delete_objects(
+        &self,
+        req: S3Request<s3s::dto::DeleteObjectsInput>,
+    ) -> S3Result<S3Response<s3s::dto::DeleteObjectsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_objects();
@@ -536,7 +548,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -546,7 +558,7 @@ impl S3 for Proxy {
     async fn delete_public_access_block(
         &self,
         req: S3Request<s3s::dto::DeletePublicAccessBlockInput>,
-    ) -> S3Result<s3s::dto::DeletePublicAccessBlockOutput> {
+    ) -> S3Result<S3Response<s3s::dto::DeletePublicAccessBlockOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.delete_public_access_block();
@@ -557,7 +569,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -567,7 +579,7 @@ impl S3 for Proxy {
     async fn get_bucket_accelerate_configuration(
         &self,
         req: S3Request<s3s::dto::GetBucketAccelerateConfigurationInput>,
-    ) -> S3Result<s3s::dto::GetBucketAccelerateConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketAccelerateConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_accelerate_configuration();
@@ -578,14 +590,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn get_bucket_acl(&self, req: S3Request<s3s::dto::GetBucketAclInput>) -> S3Result<s3s::dto::GetBucketAclOutput> {
+    async fn get_bucket_acl(
+        &self,
+        req: S3Request<s3s::dto::GetBucketAclInput>,
+    ) -> S3Result<S3Response<s3s::dto::GetBucketAclOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_acl();
@@ -596,7 +611,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -606,7 +621,7 @@ impl S3 for Proxy {
     async fn get_bucket_analytics_configuration(
         &self,
         req: S3Request<s3s::dto::GetBucketAnalyticsConfigurationInput>,
-    ) -> S3Result<s3s::dto::GetBucketAnalyticsConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketAnalyticsConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_analytics_configuration();
@@ -618,14 +633,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn get_bucket_cors(&self, req: S3Request<s3s::dto::GetBucketCorsInput>) -> S3Result<s3s::dto::GetBucketCorsOutput> {
+    async fn get_bucket_cors(
+        &self,
+        req: S3Request<s3s::dto::GetBucketCorsInput>,
+    ) -> S3Result<S3Response<s3s::dto::GetBucketCorsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_cors();
@@ -636,7 +654,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -646,7 +664,7 @@ impl S3 for Proxy {
     async fn get_bucket_encryption(
         &self,
         req: S3Request<s3s::dto::GetBucketEncryptionInput>,
-    ) -> S3Result<s3s::dto::GetBucketEncryptionOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketEncryptionOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_encryption();
@@ -657,7 +675,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -667,7 +685,7 @@ impl S3 for Proxy {
     async fn get_bucket_intelligent_tiering_configuration(
         &self,
         req: S3Request<s3s::dto::GetBucketIntelligentTieringConfigurationInput>,
-    ) -> S3Result<s3s::dto::GetBucketIntelligentTieringConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketIntelligentTieringConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_intelligent_tiering_configuration();
@@ -678,7 +696,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -688,7 +706,7 @@ impl S3 for Proxy {
     async fn get_bucket_inventory_configuration(
         &self,
         req: S3Request<s3s::dto::GetBucketInventoryConfigurationInput>,
-    ) -> S3Result<s3s::dto::GetBucketInventoryConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketInventoryConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_inventory_configuration();
@@ -700,7 +718,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -710,7 +728,7 @@ impl S3 for Proxy {
     async fn get_bucket_lifecycle_configuration(
         &self,
         req: S3Request<s3s::dto::GetBucketLifecycleConfigurationInput>,
-    ) -> S3Result<s3s::dto::GetBucketLifecycleConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketLifecycleConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_lifecycle_configuration();
@@ -721,7 +739,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -731,7 +749,7 @@ impl S3 for Proxy {
     async fn get_bucket_location(
         &self,
         req: S3Request<s3s::dto::GetBucketLocationInput>,
-    ) -> S3Result<s3s::dto::GetBucketLocationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketLocationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_location();
@@ -742,7 +760,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -752,7 +770,7 @@ impl S3 for Proxy {
     async fn get_bucket_logging(
         &self,
         req: S3Request<s3s::dto::GetBucketLoggingInput>,
-    ) -> S3Result<s3s::dto::GetBucketLoggingOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketLoggingOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_logging();
@@ -763,7 +781,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -773,7 +791,7 @@ impl S3 for Proxy {
     async fn get_bucket_metrics_configuration(
         &self,
         req: S3Request<s3s::dto::GetBucketMetricsConfigurationInput>,
-    ) -> S3Result<s3s::dto::GetBucketMetricsConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketMetricsConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_metrics_configuration();
@@ -785,7 +803,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -795,7 +813,7 @@ impl S3 for Proxy {
     async fn get_bucket_notification_configuration(
         &self,
         req: S3Request<s3s::dto::GetBucketNotificationConfigurationInput>,
-    ) -> S3Result<s3s::dto::GetBucketNotificationConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketNotificationConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_notification_configuration();
@@ -806,7 +824,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -816,7 +834,7 @@ impl S3 for Proxy {
     async fn get_bucket_ownership_controls(
         &self,
         req: S3Request<s3s::dto::GetBucketOwnershipControlsInput>,
-    ) -> S3Result<s3s::dto::GetBucketOwnershipControlsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketOwnershipControlsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_ownership_controls();
@@ -827,7 +845,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -837,7 +855,7 @@ impl S3 for Proxy {
     async fn get_bucket_policy(
         &self,
         req: S3Request<s3s::dto::GetBucketPolicyInput>,
-    ) -> S3Result<s3s::dto::GetBucketPolicyOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketPolicyOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_policy();
@@ -848,7 +866,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -858,7 +876,7 @@ impl S3 for Proxy {
     async fn get_bucket_policy_status(
         &self,
         req: S3Request<s3s::dto::GetBucketPolicyStatusInput>,
-    ) -> S3Result<s3s::dto::GetBucketPolicyStatusOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketPolicyStatusOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_policy_status();
@@ -869,7 +887,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -879,7 +897,7 @@ impl S3 for Proxy {
     async fn get_bucket_replication(
         &self,
         req: S3Request<s3s::dto::GetBucketReplicationInput>,
-    ) -> S3Result<s3s::dto::GetBucketReplicationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketReplicationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_replication();
@@ -890,7 +908,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -900,7 +918,7 @@ impl S3 for Proxy {
     async fn get_bucket_request_payment(
         &self,
         req: S3Request<s3s::dto::GetBucketRequestPaymentInput>,
-    ) -> S3Result<s3s::dto::GetBucketRequestPaymentOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketRequestPaymentOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_request_payment();
@@ -911,7 +929,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -921,7 +939,7 @@ impl S3 for Proxy {
     async fn get_bucket_tagging(
         &self,
         req: S3Request<s3s::dto::GetBucketTaggingInput>,
-    ) -> S3Result<s3s::dto::GetBucketTaggingOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketTaggingOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_tagging();
@@ -932,7 +950,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -942,7 +960,7 @@ impl S3 for Proxy {
     async fn get_bucket_versioning(
         &self,
         req: S3Request<s3s::dto::GetBucketVersioningInput>,
-    ) -> S3Result<s3s::dto::GetBucketVersioningOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketVersioningOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_versioning();
@@ -953,7 +971,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -963,7 +981,7 @@ impl S3 for Proxy {
     async fn get_bucket_website(
         &self,
         req: S3Request<s3s::dto::GetBucketWebsiteInput>,
-    ) -> S3Result<s3s::dto::GetBucketWebsiteOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetBucketWebsiteOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_website();
@@ -974,14 +992,14 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn get_object(&self, req: S3Request<s3s::dto::GetObjectInput>) -> S3Result<s3s::dto::GetObjectOutput> {
+    async fn get_object(&self, req: S3Request<s3s::dto::GetObjectInput>) -> S3Result<S3Response<s3s::dto::GetObjectOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object();
@@ -1011,14 +1029,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn get_object_acl(&self, req: S3Request<s3s::dto::GetObjectAclInput>) -> S3Result<s3s::dto::GetObjectAclOutput> {
+    async fn get_object_acl(
+        &self,
+        req: S3Request<s3s::dto::GetObjectAclInput>,
+    ) -> S3Result<S3Response<s3s::dto::GetObjectAclOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_acl();
@@ -1032,7 +1053,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1042,7 +1063,7 @@ impl S3 for Proxy {
     async fn get_object_attributes(
         &self,
         req: S3Request<s3s::dto::GetObjectAttributesInput>,
-    ) -> S3Result<s3s::dto::GetObjectAttributesOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetObjectAttributesOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_attributes();
@@ -1062,7 +1083,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1072,7 +1093,7 @@ impl S3 for Proxy {
     async fn get_object_legal_hold(
         &self,
         req: S3Request<s3s::dto::GetObjectLegalHoldInput>,
-    ) -> S3Result<s3s::dto::GetObjectLegalHoldOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetObjectLegalHoldOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_legal_hold();
@@ -1086,7 +1107,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1096,7 +1117,7 @@ impl S3 for Proxy {
     async fn get_object_lock_configuration(
         &self,
         req: S3Request<s3s::dto::GetObjectLockConfigurationInput>,
-    ) -> S3Result<s3s::dto::GetObjectLockConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetObjectLockConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_lock_configuration();
@@ -1107,7 +1128,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1117,7 +1138,7 @@ impl S3 for Proxy {
     async fn get_object_retention(
         &self,
         req: S3Request<s3s::dto::GetObjectRetentionInput>,
-    ) -> S3Result<s3s::dto::GetObjectRetentionOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetObjectRetentionOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_retention();
@@ -1131,7 +1152,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1141,7 +1162,7 @@ impl S3 for Proxy {
     async fn get_object_tagging(
         &self,
         req: S3Request<s3s::dto::GetObjectTaggingInput>,
-    ) -> S3Result<s3s::dto::GetObjectTaggingOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetObjectTaggingOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_tagging();
@@ -1155,7 +1176,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1165,7 +1186,7 @@ impl S3 for Proxy {
     async fn get_object_torrent(
         &self,
         req: S3Request<s3s::dto::GetObjectTorrentInput>,
-    ) -> S3Result<s3s::dto::GetObjectTorrentOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetObjectTorrentOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_object_torrent();
@@ -1178,7 +1199,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1188,7 +1209,7 @@ impl S3 for Proxy {
     async fn get_public_access_block(
         &self,
         req: S3Request<s3s::dto::GetPublicAccessBlockInput>,
-    ) -> S3Result<s3s::dto::GetPublicAccessBlockOutput> {
+    ) -> S3Result<S3Response<s3s::dto::GetPublicAccessBlockOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_public_access_block();
@@ -1199,14 +1220,14 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn head_bucket(&self, req: S3Request<s3s::dto::HeadBucketInput>) -> S3Result<s3s::dto::HeadBucketOutput> {
+    async fn head_bucket(&self, req: S3Request<s3s::dto::HeadBucketInput>) -> S3Result<S3Response<s3s::dto::HeadBucketOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.head_bucket();
@@ -1217,14 +1238,14 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn head_object(&self, req: S3Request<s3s::dto::HeadObjectInput>) -> S3Result<s3s::dto::HeadObjectOutput> {
+    async fn head_object(&self, req: S3Request<s3s::dto::HeadObjectInput>) -> S3Result<S3Response<s3s::dto::HeadObjectOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.head_object();
@@ -1248,7 +1269,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1258,7 +1279,7 @@ impl S3 for Proxy {
     async fn list_bucket_analytics_configurations(
         &self,
         req: S3Request<s3s::dto::ListBucketAnalyticsConfigurationsInput>,
-    ) -> S3Result<s3s::dto::ListBucketAnalyticsConfigurationsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::ListBucketAnalyticsConfigurationsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_bucket_analytics_configurations();
@@ -1270,7 +1291,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1280,7 +1301,7 @@ impl S3 for Proxy {
     async fn list_bucket_intelligent_tiering_configurations(
         &self,
         req: S3Request<s3s::dto::ListBucketIntelligentTieringConfigurationsInput>,
-    ) -> S3Result<s3s::dto::ListBucketIntelligentTieringConfigurationsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::ListBucketIntelligentTieringConfigurationsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_bucket_intelligent_tiering_configurations();
@@ -1291,7 +1312,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1301,7 +1322,7 @@ impl S3 for Proxy {
     async fn list_bucket_inventory_configurations(
         &self,
         req: S3Request<s3s::dto::ListBucketInventoryConfigurationsInput>,
-    ) -> S3Result<s3s::dto::ListBucketInventoryConfigurationsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::ListBucketInventoryConfigurationsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_bucket_inventory_configurations();
@@ -1313,7 +1334,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1323,7 +1344,7 @@ impl S3 for Proxy {
     async fn list_bucket_metrics_configurations(
         &self,
         req: S3Request<s3s::dto::ListBucketMetricsConfigurationsInput>,
-    ) -> S3Result<s3s::dto::ListBucketMetricsConfigurationsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::ListBucketMetricsConfigurationsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_bucket_metrics_configurations();
@@ -1335,14 +1356,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn list_buckets(&self, req: S3Request<s3s::dto::ListBucketsInput>) -> S3Result<s3s::dto::ListBucketsOutput> {
+    async fn list_buckets(
+        &self,
+        req: S3Request<s3s::dto::ListBucketsInput>,
+    ) -> S3Result<S3Response<s3s::dto::ListBucketsOutput>> {
         let input = req.input;
         debug!(?input);
         let result = self.0.list_buckets().send().await;
@@ -1350,7 +1374,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1360,7 +1384,7 @@ impl S3 for Proxy {
     async fn list_multipart_uploads(
         &self,
         req: S3Request<s3s::dto::ListMultipartUploadsInput>,
-    ) -> S3Result<s3s::dto::ListMultipartUploadsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::ListMultipartUploadsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_multipart_uploads();
@@ -1377,7 +1401,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1387,7 +1411,7 @@ impl S3 for Proxy {
     async fn list_object_versions(
         &self,
         req: S3Request<s3s::dto::ListObjectVersionsInput>,
-    ) -> S3Result<s3s::dto::ListObjectVersionsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::ListObjectVersionsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_object_versions();
@@ -1404,14 +1428,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn list_objects(&self, req: S3Request<s3s::dto::ListObjectsInput>) -> S3Result<s3s::dto::ListObjectsOutput> {
+    async fn list_objects(
+        &self,
+        req: S3Request<s3s::dto::ListObjectsInput>,
+    ) -> S3Result<S3Response<s3s::dto::ListObjectsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_objects();
@@ -1428,14 +1455,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn list_objects_v2(&self, req: S3Request<s3s::dto::ListObjectsV2Input>) -> S3Result<s3s::dto::ListObjectsV2Output> {
+    async fn list_objects_v2(
+        &self,
+        req: S3Request<s3s::dto::ListObjectsV2Input>,
+    ) -> S3Result<S3Response<s3s::dto::ListObjectsV2Output>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_objects_v2();
@@ -1454,14 +1484,14 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn list_parts(&self, req: S3Request<s3s::dto::ListPartsInput>) -> S3Result<s3s::dto::ListPartsOutput> {
+    async fn list_parts(&self, req: S3Request<s3s::dto::ListPartsInput>) -> S3Result<S3Response<s3s::dto::ListPartsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_parts();
@@ -1480,7 +1510,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1490,7 +1520,7 @@ impl S3 for Proxy {
     async fn put_bucket_accelerate_configuration(
         &self,
         req: S3Request<s3s::dto::PutBucketAccelerateConfigurationInput>,
-    ) -> S3Result<s3s::dto::PutBucketAccelerateConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketAccelerateConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_accelerate_configuration();
@@ -1503,14 +1533,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn put_bucket_acl(&self, req: S3Request<s3s::dto::PutBucketAclInput>) -> S3Result<s3s::dto::PutBucketAclOutput> {
+    async fn put_bucket_acl(
+        &self,
+        req: S3Request<s3s::dto::PutBucketAclInput>,
+    ) -> S3Result<S3Response<s3s::dto::PutBucketAclOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_acl();
@@ -1530,7 +1563,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1540,7 +1573,7 @@ impl S3 for Proxy {
     async fn put_bucket_analytics_configuration(
         &self,
         req: S3Request<s3s::dto::PutBucketAnalyticsConfigurationInput>,
-    ) -> S3Result<s3s::dto::PutBucketAnalyticsConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketAnalyticsConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_analytics_configuration();
@@ -1553,14 +1586,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn put_bucket_cors(&self, req: S3Request<s3s::dto::PutBucketCorsInput>) -> S3Result<s3s::dto::PutBucketCorsOutput> {
+    async fn put_bucket_cors(
+        &self,
+        req: S3Request<s3s::dto::PutBucketCorsInput>,
+    ) -> S3Result<S3Response<s3s::dto::PutBucketCorsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_cors();
@@ -1574,7 +1610,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1584,7 +1620,7 @@ impl S3 for Proxy {
     async fn put_bucket_encryption(
         &self,
         req: S3Request<s3s::dto::PutBucketEncryptionInput>,
-    ) -> S3Result<s3s::dto::PutBucketEncryptionOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketEncryptionOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_encryption();
@@ -1598,7 +1634,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1608,7 +1644,7 @@ impl S3 for Proxy {
     async fn put_bucket_intelligent_tiering_configuration(
         &self,
         req: S3Request<s3s::dto::PutBucketIntelligentTieringConfigurationInput>,
-    ) -> S3Result<s3s::dto::PutBucketIntelligentTieringConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketIntelligentTieringConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_intelligent_tiering_configuration();
@@ -1620,7 +1656,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1630,7 +1666,7 @@ impl S3 for Proxy {
     async fn put_bucket_inventory_configuration(
         &self,
         req: S3Request<s3s::dto::PutBucketInventoryConfigurationInput>,
-    ) -> S3Result<s3s::dto::PutBucketInventoryConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketInventoryConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_inventory_configuration();
@@ -1643,7 +1679,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1653,7 +1689,7 @@ impl S3 for Proxy {
     async fn put_bucket_lifecycle_configuration(
         &self,
         req: S3Request<s3s::dto::PutBucketLifecycleConfigurationInput>,
-    ) -> S3Result<s3s::dto::PutBucketLifecycleConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketLifecycleConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_lifecycle_configuration();
@@ -1666,7 +1702,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1676,7 +1712,7 @@ impl S3 for Proxy {
     async fn put_bucket_logging(
         &self,
         req: S3Request<s3s::dto::PutBucketLoggingInput>,
-    ) -> S3Result<s3s::dto::PutBucketLoggingOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketLoggingOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_logging();
@@ -1690,7 +1726,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1700,7 +1736,7 @@ impl S3 for Proxy {
     async fn put_bucket_metrics_configuration(
         &self,
         req: S3Request<s3s::dto::PutBucketMetricsConfigurationInput>,
-    ) -> S3Result<s3s::dto::PutBucketMetricsConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketMetricsConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_metrics_configuration();
@@ -1713,7 +1749,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1723,7 +1759,7 @@ impl S3 for Proxy {
     async fn put_bucket_notification_configuration(
         &self,
         req: S3Request<s3s::dto::PutBucketNotificationConfigurationInput>,
-    ) -> S3Result<s3s::dto::PutBucketNotificationConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketNotificationConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_notification_configuration();
@@ -1736,7 +1772,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1746,7 +1782,7 @@ impl S3 for Proxy {
     async fn put_bucket_ownership_controls(
         &self,
         req: S3Request<s3s::dto::PutBucketOwnershipControlsInput>,
-    ) -> S3Result<s3s::dto::PutBucketOwnershipControlsOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketOwnershipControlsOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_ownership_controls();
@@ -1759,7 +1795,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1769,7 +1805,7 @@ impl S3 for Proxy {
     async fn put_bucket_policy(
         &self,
         req: S3Request<s3s::dto::PutBucketPolicyInput>,
-    ) -> S3Result<s3s::dto::PutBucketPolicyOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketPolicyOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_policy();
@@ -1784,7 +1820,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1794,7 +1830,7 @@ impl S3 for Proxy {
     async fn put_bucket_replication(
         &self,
         req: S3Request<s3s::dto::PutBucketReplicationInput>,
-    ) -> S3Result<s3s::dto::PutBucketReplicationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketReplicationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_replication();
@@ -1809,7 +1845,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1819,7 +1855,7 @@ impl S3 for Proxy {
     async fn put_bucket_request_payment(
         &self,
         req: S3Request<s3s::dto::PutBucketRequestPaymentInput>,
-    ) -> S3Result<s3s::dto::PutBucketRequestPaymentOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketRequestPaymentOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_request_payment();
@@ -1833,7 +1869,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1843,7 +1879,7 @@ impl S3 for Proxy {
     async fn put_bucket_tagging(
         &self,
         req: S3Request<s3s::dto::PutBucketTaggingInput>,
-    ) -> S3Result<s3s::dto::PutBucketTaggingOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketTaggingOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_tagging();
@@ -1857,7 +1893,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1867,7 +1903,7 @@ impl S3 for Proxy {
     async fn put_bucket_versioning(
         &self,
         req: S3Request<s3s::dto::PutBucketVersioningInput>,
-    ) -> S3Result<s3s::dto::PutBucketVersioningOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketVersioningOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_versioning();
@@ -1882,7 +1918,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1892,7 +1928,7 @@ impl S3 for Proxy {
     async fn put_bucket_website(
         &self,
         req: S3Request<s3s::dto::PutBucketWebsiteInput>,
-    ) -> S3Result<s3s::dto::PutBucketWebsiteOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutBucketWebsiteOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_bucket_website();
@@ -1906,14 +1942,14 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn put_object(&self, req: S3Request<s3s::dto::PutObjectInput>) -> S3Result<s3s::dto::PutObjectOutput> {
+    async fn put_object(&self, req: S3Request<s3s::dto::PutObjectInput>) -> S3Result<S3Response<s3s::dto::PutObjectOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object();
@@ -1959,14 +1995,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn put_object_acl(&self, req: S3Request<s3s::dto::PutObjectAclInput>) -> S3Result<s3s::dto::PutObjectAclOutput> {
+    async fn put_object_acl(
+        &self,
+        req: S3Request<s3s::dto::PutObjectAclInput>,
+    ) -> S3Result<S3Response<s3s::dto::PutObjectAclOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_acl();
@@ -1989,7 +2028,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1999,7 +2038,7 @@ impl S3 for Proxy {
     async fn put_object_legal_hold(
         &self,
         req: S3Request<s3s::dto::PutObjectLegalHoldInput>,
-    ) -> S3Result<s3s::dto::PutObjectLegalHoldOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutObjectLegalHoldOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_legal_hold();
@@ -2016,7 +2055,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2026,7 +2065,7 @@ impl S3 for Proxy {
     async fn put_object_lock_configuration(
         &self,
         req: S3Request<s3s::dto::PutObjectLockConfigurationInput>,
-    ) -> S3Result<s3s::dto::PutObjectLockConfigurationOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutObjectLockConfigurationOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_lock_configuration();
@@ -2042,7 +2081,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2052,7 +2091,7 @@ impl S3 for Proxy {
     async fn put_object_retention(
         &self,
         req: S3Request<s3s::dto::PutObjectRetentionInput>,
-    ) -> S3Result<s3s::dto::PutObjectRetentionOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutObjectRetentionOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_retention();
@@ -2070,7 +2109,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2080,7 +2119,7 @@ impl S3 for Proxy {
     async fn put_object_tagging(
         &self,
         req: S3Request<s3s::dto::PutObjectTaggingInput>,
-    ) -> S3Result<s3s::dto::PutObjectTaggingOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutObjectTaggingOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_object_tagging();
@@ -2097,7 +2136,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2107,7 +2146,7 @@ impl S3 for Proxy {
     async fn put_public_access_block(
         &self,
         req: S3Request<s3s::dto::PutPublicAccessBlockInput>,
-    ) -> S3Result<s3s::dto::PutPublicAccessBlockOutput> {
+    ) -> S3Result<S3Response<s3s::dto::PutPublicAccessBlockOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.put_public_access_block();
@@ -2121,14 +2160,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn restore_object(&self, req: S3Request<s3s::dto::RestoreObjectInput>) -> S3Result<s3s::dto::RestoreObjectOutput> {
+    async fn restore_object(
+        &self,
+        req: S3Request<s3s::dto::RestoreObjectInput>,
+    ) -> S3Result<S3Response<s3s::dto::RestoreObjectOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.restore_object();
@@ -2144,7 +2186,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2154,7 +2196,7 @@ impl S3 for Proxy {
     async fn select_object_content(
         &self,
         req: S3Request<s3s::dto::SelectObjectContentInput>,
-    ) -> S3Result<s3s::dto::SelectObjectContentOutput> {
+    ) -> S3Result<S3Response<s3s::dto::SelectObjectContentOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.select_object_content();
@@ -2175,14 +2217,14 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn upload_part(&self, req: S3Request<s3s::dto::UploadPartInput>) -> S3Result<s3s::dto::UploadPartOutput> {
+    async fn upload_part(&self, req: S3Request<s3s::dto::UploadPartInput>) -> S3Result<S3Response<s3s::dto::UploadPartOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.upload_part();
@@ -2208,14 +2250,17 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
     }
 
     #[tracing::instrument(skip(self, req))]
-    async fn upload_part_copy(&self, req: S3Request<s3s::dto::UploadPartCopyInput>) -> S3Result<s3s::dto::UploadPartCopyOutput> {
+    async fn upload_part_copy(
+        &self,
+        req: S3Request<s3s::dto::UploadPartCopyInput>,
+    ) -> S3Result<S3Response<s3s::dto::UploadPartCopyOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.upload_part_copy();
@@ -2243,7 +2288,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2253,7 +2298,7 @@ impl S3 for Proxy {
     async fn write_get_object_response(
         &self,
         req: S3Request<s3s::dto::WriteGetObjectResponseInput>,
-    ) -> S3Result<s3s::dto::WriteGetObjectResponseOutput> {
+    ) -> S3Result<S3Response<s3s::dto::WriteGetObjectResponseOutput>> {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.write_get_object_response();
@@ -2302,7 +2347,7 @@ impl S3 for Proxy {
             Ok(output) => {
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(output)
+                Ok(S3Response::new(output))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
