@@ -34,6 +34,25 @@ jobs:
           ./scripts/codegen.sh
           [[ -z $(git status -s) ]] # Fail if changed. See https://stackoverflow.com/a/9393642
 
+  cross-test:
+    name: cross-test ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain:
+          - stable
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+      - run: cargo test --all-features
+
   mint:
     name: e2e (s3s-proxy, mint)
     runs-on: ubuntu-latest
