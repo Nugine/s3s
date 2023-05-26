@@ -14,7 +14,7 @@ name = "s3s-fs"
 required-features = ["binary"]
 
 [features]
-binary = ["tokio/full", "md-5/asm", "dep:clap", "dep:tracing-subscriber", "dep:hyper"]
+binary = ["tokio/full", "dep:clap", "dep:tracing-subscriber", "dep:hyper"]
 
 [dependencies]
 async-trait = "0.1.68"
