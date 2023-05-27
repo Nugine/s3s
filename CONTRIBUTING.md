@@ -1,9 +1,11 @@
 # Development Guide
 
-Toolchain
-
-+ [Rust 1.69.0 or newer](https://rustup.rs/)
-+ [just](https://github.com/casey/just)
+|               Toolchain               | Version |
+| :-----------------------------------: | :-----: |
+|      [Rust](https://rustup.rs/)       | ^1.69.0 |
+| [just](https://github.com/casey/just) |    -    |
+|                Python                 |  ^3.10  |
+|                Docker                 |    -    |
 
 Get the source code
 
