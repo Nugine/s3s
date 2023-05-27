@@ -82,5 +82,5 @@ if __name__ == "__main__":
     # FIXME: E2E tests
     # https://github.com/Nugine/s3s/issues/4
     assert "minio-dotnet" not in counts
-    # assert counts["minio-js"]["pass"] >= 0
+    assert counts["minio-js"]["pass"] >= 219
     assert counts["versioning"]["pass"] >= 4

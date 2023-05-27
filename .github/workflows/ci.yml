@@ -66,9 +66,5 @@ jobs:
       - run: docker pull minio/mint:edge
       - run: docker pull minio/minio:latest
       - run: cargo install --path crates/s3s-proxy
-      - run: |
-          export RUST_LOG=s3s_proxy=debug,s3s_aws=debug,s3s=debug
-          ./scripts/e2e-mint.sh
-      - run: cat target/s3s-proxy.ansi
-      - run: cat target/mint.log
+      - run: ./scripts/e2e-mint.sh
       - run: ./scripts/report-mint.py /tmp/mint/log.json

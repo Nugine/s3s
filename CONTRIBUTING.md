@@ -81,7 +81,7 @@ just install-s3s-proxy
 Run the combined server and save logs
 
 ```bash
-./scripts/s3s-proxy.sh | tee target/s3s-proxy.ansi
+./scripts/s3s-proxy.sh | tee target/s3s-proxy.log
 ```
 
 Open a new terminal, then run the test suite
