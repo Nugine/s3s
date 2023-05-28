@@ -11,7 +11,6 @@ use std::collections::VecDeque;
 use std::io;
 use std::ops::Neg;
 use std::ops::Not;
-use std::path::Path;
 use std::path::PathBuf;
 
 use tokio::fs;
@@ -22,9 +21,9 @@ use tokio_util::io::ReaderStream;
 use futures::TryStreamExt;
 use md5::{Digest, Md5};
 use numeric_cast::NumericCast;
-use path_absolutize::Absolutize;
 use rust_utils::default::default;
 use tracing::debug;
+use uuid::Uuid;
 
 #[async_trait::async_trait]
 impl S3 for FileSystem {
@@ -426,12 +425,12 @@ impl S3 for FileSystem {
         req: S3Request<CreateMultipartUploadInput>,
     ) -> S3Result<S3Response<CreateMultipartUploadOutput>> {
         let input = req.input;
-        let upload_id = uuid::Uuid::new_v4().to_string();
+        let upload_id = self.create_upload_id(req.credentials.as_ref()).await?;
 
         let output = CreateMultipartUploadOutput {
             bucket: Some(input.bucket),
             key: Some(input.key),
-            upload_id: Some(upload_id),
+            upload_id: Some(upload_id.to_string()),
             ..Default::default()
         };
 
@@ -449,12 +448,12 @@ impl S3 for FileSystem {
 
         let body = body.ok_or_else(|| s3_error!(IncompleteBody))?;
 
-        if uuid::Uuid::parse_str(&upload_id).is_err() {
-            return Err(s3_error!(InvalidRequest));
+        let upload_id = Uuid::parse_str(&upload_id).map_err(|_| s3_error!(InvalidRequest))?;
+        if self.verify_upload_id(req.credentials.as_ref(), &upload_id).await?.not() {
+            return Err(s3_error!(AccessDenied));
         }
 
-        let file_path_str = format!(".upload_id-{upload_id}.part-{part_number}");
-        let file_path = try_!(Path::new(&file_path_str).absolutize_virtually(&self.root));
+        let file_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
 
         let mut md5_hash = Md5::new();
         let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
@@ -489,6 +488,13 @@ impl S3 for FileSystem {
 
         let Some(multipart_upload) = multipart_upload else { return Err(s3_error!(InvalidPart)) };
 
+        let upload_id = Uuid::parse_str(&upload_id).map_err(|_| s3_error!(InvalidRequest))?;
+        if self.verify_upload_id(req.credentials.as_ref(), &upload_id).await?.not() {
+            return Err(s3_error!(AccessDenied));
+        }
+
+        self.delete_upload_id(&upload_id).await?;
+
         let object_path = self.get_object_path(&bucket, &key)?;
         let file = try_!(fs::File::create(&object_path).await);
         let mut writer = BufWriter::new(file);
@@ -501,12 +507,7 @@ impl S3 for FileSystem {
                 return Err(s3_error!(InvalidRequest, "invalid part order"));
             }
 
-            if uuid::Uuid::parse_str(&upload_id).is_err() {
-                return Err(s3_error!(InvalidRequest));
-            }
-
-            let part_path_str = format!(".upload_id-{upload_id}.part-{part_number}");
-            let part_path = try_!(Path::new(&part_path_str).absolutize_virtually(&self.root));
+            let part_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
 
             let mut reader = try_!(fs::File::open(&part_path).await);
             let size = try_!(tokio::io::copy(&mut reader, &mut writer).await);
