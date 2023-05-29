@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-codegen-writer = "0.1.0"
+codegen-writer = "0.2.0"
 heck = "0.4.1"
 nugine-rust-utils = "0.3.1"
 numeric_cast = "0.2.1"
