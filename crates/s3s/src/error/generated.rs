@@ -435,7 +435,7 @@ pub enum S3ErrorCode {
     ///
     RestoreAlreadyInProgress,
 
-    /// Reduce your request rate.
+    /// Service is unable to handle request.
     ///
     /// HTTP Status Code: 503 Service Unavailable
     ///
