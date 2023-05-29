@@ -38,7 +38,7 @@ fn main() {
         let json_file = std::fs::read(json_path).unwrap();
         serde_json::from_slice(&json_file).unwrap()
     };
-    assert!(model.smithy == "2.0");
+    assert_eq!(model.smithy, "2.0");
 
     let ops = ops::collect_operations(&model);
     let rust_types = dto::collect_rust_types(&model, &ops);
@@ -46,7 +46,7 @@ fn main() {
     {
         let path = "crates/s3s/src/dto/generated.rs";
         let gen = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(gen, || dto::codegen(&rust_types));
+        codegen_writer::scoped(gen, || dto::codegen(&rust_types, &ops));
     }
 
     {
