@@ -1,4 +1,5 @@
 use crate::dto::RustTypes;
+use crate::ops::is_op_input;
 use crate::ops::Operations;
 use crate::rust;
 
@@ -218,15 +219,6 @@ fn aws_ty_path(name: &str, ops: &Operations, rust_types: &RustTypes) -> String {
     }
 
     f!("aws_sdk_s3::types::{aws_name}")
-}
-
-fn is_op_input(name: &str, ops: &Operations) -> bool {
-    if let Some(op) = name.strip_suffix("Input") {
-        if ops.contains_key(op) {
-            return true;
-        }
-    }
-    false
 }
 
 fn contains_deprecated_field(name: &str) -> bool {

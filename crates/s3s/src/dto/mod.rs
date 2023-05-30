@@ -1,3 +1,5 @@
+mod build_error;
+
 mod generated;
 pub use self::generated::*;
 

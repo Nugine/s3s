@@ -10,6 +10,7 @@ use std::convert::Infallible;
 use std::fmt;
 use std::str::FromStr;
 
+use rust_utils::default::default;
 pub type AbortDate = Timestamp;
 
 /// <p>Specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will
@@ -59,6 +60,13 @@ impl fmt::Debug for AbortMultipartUploadInput {
         }
         d.field("upload_id", &self.upload_id);
         d.finish_non_exhaustive()
+    }
+}
+
+impl AbortMultipartUploadInput {
+    #[must_use]
+    pub fn builder() -> builders::AbortMultipartUploadInputBuilder {
+        default()
     }
 }
 
@@ -1134,6 +1142,13 @@ impl fmt::Debug for CompleteMultipartUploadInput {
     }
 }
 
+impl CompleteMultipartUploadInput {
+    #[must_use]
+    pub fn builder() -> builders::CompleteMultipartUploadInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct CompleteMultipartUploadOutput {
     /// <p>The name of the bucket that contains the newly created object. Does not return the access point
@@ -1697,6 +1712,13 @@ impl fmt::Debug for CopyObjectInput {
     }
 }
 
+impl CopyObjectInput {
+    #[must_use]
+    pub fn builder() -> builders::CopyObjectInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct CopyObjectOutput {
     /// <p>Indicates whether the copied object uses an S3 Bucket Key for server-side encryption
@@ -1973,6 +1995,13 @@ impl fmt::Debug for CreateBucketInput {
     }
 }
 
+impl CreateBucketInput {
+    #[must_use]
+    pub fn builder() -> builders::CreateBucketInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct CreateBucketOutput {
     /// <p>A forward slash followed by the name of the bucket.</p>
@@ -2179,6 +2208,13 @@ impl fmt::Debug for CreateMultipartUploadInput {
     }
 }
 
+impl CreateMultipartUploadInput {
+    #[must_use]
+    pub fn builder() -> builders::CreateMultipartUploadInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct CreateMultipartUploadOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete
@@ -2360,6 +2396,13 @@ impl fmt::Debug for DeleteBucketAnalyticsConfigurationInput {
     }
 }
 
+impl DeleteBucketAnalyticsConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketAnalyticsConfigurationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct DeleteBucketAnalyticsConfigurationOutput {}
 
@@ -2385,6 +2428,13 @@ impl fmt::Debug for DeleteBucketCorsInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl DeleteBucketCorsInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketCorsInputBuilder {
+        default()
     }
 }
 
@@ -2417,6 +2467,13 @@ impl fmt::Debug for DeleteBucketEncryptionInput {
     }
 }
 
+impl DeleteBucketEncryptionInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketEncryptionInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct DeleteBucketEncryptionOutput {}
 
@@ -2445,6 +2502,13 @@ impl fmt::Debug for DeleteBucketInput {
     }
 }
 
+impl DeleteBucketInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketInputBuilder {
+        default()
+    }
+}
+
 pub struct DeleteBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -2458,6 +2522,13 @@ impl fmt::Debug for DeleteBucketIntelligentTieringConfigurationInput {
         d.field("bucket", &self.bucket);
         d.field("id", &self.id);
         d.finish_non_exhaustive()
+    }
+}
+
+impl DeleteBucketIntelligentTieringConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketIntelligentTieringConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -2492,6 +2563,13 @@ impl fmt::Debug for DeleteBucketInventoryConfigurationInput {
     }
 }
 
+impl DeleteBucketInventoryConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketInventoryConfigurationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct DeleteBucketInventoryConfigurationOutput {}
 
@@ -2517,6 +2595,13 @@ impl fmt::Debug for DeleteBucketLifecycleInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl DeleteBucketLifecycleInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketLifecycleInputBuilder {
+        default()
     }
 }
 
@@ -2549,6 +2634,13 @@ impl fmt::Debug for DeleteBucketMetricsConfigurationInput {
         }
         d.field("id", &self.id);
         d.finish_non_exhaustive()
+    }
+}
+
+impl DeleteBucketMetricsConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketMetricsConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -2590,6 +2682,13 @@ impl fmt::Debug for DeleteBucketOwnershipControlsInput {
     }
 }
 
+impl DeleteBucketOwnershipControlsInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketOwnershipControlsInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct DeleteBucketOwnershipControlsOutput {}
 
@@ -2615,6 +2714,13 @@ impl fmt::Debug for DeleteBucketPolicyInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl DeleteBucketPolicyInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketPolicyInputBuilder {
+        default()
     }
 }
 
@@ -2646,6 +2752,13 @@ impl fmt::Debug for DeleteBucketReplicationInput {
     }
 }
 
+impl DeleteBucketReplicationInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketReplicationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct DeleteBucketReplicationOutput {}
 
@@ -2674,6 +2787,13 @@ impl fmt::Debug for DeleteBucketTaggingInput {
     }
 }
 
+impl DeleteBucketTaggingInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketTaggingInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct DeleteBucketTaggingOutput {}
 
@@ -2699,6 +2819,13 @@ impl fmt::Debug for DeleteBucketWebsiteInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl DeleteBucketWebsiteInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteBucketWebsiteInputBuilder {
+        default()
     }
 }
 
@@ -2870,6 +2997,13 @@ impl fmt::Debug for DeleteObjectInput {
     }
 }
 
+impl DeleteObjectInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteObjectInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct DeleteObjectOutput {
     /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was
@@ -2921,6 +3055,13 @@ impl fmt::Debug for DeleteObjectTaggingInput {
             d.field("version_id", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl DeleteObjectTaggingInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteObjectTaggingInputBuilder {
+        default()
     }
 }
 
@@ -2995,6 +3136,13 @@ impl fmt::Debug for DeleteObjectsInput {
     }
 }
 
+impl DeleteObjectsInput {
+    #[must_use]
+    pub fn builder() -> builders::DeleteObjectsInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct DeleteObjectsOutput {
     /// <p>Container element for a successful delete. It identifies the object that was
@@ -3038,6 +3186,13 @@ impl fmt::Debug for DeletePublicAccessBlockInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl DeletePublicAccessBlockInput {
+    #[must_use]
+    pub fn builder() -> builders::DeletePublicAccessBlockInputBuilder {
+        default()
     }
 }
 
@@ -5479,6 +5634,13 @@ impl fmt::Debug for GetBucketAccelerateConfigurationInput {
     }
 }
 
+impl GetBucketAccelerateConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketAccelerateConfigurationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketAccelerateConfigurationOutput {
     /// <p>The accelerate configuration of the bucket.</p>
@@ -5515,6 +5677,13 @@ impl fmt::Debug for GetBucketAclInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketAclInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketAclInputBuilder {
+        default()
     }
 }
 
@@ -5560,6 +5729,13 @@ impl fmt::Debug for GetBucketAnalyticsConfigurationInput {
     }
 }
 
+impl GetBucketAnalyticsConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketAnalyticsConfigurationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketAnalyticsConfigurationOutput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
@@ -5599,6 +5775,13 @@ impl fmt::Debug for GetBucketCorsInput {
     }
 }
 
+impl GetBucketCorsInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketCorsInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketCorsOutput {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add
@@ -5635,6 +5818,13 @@ impl fmt::Debug for GetBucketEncryptionInput {
     }
 }
 
+impl GetBucketEncryptionInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketEncryptionInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketEncryptionOutput {
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
@@ -5663,6 +5853,13 @@ impl fmt::Debug for GetBucketIntelligentTieringConfigurationInput {
         d.field("bucket", &self.bucket);
         d.field("id", &self.id);
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketIntelligentTieringConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketIntelligentTieringConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -5703,6 +5900,13 @@ impl fmt::Debug for GetBucketInventoryConfigurationInput {
     }
 }
 
+impl GetBucketInventoryConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketInventoryConfigurationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketInventoryConfigurationOutput {
     /// <p>Specifies the inventory configuration.</p>
@@ -5734,6 +5938,13 @@ impl fmt::Debug for GetBucketLifecycleConfigurationInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketLifecycleConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketLifecycleConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -5776,6 +5987,13 @@ impl fmt::Debug for GetBucketLocationInput {
     }
 }
 
+impl GetBucketLocationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketLocationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketLocationOutput {
     /// <p>Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported
@@ -5809,6 +6027,13 @@ impl fmt::Debug for GetBucketLoggingInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketLoggingInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketLoggingInputBuilder {
+        default()
     }
 }
 
@@ -5849,6 +6074,13 @@ impl fmt::Debug for GetBucketMetricsConfigurationInput {
     }
 }
 
+impl GetBucketMetricsConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketMetricsConfigurationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketMetricsConfigurationOutput {
     /// <p>Specifies the metrics configuration.</p>
@@ -5885,6 +6117,13 @@ impl fmt::Debug for GetBucketNotificationConfigurationInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketNotificationConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketNotificationConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -5943,6 +6182,13 @@ impl fmt::Debug for GetBucketOwnershipControlsInput {
     }
 }
 
+impl GetBucketOwnershipControlsInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketOwnershipControlsInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketOwnershipControlsOutput {
     /// <p>The <code>OwnershipControls</code> (BucketOwnerEnforced, BucketOwnerPreferred, or
@@ -5983,6 +6229,13 @@ impl fmt::Debug for GetBucketPolicyInput {
     }
 }
 
+impl GetBucketPolicyInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketPolicyInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketPolicyOutput {
     /// <p>The bucket policy as a JSON document.</p>
@@ -6014,6 +6267,13 @@ impl fmt::Debug for GetBucketPolicyStatusInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketPolicyStatusInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketPolicyStatusInputBuilder {
+        default()
     }
 }
 
@@ -6051,6 +6311,13 @@ impl fmt::Debug for GetBucketReplicationInput {
     }
 }
 
+impl GetBucketReplicationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketReplicationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: Option<ReplicationConfiguration>,
@@ -6081,6 +6348,13 @@ impl fmt::Debug for GetBucketRequestPaymentInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketRequestPaymentInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketRequestPaymentInputBuilder {
+        default()
     }
 }
 
@@ -6118,6 +6392,13 @@ impl fmt::Debug for GetBucketTaggingInput {
     }
 }
 
+impl GetBucketTaggingInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketTaggingInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetBucketTaggingOutput {
     /// <p>Contains the tag set.</p>
@@ -6147,6 +6428,13 @@ impl fmt::Debug for GetBucketVersioningInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketVersioningInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketVersioningInputBuilder {
+        default()
     }
 }
 
@@ -6188,6 +6476,13 @@ impl fmt::Debug for GetBucketWebsiteInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetBucketWebsiteInput {
+    #[must_use]
+    pub fn builder() -> builders::GetBucketWebsiteInputBuilder {
+        default()
     }
 }
 
@@ -6252,6 +6547,13 @@ impl fmt::Debug for GetObjectAclInput {
             d.field("version_id", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetObjectAclInput {
+    #[must_use]
+    pub fn builder() -> builders::GetObjectAclInputBuilder {
+        default()
     }
 }
 
@@ -6345,6 +6647,13 @@ impl fmt::Debug for GetObjectAttributesInput {
             d.field("version_id", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetObjectAttributesInput {
+    #[must_use]
+    pub fn builder() -> builders::GetObjectAttributesInputBuilder {
+        default()
     }
 }
 
@@ -6576,6 +6885,13 @@ impl fmt::Debug for GetObjectInput {
     }
 }
 
+impl GetObjectInput {
+    #[must_use]
+    pub fn builder() -> builders::GetObjectInputBuilder {
+        default()
+    }
+}
+
 pub struct GetObjectLegalHoldInput {
     /// <p>The bucket name containing the object whose legal hold status you want to retrieve. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -6604,6 +6920,13 @@ impl fmt::Debug for GetObjectLegalHoldInput {
             d.field("version_id", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetObjectLegalHoldInput {
+    #[must_use]
+    pub fn builder() -> builders::GetObjectLegalHoldInputBuilder {
+        default()
     }
 }
 
@@ -6639,6 +6962,13 @@ impl fmt::Debug for GetObjectLockConfigurationInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetObjectLockConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::GetObjectLockConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -6905,6 +7235,13 @@ impl fmt::Debug for GetObjectRetentionInput {
     }
 }
 
+impl GetObjectRetentionInput {
+    #[must_use]
+    pub fn builder() -> builders::GetObjectRetentionInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetObjectRetentionOutput {
     /// <p>The container element for an object's retention settings.</p>
@@ -6954,6 +7291,13 @@ impl fmt::Debug for GetObjectTaggingInput {
     }
 }
 
+impl GetObjectTaggingInput {
+    #[must_use]
+    pub fn builder() -> builders::GetObjectTaggingInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetObjectTaggingOutput {
     /// <p>Contains the tag set.</p>
@@ -6998,6 +7342,13 @@ impl fmt::Debug for GetObjectTorrentInput {
     }
 }
 
+impl GetObjectTorrentInput {
+    #[must_use]
+    pub fn builder() -> builders::GetObjectTorrentInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct GetObjectTorrentOutput {
     /// <p>A Bencoded dictionary as defined by the BitTorrent specification</p>
@@ -7034,6 +7385,13 @@ impl fmt::Debug for GetPublicAccessBlockInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl GetPublicAccessBlockInput {
+    #[must_use]
+    pub fn builder() -> builders::GetPublicAccessBlockInputBuilder {
+        default()
     }
 }
 
@@ -7191,6 +7549,13 @@ impl fmt::Debug for HeadBucketInput {
     }
 }
 
+impl HeadBucketInput {
+    #[must_use]
+    pub fn builder() -> builders::HeadBucketInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct HeadBucketOutput {}
 
@@ -7298,6 +7663,13 @@ impl fmt::Debug for HeadObjectInput {
             d.field("version_id", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl HeadObjectInput {
+    #[must_use]
+    pub fn builder() -> builders::HeadObjectInputBuilder {
+        default()
     }
 }
 
@@ -8483,6 +8855,13 @@ impl fmt::Debug for ListBucketAnalyticsConfigurationsInput {
     }
 }
 
+impl ListBucketAnalyticsConfigurationsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListBucketAnalyticsConfigurationsInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     /// <p>The list of analytics configurations for a bucket.</p>
@@ -8535,6 +8914,13 @@ impl fmt::Debug for ListBucketIntelligentTieringConfigurationsInput {
             d.field("continuation_token", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl ListBucketIntelligentTieringConfigurationsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListBucketIntelligentTieringConfigurationsInputBuilder {
+        default()
     }
 }
 
@@ -8594,6 +8980,13 @@ impl fmt::Debug for ListBucketInventoryConfigurationsInput {
             d.field("expected_bucket_owner", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl ListBucketInventoryConfigurationsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListBucketInventoryConfigurationsInputBuilder {
+        default()
     }
 }
 
@@ -8657,6 +9050,13 @@ impl fmt::Debug for ListBucketMetricsConfigurationsInput {
     }
 }
 
+impl ListBucketMetricsConfigurationsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListBucketMetricsConfigurationsInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct ListBucketMetricsConfigurationsOutput {
     /// <p>The marker that is used as a starting point for this metrics configuration list
@@ -8699,6 +9099,13 @@ impl fmt::Debug for ListBucketsInput {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("ListBucketsInput");
         d.finish_non_exhaustive()
+    }
+}
+
+impl ListBucketsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListBucketsInputBuilder {
+        default()
     }
 }
 
@@ -8790,6 +9197,13 @@ impl fmt::Debug for ListMultipartUploadsInput {
             d.field("upload_id_marker", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl ListMultipartUploadsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListMultipartUploadsInputBuilder {
+        default()
     }
 }
 
@@ -8933,6 +9347,13 @@ impl fmt::Debug for ListObjectVersionsInput {
             d.field("version_id_marker", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl ListObjectVersionsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListObjectVersionsInputBuilder {
+        default()
     }
 }
 
@@ -9080,6 +9501,13 @@ impl fmt::Debug for ListObjectsInput {
     }
 }
 
+impl ListObjectsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListObjectsInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct ListObjectsOutput {
     /// <p>All of the keys (up to 1,000) rolled up in a common prefix count as a single return when
@@ -9222,6 +9650,13 @@ impl fmt::Debug for ListObjectsV2Input {
             d.field("start_after", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl ListObjectsV2Input {
+    #[must_use]
+    pub fn builder() -> builders::ListObjectsV2InputBuilder {
+        default()
     }
 }
 
@@ -9387,6 +9822,13 @@ impl fmt::Debug for ListPartsInput {
         }
         d.field("upload_id", &self.upload_id);
         d.finish_non_exhaustive()
+    }
+}
+
+impl ListPartsInput {
+    #[must_use]
+    pub fn builder() -> builders::ListPartsInputBuilder {
+        default()
     }
 }
 
@@ -11269,6 +11711,13 @@ impl fmt::Debug for PutBucketAccelerateConfigurationInput {
     }
 }
 
+impl PutBucketAccelerateConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketAccelerateConfigurationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketAccelerateConfigurationOutput {}
 
@@ -11356,6 +11805,13 @@ impl fmt::Debug for PutBucketAclInput {
     }
 }
 
+impl PutBucketAclInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketAclInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketAclOutput {}
 
@@ -11387,6 +11843,13 @@ impl fmt::Debug for PutBucketAnalyticsConfigurationInput {
         }
         d.field("id", &self.id);
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutBucketAnalyticsConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketAnalyticsConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -11445,6 +11908,13 @@ impl fmt::Debug for PutBucketCorsInput {
     }
 }
 
+impl PutBucketCorsInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketCorsInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketCorsOutput {}
 
@@ -11498,6 +11968,13 @@ impl fmt::Debug for PutBucketEncryptionInput {
     }
 }
 
+impl PutBucketEncryptionInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketEncryptionInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketEncryptionOutput {}
 
@@ -11524,6 +12001,13 @@ impl fmt::Debug for PutBucketIntelligentTieringConfigurationInput {
         d.field("id", &self.id);
         d.field("intelligent_tiering_configuration", &self.intelligent_tiering_configuration);
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutBucketIntelligentTieringConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketIntelligentTieringConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -11558,6 +12042,13 @@ impl fmt::Debug for PutBucketInventoryConfigurationInput {
         d.field("id", &self.id);
         d.field("inventory_configuration", &self.inventory_configuration);
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutBucketInventoryConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketInventoryConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -11602,6 +12093,13 @@ impl fmt::Debug for PutBucketLifecycleConfigurationInput {
             d.field("lifecycle_configuration", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutBucketLifecycleConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketLifecycleConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -11653,6 +12151,13 @@ impl fmt::Debug for PutBucketLoggingInput {
     }
 }
 
+impl PutBucketLoggingInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketLoggingInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketLoggingOutput {}
 
@@ -11685,6 +12190,13 @@ impl fmt::Debug for PutBucketMetricsConfigurationInput {
         d.field("id", &self.id);
         d.field("metrics_configuration", &self.metrics_configuration);
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutBucketMetricsConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketMetricsConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -11724,6 +12236,13 @@ impl fmt::Debug for PutBucketNotificationConfigurationInput {
     }
 }
 
+impl PutBucketNotificationConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketNotificationConfigurationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketNotificationConfigurationOutput {}
 
@@ -11759,6 +12278,13 @@ impl fmt::Debug for PutBucketOwnershipControlsInput {
         }
         d.field("ownership_controls", &self.ownership_controls);
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutBucketOwnershipControlsInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketOwnershipControlsInputBuilder {
+        default()
     }
 }
 
@@ -11816,6 +12342,13 @@ impl fmt::Debug for PutBucketPolicyInput {
     }
 }
 
+impl PutBucketPolicyInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketPolicyInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketPolicyOutput {}
 
@@ -11870,6 +12403,13 @@ impl fmt::Debug for PutBucketReplicationInput {
     }
 }
 
+impl PutBucketReplicationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketReplicationInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketReplicationOutput {}
 
@@ -11920,6 +12460,13 @@ impl fmt::Debug for PutBucketRequestPaymentInput {
     }
 }
 
+impl PutBucketRequestPaymentInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketRequestPaymentInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketRequestPaymentOutput {}
 
@@ -11967,6 +12514,13 @@ impl fmt::Debug for PutBucketTaggingInput {
         }
         d.field("tagging", &self.tagging);
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutBucketTaggingInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketTaggingInputBuilder {
+        default()
     }
 }
 
@@ -12027,6 +12581,13 @@ impl fmt::Debug for PutBucketVersioningInput {
     }
 }
 
+impl PutBucketVersioningInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketVersioningInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutBucketVersioningOutput {}
 
@@ -12074,6 +12635,13 @@ impl fmt::Debug for PutBucketWebsiteInput {
         }
         d.field("website_configuration", &self.website_configuration);
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutBucketWebsiteInput {
+    #[must_use]
+    pub fn builder() -> builders::PutBucketWebsiteInputBuilder {
+        default()
     }
 }
 
@@ -12182,6 +12750,13 @@ impl fmt::Debug for PutObjectAclInput {
             d.field("version_id", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutObjectAclInput {
+    #[must_use]
+    pub fn builder() -> builders::PutObjectAclInputBuilder {
+        default()
     }
 }
 
@@ -12470,6 +13045,13 @@ impl fmt::Debug for PutObjectInput {
     }
 }
 
+impl PutObjectInput {
+    #[must_use]
+    pub fn builder() -> builders::PutObjectInputBuilder {
+        default()
+    }
+}
+
 pub struct PutObjectLegalHoldInput {
     /// <p>The bucket name containing the object that you want to place a legal hold on. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -12521,6 +13103,13 @@ impl fmt::Debug for PutObjectLegalHoldInput {
             d.field("version_id", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutObjectLegalHoldInput {
+    #[must_use]
+    pub fn builder() -> builders::PutObjectLegalHoldInputBuilder {
+        default()
     }
 }
 
@@ -12585,6 +13174,13 @@ impl fmt::Debug for PutObjectLockConfigurationInput {
             d.field("token", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutObjectLockConfigurationInput {
+    #[must_use]
+    pub fn builder() -> builders::PutObjectLockConfigurationInputBuilder {
+        default()
     }
 }
 
@@ -12768,6 +13364,13 @@ impl fmt::Debug for PutObjectRetentionInput {
     }
 }
 
+impl PutObjectRetentionInput {
+    #[must_use]
+    pub fn builder() -> builders::PutObjectRetentionInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutObjectRetentionOutput {
     pub request_charged: Option<RequestCharged>,
@@ -12836,6 +13439,13 @@ impl fmt::Debug for PutObjectTaggingInput {
     }
 }
 
+impl PutObjectTaggingInput {
+    #[must_use]
+    pub fn builder() -> builders::PutObjectTaggingInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct PutObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was added to.</p>
@@ -12890,6 +13500,13 @@ impl fmt::Debug for PutPublicAccessBlockInput {
         }
         d.field("public_access_block_configuration", &self.public_access_block_configuration);
         d.finish_non_exhaustive()
+    }
+}
+
+impl PutPublicAccessBlockInput {
+    #[must_use]
+    pub fn builder() -> builders::PutPublicAccessBlockInputBuilder {
+        default()
     }
 }
 
@@ -13630,6 +14247,13 @@ impl fmt::Debug for RestoreObjectInput {
     }
 }
 
+impl RestoreObjectInput {
+    #[must_use]
+    pub fn builder() -> builders::RestoreObjectInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct RestoreObjectOutput {
     pub request_charged: Option<RequestCharged>,
@@ -13962,6 +14586,13 @@ impl fmt::Debug for SelectObjectContentInput {
         }
         d.field("request", &self.request);
         d.finish_non_exhaustive()
+    }
+}
+
+impl SelectObjectContentInput {
+    #[must_use]
+    pub fn builder() -> builders::SelectObjectContentInputBuilder {
+        default()
     }
 }
 
@@ -14927,6 +15558,13 @@ impl fmt::Debug for UploadPartCopyInput {
     }
 }
 
+impl UploadPartCopyInput {
+    #[must_use]
+    pub fn builder() -> builders::UploadPartCopyInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct UploadPartCopyOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
@@ -15099,6 +15737,13 @@ impl fmt::Debug for UploadPartInput {
         }
         d.field("upload_id", &self.upload_id);
         d.finish_non_exhaustive()
+    }
+}
+
+impl UploadPartInput {
+    #[must_use]
+    pub fn builder() -> builders::UploadPartInputBuilder {
+        default()
     }
 }
 
@@ -15594,6 +16239,13 @@ impl fmt::Debug for WriteGetObjectResponseInput {
     }
 }
 
+impl WriteGetObjectResponseInput {
+    #[must_use]
+    pub fn builder() -> builders::WriteGetObjectResponseInputBuilder {
+        default()
+    }
+}
+
 #[derive(Default)]
 pub struct WriteGetObjectResponseOutput {}
 
@@ -15707,5 +16359,5785 @@ mod tests {
         require_default::<UploadPartOutput>();
         require_default::<UploadPartCopyOutput>();
         require_default::<WriteGetObjectResponseOutput>();
+    }
+}
+pub mod builders {
+    #![allow(clippy::missing_errors_doc)]
+
+    pub use super::build_error::BuildError;
+    use super::*;
+
+    /// A builder for [`AbortMultipartUploadInput`]
+    #[derive(Default)]
+    pub struct AbortMultipartUploadInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        upload_id: Option<MultipartUploadId>,
+    }
+
+    impl AbortMultipartUploadInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+            self.upload_id = Some(field);
+        }
+
+        pub fn build(self) -> Result<AbortMultipartUploadInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let upload_id = self.upload_id.ok_or_else(|| BuildError::missing_field("upload_id"))?;
+            Ok(AbortMultipartUploadInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                request_payer,
+                upload_id,
+            })
+        }
+    }
+
+    /// A builder for [`CompleteMultipartUploadInput`]
+    #[derive(Default)]
+    pub struct CompleteMultipartUploadInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_crc32: Option<ChecksumCRC32>,
+
+        checksum_crc32c: Option<ChecksumCRC32C>,
+
+        checksum_sha1: Option<ChecksumSHA1>,
+
+        checksum_sha256: Option<ChecksumSHA256>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        multipart_upload: Option<CompletedMultipartUpload>,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        upload_id: Option<MultipartUploadId>,
+    }
+
+    impl CompleteMultipartUploadInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) {
+            self.checksum_crc32 = field;
+        }
+
+        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) {
+            self.checksum_crc32c = field;
+        }
+
+        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) {
+            self.checksum_sha1 = field;
+        }
+
+        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) {
+            self.checksum_sha256 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_multipart_upload(&mut self, field: Option<CompletedMultipartUpload>) {
+            self.multipart_upload = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+            self.upload_id = Some(field);
+        }
+
+        pub fn build(self) -> Result<CompleteMultipartUploadInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_crc32 = self.checksum_crc32;
+            let checksum_crc32c = self.checksum_crc32c;
+            let checksum_sha1 = self.checksum_sha1;
+            let checksum_sha256 = self.checksum_sha256;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let multipart_upload = self.multipart_upload;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let upload_id = self.upload_id.ok_or_else(|| BuildError::missing_field("upload_id"))?;
+            Ok(CompleteMultipartUploadInput {
+                bucket,
+                checksum_crc32,
+                checksum_crc32c,
+                checksum_sha1,
+                checksum_sha256,
+                expected_bucket_owner,
+                key,
+                multipart_upload,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                upload_id,
+            })
+        }
+    }
+
+    /// A builder for [`CopyObjectInput`]
+    #[derive(Default)]
+    pub struct CopyObjectInputBuilder {
+        acl: Option<ObjectCannedACL>,
+
+        bucket: Option<BucketName>,
+
+        bucket_key_enabled: Option<BucketKeyEnabled>,
+
+        cache_control: Option<CacheControl>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_disposition: Option<ContentDisposition>,
+
+        content_encoding: Option<ContentEncoding>,
+
+        content_language: Option<ContentLanguage>,
+
+        content_type: Option<ContentType>,
+
+        copy_source: Option<CopySource>,
+
+        copy_source_if_match: Option<CopySourceIfMatch>,
+
+        copy_source_if_modified_since: Option<CopySourceIfModifiedSince>,
+
+        copy_source_if_none_match: Option<CopySourceIfNoneMatch>,
+
+        copy_source_if_unmodified_since: Option<CopySourceIfUnmodifiedSince>,
+
+        copy_source_sse_customer_algorithm: Option<CopySourceSSECustomerAlgorithm>,
+
+        copy_source_sse_customer_key: Option<CopySourceSSECustomerKey>,
+
+        copy_source_sse_customer_key_md5: Option<CopySourceSSECustomerKeyMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        expected_source_bucket_owner: Option<AccountId>,
+
+        expires: Option<Expires>,
+
+        grant_full_control: Option<GrantFullControl>,
+
+        grant_read: Option<GrantRead>,
+
+        grant_read_acp: Option<GrantReadACP>,
+
+        grant_write_acp: Option<GrantWriteACP>,
+
+        key: Option<ObjectKey>,
+
+        metadata: Option<Metadata>,
+
+        metadata_directive: Option<MetadataDirective>,
+
+        object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
+
+        object_lock_mode: Option<ObjectLockMode>,
+
+        object_lock_retain_until_date: Option<ObjectLockRetainUntilDate>,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
+
+        ssekms_key_id: Option<SSEKMSKeyId>,
+
+        server_side_encryption: Option<ServerSideEncryption>,
+
+        storage_class: Option<StorageClass>,
+
+        tagging: Option<TaggingHeader>,
+
+        tagging_directive: Option<TaggingDirective>,
+
+        website_redirect_location: Option<WebsiteRedirectLocation>,
+    }
+
+    impl CopyObjectInputBuilder {
+        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) {
+            self.acl = field;
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) {
+            self.bucket_key_enabled = field;
+        }
+
+        pub fn set_cache_control(&mut self, field: Option<CacheControl>) {
+            self.cache_control = field;
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) {
+            self.content_disposition = field;
+        }
+
+        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) {
+            self.content_encoding = field;
+        }
+
+        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) {
+            self.content_language = field;
+        }
+
+        pub fn set_content_type(&mut self, field: Option<ContentType>) {
+            self.content_type = field;
+        }
+
+        pub fn set_copy_source(&mut self, field: CopySource) {
+            self.copy_source = Some(field);
+        }
+
+        pub fn set_copy_source_if_match(&mut self, field: Option<CopySourceIfMatch>) {
+            self.copy_source_if_match = field;
+        }
+
+        pub fn set_copy_source_if_modified_since(&mut self, field: Option<CopySourceIfModifiedSince>) {
+            self.copy_source_if_modified_since = field;
+        }
+
+        pub fn set_copy_source_if_none_match(&mut self, field: Option<CopySourceIfNoneMatch>) {
+            self.copy_source_if_none_match = field;
+        }
+
+        pub fn set_copy_source_if_unmodified_since(&mut self, field: Option<CopySourceIfUnmodifiedSince>) {
+            self.copy_source_if_unmodified_since = field;
+        }
+
+        pub fn set_copy_source_sse_customer_algorithm(&mut self, field: Option<CopySourceSSECustomerAlgorithm>) {
+            self.copy_source_sse_customer_algorithm = field;
+        }
+
+        pub fn set_copy_source_sse_customer_key(&mut self, field: Option<CopySourceSSECustomerKey>) {
+            self.copy_source_sse_customer_key = field;
+        }
+
+        pub fn set_copy_source_sse_customer_key_md5(&mut self, field: Option<CopySourceSSECustomerKeyMD5>) {
+            self.copy_source_sse_customer_key_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_expected_source_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_source_bucket_owner = field;
+        }
+
+        pub fn set_expires(&mut self, field: Option<Expires>) {
+            self.expires = field;
+        }
+
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+            self.grant_full_control = field;
+        }
+
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+            self.grant_read = field;
+        }
+
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+            self.grant_read_acp = field;
+        }
+
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+            self.grant_write_acp = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_metadata(&mut self, field: Option<Metadata>) {
+            self.metadata = field;
+        }
+
+        pub fn set_metadata_directive(&mut self, field: Option<MetadataDirective>) {
+            self.metadata_directive = field;
+        }
+
+        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) {
+            self.object_lock_legal_hold_status = field;
+        }
+
+        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) {
+            self.object_lock_mode = field;
+        }
+
+        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) {
+            self.object_lock_retain_until_date = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) {
+            self.ssekms_encryption_context = field;
+        }
+
+        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) {
+            self.ssekms_key_id = field;
+        }
+
+        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) {
+            self.server_side_encryption = field;
+        }
+
+        pub fn set_storage_class(&mut self, field: Option<StorageClass>) {
+            self.storage_class = field;
+        }
+
+        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) {
+            self.tagging = field;
+        }
+
+        pub fn set_tagging_directive(&mut self, field: Option<TaggingDirective>) {
+            self.tagging_directive = field;
+        }
+
+        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) {
+            self.website_redirect_location = field;
+        }
+
+        pub fn build(self) -> Result<CopyObjectInput, BuildError> {
+            let acl = self.acl;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let bucket_key_enabled = self.bucket_key_enabled;
+            let cache_control = self.cache_control;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_disposition = self.content_disposition;
+            let content_encoding = self.content_encoding;
+            let content_language = self.content_language;
+            let content_type = self.content_type;
+            let copy_source = self.copy_source.ok_or_else(|| BuildError::missing_field("copy_source"))?;
+            let copy_source_if_match = self.copy_source_if_match;
+            let copy_source_if_modified_since = self.copy_source_if_modified_since;
+            let copy_source_if_none_match = self.copy_source_if_none_match;
+            let copy_source_if_unmodified_since = self.copy_source_if_unmodified_since;
+            let copy_source_sse_customer_algorithm = self.copy_source_sse_customer_algorithm;
+            let copy_source_sse_customer_key = self.copy_source_sse_customer_key;
+            let copy_source_sse_customer_key_md5 = self.copy_source_sse_customer_key_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let expected_source_bucket_owner = self.expected_source_bucket_owner;
+            let expires = self.expires;
+            let grant_full_control = self.grant_full_control;
+            let grant_read = self.grant_read;
+            let grant_read_acp = self.grant_read_acp;
+            let grant_write_acp = self.grant_write_acp;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let metadata = self.metadata;
+            let metadata_directive = self.metadata_directive;
+            let object_lock_legal_hold_status = self.object_lock_legal_hold_status;
+            let object_lock_mode = self.object_lock_mode;
+            let object_lock_retain_until_date = self.object_lock_retain_until_date;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let ssekms_encryption_context = self.ssekms_encryption_context;
+            let ssekms_key_id = self.ssekms_key_id;
+            let server_side_encryption = self.server_side_encryption;
+            let storage_class = self.storage_class;
+            let tagging = self.tagging;
+            let tagging_directive = self.tagging_directive;
+            let website_redirect_location = self.website_redirect_location;
+            Ok(CopyObjectInput {
+                acl,
+                bucket,
+                bucket_key_enabled,
+                cache_control,
+                checksum_algorithm,
+                content_disposition,
+                content_encoding,
+                content_language,
+                content_type,
+                copy_source,
+                copy_source_if_match,
+                copy_source_if_modified_since,
+                copy_source_if_none_match,
+                copy_source_if_unmodified_since,
+                copy_source_sse_customer_algorithm,
+                copy_source_sse_customer_key,
+                copy_source_sse_customer_key_md5,
+                expected_bucket_owner,
+                expected_source_bucket_owner,
+                expires,
+                grant_full_control,
+                grant_read,
+                grant_read_acp,
+                grant_write_acp,
+                key,
+                metadata,
+                metadata_directive,
+                object_lock_legal_hold_status,
+                object_lock_mode,
+                object_lock_retain_until_date,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                ssekms_encryption_context,
+                ssekms_key_id,
+                server_side_encryption,
+                storage_class,
+                tagging,
+                tagging_directive,
+                website_redirect_location,
+            })
+        }
+    }
+
+    /// A builder for [`CreateBucketInput`]
+    #[derive(Default)]
+    pub struct CreateBucketInputBuilder {
+        acl: Option<BucketCannedACL>,
+
+        bucket: Option<BucketName>,
+
+        create_bucket_configuration: Option<CreateBucketConfiguration>,
+
+        grant_full_control: Option<GrantFullControl>,
+
+        grant_read: Option<GrantRead>,
+
+        grant_read_acp: Option<GrantReadACP>,
+
+        grant_write: Option<GrantWrite>,
+
+        grant_write_acp: Option<GrantWriteACP>,
+
+        object_lock_enabled_for_bucket: Option<ObjectLockEnabledForBucket>,
+
+        object_ownership: Option<ObjectOwnership>,
+    }
+
+    impl CreateBucketInputBuilder {
+        pub fn set_acl(&mut self, field: Option<BucketCannedACL>) {
+            self.acl = field;
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_create_bucket_configuration(&mut self, field: Option<CreateBucketConfiguration>) {
+            self.create_bucket_configuration = field;
+        }
+
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+            self.grant_full_control = field;
+        }
+
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+            self.grant_read = field;
+        }
+
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+            self.grant_read_acp = field;
+        }
+
+        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) {
+            self.grant_write = field;
+        }
+
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+            self.grant_write_acp = field;
+        }
+
+        pub fn set_object_lock_enabled_for_bucket(&mut self, field: Option<ObjectLockEnabledForBucket>) {
+            self.object_lock_enabled_for_bucket = field;
+        }
+
+        pub fn set_object_ownership(&mut self, field: Option<ObjectOwnership>) {
+            self.object_ownership = field;
+        }
+
+        pub fn build(self) -> Result<CreateBucketInput, BuildError> {
+            let acl = self.acl;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let create_bucket_configuration = self.create_bucket_configuration;
+            let grant_full_control = self.grant_full_control;
+            let grant_read = self.grant_read;
+            let grant_read_acp = self.grant_read_acp;
+            let grant_write = self.grant_write;
+            let grant_write_acp = self.grant_write_acp;
+            let object_lock_enabled_for_bucket = self.object_lock_enabled_for_bucket;
+            let object_ownership = self.object_ownership;
+            Ok(CreateBucketInput {
+                acl,
+                bucket,
+                create_bucket_configuration,
+                grant_full_control,
+                grant_read,
+                grant_read_acp,
+                grant_write,
+                grant_write_acp,
+                object_lock_enabled_for_bucket,
+                object_ownership,
+            })
+        }
+    }
+
+    /// A builder for [`CreateMultipartUploadInput`]
+    #[derive(Default)]
+    pub struct CreateMultipartUploadInputBuilder {
+        acl: Option<ObjectCannedACL>,
+
+        bucket: Option<BucketName>,
+
+        bucket_key_enabled: Option<BucketKeyEnabled>,
+
+        cache_control: Option<CacheControl>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_disposition: Option<ContentDisposition>,
+
+        content_encoding: Option<ContentEncoding>,
+
+        content_language: Option<ContentLanguage>,
+
+        content_type: Option<ContentType>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        expires: Option<Expires>,
+
+        grant_full_control: Option<GrantFullControl>,
+
+        grant_read: Option<GrantRead>,
+
+        grant_read_acp: Option<GrantReadACP>,
+
+        grant_write_acp: Option<GrantWriteACP>,
+
+        key: Option<ObjectKey>,
+
+        metadata: Option<Metadata>,
+
+        object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
+
+        object_lock_mode: Option<ObjectLockMode>,
+
+        object_lock_retain_until_date: Option<ObjectLockRetainUntilDate>,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
+
+        ssekms_key_id: Option<SSEKMSKeyId>,
+
+        server_side_encryption: Option<ServerSideEncryption>,
+
+        storage_class: Option<StorageClass>,
+
+        tagging: Option<TaggingHeader>,
+
+        website_redirect_location: Option<WebsiteRedirectLocation>,
+    }
+
+    impl CreateMultipartUploadInputBuilder {
+        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) {
+            self.acl = field;
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) {
+            self.bucket_key_enabled = field;
+        }
+
+        pub fn set_cache_control(&mut self, field: Option<CacheControl>) {
+            self.cache_control = field;
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) {
+            self.content_disposition = field;
+        }
+
+        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) {
+            self.content_encoding = field;
+        }
+
+        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) {
+            self.content_language = field;
+        }
+
+        pub fn set_content_type(&mut self, field: Option<ContentType>) {
+            self.content_type = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_expires(&mut self, field: Option<Expires>) {
+            self.expires = field;
+        }
+
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+            self.grant_full_control = field;
+        }
+
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+            self.grant_read = field;
+        }
+
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+            self.grant_read_acp = field;
+        }
+
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+            self.grant_write_acp = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_metadata(&mut self, field: Option<Metadata>) {
+            self.metadata = field;
+        }
+
+        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) {
+            self.object_lock_legal_hold_status = field;
+        }
+
+        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) {
+            self.object_lock_mode = field;
+        }
+
+        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) {
+            self.object_lock_retain_until_date = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) {
+            self.ssekms_encryption_context = field;
+        }
+
+        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) {
+            self.ssekms_key_id = field;
+        }
+
+        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) {
+            self.server_side_encryption = field;
+        }
+
+        pub fn set_storage_class(&mut self, field: Option<StorageClass>) {
+            self.storage_class = field;
+        }
+
+        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) {
+            self.tagging = field;
+        }
+
+        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) {
+            self.website_redirect_location = field;
+        }
+
+        pub fn build(self) -> Result<CreateMultipartUploadInput, BuildError> {
+            let acl = self.acl;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let bucket_key_enabled = self.bucket_key_enabled;
+            let cache_control = self.cache_control;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_disposition = self.content_disposition;
+            let content_encoding = self.content_encoding;
+            let content_language = self.content_language;
+            let content_type = self.content_type;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let expires = self.expires;
+            let grant_full_control = self.grant_full_control;
+            let grant_read = self.grant_read;
+            let grant_read_acp = self.grant_read_acp;
+            let grant_write_acp = self.grant_write_acp;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let metadata = self.metadata;
+            let object_lock_legal_hold_status = self.object_lock_legal_hold_status;
+            let object_lock_mode = self.object_lock_mode;
+            let object_lock_retain_until_date = self.object_lock_retain_until_date;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let ssekms_encryption_context = self.ssekms_encryption_context;
+            let ssekms_key_id = self.ssekms_key_id;
+            let server_side_encryption = self.server_side_encryption;
+            let storage_class = self.storage_class;
+            let tagging = self.tagging;
+            let website_redirect_location = self.website_redirect_location;
+            Ok(CreateMultipartUploadInput {
+                acl,
+                bucket,
+                bucket_key_enabled,
+                cache_control,
+                checksum_algorithm,
+                content_disposition,
+                content_encoding,
+                content_language,
+                content_type,
+                expected_bucket_owner,
+                expires,
+                grant_full_control,
+                grant_read,
+                grant_read_acp,
+                grant_write_acp,
+                key,
+                metadata,
+                object_lock_legal_hold_status,
+                object_lock_mode,
+                object_lock_retain_until_date,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                ssekms_encryption_context,
+                ssekms_key_id,
+                server_side_encryption,
+                storage_class,
+                tagging,
+                website_redirect_location,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketAnalyticsConfigurationInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketAnalyticsConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<AnalyticsId>,
+    }
+
+    impl DeleteBucketAnalyticsConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: AnalyticsId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<DeleteBucketAnalyticsConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(DeleteBucketAnalyticsConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                id,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketCorsInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketCorsInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketCorsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketCorsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketCorsInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketEncryptionInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketEncryptionInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketEncryptionInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketEncryptionInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketEncryptionInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketIntelligentTieringConfigurationInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketIntelligentTieringConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        id: Option<IntelligentTieringId>,
+    }
+
+    impl DeleteBucketIntelligentTieringConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_id(&mut self, field: IntelligentTieringId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<DeleteBucketIntelligentTieringConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(DeleteBucketIntelligentTieringConfigurationInput { bucket, id })
+        }
+    }
+
+    /// A builder for [`DeleteBucketInventoryConfigurationInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketInventoryConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<InventoryId>,
+    }
+
+    impl DeleteBucketInventoryConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: InventoryId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<DeleteBucketInventoryConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(DeleteBucketInventoryConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                id,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketLifecycleInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketLifecycleInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketLifecycleInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketLifecycleInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketLifecycleInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketMetricsConfigurationInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketMetricsConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<MetricsId>,
+    }
+
+    impl DeleteBucketMetricsConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: MetricsId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<DeleteBucketMetricsConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(DeleteBucketMetricsConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                id,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketOwnershipControlsInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketOwnershipControlsInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketOwnershipControlsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketOwnershipControlsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketOwnershipControlsInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketPolicyInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketPolicyInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketPolicyInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketPolicyInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketPolicyInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketReplicationInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketReplicationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketReplicationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketReplicationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketReplicationInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketTaggingInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketTaggingInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketTaggingInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketTaggingInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketTaggingInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteBucketWebsiteInput`]
+    #[derive(Default)]
+    pub struct DeleteBucketWebsiteInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeleteBucketWebsiteInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeleteBucketWebsiteInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeleteBucketWebsiteInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteObjectInput`]
+    #[derive(Default)]
+    pub struct DeleteObjectInputBuilder {
+        bucket: Option<BucketName>,
+
+        bypass_governance_retention: Option<BypassGovernanceRetention>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        mfa: Option<MFA>,
+
+        request_payer: Option<RequestPayer>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl DeleteObjectInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) {
+            self.bypass_governance_retention = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_mfa(&mut self, field: Option<MFA>) {
+            self.mfa = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<DeleteObjectInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let bypass_governance_retention = self.bypass_governance_retention;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let mfa = self.mfa;
+            let request_payer = self.request_payer;
+            let version_id = self.version_id;
+            Ok(DeleteObjectInput {
+                bucket,
+                bypass_governance_retention,
+                expected_bucket_owner,
+                key,
+                mfa,
+                request_payer,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteObjectTaggingInput`]
+    #[derive(Default)]
+    pub struct DeleteObjectTaggingInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl DeleteObjectTaggingInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<DeleteObjectTaggingInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let version_id = self.version_id;
+            Ok(DeleteObjectTaggingInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`DeleteObjectsInput`]
+    #[derive(Default)]
+    pub struct DeleteObjectsInputBuilder {
+        bucket: Option<BucketName>,
+
+        bypass_governance_retention: Option<BypassGovernanceRetention>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        delete: Option<Delete>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        mfa: Option<MFA>,
+
+        request_payer: Option<RequestPayer>,
+    }
+
+    impl DeleteObjectsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) {
+            self.bypass_governance_retention = field;
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_delete(&mut self, field: Delete) {
+            self.delete = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_mfa(&mut self, field: Option<MFA>) {
+            self.mfa = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn build(self) -> Result<DeleteObjectsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let bypass_governance_retention = self.bypass_governance_retention;
+            let checksum_algorithm = self.checksum_algorithm;
+            let delete = self.delete.ok_or_else(|| BuildError::missing_field("delete"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let mfa = self.mfa;
+            let request_payer = self.request_payer;
+            Ok(DeleteObjectsInput {
+                bucket,
+                bypass_governance_retention,
+                checksum_algorithm,
+                delete,
+                expected_bucket_owner,
+                mfa,
+                request_payer,
+            })
+        }
+    }
+
+    /// A builder for [`DeletePublicAccessBlockInput`]
+    #[derive(Default)]
+    pub struct DeletePublicAccessBlockInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl DeletePublicAccessBlockInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<DeletePublicAccessBlockInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(DeletePublicAccessBlockInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketAccelerateConfigurationInput`]
+    #[derive(Default)]
+    pub struct GetBucketAccelerateConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketAccelerateConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketAccelerateConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketAccelerateConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketAclInput`]
+    #[derive(Default)]
+    pub struct GetBucketAclInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketAclInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketAclInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketAclInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketAnalyticsConfigurationInput`]
+    #[derive(Default)]
+    pub struct GetBucketAnalyticsConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<AnalyticsId>,
+    }
+
+    impl GetBucketAnalyticsConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: AnalyticsId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<GetBucketAnalyticsConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(GetBucketAnalyticsConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                id,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketCorsInput`]
+    #[derive(Default)]
+    pub struct GetBucketCorsInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketCorsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketCorsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketCorsInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketEncryptionInput`]
+    #[derive(Default)]
+    pub struct GetBucketEncryptionInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketEncryptionInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketEncryptionInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketEncryptionInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketIntelligentTieringConfigurationInput`]
+    #[derive(Default)]
+    pub struct GetBucketIntelligentTieringConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        id: Option<IntelligentTieringId>,
+    }
+
+    impl GetBucketIntelligentTieringConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_id(&mut self, field: IntelligentTieringId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<GetBucketIntelligentTieringConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(GetBucketIntelligentTieringConfigurationInput { bucket, id })
+        }
+    }
+
+    /// A builder for [`GetBucketInventoryConfigurationInput`]
+    #[derive(Default)]
+    pub struct GetBucketInventoryConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<InventoryId>,
+    }
+
+    impl GetBucketInventoryConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: InventoryId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<GetBucketInventoryConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(GetBucketInventoryConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                id,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketLifecycleConfigurationInput`]
+    #[derive(Default)]
+    pub struct GetBucketLifecycleConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketLifecycleConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketLifecycleConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketLifecycleConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketLocationInput`]
+    #[derive(Default)]
+    pub struct GetBucketLocationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketLocationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketLocationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketLocationInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketLoggingInput`]
+    #[derive(Default)]
+    pub struct GetBucketLoggingInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketLoggingInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketLoggingInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketLoggingInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketMetricsConfigurationInput`]
+    #[derive(Default)]
+    pub struct GetBucketMetricsConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<MetricsId>,
+    }
+
+    impl GetBucketMetricsConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: MetricsId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<GetBucketMetricsConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(GetBucketMetricsConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                id,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketNotificationConfigurationInput`]
+    #[derive(Default)]
+    pub struct GetBucketNotificationConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketNotificationConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketNotificationConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketNotificationConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketOwnershipControlsInput`]
+    #[derive(Default)]
+    pub struct GetBucketOwnershipControlsInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketOwnershipControlsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketOwnershipControlsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketOwnershipControlsInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketPolicyInput`]
+    #[derive(Default)]
+    pub struct GetBucketPolicyInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketPolicyInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketPolicyInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketPolicyInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketPolicyStatusInput`]
+    #[derive(Default)]
+    pub struct GetBucketPolicyStatusInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketPolicyStatusInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketPolicyStatusInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketPolicyStatusInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketReplicationInput`]
+    #[derive(Default)]
+    pub struct GetBucketReplicationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketReplicationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketReplicationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketReplicationInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketRequestPaymentInput`]
+    #[derive(Default)]
+    pub struct GetBucketRequestPaymentInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketRequestPaymentInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketRequestPaymentInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketRequestPaymentInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketTaggingInput`]
+    #[derive(Default)]
+    pub struct GetBucketTaggingInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketTaggingInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketTaggingInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketTaggingInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketVersioningInput`]
+    #[derive(Default)]
+    pub struct GetBucketVersioningInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketVersioningInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketVersioningInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketVersioningInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetBucketWebsiteInput`]
+    #[derive(Default)]
+    pub struct GetBucketWebsiteInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetBucketWebsiteInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetBucketWebsiteInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetBucketWebsiteInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetObjectInput`]
+    #[derive(Default)]
+    pub struct GetObjectInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_mode: Option<ChecksumMode>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        if_match: Option<IfMatch>,
+
+        if_modified_since: Option<IfModifiedSince>,
+
+        if_none_match: Option<IfNoneMatch>,
+
+        if_unmodified_since: Option<IfUnmodifiedSince>,
+
+        key: Option<ObjectKey>,
+
+        part_number: Option<PartNumber>,
+
+        range: Option<Range>,
+
+        request_payer: Option<RequestPayer>,
+
+        response_cache_control: Option<ResponseCacheControl>,
+
+        response_content_disposition: Option<ResponseContentDisposition>,
+
+        response_content_encoding: Option<ResponseContentEncoding>,
+
+        response_content_language: Option<ResponseContentLanguage>,
+
+        response_content_type: Option<ResponseContentType>,
+
+        response_expires: Option<ResponseExpires>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl GetObjectInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_mode(&mut self, field: Option<ChecksumMode>) {
+            self.checksum_mode = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_if_match(&mut self, field: Option<IfMatch>) {
+            self.if_match = field;
+        }
+
+        pub fn set_if_modified_since(&mut self, field: Option<IfModifiedSince>) {
+            self.if_modified_since = field;
+        }
+
+        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) {
+            self.if_none_match = field;
+        }
+
+        pub fn set_if_unmodified_since(&mut self, field: Option<IfUnmodifiedSince>) {
+            self.if_unmodified_since = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_part_number(&mut self, field: Option<PartNumber>) {
+            self.part_number = field;
+        }
+
+        pub fn set_range(&mut self, field: Option<Range>) {
+            self.range = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_response_cache_control(&mut self, field: Option<ResponseCacheControl>) {
+            self.response_cache_control = field;
+        }
+
+        pub fn set_response_content_disposition(&mut self, field: Option<ResponseContentDisposition>) {
+            self.response_content_disposition = field;
+        }
+
+        pub fn set_response_content_encoding(&mut self, field: Option<ResponseContentEncoding>) {
+            self.response_content_encoding = field;
+        }
+
+        pub fn set_response_content_language(&mut self, field: Option<ResponseContentLanguage>) {
+            self.response_content_language = field;
+        }
+
+        pub fn set_response_content_type(&mut self, field: Option<ResponseContentType>) {
+            self.response_content_type = field;
+        }
+
+        pub fn set_response_expires(&mut self, field: Option<ResponseExpires>) {
+            self.response_expires = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<GetObjectInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_mode = self.checksum_mode;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let if_match = self.if_match;
+            let if_modified_since = self.if_modified_since;
+            let if_none_match = self.if_none_match;
+            let if_unmodified_since = self.if_unmodified_since;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let part_number = self.part_number;
+            let range = self.range;
+            let request_payer = self.request_payer;
+            let response_cache_control = self.response_cache_control;
+            let response_content_disposition = self.response_content_disposition;
+            let response_content_encoding = self.response_content_encoding;
+            let response_content_language = self.response_content_language;
+            let response_content_type = self.response_content_type;
+            let response_expires = self.response_expires;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let version_id = self.version_id;
+            Ok(GetObjectInput {
+                bucket,
+                checksum_mode,
+                expected_bucket_owner,
+                if_match,
+                if_modified_since,
+                if_none_match,
+                if_unmodified_since,
+                key,
+                part_number,
+                range,
+                request_payer,
+                response_cache_control,
+                response_content_disposition,
+                response_content_encoding,
+                response_content_language,
+                response_content_type,
+                response_expires,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`GetObjectAclInput`]
+    #[derive(Default)]
+    pub struct GetObjectAclInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl GetObjectAclInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<GetObjectAclInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let version_id = self.version_id;
+            Ok(GetObjectAclInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                request_payer,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`GetObjectAttributesInput`]
+    #[derive(Default)]
+    pub struct GetObjectAttributesInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        max_parts: Option<MaxParts>,
+
+        object_attributes: ObjectAttributesList,
+
+        part_number_marker: Option<PartNumberMarker>,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl GetObjectAttributesInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_max_parts(&mut self, field: Option<MaxParts>) {
+            self.max_parts = field;
+        }
+
+        pub fn set_object_attributes(&mut self, field: ObjectAttributesList) {
+            self.object_attributes = field;
+        }
+
+        pub fn set_part_number_marker(&mut self, field: Option<PartNumberMarker>) {
+            self.part_number_marker = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<GetObjectAttributesInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let max_parts = self.max_parts;
+            let object_attributes = self.object_attributes;
+            let part_number_marker = self.part_number_marker;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let version_id = self.version_id;
+            Ok(GetObjectAttributesInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                max_parts,
+                object_attributes,
+                part_number_marker,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`GetObjectLegalHoldInput`]
+    #[derive(Default)]
+    pub struct GetObjectLegalHoldInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl GetObjectLegalHoldInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<GetObjectLegalHoldInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let version_id = self.version_id;
+            Ok(GetObjectLegalHoldInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                request_payer,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`GetObjectLockConfigurationInput`]
+    #[derive(Default)]
+    pub struct GetObjectLockConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetObjectLockConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetObjectLockConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetObjectLockConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`GetObjectRetentionInput`]
+    #[derive(Default)]
+    pub struct GetObjectRetentionInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl GetObjectRetentionInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<GetObjectRetentionInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let version_id = self.version_id;
+            Ok(GetObjectRetentionInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                request_payer,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`GetObjectTaggingInput`]
+    #[derive(Default)]
+    pub struct GetObjectTaggingInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl GetObjectTaggingInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<GetObjectTaggingInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let version_id = self.version_id;
+            Ok(GetObjectTaggingInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                request_payer,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`GetObjectTorrentInput`]
+    #[derive(Default)]
+    pub struct GetObjectTorrentInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+    }
+
+    impl GetObjectTorrentInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn build(self) -> Result<GetObjectTorrentInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            Ok(GetObjectTorrentInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                request_payer,
+            })
+        }
+    }
+
+    /// A builder for [`GetPublicAccessBlockInput`]
+    #[derive(Default)]
+    pub struct GetPublicAccessBlockInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl GetPublicAccessBlockInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<GetPublicAccessBlockInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(GetPublicAccessBlockInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`HeadBucketInput`]
+    #[derive(Default)]
+    pub struct HeadBucketInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl HeadBucketInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<HeadBucketInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(HeadBucketInput {
+                bucket,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`HeadObjectInput`]
+    #[derive(Default)]
+    pub struct HeadObjectInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_mode: Option<ChecksumMode>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        if_match: Option<IfMatch>,
+
+        if_modified_since: Option<IfModifiedSince>,
+
+        if_none_match: Option<IfNoneMatch>,
+
+        if_unmodified_since: Option<IfUnmodifiedSince>,
+
+        key: Option<ObjectKey>,
+
+        part_number: Option<PartNumber>,
+
+        range: Option<Range>,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl HeadObjectInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_mode(&mut self, field: Option<ChecksumMode>) {
+            self.checksum_mode = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_if_match(&mut self, field: Option<IfMatch>) {
+            self.if_match = field;
+        }
+
+        pub fn set_if_modified_since(&mut self, field: Option<IfModifiedSince>) {
+            self.if_modified_since = field;
+        }
+
+        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) {
+            self.if_none_match = field;
+        }
+
+        pub fn set_if_unmodified_since(&mut self, field: Option<IfUnmodifiedSince>) {
+            self.if_unmodified_since = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_part_number(&mut self, field: Option<PartNumber>) {
+            self.part_number = field;
+        }
+
+        pub fn set_range(&mut self, field: Option<Range>) {
+            self.range = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<HeadObjectInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_mode = self.checksum_mode;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let if_match = self.if_match;
+            let if_modified_since = self.if_modified_since;
+            let if_none_match = self.if_none_match;
+            let if_unmodified_since = self.if_unmodified_since;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let part_number = self.part_number;
+            let range = self.range;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let version_id = self.version_id;
+            Ok(HeadObjectInput {
+                bucket,
+                checksum_mode,
+                expected_bucket_owner,
+                if_match,
+                if_modified_since,
+                if_none_match,
+                if_unmodified_since,
+                key,
+                part_number,
+                range,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`ListBucketAnalyticsConfigurationsInput`]
+    #[derive(Default)]
+    pub struct ListBucketAnalyticsConfigurationsInputBuilder {
+        bucket: Option<BucketName>,
+
+        continuation_token: Option<Token>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl ListBucketAnalyticsConfigurationsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+            self.continuation_token = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<ListBucketAnalyticsConfigurationsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let continuation_token = self.continuation_token;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(ListBucketAnalyticsConfigurationsInput {
+                bucket,
+                continuation_token,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`ListBucketIntelligentTieringConfigurationsInput`]
+    #[derive(Default)]
+    pub struct ListBucketIntelligentTieringConfigurationsInputBuilder {
+        bucket: Option<BucketName>,
+
+        continuation_token: Option<Token>,
+    }
+
+    impl ListBucketIntelligentTieringConfigurationsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+            self.continuation_token = field;
+        }
+
+        pub fn build(self) -> Result<ListBucketIntelligentTieringConfigurationsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let continuation_token = self.continuation_token;
+            Ok(ListBucketIntelligentTieringConfigurationsInput {
+                bucket,
+                continuation_token,
+            })
+        }
+    }
+
+    /// A builder for [`ListBucketInventoryConfigurationsInput`]
+    #[derive(Default)]
+    pub struct ListBucketInventoryConfigurationsInputBuilder {
+        bucket: Option<BucketName>,
+
+        continuation_token: Option<Token>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl ListBucketInventoryConfigurationsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+            self.continuation_token = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<ListBucketInventoryConfigurationsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let continuation_token = self.continuation_token;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(ListBucketInventoryConfigurationsInput {
+                bucket,
+                continuation_token,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`ListBucketMetricsConfigurationsInput`]
+    #[derive(Default)]
+    pub struct ListBucketMetricsConfigurationsInputBuilder {
+        bucket: Option<BucketName>,
+
+        continuation_token: Option<Token>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl ListBucketMetricsConfigurationsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+            self.continuation_token = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<ListBucketMetricsConfigurationsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let continuation_token = self.continuation_token;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(ListBucketMetricsConfigurationsInput {
+                bucket,
+                continuation_token,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`ListBucketsInput`]
+    #[derive(Default)]
+    pub struct ListBucketsInputBuilder {}
+
+    impl ListBucketsInputBuilder {
+        pub fn build(self) -> Result<ListBucketsInput, BuildError> {
+            Ok(ListBucketsInput {})
+        }
+    }
+
+    /// A builder for [`ListMultipartUploadsInput`]
+    #[derive(Default)]
+    pub struct ListMultipartUploadsInputBuilder {
+        bucket: Option<BucketName>,
+
+        delimiter: Option<Delimiter>,
+
+        encoding_type: Option<EncodingType>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key_marker: Option<KeyMarker>,
+
+        max_uploads: Option<MaxUploads>,
+
+        prefix: Option<Prefix>,
+
+        upload_id_marker: Option<UploadIdMarker>,
+    }
+
+    impl ListMultipartUploadsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_delimiter(&mut self, field: Option<Delimiter>) {
+            self.delimiter = field;
+        }
+
+        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) {
+            self.encoding_type = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key_marker(&mut self, field: Option<KeyMarker>) {
+            self.key_marker = field;
+        }
+
+        pub fn set_max_uploads(&mut self, field: Option<MaxUploads>) {
+            self.max_uploads = field;
+        }
+
+        pub fn set_prefix(&mut self, field: Option<Prefix>) {
+            self.prefix = field;
+        }
+
+        pub fn set_upload_id_marker(&mut self, field: Option<UploadIdMarker>) {
+            self.upload_id_marker = field;
+        }
+
+        pub fn build(self) -> Result<ListMultipartUploadsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let delimiter = self.delimiter;
+            let encoding_type = self.encoding_type;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key_marker = self.key_marker;
+            let max_uploads = self.max_uploads;
+            let prefix = self.prefix;
+            let upload_id_marker = self.upload_id_marker;
+            Ok(ListMultipartUploadsInput {
+                bucket,
+                delimiter,
+                encoding_type,
+                expected_bucket_owner,
+                key_marker,
+                max_uploads,
+                prefix,
+                upload_id_marker,
+            })
+        }
+    }
+
+    /// A builder for [`ListObjectVersionsInput`]
+    #[derive(Default)]
+    pub struct ListObjectVersionsInputBuilder {
+        bucket: Option<BucketName>,
+
+        delimiter: Option<Delimiter>,
+
+        encoding_type: Option<EncodingType>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key_marker: Option<KeyMarker>,
+
+        max_keys: Option<MaxKeys>,
+
+        prefix: Option<Prefix>,
+
+        version_id_marker: Option<VersionIdMarker>,
+    }
+
+    impl ListObjectVersionsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_delimiter(&mut self, field: Option<Delimiter>) {
+            self.delimiter = field;
+        }
+
+        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) {
+            self.encoding_type = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key_marker(&mut self, field: Option<KeyMarker>) {
+            self.key_marker = field;
+        }
+
+        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) {
+            self.max_keys = field;
+        }
+
+        pub fn set_prefix(&mut self, field: Option<Prefix>) {
+            self.prefix = field;
+        }
+
+        pub fn set_version_id_marker(&mut self, field: Option<VersionIdMarker>) {
+            self.version_id_marker = field;
+        }
+
+        pub fn build(self) -> Result<ListObjectVersionsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let delimiter = self.delimiter;
+            let encoding_type = self.encoding_type;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key_marker = self.key_marker;
+            let max_keys = self.max_keys;
+            let prefix = self.prefix;
+            let version_id_marker = self.version_id_marker;
+            Ok(ListObjectVersionsInput {
+                bucket,
+                delimiter,
+                encoding_type,
+                expected_bucket_owner,
+                key_marker,
+                max_keys,
+                prefix,
+                version_id_marker,
+            })
+        }
+    }
+
+    /// A builder for [`ListObjectsInput`]
+    #[derive(Default)]
+    pub struct ListObjectsInputBuilder {
+        bucket: Option<BucketName>,
+
+        delimiter: Option<Delimiter>,
+
+        encoding_type: Option<EncodingType>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        marker: Option<Marker>,
+
+        max_keys: Option<MaxKeys>,
+
+        prefix: Option<Prefix>,
+
+        request_payer: Option<RequestPayer>,
+    }
+
+    impl ListObjectsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_delimiter(&mut self, field: Option<Delimiter>) {
+            self.delimiter = field;
+        }
+
+        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) {
+            self.encoding_type = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_marker(&mut self, field: Option<Marker>) {
+            self.marker = field;
+        }
+
+        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) {
+            self.max_keys = field;
+        }
+
+        pub fn set_prefix(&mut self, field: Option<Prefix>) {
+            self.prefix = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn build(self) -> Result<ListObjectsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let delimiter = self.delimiter;
+            let encoding_type = self.encoding_type;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let marker = self.marker;
+            let max_keys = self.max_keys;
+            let prefix = self.prefix;
+            let request_payer = self.request_payer;
+            Ok(ListObjectsInput {
+                bucket,
+                delimiter,
+                encoding_type,
+                expected_bucket_owner,
+                marker,
+                max_keys,
+                prefix,
+                request_payer,
+            })
+        }
+    }
+
+    /// A builder for [`ListObjectsV2Input`]
+    #[derive(Default)]
+    pub struct ListObjectsV2InputBuilder {
+        bucket: Option<BucketName>,
+
+        continuation_token: Option<Token>,
+
+        delimiter: Option<Delimiter>,
+
+        encoding_type: Option<EncodingType>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        fetch_owner: Option<FetchOwner>,
+
+        max_keys: Option<MaxKeys>,
+
+        prefix: Option<Prefix>,
+
+        request_payer: Option<RequestPayer>,
+
+        start_after: Option<StartAfter>,
+    }
+
+    impl ListObjectsV2InputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+            self.continuation_token = field;
+        }
+
+        pub fn set_delimiter(&mut self, field: Option<Delimiter>) {
+            self.delimiter = field;
+        }
+
+        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) {
+            self.encoding_type = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_fetch_owner(&mut self, field: Option<FetchOwner>) {
+            self.fetch_owner = field;
+        }
+
+        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) {
+            self.max_keys = field;
+        }
+
+        pub fn set_prefix(&mut self, field: Option<Prefix>) {
+            self.prefix = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_start_after(&mut self, field: Option<StartAfter>) {
+            self.start_after = field;
+        }
+
+        pub fn build(self) -> Result<ListObjectsV2Input, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let continuation_token = self.continuation_token;
+            let delimiter = self.delimiter;
+            let encoding_type = self.encoding_type;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let fetch_owner = self.fetch_owner;
+            let max_keys = self.max_keys;
+            let prefix = self.prefix;
+            let request_payer = self.request_payer;
+            let start_after = self.start_after;
+            Ok(ListObjectsV2Input {
+                bucket,
+                continuation_token,
+                delimiter,
+                encoding_type,
+                expected_bucket_owner,
+                fetch_owner,
+                max_keys,
+                prefix,
+                request_payer,
+                start_after,
+            })
+        }
+    }
+
+    /// A builder for [`ListPartsInput`]
+    #[derive(Default)]
+    pub struct ListPartsInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        max_parts: Option<MaxParts>,
+
+        part_number_marker: Option<PartNumberMarker>,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        upload_id: Option<MultipartUploadId>,
+    }
+
+    impl ListPartsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_max_parts(&mut self, field: Option<MaxParts>) {
+            self.max_parts = field;
+        }
+
+        pub fn set_part_number_marker(&mut self, field: Option<PartNumberMarker>) {
+            self.part_number_marker = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+            self.upload_id = Some(field);
+        }
+
+        pub fn build(self) -> Result<ListPartsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let max_parts = self.max_parts;
+            let part_number_marker = self.part_number_marker;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let upload_id = self.upload_id.ok_or_else(|| BuildError::missing_field("upload_id"))?;
+            Ok(ListPartsInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                max_parts,
+                part_number_marker,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                upload_id,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketAccelerateConfigurationInput`]
+    #[derive(Default)]
+    pub struct PutBucketAccelerateConfigurationInputBuilder {
+        accelerate_configuration: Option<AccelerateConfiguration>,
+
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl PutBucketAccelerateConfigurationInputBuilder {
+        pub fn set_accelerate_configuration(&mut self, field: AccelerateConfiguration) {
+            self.accelerate_configuration = Some(field);
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<PutBucketAccelerateConfigurationInput, BuildError> {
+            let accelerate_configuration = self
+                .accelerate_configuration
+                .ok_or_else(|| BuildError::missing_field("accelerate_configuration"))?;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(PutBucketAccelerateConfigurationInput {
+                accelerate_configuration,
+                bucket,
+                checksum_algorithm,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketAclInput`]
+    #[derive(Default)]
+    pub struct PutBucketAclInputBuilder {
+        acl: Option<BucketCannedACL>,
+
+        access_control_policy: Option<AccessControlPolicy>,
+
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        grant_full_control: Option<GrantFullControl>,
+
+        grant_read: Option<GrantRead>,
+
+        grant_read_acp: Option<GrantReadACP>,
+
+        grant_write: Option<GrantWrite>,
+
+        grant_write_acp: Option<GrantWriteACP>,
+    }
+
+    impl PutBucketAclInputBuilder {
+        pub fn set_acl(&mut self, field: Option<BucketCannedACL>) {
+            self.acl = field;
+        }
+
+        pub fn set_access_control_policy(&mut self, field: Option<AccessControlPolicy>) {
+            self.access_control_policy = field;
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+            self.grant_full_control = field;
+        }
+
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+            self.grant_read = field;
+        }
+
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+            self.grant_read_acp = field;
+        }
+
+        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) {
+            self.grant_write = field;
+        }
+
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+            self.grant_write_acp = field;
+        }
+
+        pub fn build(self) -> Result<PutBucketAclInput, BuildError> {
+            let acl = self.acl;
+            let access_control_policy = self.access_control_policy;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let grant_full_control = self.grant_full_control;
+            let grant_read = self.grant_read;
+            let grant_read_acp = self.grant_read_acp;
+            let grant_write = self.grant_write;
+            let grant_write_acp = self.grant_write_acp;
+            Ok(PutBucketAclInput {
+                acl,
+                access_control_policy,
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                grant_full_control,
+                grant_read,
+                grant_read_acp,
+                grant_write,
+                grant_write_acp,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketAnalyticsConfigurationInput`]
+    #[derive(Default)]
+    pub struct PutBucketAnalyticsConfigurationInputBuilder {
+        analytics_configuration: Option<AnalyticsConfiguration>,
+
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<AnalyticsId>,
+    }
+
+    impl PutBucketAnalyticsConfigurationInputBuilder {
+        pub fn set_analytics_configuration(&mut self, field: AnalyticsConfiguration) {
+            self.analytics_configuration = Some(field);
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: AnalyticsId) {
+            self.id = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketAnalyticsConfigurationInput, BuildError> {
+            let analytics_configuration = self
+                .analytics_configuration
+                .ok_or_else(|| BuildError::missing_field("analytics_configuration"))?;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            Ok(PutBucketAnalyticsConfigurationInput {
+                analytics_configuration,
+                bucket,
+                expected_bucket_owner,
+                id,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketCorsInput`]
+    #[derive(Default)]
+    pub struct PutBucketCorsInputBuilder {
+        bucket: Option<BucketName>,
+
+        cors_configuration: Option<CORSConfiguration>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl PutBucketCorsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_cors_configuration(&mut self, field: CORSConfiguration) {
+            self.cors_configuration = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<PutBucketCorsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let cors_configuration = self
+                .cors_configuration
+                .ok_or_else(|| BuildError::missing_field("cors_configuration"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(PutBucketCorsInput {
+                bucket,
+                cors_configuration,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketEncryptionInput`]
+    #[derive(Default)]
+    pub struct PutBucketEncryptionInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
+    }
+
+    impl PutBucketEncryptionInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_server_side_encryption_configuration(&mut self, field: ServerSideEncryptionConfiguration) {
+            self.server_side_encryption_configuration = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketEncryptionInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let server_side_encryption_configuration = self
+                .server_side_encryption_configuration
+                .ok_or_else(|| BuildError::missing_field("server_side_encryption_configuration"))?;
+            Ok(PutBucketEncryptionInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                server_side_encryption_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketIntelligentTieringConfigurationInput`]
+    #[derive(Default)]
+    pub struct PutBucketIntelligentTieringConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        id: Option<IntelligentTieringId>,
+
+        intelligent_tiering_configuration: Option<IntelligentTieringConfiguration>,
+    }
+
+    impl PutBucketIntelligentTieringConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_id(&mut self, field: IntelligentTieringId) {
+            self.id = Some(field);
+        }
+
+        pub fn set_intelligent_tiering_configuration(&mut self, field: IntelligentTieringConfiguration) {
+            self.intelligent_tiering_configuration = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketIntelligentTieringConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            let intelligent_tiering_configuration = self
+                .intelligent_tiering_configuration
+                .ok_or_else(|| BuildError::missing_field("intelligent_tiering_configuration"))?;
+            Ok(PutBucketIntelligentTieringConfigurationInput {
+                bucket,
+                id,
+                intelligent_tiering_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketInventoryConfigurationInput`]
+    #[derive(Default)]
+    pub struct PutBucketInventoryConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<InventoryId>,
+
+        inventory_configuration: Option<InventoryConfiguration>,
+    }
+
+    impl PutBucketInventoryConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: InventoryId) {
+            self.id = Some(field);
+        }
+
+        pub fn set_inventory_configuration(&mut self, field: InventoryConfiguration) {
+            self.inventory_configuration = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketInventoryConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            let inventory_configuration = self
+                .inventory_configuration
+                .ok_or_else(|| BuildError::missing_field("inventory_configuration"))?;
+            Ok(PutBucketInventoryConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                id,
+                inventory_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketLifecycleConfigurationInput`]
+    #[derive(Default)]
+    pub struct PutBucketLifecycleConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        lifecycle_configuration: Option<BucketLifecycleConfiguration>,
+    }
+
+    impl PutBucketLifecycleConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_lifecycle_configuration(&mut self, field: Option<BucketLifecycleConfiguration>) {
+            self.lifecycle_configuration = field;
+        }
+
+        pub fn build(self) -> Result<PutBucketLifecycleConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let lifecycle_configuration = self.lifecycle_configuration;
+            Ok(PutBucketLifecycleConfigurationInput {
+                bucket,
+                checksum_algorithm,
+                expected_bucket_owner,
+                lifecycle_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketLoggingInput`]
+    #[derive(Default)]
+    pub struct PutBucketLoggingInputBuilder {
+        bucket: Option<BucketName>,
+
+        bucket_logging_status: Option<BucketLoggingStatus>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+    }
+
+    impl PutBucketLoggingInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_bucket_logging_status(&mut self, field: BucketLoggingStatus) {
+            self.bucket_logging_status = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn build(self) -> Result<PutBucketLoggingInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let bucket_logging_status = self
+                .bucket_logging_status
+                .ok_or_else(|| BuildError::missing_field("bucket_logging_status"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            Ok(PutBucketLoggingInput {
+                bucket,
+                bucket_logging_status,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketMetricsConfigurationInput`]
+    #[derive(Default)]
+    pub struct PutBucketMetricsConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        id: Option<MetricsId>,
+
+        metrics_configuration: Option<MetricsConfiguration>,
+    }
+
+    impl PutBucketMetricsConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_id(&mut self, field: MetricsId) {
+            self.id = Some(field);
+        }
+
+        pub fn set_metrics_configuration(&mut self, field: MetricsConfiguration) {
+            self.metrics_configuration = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketMetricsConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let id = self.id.ok_or_else(|| BuildError::missing_field("id"))?;
+            let metrics_configuration = self
+                .metrics_configuration
+                .ok_or_else(|| BuildError::missing_field("metrics_configuration"))?;
+            Ok(PutBucketMetricsConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                id,
+                metrics_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketNotificationConfigurationInput`]
+    #[derive(Default)]
+    pub struct PutBucketNotificationConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        notification_configuration: Option<NotificationConfiguration>,
+
+        skip_destination_validation: Option<SkipValidation>,
+    }
+
+    impl PutBucketNotificationConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_notification_configuration(&mut self, field: NotificationConfiguration) {
+            self.notification_configuration = Some(field);
+        }
+
+        pub fn set_skip_destination_validation(&mut self, field: Option<SkipValidation>) {
+            self.skip_destination_validation = field;
+        }
+
+        pub fn build(self) -> Result<PutBucketNotificationConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let notification_configuration = self
+                .notification_configuration
+                .ok_or_else(|| BuildError::missing_field("notification_configuration"))?;
+            let skip_destination_validation = self.skip_destination_validation;
+            Ok(PutBucketNotificationConfigurationInput {
+                bucket,
+                expected_bucket_owner,
+                notification_configuration,
+                skip_destination_validation,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketOwnershipControlsInput`]
+    #[derive(Default)]
+    pub struct PutBucketOwnershipControlsInputBuilder {
+        bucket: Option<BucketName>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        ownership_controls: Option<OwnershipControls>,
+    }
+
+    impl PutBucketOwnershipControlsInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_ownership_controls(&mut self, field: OwnershipControls) {
+            self.ownership_controls = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketOwnershipControlsInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let ownership_controls = self
+                .ownership_controls
+                .ok_or_else(|| BuildError::missing_field("ownership_controls"))?;
+            Ok(PutBucketOwnershipControlsInput {
+                bucket,
+                content_md5,
+                expected_bucket_owner,
+                ownership_controls,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketPolicyInput`]
+    #[derive(Default)]
+    pub struct PutBucketPolicyInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        confirm_remove_self_bucket_access: Option<ConfirmRemoveSelfBucketAccess>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        policy: Option<Policy>,
+    }
+
+    impl PutBucketPolicyInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_confirm_remove_self_bucket_access(&mut self, field: Option<ConfirmRemoveSelfBucketAccess>) {
+            self.confirm_remove_self_bucket_access = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_policy(&mut self, field: Policy) {
+            self.policy = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketPolicyInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let confirm_remove_self_bucket_access = self.confirm_remove_self_bucket_access;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let policy = self.policy.ok_or_else(|| BuildError::missing_field("policy"))?;
+            Ok(PutBucketPolicyInput {
+                bucket,
+                checksum_algorithm,
+                confirm_remove_self_bucket_access,
+                content_md5,
+                expected_bucket_owner,
+                policy,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketReplicationInput`]
+    #[derive(Default)]
+    pub struct PutBucketReplicationInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        replication_configuration: Option<ReplicationConfiguration>,
+
+        token: Option<ObjectLockToken>,
+    }
+
+    impl PutBucketReplicationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_replication_configuration(&mut self, field: ReplicationConfiguration) {
+            self.replication_configuration = Some(field);
+        }
+
+        pub fn set_token(&mut self, field: Option<ObjectLockToken>) {
+            self.token = field;
+        }
+
+        pub fn build(self) -> Result<PutBucketReplicationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let replication_configuration = self
+                .replication_configuration
+                .ok_or_else(|| BuildError::missing_field("replication_configuration"))?;
+            let token = self.token;
+            Ok(PutBucketReplicationInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                replication_configuration,
+                token,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketRequestPaymentInput`]
+    #[derive(Default)]
+    pub struct PutBucketRequestPaymentInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        request_payment_configuration: Option<RequestPaymentConfiguration>,
+    }
+
+    impl PutBucketRequestPaymentInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_request_payment_configuration(&mut self, field: RequestPaymentConfiguration) {
+            self.request_payment_configuration = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketRequestPaymentInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let request_payment_configuration = self
+                .request_payment_configuration
+                .ok_or_else(|| BuildError::missing_field("request_payment_configuration"))?;
+            Ok(PutBucketRequestPaymentInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                request_payment_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketTaggingInput`]
+    #[derive(Default)]
+    pub struct PutBucketTaggingInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        tagging: Option<Tagging>,
+    }
+
+    impl PutBucketTaggingInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_tagging(&mut self, field: Tagging) {
+            self.tagging = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketTaggingInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let tagging = self.tagging.ok_or_else(|| BuildError::missing_field("tagging"))?;
+            Ok(PutBucketTaggingInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                tagging,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketVersioningInput`]
+    #[derive(Default)]
+    pub struct PutBucketVersioningInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        mfa: Option<MFA>,
+
+        versioning_configuration: Option<VersioningConfiguration>,
+    }
+
+    impl PutBucketVersioningInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_mfa(&mut self, field: Option<MFA>) {
+            self.mfa = field;
+        }
+
+        pub fn set_versioning_configuration(&mut self, field: VersioningConfiguration) {
+            self.versioning_configuration = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketVersioningInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let mfa = self.mfa;
+            let versioning_configuration = self
+                .versioning_configuration
+                .ok_or_else(|| BuildError::missing_field("versioning_configuration"))?;
+            Ok(PutBucketVersioningInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                mfa,
+                versioning_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`PutBucketWebsiteInput`]
+    #[derive(Default)]
+    pub struct PutBucketWebsiteInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        website_configuration: Option<WebsiteConfiguration>,
+    }
+
+    impl PutBucketWebsiteInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_website_configuration(&mut self, field: WebsiteConfiguration) {
+            self.website_configuration = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutBucketWebsiteInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let website_configuration = self
+                .website_configuration
+                .ok_or_else(|| BuildError::missing_field("website_configuration"))?;
+            Ok(PutBucketWebsiteInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                website_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`PutObjectInput`]
+    #[derive(Default)]
+    pub struct PutObjectInputBuilder {
+        acl: Option<ObjectCannedACL>,
+
+        body: Option<StreamingBlob>,
+
+        bucket: Option<BucketName>,
+
+        bucket_key_enabled: Option<BucketKeyEnabled>,
+
+        cache_control: Option<CacheControl>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        checksum_crc32: Option<ChecksumCRC32>,
+
+        checksum_crc32c: Option<ChecksumCRC32C>,
+
+        checksum_sha1: Option<ChecksumSHA1>,
+
+        checksum_sha256: Option<ChecksumSHA256>,
+
+        content_disposition: Option<ContentDisposition>,
+
+        content_encoding: Option<ContentEncoding>,
+
+        content_language: Option<ContentLanguage>,
+
+        content_length: Option<ContentLength>,
+
+        content_md5: Option<ContentMD5>,
+
+        content_type: Option<ContentType>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        expires: Option<Expires>,
+
+        grant_full_control: Option<GrantFullControl>,
+
+        grant_read: Option<GrantRead>,
+
+        grant_read_acp: Option<GrantReadACP>,
+
+        grant_write_acp: Option<GrantWriteACP>,
+
+        key: Option<ObjectKey>,
+
+        metadata: Option<Metadata>,
+
+        object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
+
+        object_lock_mode: Option<ObjectLockMode>,
+
+        object_lock_retain_until_date: Option<ObjectLockRetainUntilDate>,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
+
+        ssekms_key_id: Option<SSEKMSKeyId>,
+
+        server_side_encryption: Option<ServerSideEncryption>,
+
+        storage_class: Option<StorageClass>,
+
+        tagging: Option<TaggingHeader>,
+
+        website_redirect_location: Option<WebsiteRedirectLocation>,
+    }
+
+    impl PutObjectInputBuilder {
+        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) {
+            self.acl = field;
+        }
+
+        pub fn set_body(&mut self, field: Option<StreamingBlob>) {
+            self.body = field;
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) {
+            self.bucket_key_enabled = field;
+        }
+
+        pub fn set_cache_control(&mut self, field: Option<CacheControl>) {
+            self.cache_control = field;
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) {
+            self.checksum_crc32 = field;
+        }
+
+        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) {
+            self.checksum_crc32c = field;
+        }
+
+        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) {
+            self.checksum_sha1 = field;
+        }
+
+        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) {
+            self.checksum_sha256 = field;
+        }
+
+        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) {
+            self.content_disposition = field;
+        }
+
+        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) {
+            self.content_encoding = field;
+        }
+
+        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) {
+            self.content_language = field;
+        }
+
+        pub fn set_content_length(&mut self, field: Option<ContentLength>) {
+            self.content_length = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_content_type(&mut self, field: Option<ContentType>) {
+            self.content_type = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_expires(&mut self, field: Option<Expires>) {
+            self.expires = field;
+        }
+
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+            self.grant_full_control = field;
+        }
+
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+            self.grant_read = field;
+        }
+
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+            self.grant_read_acp = field;
+        }
+
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+            self.grant_write_acp = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_metadata(&mut self, field: Option<Metadata>) {
+            self.metadata = field;
+        }
+
+        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) {
+            self.object_lock_legal_hold_status = field;
+        }
+
+        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) {
+            self.object_lock_mode = field;
+        }
+
+        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) {
+            self.object_lock_retain_until_date = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) {
+            self.ssekms_encryption_context = field;
+        }
+
+        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) {
+            self.ssekms_key_id = field;
+        }
+
+        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) {
+            self.server_side_encryption = field;
+        }
+
+        pub fn set_storage_class(&mut self, field: Option<StorageClass>) {
+            self.storage_class = field;
+        }
+
+        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) {
+            self.tagging = field;
+        }
+
+        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) {
+            self.website_redirect_location = field;
+        }
+
+        pub fn build(self) -> Result<PutObjectInput, BuildError> {
+            let acl = self.acl;
+            let body = self.body;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let bucket_key_enabled = self.bucket_key_enabled;
+            let cache_control = self.cache_control;
+            let checksum_algorithm = self.checksum_algorithm;
+            let checksum_crc32 = self.checksum_crc32;
+            let checksum_crc32c = self.checksum_crc32c;
+            let checksum_sha1 = self.checksum_sha1;
+            let checksum_sha256 = self.checksum_sha256;
+            let content_disposition = self.content_disposition;
+            let content_encoding = self.content_encoding;
+            let content_language = self.content_language;
+            let content_length = self.content_length;
+            let content_md5 = self.content_md5;
+            let content_type = self.content_type;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let expires = self.expires;
+            let grant_full_control = self.grant_full_control;
+            let grant_read = self.grant_read;
+            let grant_read_acp = self.grant_read_acp;
+            let grant_write_acp = self.grant_write_acp;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let metadata = self.metadata;
+            let object_lock_legal_hold_status = self.object_lock_legal_hold_status;
+            let object_lock_mode = self.object_lock_mode;
+            let object_lock_retain_until_date = self.object_lock_retain_until_date;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let ssekms_encryption_context = self.ssekms_encryption_context;
+            let ssekms_key_id = self.ssekms_key_id;
+            let server_side_encryption = self.server_side_encryption;
+            let storage_class = self.storage_class;
+            let tagging = self.tagging;
+            let website_redirect_location = self.website_redirect_location;
+            Ok(PutObjectInput {
+                acl,
+                body,
+                bucket,
+                bucket_key_enabled,
+                cache_control,
+                checksum_algorithm,
+                checksum_crc32,
+                checksum_crc32c,
+                checksum_sha1,
+                checksum_sha256,
+                content_disposition,
+                content_encoding,
+                content_language,
+                content_length,
+                content_md5,
+                content_type,
+                expected_bucket_owner,
+                expires,
+                grant_full_control,
+                grant_read,
+                grant_read_acp,
+                grant_write_acp,
+                key,
+                metadata,
+                object_lock_legal_hold_status,
+                object_lock_mode,
+                object_lock_retain_until_date,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                ssekms_encryption_context,
+                ssekms_key_id,
+                server_side_encryption,
+                storage_class,
+                tagging,
+                website_redirect_location,
+            })
+        }
+    }
+
+    /// A builder for [`PutObjectAclInput`]
+    #[derive(Default)]
+    pub struct PutObjectAclInputBuilder {
+        acl: Option<ObjectCannedACL>,
+
+        access_control_policy: Option<AccessControlPolicy>,
+
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        grant_full_control: Option<GrantFullControl>,
+
+        grant_read: Option<GrantRead>,
+
+        grant_read_acp: Option<GrantReadACP>,
+
+        grant_write: Option<GrantWrite>,
+
+        grant_write_acp: Option<GrantWriteACP>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl PutObjectAclInputBuilder {
+        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) {
+            self.acl = field;
+        }
+
+        pub fn set_access_control_policy(&mut self, field: Option<AccessControlPolicy>) {
+            self.access_control_policy = field;
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+            self.grant_full_control = field;
+        }
+
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+            self.grant_read = field;
+        }
+
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+            self.grant_read_acp = field;
+        }
+
+        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) {
+            self.grant_write = field;
+        }
+
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+            self.grant_write_acp = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<PutObjectAclInput, BuildError> {
+            let acl = self.acl;
+            let access_control_policy = self.access_control_policy;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let grant_full_control = self.grant_full_control;
+            let grant_read = self.grant_read;
+            let grant_read_acp = self.grant_read_acp;
+            let grant_write = self.grant_write;
+            let grant_write_acp = self.grant_write_acp;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let version_id = self.version_id;
+            Ok(PutObjectAclInput {
+                acl,
+                access_control_policy,
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                grant_full_control,
+                grant_read,
+                grant_read_acp,
+                grant_write,
+                grant_write_acp,
+                key,
+                request_payer,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`PutObjectLegalHoldInput`]
+    #[derive(Default)]
+    pub struct PutObjectLegalHoldInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        legal_hold: Option<ObjectLockLegalHold>,
+
+        request_payer: Option<RequestPayer>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl PutObjectLegalHoldInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_legal_hold(&mut self, field: Option<ObjectLockLegalHold>) {
+            self.legal_hold = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<PutObjectLegalHoldInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let legal_hold = self.legal_hold;
+            let request_payer = self.request_payer;
+            let version_id = self.version_id;
+            Ok(PutObjectLegalHoldInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                key,
+                legal_hold,
+                request_payer,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`PutObjectLockConfigurationInput`]
+    #[derive(Default)]
+    pub struct PutObjectLockConfigurationInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        object_lock_configuration: Option<ObjectLockConfiguration>,
+
+        request_payer: Option<RequestPayer>,
+
+        token: Option<ObjectLockToken>,
+    }
+
+    impl PutObjectLockConfigurationInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_object_lock_configuration(&mut self, field: Option<ObjectLockConfiguration>) {
+            self.object_lock_configuration = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_token(&mut self, field: Option<ObjectLockToken>) {
+            self.token = field;
+        }
+
+        pub fn build(self) -> Result<PutObjectLockConfigurationInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let object_lock_configuration = self.object_lock_configuration;
+            let request_payer = self.request_payer;
+            let token = self.token;
+            Ok(PutObjectLockConfigurationInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                object_lock_configuration,
+                request_payer,
+                token,
+            })
+        }
+    }
+
+    /// A builder for [`PutObjectRetentionInput`]
+    #[derive(Default)]
+    pub struct PutObjectRetentionInputBuilder {
+        bucket: Option<BucketName>,
+
+        bypass_governance_retention: Option<BypassGovernanceRetention>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        retention: Option<ObjectLockRetention>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl PutObjectRetentionInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) {
+            self.bypass_governance_retention = field;
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_retention(&mut self, field: Option<ObjectLockRetention>) {
+            self.retention = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<PutObjectRetentionInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let bypass_governance_retention = self.bypass_governance_retention;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let retention = self.retention;
+            let version_id = self.version_id;
+            Ok(PutObjectRetentionInput {
+                bucket,
+                bypass_governance_retention,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                key,
+                request_payer,
+                retention,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`PutObjectTaggingInput`]
+    #[derive(Default)]
+    pub struct PutObjectTaggingInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        tagging: Option<Tagging>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl PutObjectTaggingInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_tagging(&mut self, field: Tagging) {
+            self.tagging = Some(field);
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<PutObjectTaggingInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let tagging = self.tagging.ok_or_else(|| BuildError::missing_field("tagging"))?;
+            let version_id = self.version_id;
+            Ok(PutObjectTaggingInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                key,
+                request_payer,
+                tagging,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`PutPublicAccessBlockInput`]
+    #[derive(Default)]
+    pub struct PutPublicAccessBlockInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        public_access_block_configuration: Option<PublicAccessBlockConfiguration>,
+    }
+
+    impl PutPublicAccessBlockInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_public_access_block_configuration(&mut self, field: PublicAccessBlockConfiguration) {
+            self.public_access_block_configuration = Some(field);
+        }
+
+        pub fn build(self) -> Result<PutPublicAccessBlockInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let public_access_block_configuration = self
+                .public_access_block_configuration
+                .ok_or_else(|| BuildError::missing_field("public_access_block_configuration"))?;
+            Ok(PutPublicAccessBlockInput {
+                bucket,
+                checksum_algorithm,
+                content_md5,
+                expected_bucket_owner,
+                public_access_block_configuration,
+            })
+        }
+    }
+
+    /// A builder for [`RestoreObjectInput`]
+    #[derive(Default)]
+    pub struct RestoreObjectInputBuilder {
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        request_payer: Option<RequestPayer>,
+
+        restore_request: Option<RestoreRequest>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl RestoreObjectInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_restore_request(&mut self, field: Option<RestoreRequest>) {
+            self.restore_request = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<RestoreObjectInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let request_payer = self.request_payer;
+            let restore_request = self.restore_request;
+            let version_id = self.version_id;
+            Ok(RestoreObjectInput {
+                bucket,
+                checksum_algorithm,
+                expected_bucket_owner,
+                key,
+                request_payer,
+                restore_request,
+                version_id,
+            })
+        }
+    }
+
+    /// A builder for [`SelectObjectContentInput`]
+    #[derive(Default)]
+    pub struct SelectObjectContentInputBuilder {
+        bucket: Option<BucketName>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        request: Option<SelectObjectContentRequest>,
+    }
+
+    impl SelectObjectContentInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_request(&mut self, field: SelectObjectContentRequest) {
+            self.request = Some(field);
+        }
+
+        pub fn build(self) -> Result<SelectObjectContentInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let request = self.request.ok_or_else(|| BuildError::missing_field("request"))?;
+            Ok(SelectObjectContentInput {
+                bucket,
+                expected_bucket_owner,
+                key,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                request,
+            })
+        }
+    }
+
+    /// A builder for [`UploadPartInput`]
+    #[derive(Default)]
+    pub struct UploadPartInputBuilder {
+        body: Option<StreamingBlob>,
+
+        bucket: Option<BucketName>,
+
+        checksum_algorithm: Option<ChecksumAlgorithm>,
+
+        checksum_crc32: Option<ChecksumCRC32>,
+
+        checksum_crc32c: Option<ChecksumCRC32C>,
+
+        checksum_sha1: Option<ChecksumSHA1>,
+
+        checksum_sha256: Option<ChecksumSHA256>,
+
+        content_length: Option<ContentLength>,
+
+        content_md5: Option<ContentMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        part_number: PartNumber,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        upload_id: Option<MultipartUploadId>,
+    }
+
+    impl UploadPartInputBuilder {
+        pub fn set_body(&mut self, field: Option<StreamingBlob>) {
+            self.body = field;
+        }
+
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+            self.checksum_algorithm = field;
+        }
+
+        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) {
+            self.checksum_crc32 = field;
+        }
+
+        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) {
+            self.checksum_crc32c = field;
+        }
+
+        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) {
+            self.checksum_sha1 = field;
+        }
+
+        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) {
+            self.checksum_sha256 = field;
+        }
+
+        pub fn set_content_length(&mut self, field: Option<ContentLength>) {
+            self.content_length = field;
+        }
+
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+            self.content_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_part_number(&mut self, field: PartNumber) {
+            self.part_number = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+            self.upload_id = Some(field);
+        }
+
+        pub fn build(self) -> Result<UploadPartInput, BuildError> {
+            let body = self.body;
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let checksum_algorithm = self.checksum_algorithm;
+            let checksum_crc32 = self.checksum_crc32;
+            let checksum_crc32c = self.checksum_crc32c;
+            let checksum_sha1 = self.checksum_sha1;
+            let checksum_sha256 = self.checksum_sha256;
+            let content_length = self.content_length;
+            let content_md5 = self.content_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let part_number = self.part_number;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let upload_id = self.upload_id.ok_or_else(|| BuildError::missing_field("upload_id"))?;
+            Ok(UploadPartInput {
+                body,
+                bucket,
+                checksum_algorithm,
+                checksum_crc32,
+                checksum_crc32c,
+                checksum_sha1,
+                checksum_sha256,
+                content_length,
+                content_md5,
+                expected_bucket_owner,
+                key,
+                part_number,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                upload_id,
+            })
+        }
+    }
+
+    /// A builder for [`UploadPartCopyInput`]
+    #[derive(Default)]
+    pub struct UploadPartCopyInputBuilder {
+        bucket: Option<BucketName>,
+
+        copy_source: Option<CopySource>,
+
+        copy_source_if_match: Option<CopySourceIfMatch>,
+
+        copy_source_if_modified_since: Option<CopySourceIfModifiedSince>,
+
+        copy_source_if_none_match: Option<CopySourceIfNoneMatch>,
+
+        copy_source_if_unmodified_since: Option<CopySourceIfUnmodifiedSince>,
+
+        copy_source_range: Option<CopySourceRange>,
+
+        copy_source_sse_customer_algorithm: Option<CopySourceSSECustomerAlgorithm>,
+
+        copy_source_sse_customer_key: Option<CopySourceSSECustomerKey>,
+
+        copy_source_sse_customer_key_md5: Option<CopySourceSSECustomerKeyMD5>,
+
+        expected_bucket_owner: Option<AccountId>,
+
+        expected_source_bucket_owner: Option<AccountId>,
+
+        key: Option<ObjectKey>,
+
+        part_number: PartNumber,
+
+        request_payer: Option<RequestPayer>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key: Option<SSECustomerKey>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        upload_id: Option<MultipartUploadId>,
+    }
+
+    impl UploadPartCopyInputBuilder {
+        pub fn set_bucket(&mut self, field: BucketName) {
+            self.bucket = Some(field);
+        }
+
+        pub fn set_copy_source(&mut self, field: CopySource) {
+            self.copy_source = Some(field);
+        }
+
+        pub fn set_copy_source_if_match(&mut self, field: Option<CopySourceIfMatch>) {
+            self.copy_source_if_match = field;
+        }
+
+        pub fn set_copy_source_if_modified_since(&mut self, field: Option<CopySourceIfModifiedSince>) {
+            self.copy_source_if_modified_since = field;
+        }
+
+        pub fn set_copy_source_if_none_match(&mut self, field: Option<CopySourceIfNoneMatch>) {
+            self.copy_source_if_none_match = field;
+        }
+
+        pub fn set_copy_source_if_unmodified_since(&mut self, field: Option<CopySourceIfUnmodifiedSince>) {
+            self.copy_source_if_unmodified_since = field;
+        }
+
+        pub fn set_copy_source_range(&mut self, field: Option<CopySourceRange>) {
+            self.copy_source_range = field;
+        }
+
+        pub fn set_copy_source_sse_customer_algorithm(&mut self, field: Option<CopySourceSSECustomerAlgorithm>) {
+            self.copy_source_sse_customer_algorithm = field;
+        }
+
+        pub fn set_copy_source_sse_customer_key(&mut self, field: Option<CopySourceSSECustomerKey>) {
+            self.copy_source_sse_customer_key = field;
+        }
+
+        pub fn set_copy_source_sse_customer_key_md5(&mut self, field: Option<CopySourceSSECustomerKeyMD5>) {
+            self.copy_source_sse_customer_key_md5 = field;
+        }
+
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_bucket_owner = field;
+        }
+
+        pub fn set_expected_source_bucket_owner(&mut self, field: Option<AccountId>) {
+            self.expected_source_bucket_owner = field;
+        }
+
+        pub fn set_key(&mut self, field: ObjectKey) {
+            self.key = Some(field);
+        }
+
+        pub fn set_part_number(&mut self, field: PartNumber) {
+            self.part_number = field;
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+            self.request_payer = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+            self.sse_customer_key = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+            self.upload_id = Some(field);
+        }
+
+        pub fn build(self) -> Result<UploadPartCopyInput, BuildError> {
+            let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
+            let copy_source = self.copy_source.ok_or_else(|| BuildError::missing_field("copy_source"))?;
+            let copy_source_if_match = self.copy_source_if_match;
+            let copy_source_if_modified_since = self.copy_source_if_modified_since;
+            let copy_source_if_none_match = self.copy_source_if_none_match;
+            let copy_source_if_unmodified_since = self.copy_source_if_unmodified_since;
+            let copy_source_range = self.copy_source_range;
+            let copy_source_sse_customer_algorithm = self.copy_source_sse_customer_algorithm;
+            let copy_source_sse_customer_key = self.copy_source_sse_customer_key;
+            let copy_source_sse_customer_key_md5 = self.copy_source_sse_customer_key_md5;
+            let expected_bucket_owner = self.expected_bucket_owner;
+            let expected_source_bucket_owner = self.expected_source_bucket_owner;
+            let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
+            let part_number = self.part_number;
+            let request_payer = self.request_payer;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key = self.sse_customer_key;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let upload_id = self.upload_id.ok_or_else(|| BuildError::missing_field("upload_id"))?;
+            Ok(UploadPartCopyInput {
+                bucket,
+                copy_source,
+                copy_source_if_match,
+                copy_source_if_modified_since,
+                copy_source_if_none_match,
+                copy_source_if_unmodified_since,
+                copy_source_range,
+                copy_source_sse_customer_algorithm,
+                copy_source_sse_customer_key,
+                copy_source_sse_customer_key_md5,
+                expected_bucket_owner,
+                expected_source_bucket_owner,
+                key,
+                part_number,
+                request_payer,
+                sse_customer_algorithm,
+                sse_customer_key,
+                sse_customer_key_md5,
+                upload_id,
+            })
+        }
+    }
+
+    /// A builder for [`WriteGetObjectResponseInput`]
+    #[derive(Default)]
+    pub struct WriteGetObjectResponseInputBuilder {
+        accept_ranges: Option<AcceptRanges>,
+
+        body: Option<StreamingBlob>,
+
+        bucket_key_enabled: Option<BucketKeyEnabled>,
+
+        cache_control: Option<CacheControl>,
+
+        checksum_crc32: Option<ChecksumCRC32>,
+
+        checksum_crc32c: Option<ChecksumCRC32C>,
+
+        checksum_sha1: Option<ChecksumSHA1>,
+
+        checksum_sha256: Option<ChecksumSHA256>,
+
+        content_disposition: Option<ContentDisposition>,
+
+        content_encoding: Option<ContentEncoding>,
+
+        content_language: Option<ContentLanguage>,
+
+        content_length: Option<ContentLength>,
+
+        content_range: Option<ContentRange>,
+
+        content_type: Option<ContentType>,
+
+        delete_marker: Option<DeleteMarker>,
+
+        e_tag: Option<ETag>,
+
+        error_code: Option<ErrorCode>,
+
+        error_message: Option<ErrorMessage>,
+
+        expiration: Option<Expiration>,
+
+        expires: Option<Expires>,
+
+        last_modified: Option<LastModified>,
+
+        metadata: Option<Metadata>,
+
+        missing_meta: Option<MissingMeta>,
+
+        object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus>,
+
+        object_lock_mode: Option<ObjectLockMode>,
+
+        object_lock_retain_until_date: Option<ObjectLockRetainUntilDate>,
+
+        parts_count: Option<PartsCount>,
+
+        replication_status: Option<ReplicationStatus>,
+
+        request_charged: Option<RequestCharged>,
+
+        request_route: Option<RequestRoute>,
+
+        request_token: Option<RequestToken>,
+
+        restore: Option<Restore>,
+
+        sse_customer_algorithm: Option<SSECustomerAlgorithm>,
+
+        sse_customer_key_md5: Option<SSECustomerKeyMD5>,
+
+        ssekms_key_id: Option<SSEKMSKeyId>,
+
+        server_side_encryption: Option<ServerSideEncryption>,
+
+        status_code: Option<GetObjectResponseStatusCode>,
+
+        storage_class: Option<StorageClass>,
+
+        tag_count: Option<TagCount>,
+
+        version_id: Option<ObjectVersionId>,
+    }
+
+    impl WriteGetObjectResponseInputBuilder {
+        pub fn set_accept_ranges(&mut self, field: Option<AcceptRanges>) {
+            self.accept_ranges = field;
+        }
+
+        pub fn set_body(&mut self, field: Option<StreamingBlob>) {
+            self.body = field;
+        }
+
+        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) {
+            self.bucket_key_enabled = field;
+        }
+
+        pub fn set_cache_control(&mut self, field: Option<CacheControl>) {
+            self.cache_control = field;
+        }
+
+        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) {
+            self.checksum_crc32 = field;
+        }
+
+        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) {
+            self.checksum_crc32c = field;
+        }
+
+        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) {
+            self.checksum_sha1 = field;
+        }
+
+        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) {
+            self.checksum_sha256 = field;
+        }
+
+        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) {
+            self.content_disposition = field;
+        }
+
+        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) {
+            self.content_encoding = field;
+        }
+
+        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) {
+            self.content_language = field;
+        }
+
+        pub fn set_content_length(&mut self, field: Option<ContentLength>) {
+            self.content_length = field;
+        }
+
+        pub fn set_content_range(&mut self, field: Option<ContentRange>) {
+            self.content_range = field;
+        }
+
+        pub fn set_content_type(&mut self, field: Option<ContentType>) {
+            self.content_type = field;
+        }
+
+        pub fn set_delete_marker(&mut self, field: Option<DeleteMarker>) {
+            self.delete_marker = field;
+        }
+
+        pub fn set_e_tag(&mut self, field: Option<ETag>) {
+            self.e_tag = field;
+        }
+
+        pub fn set_error_code(&mut self, field: Option<ErrorCode>) {
+            self.error_code = field;
+        }
+
+        pub fn set_error_message(&mut self, field: Option<ErrorMessage>) {
+            self.error_message = field;
+        }
+
+        pub fn set_expiration(&mut self, field: Option<Expiration>) {
+            self.expiration = field;
+        }
+
+        pub fn set_expires(&mut self, field: Option<Expires>) {
+            self.expires = field;
+        }
+
+        pub fn set_last_modified(&mut self, field: Option<LastModified>) {
+            self.last_modified = field;
+        }
+
+        pub fn set_metadata(&mut self, field: Option<Metadata>) {
+            self.metadata = field;
+        }
+
+        pub fn set_missing_meta(&mut self, field: Option<MissingMeta>) {
+            self.missing_meta = field;
+        }
+
+        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) {
+            self.object_lock_legal_hold_status = field;
+        }
+
+        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) {
+            self.object_lock_mode = field;
+        }
+
+        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) {
+            self.object_lock_retain_until_date = field;
+        }
+
+        pub fn set_parts_count(&mut self, field: Option<PartsCount>) {
+            self.parts_count = field;
+        }
+
+        pub fn set_replication_status(&mut self, field: Option<ReplicationStatus>) {
+            self.replication_status = field;
+        }
+
+        pub fn set_request_charged(&mut self, field: Option<RequestCharged>) {
+            self.request_charged = field;
+        }
+
+        pub fn set_request_route(&mut self, field: RequestRoute) {
+            self.request_route = Some(field);
+        }
+
+        pub fn set_request_token(&mut self, field: RequestToken) {
+            self.request_token = Some(field);
+        }
+
+        pub fn set_restore(&mut self, field: Option<Restore>) {
+            self.restore = field;
+        }
+
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+            self.sse_customer_algorithm = field;
+        }
+
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+            self.sse_customer_key_md5 = field;
+        }
+
+        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) {
+            self.ssekms_key_id = field;
+        }
+
+        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) {
+            self.server_side_encryption = field;
+        }
+
+        pub fn set_status_code(&mut self, field: Option<GetObjectResponseStatusCode>) {
+            self.status_code = field;
+        }
+
+        pub fn set_storage_class(&mut self, field: Option<StorageClass>) {
+            self.storage_class = field;
+        }
+
+        pub fn set_tag_count(&mut self, field: Option<TagCount>) {
+            self.tag_count = field;
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+            self.version_id = field;
+        }
+
+        pub fn build(self) -> Result<WriteGetObjectResponseInput, BuildError> {
+            let accept_ranges = self.accept_ranges;
+            let body = self.body;
+            let bucket_key_enabled = self.bucket_key_enabled;
+            let cache_control = self.cache_control;
+            let checksum_crc32 = self.checksum_crc32;
+            let checksum_crc32c = self.checksum_crc32c;
+            let checksum_sha1 = self.checksum_sha1;
+            let checksum_sha256 = self.checksum_sha256;
+            let content_disposition = self.content_disposition;
+            let content_encoding = self.content_encoding;
+            let content_language = self.content_language;
+            let content_length = self.content_length;
+            let content_range = self.content_range;
+            let content_type = self.content_type;
+            let delete_marker = self.delete_marker;
+            let e_tag = self.e_tag;
+            let error_code = self.error_code;
+            let error_message = self.error_message;
+            let expiration = self.expiration;
+            let expires = self.expires;
+            let last_modified = self.last_modified;
+            let metadata = self.metadata;
+            let missing_meta = self.missing_meta;
+            let object_lock_legal_hold_status = self.object_lock_legal_hold_status;
+            let object_lock_mode = self.object_lock_mode;
+            let object_lock_retain_until_date = self.object_lock_retain_until_date;
+            let parts_count = self.parts_count;
+            let replication_status = self.replication_status;
+            let request_charged = self.request_charged;
+            let request_route = self.request_route.ok_or_else(|| BuildError::missing_field("request_route"))?;
+            let request_token = self.request_token.ok_or_else(|| BuildError::missing_field("request_token"))?;
+            let restore = self.restore;
+            let sse_customer_algorithm = self.sse_customer_algorithm;
+            let sse_customer_key_md5 = self.sse_customer_key_md5;
+            let ssekms_key_id = self.ssekms_key_id;
+            let server_side_encryption = self.server_side_encryption;
+            let status_code = self.status_code;
+            let storage_class = self.storage_class;
+            let tag_count = self.tag_count;
+            let version_id = self.version_id;
+            Ok(WriteGetObjectResponseInput {
+                accept_ranges,
+                body,
+                bucket_key_enabled,
+                cache_control,
+                checksum_crc32,
+                checksum_crc32c,
+                checksum_sha1,
+                checksum_sha256,
+                content_disposition,
+                content_encoding,
+                content_language,
+                content_length,
+                content_range,
+                content_type,
+                delete_marker,
+                e_tag,
+                error_code,
+                error_message,
+                expiration,
+                expires,
+                last_modified,
+                metadata,
+                missing_meta,
+                object_lock_legal_hold_status,
+                object_lock_mode,
+                object_lock_retain_until_date,
+                parts_count,
+                replication_status,
+                request_charged,
+                request_route,
+                request_token,
+                restore,
+                sse_customer_algorithm,
+                sse_customer_key_md5,
+                ssekms_key_id,
+                server_side_encryption,
+                status_code,
+                storage_class,
+                tag_count,
+                version_id,
+            })
+        }
     }
 }
