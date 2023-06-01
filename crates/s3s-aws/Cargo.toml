@@ -12,9 +12,9 @@ categories = ["web-programming", "web-programming::http-server"]
 [dependencies]
 async-trait = "0.1.68"
 aws-sdk-s3 = "0.28.0"
-aws-smithy-http = { version = "0.55.2", features = ["event-stream"] }
-aws-smithy-types = "0.55.2"
-aws-smithy-types-convert = { version = "0.55.2", features = ["convert-time"] }
+aws-smithy-http = { version = "0.55.3", features = ["event-stream"] }
+aws-smithy-types = "0.55.3"
+aws-smithy-types-convert = { version = "0.55.3", features = ["convert-time"] }
 bytes = "1.4.0"
 futures = { version = "0.3.28", default-features = false, features = ["std"] }
 hyper = "0.14.26"
