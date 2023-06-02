@@ -58,7 +58,7 @@ impl S3 for FileSystem {
         }
 
         let prefix = dst_path.parent().unwrap();
-        fs::create_dir_all(prefix).unwrap();
+        fs::create_dir_all(prefix).await.unwrap();
 
         let file_metadata = try_!(fs::metadata(&src_path).await);
         let last_modified = Timestamp::from(try_!(file_metadata.modified()));
@@ -483,9 +483,8 @@ impl S3 for FileSystem {
         } = req.input;
 
         let mut parts: Vec<Part> = Vec::new();
-        let iter_ = fs::read_dir(&self.root).await;
-        if iter_.is_ok() {
-            let mut iter = iter_.unwrap();
+        let directory_iterator = fs::read_dir(&self.root).await;
+        if let Ok(mut iter) = directory_iterator {
             while let Some(entry) = try_!(iter.next_entry().await) {
                 let file_type = try_!(entry.file_type().await);
                 if file_type.is_file().not() {
@@ -509,7 +508,7 @@ impl S3 for FileSystem {
                 let part = Part {
                     last_modified: Some(last_modified),
                     part_number: parsed_part_number,
-                    size: size,
+                    size,
                     ..Default::default()
                 };
                 parts.push(part);
