@@ -479,14 +479,11 @@ impl S3 for FileSystem {
     #[tracing::instrument]
     async fn list_parts(&self, req: S3Request<ListPartsInput>) -> S3Result<ListPartsOutput> {
         let ListPartsInput {
-            bucket,
-            key,
-            upload_id,
-            ..
+            bucket, key, upload_id, ..
         } = req.input;
 
         let mut parts: Vec<Part> = Vec::new();
-        let iter_ = fs::read_dir(&self.root).await ;
+        let iter_ = fs::read_dir(&self.root).await;
         if iter_.is_ok() {
             let mut iter = iter_.unwrap();
             while let Some(entry) = try_!(iter.next_entry().await) {
