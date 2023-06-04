@@ -16,6 +16,7 @@
     clippy::single_match_else,
     clippy::wildcard_imports,
     clippy::let_underscore_untyped,
+    clippy::inline_always,
 )]
 
 #[macro_use]

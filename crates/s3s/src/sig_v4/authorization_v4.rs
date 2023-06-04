@@ -4,7 +4,6 @@
 //!
 
 use serde::{Deserialize, Serialize};
-use smallvec::SmallVec;
 
 /// Authorization
 #[derive(Debug, Serialize, Deserialize)]
@@ -56,81 +55,12 @@ pub struct ParseCredentialError {
     _priv: (),
 }
 
-/// helper macro for parser
-macro_rules! parse_and_bind {
-    (mut $input:expr => $f:expr => $id:pat ) => {
-        let $id = {
-            let (__input, output) = $f($input)?;
-            $input = __input;
-            output
-        };
-    };
-    ($input:expr => $f:expr => $id:pat ) => {
-        let $id = {
-            let (_, output) = $f($input)?;
-            output
-        };
-    };
-}
-
 impl<'a> CredentialV4<'a> {
-    /// parse by nom
-    fn nom_parse(mut input: &'a str) -> nom::IResult<&'a str, Self> {
-        use nom::{
-            bytes::complete::{tag, take, take_till, take_till1},
-            sequence::terminated,
-        };
-
-        let mut slash_tail1 = terminated(take_till1(|c| c == '/'), take(1_usize));
-        let mut slash_tail0 = terminated(take_till(|c| c == '/'), take(1_usize));
-
-        parse_and_bind!(mut input => slash_tail0 => access_key_id);
-        parse_and_bind!(mut input => slash_tail1 => date);
-        parse_and_bind!(date => CredentialV4::verify_date => _);
-        parse_and_bind!(mut input => slash_tail0 => aws_region);
-        parse_and_bind!(mut input => slash_tail1 => aws_service);
-        parse_and_bind!(mut input => tag("aws4_request") => _);
-
-        let c = CredentialV4 {
-            access_key_id,
-            date,
-            aws_region,
-            aws_service,
-        };
-        Ok((input, c))
-    }
-
     pub fn parse(input: &'a str) -> Result<Self, ParseCredentialError> {
-        match Self::nom_parse(input) {
+        match parser::parse_credential(input) {
             Ok(("", ans)) => Ok(ans),
             Ok(_) | Err(_) => Err(ParseCredentialError { _priv: () }),
         }
-    }
-
-    /// verify date: YYYYMMDD
-    fn verify_date(input: &str) -> nom::IResult<&str, (&str, &str, &str)> {
-        use chrono::NaiveDate;
-        use nom::{
-            bytes::complete::take,
-            combinator::{all_consuming, verify},
-            sequence::tuple,
-        };
-
-        verify(
-            all_consuming(tuple((take(4_usize), take(2_usize), take(2_usize)))),
-            |&(y, m, d): &(&str, &str, &str)| {
-                /// helper macro
-                macro_rules! parse_num {
-                    ($x:expr) => {{
-                        match $x.parse() {
-                            Ok(x) => x,
-                            Err(_) => return false,
-                        }
-                    }};
-                }
-                NaiveDate::from_ymd_opt(parse_num!(y), parse_num!(m), parse_num!(d)).is_some()
-            },
-        )(input)
     }
 }
 
@@ -138,55 +68,101 @@ impl<'a> AuthorizationV4<'a> {
     /// Parses `AuthorizationV4` from `Authorization` header
     /// # Errors
     /// Returns an `Err` if the header is invalid
-    pub fn parse(auth: &'a str) -> Result<Self, ParseAuthorizationError> {
-        /// nom parser
-        fn nom_parse(mut input: &str) -> nom::IResult<&str, AuthorizationV4<'_>> {
-            use nom::{
-                bytes::complete::{tag, take, take_till, take_till1},
-                character::complete::{multispace0, multispace1},
-                combinator::all_consuming,
-                sequence::tuple,
-            };
-
-            let space_till1 = take_till1(|c: char| c.is_ascii_whitespace());
-            let space_till0 = take_till(|c: char| c.is_ascii_whitespace());
-
-            parse_and_bind!(mut input => space_till1 => algorithm);
-            parse_and_bind!(mut input => multispace1 => _);
-            parse_and_bind!(mut input => tag("Credential=") => _);
-            parse_and_bind!(mut input => CredentialV4::nom_parse => credential);
-            parse_and_bind!(mut input => tag(",") => _);
-            parse_and_bind!(mut input => multispace0 => _);
-            parse_and_bind!(mut input => tag("SignedHeaders=") => _);
-
-            let mut headers: SmallVec<[&str; 16]> = SmallVec::new();
-            loop {
-                let mut expect_header = tuple((take_till1(|c| c == ';' || c == ','), take(1_usize)));
-                parse_and_bind!(mut input => expect_header => (header, sep));
-                headers.push(header);
-                if sep == "," {
-                    break;
-                }
-            }
-
-            parse_and_bind!(mut input => multispace0 => _);
-            parse_and_bind!(mut input => tag("Signature=") => _);
-            parse_and_bind!(mut input => space_till0 => signature);
-            parse_and_bind!(mut input => all_consuming(multispace0) => _);
-
-            let ans = AuthorizationV4 {
-                algorithm,
-                credential,
-                signed_headers: headers.into_vec(),
-                signature,
-            };
-
-            Ok((input, ans))
-        }
-
-        match nom_parse(auth) {
+    pub fn parse(header: &'a str) -> Result<Self, ParseAuthorizationError> {
+        match parser::parse_authorization(header) {
             Ok(("", ans)) => Ok(ans),
             Ok(_) | Err(_) => Err(ParseAuthorizationError { _priv: () }),
+        }
+    }
+}
+
+mod parser {
+    use super::*;
+
+    use crate::utils::parser::{consume, digit2, digit4, Error};
+
+    use nom::bytes::complete::{tag, take, take_till, take_till1};
+    use nom::character::complete::{multispace0, multispace1};
+    use nom::combinator::verify;
+    use nom::multi::separated_list1;
+    use nom::sequence::{delimited, preceded, terminated};
+    use nom::IResult;
+
+    pub fn parse_authorization(mut input: &str) -> IResult<&str, AuthorizationV4<'_>> {
+        let s = &mut input;
+
+        let algorithm = consume(s, till_space1)?;
+
+        consume(s, multispace1)?;
+        let credential = consume(s, delimited(tag("Credential="), parse_credential, tag(",")))?;
+
+        consume(s, multispace0)?;
+        let parse_headers = separated_list1(tag(";"), take_till(|c| c == ';' || c == ','));
+        let signed_headers = consume(s, delimited(tag("SignedHeaders="), parse_headers, tag(",")))?;
+
+        consume(s, multispace0)?;
+        let signature = consume(s, preceded(tag("Signature="), till_space0))?;
+
+        consume(s, multispace0)?;
+
+        let ans = AuthorizationV4 {
+            algorithm,
+            credential,
+            signed_headers,
+            signature,
+        };
+
+        Ok((input, ans))
+    }
+
+    fn till_space0(input: &str) -> IResult<&str, &str> {
+        take_till(|c: char| c.is_ascii_whitespace())(input)
+    }
+
+    fn till_space1(input: &str) -> IResult<&str, &str> {
+        take_till1(|c: char| c.is_ascii_whitespace())(input)
+    }
+
+    pub fn parse_credential(mut input: &str) -> IResult<&str, CredentialV4<'_>> {
+        let s = &mut input;
+
+        let access_key_id = consume(s, until_slash0)?;
+        let date = consume(s, verify(until_slash1, |s| verify_date(s).is_ok()))?;
+        let aws_region = consume(s, until_slash0)?;
+        let aws_service = consume(s, until_slash1)?;
+        consume(s, tag("aws4_request"))?;
+
+        let ans = CredentialV4 {
+            access_key_id,
+            date,
+            aws_region,
+            aws_service,
+        };
+
+        Ok((input, ans))
+    }
+
+    fn until_slash0(input: &str) -> IResult<&str, &str> {
+        terminated(take_till(|c| c == '/'), take(1_usize))(input)
+    }
+
+    fn until_slash1(input: &str) -> IResult<&str, &str> {
+        terminated(take_till1(|c| c == '/'), take(1_usize))(input)
+    }
+
+    fn verify_date(s: &str) -> Result<(), Error> {
+        let x = s.as_bytes();
+        if x.len() != 8 {
+            return Err(Error);
+        }
+
+        let yyyy = digit4([x[0], x[1], x[2], x[3]])?.into();
+        let mm = digit2([x[4], x[5]])?.into();
+        let dd = digit2([x[6], x[7]])?.into();
+
+        match chrono::NaiveDate::from_ymd_opt(yyyy, mm, dd) {
+            Some(_) => Ok(()),
+            None => Err(Error),
         }
     }
 }
