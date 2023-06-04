@@ -28,6 +28,7 @@ hmac = "0.12.1"
 http-body = "0.4.5"
 httparse = "1.8.0"
 hyper = { version = "0.14.26", features = ["stream"] }
+itoa = "1.0.6"
 memchr = "2.5.0"
 mime = "0.3.17"
 nom = "7.1.3"
