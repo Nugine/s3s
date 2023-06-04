@@ -5,7 +5,8 @@ use crate::dto::SelectObjectContentEventStream;
 use crate::dto::{Metadata, StreamingBlob, Timestamp, TimestampFormat};
 use crate::error::{S3Error, S3Result};
 use crate::http::{HeaderName, HeaderValue};
-use crate::{utils, xml};
+use crate::utils::format::fmt_timestamp;
+use crate::xml;
 
 use std::convert::Infallible;
 use std::fmt::Write as _;
@@ -41,7 +42,7 @@ where
     N: IntoHeaderName,
 {
     if let Some(value) = value {
-        let val = utils::fmt_timestamp(&value, fmt, HeaderValue::from_bytes).map_err(S3Error::internal_error)?;
+        let val = fmt_timestamp(&value, fmt, HeaderValue::from_bytes).map_err(S3Error::internal_error)?;
         res.headers.insert(name, val);
     }
     Ok(())

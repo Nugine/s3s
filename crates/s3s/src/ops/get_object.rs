@@ -2,7 +2,7 @@ use crate::dto::GetObjectInput;
 use crate::dto::Timestamp;
 use crate::dto::TimestampFormat;
 use crate::header;
-use crate::utils;
+use crate::utils::format::fmt_timestamp;
 use crate::S3Request;
 use crate::S3Result;
 
@@ -37,7 +37,7 @@ fn add(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&str>) 
 fn add_ts(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&Timestamp>) -> S3Result<()> {
     let error = |e| invalid_request!(e, "invalid overrided header: {name}: {value:?}");
     if let Some(value) = value {
-        let value = utils::fmt_timestamp(value, TimestampFormat::HttpDate, HeaderValue::from_bytes).map_err(error)?;
+        let value = fmt_timestamp(value, TimestampFormat::HttpDate, HeaderValue::from_bytes).map_err(error)?;
         map.insert(name, value);
     }
     Ok(())

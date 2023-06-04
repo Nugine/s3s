@@ -160,7 +160,7 @@ async fn extract_full_body(content_length: Option<u64>, body: &mut Body) -> S3Re
 fn fmt_content_length(len: usize) -> http::HeaderValue {
     const ZERO: http::HeaderValue = http::HeaderValue::from_static("0");
     if len > 0 {
-        crate::utils::fmt_usize(len, |s| http::HeaderValue::try_from(s).unwrap())
+        crate::utils::format::fmt_usize(len, |s| http::HeaderValue::try_from(s).unwrap())
     } else {
         ZERO
     }

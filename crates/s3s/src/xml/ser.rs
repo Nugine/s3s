@@ -4,7 +4,7 @@
 //!
 
 use crate::dto::{self, Timestamp, TimestampFormat};
-use crate::utils;
+use crate::utils::format::*;
 
 use std::fmt;
 use std::io::Write;
@@ -116,7 +116,7 @@ impl<W: Write> Serializer<W> {
     }
 
     pub fn timestamp(&mut self, name: &str, val: &Timestamp, fmt: TimestampFormat) -> SerResult {
-        utils::fmt_timestamp(val, fmt, |b| self.content(name, str::from_ascii_simd(b).unwrap()))
+        fmt_timestamp(val, fmt, |b| self.content(name, str::from_ascii_simd(b).unwrap()))
     }
 }
 
@@ -128,19 +128,19 @@ impl<W: Write> fmt::Debug for Serializer<W> {
 
 impl SerializeContent for bool {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.event(text(utils::fmt_boolean(*self)))
+        s.event(text(fmt_boolean(*self)))
     }
 }
 
 impl SerializeContent for i32 {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        utils::fmt_integer(*self, |t| s.event(text(t)))
+        fmt_integer(*self, |t| s.event(text(t)))
     }
 }
 
 impl SerializeContent for i64 {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        utils::fmt_long(*self, |t| s.event(text(t)))
+        fmt_long(*self, |t| s.event(text(t)))
     }
 }
 
