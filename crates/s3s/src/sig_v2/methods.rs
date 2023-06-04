@@ -2,7 +2,7 @@ use crate::auth::SecretKey;
 use crate::http::OrderedHeaders;
 use crate::http::OrderedQs;
 use crate::path::S3Path;
-use crate::utils::hmac_sha1;
+use crate::utils::crypto::hmac_sha1;
 
 use std::ops::Not;
 

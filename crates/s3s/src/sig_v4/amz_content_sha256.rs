@@ -1,6 +1,6 @@
 //! x-amz-content-sha256
 
-use crate::utils::is_sha256_checksum;
+use crate::utils::crypto::is_sha256_checksum;
 
 /// x-amz-content-sha256
 ///

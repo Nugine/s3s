@@ -4,7 +4,7 @@ use super::AmzDate;
 use super::CredentialV4;
 
 use crate::http::OrderedQs;
-use crate::utils::is_sha256_checksum;
+use crate::utils::crypto::is_sha256_checksum;
 
 use smallvec::SmallVec;
 

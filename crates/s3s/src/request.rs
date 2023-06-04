@@ -1,8 +1,8 @@
 use crate::auth::Credentials;
-use crate::utils::default;
 
 use hyper::http::{Extensions, HeaderValue};
 use hyper::{HeaderMap, Uri};
+use rust_utils::default::default;
 
 #[derive(Debug)]
 #[non_exhaustive]

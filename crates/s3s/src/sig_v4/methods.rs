@@ -4,7 +4,7 @@ use super::AmzDate;
 
 use crate::auth::SecretKey;
 use crate::http::OrderedHeaders;
-use crate::utils::hmac_sha256;
+use crate::utils::crypto::hmac_sha256;
 use crate::utils::stable_sort_by_first;
 
 use std::mem::MaybeUninit;
