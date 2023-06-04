@@ -3,12 +3,6 @@
 //! <https://docs.aws.amazon.com/AmazonS3/latest/userguide/RESTAuthentication.html#ConstructingTheAuthenticationHeader>
 //!
 
-use crate::utils::parser;
-
-use nom::bytes::complete::{tag, take, take_till};
-use nom::combinator::{all_consuming, rest};
-use nom::sequence::terminated;
-
 pub struct AuthorizationV2<'a> {
     pub access_key: &'a str,
     pub signature: &'a str,
@@ -24,18 +18,35 @@ pub struct ParseAuthorizationV2Error {
 
 impl<'a> AuthorizationV2<'a> {
     pub fn parse(input: &'a str) -> Result<Self, ParseAuthorizationV2Error> {
-        let error = |_| ParseAuthorizationV2Error { _priv: () };
-        let colon_tail0 = terminated(take_till(|c| c == ':'), take(1_usize));
+        match parser::parse_authorization(input) {
+            Ok(("", ans)) => Ok(ans),
+            Ok(_) | Err(_) => Err(ParseAuthorizationV2Error { _priv: () }),
+        }
+    }
+}
 
-        parser::parse(input, |p| {
-            p.nom(tag("AWS "))?;
+mod parser {
+    use super::AuthorizationV2;
 
-            let access_key = p.nom(colon_tail0)?;
-            let signature = p.nom(all_consuming(rest))?;
+    use crate::utils::parser::consume;
 
-            Ok(Self { access_key, signature })
-        })
-        .map_err(error)
+    use nom::bytes::complete::{tag, take, take_till};
+    use nom::combinator::rest;
+    use nom::sequence::terminated;
+    use nom::IResult;
+
+    pub fn parse_authorization(mut input: &str) -> IResult<&str, AuthorizationV2<'_>> {
+        let s = &mut input;
+
+        consume(s, tag("AWS "))?;
+        let access_key = consume(s, until_colon0)?;
+        let signature = consume(s, rest)?;
+
+        Ok((input, AuthorizationV2 { access_key, signature }))
+    }
+
+    fn until_colon0(input: &str) -> IResult<&str, &str> {
+        terminated(take_till(|c| c == ':'), take(1_usize))(input)
     }
 }
 

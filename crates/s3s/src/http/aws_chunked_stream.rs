@@ -75,27 +75,19 @@ struct ChunkMeta<'a> {
 
 /// nom parser
 fn parse_chunk_meta(mut input: &[u8]) -> nom::IResult<&[u8], ChunkMeta<'_>> {
-    use nom::{
-        bytes::complete::{tag, take, take_till1},
-        combinator::{all_consuming, map_res},
-        number::complete::hex_u32,
-        sequence::tuple,
-    };
+    use crate::utils::parser::consume;
 
-    let mut parser = all_consuming(tuple((
-        take_till1(|c| c == b';'),
-        tag(b";chunk-signature="),
-        take(64_usize),
-        tag(b"\r\n"),
-    )));
+    use nom::bytes::complete::{tag, take, take_till1};
+    use nom::combinator::{all_consuming, map_res};
+    use nom::number::complete::hex_u32;
+    use nom::sequence::delimited;
 
-    let (size_str, signature) = {
-        let (remain, (size_str, _, signature, _)) = parser(input)?;
-        input = remain;
-        (size_str, signature)
-    };
+    let s = &mut input;
 
-    let (_, size) = map_res(hex_u32, TryInto::try_into)(size_str)?;
+    let size = consume(s, take_till1(|c| c == b';'))?;
+    let (_, size) = map_res(hex_u32, TryInto::try_into)(size)?;
+
+    let signature = consume(s, all_consuming(delimited(tag(b";chunk-signature="), take(64_usize), tag(b"\r\n"))))?;
 
     Ok((input, ChunkMeta { size, signature }))
 }

@@ -1,7 +1,6 @@
 //! x-amz-date
 
 use std::fmt::Write as _;
-use std::str::FromStr;
 
 use arrayvec::ArrayString;
 
@@ -25,59 +24,14 @@ pub struct AmzDate {
 /// [`AmzDate`]
 #[derive(Debug, thiserror::Error)]
 #[error("ParseAmzDateError")]
-pub struct ParseAmzDateError {
-    /// private place holder
-    _priv: (),
-}
+pub struct ParseAmzDateError(());
 
 impl AmzDate {
     /// Parses `AmzDate` from header
     /// # Errors
     /// Returns an error if the header is invalid
     pub fn parse(header: &str) -> Result<Self, ParseAmzDateError> {
-        /// nom parser
-        fn nom_parse(input: &str) -> nom::IResult<&str, [&str; 6]> {
-            use nom::{
-                bytes::complete::{tag, take},
-                combinator::all_consuming,
-                sequence::tuple,
-            };
-
-            let mut parser = all_consuming(tuple((
-                take(4_usize),
-                take(2_usize),
-                take(2_usize),
-                tag("T"),
-                take(2_usize),
-                take(2_usize),
-                take(2_usize),
-                tag("Z"),
-            )));
-
-            let (_, (year_str, month_str, day_str, _, hour_str, minute_str, second_str, _)) = parser(input)?;
-
-            Ok((input, [year_str, month_str, day_str, hour_str, minute_str, second_str]))
-        }
-
-        /// parse number
-        fn to_num<T: FromStr>(input: &str) -> Result<T, ParseAmzDateError> {
-            match input.parse::<T>() {
-                Ok(x) => Ok(x),
-                Err(_) => Err(ParseAmzDateError { _priv: () }),
-            }
-        }
-
-        match nom_parse(header) {
-            Err(_) => Err(ParseAmzDateError { _priv: () }),
-            Ok((_, [year_str, month_str, day_str, hour_str, minute_str, second_str])) => Ok(Self {
-                year: to_num(year_str)?,
-                month: to_num(month_str)?,
-                day: to_num(day_str)?,
-                hour: to_num(hour_str)?,
-                minute: to_num(minute_str)?,
-                second: to_num(second_str)?,
-            }),
-        }
+        self::parser::parse(header).map_err(|_| ParseAmzDateError(()))
     }
 
     /// `{YYYY}{MM}{DD}T{HH}{MM}{SS}Z`
@@ -105,5 +59,43 @@ impl AmzDate {
         let t = time::Date::from_calendar_date(y, m, d).ok()?;
         let t = t.with_hms(self.hour, self.minute, self.second).ok()?;
         Some(t.assume_utc())
+    }
+}
+
+mod parser {
+    use super::*;
+
+    use crate::utils::parser::{digit2, digit4, Error};
+
+    macro_rules! ensure {
+        ($cond:expr) => {
+            if !$cond {
+                return Err(Error);
+            }
+        };
+    }
+
+    pub fn parse(input: &str) -> Result<AmzDate, Error> {
+        let x = input.as_bytes();
+        ensure!(x.len() == 16);
+
+        let year = digit4([x[0], x[1], x[2], x[3]])?;
+        let month = digit2([x[4], x[5]])?;
+        let day = digit2([x[6], x[7]])?;
+        ensure!(x[8] == b'T');
+
+        let hour = digit2([x[9], x[10]])?;
+        let minute = digit2([x[11], x[12]])?;
+        let second = digit2([x[13], x[14]])?;
+        ensure!(x[15] == b'Z');
+
+        Ok(AmzDate {
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            second,
+        })
     }
 }
