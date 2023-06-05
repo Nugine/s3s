@@ -196,7 +196,7 @@ mod tests {
                 Signature=fe5f80f77d5fa3beca038a248ff027d0445342fe2855ddc963176630326f1024
             "#;
 
-            assert!(matches!(AuthorizationV4::parse(auth), Err(_)));
+            assert!(AuthorizationV4::parse(auth).is_err());
         }
     }
 
