@@ -57,6 +57,10 @@ impl S3 for FileSystem {
             return Err(s3_error!(NoSuchKey));
         }
 
+        if self.get_bucket_path(&input.bucket)?.exists().not() {
+            return Err(s3_error!(NoSuchBucket));
+        }
+
         let file_metadata = try_!(fs::metadata(&src_path).await);
         let last_modified = Timestamp::from(try_!(file_metadata.modified()));
 
