@@ -486,7 +486,7 @@ impl S3 for FileSystem {
         let mut parts: Vec<Part> = Vec::new();
         let mut iter = try_!(fs::read_dir(&self.root).await);
 
-        let prefix = format!(".upload_id-{}", upload_id);
+        let prefix = format!(".upload_id-{upload_id}");
 
         while let Some(entry) = try_!(iter.next_entry().await) {
             let file_type = try_!(entry.file_type().await);
