@@ -478,42 +478,40 @@ impl S3 for FileSystem {
     }
 
     #[tracing::instrument]
-    async fn list_parts(&self, req: S3Request<ListPartsInput>) -> S3Result<ListPartsOutput> {
+    async fn list_parts(&self, req: S3Request<ListPartsInput>) -> S3Result<S3Response<ListPartsOutput>> {
         let ListPartsInput {
             bucket, key, upload_id, ..
         } = req.input;
 
         let mut parts: Vec<Part> = Vec::new();
-        let directory_iterator = fs::read_dir(&self.root).await;
-        if let Ok(mut iter) = directory_iterator {
-            while let Some(entry) = try_!(iter.next_entry().await) {
-                let file_type = try_!(entry.file_type().await);
-                if file_type.is_file().not() {
-                    continue;
-                }
+        let mut iter = try_!(fs::read_dir(&self.root).await);
 
-                let file_name = entry.file_name();
-                let Some(name) = file_name.to_str() else { continue };
-                if !name.starts_with(format!(".upload_id-{}", upload_id).as_str()) {
-                    continue;
-                }
+        let prefix = format!(".upload_id-{}", upload_id);
 
-                let file_meta = try_!(entry.metadata().await);
-                let last_modified = Timestamp::from(try_!(file_meta.modified()));
-                let size = file_meta.len() as i64;
-
-                let part_segment = name.strip_prefix(format!(".upload_id-{}", upload_id).as_str()).unwrap();
-                let part_number = part_segment.strip_prefix(".part-").unwrap();
-                let parsed_part_number = part_number.parse::<i32>().unwrap();
-
-                let part = Part {
-                    last_modified: Some(last_modified),
-                    part_number: parsed_part_number,
-                    size,
-                    ..Default::default()
-                };
-                parts.push(part);
+        while let Some(entry) = try_!(iter.next_entry().await) {
+            let file_type = try_!(entry.file_type().await);
+            if file_type.is_file().not() {
+                continue;
             }
+
+            let file_name = entry.file_name();
+            let Some(name) = file_name.to_str() else { continue };
+
+            let Some(part_segment) = name.strip_prefix(&prefix) else { continue };
+            let Some(part_number) = part_segment.strip_prefix(".part-") else { continue };
+            let part_number = part_number.parse::<i32>().unwrap();
+
+            let file_meta = try_!(entry.metadata().await);
+            let last_modified = Timestamp::from(try_!(file_meta.modified()));
+            let size = try_!(i64::try_from(file_meta.len()));
+
+            let part = Part {
+                last_modified: Some(last_modified),
+                part_number,
+                size,
+                ..Default::default()
+            };
+            parts.push(part);
         }
 
         let output = ListPartsOutput {
@@ -523,7 +521,7 @@ impl S3 for FileSystem {
             parts: Some(parts),
             ..Default::default()
         };
-        Ok(output)
+        Ok(S3Response::new(output))
     }
 
     #[tracing::instrument]
