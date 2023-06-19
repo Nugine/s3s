@@ -612,13 +612,43 @@ fn codegen_struct_builder(ty: &rust::Struct, rust_types: &RustTypes) {
             Cow::Borrowed(&field.type_)
         };
 
-        g!("pub fn set_{field_name}(&mut self, field: {struct_field_type}) {{");
+        let needs_wrap = !(field.option_type || field.default_value.is_some() || is_list_or_map(&field.type_, rust_types));
 
-        if field.option_type || field.default_value.is_some() || is_list_or_map(&field.type_, rust_types) {
-            g!("    self.{field_name} = field;");
-        } else {
+        g!("pub fn set_{field_name}(&mut self, field: {struct_field_type}) -> &mut Self {{");
+
+        if needs_wrap {
             g!("    self.{field_name} = Some(field);");
+        } else {
+            g!("    self.{field_name} = field;");
         }
+
+        g!("self");
+
+        g!("}}");
+        g!();
+    }
+
+    for field in &ty.fields {
+        let field_name = field.name.as_str();
+
+        let struct_field_type = if field.option_type {
+            Cow::Owned(format!("Option<{}>", field.type_))
+        } else {
+            Cow::Borrowed(&field.type_)
+        };
+
+        let needs_wrap = !(field.option_type || field.default_value.is_some() || is_list_or_map(&field.type_, rust_types));
+
+        g!("#[must_use]");
+        g!("pub fn {field_name}(mut self, field: {struct_field_type}) -> Self {{");
+
+        if needs_wrap {
+            g!("    self.{field_name} = Some(field);");
+        } else {
+            g!("    self.{field_name} = field;");
+        }
+
+        g!("self");
 
         g!("}}");
         g!();

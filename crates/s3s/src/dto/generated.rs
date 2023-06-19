@@ -16382,24 +16382,59 @@ pub mod builders {
     }
 
     impl AbortMultipartUploadInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) -> &mut Self {
             self.upload_id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn upload_id(mut self, field: MultipartUploadId) -> Self {
+            self.upload_id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<AbortMultipartUploadInput, BuildError> {
@@ -16449,56 +16484,147 @@ pub mod builders {
     }
 
     impl CompleteMultipartUploadInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) {
+        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) -> &mut Self {
             self.checksum_crc32 = field;
+            self
         }
 
-        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) {
+        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) -> &mut Self {
             self.checksum_crc32c = field;
+            self
         }
 
-        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) {
+        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) -> &mut Self {
             self.checksum_sha1 = field;
+            self
         }
 
-        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) {
+        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) -> &mut Self {
             self.checksum_sha256 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_multipart_upload(&mut self, field: Option<CompletedMultipartUpload>) {
+        pub fn set_multipart_upload(&mut self, field: Option<CompletedMultipartUpload>) -> &mut Self {
             self.multipart_upload = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) -> &mut Self {
             self.upload_id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_crc32(mut self, field: Option<ChecksumCRC32>) -> Self {
+            self.checksum_crc32 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_crc32c(mut self, field: Option<ChecksumCRC32C>) -> Self {
+            self.checksum_crc32c = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_sha1(mut self, field: Option<ChecksumSHA1>) -> Self {
+            self.checksum_sha1 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_sha256(mut self, field: Option<ChecksumSHA256>) -> Self {
+            self.checksum_sha256 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn multipart_upload(mut self, field: Option<CompletedMultipartUpload>) -> Self {
+            self.multipart_upload = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn upload_id(mut self, field: MultipartUploadId) -> Self {
+            self.upload_id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<CompleteMultipartUploadInput, BuildError> {
@@ -16620,168 +16746,455 @@ pub mod builders {
     }
 
     impl CopyObjectInputBuilder {
-        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) {
+        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) -> &mut Self {
             self.acl = field;
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) {
+        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) -> &mut Self {
             self.bucket_key_enabled = field;
+            self
         }
 
-        pub fn set_cache_control(&mut self, field: Option<CacheControl>) {
+        pub fn set_cache_control(&mut self, field: Option<CacheControl>) -> &mut Self {
             self.cache_control = field;
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) {
+        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) -> &mut Self {
             self.content_disposition = field;
+            self
         }
 
-        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) {
+        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) -> &mut Self {
             self.content_encoding = field;
+            self
         }
 
-        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) {
+        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) -> &mut Self {
             self.content_language = field;
+            self
         }
 
-        pub fn set_content_type(&mut self, field: Option<ContentType>) {
+        pub fn set_content_type(&mut self, field: Option<ContentType>) -> &mut Self {
             self.content_type = field;
+            self
         }
 
-        pub fn set_copy_source(&mut self, field: CopySource) {
+        pub fn set_copy_source(&mut self, field: CopySource) -> &mut Self {
             self.copy_source = Some(field);
+            self
         }
 
-        pub fn set_copy_source_if_match(&mut self, field: Option<CopySourceIfMatch>) {
+        pub fn set_copy_source_if_match(&mut self, field: Option<CopySourceIfMatch>) -> &mut Self {
             self.copy_source_if_match = field;
+            self
         }
 
-        pub fn set_copy_source_if_modified_since(&mut self, field: Option<CopySourceIfModifiedSince>) {
+        pub fn set_copy_source_if_modified_since(&mut self, field: Option<CopySourceIfModifiedSince>) -> &mut Self {
             self.copy_source_if_modified_since = field;
+            self
         }
 
-        pub fn set_copy_source_if_none_match(&mut self, field: Option<CopySourceIfNoneMatch>) {
+        pub fn set_copy_source_if_none_match(&mut self, field: Option<CopySourceIfNoneMatch>) -> &mut Self {
             self.copy_source_if_none_match = field;
+            self
         }
 
-        pub fn set_copy_source_if_unmodified_since(&mut self, field: Option<CopySourceIfUnmodifiedSince>) {
+        pub fn set_copy_source_if_unmodified_since(&mut self, field: Option<CopySourceIfUnmodifiedSince>) -> &mut Self {
             self.copy_source_if_unmodified_since = field;
+            self
         }
 
-        pub fn set_copy_source_sse_customer_algorithm(&mut self, field: Option<CopySourceSSECustomerAlgorithm>) {
+        pub fn set_copy_source_sse_customer_algorithm(&mut self, field: Option<CopySourceSSECustomerAlgorithm>) -> &mut Self {
             self.copy_source_sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_copy_source_sse_customer_key(&mut self, field: Option<CopySourceSSECustomerKey>) {
+        pub fn set_copy_source_sse_customer_key(&mut self, field: Option<CopySourceSSECustomerKey>) -> &mut Self {
             self.copy_source_sse_customer_key = field;
+            self
         }
 
-        pub fn set_copy_source_sse_customer_key_md5(&mut self, field: Option<CopySourceSSECustomerKeyMD5>) {
+        pub fn set_copy_source_sse_customer_key_md5(&mut self, field: Option<CopySourceSSECustomerKeyMD5>) -> &mut Self {
             self.copy_source_sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_expected_source_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_source_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_source_bucket_owner = field;
+            self
         }
 
-        pub fn set_expires(&mut self, field: Option<Expires>) {
+        pub fn set_expires(&mut self, field: Option<Expires>) -> &mut Self {
             self.expires = field;
+            self
         }
 
-        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) -> &mut Self {
             self.grant_full_control = field;
+            self
         }
 
-        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) -> &mut Self {
             self.grant_read = field;
+            self
         }
 
-        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) -> &mut Self {
             self.grant_read_acp = field;
+            self
         }
 
-        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) -> &mut Self {
             self.grant_write_acp = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_metadata(&mut self, field: Option<Metadata>) {
+        pub fn set_metadata(&mut self, field: Option<Metadata>) -> &mut Self {
             self.metadata = field;
+            self
         }
 
-        pub fn set_metadata_directive(&mut self, field: Option<MetadataDirective>) {
+        pub fn set_metadata_directive(&mut self, field: Option<MetadataDirective>) -> &mut Self {
             self.metadata_directive = field;
+            self
         }
 
-        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) {
+        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) -> &mut Self {
             self.object_lock_legal_hold_status = field;
+            self
         }
 
-        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) {
+        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) -> &mut Self {
             self.object_lock_mode = field;
+            self
         }
 
-        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) {
+        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) -> &mut Self {
             self.object_lock_retain_until_date = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) {
+        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) -> &mut Self {
             self.ssekms_encryption_context = field;
+            self
         }
 
-        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) {
+        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) -> &mut Self {
             self.ssekms_key_id = field;
+            self
         }
 
-        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) {
+        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) -> &mut Self {
             self.server_side_encryption = field;
+            self
         }
 
-        pub fn set_storage_class(&mut self, field: Option<StorageClass>) {
+        pub fn set_storage_class(&mut self, field: Option<StorageClass>) -> &mut Self {
             self.storage_class = field;
+            self
         }
 
-        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) {
+        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) -> &mut Self {
             self.tagging = field;
+            self
         }
 
-        pub fn set_tagging_directive(&mut self, field: Option<TaggingDirective>) {
+        pub fn set_tagging_directive(&mut self, field: Option<TaggingDirective>) -> &mut Self {
             self.tagging_directive = field;
+            self
         }
 
-        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) {
+        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) -> &mut Self {
             self.website_redirect_location = field;
+            self
+        }
+
+        #[must_use]
+        pub fn acl(mut self, field: Option<ObjectCannedACL>) -> Self {
+            self.acl = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket_key_enabled(mut self, field: Option<BucketKeyEnabled>) -> Self {
+            self.bucket_key_enabled = field;
+            self
+        }
+
+        #[must_use]
+        pub fn cache_control(mut self, field: Option<CacheControl>) -> Self {
+            self.cache_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_disposition(mut self, field: Option<ContentDisposition>) -> Self {
+            self.content_disposition = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_encoding(mut self, field: Option<ContentEncoding>) -> Self {
+            self.content_encoding = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_language(mut self, field: Option<ContentLanguage>) -> Self {
+            self.content_language = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_type(mut self, field: Option<ContentType>) -> Self {
+            self.content_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source(mut self, field: CopySource) -> Self {
+            self.copy_source = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_if_match(mut self, field: Option<CopySourceIfMatch>) -> Self {
+            self.copy_source_if_match = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_if_modified_since(mut self, field: Option<CopySourceIfModifiedSince>) -> Self {
+            self.copy_source_if_modified_since = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_if_none_match(mut self, field: Option<CopySourceIfNoneMatch>) -> Self {
+            self.copy_source_if_none_match = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_if_unmodified_since(mut self, field: Option<CopySourceIfUnmodifiedSince>) -> Self {
+            self.copy_source_if_unmodified_since = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_sse_customer_algorithm(mut self, field: Option<CopySourceSSECustomerAlgorithm>) -> Self {
+            self.copy_source_sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_sse_customer_key(mut self, field: Option<CopySourceSSECustomerKey>) -> Self {
+            self.copy_source_sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_sse_customer_key_md5(mut self, field: Option<CopySourceSSECustomerKeyMD5>) -> Self {
+            self.copy_source_sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_source_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_source_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expires(mut self, field: Option<Expires>) -> Self {
+            self.expires = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_full_control(mut self, field: Option<GrantFullControl>) -> Self {
+            self.grant_full_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read(mut self, field: Option<GrantRead>) -> Self {
+            self.grant_read = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read_acp(mut self, field: Option<GrantReadACP>) -> Self {
+            self.grant_read_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write_acp(mut self, field: Option<GrantWriteACP>) -> Self {
+            self.grant_write_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn metadata(mut self, field: Option<Metadata>) -> Self {
+            self.metadata = field;
+            self
+        }
+
+        #[must_use]
+        pub fn metadata_directive(mut self, field: Option<MetadataDirective>) -> Self {
+            self.metadata_directive = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_legal_hold_status(mut self, field: Option<ObjectLockLegalHoldStatus>) -> Self {
+            self.object_lock_legal_hold_status = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_mode(mut self, field: Option<ObjectLockMode>) -> Self {
+            self.object_lock_mode = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_retain_until_date(mut self, field: Option<ObjectLockRetainUntilDate>) -> Self {
+            self.object_lock_retain_until_date = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn ssekms_encryption_context(mut self, field: Option<SSEKMSEncryptionContext>) -> Self {
+            self.ssekms_encryption_context = field;
+            self
+        }
+
+        #[must_use]
+        pub fn ssekms_key_id(mut self, field: Option<SSEKMSKeyId>) -> Self {
+            self.ssekms_key_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn server_side_encryption(mut self, field: Option<ServerSideEncryption>) -> Self {
+            self.server_side_encryption = field;
+            self
+        }
+
+        #[must_use]
+        pub fn storage_class(mut self, field: Option<StorageClass>) -> Self {
+            self.storage_class = field;
+            self
+        }
+
+        #[must_use]
+        pub fn tagging(mut self, field: Option<TaggingHeader>) -> Self {
+            self.tagging = field;
+            self
+        }
+
+        #[must_use]
+        pub fn tagging_directive(mut self, field: Option<TaggingDirective>) -> Self {
+            self.tagging_directive = field;
+            self
+        }
+
+        #[must_use]
+        pub fn website_redirect_location(mut self, field: Option<WebsiteRedirectLocation>) -> Self {
+            self.website_redirect_location = field;
+            self
         }
 
         pub fn build(self) -> Result<CopyObjectInput, BuildError> {
@@ -16897,44 +17310,114 @@ pub mod builders {
     }
 
     impl CreateBucketInputBuilder {
-        pub fn set_acl(&mut self, field: Option<BucketCannedACL>) {
+        pub fn set_acl(&mut self, field: Option<BucketCannedACL>) -> &mut Self {
             self.acl = field;
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_create_bucket_configuration(&mut self, field: Option<CreateBucketConfiguration>) {
+        pub fn set_create_bucket_configuration(&mut self, field: Option<CreateBucketConfiguration>) -> &mut Self {
             self.create_bucket_configuration = field;
+            self
         }
 
-        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) -> &mut Self {
             self.grant_full_control = field;
+            self
         }
 
-        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) -> &mut Self {
             self.grant_read = field;
+            self
         }
 
-        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) -> &mut Self {
             self.grant_read_acp = field;
+            self
         }
 
-        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) {
+        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) -> &mut Self {
             self.grant_write = field;
+            self
         }
 
-        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) -> &mut Self {
             self.grant_write_acp = field;
+            self
         }
 
-        pub fn set_object_lock_enabled_for_bucket(&mut self, field: Option<ObjectLockEnabledForBucket>) {
+        pub fn set_object_lock_enabled_for_bucket(&mut self, field: Option<ObjectLockEnabledForBucket>) -> &mut Self {
             self.object_lock_enabled_for_bucket = field;
+            self
         }
 
-        pub fn set_object_ownership(&mut self, field: Option<ObjectOwnership>) {
+        pub fn set_object_ownership(&mut self, field: Option<ObjectOwnership>) -> &mut Self {
             self.object_ownership = field;
+            self
+        }
+
+        #[must_use]
+        pub fn acl(mut self, field: Option<BucketCannedACL>) -> Self {
+            self.acl = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn create_bucket_configuration(mut self, field: Option<CreateBucketConfiguration>) -> Self {
+            self.create_bucket_configuration = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_full_control(mut self, field: Option<GrantFullControl>) -> Self {
+            self.grant_full_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read(mut self, field: Option<GrantRead>) -> Self {
+            self.grant_read = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read_acp(mut self, field: Option<GrantReadACP>) -> Self {
+            self.grant_read_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write(mut self, field: Option<GrantWrite>) -> Self {
+            self.grant_write = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write_acp(mut self, field: Option<GrantWriteACP>) -> Self {
+            self.grant_write_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_enabled_for_bucket(mut self, field: Option<ObjectLockEnabledForBucket>) -> Self {
+            self.object_lock_enabled_for_bucket = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_ownership(mut self, field: Option<ObjectOwnership>) -> Self {
+            self.object_ownership = field;
+            self
         }
 
         pub fn build(self) -> Result<CreateBucketInput, BuildError> {
@@ -17028,124 +17511,334 @@ pub mod builders {
     }
 
     impl CreateMultipartUploadInputBuilder {
-        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) {
+        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) -> &mut Self {
             self.acl = field;
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) {
+        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) -> &mut Self {
             self.bucket_key_enabled = field;
+            self
         }
 
-        pub fn set_cache_control(&mut self, field: Option<CacheControl>) {
+        pub fn set_cache_control(&mut self, field: Option<CacheControl>) -> &mut Self {
             self.cache_control = field;
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) {
+        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) -> &mut Self {
             self.content_disposition = field;
+            self
         }
 
-        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) {
+        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) -> &mut Self {
             self.content_encoding = field;
+            self
         }
 
-        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) {
+        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) -> &mut Self {
             self.content_language = field;
+            self
         }
 
-        pub fn set_content_type(&mut self, field: Option<ContentType>) {
+        pub fn set_content_type(&mut self, field: Option<ContentType>) -> &mut Self {
             self.content_type = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_expires(&mut self, field: Option<Expires>) {
+        pub fn set_expires(&mut self, field: Option<Expires>) -> &mut Self {
             self.expires = field;
+            self
         }
 
-        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) -> &mut Self {
             self.grant_full_control = field;
+            self
         }
 
-        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) -> &mut Self {
             self.grant_read = field;
+            self
         }
 
-        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) -> &mut Self {
             self.grant_read_acp = field;
+            self
         }
 
-        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) -> &mut Self {
             self.grant_write_acp = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_metadata(&mut self, field: Option<Metadata>) {
+        pub fn set_metadata(&mut self, field: Option<Metadata>) -> &mut Self {
             self.metadata = field;
+            self
         }
 
-        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) {
+        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) -> &mut Self {
             self.object_lock_legal_hold_status = field;
+            self
         }
 
-        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) {
+        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) -> &mut Self {
             self.object_lock_mode = field;
+            self
         }
 
-        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) {
+        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) -> &mut Self {
             self.object_lock_retain_until_date = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) {
+        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) -> &mut Self {
             self.ssekms_encryption_context = field;
+            self
         }
 
-        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) {
+        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) -> &mut Self {
             self.ssekms_key_id = field;
+            self
         }
 
-        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) {
+        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) -> &mut Self {
             self.server_side_encryption = field;
+            self
         }
 
-        pub fn set_storage_class(&mut self, field: Option<StorageClass>) {
+        pub fn set_storage_class(&mut self, field: Option<StorageClass>) -> &mut Self {
             self.storage_class = field;
+            self
         }
 
-        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) {
+        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) -> &mut Self {
             self.tagging = field;
+            self
         }
 
-        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) {
+        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) -> &mut Self {
             self.website_redirect_location = field;
+            self
+        }
+
+        #[must_use]
+        pub fn acl(mut self, field: Option<ObjectCannedACL>) -> Self {
+            self.acl = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket_key_enabled(mut self, field: Option<BucketKeyEnabled>) -> Self {
+            self.bucket_key_enabled = field;
+            self
+        }
+
+        #[must_use]
+        pub fn cache_control(mut self, field: Option<CacheControl>) -> Self {
+            self.cache_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_disposition(mut self, field: Option<ContentDisposition>) -> Self {
+            self.content_disposition = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_encoding(mut self, field: Option<ContentEncoding>) -> Self {
+            self.content_encoding = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_language(mut self, field: Option<ContentLanguage>) -> Self {
+            self.content_language = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_type(mut self, field: Option<ContentType>) -> Self {
+            self.content_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expires(mut self, field: Option<Expires>) -> Self {
+            self.expires = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_full_control(mut self, field: Option<GrantFullControl>) -> Self {
+            self.grant_full_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read(mut self, field: Option<GrantRead>) -> Self {
+            self.grant_read = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read_acp(mut self, field: Option<GrantReadACP>) -> Self {
+            self.grant_read_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write_acp(mut self, field: Option<GrantWriteACP>) -> Self {
+            self.grant_write_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn metadata(mut self, field: Option<Metadata>) -> Self {
+            self.metadata = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_legal_hold_status(mut self, field: Option<ObjectLockLegalHoldStatus>) -> Self {
+            self.object_lock_legal_hold_status = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_mode(mut self, field: Option<ObjectLockMode>) -> Self {
+            self.object_lock_mode = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_retain_until_date(mut self, field: Option<ObjectLockRetainUntilDate>) -> Self {
+            self.object_lock_retain_until_date = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn ssekms_encryption_context(mut self, field: Option<SSEKMSEncryptionContext>) -> Self {
+            self.ssekms_encryption_context = field;
+            self
+        }
+
+        #[must_use]
+        pub fn ssekms_key_id(mut self, field: Option<SSEKMSKeyId>) -> Self {
+            self.ssekms_key_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn server_side_encryption(mut self, field: Option<ServerSideEncryption>) -> Self {
+            self.server_side_encryption = field;
+            self
+        }
+
+        #[must_use]
+        pub fn storage_class(mut self, field: Option<StorageClass>) -> Self {
+            self.storage_class = field;
+            self
+        }
+
+        #[must_use]
+        pub fn tagging(mut self, field: Option<TaggingHeader>) -> Self {
+            self.tagging = field;
+            self
+        }
+
+        #[must_use]
+        pub fn website_redirect_location(mut self, field: Option<WebsiteRedirectLocation>) -> Self {
+            self.website_redirect_location = field;
+            self
         }
 
         pub fn build(self) -> Result<CreateMultipartUploadInput, BuildError> {
@@ -17223,12 +17916,26 @@ pub mod builders {
     }
 
     impl DeleteBucketInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketInput, BuildError> {
@@ -17252,16 +17959,37 @@ pub mod builders {
     }
 
     impl DeleteBucketAnalyticsConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: AnalyticsId) {
+        pub fn set_id(&mut self, field: AnalyticsId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: AnalyticsId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketAnalyticsConfigurationInput, BuildError> {
@@ -17285,12 +18013,26 @@ pub mod builders {
     }
 
     impl DeleteBucketCorsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketCorsInput, BuildError> {
@@ -17312,12 +18054,26 @@ pub mod builders {
     }
 
     impl DeleteBucketEncryptionInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketEncryptionInput, BuildError> {
@@ -17339,12 +18095,26 @@ pub mod builders {
     }
 
     impl DeleteBucketIntelligentTieringConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_id(&mut self, field: IntelligentTieringId) {
+        pub fn set_id(&mut self, field: IntelligentTieringId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: IntelligentTieringId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketIntelligentTieringConfigurationInput, BuildError> {
@@ -17365,16 +18135,37 @@ pub mod builders {
     }
 
     impl DeleteBucketInventoryConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: InventoryId) {
+        pub fn set_id(&mut self, field: InventoryId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: InventoryId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketInventoryConfigurationInput, BuildError> {
@@ -17398,12 +18189,26 @@ pub mod builders {
     }
 
     impl DeleteBucketLifecycleInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketLifecycleInput, BuildError> {
@@ -17427,16 +18232,37 @@ pub mod builders {
     }
 
     impl DeleteBucketMetricsConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: MetricsId) {
+        pub fn set_id(&mut self, field: MetricsId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: MetricsId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketMetricsConfigurationInput, BuildError> {
@@ -17460,12 +18286,26 @@ pub mod builders {
     }
 
     impl DeleteBucketOwnershipControlsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketOwnershipControlsInput, BuildError> {
@@ -17487,12 +18327,26 @@ pub mod builders {
     }
 
     impl DeleteBucketPolicyInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketPolicyInput, BuildError> {
@@ -17514,12 +18368,26 @@ pub mod builders {
     }
 
     impl DeleteBucketReplicationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketReplicationInput, BuildError> {
@@ -17541,12 +18409,26 @@ pub mod builders {
     }
 
     impl DeleteBucketTaggingInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketTaggingInput, BuildError> {
@@ -17568,12 +18450,26 @@ pub mod builders {
     }
 
     impl DeleteBucketWebsiteInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteBucketWebsiteInput, BuildError> {
@@ -17605,32 +18501,81 @@ pub mod builders {
     }
 
     impl DeleteObjectInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) {
+        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) -> &mut Self {
             self.bypass_governance_retention = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_mfa(&mut self, field: Option<MFA>) {
+        pub fn set_mfa(&mut self, field: Option<MFA>) -> &mut Self {
             self.mfa = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bypass_governance_retention(mut self, field: Option<BypassGovernanceRetention>) -> Self {
+            self.bypass_governance_retention = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn mfa(mut self, field: Option<MFA>) -> Self {
+            self.mfa = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteObjectInput, BuildError> {
@@ -17666,20 +18611,48 @@ pub mod builders {
     }
 
     impl DeleteObjectTaggingInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteObjectTaggingInput, BuildError> {
@@ -17715,32 +18688,81 @@ pub mod builders {
     }
 
     impl DeleteObjectsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) {
+        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) -> &mut Self {
             self.bypass_governance_retention = field;
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_delete(&mut self, field: Delete) {
+        pub fn set_delete(&mut self, field: Delete) -> &mut Self {
             self.delete = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_mfa(&mut self, field: Option<MFA>) {
+        pub fn set_mfa(&mut self, field: Option<MFA>) -> &mut Self {
             self.mfa = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bypass_governance_retention(mut self, field: Option<BypassGovernanceRetention>) -> Self {
+            self.bypass_governance_retention = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn delete(mut self, field: Delete) -> Self {
+            self.delete = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn mfa(mut self, field: Option<MFA>) -> Self {
+            self.mfa = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
         }
 
         pub fn build(self) -> Result<DeleteObjectsInput, BuildError> {
@@ -17772,12 +18794,26 @@ pub mod builders {
     }
 
     impl DeletePublicAccessBlockInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<DeletePublicAccessBlockInput, BuildError> {
@@ -17799,12 +18835,26 @@ pub mod builders {
     }
 
     impl GetBucketAccelerateConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketAccelerateConfigurationInput, BuildError> {
@@ -17826,12 +18876,26 @@ pub mod builders {
     }
 
     impl GetBucketAclInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketAclInput, BuildError> {
@@ -17855,16 +18919,37 @@ pub mod builders {
     }
 
     impl GetBucketAnalyticsConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: AnalyticsId) {
+        pub fn set_id(&mut self, field: AnalyticsId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: AnalyticsId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<GetBucketAnalyticsConfigurationInput, BuildError> {
@@ -17888,12 +18973,26 @@ pub mod builders {
     }
 
     impl GetBucketCorsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketCorsInput, BuildError> {
@@ -17915,12 +19014,26 @@ pub mod builders {
     }
 
     impl GetBucketEncryptionInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketEncryptionInput, BuildError> {
@@ -17942,12 +19055,26 @@ pub mod builders {
     }
 
     impl GetBucketIntelligentTieringConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_id(&mut self, field: IntelligentTieringId) {
+        pub fn set_id(&mut self, field: IntelligentTieringId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: IntelligentTieringId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<GetBucketIntelligentTieringConfigurationInput, BuildError> {
@@ -17968,16 +19095,37 @@ pub mod builders {
     }
 
     impl GetBucketInventoryConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: InventoryId) {
+        pub fn set_id(&mut self, field: InventoryId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: InventoryId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<GetBucketInventoryConfigurationInput, BuildError> {
@@ -18001,12 +19149,26 @@ pub mod builders {
     }
 
     impl GetBucketLifecycleConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketLifecycleConfigurationInput, BuildError> {
@@ -18028,12 +19190,26 @@ pub mod builders {
     }
 
     impl GetBucketLocationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketLocationInput, BuildError> {
@@ -18055,12 +19231,26 @@ pub mod builders {
     }
 
     impl GetBucketLoggingInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketLoggingInput, BuildError> {
@@ -18084,16 +19274,37 @@ pub mod builders {
     }
 
     impl GetBucketMetricsConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: MetricsId) {
+        pub fn set_id(&mut self, field: MetricsId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: MetricsId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<GetBucketMetricsConfigurationInput, BuildError> {
@@ -18117,12 +19328,26 @@ pub mod builders {
     }
 
     impl GetBucketNotificationConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketNotificationConfigurationInput, BuildError> {
@@ -18144,12 +19369,26 @@ pub mod builders {
     }
 
     impl GetBucketOwnershipControlsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketOwnershipControlsInput, BuildError> {
@@ -18171,12 +19410,26 @@ pub mod builders {
     }
 
     impl GetBucketPolicyInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketPolicyInput, BuildError> {
@@ -18198,12 +19451,26 @@ pub mod builders {
     }
 
     impl GetBucketPolicyStatusInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketPolicyStatusInput, BuildError> {
@@ -18225,12 +19492,26 @@ pub mod builders {
     }
 
     impl GetBucketReplicationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketReplicationInput, BuildError> {
@@ -18252,12 +19533,26 @@ pub mod builders {
     }
 
     impl GetBucketRequestPaymentInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketRequestPaymentInput, BuildError> {
@@ -18279,12 +19574,26 @@ pub mod builders {
     }
 
     impl GetBucketTaggingInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketTaggingInput, BuildError> {
@@ -18306,12 +19615,26 @@ pub mod builders {
     }
 
     impl GetBucketVersioningInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketVersioningInput, BuildError> {
@@ -18333,12 +19656,26 @@ pub mod builders {
     }
 
     impl GetBucketWebsiteInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetBucketWebsiteInput, BuildError> {
@@ -18398,88 +19735,235 @@ pub mod builders {
     }
 
     impl GetObjectInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_mode(&mut self, field: Option<ChecksumMode>) {
+        pub fn set_checksum_mode(&mut self, field: Option<ChecksumMode>) -> &mut Self {
             self.checksum_mode = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_if_match(&mut self, field: Option<IfMatch>) {
+        pub fn set_if_match(&mut self, field: Option<IfMatch>) -> &mut Self {
             self.if_match = field;
+            self
         }
 
-        pub fn set_if_modified_since(&mut self, field: Option<IfModifiedSince>) {
+        pub fn set_if_modified_since(&mut self, field: Option<IfModifiedSince>) -> &mut Self {
             self.if_modified_since = field;
+            self
         }
 
-        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) {
+        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) -> &mut Self {
             self.if_none_match = field;
+            self
         }
 
-        pub fn set_if_unmodified_since(&mut self, field: Option<IfUnmodifiedSince>) {
+        pub fn set_if_unmodified_since(&mut self, field: Option<IfUnmodifiedSince>) -> &mut Self {
             self.if_unmodified_since = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_part_number(&mut self, field: Option<PartNumber>) {
+        pub fn set_part_number(&mut self, field: Option<PartNumber>) -> &mut Self {
             self.part_number = field;
+            self
         }
 
-        pub fn set_range(&mut self, field: Option<Range>) {
+        pub fn set_range(&mut self, field: Option<Range>) -> &mut Self {
             self.range = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_response_cache_control(&mut self, field: Option<ResponseCacheControl>) {
+        pub fn set_response_cache_control(&mut self, field: Option<ResponseCacheControl>) -> &mut Self {
             self.response_cache_control = field;
+            self
         }
 
-        pub fn set_response_content_disposition(&mut self, field: Option<ResponseContentDisposition>) {
+        pub fn set_response_content_disposition(&mut self, field: Option<ResponseContentDisposition>) -> &mut Self {
             self.response_content_disposition = field;
+            self
         }
 
-        pub fn set_response_content_encoding(&mut self, field: Option<ResponseContentEncoding>) {
+        pub fn set_response_content_encoding(&mut self, field: Option<ResponseContentEncoding>) -> &mut Self {
             self.response_content_encoding = field;
+            self
         }
 
-        pub fn set_response_content_language(&mut self, field: Option<ResponseContentLanguage>) {
+        pub fn set_response_content_language(&mut self, field: Option<ResponseContentLanguage>) -> &mut Self {
             self.response_content_language = field;
+            self
         }
 
-        pub fn set_response_content_type(&mut self, field: Option<ResponseContentType>) {
+        pub fn set_response_content_type(&mut self, field: Option<ResponseContentType>) -> &mut Self {
             self.response_content_type = field;
+            self
         }
 
-        pub fn set_response_expires(&mut self, field: Option<ResponseExpires>) {
+        pub fn set_response_expires(&mut self, field: Option<ResponseExpires>) -> &mut Self {
             self.response_expires = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_mode(mut self, field: Option<ChecksumMode>) -> Self {
+            self.checksum_mode = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn if_match(mut self, field: Option<IfMatch>) -> Self {
+            self.if_match = field;
+            self
+        }
+
+        #[must_use]
+        pub fn if_modified_since(mut self, field: Option<IfModifiedSince>) -> Self {
+            self.if_modified_since = field;
+            self
+        }
+
+        #[must_use]
+        pub fn if_none_match(mut self, field: Option<IfNoneMatch>) -> Self {
+            self.if_none_match = field;
+            self
+        }
+
+        #[must_use]
+        pub fn if_unmodified_since(mut self, field: Option<IfUnmodifiedSince>) -> Self {
+            self.if_unmodified_since = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn part_number(mut self, field: Option<PartNumber>) -> Self {
+            self.part_number = field;
+            self
+        }
+
+        #[must_use]
+        pub fn range(mut self, field: Option<Range>) -> Self {
+            self.range = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_cache_control(mut self, field: Option<ResponseCacheControl>) -> Self {
+            self.response_cache_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_content_disposition(mut self, field: Option<ResponseContentDisposition>) -> Self {
+            self.response_content_disposition = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_content_encoding(mut self, field: Option<ResponseContentEncoding>) -> Self {
+            self.response_content_encoding = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_content_language(mut self, field: Option<ResponseContentLanguage>) -> Self {
+            self.response_content_language = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_content_type(mut self, field: Option<ResponseContentType>) -> Self {
+            self.response_content_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_expires(mut self, field: Option<ResponseExpires>) -> Self {
+            self.response_expires = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<GetObjectInput, BuildError> {
@@ -18545,24 +20029,59 @@ pub mod builders {
     }
 
     impl GetObjectAclInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<GetObjectAclInput, BuildError> {
@@ -18608,48 +20127,125 @@ pub mod builders {
     }
 
     impl GetObjectAttributesInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_max_parts(&mut self, field: Option<MaxParts>) {
+        pub fn set_max_parts(&mut self, field: Option<MaxParts>) -> &mut Self {
             self.max_parts = field;
+            self
         }
 
-        pub fn set_object_attributes(&mut self, field: ObjectAttributesList) {
+        pub fn set_object_attributes(&mut self, field: ObjectAttributesList) -> &mut Self {
             self.object_attributes = field;
+            self
         }
 
-        pub fn set_part_number_marker(&mut self, field: Option<PartNumberMarker>) {
+        pub fn set_part_number_marker(&mut self, field: Option<PartNumberMarker>) -> &mut Self {
             self.part_number_marker = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn max_parts(mut self, field: Option<MaxParts>) -> Self {
+            self.max_parts = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_attributes(mut self, field: ObjectAttributesList) -> Self {
+            self.object_attributes = field;
+            self
+        }
+
+        #[must_use]
+        pub fn part_number_marker(mut self, field: Option<PartNumberMarker>) -> Self {
+            self.part_number_marker = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<GetObjectAttributesInput, BuildError> {
@@ -18695,24 +20291,59 @@ pub mod builders {
     }
 
     impl GetObjectLegalHoldInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<GetObjectLegalHoldInput, BuildError> {
@@ -18740,12 +20371,26 @@ pub mod builders {
     }
 
     impl GetObjectLockConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetObjectLockConfigurationInput, BuildError> {
@@ -18773,24 +20418,59 @@ pub mod builders {
     }
 
     impl GetObjectRetentionInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<GetObjectRetentionInput, BuildError> {
@@ -18824,24 +20504,59 @@ pub mod builders {
     }
 
     impl GetObjectTaggingInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<GetObjectTaggingInput, BuildError> {
@@ -18873,20 +20588,48 @@ pub mod builders {
     }
 
     impl GetObjectTorrentInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
         }
 
         pub fn build(self) -> Result<GetObjectTorrentInput, BuildError> {
@@ -18912,12 +20655,26 @@ pub mod builders {
     }
 
     impl GetPublicAccessBlockInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<GetPublicAccessBlockInput, BuildError> {
@@ -18939,12 +20696,26 @@ pub mod builders {
     }
 
     impl HeadBucketInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<HeadBucketInput, BuildError> {
@@ -18992,64 +20763,169 @@ pub mod builders {
     }
 
     impl HeadObjectInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_mode(&mut self, field: Option<ChecksumMode>) {
+        pub fn set_checksum_mode(&mut self, field: Option<ChecksumMode>) -> &mut Self {
             self.checksum_mode = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_if_match(&mut self, field: Option<IfMatch>) {
+        pub fn set_if_match(&mut self, field: Option<IfMatch>) -> &mut Self {
             self.if_match = field;
+            self
         }
 
-        pub fn set_if_modified_since(&mut self, field: Option<IfModifiedSince>) {
+        pub fn set_if_modified_since(&mut self, field: Option<IfModifiedSince>) -> &mut Self {
             self.if_modified_since = field;
+            self
         }
 
-        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) {
+        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) -> &mut Self {
             self.if_none_match = field;
+            self
         }
 
-        pub fn set_if_unmodified_since(&mut self, field: Option<IfUnmodifiedSince>) {
+        pub fn set_if_unmodified_since(&mut self, field: Option<IfUnmodifiedSince>) -> &mut Self {
             self.if_unmodified_since = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_part_number(&mut self, field: Option<PartNumber>) {
+        pub fn set_part_number(&mut self, field: Option<PartNumber>) -> &mut Self {
             self.part_number = field;
+            self
         }
 
-        pub fn set_range(&mut self, field: Option<Range>) {
+        pub fn set_range(&mut self, field: Option<Range>) -> &mut Self {
             self.range = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_mode(mut self, field: Option<ChecksumMode>) -> Self {
+            self.checksum_mode = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn if_match(mut self, field: Option<IfMatch>) -> Self {
+            self.if_match = field;
+            self
+        }
+
+        #[must_use]
+        pub fn if_modified_since(mut self, field: Option<IfModifiedSince>) -> Self {
+            self.if_modified_since = field;
+            self
+        }
+
+        #[must_use]
+        pub fn if_none_match(mut self, field: Option<IfNoneMatch>) -> Self {
+            self.if_none_match = field;
+            self
+        }
+
+        #[must_use]
+        pub fn if_unmodified_since(mut self, field: Option<IfUnmodifiedSince>) -> Self {
+            self.if_unmodified_since = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn part_number(mut self, field: Option<PartNumber>) -> Self {
+            self.part_number = field;
+            self
+        }
+
+        #[must_use]
+        pub fn range(mut self, field: Option<Range>) -> Self {
+            self.range = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<HeadObjectInput, BuildError> {
@@ -19099,16 +20975,37 @@ pub mod builders {
     }
 
     impl ListBucketAnalyticsConfigurationsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+        pub fn set_continuation_token(&mut self, field: Option<Token>) -> &mut Self {
             self.continuation_token = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn continuation_token(mut self, field: Option<Token>) -> Self {
+            self.continuation_token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<ListBucketAnalyticsConfigurationsInput, BuildError> {
@@ -19132,12 +21029,26 @@ pub mod builders {
     }
 
     impl ListBucketIntelligentTieringConfigurationsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+        pub fn set_continuation_token(&mut self, field: Option<Token>) -> &mut Self {
             self.continuation_token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn continuation_token(mut self, field: Option<Token>) -> Self {
+            self.continuation_token = field;
+            self
         }
 
         pub fn build(self) -> Result<ListBucketIntelligentTieringConfigurationsInput, BuildError> {
@@ -19161,16 +21072,37 @@ pub mod builders {
     }
 
     impl ListBucketInventoryConfigurationsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+        pub fn set_continuation_token(&mut self, field: Option<Token>) -> &mut Self {
             self.continuation_token = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn continuation_token(mut self, field: Option<Token>) -> Self {
+            self.continuation_token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<ListBucketInventoryConfigurationsInput, BuildError> {
@@ -19196,16 +21128,37 @@ pub mod builders {
     }
 
     impl ListBucketMetricsConfigurationsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+        pub fn set_continuation_token(&mut self, field: Option<Token>) -> &mut Self {
             self.continuation_token = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn continuation_token(mut self, field: Option<Token>) -> Self {
+            self.continuation_token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<ListBucketMetricsConfigurationsInput, BuildError> {
@@ -19251,36 +21204,92 @@ pub mod builders {
     }
 
     impl ListMultipartUploadsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_delimiter(&mut self, field: Option<Delimiter>) {
+        pub fn set_delimiter(&mut self, field: Option<Delimiter>) -> &mut Self {
             self.delimiter = field;
+            self
         }
 
-        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) {
+        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) -> &mut Self {
             self.encoding_type = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key_marker(&mut self, field: Option<KeyMarker>) {
+        pub fn set_key_marker(&mut self, field: Option<KeyMarker>) -> &mut Self {
             self.key_marker = field;
+            self
         }
 
-        pub fn set_max_uploads(&mut self, field: Option<MaxUploads>) {
+        pub fn set_max_uploads(&mut self, field: Option<MaxUploads>) -> &mut Self {
             self.max_uploads = field;
+            self
         }
 
-        pub fn set_prefix(&mut self, field: Option<Prefix>) {
+        pub fn set_prefix(&mut self, field: Option<Prefix>) -> &mut Self {
             self.prefix = field;
+            self
         }
 
-        pub fn set_upload_id_marker(&mut self, field: Option<UploadIdMarker>) {
+        pub fn set_upload_id_marker(&mut self, field: Option<UploadIdMarker>) -> &mut Self {
             self.upload_id_marker = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn delimiter(mut self, field: Option<Delimiter>) -> Self {
+            self.delimiter = field;
+            self
+        }
+
+        #[must_use]
+        pub fn encoding_type(mut self, field: Option<EncodingType>) -> Self {
+            self.encoding_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key_marker(mut self, field: Option<KeyMarker>) -> Self {
+            self.key_marker = field;
+            self
+        }
+
+        #[must_use]
+        pub fn max_uploads(mut self, field: Option<MaxUploads>) -> Self {
+            self.max_uploads = field;
+            self
+        }
+
+        #[must_use]
+        pub fn prefix(mut self, field: Option<Prefix>) -> Self {
+            self.prefix = field;
+            self
+        }
+
+        #[must_use]
+        pub fn upload_id_marker(mut self, field: Option<UploadIdMarker>) -> Self {
+            self.upload_id_marker = field;
+            self
         }
 
         pub fn build(self) -> Result<ListMultipartUploadsInput, BuildError> {
@@ -19326,36 +21335,92 @@ pub mod builders {
     }
 
     impl ListObjectVersionsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_delimiter(&mut self, field: Option<Delimiter>) {
+        pub fn set_delimiter(&mut self, field: Option<Delimiter>) -> &mut Self {
             self.delimiter = field;
+            self
         }
 
-        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) {
+        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) -> &mut Self {
             self.encoding_type = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key_marker(&mut self, field: Option<KeyMarker>) {
+        pub fn set_key_marker(&mut self, field: Option<KeyMarker>) -> &mut Self {
             self.key_marker = field;
+            self
         }
 
-        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) {
+        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) -> &mut Self {
             self.max_keys = field;
+            self
         }
 
-        pub fn set_prefix(&mut self, field: Option<Prefix>) {
+        pub fn set_prefix(&mut self, field: Option<Prefix>) -> &mut Self {
             self.prefix = field;
+            self
         }
 
-        pub fn set_version_id_marker(&mut self, field: Option<VersionIdMarker>) {
+        pub fn set_version_id_marker(&mut self, field: Option<VersionIdMarker>) -> &mut Self {
             self.version_id_marker = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn delimiter(mut self, field: Option<Delimiter>) -> Self {
+            self.delimiter = field;
+            self
+        }
+
+        #[must_use]
+        pub fn encoding_type(mut self, field: Option<EncodingType>) -> Self {
+            self.encoding_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key_marker(mut self, field: Option<KeyMarker>) -> Self {
+            self.key_marker = field;
+            self
+        }
+
+        #[must_use]
+        pub fn max_keys(mut self, field: Option<MaxKeys>) -> Self {
+            self.max_keys = field;
+            self
+        }
+
+        #[must_use]
+        pub fn prefix(mut self, field: Option<Prefix>) -> Self {
+            self.prefix = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id_marker(mut self, field: Option<VersionIdMarker>) -> Self {
+            self.version_id_marker = field;
+            self
         }
 
         pub fn build(self) -> Result<ListObjectVersionsInput, BuildError> {
@@ -19401,36 +21466,92 @@ pub mod builders {
     }
 
     impl ListObjectsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_delimiter(&mut self, field: Option<Delimiter>) {
+        pub fn set_delimiter(&mut self, field: Option<Delimiter>) -> &mut Self {
             self.delimiter = field;
+            self
         }
 
-        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) {
+        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) -> &mut Self {
             self.encoding_type = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_marker(&mut self, field: Option<Marker>) {
+        pub fn set_marker(&mut self, field: Option<Marker>) -> &mut Self {
             self.marker = field;
+            self
         }
 
-        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) {
+        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) -> &mut Self {
             self.max_keys = field;
+            self
         }
 
-        pub fn set_prefix(&mut self, field: Option<Prefix>) {
+        pub fn set_prefix(&mut self, field: Option<Prefix>) -> &mut Self {
             self.prefix = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn delimiter(mut self, field: Option<Delimiter>) -> Self {
+            self.delimiter = field;
+            self
+        }
+
+        #[must_use]
+        pub fn encoding_type(mut self, field: Option<EncodingType>) -> Self {
+            self.encoding_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn marker(mut self, field: Option<Marker>) -> Self {
+            self.marker = field;
+            self
+        }
+
+        #[must_use]
+        pub fn max_keys(mut self, field: Option<MaxKeys>) -> Self {
+            self.max_keys = field;
+            self
+        }
+
+        #[must_use]
+        pub fn prefix(mut self, field: Option<Prefix>) -> Self {
+            self.prefix = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
         }
 
         pub fn build(self) -> Result<ListObjectsInput, BuildError> {
@@ -19480,44 +21601,114 @@ pub mod builders {
     }
 
     impl ListObjectsV2InputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_continuation_token(&mut self, field: Option<Token>) {
+        pub fn set_continuation_token(&mut self, field: Option<Token>) -> &mut Self {
             self.continuation_token = field;
+            self
         }
 
-        pub fn set_delimiter(&mut self, field: Option<Delimiter>) {
+        pub fn set_delimiter(&mut self, field: Option<Delimiter>) -> &mut Self {
             self.delimiter = field;
+            self
         }
 
-        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) {
+        pub fn set_encoding_type(&mut self, field: Option<EncodingType>) -> &mut Self {
             self.encoding_type = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_fetch_owner(&mut self, field: Option<FetchOwner>) {
+        pub fn set_fetch_owner(&mut self, field: Option<FetchOwner>) -> &mut Self {
             self.fetch_owner = field;
+            self
         }
 
-        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) {
+        pub fn set_max_keys(&mut self, field: Option<MaxKeys>) -> &mut Self {
             self.max_keys = field;
+            self
         }
 
-        pub fn set_prefix(&mut self, field: Option<Prefix>) {
+        pub fn set_prefix(&mut self, field: Option<Prefix>) -> &mut Self {
             self.prefix = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_start_after(&mut self, field: Option<StartAfter>) {
+        pub fn set_start_after(&mut self, field: Option<StartAfter>) -> &mut Self {
             self.start_after = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn continuation_token(mut self, field: Option<Token>) -> Self {
+            self.continuation_token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn delimiter(mut self, field: Option<Delimiter>) -> Self {
+            self.delimiter = field;
+            self
+        }
+
+        #[must_use]
+        pub fn encoding_type(mut self, field: Option<EncodingType>) -> Self {
+            self.encoding_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn fetch_owner(mut self, field: Option<FetchOwner>) -> Self {
+            self.fetch_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn max_keys(mut self, field: Option<MaxKeys>) -> Self {
+            self.max_keys = field;
+            self
+        }
+
+        #[must_use]
+        pub fn prefix(mut self, field: Option<Prefix>) -> Self {
+            self.prefix = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn start_after(mut self, field: Option<StartAfter>) -> Self {
+            self.start_after = field;
+            self
         }
 
         pub fn build(self) -> Result<ListObjectsV2Input, BuildError> {
@@ -19571,44 +21762,114 @@ pub mod builders {
     }
 
     impl ListPartsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_max_parts(&mut self, field: Option<MaxParts>) {
+        pub fn set_max_parts(&mut self, field: Option<MaxParts>) -> &mut Self {
             self.max_parts = field;
+            self
         }
 
-        pub fn set_part_number_marker(&mut self, field: Option<PartNumberMarker>) {
+        pub fn set_part_number_marker(&mut self, field: Option<PartNumberMarker>) -> &mut Self {
             self.part_number_marker = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) -> &mut Self {
             self.upload_id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn max_parts(mut self, field: Option<MaxParts>) -> Self {
+            self.max_parts = field;
+            self
+        }
+
+        #[must_use]
+        pub fn part_number_marker(mut self, field: Option<PartNumberMarker>) -> Self {
+            self.part_number_marker = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn upload_id(mut self, field: MultipartUploadId) -> Self {
+            self.upload_id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<ListPartsInput, BuildError> {
@@ -19650,20 +21911,48 @@ pub mod builders {
     }
 
     impl PutBucketAccelerateConfigurationInputBuilder {
-        pub fn set_accelerate_configuration(&mut self, field: AccelerateConfiguration) {
+        pub fn set_accelerate_configuration(&mut self, field: AccelerateConfiguration) -> &mut Self {
             self.accelerate_configuration = Some(field);
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn accelerate_configuration(mut self, field: AccelerateConfiguration) -> Self {
+            self.accelerate_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<PutBucketAccelerateConfigurationInput, BuildError> {
@@ -19709,48 +21998,125 @@ pub mod builders {
     }
 
     impl PutBucketAclInputBuilder {
-        pub fn set_acl(&mut self, field: Option<BucketCannedACL>) {
+        pub fn set_acl(&mut self, field: Option<BucketCannedACL>) -> &mut Self {
             self.acl = field;
+            self
         }
 
-        pub fn set_access_control_policy(&mut self, field: Option<AccessControlPolicy>) {
+        pub fn set_access_control_policy(&mut self, field: Option<AccessControlPolicy>) -> &mut Self {
             self.access_control_policy = field;
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) -> &mut Self {
             self.grant_full_control = field;
+            self
         }
 
-        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) -> &mut Self {
             self.grant_read = field;
+            self
         }
 
-        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) -> &mut Self {
             self.grant_read_acp = field;
+            self
         }
 
-        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) {
+        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) -> &mut Self {
             self.grant_write = field;
+            self
         }
 
-        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) -> &mut Self {
             self.grant_write_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn acl(mut self, field: Option<BucketCannedACL>) -> Self {
+            self.acl = field;
+            self
+        }
+
+        #[must_use]
+        pub fn access_control_policy(mut self, field: Option<AccessControlPolicy>) -> Self {
+            self.access_control_policy = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_full_control(mut self, field: Option<GrantFullControl>) -> Self {
+            self.grant_full_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read(mut self, field: Option<GrantRead>) -> Self {
+            self.grant_read = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read_acp(mut self, field: Option<GrantReadACP>) -> Self {
+            self.grant_read_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write(mut self, field: Option<GrantWrite>) -> Self {
+            self.grant_write = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write_acp(mut self, field: Option<GrantWriteACP>) -> Self {
+            self.grant_write_acp = field;
+            self
         }
 
         pub fn build(self) -> Result<PutBucketAclInput, BuildError> {
@@ -19794,20 +22160,48 @@ pub mod builders {
     }
 
     impl PutBucketAnalyticsConfigurationInputBuilder {
-        pub fn set_analytics_configuration(&mut self, field: AnalyticsConfiguration) {
+        pub fn set_analytics_configuration(&mut self, field: AnalyticsConfiguration) -> &mut Self {
             self.analytics_configuration = Some(field);
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: AnalyticsId) {
+        pub fn set_id(&mut self, field: AnalyticsId) -> &mut Self {
             self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn analytics_configuration(mut self, field: AnalyticsConfiguration) -> Self {
+            self.analytics_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: AnalyticsId) -> Self {
+            self.id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketAnalyticsConfigurationInput, BuildError> {
@@ -19841,24 +22235,59 @@ pub mod builders {
     }
 
     impl PutBucketCorsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_cors_configuration(&mut self, field: CORSConfiguration) {
+        pub fn set_cors_configuration(&mut self, field: CORSConfiguration) -> &mut Self {
             self.cors_configuration = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn cors_configuration(mut self, field: CORSConfiguration) -> Self {
+            self.cors_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<PutBucketCorsInput, BuildError> {
@@ -19894,24 +22323,59 @@ pub mod builders {
     }
 
     impl PutBucketEncryptionInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_server_side_encryption_configuration(&mut self, field: ServerSideEncryptionConfiguration) {
+        pub fn set_server_side_encryption_configuration(&mut self, field: ServerSideEncryptionConfiguration) -> &mut Self {
             self.server_side_encryption_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn server_side_encryption_configuration(mut self, field: ServerSideEncryptionConfiguration) -> Self {
+            self.server_side_encryption_configuration = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketEncryptionInput, BuildError> {
@@ -19943,16 +22407,37 @@ pub mod builders {
     }
 
     impl PutBucketIntelligentTieringConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_id(&mut self, field: IntelligentTieringId) {
+        pub fn set_id(&mut self, field: IntelligentTieringId) -> &mut Self {
             self.id = Some(field);
+            self
         }
 
-        pub fn set_intelligent_tiering_configuration(&mut self, field: IntelligentTieringConfiguration) {
+        pub fn set_intelligent_tiering_configuration(&mut self, field: IntelligentTieringConfiguration) -> &mut Self {
             self.intelligent_tiering_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: IntelligentTieringId) -> Self {
+            self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn intelligent_tiering_configuration(mut self, field: IntelligentTieringConfiguration) -> Self {
+            self.intelligent_tiering_configuration = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketIntelligentTieringConfigurationInput, BuildError> {
@@ -19982,20 +22467,48 @@ pub mod builders {
     }
 
     impl PutBucketInventoryConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: InventoryId) {
+        pub fn set_id(&mut self, field: InventoryId) -> &mut Self {
             self.id = Some(field);
+            self
         }
 
-        pub fn set_inventory_configuration(&mut self, field: InventoryConfiguration) {
+        pub fn set_inventory_configuration(&mut self, field: InventoryConfiguration) -> &mut Self {
             self.inventory_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: InventoryId) -> Self {
+            self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn inventory_configuration(mut self, field: InventoryConfiguration) -> Self {
+            self.inventory_configuration = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketInventoryConfigurationInput, BuildError> {
@@ -20027,20 +22540,48 @@ pub mod builders {
     }
 
     impl PutBucketLifecycleConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_lifecycle_configuration(&mut self, field: Option<BucketLifecycleConfiguration>) {
+        pub fn set_lifecycle_configuration(&mut self, field: Option<BucketLifecycleConfiguration>) -> &mut Self {
             self.lifecycle_configuration = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn lifecycle_configuration(mut self, field: Option<BucketLifecycleConfiguration>) -> Self {
+            self.lifecycle_configuration = field;
+            self
         }
 
         pub fn build(self) -> Result<PutBucketLifecycleConfigurationInput, BuildError> {
@@ -20072,24 +22613,59 @@ pub mod builders {
     }
 
     impl PutBucketLoggingInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_bucket_logging_status(&mut self, field: BucketLoggingStatus) {
+        pub fn set_bucket_logging_status(&mut self, field: BucketLoggingStatus) -> &mut Self {
             self.bucket_logging_status = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket_logging_status(mut self, field: BucketLoggingStatus) -> Self {
+            self.bucket_logging_status = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
         }
 
         pub fn build(self) -> Result<PutBucketLoggingInput, BuildError> {
@@ -20123,20 +22699,48 @@ pub mod builders {
     }
 
     impl PutBucketMetricsConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_id(&mut self, field: MetricsId) {
+        pub fn set_id(&mut self, field: MetricsId) -> &mut Self {
             self.id = Some(field);
+            self
         }
 
-        pub fn set_metrics_configuration(&mut self, field: MetricsConfiguration) {
+        pub fn set_metrics_configuration(&mut self, field: MetricsConfiguration) -> &mut Self {
             self.metrics_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn id(mut self, field: MetricsId) -> Self {
+            self.id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn metrics_configuration(mut self, field: MetricsConfiguration) -> Self {
+            self.metrics_configuration = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketMetricsConfigurationInput, BuildError> {
@@ -20168,20 +22772,48 @@ pub mod builders {
     }
 
     impl PutBucketNotificationConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_notification_configuration(&mut self, field: NotificationConfiguration) {
+        pub fn set_notification_configuration(&mut self, field: NotificationConfiguration) -> &mut Self {
             self.notification_configuration = Some(field);
+            self
         }
 
-        pub fn set_skip_destination_validation(&mut self, field: Option<SkipValidation>) {
+        pub fn set_skip_destination_validation(&mut self, field: Option<SkipValidation>) -> &mut Self {
             self.skip_destination_validation = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn notification_configuration(mut self, field: NotificationConfiguration) -> Self {
+            self.notification_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn skip_destination_validation(mut self, field: Option<SkipValidation>) -> Self {
+            self.skip_destination_validation = field;
+            self
         }
 
         pub fn build(self) -> Result<PutBucketNotificationConfigurationInput, BuildError> {
@@ -20213,20 +22845,48 @@ pub mod builders {
     }
 
     impl PutBucketOwnershipControlsInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_ownership_controls(&mut self, field: OwnershipControls) {
+        pub fn set_ownership_controls(&mut self, field: OwnershipControls) -> &mut Self {
             self.ownership_controls = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn ownership_controls(mut self, field: OwnershipControls) -> Self {
+            self.ownership_controls = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketOwnershipControlsInput, BuildError> {
@@ -20262,28 +22922,70 @@ pub mod builders {
     }
 
     impl PutBucketPolicyInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_confirm_remove_self_bucket_access(&mut self, field: Option<ConfirmRemoveSelfBucketAccess>) {
+        pub fn set_confirm_remove_self_bucket_access(&mut self, field: Option<ConfirmRemoveSelfBucketAccess>) -> &mut Self {
             self.confirm_remove_self_bucket_access = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_policy(&mut self, field: Policy) {
+        pub fn set_policy(&mut self, field: Policy) -> &mut Self {
             self.policy = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn confirm_remove_self_bucket_access(mut self, field: Option<ConfirmRemoveSelfBucketAccess>) -> Self {
+            self.confirm_remove_self_bucket_access = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn policy(mut self, field: Policy) -> Self {
+            self.policy = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketPolicyInput, BuildError> {
@@ -20321,28 +23023,70 @@ pub mod builders {
     }
 
     impl PutBucketReplicationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_replication_configuration(&mut self, field: ReplicationConfiguration) {
+        pub fn set_replication_configuration(&mut self, field: ReplicationConfiguration) -> &mut Self {
             self.replication_configuration = Some(field);
+            self
         }
 
-        pub fn set_token(&mut self, field: Option<ObjectLockToken>) {
+        pub fn set_token(&mut self, field: Option<ObjectLockToken>) -> &mut Self {
             self.token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn replication_configuration(mut self, field: ReplicationConfiguration) -> Self {
+            self.replication_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn token(mut self, field: Option<ObjectLockToken>) -> Self {
+            self.token = field;
+            self
         }
 
         pub fn build(self) -> Result<PutBucketReplicationInput, BuildError> {
@@ -20380,24 +23124,59 @@ pub mod builders {
     }
 
     impl PutBucketRequestPaymentInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_request_payment_configuration(&mut self, field: RequestPaymentConfiguration) {
+        pub fn set_request_payment_configuration(&mut self, field: RequestPaymentConfiguration) -> &mut Self {
             self.request_payment_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payment_configuration(mut self, field: RequestPaymentConfiguration) -> Self {
+            self.request_payment_configuration = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketRequestPaymentInput, BuildError> {
@@ -20433,24 +23212,59 @@ pub mod builders {
     }
 
     impl PutBucketTaggingInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_tagging(&mut self, field: Tagging) {
+        pub fn set_tagging(&mut self, field: Tagging) -> &mut Self {
             self.tagging = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn tagging(mut self, field: Tagging) -> Self {
+            self.tagging = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketTaggingInput, BuildError> {
@@ -20486,28 +23300,70 @@ pub mod builders {
     }
 
     impl PutBucketVersioningInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_mfa(&mut self, field: Option<MFA>) {
+        pub fn set_mfa(&mut self, field: Option<MFA>) -> &mut Self {
             self.mfa = field;
+            self
         }
 
-        pub fn set_versioning_configuration(&mut self, field: VersioningConfiguration) {
+        pub fn set_versioning_configuration(&mut self, field: VersioningConfiguration) -> &mut Self {
             self.versioning_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn mfa(mut self, field: Option<MFA>) -> Self {
+            self.mfa = field;
+            self
+        }
+
+        #[must_use]
+        pub fn versioning_configuration(mut self, field: VersioningConfiguration) -> Self {
+            self.versioning_configuration = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketVersioningInput, BuildError> {
@@ -20545,24 +23401,59 @@ pub mod builders {
     }
 
     impl PutBucketWebsiteInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_website_configuration(&mut self, field: WebsiteConfiguration) {
+        pub fn set_website_configuration(&mut self, field: WebsiteConfiguration) -> &mut Self {
             self.website_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn website_configuration(mut self, field: WebsiteConfiguration) -> Self {
+            self.website_configuration = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutBucketWebsiteInput, BuildError> {
@@ -20662,152 +23553,411 @@ pub mod builders {
     }
 
     impl PutObjectInputBuilder {
-        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) {
+        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) -> &mut Self {
             self.acl = field;
+            self
         }
 
-        pub fn set_body(&mut self, field: Option<StreamingBlob>) {
+        pub fn set_body(&mut self, field: Option<StreamingBlob>) -> &mut Self {
             self.body = field;
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) {
+        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) -> &mut Self {
             self.bucket_key_enabled = field;
+            self
         }
 
-        pub fn set_cache_control(&mut self, field: Option<CacheControl>) {
+        pub fn set_cache_control(&mut self, field: Option<CacheControl>) -> &mut Self {
             self.cache_control = field;
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) {
+        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) -> &mut Self {
             self.checksum_crc32 = field;
+            self
         }
 
-        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) {
+        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) -> &mut Self {
             self.checksum_crc32c = field;
+            self
         }
 
-        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) {
+        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) -> &mut Self {
             self.checksum_sha1 = field;
+            self
         }
 
-        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) {
+        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) -> &mut Self {
             self.checksum_sha256 = field;
+            self
         }
 
-        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) {
+        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) -> &mut Self {
             self.content_disposition = field;
+            self
         }
 
-        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) {
+        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) -> &mut Self {
             self.content_encoding = field;
+            self
         }
 
-        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) {
+        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) -> &mut Self {
             self.content_language = field;
+            self
         }
 
-        pub fn set_content_length(&mut self, field: Option<ContentLength>) {
+        pub fn set_content_length(&mut self, field: Option<ContentLength>) -> &mut Self {
             self.content_length = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_content_type(&mut self, field: Option<ContentType>) {
+        pub fn set_content_type(&mut self, field: Option<ContentType>) -> &mut Self {
             self.content_type = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_expires(&mut self, field: Option<Expires>) {
+        pub fn set_expires(&mut self, field: Option<Expires>) -> &mut Self {
             self.expires = field;
+            self
         }
 
-        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) -> &mut Self {
             self.grant_full_control = field;
+            self
         }
 
-        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) -> &mut Self {
             self.grant_read = field;
+            self
         }
 
-        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) -> &mut Self {
             self.grant_read_acp = field;
+            self
         }
 
-        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) -> &mut Self {
             self.grant_write_acp = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_metadata(&mut self, field: Option<Metadata>) {
+        pub fn set_metadata(&mut self, field: Option<Metadata>) -> &mut Self {
             self.metadata = field;
+            self
         }
 
-        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) {
+        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) -> &mut Self {
             self.object_lock_legal_hold_status = field;
+            self
         }
 
-        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) {
+        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) -> &mut Self {
             self.object_lock_mode = field;
+            self
         }
 
-        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) {
+        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) -> &mut Self {
             self.object_lock_retain_until_date = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) {
+        pub fn set_ssekms_encryption_context(&mut self, field: Option<SSEKMSEncryptionContext>) -> &mut Self {
             self.ssekms_encryption_context = field;
+            self
         }
 
-        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) {
+        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) -> &mut Self {
             self.ssekms_key_id = field;
+            self
         }
 
-        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) {
+        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) -> &mut Self {
             self.server_side_encryption = field;
+            self
         }
 
-        pub fn set_storage_class(&mut self, field: Option<StorageClass>) {
+        pub fn set_storage_class(&mut self, field: Option<StorageClass>) -> &mut Self {
             self.storage_class = field;
+            self
         }
 
-        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) {
+        pub fn set_tagging(&mut self, field: Option<TaggingHeader>) -> &mut Self {
             self.tagging = field;
+            self
         }
 
-        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) {
+        pub fn set_website_redirect_location(&mut self, field: Option<WebsiteRedirectLocation>) -> &mut Self {
             self.website_redirect_location = field;
+            self
+        }
+
+        #[must_use]
+        pub fn acl(mut self, field: Option<ObjectCannedACL>) -> Self {
+            self.acl = field;
+            self
+        }
+
+        #[must_use]
+        pub fn body(mut self, field: Option<StreamingBlob>) -> Self {
+            self.body = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket_key_enabled(mut self, field: Option<BucketKeyEnabled>) -> Self {
+            self.bucket_key_enabled = field;
+            self
+        }
+
+        #[must_use]
+        pub fn cache_control(mut self, field: Option<CacheControl>) -> Self {
+            self.cache_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_crc32(mut self, field: Option<ChecksumCRC32>) -> Self {
+            self.checksum_crc32 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_crc32c(mut self, field: Option<ChecksumCRC32C>) -> Self {
+            self.checksum_crc32c = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_sha1(mut self, field: Option<ChecksumSHA1>) -> Self {
+            self.checksum_sha1 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_sha256(mut self, field: Option<ChecksumSHA256>) -> Self {
+            self.checksum_sha256 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_disposition(mut self, field: Option<ContentDisposition>) -> Self {
+            self.content_disposition = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_encoding(mut self, field: Option<ContentEncoding>) -> Self {
+            self.content_encoding = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_language(mut self, field: Option<ContentLanguage>) -> Self {
+            self.content_language = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_length(mut self, field: Option<ContentLength>) -> Self {
+            self.content_length = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_type(mut self, field: Option<ContentType>) -> Self {
+            self.content_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expires(mut self, field: Option<Expires>) -> Self {
+            self.expires = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_full_control(mut self, field: Option<GrantFullControl>) -> Self {
+            self.grant_full_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read(mut self, field: Option<GrantRead>) -> Self {
+            self.grant_read = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read_acp(mut self, field: Option<GrantReadACP>) -> Self {
+            self.grant_read_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write_acp(mut self, field: Option<GrantWriteACP>) -> Self {
+            self.grant_write_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn metadata(mut self, field: Option<Metadata>) -> Self {
+            self.metadata = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_legal_hold_status(mut self, field: Option<ObjectLockLegalHoldStatus>) -> Self {
+            self.object_lock_legal_hold_status = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_mode(mut self, field: Option<ObjectLockMode>) -> Self {
+            self.object_lock_mode = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_retain_until_date(mut self, field: Option<ObjectLockRetainUntilDate>) -> Self {
+            self.object_lock_retain_until_date = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn ssekms_encryption_context(mut self, field: Option<SSEKMSEncryptionContext>) -> Self {
+            self.ssekms_encryption_context = field;
+            self
+        }
+
+        #[must_use]
+        pub fn ssekms_key_id(mut self, field: Option<SSEKMSKeyId>) -> Self {
+            self.ssekms_key_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn server_side_encryption(mut self, field: Option<ServerSideEncryption>) -> Self {
+            self.server_side_encryption = field;
+            self
+        }
+
+        #[must_use]
+        pub fn storage_class(mut self, field: Option<StorageClass>) -> Self {
+            self.storage_class = field;
+            self
+        }
+
+        #[must_use]
+        pub fn tagging(mut self, field: Option<TaggingHeader>) -> Self {
+            self.tagging = field;
+            self
+        }
+
+        #[must_use]
+        pub fn website_redirect_location(mut self, field: Option<WebsiteRedirectLocation>) -> Self {
+            self.website_redirect_location = field;
+            self
         }
 
         pub fn build(self) -> Result<PutObjectInput, BuildError> {
@@ -20923,60 +24073,158 @@ pub mod builders {
     }
 
     impl PutObjectAclInputBuilder {
-        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) {
+        pub fn set_acl(&mut self, field: Option<ObjectCannedACL>) -> &mut Self {
             self.acl = field;
+            self
         }
 
-        pub fn set_access_control_policy(&mut self, field: Option<AccessControlPolicy>) {
+        pub fn set_access_control_policy(&mut self, field: Option<AccessControlPolicy>) -> &mut Self {
             self.access_control_policy = field;
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) {
+        pub fn set_grant_full_control(&mut self, field: Option<GrantFullControl>) -> &mut Self {
             self.grant_full_control = field;
+            self
         }
 
-        pub fn set_grant_read(&mut self, field: Option<GrantRead>) {
+        pub fn set_grant_read(&mut self, field: Option<GrantRead>) -> &mut Self {
             self.grant_read = field;
+            self
         }
 
-        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) {
+        pub fn set_grant_read_acp(&mut self, field: Option<GrantReadACP>) -> &mut Self {
             self.grant_read_acp = field;
+            self
         }
 
-        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) {
+        pub fn set_grant_write(&mut self, field: Option<GrantWrite>) -> &mut Self {
             self.grant_write = field;
+            self
         }
 
-        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) {
+        pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) -> &mut Self {
             self.grant_write_acp = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn acl(mut self, field: Option<ObjectCannedACL>) -> Self {
+            self.acl = field;
+            self
+        }
+
+        #[must_use]
+        pub fn access_control_policy(mut self, field: Option<AccessControlPolicy>) -> Self {
+            self.access_control_policy = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_full_control(mut self, field: Option<GrantFullControl>) -> Self {
+            self.grant_full_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read(mut self, field: Option<GrantRead>) -> Self {
+            self.grant_read = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_read_acp(mut self, field: Option<GrantReadACP>) -> Self {
+            self.grant_read_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write(mut self, field: Option<GrantWrite>) -> Self {
+            self.grant_write = field;
+            self
+        }
+
+        #[must_use]
+        pub fn grant_write_acp(mut self, field: Option<GrantWriteACP>) -> Self {
+            self.grant_write_acp = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<PutObjectAclInput, BuildError> {
@@ -21034,36 +24282,92 @@ pub mod builders {
     }
 
     impl PutObjectLegalHoldInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_legal_hold(&mut self, field: Option<ObjectLockLegalHold>) {
+        pub fn set_legal_hold(&mut self, field: Option<ObjectLockLegalHold>) -> &mut Self {
             self.legal_hold = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn legal_hold(mut self, field: Option<ObjectLockLegalHold>) -> Self {
+            self.legal_hold = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<PutObjectLegalHoldInput, BuildError> {
@@ -21107,32 +24411,81 @@ pub mod builders {
     }
 
     impl PutObjectLockConfigurationInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_object_lock_configuration(&mut self, field: Option<ObjectLockConfiguration>) {
+        pub fn set_object_lock_configuration(&mut self, field: Option<ObjectLockConfiguration>) -> &mut Self {
             self.object_lock_configuration = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_token(&mut self, field: Option<ObjectLockToken>) {
+        pub fn set_token(&mut self, field: Option<ObjectLockToken>) -> &mut Self {
             self.token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_configuration(mut self, field: Option<ObjectLockConfiguration>) -> Self {
+            self.object_lock_configuration = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn token(mut self, field: Option<ObjectLockToken>) -> Self {
+            self.token = field;
+            self
         }
 
         pub fn build(self) -> Result<PutObjectLockConfigurationInput, BuildError> {
@@ -21178,40 +24531,103 @@ pub mod builders {
     }
 
     impl PutObjectRetentionInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) {
+        pub fn set_bypass_governance_retention(&mut self, field: Option<BypassGovernanceRetention>) -> &mut Self {
             self.bypass_governance_retention = field;
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_retention(&mut self, field: Option<ObjectLockRetention>) {
+        pub fn set_retention(&mut self, field: Option<ObjectLockRetention>) -> &mut Self {
             self.retention = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bypass_governance_retention(mut self, field: Option<BypassGovernanceRetention>) -> Self {
+            self.bypass_governance_retention = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn retention(mut self, field: Option<ObjectLockRetention>) -> Self {
+            self.retention = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<PutObjectRetentionInput, BuildError> {
@@ -21259,36 +24675,92 @@ pub mod builders {
     }
 
     impl PutObjectTaggingInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_tagging(&mut self, field: Tagging) {
+        pub fn set_tagging(&mut self, field: Tagging) -> &mut Self {
             self.tagging = Some(field);
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn tagging(mut self, field: Tagging) -> Self {
+            self.tagging = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<PutObjectTaggingInput, BuildError> {
@@ -21328,24 +24800,59 @@ pub mod builders {
     }
 
     impl PutPublicAccessBlockInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_public_access_block_configuration(&mut self, field: PublicAccessBlockConfiguration) {
+        pub fn set_public_access_block_configuration(&mut self, field: PublicAccessBlockConfiguration) -> &mut Self {
             self.public_access_block_configuration = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn public_access_block_configuration(mut self, field: PublicAccessBlockConfiguration) -> Self {
+            self.public_access_block_configuration = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<PutPublicAccessBlockInput, BuildError> {
@@ -21385,32 +24892,81 @@ pub mod builders {
     }
 
     impl RestoreObjectInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_restore_request(&mut self, field: Option<RestoreRequest>) {
+        pub fn set_restore_request(&mut self, field: Option<RestoreRequest>) -> &mut Self {
             self.restore_request = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn restore_request(mut self, field: Option<RestoreRequest>) -> Self {
+            self.restore_request = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<RestoreObjectInput, BuildError> {
@@ -21452,32 +25008,81 @@ pub mod builders {
     }
 
     impl SelectObjectContentInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_request(&mut self, field: SelectObjectContentRequest) {
+        pub fn set_request(&mut self, field: SelectObjectContentRequest) -> &mut Self {
             self.request = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request(mut self, field: SelectObjectContentRequest) -> Self {
+            self.request = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<SelectObjectContentInput, BuildError> {
@@ -21539,72 +25144,191 @@ pub mod builders {
     }
 
     impl UploadPartInputBuilder {
-        pub fn set_body(&mut self, field: Option<StreamingBlob>) {
+        pub fn set_body(&mut self, field: Option<StreamingBlob>) -> &mut Self {
             self.body = field;
+            self
         }
 
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) {
+        pub fn set_checksum_algorithm(&mut self, field: Option<ChecksumAlgorithm>) -> &mut Self {
             self.checksum_algorithm = field;
+            self
         }
 
-        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) {
+        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) -> &mut Self {
             self.checksum_crc32 = field;
+            self
         }
 
-        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) {
+        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) -> &mut Self {
             self.checksum_crc32c = field;
+            self
         }
 
-        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) {
+        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) -> &mut Self {
             self.checksum_sha1 = field;
+            self
         }
 
-        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) {
+        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) -> &mut Self {
             self.checksum_sha256 = field;
+            self
         }
 
-        pub fn set_content_length(&mut self, field: Option<ContentLength>) {
+        pub fn set_content_length(&mut self, field: Option<ContentLength>) -> &mut Self {
             self.content_length = field;
+            self
         }
 
-        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) {
+        pub fn set_content_md5(&mut self, field: Option<ContentMD5>) -> &mut Self {
             self.content_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_part_number(&mut self, field: PartNumber) {
+        pub fn set_part_number(&mut self, field: PartNumber) -> &mut Self {
             self.part_number = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) -> &mut Self {
             self.upload_id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn body(mut self, field: Option<StreamingBlob>) -> Self {
+            self.body = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_algorithm(mut self, field: Option<ChecksumAlgorithm>) -> Self {
+            self.checksum_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_crc32(mut self, field: Option<ChecksumCRC32>) -> Self {
+            self.checksum_crc32 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_crc32c(mut self, field: Option<ChecksumCRC32C>) -> Self {
+            self.checksum_crc32c = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_sha1(mut self, field: Option<ChecksumSHA1>) -> Self {
+            self.checksum_sha1 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_sha256(mut self, field: Option<ChecksumSHA256>) -> Self {
+            self.checksum_sha256 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_length(mut self, field: Option<ContentLength>) -> Self {
+            self.content_length = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_md5(mut self, field: Option<ContentMD5>) -> Self {
+            self.content_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn part_number(mut self, field: PartNumber) -> Self {
+            self.part_number = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn upload_id(mut self, field: MultipartUploadId) -> Self {
+            self.upload_id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<UploadPartInput, BuildError> {
@@ -21690,80 +25414,213 @@ pub mod builders {
     }
 
     impl UploadPartCopyInputBuilder {
-        pub fn set_bucket(&mut self, field: BucketName) {
+        pub fn set_bucket(&mut self, field: BucketName) -> &mut Self {
             self.bucket = Some(field);
+            self
         }
 
-        pub fn set_copy_source(&mut self, field: CopySource) {
+        pub fn set_copy_source(&mut self, field: CopySource) -> &mut Self {
             self.copy_source = Some(field);
+            self
         }
 
-        pub fn set_copy_source_if_match(&mut self, field: Option<CopySourceIfMatch>) {
+        pub fn set_copy_source_if_match(&mut self, field: Option<CopySourceIfMatch>) -> &mut Self {
             self.copy_source_if_match = field;
+            self
         }
 
-        pub fn set_copy_source_if_modified_since(&mut self, field: Option<CopySourceIfModifiedSince>) {
+        pub fn set_copy_source_if_modified_since(&mut self, field: Option<CopySourceIfModifiedSince>) -> &mut Self {
             self.copy_source_if_modified_since = field;
+            self
         }
 
-        pub fn set_copy_source_if_none_match(&mut self, field: Option<CopySourceIfNoneMatch>) {
+        pub fn set_copy_source_if_none_match(&mut self, field: Option<CopySourceIfNoneMatch>) -> &mut Self {
             self.copy_source_if_none_match = field;
+            self
         }
 
-        pub fn set_copy_source_if_unmodified_since(&mut self, field: Option<CopySourceIfUnmodifiedSince>) {
+        pub fn set_copy_source_if_unmodified_since(&mut self, field: Option<CopySourceIfUnmodifiedSince>) -> &mut Self {
             self.copy_source_if_unmodified_since = field;
+            self
         }
 
-        pub fn set_copy_source_range(&mut self, field: Option<CopySourceRange>) {
+        pub fn set_copy_source_range(&mut self, field: Option<CopySourceRange>) -> &mut Self {
             self.copy_source_range = field;
+            self
         }
 
-        pub fn set_copy_source_sse_customer_algorithm(&mut self, field: Option<CopySourceSSECustomerAlgorithm>) {
+        pub fn set_copy_source_sse_customer_algorithm(&mut self, field: Option<CopySourceSSECustomerAlgorithm>) -> &mut Self {
             self.copy_source_sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_copy_source_sse_customer_key(&mut self, field: Option<CopySourceSSECustomerKey>) {
+        pub fn set_copy_source_sse_customer_key(&mut self, field: Option<CopySourceSSECustomerKey>) -> &mut Self {
             self.copy_source_sse_customer_key = field;
+            self
         }
 
-        pub fn set_copy_source_sse_customer_key_md5(&mut self, field: Option<CopySourceSSECustomerKeyMD5>) {
+        pub fn set_copy_source_sse_customer_key_md5(&mut self, field: Option<CopySourceSSECustomerKeyMD5>) -> &mut Self {
             self.copy_source_sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
         }
 
-        pub fn set_expected_source_bucket_owner(&mut self, field: Option<AccountId>) {
+        pub fn set_expected_source_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_source_bucket_owner = field;
+            self
         }
 
-        pub fn set_key(&mut self, field: ObjectKey) {
+        pub fn set_key(&mut self, field: ObjectKey) -> &mut Self {
             self.key = Some(field);
+            self
         }
 
-        pub fn set_part_number(&mut self, field: PartNumber) {
+        pub fn set_part_number(&mut self, field: PartNumber) -> &mut Self {
             self.part_number = field;
+            self
         }
 
-        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) {
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) {
+        pub fn set_sse_customer_key(&mut self, field: Option<SSECustomerKey>) -> &mut Self {
             self.sse_customer_key = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_upload_id(&mut self, field: MultipartUploadId) {
+        pub fn set_upload_id(&mut self, field: MultipartUploadId) -> &mut Self {
             self.upload_id = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn bucket(mut self, field: BucketName) -> Self {
+            self.bucket = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source(mut self, field: CopySource) -> Self {
+            self.copy_source = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_if_match(mut self, field: Option<CopySourceIfMatch>) -> Self {
+            self.copy_source_if_match = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_if_modified_since(mut self, field: Option<CopySourceIfModifiedSince>) -> Self {
+            self.copy_source_if_modified_since = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_if_none_match(mut self, field: Option<CopySourceIfNoneMatch>) -> Self {
+            self.copy_source_if_none_match = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_if_unmodified_since(mut self, field: Option<CopySourceIfUnmodifiedSince>) -> Self {
+            self.copy_source_if_unmodified_since = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_range(mut self, field: Option<CopySourceRange>) -> Self {
+            self.copy_source_range = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_sse_customer_algorithm(mut self, field: Option<CopySourceSSECustomerAlgorithm>) -> Self {
+            self.copy_source_sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_sse_customer_key(mut self, field: Option<CopySourceSSECustomerKey>) -> Self {
+            self.copy_source_sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn copy_source_sse_customer_key_md5(mut self, field: Option<CopySourceSSECustomerKeyMD5>) -> Self {
+            self.copy_source_sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expected_source_bucket_owner(mut self, field: Option<AccountId>) -> Self {
+            self.expected_source_bucket_owner = field;
+            self
+        }
+
+        #[must_use]
+        pub fn key(mut self, field: ObjectKey) -> Self {
+            self.key = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn part_number(mut self, field: PartNumber) -> Self {
+            self.part_number = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key(mut self, field: Option<SSECustomerKey>) -> Self {
+            self.sse_customer_key = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn upload_id(mut self, field: MultipartUploadId) -> Self {
+            self.upload_id = Some(field);
+            self
         }
 
         pub fn build(self) -> Result<UploadPartCopyInput, BuildError> {
@@ -21895,164 +25752,444 @@ pub mod builders {
     }
 
     impl WriteGetObjectResponseInputBuilder {
-        pub fn set_accept_ranges(&mut self, field: Option<AcceptRanges>) {
+        pub fn set_accept_ranges(&mut self, field: Option<AcceptRanges>) -> &mut Self {
             self.accept_ranges = field;
+            self
         }
 
-        pub fn set_body(&mut self, field: Option<StreamingBlob>) {
+        pub fn set_body(&mut self, field: Option<StreamingBlob>) -> &mut Self {
             self.body = field;
+            self
         }
 
-        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) {
+        pub fn set_bucket_key_enabled(&mut self, field: Option<BucketKeyEnabled>) -> &mut Self {
             self.bucket_key_enabled = field;
+            self
         }
 
-        pub fn set_cache_control(&mut self, field: Option<CacheControl>) {
+        pub fn set_cache_control(&mut self, field: Option<CacheControl>) -> &mut Self {
             self.cache_control = field;
+            self
         }
 
-        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) {
+        pub fn set_checksum_crc32(&mut self, field: Option<ChecksumCRC32>) -> &mut Self {
             self.checksum_crc32 = field;
+            self
         }
 
-        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) {
+        pub fn set_checksum_crc32c(&mut self, field: Option<ChecksumCRC32C>) -> &mut Self {
             self.checksum_crc32c = field;
+            self
         }
 
-        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) {
+        pub fn set_checksum_sha1(&mut self, field: Option<ChecksumSHA1>) -> &mut Self {
             self.checksum_sha1 = field;
+            self
         }
 
-        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) {
+        pub fn set_checksum_sha256(&mut self, field: Option<ChecksumSHA256>) -> &mut Self {
             self.checksum_sha256 = field;
+            self
         }
 
-        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) {
+        pub fn set_content_disposition(&mut self, field: Option<ContentDisposition>) -> &mut Self {
             self.content_disposition = field;
+            self
         }
 
-        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) {
+        pub fn set_content_encoding(&mut self, field: Option<ContentEncoding>) -> &mut Self {
             self.content_encoding = field;
+            self
         }
 
-        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) {
+        pub fn set_content_language(&mut self, field: Option<ContentLanguage>) -> &mut Self {
             self.content_language = field;
+            self
         }
 
-        pub fn set_content_length(&mut self, field: Option<ContentLength>) {
+        pub fn set_content_length(&mut self, field: Option<ContentLength>) -> &mut Self {
             self.content_length = field;
+            self
         }
 
-        pub fn set_content_range(&mut self, field: Option<ContentRange>) {
+        pub fn set_content_range(&mut self, field: Option<ContentRange>) -> &mut Self {
             self.content_range = field;
+            self
         }
 
-        pub fn set_content_type(&mut self, field: Option<ContentType>) {
+        pub fn set_content_type(&mut self, field: Option<ContentType>) -> &mut Self {
             self.content_type = field;
+            self
         }
 
-        pub fn set_delete_marker(&mut self, field: Option<DeleteMarker>) {
+        pub fn set_delete_marker(&mut self, field: Option<DeleteMarker>) -> &mut Self {
             self.delete_marker = field;
+            self
         }
 
-        pub fn set_e_tag(&mut self, field: Option<ETag>) {
+        pub fn set_e_tag(&mut self, field: Option<ETag>) -> &mut Self {
             self.e_tag = field;
+            self
         }
 
-        pub fn set_error_code(&mut self, field: Option<ErrorCode>) {
+        pub fn set_error_code(&mut self, field: Option<ErrorCode>) -> &mut Self {
             self.error_code = field;
+            self
         }
 
-        pub fn set_error_message(&mut self, field: Option<ErrorMessage>) {
+        pub fn set_error_message(&mut self, field: Option<ErrorMessage>) -> &mut Self {
             self.error_message = field;
+            self
         }
 
-        pub fn set_expiration(&mut self, field: Option<Expiration>) {
+        pub fn set_expiration(&mut self, field: Option<Expiration>) -> &mut Self {
             self.expiration = field;
+            self
         }
 
-        pub fn set_expires(&mut self, field: Option<Expires>) {
+        pub fn set_expires(&mut self, field: Option<Expires>) -> &mut Self {
             self.expires = field;
+            self
         }
 
-        pub fn set_last_modified(&mut self, field: Option<LastModified>) {
+        pub fn set_last_modified(&mut self, field: Option<LastModified>) -> &mut Self {
             self.last_modified = field;
+            self
         }
 
-        pub fn set_metadata(&mut self, field: Option<Metadata>) {
+        pub fn set_metadata(&mut self, field: Option<Metadata>) -> &mut Self {
             self.metadata = field;
+            self
         }
 
-        pub fn set_missing_meta(&mut self, field: Option<MissingMeta>) {
+        pub fn set_missing_meta(&mut self, field: Option<MissingMeta>) -> &mut Self {
             self.missing_meta = field;
+            self
         }
 
-        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) {
+        pub fn set_object_lock_legal_hold_status(&mut self, field: Option<ObjectLockLegalHoldStatus>) -> &mut Self {
             self.object_lock_legal_hold_status = field;
+            self
         }
 
-        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) {
+        pub fn set_object_lock_mode(&mut self, field: Option<ObjectLockMode>) -> &mut Self {
             self.object_lock_mode = field;
+            self
         }
 
-        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) {
+        pub fn set_object_lock_retain_until_date(&mut self, field: Option<ObjectLockRetainUntilDate>) -> &mut Self {
             self.object_lock_retain_until_date = field;
+            self
         }
 
-        pub fn set_parts_count(&mut self, field: Option<PartsCount>) {
+        pub fn set_parts_count(&mut self, field: Option<PartsCount>) -> &mut Self {
             self.parts_count = field;
+            self
         }
 
-        pub fn set_replication_status(&mut self, field: Option<ReplicationStatus>) {
+        pub fn set_replication_status(&mut self, field: Option<ReplicationStatus>) -> &mut Self {
             self.replication_status = field;
+            self
         }
 
-        pub fn set_request_charged(&mut self, field: Option<RequestCharged>) {
+        pub fn set_request_charged(&mut self, field: Option<RequestCharged>) -> &mut Self {
             self.request_charged = field;
+            self
         }
 
-        pub fn set_request_route(&mut self, field: RequestRoute) {
+        pub fn set_request_route(&mut self, field: RequestRoute) -> &mut Self {
             self.request_route = Some(field);
+            self
         }
 
-        pub fn set_request_token(&mut self, field: RequestToken) {
+        pub fn set_request_token(&mut self, field: RequestToken) -> &mut Self {
             self.request_token = Some(field);
+            self
         }
 
-        pub fn set_restore(&mut self, field: Option<Restore>) {
+        pub fn set_restore(&mut self, field: Option<Restore>) -> &mut Self {
             self.restore = field;
+            self
         }
 
-        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) {
+        pub fn set_sse_customer_algorithm(&mut self, field: Option<SSECustomerAlgorithm>) -> &mut Self {
             self.sse_customer_algorithm = field;
+            self
         }
 
-        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) {
+        pub fn set_sse_customer_key_md5(&mut self, field: Option<SSECustomerKeyMD5>) -> &mut Self {
             self.sse_customer_key_md5 = field;
+            self
         }
 
-        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) {
+        pub fn set_ssekms_key_id(&mut self, field: Option<SSEKMSKeyId>) -> &mut Self {
             self.ssekms_key_id = field;
+            self
         }
 
-        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) {
+        pub fn set_server_side_encryption(&mut self, field: Option<ServerSideEncryption>) -> &mut Self {
             self.server_side_encryption = field;
+            self
         }
 
-        pub fn set_status_code(&mut self, field: Option<GetObjectResponseStatusCode>) {
+        pub fn set_status_code(&mut self, field: Option<GetObjectResponseStatusCode>) -> &mut Self {
             self.status_code = field;
+            self
         }
 
-        pub fn set_storage_class(&mut self, field: Option<StorageClass>) {
+        pub fn set_storage_class(&mut self, field: Option<StorageClass>) -> &mut Self {
             self.storage_class = field;
+            self
         }
 
-        pub fn set_tag_count(&mut self, field: Option<TagCount>) {
+        pub fn set_tag_count(&mut self, field: Option<TagCount>) -> &mut Self {
             self.tag_count = field;
+            self
         }
 
-        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) {
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
             self.version_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn accept_ranges(mut self, field: Option<AcceptRanges>) -> Self {
+            self.accept_ranges = field;
+            self
+        }
+
+        #[must_use]
+        pub fn body(mut self, field: Option<StreamingBlob>) -> Self {
+            self.body = field;
+            self
+        }
+
+        #[must_use]
+        pub fn bucket_key_enabled(mut self, field: Option<BucketKeyEnabled>) -> Self {
+            self.bucket_key_enabled = field;
+            self
+        }
+
+        #[must_use]
+        pub fn cache_control(mut self, field: Option<CacheControl>) -> Self {
+            self.cache_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_crc32(mut self, field: Option<ChecksumCRC32>) -> Self {
+            self.checksum_crc32 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_crc32c(mut self, field: Option<ChecksumCRC32C>) -> Self {
+            self.checksum_crc32c = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_sha1(mut self, field: Option<ChecksumSHA1>) -> Self {
+            self.checksum_sha1 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn checksum_sha256(mut self, field: Option<ChecksumSHA256>) -> Self {
+            self.checksum_sha256 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_disposition(mut self, field: Option<ContentDisposition>) -> Self {
+            self.content_disposition = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_encoding(mut self, field: Option<ContentEncoding>) -> Self {
+            self.content_encoding = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_language(mut self, field: Option<ContentLanguage>) -> Self {
+            self.content_language = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_length(mut self, field: Option<ContentLength>) -> Self {
+            self.content_length = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_range(mut self, field: Option<ContentRange>) -> Self {
+            self.content_range = field;
+            self
+        }
+
+        #[must_use]
+        pub fn content_type(mut self, field: Option<ContentType>) -> Self {
+            self.content_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn delete_marker(mut self, field: Option<DeleteMarker>) -> Self {
+            self.delete_marker = field;
+            self
+        }
+
+        #[must_use]
+        pub fn e_tag(mut self, field: Option<ETag>) -> Self {
+            self.e_tag = field;
+            self
+        }
+
+        #[must_use]
+        pub fn error_code(mut self, field: Option<ErrorCode>) -> Self {
+            self.error_code = field;
+            self
+        }
+
+        #[must_use]
+        pub fn error_message(mut self, field: Option<ErrorMessage>) -> Self {
+            self.error_message = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expiration(mut self, field: Option<Expiration>) -> Self {
+            self.expiration = field;
+            self
+        }
+
+        #[must_use]
+        pub fn expires(mut self, field: Option<Expires>) -> Self {
+            self.expires = field;
+            self
+        }
+
+        #[must_use]
+        pub fn last_modified(mut self, field: Option<LastModified>) -> Self {
+            self.last_modified = field;
+            self
+        }
+
+        #[must_use]
+        pub fn metadata(mut self, field: Option<Metadata>) -> Self {
+            self.metadata = field;
+            self
+        }
+
+        #[must_use]
+        pub fn missing_meta(mut self, field: Option<MissingMeta>) -> Self {
+            self.missing_meta = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_legal_hold_status(mut self, field: Option<ObjectLockLegalHoldStatus>) -> Self {
+            self.object_lock_legal_hold_status = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_mode(mut self, field: Option<ObjectLockMode>) -> Self {
+            self.object_lock_mode = field;
+            self
+        }
+
+        #[must_use]
+        pub fn object_lock_retain_until_date(mut self, field: Option<ObjectLockRetainUntilDate>) -> Self {
+            self.object_lock_retain_until_date = field;
+            self
+        }
+
+        #[must_use]
+        pub fn parts_count(mut self, field: Option<PartsCount>) -> Self {
+            self.parts_count = field;
+            self
+        }
+
+        #[must_use]
+        pub fn replication_status(mut self, field: Option<ReplicationStatus>) -> Self {
+            self.replication_status = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_charged(mut self, field: Option<RequestCharged>) -> Self {
+            self.request_charged = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_route(mut self, field: RequestRoute) -> Self {
+            self.request_route = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn request_token(mut self, field: RequestToken) -> Self {
+            self.request_token = Some(field);
+            self
+        }
+
+        #[must_use]
+        pub fn restore(mut self, field: Option<Restore>) -> Self {
+            self.restore = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
+            self.sse_customer_algorithm = field;
+            self
+        }
+
+        #[must_use]
+        pub fn sse_customer_key_md5(mut self, field: Option<SSECustomerKeyMD5>) -> Self {
+            self.sse_customer_key_md5 = field;
+            self
+        }
+
+        #[must_use]
+        pub fn ssekms_key_id(mut self, field: Option<SSEKMSKeyId>) -> Self {
+            self.ssekms_key_id = field;
+            self
+        }
+
+        #[must_use]
+        pub fn server_side_encryption(mut self, field: Option<ServerSideEncryption>) -> Self {
+            self.server_side_encryption = field;
+            self
+        }
+
+        #[must_use]
+        pub fn status_code(mut self, field: Option<GetObjectResponseStatusCode>) -> Self {
+            self.status_code = field;
+            self
+        }
+
+        #[must_use]
+        pub fn storage_class(mut self, field: Option<StorageClass>) -> Self {
+            self.storage_class = field;
+            self
+        }
+
+        #[must_use]
+        pub fn tag_count(mut self, field: Option<TagCount>) -> Self {
+            self.tag_count = field;
+            self
+        }
+
+        #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
         }
 
         pub fn build(self) -> Result<WriteGetObjectResponseInput, BuildError> {
