@@ -10,6 +10,7 @@ mod get_object;
 mod tests;
 
 use crate::auth::S3Auth;
+use crate::auth::S3AuthContext;
 use crate::error::*;
 use crate::header;
 use crate::http;
@@ -243,6 +244,18 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
 
             req.s3ext.multipart = scx.multipart;
             req.s3ext.credentials = credentials;
+        }
+
+        if let Some(auth) = auth {
+            let mut cx = S3AuthContext {
+                credentials: req.s3ext.credentials.as_ref(),
+                s3_path,
+                method: &req.method,
+                uri: &req.uri,
+                headers: &req.headers,
+                extensions: &mut req.extensions,
+            };
+            auth.check_access(&mut cx).await?;
         }
 
         if body_changed {

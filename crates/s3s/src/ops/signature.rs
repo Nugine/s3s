@@ -81,16 +81,12 @@ impl SignatureContext<'_> {
     pub async fn check(&mut self) -> S3Result<Option<Credentials>> {
         if let Some(result) = self.v2_check().await {
             debug!("checked signature v2");
-            return result.map(Some);
+            return Ok(Some(result?));
         }
 
         if let Some(result) = self.v4_check().await {
             debug!("checked signature v4");
-            return result.map(Some);
-        }
-
-        if self.auth.is_some() {
-            return Err(s3_error!(AccessDenied, "Signature is required"));
+            return Ok(Some(result?));
         }
 
         Ok(None)
