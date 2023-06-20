@@ -63,6 +63,30 @@ impl S3Path {
             key: key.into(),
         }
     }
+
+    /// Returns `true` if the path is root
+    #[must_use]
+    pub fn is_root(&self) -> bool {
+        matches!(self, Self::Root)
+    }
+
+    /// Returns the bucket name if the path is bucket
+    #[must_use]
+    pub fn as_bucket(&self) -> Option<&str> {
+        match self {
+            Self::Bucket { bucket } => Some(bucket),
+            _ => None,
+        }
+    }
+
+    /// Returns the bucket name and object key if the path is object
+    #[must_use]
+    pub fn as_object(&self) -> Option<(&str, &str)> {
+        match self {
+            Self::Object { bucket, key } => Some((bucket, key)),
+            _ => None,
+        }
+    }
 }
 
 /// See [bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
