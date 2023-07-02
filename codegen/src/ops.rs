@@ -671,7 +671,7 @@ impl PathPattern {
     }
 
     fn query_patterns(part: &str) -> Vec<(String, String)> {
-        let Some((_, q)) = part.split_once('?') else{ return Vec::new() };
+        let Some((_, q)) = part.split_once('?') else { return Vec::new() };
         let mut qs: Vec<(String, String)> = serde_urlencoded::from_str(q).unwrap();
         qs.retain(|(n, v)| n != "x-id" && v.is_empty().not());
         qs

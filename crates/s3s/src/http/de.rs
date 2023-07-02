@@ -34,7 +34,7 @@ where
 {
     let mut iter = req.headers.get_all(name).into_iter();
     let Some(val) = iter.next() else { return Err(missing_header(name)) };
-    let None = iter.next() else { return Err(duplicate_header(name)) } ;
+    let None = iter.next() else { return Err(duplicate_header(name)) };
 
     T::try_from_header_value(val).map_err(|err| invalid_header(err, name, val))
 }
@@ -46,7 +46,7 @@ where
 {
     let mut iter = req.headers.get_all(name).into_iter();
     let Some(val) = iter.next() else { return Ok(None) };
-    let None = iter.next() else { return Err(duplicate_header(name)) } ;
+    let None = iter.next() else { return Err(duplicate_header(name)) };
 
     match T::try_from_header_value(val) {
         Ok(ans) => Ok(Some(ans)),
@@ -57,7 +57,7 @@ where
 pub fn parse_opt_header_timestamp(req: &Request, name: &HeaderName, fmt: TimestampFormat) -> S3Result<Option<Timestamp>> {
     let mut iter = req.headers.get_all(name).into_iter();
     let Some(val) = iter.next() else { return Ok(None) };
-    let None = iter.next() else { return Err(duplicate_header(name)) } ;
+    let None = iter.next() else { return Err(duplicate_header(name)) };
 
     let s = val.to_str().map_err(|err| invalid_header(err, name, val))?;
     match Timestamp::parse(fmt, s) {
@@ -102,7 +102,7 @@ where
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Err(missing_query(name)) };
-    let None = iter.next() else { return Err(duplicate_query(name)) } ;
+    let None = iter.next() else { return Err(duplicate_query(name)) };
 
     val.parse::<T>().map_err(|err| invalid_query(err, name, val))
 }
@@ -115,7 +115,7 @@ where
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Ok(None) };
-    let None = iter.next() else { return Err(duplicate_query(name)) } ;
+    let None = iter.next() else { return Err(duplicate_query(name)) };
 
     Ok(Some(val.parse::<T>().map_err(|err| invalid_query(err, name, val))?))
 }
@@ -125,21 +125,25 @@ pub fn parse_opt_query_timestamp(req: &Request, name: &str, fmt: TimestampFormat
 
     let mut iter = qs.get_all(name);
     let Some(val) = iter.next() else { return Ok(None) };
-    let None = iter.next() else { return Err(duplicate_query(name)) } ;
+    let None = iter.next() else { return Err(duplicate_query(name)) };
 
     Ok(Some(Timestamp::parse(fmt, val).map_err(|err| invalid_query(err, name, val))?))
 }
 
 #[track_caller]
 pub fn unwrap_bucket(req: &mut Request) -> String {
-    let Some(S3Path::Bucket { bucket }) = req.s3ext.s3_path.take() else { panic!("s3 path not found") };
-    bucket.into()
+    match req.s3ext.s3_path.take() {
+        Some(S3Path::Bucket { bucket }) => bucket.into(),
+        _ => panic!("s3 path not found, expected bucket"),
+    }
 }
 
 #[track_caller]
 pub fn unwrap_object(req: &mut Request) -> (String, String) {
-    let Some(S3Path::Object { bucket, key }) = req.s3ext.s3_path.take() else { panic!("s3 path not found") };
-    (bucket.into(), key.into())
+    match req.s3ext.s3_path.take() {
+        Some(S3Path::Object { bucket, key }) => (bucket.into(), key.into()),
+        _ => panic!("s3 path not found, expected object"),
+    }
 }
 
 fn malformed_xml(source: xml::DeError) -> S3Error {

@@ -556,7 +556,7 @@ fn codegen_builders(rust_types: &RustTypes, ops: &Operations) {
     );
 
     for op in ops.values() {
-        let rust::Type::Struct(ty) = &rust_types[&op.input] else {continue};
+        let rust::Type::Struct(ty) = &rust_types[&op.input] else { continue };
         codegen_struct_builder(ty, rust_types);
         g!();
     }
