@@ -853,7 +853,6 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
                         };
                         let final_count = group.iter().filter(|r| is_final_op(r)).count();
                         assert!(final_count <= 1);
-                        if final_count == 1 {}
 
                         g!("if let Some(qs) = qs {{");
                         for route in group {

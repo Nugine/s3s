@@ -38,7 +38,7 @@ impl<'a> OrderedHeaders<'a> {
     pub fn from_headers(map: &'a HeaderMap<HeaderValue>) -> Result<Self, ToStrError> {
         let mut headers: Vec<(&'a str, &'a str)> = Vec::with_capacity(map.len());
 
-        for (name, value) in map.iter() {
+        for (name, value) in map {
             headers.push((name.as_str(), value.to_str()?));
         }
         stable_sort_by_first(&mut headers);

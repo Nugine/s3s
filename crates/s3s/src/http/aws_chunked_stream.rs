@@ -344,7 +344,7 @@ mod tests {
 
         let date = AmzDate::parse(timestamp).unwrap();
 
-        let stream = futures::stream::iter(chunk_results.into_iter());
+        let stream = futures::stream::iter(chunk_results);
         let mut chunked_stream = AwsChunkedStream::new(
             stream,
             seed_signature.into(),

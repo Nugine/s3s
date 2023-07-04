@@ -171,7 +171,7 @@ pub fn create_canonical_request(
 
         // FIXME: check HOST, Content-Type, x-amz-security-token, x-amz-content-sha256
 
-        for &(name, value) in signed_headers.as_ref().iter() {
+        for &(name, value) in signed_headers.as_ref() {
             if is_skipped_header(name) {
                 continue;
             }
@@ -186,7 +186,7 @@ pub fn create_canonical_request(
     {
         // <SignedHeaders>\n
         let mut first_flag = true;
-        for &(name, _) in signed_headers.as_ref().iter() {
+        for &(name, _) in signed_headers.as_ref() {
             if is_skipped_header(name) {
                 continue;
             }
@@ -367,7 +367,7 @@ pub fn create_presigned_canonical_request(
     {
         // <CanonicalHeaders>\n
 
-        for &(name, value) in signed_headers.as_ref().iter() {
+        for &(name, value) in signed_headers.as_ref() {
             if is_skipped_header(name) {
                 continue;
             }
@@ -381,7 +381,7 @@ pub fn create_presigned_canonical_request(
     {
         // <SignedHeaders>\n
         let mut first_flag = true;
-        for &(name, _) in signed_headers.as_ref().iter() {
+        for &(name, _) in signed_headers.as_ref() {
             if is_skipped_header(name) {
                 continue;
             }
