@@ -61,6 +61,10 @@ impl S3 for FileSystem {
             return Err(s3_error!(NoSuchBucket));
         }
 
+        if let Some(dir_path) = dst_path.parent() {
+            try_!(fs::create_dir_all(&dir_path).await);
+        }
+
         let file_metadata = try_!(fs::metadata(&src_path).await);
         let last_modified = Timestamp::from(try_!(file_metadata.modified()));
 
