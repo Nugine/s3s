@@ -15,22 +15,29 @@ use hyper::server::Server;
 use tracing::info;
 
 #[derive(Debug, Parser)]
+#[command(version)]
 struct Opt {
-    #[clap(long, default_value = "localhost")]
+    /// Host name to listen on.
+    #[arg(long, default_value = "localhost")]
     host: String,
 
-    #[clap(long, default_value = "8014")]
+    /// Port number to listen on.
+    #[arg(long, default_value = "8014")] // The original design was finished on 2020-08-14.
     port: u16,
 
-    #[clap(long, requires("secret-key"))]
+    /// Access key used for authentication.
+    #[arg(long, requires("secret-key"))]
     access_key: Option<String>,
 
-    #[clap(long, requires("access-key"))]
+    /// Secret key used for authentication.
+    #[arg(long, requires("access-key"))]
     secret_key: Option<String>,
 
-    #[clap(long)]
+    /// Domain name used for virtual-hosted-style requests.
+    #[arg(long)]
     domain_name: Option<String>,
 
+    /// Root directory of stored data.
     root: PathBuf,
 }
 
