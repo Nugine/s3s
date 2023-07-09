@@ -297,6 +297,15 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
         resolve_route(req, s3_path, req.s3ext.qs.as_ref())?
     };
 
+    // FIXME: hack for E2E tests (minio/mint)
+    if op.name() == "ListObjects" {
+        if let Some(qs) = req.s3ext.qs.as_ref() {
+            if qs.has("events") {
+                return Err(s3_error!(NotImplemented, "listenBucketNotification only works on MinIO"));
+            }
+        }
+    }
+
     debug!(op = %op.name(), ?s3_path, "resolved route");
 
     if needs_full_body {

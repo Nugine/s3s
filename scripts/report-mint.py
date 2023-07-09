@@ -34,8 +34,23 @@ def from_json(x: Any) -> MintLog:
 
 if __name__ == "__main__":
     log_path = sys.argv[1]
+    logs = []
     with open(log_path) as f:
-        logs = [from_json(json.loads(line.strip())) for line in f.readlines()]
+        for line in f.readlines():
+            line = line.strip()
+            if len(line) == 0:
+                continue
+
+            if line.find("{") != 0:
+                line = line[line.find("{") :]
+
+            try:
+                json_value = json.loads(line)
+            except Exception as e:
+                print(f"error parsing log line: {line}")
+                continue
+
+            logs.append(from_json(json_value))
 
     for x in logs:
         if ":" in x.name:
