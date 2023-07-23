@@ -213,6 +213,14 @@ impl Body {
         }
     }
 
+    pub fn take_bytes(&mut self) -> Option<Bytes> {
+        match mem::take(&mut self.kind) {
+            Kind::Empty => Some(Bytes::new()),
+            Kind::Once { inner } => Some(inner),
+            _ => None,
+        }
+    }
+
     fn into_hyper(self) -> hyper::Body {
         match self.kind {
             Kind::Empty => hyper::Body::empty(),

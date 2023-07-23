@@ -164,7 +164,7 @@ pub fn take_xml_body<T>(req: &mut Request) -> S3Result<T>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
-    let bytes = req.body.bytes().expect("full body not found");
+    let bytes = req.body.take_bytes().expect("full body not found");
     if bytes.is_empty() {
         return Err(S3ErrorCode::MissingRequestBodyError.into());
     }
@@ -179,7 +179,7 @@ pub fn take_opt_xml_body<T>(req: &mut Request) -> S3Result<Option<T>>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
-    let bytes = req.body.bytes().expect("full body not found");
+    let bytes = req.body.take_bytes().expect("full body not found");
     if bytes.is_empty() {
         return Ok(None);
     }
@@ -191,7 +191,7 @@ where
 }
 
 pub fn take_string_body(req: &mut Request) -> S3Result<String> {
-    let bytes = req.body.bytes().expect("full body not found");
+    let bytes = req.body.take_bytes().expect("full body not found");
     match String::from_utf8_simd(bytes.into()) {
         Some(s) => Ok(s),
         None => Err(invalid_request!("expected UTF-8 body")),
