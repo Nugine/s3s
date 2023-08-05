@@ -31,10 +31,11 @@ macro_rules! wrap_sdk_error {
 
 pub struct SetStatusCode<'a, 'b, E, R>(pub &'a mut s3s::S3Error, pub &'b aws_smithy_http::result::ServiceError<E, R>);
 
-impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_http::operation::Response> {
+impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_runtime_api::client::orchestrator::HttpResponse> {
     pub fn call(self) {
         let Self(err, e) = self;
-        err.set_status_code(e.raw().http().status());
+        err.set_status_code(e.raw().status());
+        // TODO: headers?
     }
 }
 

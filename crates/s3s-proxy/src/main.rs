@@ -48,15 +48,16 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
     let opt = Opt::parse();
 
     // Setup S3 provider
-    let conf = aws_config::from_env().endpoint_url(&opt.endpoint_url).load().await;
-    let proxy = s3s_aws::Proxy::from(aws_sdk_s3::Client::new(&conf));
+    let sdk_conf = aws_config::from_env().endpoint_url(&opt.endpoint_url).load().await;
+    let client = aws_sdk_s3::Client::from_conf(aws_sdk_s3::config::Builder::from(&sdk_conf).force_path_style(true).build());
+    let proxy = s3s_aws::Proxy::from(client);
 
     // Setup S3 service
     let service = {
         let mut b = S3ServiceBuilder::new(proxy);
 
         // Enable authentication
-        if let Some(cred_provider) = conf.credentials_provider() {
+        if let Some(cred_provider) = sdk_conf.credentials_provider() {
             let cred = cred_provider.provide_credentials().await?;
             b.set_auth(SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key()));
         }
