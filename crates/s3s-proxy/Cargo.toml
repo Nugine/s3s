@@ -8,10 +8,10 @@ publish = false
 aws-config = "0.55.3"
 aws-credential-types = "0.55.3"
 aws-sdk-s3 = "0.28.0"
-clap = { version = "4.3.5", features = ["derive"] }
-hyper = { version = "0.14.26", features = ["full"] }
+clap = { version = "4.3.17", features = ["derive"] }
+hyper = { version = "0.14.27", features = ["full"] }
 s3s = { version = "0.6.2-dev", path = "../s3s" }
 s3s-aws = { version = "0.6.2-dev", path = "../s3s-aws" }
-tokio = { version = "1.28.2", features = ["full"] }
+tokio = { version = "1.29.1", features = ["full"] }
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter", "time"] }
