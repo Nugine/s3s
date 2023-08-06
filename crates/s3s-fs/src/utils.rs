@@ -49,5 +49,5 @@ where
 }
 
 pub fn hex(input: impl AsRef<[u8]>) -> String {
-    hex_simd::encode_to_string(input, hex_simd::AsciiCase::Lower)
+    hex_simd::encode_to_string(input.as_ref(), hex_simd::AsciiCase::Lower)
 }

@@ -16,11 +16,13 @@ use aws_credential_types::provider::SharedCredentialsProvider;
 use aws_sdk_s3::config::Credentials;
 use aws_sdk_s3::config::Region;
 use aws_sdk_s3::primitives::ByteStream;
+use aws_sdk_s3::Client;
+
 use aws_sdk_s3::types::BucketLocationConstraint;
+use aws_sdk_s3::types::ChecksumMode;
 use aws_sdk_s3::types::CompletedMultipartUpload;
 use aws_sdk_s3::types::CompletedPart;
 use aws_sdk_s3::types::CreateBucketConfiguration;
-use aws_sdk_s3::Client;
 
 use anyhow::Result;
 use once_cell::sync::Lazy;
@@ -134,21 +136,36 @@ async fn test_single_object() -> Result<()> {
     let bucket = bucket.as_str();
     let key = "sample.txt";
     let content = "hello world\n你好世界\n";
+    let crc32c = base64_simd::STANDARD.encode_to_string(crc32c::crc32c(content.as_bytes()).to_be_bytes());
 
     create_bucket(&c, bucket).await?;
 
     {
         let body = ByteStream::from_static(content.as_bytes());
-        c.put_object().bucket(bucket).key(key).body(body).send().await?;
+        c.put_object()
+            .bucket(bucket)
+            .key(key)
+            .body(body)
+            .checksum_crc32_c(crc32c.as_str())
+            .send()
+            .await?;
     }
 
     {
-        let ans = c.get_object().bucket(bucket).key(key).send().await?;
+        let ans = c
+            .get_object()
+            .bucket(bucket)
+            .key(key)
+            .checksum_mode(ChecksumMode::Enabled)
+            .send()
+            .await?;
 
         let content_length: usize = ans.content_length().try_into().unwrap();
+        let checksum_crc32c = ans.checksum_crc32_c.unwrap();
         let body = ans.body.collect().await?.into_bytes();
 
         assert_eq!(content_length, content.len());
+        assert_eq!(checksum_crc32c, crc32c);
         assert_eq!(body.as_ref(), content.as_bytes());
     }
 
