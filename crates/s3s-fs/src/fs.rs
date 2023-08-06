@@ -51,6 +51,12 @@ impl FileSystem {
         self.resolve_abs_path(file_path)
     }
 
+    pub(crate) fn get_internal_info_path(&self, bucket: &str, key: &str) -> Result<PathBuf> {
+        let encode = |s: &str| base64_simd::URL_SAFE_NO_PAD.encode_to_string(s);
+        let file_path = format!(".bucket-{}.object-{}.internal.json", encode(bucket), encode(key));
+        self.resolve_abs_path(file_path)
+    }
+
     /// load metadata from fs
     pub(crate) async fn load_metadata(&self, bucket: &str, key: &str) -> Result<Option<dto::Metadata>> {
         let path = self.get_metadata_path(bucket, key)?;
@@ -66,6 +72,32 @@ impl FileSystem {
     pub(crate) async fn save_metadata(&self, bucket: &str, key: &str, metadata: &dto::Metadata) -> Result<()> {
         let path = self.get_metadata_path(bucket, key)?;
         let content = serde_json::to_vec(metadata)?;
+        fs::write(&path, &content).await?;
+        Ok(())
+    }
+
+    pub(crate) async fn load_internal_info(
+        &self,
+        bucket: &str,
+        key: &str,
+    ) -> Result<Option<serde_json::Map<String, serde_json::Value>>> {
+        let path = self.get_internal_info_path(bucket, key)?;
+        if path.exists().not() {
+            return Ok(None);
+        }
+        let content = fs::read(&path).await?;
+        let map = serde_json::from_slice(&content)?;
+        Ok(Some(map))
+    }
+
+    pub(crate) async fn save_internal_info(
+        &self,
+        bucket: &str,
+        key: &str,
+        info: &serde_json::Map<String, serde_json::Value>,
+    ) -> Result<()> {
+        let path = self.get_internal_info_path(bucket, key)?;
+        let content = serde_json::to_vec(info)?;
         fs::write(&path, &content).await?;
         Ok(())
     }
