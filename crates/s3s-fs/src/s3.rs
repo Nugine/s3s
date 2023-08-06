@@ -1,4 +1,5 @@
 use crate::fs::FileSystem;
+use crate::fs::InternalInfo;
 use crate::utils::*;
 
 use s3s::dto::*;
@@ -198,13 +199,24 @@ impl S3 for FileSystem {
         let object_metadata = self.load_metadata(&input.bucket, &input.key).await?;
 
         let md5_sum = self.get_md5_sum(&input.bucket, &input.key).await?;
+        let e_tag = format!("\"{md5_sum}\"");
+
+        let info = self.load_internal_info(&input.bucket, &input.key).await?;
+        let checksum = match &info {
+            Some(info) => crate::checksum::from_internal_info(info),
+            None => default(),
+        };
 
         let output = GetObjectOutput {
             body: Some(StreamingBlob::wrap(body)),
             content_length: content_length_i64,
             last_modified: Some(last_modified),
             metadata: object_metadata,
-            e_tag: Some(format!("\"{md5_sum}\"")),
+            e_tag: Some(e_tag),
+            checksum_crc32: checksum.checksum_crc32,
+            checksum_crc32c: checksum.checksum_crc32c,
+            checksum_sha1: checksum.checksum_sha1,
+            checksum_sha256: checksum.checksum_sha256,
             ..Default::default()
         };
         Ok(S3Response::new(output))
@@ -388,6 +400,20 @@ impl S3 for FileSystem {
 
         let Some(body) = body else { return Err(s3_error!(IncompleteBody)) };
 
+        let mut checksum: crate::checksum::ChecksumCalculator = default();
+        if input.checksum_crc32.is_some() {
+            checksum.crc32 = Some(default());
+        }
+        if input.checksum_crc32c.is_some() {
+            checksum.crc32c = Some(default());
+        }
+        if input.checksum_sha1.is_some() {
+            checksum.sha1 = Some(default());
+        }
+        if input.checksum_sha256.is_some() {
+            checksum.sha256 = Some(default());
+        }
+
         if key.ends_with('/') {
             if let Some(len) = content_length {
                 if len > 0 {
@@ -406,7 +432,10 @@ impl S3 for FileSystem {
         }
 
         let mut md5_hash = Md5::new();
-        let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
+        let stream = body.inspect_ok(|bytes| {
+            md5_hash.update(bytes.as_ref());
+            checksum.update(bytes.as_ref());
+        });
 
         let file = try_!(fs::File::create(&object_path).await);
         let mut writer = BufWriter::new(file);
@@ -414,14 +443,38 @@ impl S3 for FileSystem {
         let size = copy_bytes(stream, &mut writer).await?;
         let md5_sum = hex(md5_hash.finalize());
 
-        debug!(path = %object_path.display(), ?size, %md5_sum, "write file");
+        let checksum = checksum.finalize();
+        if checksum.checksum_crc32 != input.checksum_crc32 {
+            return Err(s3_error!(BadDigest, "checksum_crc32 mismatch"));
+        }
+        if checksum.checksum_crc32c != input.checksum_crc32c {
+            return Err(s3_error!(BadDigest, "checksum_crc32c mismatch"));
+        }
+        if checksum.checksum_sha1 != input.checksum_sha1 {
+            return Err(s3_error!(BadDigest, "checksum_sha1 mismatch"));
+        }
+        if checksum.checksum_sha256 != input.checksum_sha256 {
+            return Err(s3_error!(BadDigest, "checksum_sha256 mismatch"));
+        }
+
+        debug!(path = %object_path.display(), ?size, %md5_sum, ?checksum, "write file");
 
         if let Some(ref metadata) = metadata {
             self.save_metadata(&bucket, &key, metadata).await?;
         }
 
+        let mut info: InternalInfo = default();
+        crate::checksum::modify_internal_info(&mut info, &checksum);
+        self.save_internal_info(&bucket, &key, &info).await?;
+
+        let e_tag = format!("\"{md5_sum}\"");
+
         let output = PutObjectOutput {
-            e_tag: Some(format!("\"{md5_sum}\"")),
+            e_tag: Some(e_tag),
+            checksum_crc32: checksum.checksum_crc32,
+            checksum_crc32c: checksum.checksum_crc32c,
+            checksum_sha1: checksum.checksum_sha1,
+            checksum_sha256: checksum.checksum_sha256,
             ..Default::default()
         };
         Ok(S3Response::new(output))

@@ -21,6 +21,8 @@ pub struct FileSystem {
     pub(crate) root: PathBuf,
 }
 
+pub(crate) type InternalInfo = serde_json::Map<String, serde_json::Value>;
+
 impl FileSystem {
     pub fn new(root: impl AsRef<Path>) -> Result<Self> {
         let root = env::current_dir()?.join(root).canonicalize()?;
@@ -76,11 +78,7 @@ impl FileSystem {
         Ok(())
     }
 
-    pub(crate) async fn load_internal_info(
-        &self,
-        bucket: &str,
-        key: &str,
-    ) -> Result<Option<serde_json::Map<String, serde_json::Value>>> {
+    pub(crate) async fn load_internal_info(&self, bucket: &str, key: &str) -> Result<Option<InternalInfo>> {
         let path = self.get_internal_info_path(bucket, key)?;
         if path.exists().not() {
             return Ok(None);
@@ -90,12 +88,7 @@ impl FileSystem {
         Ok(Some(map))
     }
 
-    pub(crate) async fn save_internal_info(
-        &self,
-        bucket: &str,
-        key: &str,
-        info: &serde_json::Map<String, serde_json::Value>,
-    ) -> Result<()> {
+    pub(crate) async fn save_internal_info(&self, bucket: &str, key: &str, info: &InternalInfo) -> Result<()> {
         let path = self.get_internal_info_path(bucket, key)?;
         let content = serde_json::to_vec(info)?;
         fs::write(&path, &content).await?;
