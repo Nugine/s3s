@@ -252,7 +252,7 @@ fn xml_payload<T: xml::Serialize>(val: &T) -> Bytes {
     {
         let mut ser = xml::Serializer::new(&mut buf);
         ser.decl()
-            .and_then(|_| val.serialize(&mut ser))
+            .and_then(|()| val.serialize(&mut ser))
             .expect("infallible serialization");
     }
     buf.into()

@@ -199,7 +199,7 @@ mod tests {
             let output = Range::parse(input);
             match expected {
                 Ok(expected) => assert_eq!(output.unwrap(), *expected),
-                Err(_) => assert!(output.is_err()),
+                Err(()) => assert!(output.is_err()),
             }
         }
     }

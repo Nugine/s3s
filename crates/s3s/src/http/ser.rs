@@ -97,7 +97,7 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
     {
         let mut ser = xml::Serializer::new(&mut buf);
         ser.decl()
-            .and_then(|_| val.serialize(&mut ser))
+            .and_then(|()| val.serialize(&mut ser))
             .map_err(S3Error::internal_error)?;
     }
     res.body = Body::from(buf);
