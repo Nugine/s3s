@@ -10,7 +10,7 @@ keywords = ["s3"]
 categories = ["web-programming", "web-programming::http-server"]
 
 [dependencies]
-async-trait = "0.1.71"
+async-trait = "0.1.73"
 aws-sdk-s3 = "0.29.0"
 aws-smithy-http = { version = "0.56.0", features = ["event-stream"] }
 aws-smithy-runtime-api = { version = "0.56.0", features = ["client"] }
