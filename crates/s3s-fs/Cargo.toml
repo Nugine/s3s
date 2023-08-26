@@ -49,9 +49,9 @@ uuid = { version = "1.4.1", features = ["v4"] }
 
 [dev-dependencies]
 anyhow = { version = "1.0.73", features = ["backtrace"] }
-aws-config = { version = "0.56.0", default-features = false }
-aws-credential-types = { version = "0.56.0", features = ["test-util"] }
-aws-sdk-s3 = "0.29.0"
+aws-config = { version = "0.56.1", default-features = false }
+aws-credential-types = { version = "0.56.1", features = ["test-util"] }
+aws-sdk-s3 = "0.30.0"
 once_cell = "1.18.0"
 s3s-aws = { version = "0.7.1-dev", path = "../s3s-aws" }
 tokio = { version = "1.31.0", features = ["full"] }
