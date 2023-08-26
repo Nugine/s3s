@@ -283,7 +283,7 @@ impl fmt::Debug for AnalyticsS3BucketDestination {
 pub struct AnalyticsS3ExportFileFormat(Cow<'static, str>);
 
 impl AnalyticsS3ExportFileFormat {
-    pub const CSV: &str = "CSV";
+    pub const CSV: &'static str = "CSV";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -319,9 +319,9 @@ impl FromStr for AnalyticsS3ExportFileFormat {
 pub struct ArchiveStatus(Cow<'static, str>);
 
 impl ArchiveStatus {
-    pub const ARCHIVE_ACCESS: &str = "ARCHIVE_ACCESS";
+    pub const ARCHIVE_ACCESS: &'static str = "ARCHIVE_ACCESS";
 
-    pub const DEEP_ARCHIVE_ACCESS: &str = "DEEP_ARCHIVE_ACCESS";
+    pub const DEEP_ARCHIVE_ACCESS: &'static str = "DEEP_ARCHIVE_ACCESS";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -381,9 +381,9 @@ impl fmt::Debug for Bucket {
 pub struct BucketAccelerateStatus(Cow<'static, str>);
 
 impl BucketAccelerateStatus {
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
-    pub const SUSPENDED: &str = "Suspended";
+    pub const SUSPENDED: &'static str = "Suspended";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -445,13 +445,13 @@ impl fmt::Debug for BucketAlreadyOwnedByYou {
 pub struct BucketCannedACL(Cow<'static, str>);
 
 impl BucketCannedACL {
-    pub const AUTHENTICATED_READ: &str = "authenticated-read";
+    pub const AUTHENTICATED_READ: &'static str = "authenticated-read";
 
-    pub const PRIVATE: &str = "private";
+    pub const PRIVATE: &'static str = "private";
 
-    pub const PUBLIC_READ: &str = "public-read";
+    pub const PUBLIC_READ: &'static str = "public-read";
 
-    pub const PUBLIC_READ_WRITE: &str = "public-read-write";
+    pub const PUBLIC_READ_WRITE: &'static str = "public-read-write";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -506,57 +506,57 @@ impl fmt::Debug for BucketLifecycleConfiguration {
 pub struct BucketLocationConstraint(Cow<'static, str>);
 
 impl BucketLocationConstraint {
-    pub const EU: &str = "EU";
+    pub const EU: &'static str = "EU";
 
-    pub const AF_SOUTH_1: &str = "af-south-1";
+    pub const AF_SOUTH_1: &'static str = "af-south-1";
 
-    pub const AP_EAST_1: &str = "ap-east-1";
+    pub const AP_EAST_1: &'static str = "ap-east-1";
 
-    pub const AP_NORTHEAST_1: &str = "ap-northeast-1";
+    pub const AP_NORTHEAST_1: &'static str = "ap-northeast-1";
 
-    pub const AP_NORTHEAST_2: &str = "ap-northeast-2";
+    pub const AP_NORTHEAST_2: &'static str = "ap-northeast-2";
 
-    pub const AP_NORTHEAST_3: &str = "ap-northeast-3";
+    pub const AP_NORTHEAST_3: &'static str = "ap-northeast-3";
 
-    pub const AP_SOUTH_1: &str = "ap-south-1";
+    pub const AP_SOUTH_1: &'static str = "ap-south-1";
 
-    pub const AP_SOUTHEAST_1: &str = "ap-southeast-1";
+    pub const AP_SOUTHEAST_1: &'static str = "ap-southeast-1";
 
-    pub const AP_SOUTHEAST_2: &str = "ap-southeast-2";
+    pub const AP_SOUTHEAST_2: &'static str = "ap-southeast-2";
 
-    pub const AP_SOUTHEAST_3: &str = "ap-southeast-3";
+    pub const AP_SOUTHEAST_3: &'static str = "ap-southeast-3";
 
-    pub const CA_CENTRAL_1: &str = "ca-central-1";
+    pub const CA_CENTRAL_1: &'static str = "ca-central-1";
 
-    pub const CN_NORTH_1: &str = "cn-north-1";
+    pub const CN_NORTH_1: &'static str = "cn-north-1";
 
-    pub const CN_NORTHWEST_1: &str = "cn-northwest-1";
+    pub const CN_NORTHWEST_1: &'static str = "cn-northwest-1";
 
-    pub const EU_CENTRAL_1: &str = "eu-central-1";
+    pub const EU_CENTRAL_1: &'static str = "eu-central-1";
 
-    pub const EU_NORTH_1: &str = "eu-north-1";
+    pub const EU_NORTH_1: &'static str = "eu-north-1";
 
-    pub const EU_SOUTH_1: &str = "eu-south-1";
+    pub const EU_SOUTH_1: &'static str = "eu-south-1";
 
-    pub const EU_WEST_1: &str = "eu-west-1";
+    pub const EU_WEST_1: &'static str = "eu-west-1";
 
-    pub const EU_WEST_2: &str = "eu-west-2";
+    pub const EU_WEST_2: &'static str = "eu-west-2";
 
-    pub const EU_WEST_3: &str = "eu-west-3";
+    pub const EU_WEST_3: &'static str = "eu-west-3";
 
-    pub const ME_SOUTH_1: &str = "me-south-1";
+    pub const ME_SOUTH_1: &'static str = "me-south-1";
 
-    pub const SA_EAST_1: &str = "sa-east-1";
+    pub const SA_EAST_1: &'static str = "sa-east-1";
 
-    pub const US_EAST_2: &str = "us-east-2";
+    pub const US_EAST_2: &'static str = "us-east-2";
 
-    pub const US_GOV_EAST_1: &str = "us-gov-east-1";
+    pub const US_GOV_EAST_1: &'static str = "us-gov-east-1";
 
-    pub const US_GOV_WEST_1: &str = "us-gov-west-1";
+    pub const US_GOV_WEST_1: &'static str = "us-gov-west-1";
 
-    pub const US_WEST_1: &str = "us-west-1";
+    pub const US_WEST_1: &'static str = "us-west-1";
 
-    pub const US_WEST_2: &str = "us-west-2";
+    pub const US_WEST_2: &'static str = "us-west-2";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -608,11 +608,11 @@ impl fmt::Debug for BucketLoggingStatus {
 pub struct BucketLogsPermission(Cow<'static, str>);
 
 impl BucketLogsPermission {
-    pub const FULL_CONTROL: &str = "FULL_CONTROL";
+    pub const FULL_CONTROL: &'static str = "FULL_CONTROL";
 
-    pub const READ: &str = "READ";
+    pub const READ: &'static str = "READ";
 
-    pub const WRITE: &str = "WRITE";
+    pub const WRITE: &'static str = "WRITE";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -650,9 +650,9 @@ pub type BucketName = String;
 pub struct BucketVersioningStatus(Cow<'static, str>);
 
 impl BucketVersioningStatus {
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
-    pub const SUSPENDED: &str = "Suspended";
+    pub const SUSPENDED: &'static str = "Suspended";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -940,13 +940,13 @@ impl fmt::Debug for Checksum {
 pub struct ChecksumAlgorithm(Cow<'static, str>);
 
 impl ChecksumAlgorithm {
-    pub const CRC32: &str = "CRC32";
+    pub const CRC32: &'static str = "CRC32";
 
-    pub const CRC32C: &str = "CRC32C";
+    pub const CRC32C: &'static str = "CRC32C";
 
-    pub const SHA1: &str = "SHA1";
+    pub const SHA1: &'static str = "SHA1";
 
-    pub const SHA256: &str = "SHA256";
+    pub const SHA256: &'static str = "SHA256";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -988,7 +988,7 @@ pub type ChecksumCRC32C = String;
 pub struct ChecksumMode(Cow<'static, str>);
 
 impl ChecksumMode {
-    pub const ENABLED: &str = "ENABLED";
+    pub const ENABLED: &'static str = "ENABLED";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -1333,11 +1333,11 @@ pub type CompletedPartList = List<CompletedPart>;
 pub struct CompressionType(Cow<'static, str>);
 
 impl CompressionType {
-    pub const BZIP2: &str = "BZIP2";
+    pub const BZIP2: &'static str = "BZIP2";
 
-    pub const GZIP: &str = "GZIP";
+    pub const GZIP: &'static str = "GZIP";
 
-    pub const NONE: &str = "NONE";
+    pub const NONE: &'static str = "NONE";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -2912,9 +2912,9 @@ impl fmt::Debug for DeleteMarkerReplication {
 pub struct DeleteMarkerReplicationStatus(Cow<'static, str>);
 
 impl DeleteMarkerReplicationStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -3326,7 +3326,7 @@ pub type EnableRequestProgress = bool;
 pub struct EncodingType(Cow<'static, str>);
 
 impl EncodingType {
-    pub const URL: &str = "url";
+    pub const URL: &'static str = "url";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5382,9 +5382,9 @@ impl fmt::Debug for ExistingObjectReplication {
 pub struct ExistingObjectReplicationStatus(Cow<'static, str>);
 
 impl ExistingObjectReplicationStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5422,9 +5422,9 @@ pub type Expiration = String;
 pub struct ExpirationStatus(Cow<'static, str>);
 
 impl ExpirationStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5470,7 +5470,7 @@ pub type Expression = String;
 pub struct ExpressionType(Cow<'static, str>);
 
 impl ExpressionType {
-    pub const SQL: &str = "SQL";
+    pub const SQL: &'static str = "SQL";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5510,11 +5510,11 @@ pub type FieldDelimiter = String;
 pub struct FileHeaderInfo(Cow<'static, str>);
 
 impl FileHeaderInfo {
-    pub const IGNORE: &str = "IGNORE";
+    pub const IGNORE: &'static str = "IGNORE";
 
-    pub const NONE: &str = "NONE";
+    pub const NONE: &'static str = "NONE";
 
-    pub const USE: &str = "USE";
+    pub const USE: &'static str = "USE";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -5580,9 +5580,9 @@ pub type FilterRuleList = List<FilterRule>;
 pub struct FilterRuleName(Cow<'static, str>);
 
 impl FilterRuleName {
-    pub const PREFIX: &str = "prefix";
+    pub const PREFIX: &'static str = "prefix";
 
-    pub const SUFFIX: &str = "suffix";
+    pub const SUFFIX: &'static str = "suffix";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8031,9 +8031,9 @@ impl fmt::Debug for InputSerialization {
 pub struct IntelligentTieringAccessTier(Cow<'static, str>);
 
 impl IntelligentTieringAccessTier {
-    pub const ARCHIVE_ACCESS: &str = "ARCHIVE_ACCESS";
+    pub const ARCHIVE_ACCESS: &'static str = "ARCHIVE_ACCESS";
 
-    pub const DEEP_ARCHIVE_ACCESS: &str = "DEEP_ARCHIVE_ACCESS";
+    pub const DEEP_ARCHIVE_ACCESS: &'static str = "DEEP_ARCHIVE_ACCESS";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8164,9 +8164,9 @@ pub type IntelligentTieringId = String;
 pub struct IntelligentTieringStatus(Cow<'static, str>);
 
 impl IntelligentTieringStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8321,11 +8321,11 @@ impl fmt::Debug for InventoryFilter {
 pub struct InventoryFormat(Cow<'static, str>);
 
 impl InventoryFormat {
-    pub const CSV: &str = "CSV";
+    pub const CSV: &'static str = "CSV";
 
-    pub const ORC: &str = "ORC";
+    pub const ORC: &'static str = "ORC";
 
-    pub const PARQUET: &str = "Parquet";
+    pub const PARQUET: &'static str = "Parquet";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8361,9 +8361,9 @@ impl FromStr for InventoryFormat {
 pub struct InventoryFrequency(Cow<'static, str>);
 
 impl InventoryFrequency {
-    pub const DAILY: &str = "Daily";
+    pub const DAILY: &'static str = "Daily";
 
-    pub const WEEKLY: &str = "Weekly";
+    pub const WEEKLY: &'static str = "Weekly";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8401,9 +8401,9 @@ pub type InventoryId = String;
 pub struct InventoryIncludedObjectVersions(Cow<'static, str>);
 
 impl InventoryIncludedObjectVersions {
-    pub const ALL: &str = "All";
+    pub const ALL: &'static str = "All";
 
-    pub const CURRENT: &str = "Current";
+    pub const CURRENT: &'static str = "Current";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8439,31 +8439,31 @@ impl FromStr for InventoryIncludedObjectVersions {
 pub struct InventoryOptionalField(Cow<'static, str>);
 
 impl InventoryOptionalField {
-    pub const BUCKET_KEY_STATUS: &str = "BucketKeyStatus";
+    pub const BUCKET_KEY_STATUS: &'static str = "BucketKeyStatus";
 
-    pub const CHECKSUM_ALGORITHM: &str = "ChecksumAlgorithm";
+    pub const CHECKSUM_ALGORITHM: &'static str = "ChecksumAlgorithm";
 
-    pub const E_TAG: &str = "ETag";
+    pub const E_TAG: &'static str = "ETag";
 
-    pub const ENCRYPTION_STATUS: &str = "EncryptionStatus";
+    pub const ENCRYPTION_STATUS: &'static str = "EncryptionStatus";
 
-    pub const INTELLIGENT_TIERING_ACCESS_TIER: &str = "IntelligentTieringAccessTier";
+    pub const INTELLIGENT_TIERING_ACCESS_TIER: &'static str = "IntelligentTieringAccessTier";
 
-    pub const IS_MULTIPART_UPLOADED: &str = "IsMultipartUploaded";
+    pub const IS_MULTIPART_UPLOADED: &'static str = "IsMultipartUploaded";
 
-    pub const LAST_MODIFIED_DATE: &str = "LastModifiedDate";
+    pub const LAST_MODIFIED_DATE: &'static str = "LastModifiedDate";
 
-    pub const OBJECT_LOCK_LEGAL_HOLD_STATUS: &str = "ObjectLockLegalHoldStatus";
+    pub const OBJECT_LOCK_LEGAL_HOLD_STATUS: &'static str = "ObjectLockLegalHoldStatus";
 
-    pub const OBJECT_LOCK_MODE: &str = "ObjectLockMode";
+    pub const OBJECT_LOCK_MODE: &'static str = "ObjectLockMode";
 
-    pub const OBJECT_LOCK_RETAIN_UNTIL_DATE: &str = "ObjectLockRetainUntilDate";
+    pub const OBJECT_LOCK_RETAIN_UNTIL_DATE: &'static str = "ObjectLockRetainUntilDate";
 
-    pub const REPLICATION_STATUS: &str = "ReplicationStatus";
+    pub const REPLICATION_STATUS: &'static str = "ReplicationStatus";
 
-    pub const SIZE: &str = "Size";
+    pub const SIZE: &'static str = "Size";
 
-    pub const STORAGE_CLASS: &str = "StorageClass";
+    pub const STORAGE_CLASS: &'static str = "StorageClass";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -8598,9 +8598,9 @@ impl fmt::Debug for JSONOutput {
 pub struct JSONType(Cow<'static, str>);
 
 impl JSONType {
-    pub const DOCUMENT: &str = "DOCUMENT";
+    pub const DOCUMENT: &'static str = "DOCUMENT";
 
-    pub const LINES: &str = "LINES";
+    pub const LINES: &'static str = "LINES";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -9977,9 +9977,9 @@ pub type MFA = String;
 pub struct MFADelete(Cow<'static, str>);
 
 impl MFADelete {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10015,9 +10015,9 @@ impl FromStr for MFADelete {
 pub struct MFADeleteStatus(Cow<'static, str>);
 
 impl MFADeleteStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10067,9 +10067,9 @@ pub type Metadata = Map<MetadataKey, MetadataValue>;
 pub struct MetadataDirective(Cow<'static, str>);
 
 impl MetadataDirective {
-    pub const COPY: &str = "COPY";
+    pub const COPY: &'static str = "COPY";
 
-    pub const REPLACE: &str = "REPLACE";
+    pub const REPLACE: &'static str = "REPLACE";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10229,9 +10229,9 @@ pub type MetricsId = String;
 pub struct MetricsStatus(Cow<'static, str>);
 
 impl MetricsStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10579,15 +10579,15 @@ impl fmt::Debug for ObjectAlreadyInActiveTierError {
 pub struct ObjectAttributes(Cow<'static, str>);
 
 impl ObjectAttributes {
-    pub const CHECKSUM: &str = "Checksum";
+    pub const CHECKSUM: &'static str = "Checksum";
 
-    pub const ETAG: &str = "ETag";
+    pub const ETAG: &'static str = "ETag";
 
-    pub const OBJECT_PARTS: &str = "ObjectParts";
+    pub const OBJECT_PARTS: &'static str = "ObjectParts";
 
-    pub const OBJECT_SIZE: &str = "ObjectSize";
+    pub const OBJECT_SIZE: &'static str = "ObjectSize";
 
-    pub const STORAGE_CLASS: &str = "StorageClass";
+    pub const STORAGE_CLASS: &'static str = "StorageClass";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10625,19 +10625,19 @@ pub type ObjectAttributesList = List<ObjectAttributes>;
 pub struct ObjectCannedACL(Cow<'static, str>);
 
 impl ObjectCannedACL {
-    pub const AUTHENTICATED_READ: &str = "authenticated-read";
+    pub const AUTHENTICATED_READ: &'static str = "authenticated-read";
 
-    pub const AWS_EXEC_READ: &str = "aws-exec-read";
+    pub const AWS_EXEC_READ: &'static str = "aws-exec-read";
 
-    pub const BUCKET_OWNER_FULL_CONTROL: &str = "bucket-owner-full-control";
+    pub const BUCKET_OWNER_FULL_CONTROL: &'static str = "bucket-owner-full-control";
 
-    pub const BUCKET_OWNER_READ: &str = "bucket-owner-read";
+    pub const BUCKET_OWNER_READ: &'static str = "bucket-owner-read";
 
-    pub const PRIVATE: &str = "private";
+    pub const PRIVATE: &'static str = "private";
 
-    pub const PUBLIC_READ: &str = "public-read";
+    pub const PUBLIC_READ: &'static str = "public-read";
 
-    pub const PUBLIC_READ_WRITE: &str = "public-read-write";
+    pub const PUBLIC_READ_WRITE: &'static str = "public-read-write";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10731,7 +10731,7 @@ impl fmt::Debug for ObjectLockConfiguration {
 pub struct ObjectLockEnabled(Cow<'static, str>);
 
 impl ObjectLockEnabled {
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10786,9 +10786,9 @@ impl fmt::Debug for ObjectLockLegalHold {
 pub struct ObjectLockLegalHoldStatus(Cow<'static, str>);
 
 impl ObjectLockLegalHoldStatus {
-    pub const OFF: &str = "OFF";
+    pub const OFF: &'static str = "OFF";
 
-    pub const ON: &str = "ON";
+    pub const ON: &'static str = "ON";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10824,9 +10824,9 @@ impl FromStr for ObjectLockLegalHoldStatus {
 pub struct ObjectLockMode(Cow<'static, str>);
 
 impl ObjectLockMode {
-    pub const COMPLIANCE: &str = "COMPLIANCE";
+    pub const COMPLIANCE: &'static str = "COMPLIANCE";
 
-    pub const GOVERNANCE: &str = "GOVERNANCE";
+    pub const GOVERNANCE: &'static str = "GOVERNANCE";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10886,9 +10886,9 @@ impl fmt::Debug for ObjectLockRetention {
 pub struct ObjectLockRetentionMode(Cow<'static, str>);
 
 impl ObjectLockRetentionMode {
-    pub const COMPLIANCE: &str = "COMPLIANCE";
+    pub const COMPLIANCE: &'static str = "COMPLIANCE";
 
-    pub const GOVERNANCE: &str = "GOVERNANCE";
+    pub const GOVERNANCE: &'static str = "GOVERNANCE";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -10969,11 +10969,11 @@ impl fmt::Debug for ObjectNotInActiveTierError {
 pub struct ObjectOwnership(Cow<'static, str>);
 
 impl ObjectOwnership {
-    pub const BUCKET_OWNER_ENFORCED: &str = "BucketOwnerEnforced";
+    pub const BUCKET_OWNER_ENFORCED: &'static str = "BucketOwnerEnforced";
 
-    pub const BUCKET_OWNER_PREFERRED: &str = "BucketOwnerPreferred";
+    pub const BUCKET_OWNER_PREFERRED: &'static str = "BucketOwnerPreferred";
 
-    pub const OBJECT_WRITER: &str = "ObjectWriter";
+    pub const OBJECT_WRITER: &'static str = "ObjectWriter";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -11066,25 +11066,25 @@ pub type ObjectSizeLessThanBytes = i64;
 pub struct ObjectStorageClass(Cow<'static, str>);
 
 impl ObjectStorageClass {
-    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+    pub const DEEP_ARCHIVE: &'static str = "DEEP_ARCHIVE";
 
-    pub const GLACIER: &str = "GLACIER";
+    pub const GLACIER: &'static str = "GLACIER";
 
-    pub const GLACIER_IR: &str = "GLACIER_IR";
+    pub const GLACIER_IR: &'static str = "GLACIER_IR";
 
-    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+    pub const INTELLIGENT_TIERING: &'static str = "INTELLIGENT_TIERING";
 
-    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+    pub const ONEZONE_IA: &'static str = "ONEZONE_IA";
 
-    pub const OUTPOSTS: &str = "OUTPOSTS";
+    pub const OUTPOSTS: &'static str = "OUTPOSTS";
 
-    pub const REDUCED_REDUNDANCY: &str = "REDUCED_REDUNDANCY";
+    pub const REDUCED_REDUNDANCY: &'static str = "REDUCED_REDUNDANCY";
 
-    pub const SNOW: &str = "SNOW";
+    pub const SNOW: &'static str = "SNOW";
 
-    pub const STANDARD: &str = "STANDARD";
+    pub const STANDARD: &'static str = "STANDARD";
 
-    pub const STANDARD_IA: &str = "STANDARD_IA";
+    pub const STANDARD_IA: &'static str = "STANDARD_IA";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -11178,7 +11178,7 @@ pub type ObjectVersionList = List<ObjectVersion>;
 pub struct ObjectVersionStorageClass(Cow<'static, str>);
 
 impl ObjectVersionStorageClass {
-    pub const STANDARD: &str = "STANDARD";
+    pub const STANDARD: &'static str = "STANDARD";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -11302,7 +11302,7 @@ impl fmt::Debug for Owner {
 pub struct OwnerOverride(Cow<'static, str>);
 
 impl OwnerOverride {
-    pub const DESTINATION: &str = "Destination";
+    pub const DESTINATION: &'static str = "Destination";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -11450,9 +11450,9 @@ pub type PartsList = List<ObjectPart>;
 pub struct Payer(Cow<'static, str>);
 
 impl Payer {
-    pub const BUCKET_OWNER: &str = "BucketOwner";
+    pub const BUCKET_OWNER: &'static str = "BucketOwner";
 
-    pub const REQUESTER: &str = "Requester";
+    pub const REQUESTER: &'static str = "Requester";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -11488,15 +11488,15 @@ impl FromStr for Payer {
 pub struct Permission(Cow<'static, str>);
 
 impl Permission {
-    pub const FULL_CONTROL: &str = "FULL_CONTROL";
+    pub const FULL_CONTROL: &'static str = "FULL_CONTROL";
 
-    pub const READ: &str = "READ";
+    pub const READ: &'static str = "READ";
 
-    pub const READ_ACP: &str = "READ_ACP";
+    pub const READ_ACP: &'static str = "READ_ACP";
 
-    pub const WRITE: &str = "WRITE";
+    pub const WRITE: &'static str = "WRITE";
 
-    pub const WRITE_ACP: &str = "WRITE_ACP";
+    pub const WRITE_ACP: &'static str = "WRITE_ACP";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -11592,9 +11592,9 @@ impl fmt::Debug for ProgressEvent {
 pub struct Protocol(Cow<'static, str>);
 
 impl Protocol {
-    pub const HTTP: &str = "http";
+    pub const HTTP: &'static str = "http";
 
-    pub const HTTPS: &str = "https";
+    pub const HTTPS: &'static str = "https";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13561,9 +13561,9 @@ pub type QuoteEscapeCharacter = String;
 pub struct QuoteFields(Cow<'static, str>);
 
 impl QuoteFields {
-    pub const ALWAYS: &str = "ALWAYS";
+    pub const ALWAYS: &'static str = "ALWAYS";
 
-    pub const ASNEEDED: &str = "ASNEEDED";
+    pub const ASNEEDED: &'static str = "ASNEEDED";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13724,9 +13724,9 @@ impl fmt::Debug for ReplicaModifications {
 pub struct ReplicaModificationsStatus(Cow<'static, str>);
 
 impl ReplicaModificationsStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13919,9 +13919,9 @@ pub enum ReplicationRuleFilter {
 pub struct ReplicationRuleStatus(Cow<'static, str>);
 
 impl ReplicationRuleStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -13959,13 +13959,13 @@ pub type ReplicationRules = List<ReplicationRule>;
 pub struct ReplicationStatus(Cow<'static, str>);
 
 impl ReplicationStatus {
-    pub const COMPLETE: &str = "COMPLETE";
+    pub const COMPLETE: &'static str = "COMPLETE";
 
-    pub const FAILED: &str = "FAILED";
+    pub const FAILED: &'static str = "FAILED";
 
-    pub const PENDING: &str = "PENDING";
+    pub const PENDING: &'static str = "PENDING";
 
-    pub const REPLICA: &str = "REPLICA";
+    pub const REPLICA: &'static str = "REPLICA";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14021,9 +14021,9 @@ impl fmt::Debug for ReplicationTime {
 pub struct ReplicationTimeStatus(Cow<'static, str>);
 
 impl ReplicationTimeStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14078,7 +14078,7 @@ impl fmt::Debug for ReplicationTimeValue {
 pub struct RequestCharged(Cow<'static, str>);
 
 impl RequestCharged {
-    pub const REQUESTER: &str = "requester";
+    pub const REQUESTER: &'static str = "requester";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14118,7 +14118,7 @@ impl FromStr for RequestCharged {
 pub struct RequestPayer(Cow<'static, str>);
 
 impl RequestPayer {
-    pub const REQUESTER: &str = "requester";
+    pub const REQUESTER: &'static str = "requester";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14330,7 +14330,7 @@ impl fmt::Debug for RestoreRequest {
 pub struct RestoreRequestType(Cow<'static, str>);
 
 impl RestoreRequestType {
-    pub const SELECT: &str = "SELECT";
+    pub const SELECT: &'static str = "SELECT";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14700,9 +14700,9 @@ impl fmt::Debug for SelectParameters {
 pub struct ServerSideEncryption(Cow<'static, str>);
 
 impl ServerSideEncryption {
-    pub const AES256: &str = "AES256";
+    pub const AES256: &'static str = "AES256";
 
-    pub const AWS_KMS: &str = "aws:kms";
+    pub const AWS_KMS: &'static str = "aws:kms";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14888,9 +14888,9 @@ impl fmt::Debug for SseKmsEncryptedObjects {
 pub struct SseKmsEncryptedObjectsStatus(Cow<'static, str>);
 
 impl SseKmsEncryptedObjectsStatus {
-    pub const DISABLED: &str = "Disabled";
+    pub const DISABLED: &'static str = "Disabled";
 
-    pub const ENABLED: &str = "Enabled";
+    pub const ENABLED: &'static str = "Enabled";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -14968,25 +14968,25 @@ impl fmt::Debug for StatsEvent {
 pub struct StorageClass(Cow<'static, str>);
 
 impl StorageClass {
-    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+    pub const DEEP_ARCHIVE: &'static str = "DEEP_ARCHIVE";
 
-    pub const GLACIER: &str = "GLACIER";
+    pub const GLACIER: &'static str = "GLACIER";
 
-    pub const GLACIER_IR: &str = "GLACIER_IR";
+    pub const GLACIER_IR: &'static str = "GLACIER_IR";
 
-    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+    pub const INTELLIGENT_TIERING: &'static str = "INTELLIGENT_TIERING";
 
-    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+    pub const ONEZONE_IA: &'static str = "ONEZONE_IA";
 
-    pub const OUTPOSTS: &str = "OUTPOSTS";
+    pub const OUTPOSTS: &'static str = "OUTPOSTS";
 
-    pub const REDUCED_REDUNDANCY: &str = "REDUCED_REDUNDANCY";
+    pub const REDUCED_REDUNDANCY: &'static str = "REDUCED_REDUNDANCY";
 
-    pub const SNOW: &str = "SNOW";
+    pub const SNOW: &'static str = "SNOW";
 
-    pub const STANDARD: &str = "STANDARD";
+    pub const STANDARD: &'static str = "STANDARD";
 
-    pub const STANDARD_IA: &str = "STANDARD_IA";
+    pub const STANDARD_IA: &'static str = "STANDARD_IA";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -15060,7 +15060,7 @@ impl fmt::Debug for StorageClassAnalysisDataExport {
 pub struct StorageClassAnalysisSchemaVersion(Cow<'static, str>);
 
 impl StorageClassAnalysisSchemaVersion {
-    pub const V_1: &str = "V_1";
+    pub const V_1: &'static str = "V_1";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -15134,9 +15134,9 @@ impl fmt::Debug for Tagging {
 pub struct TaggingDirective(Cow<'static, str>);
 
 impl TaggingDirective {
-    pub const COPY: &str = "COPY";
+    pub const COPY: &'static str = "COPY";
 
-    pub const REPLACE: &str = "REPLACE";
+    pub const REPLACE: &'static str = "REPLACE";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -15205,11 +15205,11 @@ pub type TargetPrefix = String;
 pub struct Tier(Cow<'static, str>);
 
 impl Tier {
-    pub const BULK: &str = "Bulk";
+    pub const BULK: &'static str = "Bulk";
 
-    pub const EXPEDITED: &str = "Expedited";
+    pub const EXPEDITED: &'static str = "Expedited";
 
-    pub const STANDARD: &str = "Standard";
+    pub const STANDARD: &'static str = "Standard";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -15337,17 +15337,17 @@ pub type TransitionList = List<Transition>;
 pub struct TransitionStorageClass(Cow<'static, str>);
 
 impl TransitionStorageClass {
-    pub const DEEP_ARCHIVE: &str = "DEEP_ARCHIVE";
+    pub const DEEP_ARCHIVE: &'static str = "DEEP_ARCHIVE";
 
-    pub const GLACIER: &str = "GLACIER";
+    pub const GLACIER: &'static str = "GLACIER";
 
-    pub const GLACIER_IR: &str = "GLACIER_IR";
+    pub const GLACIER_IR: &'static str = "GLACIER_IR";
 
-    pub const INTELLIGENT_TIERING: &str = "INTELLIGENT_TIERING";
+    pub const INTELLIGENT_TIERING: &'static str = "INTELLIGENT_TIERING";
 
-    pub const ONEZONE_IA: &str = "ONEZONE_IA";
+    pub const ONEZONE_IA: &'static str = "ONEZONE_IA";
 
-    pub const STANDARD_IA: &str = "STANDARD_IA";
+    pub const STANDARD_IA: &'static str = "STANDARD_IA";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -15383,11 +15383,11 @@ impl FromStr for TransitionStorageClass {
 pub struct Type(Cow<'static, str>);
 
 impl Type {
-    pub const AMAZON_CUSTOMER_BY_EMAIL: &str = "AmazonCustomerByEmail";
+    pub const AMAZON_CUSTOMER_BY_EMAIL: &'static str = "AmazonCustomerByEmail";
 
-    pub const CANONICAL_USER: &str = "CanonicalUser";
+    pub const CANONICAL_USER: &'static str = "CanonicalUser";
 
-    pub const GROUP: &str = "Group";
+    pub const GROUP: &'static str = "Group";
 
     #[must_use]
     pub fn as_str(&self) -> &str {

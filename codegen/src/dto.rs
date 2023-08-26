@@ -439,7 +439,7 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes) {
     {
         for variant in &ty.variants {
             codegen_doc(variant.doc.as_deref());
-            g!("pub const {}: &str = \"{}\";", variant.name, variant.value);
+            g!("pub const {}: &'static str = \"{}\";", variant.name, variant.value);
             g!();
         }
 

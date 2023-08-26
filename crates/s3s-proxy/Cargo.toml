@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-aws-config = { version = "0.56.0", no-default-features = true }
+aws-config = { version = "0.56.0", default-features = false }
 aws-credential-types = "0.56.0"
 aws-sdk-s3 = "0.29.0"
 clap = { version = "4.3.21", features = ["derive"] }
