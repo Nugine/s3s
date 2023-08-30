@@ -36,6 +36,7 @@ jobs:
       - run: |
           just codegen
           ./scripts/assert-unchanged.sh
+      - run: cargo install --path crates/s3s-fs --features binary
 
   cross-test:
     runs-on: ${{ matrix.os }}
