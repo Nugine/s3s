@@ -2,10 +2,13 @@ use crate::dto::GetObjectInput;
 use crate::dto::Timestamp;
 use crate::dto::TimestampFormat;
 use crate::header;
+use crate::http::Response;
 use crate::utils::format::fmt_timestamp;
 use crate::S3Request;
 use crate::S3Result;
 
+use hyper::header::CONTENT_LENGTH;
+use hyper::header::TRANSFER_ENCODING;
 use hyper::http::HeaderName;
 use hyper::http::HeaderValue;
 use hyper::HeaderMap;
@@ -41,4 +44,15 @@ fn add_ts(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&Tim
         map.insert(name, value);
     }
     Ok(())
+}
+
+pub fn merge_custom_headers(resp: &mut Response, headers: HeaderMap<HeaderValue>) {
+    resp.headers.extend(headers);
+
+    // special case for https://github.com/Nugine/s3s/issues/80
+    if let Some(val) = resp.headers.get(TRANSFER_ENCODING) {
+        if val.as_bytes() == b"chunked" {
+            resp.headers.remove(CONTENT_LENGTH);
+        }
+    }
 }
