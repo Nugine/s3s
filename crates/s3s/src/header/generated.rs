@@ -217,6 +217,8 @@ pub const X_AMZ_OBJECT_LOCK_RETAIN_UNTIL_DATE: HeaderName = HeaderName::from_sta
 
 pub const X_AMZ_OBJECT_OWNERSHIP: HeaderName = HeaderName::from_static("x-amz-object-ownership");
 
+pub const X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES: HeaderName = HeaderName::from_static("x-amz-optional-object-attributes");
+
 pub const X_AMZ_PART_NUMBER_MARKER: HeaderName = HeaderName::from_static("x-amz-part-number-marker");
 
 pub const X_AMZ_REPLICATION_STATUS: HeaderName = HeaderName::from_static("x-amz-replication-status");

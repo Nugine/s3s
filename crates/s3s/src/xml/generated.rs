@@ -1332,6 +1332,9 @@ impl SerializeContent for Object {
         if let Some(ref val) = self.owner {
             s.content("Owner", val)?;
         }
+        if let Some(ref val) = self.restore_status {
+            s.content("RestoreStatus", val)?;
+        }
         s.content("Size", &self.size)?;
         if let Some(ref val) = self.storage_class {
             s.content("StorageClass", val)?;
@@ -1449,6 +1452,9 @@ impl SerializeContent for ObjectVersion {
         }
         if let Some(ref val) = self.owner {
             s.content("Owner", val)?;
+        }
+        if let Some(ref val) = self.restore_status {
+            s.content("RestoreStatus", val)?;
         }
         s.content("Size", &self.size)?;
         if let Some(ref val) = self.storage_class {
@@ -1716,6 +1722,16 @@ impl SerializeContent for ReplicationTimeStatus {
 impl SerializeContent for ReplicationTimeValue {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         s.content("Minutes", &self.minutes)?;
+        Ok(())
+    }
+}
+
+impl SerializeContent for RestoreStatus {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        s.content("IsRestoreInProgress", &self.is_restore_in_progress)?;
+        if let Some(ref val) = self.restore_expiry_date {
+            s.timestamp("RestoreExpiryDate", val, TimestampFormat::DateTime)?;
+        }
         Ok(())
     }
 }

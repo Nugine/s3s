@@ -36,7 +36,7 @@ pub struct AbortMultipartUploadInput {
     /// <p>The bucket name to which the upload was taking place. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -520,6 +520,8 @@ impl BucketLocationConstraint {
 
     pub const AP_SOUTH_1: &'static str = "ap-south-1";
 
+    pub const AP_SOUTH_2: &'static str = "ap-south-2";
+
     pub const AP_SOUTHEAST_1: &'static str = "ap-southeast-1";
 
     pub const AP_SOUTHEAST_2: &'static str = "ap-southeast-2";
@@ -537,6 +539,8 @@ impl BucketLocationConstraint {
     pub const EU_NORTH_1: &'static str = "eu-north-1";
 
     pub const EU_SOUTH_1: &'static str = "eu-south-1";
+
+    pub const EU_SOUTH_2: &'static str = "eu-south-2";
 
     pub const EU_WEST_1: &'static str = "eu-west-1";
 
@@ -1054,7 +1058,7 @@ pub struct CompleteMultipartUploadInput {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
     /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
@@ -1155,10 +1159,10 @@ pub struct CompleteMultipartUploadOutput {
     /// ARN or access point alias if used.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: Option<BucketName>,
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
-    /// with Amazon Web Services KMS (SSE-KMS).</p>
+    /// with Key Management Service (KMS) keys (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -1197,11 +1201,11 @@ pub struct CompleteMultipartUploadOutput {
     /// <p>The URI that identifies the newly created object.</p>
     pub location: Option<Location>,
     pub request_charged: Option<RequestCharged>,
-    /// <p>If present, specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric
-    /// encryption customer managed key that was used for the object.</p>
+    /// <p>If present, specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key
+    /// that was used for the object.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the newly created object, in case the bucket has versioning turned
     /// on.</p>
@@ -1442,11 +1446,12 @@ pub struct CopyObjectInput {
     /// <p>The name of the destination bucket.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with
-    /// server-side encryption using AWS KMS (SSE-KMS). Setting this header to <code>true</code>
-    /// causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS. </p>
+    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS). Setting this header to
+    /// <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with
+    /// SSE-KMS. </p>
     /// <p>Specifying this header with a COPY action doesn’t affect bucket-level settings for S3
     /// Bucket Key.</p>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
@@ -1557,15 +1562,15 @@ pub struct CopyObjectInput {
     /// this header is a base64-encoded UTF-8 string holding JSON with the encryption context
     /// key-value pairs.</p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>Specifies the Amazon Web Services KMS key ID to use for object encryption. All GET and PUT requests
-    /// for an object protected by Amazon Web Services KMS will fail if not made via SSL or using SigV4. For
-    /// information about configuring using any of the officially supported Amazon Web Services SDKs and Amazon Web Services
-    /// CLI, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version">Specifying the
+    /// <p>Specifies the KMS key ID to use for object encryption. All GET and PUT requests for an
+    /// object protected by KMS will fail if they're not made via SSL or using SigV4. For
+    /// information about configuring any of the officially supported Amazon Web Services SDKs and Amazon Web Services CLI, see
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version">Specifying the
     /// Signature Version in Request Authentication</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The
     /// STANDARD storage class provides high durability and high availability. Depending on
@@ -1722,7 +1727,7 @@ impl CopyObjectInput {
 #[derive(Default)]
 pub struct CopyObjectOutput {
     /// <p>Indicates whether the copied object uses an S3 Bucket Key for server-side encryption
-    /// with Amazon Web Services KMS (SSE-KMS).</p>
+    /// with Key Management Service (KMS) keys (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
     /// <p>Container for all response elements.</p>
     pub copy_object_result: Option<CopyObjectResult>,
@@ -1742,11 +1747,11 @@ pub struct CopyObjectOutput {
     /// value of this header is a base64-encoded UTF-8 string holding JSON with the encryption
     /// context key-value pairs.</p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If present, specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric
-    /// encryption customer managed key that was used for the object.</p>
+    /// <p>If present, specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key
+    /// that was used for the object.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the newly created copy.</p>
     pub version_id: Option<ObjectVersionId>,
@@ -2025,11 +2030,12 @@ pub struct CreateMultipartUploadInput {
     /// <p>The name of the bucket to which to initiate the upload</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with
-    /// server-side encryption using AWS KMS (SSE-KMS). Setting this header to <code>true</code>
-    /// causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS.</p>
+    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS). Setting this header to
+    /// <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with
+    /// SSE-KMS.</p>
     /// <p>Specifying this header with an object action doesn’t affect bucket-level settings for S3
     /// Bucket Key.</p>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
@@ -2093,13 +2099,13 @@ pub struct CreateMultipartUploadInput {
     /// key-value pairs.</p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
     /// <p>Specifies the ID of the symmetric encryption customer managed key to use for object encryption.
-    /// All GET and PUT requests for an object protected by Amazon Web Services KMS will fail if not made via SSL
-    /// or using SigV4. For information about configuring using any of the officially supported
-    /// Amazon Web Services SDKs and Amazon Web Services CLI, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version">Specifying the Signature Version in Request Authentication</a>
+    /// All GET and PUT requests for an object protected by KMS will fail if they're not made via
+    /// SSL or using SigV4. For information about configuring any of the officially supported Amazon Web Services
+    /// SDKs and Amazon Web Services CLI, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version">Specifying the Signature Version in Request Authentication</a>
     /// in the <i>Amazon S3 User Guide</i>.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The
     /// STANDARD storage class provides high durability and high availability. Depending on
@@ -2233,10 +2239,10 @@ pub struct CreateMultipartUploadOutput {
     /// access point ARN or access point alias if used.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: Option<BucketName>,
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
-    /// with Amazon Web Services KMS (SSE-KMS).</p>
+    /// with Key Management Service (KMS) keys (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
@@ -2254,11 +2260,11 @@ pub struct CreateMultipartUploadOutput {
     /// value of this header is a base64-encoded UTF-8 string holding JSON with the encryption
     /// context key-value pairs.</p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If present, specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric
-    /// encryption customer managed key that was used for the object.</p>
+    /// <p>If present, specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key
+    /// that was used for the object.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>ID for the initiated multipart upload.</p>
     pub upload_id: Option<MultipartUploadId>,
@@ -2359,7 +2365,7 @@ impl fmt::Debug for DefaultRetention {
 /// <p>Container for the objects to delete.</p>
 #[derive(Default)]
 pub struct Delete {
-    /// <p>The objects to delete.</p>
+    /// <p>The object to delete.</p>
     pub objects: ObjectIdentifierList,
     /// <p>Element to enable quiet mode for the request. When you add this element, you must set
     /// its value to true.</p>
@@ -2954,7 +2960,7 @@ pub struct DeleteObjectInput {
     /// <p>The bucket name of the bucket containing the object. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Indicates whether S3 Object Lock should bypass Governance-mode restrictions to process
     /// this operation. To use this header, you must have the
@@ -3033,7 +3039,7 @@ pub struct DeleteObjectTaggingInput {
     /// <p>The bucket name containing the objects from which to remove the tags. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -3085,7 +3091,7 @@ pub struct DeleteObjectsInput {
     /// <p>The bucket name containing the objects to delete. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies whether you want to delete this object even if it has a Governance-type Object
     /// Lock in place. To use this header, you must have the
@@ -3318,7 +3324,7 @@ pub type EmailAddress = String;
 pub type EnableRequestProgress = bool;
 
 /// <p>Requests Amazon S3 to encode the object keys in the response and specifies the encoding
-/// method to use. An object key may contain any Unicode character; however, XML 1.0 parser
+/// method to use. An object key can contain any Unicode character; however, the XML 1.0 parser
 /// cannot parse some characters, such as characters with an ASCII value from 0 to 10. For
 /// characters that are not supported in XML 1.0, you can add this parameter to request that
 /// Amazon S3 encode the keys in the response.</p>
@@ -3368,7 +3374,7 @@ pub struct Encryption {
     pub kms_context: Option<KMSContext>,
     /// <p>If the encryption type is <code>aws:kms</code>, this optional value specifies the ID of
     /// the symmetric encryption customer managed key to use for encryption of job results. Amazon S3 only
-    /// supports symmetric encryption KMS keys. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Asymmetric keys in Amazon Web Services KMS</a> in the <i>Amazon Web Services Key Management Service
+    /// supports symmetric encryption KMS keys. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Asymmetric keys in KMS</a> in the <i>Amazon Web Services Key Management Service
     /// Developer Guide</i>.</p>
     pub kms_key_id: Option<SSEKMSKeyId>,
 }
@@ -5621,6 +5627,7 @@ pub struct GetBucketAccelerateConfigurationInput {
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
+    pub request_payer: Option<RequestPayer>,
 }
 
 impl fmt::Debug for GetBucketAccelerateConfigurationInput {
@@ -5629,6 +5636,9 @@ impl fmt::Debug for GetBucketAccelerateConfigurationInput {
         d.field("bucket", &self.bucket);
         if let Some(ref val) = self.expected_bucket_owner {
             d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
         }
         d.finish_non_exhaustive()
     }
@@ -5643,6 +5653,7 @@ impl GetBucketAccelerateConfigurationInput {
 
 #[derive(Default)]
 pub struct GetBucketAccelerateConfigurationOutput {
+    pub request_charged: Option<RequestCharged>,
     /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<BucketAccelerateStatus>,
 }
@@ -5650,6 +5661,9 @@ pub struct GetBucketAccelerateConfigurationOutput {
 impl fmt::Debug for GetBucketAccelerateConfigurationOutput {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("GetBucketAccelerateConfigurationOutput");
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
         if let Some(ref val) = self.status {
             d.field("status", val);
         }
@@ -6586,7 +6600,7 @@ pub struct GetObjectAttributesInput {
     /// <p>The name of the bucket that contains the object.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -6594,7 +6608,7 @@ pub struct GetObjectAttributesInput {
     pub key: ObjectKey,
     /// <p>Sets the maximum number of parts to return.</p>
     pub max_parts: Option<MaxParts>,
-    /// <p>An XML header that specifies the fields at the root level that you want returned in the
+    /// <p>Specifies the fields at the root level that you want returned in the
     /// response. Fields that you do not specify are not returned.</p>
     pub object_attributes: ObjectAttributesList,
     /// <p>Specifies the part after which listing should begin. Only parts with higher part numbers
@@ -6759,7 +6773,7 @@ pub struct GetObjectInput {
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When using an Object Lambda access point the hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-object-lambda.<i>Region</i>.amazonaws.com.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>To retrieve the checksum, this mode must be enabled.</p>
     pub checksum_mode: Option<ChecksumMode>,
@@ -6994,8 +7008,8 @@ pub struct GetObjectOutput {
     pub accept_ranges: Option<AcceptRanges>,
     /// <p>Object data.</p>
     pub body: Option<StreamingBlob>,
-    /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption with Amazon Web Services
-    /// KMS (SSE-KMS).</p>
+    /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption with
+    /// Key Management Service (KMS) keys (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
@@ -7080,11 +7094,11 @@ pub struct GetObjectOutput {
     /// response will include this header to provide round-trip message integrity verification of
     /// the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric
-    /// encryption customer managed key that was used for the object.</p>
+    /// <p>If present, specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key
+    /// that was used for the object.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Provides storage class information of the object. Amazon S3 returns this header for all
     /// objects except for S3 Standard storage class objects.</p>
@@ -7262,7 +7276,7 @@ pub struct GetObjectTaggingInput {
     /// <p>The bucket name containing the object for which to get the tagging information. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -7532,7 +7546,7 @@ pub struct HeadBucketInput {
     /// For more information about <code>InvalidAccessPointAliasError</code>, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ErrorCodeList">List of
     /// Error Codes</a>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -7570,7 +7584,7 @@ pub struct HeadObjectInput {
     /// <p>The name of the bucket containing the object.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>To retrieve the checksum, this parameter must be enabled.</p>
     /// <p>In addition, if you enable <code>ChecksumMode</code> and the object is encrypted with
@@ -7679,8 +7693,8 @@ pub struct HeadObjectOutput {
     pub accept_ranges: Option<AcceptRanges>,
     /// <p>The archive state of the head object.</p>
     pub archive_status: Option<ArchiveStatus>,
-    /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption with Amazon Web Services
-    /// KMS (SSE-KMS).</p>
+    /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption with
+    /// Key Management Service (KMS) keys (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
@@ -7814,11 +7828,11 @@ pub struct HeadObjectOutput {
     /// response will include this header to provide round-trip message integrity verification of
     /// the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric
-    /// encryption customer managed key that was used for the object.</p>
+    /// <p>If present, specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key
+    /// that was used for the object.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Provides storage class information of the object. Amazon S3 returns this header for all
     /// objects except for S3 Standard storage class objects.</p>
@@ -8453,11 +8467,15 @@ impl InventoryOptionalField {
 
     pub const LAST_MODIFIED_DATE: &'static str = "LastModifiedDate";
 
+    pub const OBJECT_ACCESS_CONTROL_LIST: &'static str = "ObjectAccessControlList";
+
     pub const OBJECT_LOCK_LEGAL_HOLD_STATUS: &'static str = "ObjectLockLegalHoldStatus";
 
     pub const OBJECT_LOCK_MODE: &'static str = "ObjectLockMode";
 
     pub const OBJECT_LOCK_RETAIN_UNTIL_DATE: &'static str = "ObjectLockRetainUntilDate";
+
+    pub const OBJECT_OWNER: &'static str = "ObjectOwner";
 
     pub const REPLICATION_STATUS: &'static str = "ReplicationStatus";
 
@@ -8556,6 +8574,8 @@ pub type IsEnabled = bool;
 pub type IsLatest = bool;
 
 pub type IsPublic = bool;
+
+pub type IsRestoreInProgress = bool;
 
 pub type IsTruncated = bool;
 
@@ -8834,8 +8854,8 @@ pub type LifecycleRules = List<LifecycleRule>;
 pub struct ListBucketAnalyticsConfigurationsInput {
     /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
     pub bucket: BucketName,
-    /// <p>The ContinuationToken that represents a placeholder from where this request should
-    /// begin.</p>
+    /// <p>The <code>ContinuationToken</code> that represents a placeholder from where this request
+    /// should begin.</p>
     pub continuation_token: Option<Token>,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -8962,8 +8982,9 @@ pub struct ListBucketInventoryConfigurationsInput {
     /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
     pub bucket: BucketName,
     /// <p>The marker used to continue an inventory configuration listing that has been truncated.
-    /// Use the NextContinuationToken from a previously truncated list response to continue the
-    /// listing. The continuation token is an opaque value that Amazon S3 understands.</p>
+    /// Use the <code>NextContinuationToken</code> from a previously truncated list response to
+    /// continue the listing. The continuation token is an opaque value that Amazon S3
+    /// understands.</p>
     pub continuation_token: Option<Token>,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -9028,8 +9049,8 @@ pub struct ListBucketMetricsConfigurationsInput {
     /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
     pub bucket: BucketName,
     /// <p>The marker that is used to continue a metrics configuration listing that has been
-    /// truncated. Use the NextContinuationToken from a previously truncated list response to
-    /// continue the listing. The continuation token is an opaque value that Amazon S3
+    /// truncated. Use the <code>NextContinuationToken</code> from a previously truncated list
+    /// response to continue the listing. The continuation token is an opaque value that Amazon S3
     /// understands.</p>
     pub continuation_token: Option<Token>,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
@@ -9134,7 +9155,7 @@ pub struct ListMultipartUploadsInput {
     /// <p>The name of the bucket to which the multipart upload was initiated. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Character you use to group keys.</p>
     /// <p>All keys that contain the same string between the prefix, if specified, and the first
@@ -9147,8 +9168,8 @@ pub struct ListMultipartUploadsInput {
     pub encoding_type: Option<EncodingType>,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
-    /// <p>Together with upload-id-marker, this parameter specifies the multipart upload after
-    /// which listing should begin.</p>
+    /// <p>Together with <code>upload-id-marker</code>, this parameter specifies the multipart
+    /// upload after which listing should begin.</p>
     /// <p>If <code>upload-id-marker</code> is not specified, only the keys lexicographically
     /// greater than the specified <code>key-marker</code> will be included in the list.</p>
     /// <p>If <code>upload-id-marker</code> is specified, any multipart uploads for a key equal to
@@ -9161,8 +9182,10 @@ pub struct ListMultipartUploadsInput {
     pub max_uploads: Option<MaxUploads>,
     /// <p>Lists in-progress uploads only for those keys that begin with the specified prefix. You
     /// can use prefixes to separate a bucket into different grouping of keys. (You can think of
-    /// using prefix to make groups in the same way you'd use a folder in a file system.)</p>
+    /// using <code>prefix</code> to make groups in the same way that you'd use a folder in a file
+    /// system.)</p>
     pub prefix: Option<Prefix>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Together with key-marker, specifies the multipart upload after which listing should
     /// begin. If key-marker is not specified, the upload-id-marker parameter is ignored.
     /// Otherwise, any multipart uploads for a key equal to the key-marker might be included in the
@@ -9193,6 +9216,9 @@ impl fmt::Debug for ListMultipartUploadsInput {
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
+        }
         if let Some(ref val) = self.upload_id_marker {
             d.field("upload_id_marker", val);
         }
@@ -9220,8 +9246,8 @@ pub struct ListMultipartUploadsOutput {
     /// your request, this element is absent from the response.</p>
     pub delimiter: Option<Delimiter>,
     /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
-    /// <p>If you specify <code>encoding-type</code> request parameter, Amazon S3 includes this element
-    /// in the response, and returns encoded key name values in the following response
+    /// <p>If you specify the <code>encoding-type</code> request parameter, Amazon S3 includes this
+    /// element in the response, and returns encoded key name values in the following response
     /// elements:</p>
     /// <p>
     /// <code>Delimiter</code>, <code>KeyMarker</code>, <code>Prefix</code>,
@@ -9245,6 +9271,7 @@ pub struct ListMultipartUploadsOutput {
     /// <p>When a prefix is provided in the request, this field contains the specified prefix. The
     /// result contains only keys starting with the specified prefix.</p>
     pub prefix: Option<Prefix>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>Upload ID after which listing began.</p>
     pub upload_id_marker: Option<UploadIdMarker>,
     /// <p>Container for elements related to a particular multipart upload. A response can contain
@@ -9281,6 +9308,9 @@ impl fmt::Debug for ListMultipartUploadsOutput {
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
         if let Some(ref val) = self.upload_id_marker {
             d.field("upload_id_marker", val);
         }
@@ -9296,27 +9326,32 @@ pub struct ListObjectVersionsInput {
     pub bucket: BucketName,
     /// <p>A delimiter is a character that you specify to group keys. All keys that contain the
     /// same string between the <code>prefix</code> and the first occurrence of the delimiter are
-    /// grouped under a single result element in CommonPrefixes. These groups are counted as one
-    /// result against the max-keys limitation. These keys are not returned elsewhere in the
-    /// response.</p>
+    /// grouped under a single result element in <code>CommonPrefixes</code>. These groups are
+    /// counted as one result against the <code>max-keys</code> limitation. These keys are not
+    /// returned elsewhere in the response.</p>
     pub delimiter: Option<Delimiter>,
     pub encoding_type: Option<EncodingType>,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
     /// <p>Specifies the key to start with when listing objects in a bucket.</p>
     pub key_marker: Option<KeyMarker>,
-    /// <p>Sets the maximum number of keys returned in the response. By default the action returns
+    /// <p>Sets the maximum number of keys returned in the response. By default, the action returns
     /// up to 1,000 key names. The response might contain fewer keys but will never contain more.
-    /// If additional keys satisfy the search criteria, but were not returned because max-keys was
-    /// exceeded, the response contains <isTruncated>true</isTruncated>. To return the
-    /// additional keys, see key-marker and version-id-marker.</p>
+    /// If additional keys satisfy the search criteria, but were not returned because
+    /// <code>max-keys</code> was exceeded, the response contains
+    /// <code><isTruncated>true</isTruncated></code>. To return the additional keys,
+    /// see <code>key-marker</code> and <code>version-id-marker</code>.</p>
     pub max_keys: Option<MaxKeys>,
+    /// <p>Specifies the optional fields that you want returned in the response.
+    /// Fields that you do not specify are not returned.</p>
+    pub optional_object_attributes: OptionalObjectAttributesList,
     /// <p>Use this parameter to select only those keys that begin with the specified prefix. You
     /// can use prefixes to separate a bucket into different groupings of keys. (You can think of
-    /// using prefix to make groups in the same way you'd use a folder in a file system.) You can
-    /// use prefix with delimiter to roll up numerous objects into a single result under
-    /// CommonPrefixes. </p>
+    /// using <code>prefix</code> to make groups in the same way that you'd use a folder in a file
+    /// system.) You can use <code>prefix</code> with <code>delimiter</code> to roll up numerous
+    /// objects into a single result under <code>CommonPrefixes</code>. </p>
     pub prefix: Option<Prefix>,
+    pub request_payer: Option<RequestPayer>,
     /// <p>Specifies the object version you want to start listing from.</p>
     pub version_id_marker: Option<VersionIdMarker>,
 }
@@ -9340,8 +9375,12 @@ impl fmt::Debug for ListObjectVersionsInput {
         if let Some(ref val) = self.max_keys {
             d.field("max_keys", val);
         }
+        d.field("optional_object_attributes", &self.optional_object_attributes);
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
+        }
+        if let Some(ref val) = self.request_payer {
+            d.field("request_payer", val);
         }
         if let Some(ref val) = self.version_id_marker {
             d.field("version_id_marker", val);
@@ -9367,19 +9406,21 @@ pub struct ListObjectVersionsOutput {
     /// <p>The delimiter grouping the included keys. A delimiter is a character that you specify to
     /// group keys. All keys that contain the same string between the prefix and the first
     /// occurrence of the delimiter are grouped under a single result element in
-    /// <code>CommonPrefixes</code>. These groups are counted as one result against the max-keys
-    /// limitation. These keys are not returned elsewhere in the response.</p>
+    /// <code>CommonPrefixes</code>. These groups are counted as one result against the
+    /// <code>max-keys</code> limitation. These keys are not returned elsewhere in the
+    /// response.</p>
     pub delimiter: Option<Delimiter>,
     /// <p> Encoding type used by Amazon S3 to encode object key names in the XML response.</p>
-    /// <p>If you specify encoding-type request parameter, Amazon S3 includes this element in the
-    /// response, and returns encoded key name values in the following response elements:</p>
+    /// <p>If you specify the <code>encoding-type</code> request parameter, Amazon S3 includes this
+    /// element in the response, and returns encoded key name values in the following response
+    /// elements:</p>
     /// <p>
     /// <code>KeyMarker, NextKeyMarker, Prefix, Key</code>, and <code>Delimiter</code>.</p>
     pub encoding_type: Option<EncodingType>,
     /// <p>A flag that indicates whether Amazon S3 returned all of the results that satisfied the search
-    /// criteria. If your results were truncated, you can make a follow-up paginated request using
-    /// the NextKeyMarker and NextVersionIdMarker response parameters as a starting place in
-    /// another request to return the rest of the results.</p>
+    /// criteria. If your results were truncated, you can make a follow-up paginated request by
+    /// using the <code>NextKeyMarker</code> and <code>NextVersionIdMarker</code> response
+    /// parameters as a starting place in another request to return the rest of the results.</p>
     pub is_truncated: IsTruncated,
     /// <p>Marks the last key returned in a truncated response.</p>
     pub key_marker: Option<KeyMarker>,
@@ -9394,11 +9435,12 @@ pub struct ListObjectVersionsOutput {
     pub next_key_marker: Option<NextKeyMarker>,
     /// <p>When the number of responses exceeds the value of <code>MaxKeys</code>,
     /// <code>NextVersionIdMarker</code> specifies the first object version not returned that
-    /// satisfies the search criteria. Use this value for the version-id-marker request parameter
-    /// in a subsequent request.</p>
+    /// satisfies the search criteria. Use this value for the <code>version-id-marker</code>
+    /// request parameter in a subsequent request.</p>
     pub next_version_id_marker: Option<NextVersionIdMarker>,
     /// <p>Selects objects that start with the value supplied by this parameter.</p>
     pub prefix: Option<Prefix>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>Marks the last version of the key returned in a truncated response.</p>
     pub version_id_marker: Option<VersionIdMarker>,
     /// <p>Container for version information.</p>
@@ -9437,6 +9479,9 @@ impl fmt::Debug for ListObjectVersionsOutput {
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
         if let Some(ref val) = self.version_id_marker {
             d.field("version_id_marker", val);
         }
@@ -9451,9 +9496,9 @@ pub struct ListObjectsInput {
     /// <p>The name of the bucket containing the objects.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
-    /// <p>A delimiter is a character you use to group keys.</p>
+    /// <p>A delimiter is a character that you use to group keys.</p>
     pub delimiter: Option<Delimiter>,
     pub encoding_type: Option<EncodingType>,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
@@ -9461,10 +9506,12 @@ pub struct ListObjectsInput {
     /// <p>Marker is where you want Amazon S3 to start listing from. Amazon S3 starts listing after
     /// this specified key. Marker can be any key in the bucket.</p>
     pub marker: Option<Marker>,
-    /// <p>Sets the maximum number of keys returned in the response. By default the action returns
-    /// up to 1,000 key names. The response might contain fewer keys but will never contain more.
-    /// </p>
+    /// <p>Sets the maximum number of keys returned in the response. By default, the action returns
+    /// up to 1,000 key names. The response might contain fewer keys but will never contain more. </p>
     pub max_keys: Option<MaxKeys>,
+    /// <p>Specifies the optional fields that you want returned in the response.
+    /// Fields that you do not specify are not returned.</p>
+    pub optional_object_attributes: OptionalObjectAttributesList,
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<Prefix>,
     /// <p>Confirms that the requester knows that she or he will be charged for the list objects
@@ -9491,6 +9538,7 @@ impl fmt::Debug for ListObjectsInput {
         if let Some(ref val) = self.max_keys {
             d.field("max_keys", val);
         }
+        d.field("optional_object_attributes", &self.optional_object_attributes);
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
@@ -9512,14 +9560,19 @@ impl ListObjectsInput {
 pub struct ListObjectsOutput {
     /// <p>All of the keys (up to 1,000) rolled up in a common prefix count as a single return when
     /// calculating the number of returns. </p>
-    /// <p>A response can contain CommonPrefixes only if you specify a delimiter.</p>
-    /// <p>CommonPrefixes contains all (if there are any) keys between Prefix and the next
-    /// occurrence of the string specified by the delimiter.</p>
-    /// <p> CommonPrefixes lists keys that act like subdirectories in the directory specified by
-    /// Prefix.</p>
-    /// <p>For example, if the prefix is notes/ and the delimiter is a slash (/) as in
-    /// notes/summer/july, the common prefix is notes/summer/. All of the keys that roll up into a
-    /// common prefix count as a single return when calculating the number of returns.</p>
+    /// <p>A response can contain <code>CommonPrefixes</code> only if you specify a
+    /// delimiter.</p>
+    /// <p>
+    /// <code>CommonPrefixes</code> contains all (if there are any) keys between
+    /// <code>Prefix</code> and the next occurrence of the string specified by the
+    /// delimiter.</p>
+    /// <p>
+    /// <code>CommonPrefixes</code> lists keys that act like subdirectories in the directory
+    /// specified by <code>Prefix</code>.</p>
+    /// <p>For example, if the prefix is <code>notes/</code> and the delimiter is a slash
+    /// (<code>/</code>), as in <code>notes/summer/july</code>, the common prefix is
+    /// <code>notes/summer/</code>. All of the keys that roll up into a common prefix count as a
+    /// single return when calculating the number of returns.</p>
     pub common_prefixes: Option<CommonPrefixList>,
     /// <p>Metadata about each object returned.</p>
     pub contents: Option<ObjectList>,
@@ -9541,15 +9594,21 @@ pub struct ListObjectsOutput {
     pub max_keys: MaxKeys,
     /// <p>The bucket name.</p>
     pub name: Option<BucketName>,
-    /// <p>When response is truncated (the IsTruncated element value in the response is true), you
-    /// can use the key name in this field as marker in the subsequent request to get next set of
-    /// objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if
-    /// you have delimiter request parameter specified. If response does not include the NextMarker
-    /// and it is truncated, you can use the value of the last Key in the response as the marker in
-    /// the subsequent request to get the next set of object keys.</p>
+    /// <p>When the response is truncated (the <code>IsTruncated</code> element value in the
+    /// response is <code>true</code>), you can use the key name in this field as the
+    /// <code>marker</code> parameter in the subsequent request to get the next set of objects.
+    /// Amazon S3 lists objects in alphabetical order. </p>
+    /// <note>
+    /// <p>This element is returned only if you have the <code>delimiter</code> request
+    /// parameter specified. If the response does not include the <code>NextMarker</code>
+    /// element and it is truncated, you can use the value of the last <code>Key</code> element
+    /// in the response as the <code>marker</code> parameter in the subsequent request to get
+    /// the next set of object keys.</p>
+    /// </note>
     pub next_marker: Option<NextMarker>,
     /// <p>Keys that begin with the indicated prefix.</p>
     pub prefix: Option<Prefix>,
+    pub request_charged: Option<RequestCharged>,
 }
 
 impl fmt::Debug for ListObjectsOutput {
@@ -9581,6 +9640,9 @@ impl fmt::Debug for ListObjectsOutput {
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
         d.finish_non_exhaustive()
     }
 }
@@ -9589,24 +9651,30 @@ pub struct ListObjectsV2Input {
     /// <p>Bucket name to list. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
-    /// <p>ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a
-    /// token. ContinuationToken is obfuscated and is not a real key.</p>
+    /// <p>
+    /// <code>ContinuationToken</code> indicates to Amazon S3 that the list is being continued on
+    /// this bucket with a token. <code>ContinuationToken</code> is obfuscated and is not a real
+    /// key.</p>
     pub continuation_token: Option<Token>,
-    /// <p>A delimiter is a character you use to group keys.</p>
+    /// <p>A delimiter is a character that you use to group keys.</p>
     pub delimiter: Option<Delimiter>,
     /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
     pub encoding_type: Option<EncodingType>,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
-    /// <p>The owner field is not present in listV2 by default, if you want to return owner field
-    /// with each key in the result then set the fetch owner field to true.</p>
+    /// <p>The owner field is not present in <code>ListObjectsV2</code> by default. If you want to
+    /// return the owner field with each key in the result, then set the <code>FetchOwner</code>
+    /// field to <code>true</code>.</p>
     pub fetch_owner: Option<FetchOwner>,
-    /// <p>Sets the maximum number of keys returned in the response. By default the action returns
+    /// <p>Sets the maximum number of keys returned in the response. By default, the action returns
     /// up to 1,000 key names. The response might contain fewer keys but will never contain
     /// more.</p>
     pub max_keys: Option<MaxKeys>,
+    /// <p>Specifies the optional fields that you want returned in the response.
+    /// Fields that you do not specify are not returned.</p>
+    pub optional_object_attributes: OptionalObjectAttributesList,
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<Prefix>,
     /// <p>Confirms that the requester knows that she or he will be charged for the list objects
@@ -9640,6 +9708,7 @@ impl fmt::Debug for ListObjectsV2Input {
         if let Some(ref val) = self.max_keys {
             d.field("max_keys", val);
         }
+        d.field("optional_object_attributes", &self.optional_object_attributes);
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
@@ -9680,35 +9749,40 @@ pub struct ListObjectsV2Output {
     pub common_prefixes: Option<CommonPrefixList>,
     /// <p>Metadata about each object returned.</p>
     pub contents: Option<ObjectList>,
-    /// <p> If ContinuationToken was sent with the request, it is included in the response.</p>
+    /// <p> If <code>ContinuationToken</code> was sent with the request, it is included in the
+    /// response.</p>
     pub continuation_token: Option<Token>,
-    /// <p>Causes keys that contain the same string between the prefix and the first occurrence of
-    /// the delimiter to be rolled up into a single result element in the CommonPrefixes
-    /// collection. These rolled-up keys are not returned elsewhere in the response. Each rolled-up
-    /// result counts as only one return against the <code>MaxKeys</code> value.</p>
+    /// <p>Causes keys that contain the same string between the <code>prefix</code> and the first
+    /// occurrence of the delimiter to be rolled up into a single result element in the
+    /// <code>CommonPrefixes</code> collection. These rolled-up keys are not returned elsewhere
+    /// in the response. Each rolled-up result counts as only one return against the
+    /// <code>MaxKeys</code> value.</p>
     pub delimiter: Option<Delimiter>,
     /// <p>Encoding type used by Amazon S3 to encode object key names in the XML response.</p>
-    /// <p>If you specify the encoding-type request parameter, Amazon S3 includes this element in the
-    /// response, and returns encoded key name values in the following response elements:</p>
+    /// <p>If you specify the <code>encoding-type</code> request parameter, Amazon S3 includes this
+    /// element in the response, and returns encoded key name values in the following response
+    /// elements:</p>
     /// <p>
     /// <code>Delimiter, Prefix, Key,</code> and <code>StartAfter</code>.</p>
     pub encoding_type: Option<EncodingType>,
-    /// <p>Set to false if all of the results were returned. Set to true if more keys are available
-    /// to return. If the number of results exceeds that specified by MaxKeys, all of the results
-    /// might not be returned.</p>
+    /// <p>Set to <code>false</code> if all of the results were returned. Set to <code>true</code>
+    /// if more keys are available to return. If the number of results exceeds that specified by
+    /// <code>MaxKeys</code>, all of the results might not be returned.</p>
     pub is_truncated: IsTruncated,
-    /// <p>KeyCount is the number of keys returned with this request. KeyCount will always be less
-    /// than or equal to the <code>MaxKeys</code> field. Say you ask for 50 keys, your result will
-    /// include 50 keys or fewer.</p>
+    /// <p>
+    /// <code>KeyCount</code> is the number of keys returned with this request.
+    /// <code>KeyCount</code> will always be less than or equal to the <code>MaxKeys</code>
+    /// field. For example, if you ask for 50 keys, your result will include 50 keys or
+    /// fewer.</p>
     pub key_count: KeyCount,
-    /// <p>Sets the maximum number of keys returned in the response. By default the action returns
+    /// <p>Sets the maximum number of keys returned in the response. By default, the action returns
     /// up to 1,000 key names. The response might contain fewer keys but will never contain
     /// more.</p>
     pub max_keys: MaxKeys,
     /// <p>The bucket name.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub name: Option<BucketName>,
     /// <p>
     /// <code>NextContinuationToken</code> is sent when <code>isTruncated</code> is true, which
@@ -9718,6 +9792,7 @@ pub struct ListObjectsV2Output {
     pub next_continuation_token: Option<NextToken>,
     /// <p> Keys that begin with the indicated prefix.</p>
     pub prefix: Option<Prefix>,
+    pub request_charged: Option<RequestCharged>,
     /// <p>If StartAfter was sent with the request, it is included in the response.</p>
     pub start_after: Option<StartAfter>,
 }
@@ -9752,6 +9827,9 @@ impl fmt::Debug for ListObjectsV2Output {
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
+        if let Some(ref val) = self.request_charged {
+            d.field("request_charged", val);
+        }
         if let Some(ref val) = self.start_after {
             d.field("start_after", val);
         }
@@ -9763,7 +9841,7 @@ pub struct ListPartsInput {
     /// <p>The name of the bucket to which the parts are being uploaded. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the bucket is owned by a different account, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -9864,7 +9942,7 @@ pub struct ListPartsOutput {
     /// <p>Maximum number of parts that were allowed in the response.</p>
     pub max_parts: MaxParts,
     /// <p>When a list is truncated, this element specifies the last part in the list, as well as
-    /// the value to use for the part-number-marker request parameter in a subsequent
+    /// the value to use for the <code>part-number-marker</code> request parameter in a subsequent
     /// request.</p>
     pub next_part_number_marker: Option<NextPartNumberMarker>,
     /// <p> Container element that identifies the object owner, after the object is created. If
@@ -10104,9 +10182,9 @@ impl FromStr for MetadataDirective {
 /// <p>A metadata key-value pair to store with an object.</p>
 #[derive(Default)]
 pub struct MetadataEntry {
-    /// <p>Name of the Object.</p>
+    /// <p>Name of the object.</p>
     pub name: Option<MetadataKey>,
-    /// <p>Value of the Object.</p>
+    /// <p>Value of the object.</p>
     pub value: Option<MetadataValue>,
 }
 
@@ -10532,6 +10610,11 @@ pub struct Object {
     pub last_modified: Option<LastModified>,
     /// <p>The owner of the object</p>
     pub owner: Option<Owner>,
+    /// <p>Specifies the restoration status of an object. Objects in certain storage classes must be restored
+    /// before they can be retrieved. For more information about these storage classes and how to work with
+    /// archived objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/archived-objects.html">
+    /// Working with archived objects</a> in the <i>Amazon S3 User Guide</i>.</p>
+    pub restore_status: Option<RestoreStatus>,
     /// <p>Size in bytes of the object</p>
     pub size: Size,
     /// <p>The class of storage used to store the object.</p>
@@ -10555,6 +10638,9 @@ impl fmt::Debug for Object {
         }
         if let Some(ref val) = self.owner {
             d.field("owner", val);
+        }
+        if let Some(ref val) = self.restore_status {
+            d.field("restore_status", val);
         }
         d.field("size", &self.size);
         if let Some(ref val) = self.storage_class {
@@ -11132,6 +11218,11 @@ pub struct ObjectVersion {
     pub last_modified: Option<LastModified>,
     /// <p>Specifies the owner of the object.</p>
     pub owner: Option<Owner>,
+    /// <p>Specifies the restoration status of an object. Objects in certain storage classes must be restored
+    /// before they can be retrieved. For more information about these storage classes and how to work with
+    /// archived objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/archived-objects.html">
+    /// Working with archived objects</a> in the <i>Amazon S3 User Guide</i>.</p>
+    pub restore_status: Option<RestoreStatus>,
     /// <p>Size in bytes of the object.</p>
     pub size: Size,
     /// <p>The class of storage used to store the object.</p>
@@ -11158,6 +11249,9 @@ impl fmt::Debug for ObjectVersion {
         }
         if let Some(ref val) = self.owner {
             d.field("owner", val);
+        }
+        if let Some(ref val) = self.restore_status {
+            d.field("restore_status", val);
         }
         d.field("size", &self.size);
         if let Some(ref val) = self.storage_class {
@@ -11209,6 +11303,44 @@ impl FromStr for ObjectVersionStorageClass {
         Ok(Self::from(s.to_owned()))
     }
 }
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct OptionalObjectAttributes(Cow<'static, str>);
+
+impl OptionalObjectAttributes {
+    pub const RESTORE_STATUS: &'static str = "RestoreStatus";
+
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+
+    #[must_use]
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for OptionalObjectAttributes {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<OptionalObjectAttributes> for Cow<'static, str> {
+    fn from(s: OptionalObjectAttributes) -> Self {
+        s.0
+    }
+}
+
+impl FromStr for OptionalObjectAttributes {
+    type Err = Infallible;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self::from(s.to_owned()))
+    }
+}
+
+pub type OptionalObjectAttributesList = List<OptionalObjectAttributes>;
 
 /// <p>Describes the location where the restore job's output is stored.</p>
 #[derive(Default)]
@@ -11927,9 +12059,10 @@ impl fmt::Debug for PutBucketCorsOutput {
 
 pub struct PutBucketEncryptionInput {
     /// <p>Specifies default encryption for a bucket using server-side encryption with different
-    /// key options. By default, all buckets have a default encryption configuration that
-    /// uses server-side encryption with Amazon S3 managed keys (SSE-S3). You can optionally configure default encryption for a bucket by using server-side
-    /// encryption with an Amazon Web Services KMS key (SSE-KMS) or a customer-provided key (SSE-C). For information about the bucket default
+    /// key options. By default, all buckets have a default encryption configuration that uses
+    /// server-side encryption with Amazon S3 managed keys (SSE-S3). You can optionally configure
+    /// default encryption for a bucket by using server-side encryption with an Amazon Web Services KMS key
+    /// (SSE-KMS) or a customer-provided key (SSE-C). For information about the bucket default
     /// encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Bucket Default Encryption</a>
     /// in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
@@ -12701,7 +12834,7 @@ pub struct PutObjectAclInput {
     /// <p>Key for which the PUT action was initiated.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub key: ObjectKey,
     pub request_payer: Option<RequestPayer>,
     /// <p>VersionId used to reference a specific version of the object.</p>
@@ -12785,11 +12918,12 @@ pub struct PutObjectInput {
     /// <p>The bucket name to which the PUT action was initiated. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with
-    /// server-side encryption using AWS KMS (SSE-KMS). Setting this header to <code>true</code>
-    /// causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS.</p>
+    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS). Setting this header to
+    /// <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with
+    /// SSE-KMS.</p>
     /// <p>Specifying this header with a PUT action doesn’t affect bucket-level settings for S3
     /// Bucket Key.</p>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
@@ -12892,16 +13026,17 @@ pub struct PutObjectInput {
     /// Amazon Web Services KMS for future <code>GetObject</code> or <code>CopyObject</code> operations on this
     /// object.</p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If <code>x-amz-server-side-encryption</code> has a valid value of <code>aws:kms</code>,
-    /// this header specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric
-    /// encryption customer managed key that was used for the object. If you specify
-    /// <code>x-amz-server-side-encryption:aws:kms</code>, but do not provide<code>
-    /// x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key to
-    /// protect the data. If the KMS key does not exist in the same account issuing the command,
-    /// you must use the full ARN and not just the ID. </p>
+    /// <p>If <code>x-amz-server-side-encryption</code> has a valid value of <code>aws:kms</code>
+    /// or <code>aws:kms:dsse</code>, this header specifies the ID of the Key Management Service (KMS)
+    /// symmetric encryption customer managed key that was used for the object. If you specify
+    /// <code>x-amz-server-side-encryption:aws:kms</code> or
+    /// <code>x-amz-server-side-encryption:aws:kms:dsse</code>, but do not provide<code>
+    /// x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key
+    /// (<code>aws/s3</code>) to protect the data. If the KMS key does not exist in the same
+    /// account that's issuing the command, you must use the full ARN and not just the ID. </p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The
     /// STANDARD storage class provides high durability and high availability. Depending on
@@ -13202,7 +13337,7 @@ impl fmt::Debug for PutObjectLockConfigurationOutput {
 #[derive(Default)]
 pub struct PutObjectOutput {
     /// <p>Indicates whether the uploaded object uses an S3 Bucket Key for server-side encryption
-    /// with Amazon Web Services KMS (SSE-KMS).</p>
+    /// with Key Management Service (KMS) keys (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -13245,12 +13380,12 @@ pub struct PutObjectOutput {
     /// on to Amazon Web Services KMS for future <code>GetObject</code> or <code>CopyObject</code> operations on
     /// this object.</p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If <code>x-amz-server-side-encryption</code> is has a valid value of
-    /// <code>aws:kms</code>, this header specifies the ID of the Amazon Web Services Key Management Service
-    /// (Amazon Web Services KMS) symmetric encryption customer managed key that was used for the object. </p>
+    /// <p>If <code>x-amz-server-side-encryption</code> has a valid value of <code>aws:kms</code>
+    /// or <code>aws:kms:dsse</code>, this header specifies the ID of the Key Management Service (KMS)
+    /// symmetric encryption customer managed key that was used for the object. </p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version of the object.</p>
     pub version_id: Option<ObjectVersionId>,
@@ -13390,7 +13525,7 @@ pub struct PutObjectTaggingInput {
     /// <p>The bucket name containing the object. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Indicates the algorithm used to create the checksum for the object when using the SDK. This header will not provide any
     /// additional functionality if not using the SDK. When sending this header, there must be a corresponding <code>x-amz-checksum</code> or
@@ -14199,11 +14334,13 @@ pub type ResponseExpires = Timestamp;
 
 pub type Restore = String;
 
+pub type RestoreExpiryDate = Timestamp;
+
 pub struct RestoreObjectInput {
     /// <p>The bucket name containing the object to restore. </p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Indicates the algorithm used to create the checksum for the object when using the SDK. This header will not provide any
     /// additional functionality if not using the SDK. When sending this header, there must be a corresponding <code>x-amz-checksum</code> or
@@ -14362,6 +14499,42 @@ impl FromStr for RestoreRequestType {
     }
 }
 
+/// <p>Specifies the restoration status of an object. Objects in certain storage classes must be restored
+/// before they can be retrieved. For more information about these storage classes and how to work with
+/// archived objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/archived-objects.html">
+/// Working with archived objects</a> in the <i>Amazon S3 User Guide</i>.</p>
+#[derive(Default)]
+pub struct RestoreStatus {
+    /// <p>Specifies whether the object is currently being restored. If the object restoration is
+    /// in progress, the header returns the value <code>TRUE</code>. For example:</p>
+    /// <p>
+    /// <code>x-amz-optional-object-attributes: IsRestoreInProgress="true"</code>
+    /// </p>
+    /// <p>If the object restoration has completed, the header returns the value <code>FALSE</code>. For example:</p>
+    /// <p>
+    /// <code>x-amz-optional-object-attributes: IsRestoreInProgress="false", RestoreExpiryDate="2012-12-21T00:00:00.000Z"</code>
+    /// </p>
+    /// <p>If the object hasn't been restored, there is no header response.</p>
+    pub is_restore_in_progress: IsRestoreInProgress,
+    /// <p>Indicates when the restored copy will expire. This value is populated only if the object
+    /// has already been restored. For example:</p>
+    /// <p>
+    /// <code>x-amz-optional-object-attributes: IsRestoreInProgress="false", RestoreExpiryDate="2012-12-21T00:00:00.000Z"</code>
+    /// </p>
+    pub restore_expiry_date: Option<RestoreExpiryDate>,
+}
+
+impl fmt::Debug for RestoreStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("RestoreStatus");
+        d.field("is_restore_in_progress", &self.is_restore_in_progress);
+        if let Some(ref val) = self.restore_expiry_date {
+            d.field("restore_expiry_date", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
 pub type Role = String;
 
 /// <p>Specifies the redirect behavior and when a redirect is applied. For more information
@@ -14462,8 +14635,8 @@ pub type SSECustomerKeyMD5 = String;
 
 /// <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
 pub struct SSEKMS {
-    /// <p>Specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric encryption
-    /// customer managed key to use for encrypting inventory reports.</p>
+    /// <p>Specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key to use for
+    /// encrypting inventory reports.</p>
     pub key_id: SSEKMSKeyId,
 }
 
@@ -14703,6 +14876,8 @@ impl ServerSideEncryption {
     pub const AES256: &'static str = "AES256";
 
     pub const AWS_KMS: &'static str = "aws:kms";
+
+    pub const AWS_KMS_DSSE: &'static str = "aws:kms:dsse";
 
     #[must_use]
     pub fn as_str(&self) -> &str {
@@ -15427,7 +15602,7 @@ pub struct UploadPartCopyInput {
     /// <p>The bucket name.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies the source object for the copy operation. You specify the value in one of two
     /// formats, depending on whether you want to access the source object through an <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-points.html">access point</a>:</p>
@@ -15568,7 +15743,7 @@ impl UploadPartCopyInput {
 #[derive(Default)]
 pub struct UploadPartCopyOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
-    /// with Amazon Web Services KMS (SSE-KMS).</p>
+    /// with Key Management Service (KMS) keys (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
     /// <p>Container for all response elements.</p>
     pub copy_part_result: Option<CopyPartResult>,
@@ -15583,11 +15758,11 @@ pub struct UploadPartCopyOutput {
     /// response will include this header to provide round-trip message integrity verification of
     /// the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric
-    /// encryption customer managed key that was used for the object.</p>
+    /// <p>If present, specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key
+    /// that was used for the object.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
@@ -15626,7 +15801,7 @@ pub struct UploadPartInput {
     /// <p>The name of the bucket to which the multipart upload was initiated.</p>
     /// <p>When using this action with an access point, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>When you use this action with Amazon S3 on Outposts, you must direct requests to the S3 on Outposts hostname. The S3 on Outposts hostname takes the form <code>
-    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Indicates the algorithm used to create the checksum for the object when using the SDK. This header will not provide any
     /// additional functionality if not using the SDK. When sending this header, there must be a corresponding <code>x-amz-checksum</code> or
@@ -15750,7 +15925,7 @@ impl UploadPartInput {
 #[derive(Default)]
 pub struct UploadPartOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
-    /// with Amazon Web Services KMS (SSE-KMS).</p>
+    /// with Key Management Service (KMS) keys (SSE-KMS).</p>
     pub bucket_key_enabled: BucketKeyEnabled,
     /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
     /// with the object. With multipart uploads, this may not be a checksum value of the object. For more information about how checksums are calculated
@@ -15782,11 +15957,11 @@ pub struct UploadPartOutput {
     /// response will include this header to provide round-trip message integrity verification of
     /// the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, specifies the ID of the Amazon Web Services Key Management Service (Amazon Web Services KMS) symmetric
-    /// encryption customer managed key was used for the object.</p>
+    /// <p>If present, specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key
+    /// was used for the object.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// AES256, <code>aws:kms</code>).</p>
+    /// <code>AES256</code>, <code>aws:kms</code>).</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
@@ -18832,6 +19007,8 @@ pub mod builders {
         bucket: Option<BucketName>,
 
         expected_bucket_owner: Option<AccountId>,
+
+        request_payer: Option<RequestPayer>,
     }
 
     impl GetBucketAccelerateConfigurationInputBuilder {
@@ -18842,6 +19019,11 @@ pub mod builders {
 
         pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
+            self.request_payer = field;
             self
         }
 
@@ -18857,12 +19039,20 @@ pub mod builders {
             self
         }
 
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
         pub fn build(self) -> Result<GetBucketAccelerateConfigurationInput, BuildError> {
             let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
             let expected_bucket_owner = self.expected_bucket_owner;
+            let request_payer = self.request_payer;
             Ok(GetBucketAccelerateConfigurationInput {
                 bucket,
                 expected_bucket_owner,
+                request_payer,
             })
         }
     }
@@ -21200,6 +21390,8 @@ pub mod builders {
 
         prefix: Option<Prefix>,
 
+        request_payer: Option<RequestPayer>,
+
         upload_id_marker: Option<UploadIdMarker>,
     }
 
@@ -21236,6 +21428,11 @@ pub mod builders {
 
         pub fn set_prefix(&mut self, field: Option<Prefix>) -> &mut Self {
             self.prefix = field;
+            self
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
+            self.request_payer = field;
             self
         }
 
@@ -21287,6 +21484,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
+            self
+        }
+
+        #[must_use]
         pub fn upload_id_marker(mut self, field: Option<UploadIdMarker>) -> Self {
             self.upload_id_marker = field;
             self
@@ -21300,6 +21503,7 @@ pub mod builders {
             let key_marker = self.key_marker;
             let max_uploads = self.max_uploads;
             let prefix = self.prefix;
+            let request_payer = self.request_payer;
             let upload_id_marker = self.upload_id_marker;
             Ok(ListMultipartUploadsInput {
                 bucket,
@@ -21309,6 +21513,7 @@ pub mod builders {
                 key_marker,
                 max_uploads,
                 prefix,
+                request_payer,
                 upload_id_marker,
             })
         }
@@ -21329,7 +21534,11 @@ pub mod builders {
 
         max_keys: Option<MaxKeys>,
 
+        optional_object_attributes: OptionalObjectAttributesList,
+
         prefix: Option<Prefix>,
+
+        request_payer: Option<RequestPayer>,
 
         version_id_marker: Option<VersionIdMarker>,
     }
@@ -21365,8 +21574,18 @@ pub mod builders {
             self
         }
 
+        pub fn set_optional_object_attributes(&mut self, field: OptionalObjectAttributesList) -> &mut Self {
+            self.optional_object_attributes = field;
+            self
+        }
+
         pub fn set_prefix(&mut self, field: Option<Prefix>) -> &mut Self {
             self.prefix = field;
+            self
+        }
+
+        pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
+            self.request_payer = field;
             self
         }
 
@@ -21412,8 +21631,20 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn optional_object_attributes(mut self, field: OptionalObjectAttributesList) -> Self {
+            self.optional_object_attributes = field;
+            self
+        }
+
+        #[must_use]
         pub fn prefix(mut self, field: Option<Prefix>) -> Self {
             self.prefix = field;
+            self
+        }
+
+        #[must_use]
+        pub fn request_payer(mut self, field: Option<RequestPayer>) -> Self {
+            self.request_payer = field;
             self
         }
 
@@ -21430,7 +21661,9 @@ pub mod builders {
             let expected_bucket_owner = self.expected_bucket_owner;
             let key_marker = self.key_marker;
             let max_keys = self.max_keys;
+            let optional_object_attributes = self.optional_object_attributes;
             let prefix = self.prefix;
+            let request_payer = self.request_payer;
             let version_id_marker = self.version_id_marker;
             Ok(ListObjectVersionsInput {
                 bucket,
@@ -21439,7 +21672,9 @@ pub mod builders {
                 expected_bucket_owner,
                 key_marker,
                 max_keys,
+                optional_object_attributes,
                 prefix,
+                request_payer,
                 version_id_marker,
             })
         }
@@ -21459,6 +21694,8 @@ pub mod builders {
         marker: Option<Marker>,
 
         max_keys: Option<MaxKeys>,
+
+        optional_object_attributes: OptionalObjectAttributesList,
 
         prefix: Option<Prefix>,
 
@@ -21493,6 +21730,11 @@ pub mod builders {
 
         pub fn set_max_keys(&mut self, field: Option<MaxKeys>) -> &mut Self {
             self.max_keys = field;
+            self
+        }
+
+        pub fn set_optional_object_attributes(&mut self, field: OptionalObjectAttributesList) -> &mut Self {
+            self.optional_object_attributes = field;
             self
         }
 
@@ -21543,6 +21785,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn optional_object_attributes(mut self, field: OptionalObjectAttributesList) -> Self {
+            self.optional_object_attributes = field;
+            self
+        }
+
+        #[must_use]
         pub fn prefix(mut self, field: Option<Prefix>) -> Self {
             self.prefix = field;
             self
@@ -21561,6 +21809,7 @@ pub mod builders {
             let expected_bucket_owner = self.expected_bucket_owner;
             let marker = self.marker;
             let max_keys = self.max_keys;
+            let optional_object_attributes = self.optional_object_attributes;
             let prefix = self.prefix;
             let request_payer = self.request_payer;
             Ok(ListObjectsInput {
@@ -21570,6 +21819,7 @@ pub mod builders {
                 expected_bucket_owner,
                 marker,
                 max_keys,
+                optional_object_attributes,
                 prefix,
                 request_payer,
             })
@@ -21592,6 +21842,8 @@ pub mod builders {
         fetch_owner: Option<FetchOwner>,
 
         max_keys: Option<MaxKeys>,
+
+        optional_object_attributes: OptionalObjectAttributesList,
 
         prefix: Option<Prefix>,
 
@@ -21633,6 +21885,11 @@ pub mod builders {
 
         pub fn set_max_keys(&mut self, field: Option<MaxKeys>) -> &mut Self {
             self.max_keys = field;
+            self
+        }
+
+        pub fn set_optional_object_attributes(&mut self, field: OptionalObjectAttributesList) -> &mut Self {
+            self.optional_object_attributes = field;
             self
         }
 
@@ -21694,6 +21951,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn optional_object_attributes(mut self, field: OptionalObjectAttributesList) -> Self {
+            self.optional_object_attributes = field;
+            self
+        }
+
+        #[must_use]
         pub fn prefix(mut self, field: Option<Prefix>) -> Self {
             self.prefix = field;
             self
@@ -21719,6 +21982,7 @@ pub mod builders {
             let expected_bucket_owner = self.expected_bucket_owner;
             let fetch_owner = self.fetch_owner;
             let max_keys = self.max_keys;
+            let optional_object_attributes = self.optional_object_attributes;
             let prefix = self.prefix;
             let request_payer = self.request_payer;
             let start_after = self.start_after;
@@ -21730,6 +21994,7 @@ pub mod builders {
                 expected_bucket_owner,
                 fetch_owner,
                 max_keys,
+                optional_object_attributes,
                 prefix,
                 request_payer,
                 start_after,

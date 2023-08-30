@@ -42,6 +42,7 @@ impl From<ListObjectsInput> for ListObjectsV2Input {
             max_keys,
             prefix,
             request_payer,
+            optional_object_attributes,
         } = v1;
 
         Self {
@@ -55,6 +56,7 @@ impl From<ListObjectsInput> for ListObjectsV2Input {
             prefix,
             request_payer,
             start_after: marker,
+            optional_object_attributes,
         }
     }
 }

@@ -6,9 +6,9 @@ import hashlib
 
 # https://github.com/awslabs/aws-sdk-rust/commits/main/aws-models/s3.json
 
-COMMIT = "82ebba98e531955b395225e9ab420af614442b73"
+COMMIT = "d09fb3435954efee106e07f277f47808f29219d3"
 URL = f"https://github.com/awslabs/aws-sdk-rust/raw/{COMMIT}/aws-models/s3.json"
-SHA256 = "269b56b8ea8c07012994ba467d3a123d4a697f9b22c673a381f4df07d898c5ff"
+SHA256 = "d280b085f83a95dd7e22aea88f72f699a489fd018861f20c23cfda9d1c4a052b"
 
 
 def sha256sum(arg: bytes | Path) -> str:

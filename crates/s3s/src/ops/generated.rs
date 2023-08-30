@@ -116,6 +116,16 @@ impl http::TryIntoHeaderValue for ObjectOwnership {
     }
 }
 
+impl http::TryIntoHeaderValue for OptionalObjectAttributes {
+    type Error = http::InvalidHeaderValue;
+    fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
+        }
+    }
+}
+
 impl http::TryIntoHeaderValue for ReplicationStatus {
     type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
@@ -249,6 +259,14 @@ impl http::TryFromHeaderValue for ObjectLockMode {
 }
 
 impl http::TryFromHeaderValue for ObjectOwnership {
+    type Error = http::ParseHeaderError;
+    fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
+    }
+}
+
+impl http::TryFromHeaderValue for OptionalObjectAttributes {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
         let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
@@ -1561,15 +1579,19 @@ impl GetBucketAccelerateConfiguration {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
+        let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
+
         Ok(GetBucketAccelerateConfigurationInput {
             bucket,
             expected_bucket_owner,
+            request_payer,
         })
     }
 
     pub fn serialize_http(x: GetBucketAccelerateConfigurationOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
+        http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
 }
@@ -2624,7 +2646,7 @@ impl GetObjectAttributes {
 
         let max_parts: Option<MaxParts> = http::parse_opt_header(req, &X_AMZ_MAX_PARTS)?;
 
-        let object_attributes: ObjectAttributesList = http::parse_list_header(req, &X_AMZ_OBJECT_ATTRIBUTES)?;
+        let object_attributes: ObjectAttributesList = http::parse_list_header(req, &X_AMZ_OBJECT_ATTRIBUTES, true)?;
 
         let part_number_marker: Option<PartNumberMarker> = http::parse_opt_header(req, &X_AMZ_PART_NUMBER_MARKER)?;
 
@@ -3367,6 +3389,8 @@ impl ListMultipartUploads {
 
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
+        let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
+
         let upload_id_marker: Option<UploadIdMarker> = http::parse_opt_query(req, "upload-id-marker")?;
 
         Ok(ListMultipartUploadsInput {
@@ -3377,6 +3401,7 @@ impl ListMultipartUploads {
             key_marker,
             max_uploads,
             prefix,
+            request_payer,
             upload_id_marker,
         })
     }
@@ -3384,6 +3409,7 @@ impl ListMultipartUploads {
     pub fn serialize_http(x: ListMultipartUploadsOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
+        http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
 }
@@ -3425,7 +3451,12 @@ impl ListObjectVersions {
 
         let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
+        let optional_object_attributes: OptionalObjectAttributesList =
+            http::parse_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES, false)?;
+
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
+
+        let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
 
         let version_id_marker: Option<VersionIdMarker> = http::parse_opt_query(req, "version-id-marker")?;
 
@@ -3436,7 +3467,9 @@ impl ListObjectVersions {
             expected_bucket_owner,
             key_marker,
             max_keys,
+            optional_object_attributes,
             prefix,
+            request_payer,
             version_id_marker,
         })
     }
@@ -3444,6 +3477,7 @@ impl ListObjectVersions {
     pub fn serialize_http(x: ListObjectVersionsOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
+        http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
 }
@@ -3485,6 +3519,9 @@ impl ListObjects {
 
         let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
+        let optional_object_attributes: OptionalObjectAttributesList =
+            http::parse_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES, false)?;
+
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
@@ -3496,6 +3533,7 @@ impl ListObjects {
             expected_bucket_owner,
             marker,
             max_keys,
+            optional_object_attributes,
             prefix,
             request_payer,
         })
@@ -3504,6 +3542,7 @@ impl ListObjects {
     pub fn serialize_http(x: ListObjectsOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
+        http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
 }
@@ -3547,6 +3586,9 @@ impl ListObjectsV2 {
 
         let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
+        let optional_object_attributes: OptionalObjectAttributesList =
+            http::parse_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES, false)?;
+
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
@@ -3561,6 +3603,7 @@ impl ListObjectsV2 {
             expected_bucket_owner,
             fetch_owner,
             max_keys,
+            optional_object_attributes,
             prefix,
             request_payer,
             start_after,
@@ -3570,6 +3613,7 @@ impl ListObjectsV2 {
     pub fn serialize_http(x: ListObjectsV2Output) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
+        http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         Ok(res)
     }
 }
@@ -5732,6 +5776,9 @@ pub fn resolve_route(
                     if qs.has("metrics") {
                         return Ok((&GetBucketMetricsConfiguration as &'static dyn super::Operation, false));
                     }
+                    if qs.has("versions") {
+                        return Ok((&ListObjectVersions as &'static dyn super::Operation, false));
+                    }
                     if qs.has("accelerate") {
                         return Ok((&GetBucketAccelerateConfiguration as &'static dyn super::Operation, false));
                     }
@@ -5801,14 +5848,14 @@ pub fn resolve_route(
                     if qs.has("uploads") {
                         return Ok((&ListMultipartUploads as &'static dyn super::Operation, false));
                     }
-                    if qs.has("versions") {
-                        return Ok((&ListObjectVersions as &'static dyn super::Operation, false));
-                    }
                     if super::check_query_pattern(qs, "list-type", "2") {
                         return Ok((&ListObjectsV2 as &'static dyn super::Operation, false));
                     }
                 }
-                Ok((&ListObjects as &'static dyn super::Operation, false))
+                if req.headers.contains_key("x-amz-optional-object-attributes") {
+                    return Ok((&ListObjects as &'static dyn super::Operation, false));
+                }
+                Err(super::unknown_operation())
             }
             S3Path::Object { .. } => {
                 if let Some(qs) = qs {

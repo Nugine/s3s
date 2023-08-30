@@ -371,6 +371,7 @@ impl AwsConversion for s3s::dto::BucketLocationConstraint {
             aws_sdk_s3::types::BucketLocationConstraint::ApNortheast2 => Self::from_static(Self::AP_NORTHEAST_2),
             aws_sdk_s3::types::BucketLocationConstraint::ApNortheast3 => Self::from_static(Self::AP_NORTHEAST_3),
             aws_sdk_s3::types::BucketLocationConstraint::ApSouth1 => Self::from_static(Self::AP_SOUTH_1),
+            aws_sdk_s3::types::BucketLocationConstraint::ApSouth2 => Self::from_static(Self::AP_SOUTH_2),
             aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast1 => Self::from_static(Self::AP_SOUTHEAST_1),
             aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast2 => Self::from_static(Self::AP_SOUTHEAST_2),
             aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast3 => Self::from_static(Self::AP_SOUTHEAST_3),
@@ -380,6 +381,7 @@ impl AwsConversion for s3s::dto::BucketLocationConstraint {
             aws_sdk_s3::types::BucketLocationConstraint::EuCentral1 => Self::from_static(Self::EU_CENTRAL_1),
             aws_sdk_s3::types::BucketLocationConstraint::EuNorth1 => Self::from_static(Self::EU_NORTH_1),
             aws_sdk_s3::types::BucketLocationConstraint::EuSouth1 => Self::from_static(Self::EU_SOUTH_1),
+            aws_sdk_s3::types::BucketLocationConstraint::EuSouth2 => Self::from_static(Self::EU_SOUTH_2),
             aws_sdk_s3::types::BucketLocationConstraint::EuWest1 => Self::from_static(Self::EU_WEST_1),
             aws_sdk_s3::types::BucketLocationConstraint::EuWest2 => Self::from_static(Self::EU_WEST_2),
             aws_sdk_s3::types::BucketLocationConstraint::EuWest3 => Self::from_static(Self::EU_WEST_3),
@@ -2235,6 +2237,7 @@ impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationInput {
         Ok(Self {
             bucket: unwrap_from_aws(x.bucket, "bucket")?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+            request_payer: try_from_aws(x.request_payer)?,
         })
     }
 
@@ -2242,6 +2245,7 @@ impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationInput {
         let mut y = Self::Target::builder();
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
+        y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y.build().map_err(S3Error::internal_error)
     }
 }
@@ -2252,12 +2256,14 @@ impl AwsConversion for s3s::dto::GetBucketAccelerateConfigurationOutput {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
+            request_charged: try_from_aws(x.request_charged)?,
             status: try_from_aws(x.status)?,
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
+        y = y.set_request_charged(try_into_aws(x.request_charged)?);
         y = y.set_status(try_into_aws(x.status)?);
         Ok(y.build())
     }
@@ -4053,6 +4059,9 @@ impl AwsConversion for s3s::dto::InventoryOptionalField {
             }
             aws_sdk_s3::types::InventoryOptionalField::IsMultipartUploaded => Self::from_static(Self::IS_MULTIPART_UPLOADED),
             aws_sdk_s3::types::InventoryOptionalField::LastModifiedDate => Self::from_static(Self::LAST_MODIFIED_DATE),
+            aws_sdk_s3::types::InventoryOptionalField::ObjectAccessControlList => {
+                Self::from_static(Self::OBJECT_ACCESS_CONTROL_LIST)
+            }
             aws_sdk_s3::types::InventoryOptionalField::ObjectLockLegalHoldStatus => {
                 Self::from_static(Self::OBJECT_LOCK_LEGAL_HOLD_STATUS)
             }
@@ -4060,6 +4069,7 @@ impl AwsConversion for s3s::dto::InventoryOptionalField {
             aws_sdk_s3::types::InventoryOptionalField::ObjectLockRetainUntilDate => {
                 Self::from_static(Self::OBJECT_LOCK_RETAIN_UNTIL_DATE)
             }
+            aws_sdk_s3::types::InventoryOptionalField::ObjectOwner => Self::from_static(Self::OBJECT_OWNER),
             aws_sdk_s3::types::InventoryOptionalField::ReplicationStatus => Self::from_static(Self::REPLICATION_STATUS),
             aws_sdk_s3::types::InventoryOptionalField::Size => Self::from_static(Self::SIZE),
             aws_sdk_s3::types::InventoryOptionalField::StorageClass => Self::from_static(Self::STORAGE_CLASS),
@@ -4499,6 +4509,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsInput {
             key_marker: try_from_aws(x.key_marker)?,
             max_uploads: try_from_aws(x.max_uploads)?,
             prefix: try_from_aws(x.prefix)?,
+            request_payer: try_from_aws(x.request_payer)?,
             upload_id_marker: try_from_aws(x.upload_id_marker)?,
         })
     }
@@ -4512,6 +4523,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsInput {
         y = y.set_key_marker(try_into_aws(x.key_marker)?);
         y = y.set_max_uploads(try_into_aws(x.max_uploads)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
+        y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_upload_id_marker(try_into_aws(x.upload_id_marker)?);
         y.build().map_err(S3Error::internal_error)
     }
@@ -4533,6 +4545,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsOutput {
             next_key_marker: try_from_aws(x.next_key_marker)?,
             next_upload_id_marker: try_from_aws(x.next_upload_id_marker)?,
             prefix: try_from_aws(x.prefix)?,
+            request_charged: try_from_aws(x.request_charged)?,
             upload_id_marker: try_from_aws(x.upload_id_marker)?,
             uploads: try_from_aws(x.uploads)?,
         })
@@ -4550,6 +4563,7 @@ impl AwsConversion for s3s::dto::ListMultipartUploadsOutput {
         y = y.set_next_key_marker(try_into_aws(x.next_key_marker)?);
         y = y.set_next_upload_id_marker(try_into_aws(x.next_upload_id_marker)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
+        y = y.set_request_charged(try_into_aws(x.request_charged)?);
         y = y.set_upload_id_marker(try_into_aws(x.upload_id_marker)?);
         y = y.set_uploads(try_into_aws(x.uploads)?);
         Ok(y.build())
@@ -4568,7 +4582,9 @@ impl AwsConversion for s3s::dto::ListObjectVersionsInput {
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             key_marker: try_from_aws(x.key_marker)?,
             max_keys: try_from_aws(x.max_keys)?,
+            optional_object_attributes: unwrap_from_aws(x.optional_object_attributes, "optional_object_attributes")?,
             prefix: try_from_aws(x.prefix)?,
+            request_payer: try_from_aws(x.request_payer)?,
             version_id_marker: try_from_aws(x.version_id_marker)?,
         })
     }
@@ -4581,7 +4597,9 @@ impl AwsConversion for s3s::dto::ListObjectVersionsInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key_marker(try_into_aws(x.key_marker)?);
         y = y.set_max_keys(try_into_aws(x.max_keys)?);
+        y = y.set_optional_object_attributes(Some(try_into_aws(x.optional_object_attributes)?));
         y = y.set_prefix(try_into_aws(x.prefix)?);
+        y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_version_id_marker(try_into_aws(x.version_id_marker)?);
         y.build().map_err(S3Error::internal_error)
     }
@@ -4604,6 +4622,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsOutput {
             next_key_marker: try_from_aws(x.next_key_marker)?,
             next_version_id_marker: try_from_aws(x.next_version_id_marker)?,
             prefix: try_from_aws(x.prefix)?,
+            request_charged: try_from_aws(x.request_charged)?,
             version_id_marker: try_from_aws(x.version_id_marker)?,
             versions: try_from_aws(x.versions)?,
         })
@@ -4622,6 +4641,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsOutput {
         y = y.set_next_key_marker(try_into_aws(x.next_key_marker)?);
         y = y.set_next_version_id_marker(try_into_aws(x.next_version_id_marker)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
+        y = y.set_request_charged(try_into_aws(x.request_charged)?);
         y = y.set_version_id_marker(try_into_aws(x.version_id_marker)?);
         y = y.set_versions(try_into_aws(x.versions)?);
         Ok(y.build())
@@ -4640,6 +4660,7 @@ impl AwsConversion for s3s::dto::ListObjectsInput {
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             marker: try_from_aws(x.marker)?,
             max_keys: try_from_aws(x.max_keys)?,
+            optional_object_attributes: unwrap_from_aws(x.optional_object_attributes, "optional_object_attributes")?,
             prefix: try_from_aws(x.prefix)?,
             request_payer: try_from_aws(x.request_payer)?,
         })
@@ -4653,6 +4674,7 @@ impl AwsConversion for s3s::dto::ListObjectsInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_marker(try_into_aws(x.marker)?);
         y = y.set_max_keys(try_into_aws(x.max_keys)?);
+        y = y.set_optional_object_attributes(Some(try_into_aws(x.optional_object_attributes)?));
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y.build().map_err(S3Error::internal_error)
@@ -4675,6 +4697,7 @@ impl AwsConversion for s3s::dto::ListObjectsOutput {
             name: try_from_aws(x.name)?,
             next_marker: try_from_aws(x.next_marker)?,
             prefix: try_from_aws(x.prefix)?,
+            request_charged: try_from_aws(x.request_charged)?,
         })
     }
 
@@ -4690,6 +4713,7 @@ impl AwsConversion for s3s::dto::ListObjectsOutput {
         y = y.set_name(try_into_aws(x.name)?);
         y = y.set_next_marker(try_into_aws(x.next_marker)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
+        y = y.set_request_charged(try_into_aws(x.request_charged)?);
         Ok(y.build())
     }
 }
@@ -4707,6 +4731,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Input {
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             fetch_owner: try_from_aws(x.fetch_owner)?,
             max_keys: try_from_aws(x.max_keys)?,
+            optional_object_attributes: unwrap_from_aws(x.optional_object_attributes, "optional_object_attributes")?,
             prefix: try_from_aws(x.prefix)?,
             request_payer: try_from_aws(x.request_payer)?,
             start_after: try_from_aws(x.start_after)?,
@@ -4722,6 +4747,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Input {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_fetch_owner(try_into_aws(x.fetch_owner)?);
         y = y.set_max_keys(try_into_aws(x.max_keys)?);
+        y = y.set_optional_object_attributes(Some(try_into_aws(x.optional_object_attributes)?));
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_start_after(try_into_aws(x.start_after)?);
@@ -4746,6 +4772,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Output {
             name: try_from_aws(x.name)?,
             next_continuation_token: try_from_aws(x.next_continuation_token)?,
             prefix: try_from_aws(x.prefix)?,
+            request_charged: try_from_aws(x.request_charged)?,
             start_after: try_from_aws(x.start_after)?,
         })
     }
@@ -4763,6 +4790,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Output {
         y = y.set_name(try_into_aws(x.name)?);
         y = y.set_next_continuation_token(try_into_aws(x.next_continuation_token)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
+        y = y.set_request_charged(try_into_aws(x.request_charged)?);
         y = y.set_start_after(try_into_aws(x.start_after)?);
         Ok(y.build())
     }
@@ -5228,6 +5256,7 @@ impl AwsConversion for s3s::dto::Object {
             key: try_from_aws(x.key)?,
             last_modified: try_from_aws(x.last_modified)?,
             owner: try_from_aws(x.owner)?,
+            restore_status: try_from_aws(x.restore_status)?,
             size: try_from_aws(x.size)?,
             storage_class: try_from_aws(x.storage_class)?,
         })
@@ -5240,6 +5269,7 @@ impl AwsConversion for s3s::dto::Object {
         y = y.set_key(try_into_aws(x.key)?);
         y = y.set_last_modified(try_into_aws(x.last_modified)?);
         y = y.set_owner(try_into_aws(x.owner)?);
+        y = y.set_restore_status(try_into_aws(x.restore_status)?);
         y = y.set_size(Some(try_into_aws(x.size)?));
         y = y.set_storage_class(try_into_aws(x.storage_class)?);
         Ok(y.build())
@@ -5568,6 +5598,7 @@ impl AwsConversion for s3s::dto::ObjectVersion {
             key: try_from_aws(x.key)?,
             last_modified: try_from_aws(x.last_modified)?,
             owner: try_from_aws(x.owner)?,
+            restore_status: try_from_aws(x.restore_status)?,
             size: try_from_aws(x.size)?,
             storage_class: try_from_aws(x.storage_class)?,
             version_id: try_from_aws(x.version_id)?,
@@ -5582,6 +5613,7 @@ impl AwsConversion for s3s::dto::ObjectVersion {
         y = y.set_key(try_into_aws(x.key)?);
         y = y.set_last_modified(try_into_aws(x.last_modified)?);
         y = y.set_owner(try_into_aws(x.owner)?);
+        y = y.set_restore_status(try_into_aws(x.restore_status)?);
         y = y.set_size(Some(try_into_aws(x.size)?));
         y = y.set_storage_class(try_into_aws(x.storage_class)?);
         y = y.set_version_id(try_into_aws(x.version_id)?);
@@ -5603,6 +5635,23 @@ impl AwsConversion for s3s::dto::ObjectVersionStorageClass {
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(aws_sdk_s3::types::ObjectVersionStorageClass::from(x.as_str()))
+    }
+}
+
+impl AwsConversion for s3s::dto::OptionalObjectAttributes {
+    type Target = aws_sdk_s3::types::OptionalObjectAttributes;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(match x {
+            aws_sdk_s3::types::OptionalObjectAttributes::RestoreStatus => Self::from_static(Self::RESTORE_STATUS),
+            aws_sdk_s3::types::OptionalObjectAttributes::Unknown(_) => Self::from(x.as_str().to_owned()),
+            _ => Self::from(x.as_str().to_owned()),
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        Ok(aws_sdk_s3::types::OptionalObjectAttributes::from(x.as_str()))
     }
 }
 
@@ -7553,6 +7602,25 @@ impl AwsConversion for s3s::dto::RestoreRequestType {
     }
 }
 
+impl AwsConversion for s3s::dto::RestoreStatus {
+    type Target = aws_sdk_s3::types::RestoreStatus;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            is_restore_in_progress: try_from_aws(x.is_restore_in_progress)?,
+            restore_expiry_date: try_from_aws(x.restore_expiry_date)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_is_restore_in_progress(Some(try_into_aws(x.is_restore_in_progress)?));
+        y = y.set_restore_expiry_date(try_into_aws(x.restore_expiry_date)?);
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::RoutingRule {
     type Target = aws_sdk_s3::types::RoutingRule;
     type Error = S3Error;
@@ -7746,6 +7814,7 @@ impl AwsConversion for s3s::dto::ServerSideEncryption {
         Ok(match x {
             aws_sdk_s3::types::ServerSideEncryption::Aes256 => Self::from_static(Self::AES256),
             aws_sdk_s3::types::ServerSideEncryption::AwsKms => Self::from_static(Self::AWS_KMS),
+            aws_sdk_s3::types::ServerSideEncryption::AwsKmsDsse => Self::from_static(Self::AWS_KMS_DSSE),
             aws_sdk_s3::types::ServerSideEncryption::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
