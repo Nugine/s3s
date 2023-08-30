@@ -627,9 +627,11 @@ fn codegen_op_http_call(op: &Operation) {
 
     if op.name == "GetObject" {
         g!("resp.headers.extend(overrided_headers);");
+        g!("super::get_object::merge_custom_headers(&mut resp, s3_resp.headers);");
+    } else {
+        g!("resp.headers.extend(s3_resp.headers);");
     }
 
-    g!("resp.headers.extend(s3_resp.headers);");
     g!("resp.extensions.extend(s3_resp.extensions);");
     g!("Ok(resp)");
 

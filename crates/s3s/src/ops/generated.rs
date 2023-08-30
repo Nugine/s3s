@@ -2558,7 +2558,7 @@ impl super::Operation for GetObject {
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(overrided_headers);
-        resp.headers.extend(s3_resp.headers);
+        super::get_object::merge_custom_headers(&mut resp, s3_resp.headers);
         resp.extensions.extend(s3_resp.extensions);
         Ok(resp)
     }
