@@ -20,6 +20,12 @@ impl Error {
         log(&*source);
         Self { source }
     }
+
+    #[must_use]
+    #[track_caller]
+    pub fn from_string(s: impl Into<String>) -> Self {
+        Self::new(s.into().into())
+    }
 }
 
 impl<E> From<E> for Error

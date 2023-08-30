@@ -55,11 +55,26 @@ fn setup_tracing() {
         .init();
 }
 
-#[tokio::main]
-async fn main() -> Result {
-    setup_tracing();
-    let opt = Opt::parse();
+fn check_cli_args(opt: &Opt) -> Result<(), String> {
+    if let Some(ref s) = opt.domain_name {
+        if s.contains('/') {
+            return Err(format!("expected domain name, found URL-like string: {s:?}"));
+        }
+    }
+    Ok(())
+}
 
+fn main() -> Result {
+    let opt = Opt::parse();
+    check_cli_args(&opt).map_err(s3s_fs::Error::from_string)?;
+
+    setup_tracing();
+
+    run(opt)
+}
+
+#[tokio::main]
+async fn run(opt: Opt) -> Result {
     // Setup S3 provider
     let fs = FileSystem::new(opt.root)?;
 
