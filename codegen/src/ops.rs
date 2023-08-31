@@ -744,7 +744,10 @@ fn required_headers<'a>(op: &Operation, rust_types: &'a RustTypes) -> Vec<&'a st
 
     let mut ans: Vec<&'a str> = default();
     for field in &ty.fields {
-        let is_required = field.option_type.not() && field.default_value.is_none();
+        let is_list = matches!(rust_types[field.type_.as_str()], rust::Type::List(_));
+
+        let is_required = field.is_required || (field.option_type.not() && field.default_value.is_none() && is_list.not());
+
         if is_required && field.position == "header" {
             let header = field.http_header.as_deref().unwrap();
             ans.push(header);

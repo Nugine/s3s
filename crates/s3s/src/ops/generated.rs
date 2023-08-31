@@ -5776,9 +5776,6 @@ pub fn resolve_route(
                     if qs.has("metrics") {
                         return Ok((&GetBucketMetricsConfiguration as &'static dyn super::Operation, false));
                     }
-                    if qs.has("versions") {
-                        return Ok((&ListObjectVersions as &'static dyn super::Operation, false));
-                    }
                     if qs.has("accelerate") {
                         return Ok((&GetBucketAccelerateConfiguration as &'static dyn super::Operation, false));
                     }
@@ -5848,14 +5845,14 @@ pub fn resolve_route(
                     if qs.has("uploads") {
                         return Ok((&ListMultipartUploads as &'static dyn super::Operation, false));
                     }
+                    if qs.has("versions") {
+                        return Ok((&ListObjectVersions as &'static dyn super::Operation, false));
+                    }
                     if super::check_query_pattern(qs, "list-type", "2") {
                         return Ok((&ListObjectsV2 as &'static dyn super::Operation, false));
                     }
                 }
-                if req.headers.contains_key("x-amz-optional-object-attributes") {
-                    return Ok((&ListObjects as &'static dyn super::Operation, false));
-                }
-                Err(super::unknown_operation())
+                Ok((&ListObjects as &'static dyn super::Operation, false))
             }
             S3Path::Object { .. } => {
                 if let Some(qs) = qs {
