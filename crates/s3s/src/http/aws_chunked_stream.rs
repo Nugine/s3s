@@ -232,7 +232,7 @@ impl AwsChunkedStream {
             }
         };
 
-        let mut remaining_bytes = 'outer: loop {
+        let mut remaining_bytes = 'outer: {
             if let Some(remaining_bytes) = push_data_bytes(prev_bytes) {
                 break 'outer remaining_bytes;
             }
@@ -248,6 +248,7 @@ impl AwsChunkedStream {
                 }
             }
         };
+
         if remaining_bytes.starts_with(b"\r\n") {
             // fast path
             remaining_bytes.advance(2);
