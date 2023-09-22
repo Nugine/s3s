@@ -656,10 +656,13 @@ impl S3 for FileSystem {
         let prefix = format!(".upload_id-{upload_id}");
         let mut iter = try_!(fs::read_dir(&self.root).await);
         while let Some(entry) = try_!(iter.next_entry().await) {
+            let file_type = try_!(entry.file_type().await);
+            if file_type.is_file().not() {
+                continue;
+            }
+
             let file_name = entry.file_name();
-            let name = file_name
-                .to_str()
-                .ok_or_else(|| s3_error!(InternalError, "Failed to read filename"))?;
+            let Some(name) = file_name.to_str() else { continue };
 
             if name.starts_with(&prefix) {
                 try_!(fs::remove_file(entry.path()).await);
