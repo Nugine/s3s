@@ -638,4 +638,41 @@ impl S3 for FileSystem {
         };
         Ok(S3Response::new(output))
     }
+
+    #[tracing::instrument]
+    async fn abort_multipart_upload(
+        &self,
+        req: S3Request<AbortMultipartUploadInput>,
+    ) -> S3Result<S3Response<AbortMultipartUploadOutput>> {
+        let AbortMultipartUploadInput {
+            bucket, key, upload_id, ..
+        } = req.input;
+
+        let upload_id = Uuid::parse_str(&upload_id).map_err(|_| s3_error!(InvalidRequest))?;
+        if self.verify_upload_id(req.credentials.as_ref(), &upload_id).await?.not() {
+            return Err(s3_error!(AccessDenied));
+        }
+
+        let prefix = format!(".upload_id-{upload_id}");
+        let mut iter = try_!(fs::read_dir(&self.root).await);
+        while let Some(entry) = try_!(iter.next_entry().await) {
+            let file_type = try_!(entry.file_type().await);
+            if file_type.is_file().not() {
+                continue;
+            }
+
+            let file_name = entry.file_name();
+            let Some(name) = file_name.to_str() else { continue };
+
+            if name.starts_with(&prefix) {
+                try_!(fs::remove_file(entry.path()).await);
+            }
+        }
+
+        self.delete_upload_id(&upload_id).await?;
+
+        debug!(bucket = %bucket, key = %key, upload_id = %upload_id, "multipart upload aborted");
+
+        Ok(S3Response::new(AbortMultipartUploadOutput { ..Default::default() }))
+    }
 }
