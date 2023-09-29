@@ -31,7 +31,7 @@ jobs:
         with:
           tool: just
       - run: cargo fmt --all -- --check
-      - run: cargo clippy -- -D warnings
+      - run: cargo clippy --all-features --all-targets -- -D warnings
       - run: cargo test --all-features
       - run: |
           just codegen

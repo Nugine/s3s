@@ -3,7 +3,7 @@ fmt:
 
 dev:
     cargo fmt
-    cargo clippy
+    cargo clippy --all-features --all-targets
     cargo test
 
 doc:
