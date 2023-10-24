@@ -36,29 +36,29 @@ pub struct ParsePresignedUrlError {
 /// query strings of a presigned url
 struct PresignedQs<'a> {
     /// X-Amz-Algorithm
-    x_amz_algorithm: &'a str,
+    algorithm: &'a str,
     /// X-Amz-Credential
-    x_amz_credential: &'a str,
+    credential: &'a str,
     /// X-Amz-Date
-    x_amz_date: &'a str,
+    date: &'a str,
     /// X-Amz-Expires
-    x_amz_expires: &'a str,
+    expires: &'a str,
     /// X-Amz-SignedHeaders
-    x_amz_signed_headers: &'a str,
+    signed_headers: &'a str,
     /// X-Amz-Signature
-    x_amz_signature: &'a str,
+    signature: &'a str,
 }
 
 impl<'a> PresignedQs<'a> {
     /// Creates `PresignedQs` from `OrderedQs`
     fn from_ordered_qs(qs: &'a OrderedQs) -> Option<Self> {
         Some(PresignedQs {
-            x_amz_algorithm: qs.get_unique("X-Amz-Algorithm")?,
-            x_amz_credential: qs.get_unique("X-Amz-Credential")?,
-            x_amz_date: qs.get_unique("X-Amz-Date")?,
-            x_amz_expires: qs.get_unique("X-Amz-Expires")?,
-            x_amz_signed_headers: qs.get_unique("X-Amz-SignedHeaders")?,
-            x_amz_signature: qs.get_unique("X-Amz-Signature")?,
+            algorithm: qs.get_unique("X-Amz-Algorithm")?,
+            credential: qs.get_unique("X-Amz-Credential")?,
+            date: qs.get_unique("X-Amz-Date")?,
+            expires: qs.get_unique("X-Amz-Expires")?,
+            signed_headers: qs.get_unique("X-Amz-SignedHeaders")?,
+            signature: qs.get_unique("X-Amz-Signature")?,
         })
     }
 }
@@ -73,23 +73,23 @@ impl<'a> PresignedUrlV4<'a> {
 
         let info = PresignedQs::from_ordered_qs(qs).ok_or_else(err)?;
 
-        let algorithm = info.x_amz_algorithm;
+        let algorithm = info.algorithm;
 
-        let credential = CredentialV4::parse(info.x_amz_credential).map_err(|_e| err())?;
+        let credential = CredentialV4::parse(info.credential).map_err(|_e| err())?;
 
-        let amz_date = AmzDate::parse(info.x_amz_date).map_err(|_e| err())?;
+        let amz_date = AmzDate::parse(info.date).map_err(|_e| err())?;
 
-        let expires = parse_expires(info.x_amz_expires).ok_or_else(err)?;
+        let expires = parse_expires(info.expires).ok_or_else(err)?;
 
-        if !info.x_amz_signed_headers.is_ascii() {
+        if !info.signed_headers.is_ascii() {
             return Err(err());
         }
-        let signed_headers = info.x_amz_signed_headers.split(';').collect();
+        let signed_headers = info.signed_headers.split(';').collect();
 
-        if !is_sha256_checksum(info.x_amz_signature) {
+        if !is_sha256_checksum(info.signature) {
             return Err(err());
         }
-        let signature = info.x_amz_signature;
+        let signature = info.signature;
 
         Ok(Self {
             algorithm,
