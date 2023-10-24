@@ -565,13 +565,16 @@ impl S3 for FileSystem {
             }
 
             let start: u64 = parts[0].parse().map_err(|_| s3_error!(InvalidArgument))?;
-            let end: u64 = parts[1].parse().map_err(|_| s3_error!(InvalidArgument))?;
+            let mut end = file_len - 1;
+            if parts[1].is_empty() {
+                end = parts[1].parse().map_err(|_| s3_error!(InvalidArgument))?;
+            }
             (start, end)
         } else {
-            (0, file_len)
+            (0, file_len - 1)
         };
 
-        let content_length = end - start;
+        let content_length = end - start + 1;
         let content_length_usize = try_!(usize::try_from(content_length));
 
         let _ = try_!(src_file.seek(io::SeekFrom::Start(start)).await);
