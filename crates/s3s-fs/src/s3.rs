@@ -554,7 +554,7 @@ impl S3 for FileSystem {
 
         let dst_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
         let src_path = self.get_object_path(src_bucket, src_key)?;
-        //copy object
+        
         let src_file = fs::File::open(&src_path).await.map_err(|e| s3_error!(e, NoSuchKey))?;
 
         let file_metadata = try_!(src_file.metadata().await);
@@ -564,7 +564,6 @@ impl S3 for FileSystem {
         let body = bytes_stream(ReaderStream::with_capacity(src_file, 4096), file_length_usize);
         let body = Some(StreamingBlob::wrap(body));
         let body = body.ok_or_else(|| s3_error!(IncompleteBody))?;
-        //end copy object
 
         let dst_file = try_!(fs::File::create(&dst_path).await);
         let mut writer = BufWriter::new(dst_file);
