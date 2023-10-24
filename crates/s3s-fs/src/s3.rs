@@ -566,7 +566,7 @@ impl S3 for FileSystem {
 
             let start: u64 = parts[0].parse().map_err(|_| s3_error!(InvalidArgument))?;
             let mut end = file_len - 1;
-            if parts[1].is_empty() {
+            if parts[1].is_empty().not() {
                 end = parts[1].parse().map_err(|_| s3_error!(InvalidArgument))?;
             }
             (start, end)
