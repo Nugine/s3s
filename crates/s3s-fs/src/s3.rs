@@ -536,6 +536,7 @@ impl S3 for FileSystem {
 
     #[tracing::instrument]
     async fn upload_part_copy(&self, req: S3Request<UploadPartCopyInput>) -> S3Result<S3Response<UploadPartCopyOutput>> {
+<<<<<<< HEAD
         let UploadPartCopyInput {
             copy_source,
             upload_id,
@@ -548,10 +549,17 @@ impl S3 for FileSystem {
             CopySource::Bucket { ref bucket, ref key, .. } => (bucket, key),
         };
         let upload_id = Uuid::parse_str(&upload_id).map_err(|_| s3_error!(InvalidRequest))?;
+=======
+        let input = req.input;
+
+        let upload_id = Uuid::parse_str(&input.upload_id).map_err(|_| s3_error!(InvalidRequest))?;
+        let part_number = input.part_number;
+>>>>>>> upstream/main
         if self.verify_upload_id(req.credentials.as_ref(), &upload_id).await?.not() {
             return Err(s3_error!(AccessDenied));
         }
 
+<<<<<<< HEAD
         let dst_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
         let src_path = self.get_object_path(src_bucket, src_key)?;
         
@@ -564,13 +572,69 @@ impl S3 for FileSystem {
         let body = bytes_stream(ReaderStream::with_capacity(src_file, 4096), file_length_usize);
         let body = Some(StreamingBlob::wrap(body));
         let body = body.ok_or_else(|| s3_error!(IncompleteBody))?;
+=======
+        let (src_bucket, src_key) = match input.copy_source {
+            CopySource::AccessPoint { .. } => return Err(s3_error!(NotImplemented)),
+            CopySource::Bucket { ref bucket, ref key, .. } => (bucket, key),
+        };
+        let src_path = self.get_object_path(src_bucket, src_key)?;
+        let dst_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
+
+        let mut src_file = fs::File::open(&src_path).await.map_err(|e| s3_error!(e, NoSuchKey))?;
+        let file_len = try_!(src_file.metadata().await).len();
+
+        let (start, end) = if let Some(copy_range) = &input.copy_source_range {
+            if !copy_range.starts_with("bytes=") {
+                return Err(s3_error!(InvalidArgument));
+            }
+            let range = &copy_range["bytes=".len()..];
+            let parts: Vec<&str> = range.split('-').collect();
+            if parts.len() != 2 {
+                return Err(s3_error!(InvalidArgument));
+            }
+
+            let start: u64 = parts[0].parse().map_err(|_| s3_error!(InvalidArgument))?;
+            let mut end = file_len - 1;
+            if parts[1].is_empty().not() {
+                end = parts[1].parse().map_err(|_| s3_error!(InvalidArgument))?;
+            }
+            (start, end)
+        } else {
+            (0, file_len - 1)
+        };
+
+        let content_length = end - start + 1;
+        let content_length_usize = try_!(usize::try_from(content_length));
+
+        let _ = try_!(src_file.seek(io::SeekFrom::Start(start)).await);
+        let body = StreamingBlob::wrap(bytes_stream(ReaderStream::with_capacity(src_file, 4096), content_length_usize));
+>>>>>>> upstream/main
 
         let dst_file = try_!(fs::File::create(&dst_path).await);
         let mut writer = BufWriter::new(dst_file);
 
+<<<<<<< HEAD
         copy_bytes(body, &mut writer).await?;
 
         let output = UploadPartCopyOutput { ..Default::default() };
+=======
+        let mut md5_hash = Md5::new();
+        let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
+
+        let size = copy_bytes(stream, &mut writer).await?;
+        let md5_sum = hex(md5_hash.finalize());
+
+        debug!(path = %dst_path.display(), ?size, %md5_sum, "write file");
+
+        let output = UploadPartCopyOutput {
+            copy_part_result: Some(CopyPartResult {
+                e_tag: Some(format!("\"{md5_sum}\"")),
+                ..Default::default()
+            }),
+            ..Default::default()
+        };
+
+>>>>>>> upstream/main
         Ok(S3Response::new(output))
     }
 

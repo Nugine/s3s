@@ -257,7 +257,11 @@ impl SignatureContext<'_> {
                 let payload = sig_v4::Payload::MultipleChunks;
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             } else if matches!(*self.req_method, Method::GET | Method::HEAD) {
-                let payload = sig_v4::Payload::Empty;
+                let payload = if matches!(amz_content_sha256, AmzContentSha256::UnsignedPayload) {
+                    sig_v4::Payload::Unsigned
+                } else {
+                    sig_v4::Payload::Empty
+                };
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             } else {
                 let bytes = super::extract_full_body(self.content_length, self.req_body).await?;
