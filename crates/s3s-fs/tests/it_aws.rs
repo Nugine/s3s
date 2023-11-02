@@ -249,3 +249,88 @@ async fn test_multipart() -> Result<()> {
 
     Ok(())
 }
+
+#[tokio::test]
+#[tracing::instrument]
+async fn test_upload_part_copy() -> Result<()> {
+    let _guard = serial().await;
+
+    let c = Client::new(config());
+    let src_bucket = format!("test-copy{}", Uuid::new_v4());
+    let src_bucket = src_bucket.as_str();
+    let src_key = "copied.txt";
+    let src_content = "hello world\nनमस्ते दुनिया\n";
+    let crc32c = base64_simd::STANDARD.encode_to_string(crc32c::crc32c(src_content.as_bytes()).to_be_bytes());
+
+    create_bucket(&c, src_bucket).await?;
+
+    {
+        let src_body = ByteStream::from_static(src_content.as_bytes());
+        c.put_object()
+            .bucket(src_bucket)
+            .key(src_key)
+            .body(src_body)
+            .checksum_crc32_c(crc32c.as_str())
+            .send()
+            .await?;
+    }
+
+    let bucket = format!("test-uploadpartcopy-{}", Uuid::new_v4());
+    let bucket = bucket.as_str();
+    create_bucket(&c, bucket).await?;
+
+    let key = "sample.txt";
+
+    let upload_id = {
+        let ans = c.create_multipart_upload().bucket(bucket).key(key).send().await?;
+        ans.upload_id.unwrap()
+    };
+    let upload_id = upload_id.as_str();
+    let src_path = format!("{src_bucket}/{src_key}");
+    let upload_parts = {
+        let part_number = 1;
+        let _ans = c
+            .upload_part_copy()
+            .bucket(bucket)
+            .key(key)
+            .copy_source(src_path)
+            .upload_id(upload_id)
+            .part_number(part_number)
+            .send()
+            .await?;
+        let part = CompletedPart::builder().part_number(part_number).build();
+        vec![part]
+    };
+
+    {
+        let upload = CompletedMultipartUpload::builder().set_parts(Some(upload_parts)).build();
+
+        let _ = c
+            .complete_multipart_upload()
+            .bucket(bucket)
+            .key(key)
+            .multipart_upload(upload)
+            .upload_id(upload_id)
+            .send()
+            .await?;
+    }
+
+    {
+        let ans = c.get_object().bucket(bucket).key(key).send().await?;
+
+        let content_length: usize = ans.content_length().try_into().unwrap();
+        let body = ans.body.collect().await?.into_bytes();
+
+        assert_eq!(content_length, src_content.len());
+        assert_eq!(body.as_ref(), src_content.as_bytes());
+    }
+    println!("{} CK3", key);
+    {
+        delete_object(&c, bucket, key).await?;
+        delete_bucket(&c, bucket).await?;
+        delete_object(&c, src_bucket, src_key).await?;
+        delete_bucket(&c, src_bucket).await?;
+    }
+
+    Ok(())
+}
