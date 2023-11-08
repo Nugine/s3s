@@ -111,18 +111,90 @@ async fn delete_bucket(c: &Client, bucket: &str) -> Result<()> {
     Ok(())
 }
 
+macro_rules! log_and_unwrap {
+    ($result:expr) => {
+        match $result {
+            Ok(ans) => {
+                debug!(?ans);
+                ans
+            }
+            Err(err) => {
+                error!(?err);
+                return Err(err.into());
+            }
+        }
+    };
+}
+
 #[tokio::test]
 #[tracing::instrument]
 async fn test_list_buckets() -> Result<()> {
     let c = Client::new(config());
-    let result = c.list_buckets().send().await;
+    let response1 = log_and_unwrap!(c.list_buckets().send().await);
+    assert!(response1.buckets().is_some());
 
-    match result {
-        Ok(ref ans) => debug!(?ans),
-        Err(ref err) => error!(?err),
+    let bucket1 = format!("test-list-buckets-1-{}", Uuid::new_v4());
+    let bucket1_str = bucket1.as_str();
+    let bucket2 = format!("test-list-buckets-2-{}", Uuid::new_v4());
+    let bucket2_str = bucket2.as_str();
+
+    create_bucket(&c, bucket1_str).await?;
+    create_bucket(&c, bucket2_str).await?;
+
+    let response2 = log_and_unwrap!(c.list_buckets().send().await);
+    assert!(response2.buckets().is_some());
+    let bucket_names: Vec<_> = response2
+        .buckets()
+        .unwrap()
+        .iter()
+        .filter_map(|bucket| bucket.name())
+        .collect();
+    assert!(bucket_names.contains(&bucket1_str));
+    assert!(bucket_names.contains(&bucket2_str));
+
+    Ok(())
+}
+
+#[tokio::test]
+#[tracing::instrument]
+async fn test_list_objects_v2() -> Result<()> {
+    let c = Client::new(config());
+    let bucket = format!("test-list-objects-v2-{}", Uuid::new_v4());
+    let bucket_str = bucket.as_str();
+    create_bucket(&c, bucket_str).await?;
+
+    let test_prefix = "/this/is/a/test/";
+    let key1 = "this/is/a/test/path/file1.txt";
+    let key2 = "this/is/a/test/path/file2.txt";
+    {
+        let content = "hello world\nनमस्ते दुनिया\n";
+        let crc32c = base64_simd::STANDARD.encode_to_string(crc32c::crc32c(content.as_bytes()).to_be_bytes());
+        c.put_object()
+            .bucket(bucket_str)
+            .key(key1)
+            .body(ByteStream::from_static(content.as_bytes()))
+            .checksum_crc32_c(crc32c.as_str())
+            .send()
+            .await?;
+        c.put_object()
+            .bucket(bucket_str)
+            .key(key2)
+            .body(ByteStream::from_static(content.as_bytes()))
+            .checksum_crc32_c(crc32c.as_str())
+            .send()
+            .await?;
     }
 
-    result?;
+    let result = c.list_objects_v2().bucket(bucket_str).prefix(test_prefix).send().await;
+
+    let response = log_and_unwrap!(result);
+
+    assert!(response.contents().is_some());
+    let contents: Vec<_> = response.contents().unwrap().iter().filter_map(|obj| obj.key()).collect();
+    assert!(!contents.is_empty());
+    assert!(contents.contains(&key1));
+    assert!(contents.contains(&key2));
+
     Ok(())
 }
 
