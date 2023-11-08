@@ -12,7 +12,7 @@ use std::collections::VecDeque;
 use std::io;
 use std::ops::Neg;
 use std::ops::Not;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use tokio::fs;
 use tokio::io::AsyncSeekExt;
@@ -23,8 +23,31 @@ use futures::TryStreamExt;
 use md5::{Digest, Md5};
 use numeric_cast::NumericCast;
 use rust_utils::default::default;
+use std::path::Component;
+use std::string::ToString;
 use tracing::debug;
 use uuid::Uuid;
+
+fn normalize_path(path: &Path, delimiter: &str) -> Option<String> {
+    let mut normalized = String::new();
+    let mut first = true;
+    for component in path.components() {
+        match component {
+            Component::RootDir | Component::CurDir | Component::ParentDir | Component::Prefix(_) => {
+                return None;
+            }
+            Component::Normal(name) => {
+                let name = name.to_str()?;
+                if !first {
+                    normalized.push_str(delimiter);
+                }
+                normalized.push_str(name);
+                first = false;
+            }
+        }
+    }
+    Some(normalized)
+}
 
 #[async_trait::async_trait]
 impl S3 for FileSystem {
@@ -335,10 +358,12 @@ impl S3 for FileSystem {
                 } else {
                     let file_path = entry.path();
                     let key = try_!(file_path.strip_prefix(&path));
-                    let Some(key) = key.to_str() else { continue };
+                    let delimiter = input.delimiter.as_ref().map_or("/", |d| d.as_str());
+                    let Some(key_str) = normalize_path(key, delimiter) else { continue };
 
                     if let Some(ref prefix) = input.prefix {
-                        if !key.starts_with(prefix) {
+                        let prefix_path: PathBuf = prefix.split(delimiter).collect();
+                        if !key.starts_with(prefix_path) {
                             continue;
                         }
                     }
@@ -348,7 +373,7 @@ impl S3 for FileSystem {
                     let size = metadata.len();
 
                     let object = Object {
-                        key: Some(key.to_owned()),
+                        key: Some(key_str),
                         last_modified: Some(last_modified),
                         size: try_!(i64::try_from(size)),
                         ..Default::default()
