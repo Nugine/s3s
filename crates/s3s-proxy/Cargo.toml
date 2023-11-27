@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 aws-config = "0.56.1"
-aws-credential-types = "0.56.1"
+aws-credential-types = "1.0.1"
 aws-sdk-s3 = "0.34.0"
 clap = { version = "4.3.21", features = ["derive"] }
 hyper = { version = "0.14.27", features = ["full"] }
