@@ -359,11 +359,17 @@ impl S3 for FileSystem {
                     let file_path = entry.path();
                     let key = try_!(file_path.strip_prefix(&path));
                     let delimiter = input.delimiter.as_ref().map_or("/", |d| d.as_str());
-                    let Some(key_str) = normalize_path(key, delimiter) else { continue };
+                    let Some(key_str) = normalize_path(key, delimiter) else {
+                        continue;
+                    };
 
                     if let Some(ref prefix) = input.prefix {
                         let prefix_path: PathBuf = prefix.split(delimiter).collect();
-                        if !key.starts_with(prefix_path) {
+
+                        let key_s = format!("{}", key.display());
+                        let prefix_path_s = format!("{}", prefix_path.display());
+
+                        if !key_s.starts_with(&prefix_path_s) {
                             continue;
                         }
                     }
@@ -388,6 +394,15 @@ impl S3 for FileSystem {
             let rhs_key = rhs.key.as_deref().unwrap_or("");
             lhs_key.cmp(rhs_key)
         });
+
+        let objects = if let Some(marker) = &input.start_after {
+            objects
+                .into_iter()
+                .skip_while(|n| n.key.as_deref().unwrap_or("") <= marker.as_str())
+                .collect()
+        } else {
+            objects
+        };
 
         let key_count = try_!(i32::try_from(objects.len()));
 
