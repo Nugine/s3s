@@ -466,10 +466,7 @@ impl S3 for FileSystem {
             return Ok(S3Response::new(output));
         }
 
-        let object_path = self.get_object_path(&bucket, &key)?;
-        if let Some(dir_path) = object_path.parent() {
-            try_!(fs::create_dir_all(&dir_path).await);
-        }
+        let mut file_writer = self.prepare_file_write(&bucket, &key).await?;
 
         let mut md5_hash = Md5::new();
         let stream = body.inspect_ok(|bytes| {
@@ -477,10 +474,9 @@ impl S3 for FileSystem {
             checksum.update(bytes.as_ref());
         });
 
-        let file = try_!(fs::File::create(&object_path).await);
-        let mut writer = BufWriter::new(file);
+        let size = copy_bytes(stream, file_writer.writer()).await?;
+        let object_path = file_writer.done().await?;
 
-        let size = copy_bytes(stream, &mut writer).await?;
         let md5_sum = hex(md5_hash.finalize());
 
         let checksum = checksum.finalize();
@@ -711,9 +707,7 @@ impl S3 for FileSystem {
 
         self.delete_upload_id(&upload_id).await?;
 
-        let object_path = self.get_object_path(&bucket, &key)?;
-        let file = try_!(fs::File::create(&object_path).await);
-        let mut writer = BufWriter::new(file);
+        let mut file_writer = self.prepare_file_write(&bucket, &key).await?;
 
         let mut cnt: i32 = 0;
         for part in multipart_upload.parts.into_iter().flatten() {
@@ -726,12 +720,12 @@ impl S3 for FileSystem {
             let part_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
 
             let mut reader = try_!(fs::File::open(&part_path).await);
-            let size = try_!(tokio::io::copy(&mut reader, &mut writer).await);
+            let size = try_!(tokio::io::copy(&mut reader, &mut file_writer.writer()).await);
 
-            debug!(from = %part_path.display(), to = %object_path.display(), ?size, "write file");
+            debug!(from = %part_path.display(), tmp = %file_writer.tmp_path().display(), to = %file_writer.final_path().display(), ?size, "write file");
             try_!(fs::remove_file(&part_path).await);
         }
-        drop(writer);
+        let object_path = file_writer.done().await?;
 
         let file_size = try_!(fs::metadata(&object_path).await).len();
         let md5_sum = self.get_md5_sum(&bucket, &key).await?;
