@@ -15,6 +15,7 @@ use tokio::io::{AsyncReadExt, BufWriter};
 
 use md5::{Digest, Md5};
 use path_absolutize::Absolutize;
+use s3s::dto::PartNumber;
 use uuid::Uuid;
 
 #[derive(Debug)]
@@ -35,7 +36,7 @@ fn clean_old_tmp_files(root: &Path) -> std::io::Result<()> {
         let entry = entry?;
         let file_name = entry.file_name();
         let Some(file_name) = file_name.to_str() else { continue };
-        // See `FileSystem::write_file`
+        // See `FileSystem::prepare_file_write`
         if file_name.starts_with(".tmp.") && file_name.ends_with(".internal.part") {
             std::fs::remove_file(entry.path())?;
         }
@@ -53,6 +54,10 @@ impl FileSystem {
 
     pub(crate) fn resolve_abs_path(&self, path: impl AsRef<Path>) -> Result<PathBuf> {
         Ok(path.as_ref().absolutize_virtually(&self.root)?.into_owned())
+    }
+
+    pub(crate) fn resolve_upload_part_path(&self, upload_id: Uuid, part_number: PartNumber) -> Result<PathBuf> {
+        self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))
     }
 
     /// resolve object path under the virtual root
@@ -171,53 +176,52 @@ impl FileSystem {
 
     /// Write to the filesystem atomically.
     /// This is done by first writing to a temporary location and then moving the file.
-    pub(crate) async fn prepare_file_write(&self, bucket: &str, key: &str) -> Result<FileWriter> {
-        let final_path = Some(self.get_object_path(bucket, key)?);
+    pub(crate) async fn prepare_file_write<'a>(&self, path: &'a Path) -> Result<FileWriter<'a>> {
         let tmp_name = format!(".tmp.{}.internal.part", self.tmp_file_counter.fetch_add(1, Ordering::SeqCst));
         let tmp_path = self.resolve_abs_path(tmp_name)?;
         let file = File::create(&tmp_path).await?;
         let writer = BufWriter::new(file);
         Ok(FileWriter {
             tmp_path,
-            final_path,
+            dest_path: path,
             writer,
             clean_tmp: true,
         })
     }
 }
 
-pub(crate) struct FileWriter {
+pub(crate) struct FileWriter<'a> {
     tmp_path: PathBuf,
-    final_path: Option<PathBuf>,
+    dest_path: &'a Path,
     writer: BufWriter<File>,
     clean_tmp: bool,
 }
 
-impl FileWriter {
+impl<'a> FileWriter<'a> {
     pub(crate) fn tmp_path(&self) -> &Path {
         &self.tmp_path
     }
 
-    pub(crate) fn final_path(&self) -> &Path {
-        self.final_path.as_ref().unwrap()
+    pub(crate) fn dest_path(&self) -> &'a Path {
+        self.dest_path
     }
 
     pub(crate) fn writer(&mut self) -> &mut BufWriter<File> {
         &mut self.writer
     }
 
-    pub(crate) async fn done(mut self) -> Result<PathBuf> {
-        if let Some(final_dir_path) = self.final_path().parent() {
+    pub(crate) async fn done(mut self) -> Result<()> {
+        if let Some(final_dir_path) = self.dest_path().parent() {
             fs::create_dir_all(&final_dir_path).await?;
         }
 
-        fs::rename(&self.tmp_path, &self.final_path()).await?;
+        fs::rename(&self.tmp_path, self.dest_path()).await?;
         self.clean_tmp = false;
-        Ok(self.final_path.take().unwrap())
+        Ok(())
     }
 }
 
-impl Drop for FileWriter {
+impl<'a> Drop for FileWriter<'a> {
     fn drop(&mut self) {
         if self.clean_tmp {
             let _ = std::fs::remove_file(&self.tmp_path);

@@ -16,7 +16,6 @@ use std::path::{Path, PathBuf};
 
 use tokio::fs;
 use tokio::io::AsyncSeekExt;
-use tokio::io::BufWriter;
 use tokio_util::io::ReaderStream;
 
 use futures::TryStreamExt;
@@ -466,7 +465,8 @@ impl S3 for FileSystem {
             return Ok(S3Response::new(output));
         }
 
-        let mut file_writer = self.prepare_file_write(&bucket, &key).await?;
+        let object_path = self.get_object_path(&bucket, &key)?;
+        let mut file_writer = self.prepare_file_write(&object_path).await?;
 
         let mut md5_hash = Md5::new();
         let stream = body.inspect_ok(|bytes| {
@@ -475,7 +475,7 @@ impl S3 for FileSystem {
         });
 
         let size = copy_bytes(stream, file_writer.writer()).await?;
-        let object_path = file_writer.done().await?;
+        file_writer.done().await?;
 
         let md5_sum = hex(md5_hash.finalize());
 
@@ -550,15 +550,15 @@ impl S3 for FileSystem {
             return Err(s3_error!(AccessDenied));
         }
 
-        let file_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
+        let file_path = self.resolve_upload_part_path(upload_id, part_number)?;
 
         let mut md5_hash = Md5::new();
         let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
 
-        let file = try_!(fs::File::create(&file_path).await);
-        let mut writer = BufWriter::new(file);
+        let mut file_writer = self.prepare_file_write(&file_path).await?;
+        let size = copy_bytes(stream, file_writer.writer()).await?;
+        file_writer.done().await?;
 
-        let size = copy_bytes(stream, &mut writer).await?;
         let md5_sum = hex(md5_hash.finalize());
 
         debug!(path = %file_path.display(), ?size, %md5_sum, "write file");
@@ -585,7 +585,7 @@ impl S3 for FileSystem {
             CopySource::Bucket { ref bucket, ref key, .. } => (bucket, key),
         };
         let src_path = self.get_object_path(src_bucket, src_key)?;
-        let dst_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
+        let dst_path = self.resolve_upload_part_path(upload_id, part_number)?;
 
         let mut src_file = fs::File::open(&src_path).await.map_err(|e| s3_error!(e, NoSuchKey))?;
         let file_len = try_!(src_file.metadata().await).len();
@@ -616,13 +616,13 @@ impl S3 for FileSystem {
         let _ = try_!(src_file.seek(io::SeekFrom::Start(start)).await);
         let body = StreamingBlob::wrap(bytes_stream(ReaderStream::with_capacity(src_file, 4096), content_length_usize));
 
-        let dst_file = try_!(fs::File::create(&dst_path).await);
-        let mut writer = BufWriter::new(dst_file);
-
         let mut md5_hash = Md5::new();
         let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
 
-        let size = copy_bytes(stream, &mut writer).await?;
+        let mut file_writer = self.prepare_file_write(&dst_path).await?;
+        let size = copy_bytes(stream, file_writer.writer()).await?;
+        file_writer.done().await?;
+
         let md5_sum = hex(md5_hash.finalize());
 
         debug!(path = %dst_path.display(), ?size, %md5_sum, "write file");
@@ -707,7 +707,8 @@ impl S3 for FileSystem {
 
         self.delete_upload_id(&upload_id).await?;
 
-        let mut file_writer = self.prepare_file_write(&bucket, &key).await?;
+        let object_path = self.get_object_path(&bucket, &key)?;
+        let mut file_writer = self.prepare_file_write(&object_path).await?;
 
         let mut cnt: i32 = 0;
         for part in multipart_upload.parts.into_iter().flatten() {
@@ -717,15 +718,15 @@ impl S3 for FileSystem {
                 return Err(s3_error!(InvalidRequest, "invalid part order"));
             }
 
-            let part_path = self.resolve_abs_path(format!(".upload_id-{upload_id}.part-{part_number}"))?;
+            let part_path = self.resolve_upload_part_path(upload_id, part_number)?;
 
             let mut reader = try_!(fs::File::open(&part_path).await);
             let size = try_!(tokio::io::copy(&mut reader, &mut file_writer.writer()).await);
 
-            debug!(from = %part_path.display(), tmp = %file_writer.tmp_path().display(), to = %file_writer.final_path().display(), ?size, "write file");
+            debug!(from = %part_path.display(), tmp = %file_writer.tmp_path().display(), to = %file_writer.dest_path().display(), ?size, "write file");
             try_!(fs::remove_file(&part_path).await);
         }
-        let object_path = file_writer.done().await?;
+        file_writer.done().await?;
 
         let file_size = try_!(fs::metadata(&object_path).await).len();
         let md5_sum = self.get_md5_sum(&bucket, &key).await?;
