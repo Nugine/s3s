@@ -25,7 +25,6 @@ mod utils;
 #[macro_use]
 mod error;
 
-mod header;
 mod http;
 mod ops;
 mod request;
@@ -34,6 +33,8 @@ mod s3_trait;
 mod sig_v2;
 mod sig_v4;
 mod xml;
+
+pub mod header;
 
 pub mod auth;
 pub mod dto;

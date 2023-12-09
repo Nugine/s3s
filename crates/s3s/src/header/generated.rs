@@ -197,6 +197,8 @@ pub const X_AMZ_GRANT_WRITE: HeaderName = HeaderName::from_static("x-amz-grant-w
 
 pub const X_AMZ_GRANT_WRITE_ACP: HeaderName = HeaderName::from_static("x-amz-grant-write-acp");
 
+pub const X_AMZ_ID_2: HeaderName = HeaderName::from_static("x-amz-id-2");
+
 pub const X_AMZ_MAX_PARTS: HeaderName = HeaderName::from_static("x-amz-max-parts");
 
 pub const X_AMZ_METADATA_DIRECTIVE: HeaderName = HeaderName::from_static("x-amz-metadata-directive");
@@ -224,6 +226,8 @@ pub const X_AMZ_PART_NUMBER_MARKER: HeaderName = HeaderName::from_static("x-amz-
 pub const X_AMZ_REPLICATION_STATUS: HeaderName = HeaderName::from_static("x-amz-replication-status");
 
 pub const X_AMZ_REQUEST_CHARGED: HeaderName = HeaderName::from_static("x-amz-request-charged");
+
+pub const X_AMZ_REQUEST_ID: HeaderName = HeaderName::from_static("x-amz-request-id");
 
 pub const X_AMZ_REQUEST_PAYER: HeaderName = HeaderName::from_static("x-amz-request-payer");
 

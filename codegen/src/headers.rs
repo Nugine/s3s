@@ -27,6 +27,8 @@ pub fn codegen(model: &smithy::Model) {
         headers.insert("authorization");
         headers.insert("host");
         headers.insert("x-amz-decoded-content-length");
+        headers.insert("x-amz-request-id");
+        headers.insert("x-amz-id-2");
     }
 
     glines![

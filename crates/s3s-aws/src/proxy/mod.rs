@@ -1,4 +1,5 @@
 mod generated;
+mod meta;
 
 pub struct Proxy(aws_sdk_s3::Client);
 

@@ -4,6 +4,7 @@ use super::*;
 
 use crate::conv::{try_from_aws, try_into_aws};
 
+use s3s::header::{X_AMZ_ID_2, X_AMZ_REQUEST_ID};
 use s3s::S3Result;
 use s3s::S3;
 use s3s::{S3Request, S3Response};
@@ -28,9 +29,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -60,9 +70,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -117,9 +136,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -146,9 +174,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -195,9 +232,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -216,9 +262,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -238,9 +293,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -259,9 +323,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -280,9 +353,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -301,9 +383,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -323,9 +414,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -344,9 +444,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -366,9 +475,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -387,9 +505,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -408,9 +535,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -429,9 +565,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -450,9 +595,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -471,9 +625,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -497,9 +660,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -520,9 +692,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -546,9 +727,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -567,9 +757,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -589,9 +788,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -610,9 +818,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -632,9 +849,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -653,9 +879,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -674,9 +909,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -695,9 +939,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -717,9 +970,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -738,9 +1000,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -759,9 +1030,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -780,9 +1060,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -802,9 +1091,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -823,9 +1121,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -844,9 +1151,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -865,9 +1181,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -886,9 +1211,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -907,9 +1241,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -928,9 +1271,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -949,9 +1301,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -970,9 +1331,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -991,9 +1361,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1028,9 +1407,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1052,9 +1440,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1082,9 +1479,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1106,9 +1512,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1127,9 +1542,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1151,9 +1575,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1175,9 +1608,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1198,9 +1640,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1219,9 +1670,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1237,9 +1697,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1268,9 +1737,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1290,9 +1768,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1311,9 +1798,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1333,9 +1829,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1355,9 +1860,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1373,9 +1887,18 @@ impl S3 for Proxy {
         let result = self.0.list_buckets().send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1401,9 +1924,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1430,9 +1962,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1458,9 +1999,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1488,9 +2038,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1514,9 +2073,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1537,9 +2105,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1567,9 +2144,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1590,9 +2176,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1614,9 +2209,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1638,9 +2242,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1660,9 +2273,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1683,9 +2305,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1706,9 +2337,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1730,9 +2370,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1753,9 +2402,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1776,9 +2434,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1799,9 +2466,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1824,9 +2500,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1849,9 +2534,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1873,9 +2567,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1897,9 +2600,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1922,9 +2634,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1946,9 +2667,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1999,9 +2729,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2032,9 +2771,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2059,9 +2807,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2085,9 +2842,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2113,9 +2879,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2140,9 +2915,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2164,9 +2948,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2190,9 +2983,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2221,9 +3023,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2254,9 +3065,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2292,9 +3112,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2351,9 +3180,18 @@ impl S3 for Proxy {
         let result = b.send().await;
         match result {
             Ok(output) => {
+                let request_id = super::meta::request_id(&output)?;
+                let ext_request_id = super::meta::extended_request_id(&output)?;
                 let output = try_from_aws(output)?;
                 debug!(?output);
-                Ok(S3Response::new(output))
+                let mut res = S3Response::new(output);
+                if let Some(val) = request_id {
+                    res.headers.insert(X_AMZ_REQUEST_ID, val);
+                }
+                if let Some(val) = ext_request_id {
+                    res.headers.insert(X_AMZ_ID_2, val);
+                }
+                Ok(res)
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
