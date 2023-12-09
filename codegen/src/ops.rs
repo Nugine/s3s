@@ -218,26 +218,27 @@ fn codegen_header_value(ops: &Operations, rust_types: &RustTypes) {
     }
 }
 
+fn codegen_op_http_ser_unit(op: &Operation) {
+    g!("pub fn serialize_http() -> http::Response {{");
+
+    if op.http_code == 200 {
+        g!("http::Response::default()");
+    } else {
+        g!("let mut res = http::Response::default();");
+        g!("res.status = http::StatusCode::{};", status_code_name(op.http_code));
+        g!("res");
+    }
+
+    g!("}}");
+}
+
 fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
     let output = op.output.as_str();
     let rust_type = &rust_types[output];
     match rust_type {
         rust::Type::Provided(ty) => {
             assert_eq!(ty.name, "Unit");
-            g!("pub fn serialize_http() -> http::Response {{");
-
-            if op.http_code == 200 {
-                g!("http::Response::default()");
-            } else {
-                g!("let mut res = http::Response::default();");
-
-                let code_name = status_code_name(op.http_code);
-                g!("res.status = http::StatusCode::{code_name};");
-
-                g!("res");
-            }
-
-            g!("}}");
+            codegen_op_http_ser_unit(op);
         }
         rust::Type::Struct(ty) => {
             if ty.fields.is_empty() {
@@ -255,7 +256,14 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
                     assert!(["header", "metadata", "xml", "payload"].contains(&field.position.as_str()),);
                 }
 
-                {
+                if op.name == "GetObject" {
+                    assert_eq!(op.http_code, 200);
+                    g!("let mut res = http::Response::default();");
+                    // https://github.com/Nugine/s3s/issues/118
+                    g!("if x.content_range.is_some() {{");
+                    g!("    res.status = http::StatusCode::PARTIAL_CONTENT;");
+                    g!("}}");
+                } else {
                     let code_name = status_code_name(op.http_code);
                     g!("let mut res = http::Response::with_status(http::StatusCode::{code_name});");
                 }

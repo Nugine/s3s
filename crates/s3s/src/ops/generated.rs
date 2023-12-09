@@ -2515,7 +2515,10 @@ impl GetObject {
     }
 
     pub fn serialize_http(x: GetObjectOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::with_status(http::StatusCode::OK);
+        let mut res = http::Response::default();
+        if x.content_range.is_some() {
+            res.status = http::StatusCode::PARTIAL_CONTENT;
+        }
         if let Some(val) = x.body {
             http::set_stream_body(&mut res, val);
         }
