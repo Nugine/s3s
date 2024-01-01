@@ -27,7 +27,7 @@ hex-simd = "0.8.0"
 hmac = "0.12.1"
 http-body = "0.4.5"
 httparse = "1.8.0"
-hyper = { version = "0.14.27", features = ["stream"] }
+hyper = { version = "1.1.0", features = ["stream"] }
 itoa = "1.0.9"
 memchr = "2.6.2"
 mime = "0.3.17"
