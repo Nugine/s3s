@@ -3,8 +3,9 @@ from dataclasses import dataclass
 from typing import Any, Dict, Optional
 import json
 import sys
-from pprint import pprint
+from pprint import pprint  # noqa: F401
 from itertools import groupby
+
 
 # https://github.com/minio/mint#mint-log-format
 @dataclass
@@ -46,7 +47,7 @@ if __name__ == "__main__":
 
             try:
                 json_value = json.loads(line)
-            except Exception as e:
+            except Exception:
                 print(f"error parsing log line: {line}")
                 continue
 
@@ -67,14 +68,24 @@ if __name__ == "__main__":
         na_count = len(list(x for x in group if x.status == "NA"))
         counts[name] = {"pass": pass_count, "fail": fail_count, "na": na_count}
 
-        print(f"{name:<20} passed {pass_count:>3}, failed {fail_count:>3}, na {na_count:>3}")
+        print(
+            f"{name:<20} "
+            f"passed {pass_count:>3}, "
+            f"failed {fail_count:>3}, "
+            f"na {na_count:>3}"
+        )
     print()
 
     total_pass_count = sum(c["pass"] for c in counts.values())
     total_fail_count = sum(c["fail"] for c in counts.values())
     total_na_count = sum(c["na"] for c in counts.values())
     name = "summary"
-    print(f"{name:<20} passed {total_pass_count:>3}, failed {total_fail_count:>3}, na {total_na_count:>3}")
+    print(
+        f"{name:<20} "
+        f"passed {total_pass_count:>3}, "
+        f"failed {total_fail_count:>3}, "
+        f"na {total_na_count:>3}"
+    )
 
     passed_groups = [
         "aws-sdk-go",
@@ -84,7 +95,6 @@ if __name__ == "__main__":
         "minio-go",
         "minio-py",
         "s3cmd",
-        "s3select",
     ]
 
     for group in passed_groups:
@@ -99,3 +109,4 @@ if __name__ == "__main__":
     assert "minio-dotnet" not in counts
     assert counts["minio-js"]["pass"] >= 219
     assert counts["versioning"]["pass"] >= 4
+    assert "s3select" not in counts
