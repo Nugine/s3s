@@ -30,7 +30,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -62,7 +63,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -119,7 +121,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -148,7 +151,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -197,7 +201,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -218,7 +223,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -240,7 +246,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -261,7 +268,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -282,7 +290,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -303,7 +312,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -325,7 +335,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -346,7 +357,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -368,7 +380,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -389,7 +402,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -410,7 +424,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -431,7 +446,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -452,7 +468,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -473,7 +490,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -499,7 +517,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -522,7 +541,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -548,7 +568,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -569,7 +590,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -591,7 +613,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -612,7 +635,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -634,7 +658,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -655,7 +680,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -676,7 +702,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -697,7 +724,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -719,7 +747,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -740,7 +769,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -761,7 +791,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -782,7 +813,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -804,7 +836,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -825,7 +858,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -846,7 +880,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -867,7 +902,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -888,7 +924,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -909,7 +946,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -930,7 +968,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -951,7 +990,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -972,7 +1012,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -993,7 +1034,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1030,7 +1072,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1054,7 +1097,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1084,7 +1128,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1108,7 +1153,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1129,7 +1175,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1153,7 +1200,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1177,7 +1225,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1200,7 +1249,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1221,7 +1271,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1239,7 +1290,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1270,7 +1322,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1292,7 +1345,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1313,7 +1367,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1335,7 +1390,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1357,7 +1413,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1375,7 +1432,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1403,7 +1461,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1432,7 +1491,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1460,7 +1520,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1490,7 +1551,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1516,7 +1578,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1539,7 +1602,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1569,7 +1633,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1592,7 +1657,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1616,7 +1682,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1640,7 +1707,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1662,7 +1730,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1685,7 +1754,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1708,7 +1778,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1732,7 +1803,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1755,7 +1827,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1778,7 +1851,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1801,7 +1875,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1826,7 +1901,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1851,7 +1927,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1875,7 +1952,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1899,7 +1977,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1924,7 +2003,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -1948,7 +2028,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2001,7 +2082,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2034,7 +2116,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2061,7 +2144,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2087,7 +2171,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2115,7 +2200,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2142,7 +2228,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2166,7 +2253,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2192,7 +2280,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2223,7 +2312,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2256,7 +2346,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2294,7 +2385,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }
@@ -2353,7 +2445,8 @@ impl S3 for Proxy {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
                 let output = try_from_aws(output)?;
-                Ok(S3Response::new_with_headers(output, headers))
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
             }
             Err(e) => Err(wrap_sdk_error!(e)),
         }

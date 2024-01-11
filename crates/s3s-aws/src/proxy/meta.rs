@@ -1,10 +1,9 @@
-use s3s::{
-    header::{X_AMZ_ID_2, X_AMZ_REQUEST_ID},
-    s3_error, S3Result,
-};
+use s3s::header::{X_AMZ_ID_2, X_AMZ_REQUEST_ID};
+use s3s::{s3_error, S3Result};
 
 use aws_sdk_s3::operation::{RequestId, RequestIdExt};
-use hyper::{header::HeaderValue, HeaderMap};
+use hyper::header::HeaderValue;
+use hyper::HeaderMap;
 
 pub fn build_headers<T>(output: &T) -> S3Result<HeaderMap<HeaderValue>>
 where

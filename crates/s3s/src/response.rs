@@ -17,15 +17,20 @@ pub struct S3Response<T> {
 }
 
 impl<T> S3Response<T> {
-    pub fn new_with_headers(output: T, headers: HeaderMap<HeaderValue>) -> Self {
+    pub fn with_headers(output: T, headers: HeaderMap<HeaderValue>) -> Self {
         Self {
             output,
             headers,
             extensions: Extensions::new(),
         }
     }
+
     pub fn new(output: T) -> Self {
-        Self::new_with_headers(output, HeaderMap::new())
+        Self {
+            output,
+            headers: HeaderMap::new(),
+            extensions: Extensions::new(),
+        }
     }
 
     pub fn map_output<U>(self, f: impl FnOnce(T) -> U) -> S3Response<U> {
