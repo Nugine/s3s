@@ -85,6 +85,5 @@ fn get_non_default_port(uri: &http::Uri) -> Option<http::uri::Port<&str>> {
 
 fn is_schema_secure(uri: &http::Uri) -> bool {
     uri.scheme_str()
-        .map(|scheme_str| matches!(scheme_str, "wss" | "https"))
-        .unwrap_or_default()
+        .is_some_and(|scheme_str| matches!(scheme_str, "wss" | "https"))
 }

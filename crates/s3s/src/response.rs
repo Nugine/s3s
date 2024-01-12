@@ -25,6 +25,14 @@ impl<T> S3Response<T> {
         }
     }
 
+    pub fn with_headers(output: T, headers: HeaderMap<HeaderValue>) -> Self {
+        Self {
+            output,
+            headers,
+            extensions: Extensions::new(),
+        }
+    }
+
     pub fn map_output<U>(self, f: impl FnOnce(T) -> U) -> S3Response<U> {
         S3Response {
             output: f(self.output),

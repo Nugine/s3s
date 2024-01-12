@@ -1,16 +1,22 @@
+use s3s::header::{X_AMZ_ID_2, X_AMZ_REQUEST_ID};
 use s3s::{s3_error, S3Result};
 
 use aws_sdk_s3::operation::{RequestId, RequestIdExt};
 use hyper::header::HeaderValue;
+use hyper::HeaderMap;
 
-pub fn request_id(x: &impl RequestId) -> S3Result<Option<HeaderValue>> {
-    let Some(id) = x.request_id() else { return Ok(None) };
-    let val = HeaderValue::from_str(id).map_err(|_| s3_error!(InternalError, "invalid request id"))?;
-    Ok(Some(val))
-}
-
-pub fn extended_request_id(x: &impl RequestIdExt) -> S3Result<Option<HeaderValue>> {
-    let Some(id) = x.extended_request_id() else { return Ok(None) };
-    let val = HeaderValue::from_str(id).map_err(|_| s3_error!(InternalError, "invalid extended request id"))?;
-    Ok(Some(val))
+pub fn build_headers<T>(output: &T) -> S3Result<HeaderMap<HeaderValue>>
+where
+    T: RequestId + RequestIdExt,
+{
+    let mut header = HeaderMap::new();
+    if let Some(id) = output.request_id() {
+        let val = HeaderValue::from_str(id).map_err(|_| s3_error!(InternalError, "invalid request id"))?;
+        header.insert(X_AMZ_REQUEST_ID, val);
+    }
+    if let Some(id) = output.extended_request_id() {
+        let val = HeaderValue::from_str(id).map_err(|_| s3_error!(InternalError, "invalid extended request id"))?;
+        header.insert(X_AMZ_ID_2, val);
+    }
+    Ok(header)
 }
