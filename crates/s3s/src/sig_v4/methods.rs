@@ -33,11 +33,13 @@ fn hex_sha256<R>(data: &[u8], f: impl FnOnce(&str) -> R) -> R {
 /// `f(hex(sha256(chunk)))`
 fn hex_sha256_chunk<R>(chunk: &[Bytes], f: impl FnOnce(&str) -> R) -> R {
     let src = {
-        let mut h = Sha256::new();
-        chunk.iter().for_each(|data| h.update(data));
-        h.finalize()
+        let mut h = openssl::hash::Hasher::new(openssl::hash::MessageDigest::sha256()).unwrap();
+        chunk.iter().for_each(|data| h.update(data).unwrap());
+        h.finish().unwrap()
     };
-    hex_bytes32(src.as_ref(), f)
+    let buf: &mut [_] = &mut [MaybeUninit::uninit(); 64];
+    let ans = hex_simd::encode_as_str(src.as_ref(), buf.as_out(), AsciiCase::Lower);
+    f(ans)
 }
 
 fn hex(data: impl AsRef<[u8]>) -> String {
