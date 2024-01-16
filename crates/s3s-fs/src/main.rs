@@ -7,10 +7,11 @@ use s3s_fs::Result;
 use s3s::auth::SimpleAuth;
 use s3s::service::S3ServiceBuilder;
 
+use std::io::IsTerminal;
 use std::net::TcpListener;
 use std::path::PathBuf;
 
-use clap::Parser;
+use clap::{CommandFactory, Parser};
 use hyper::server::Server;
 use tracing::info;
 
@@ -26,11 +27,11 @@ struct Opt {
     port: u16,
 
     /// Access key used for authentication.
-    #[arg(long, requires("secret-key"))]
+    #[arg(long)]
     access_key: Option<String>,
 
     /// Secret key used for authentication.
-    #[arg(long, requires("access-key"))]
+    #[arg(long)]
     secret_key: Option<String>,
 
     /// Domain name used for virtual-hosted-style requests.
@@ -45,8 +46,7 @@ fn setup_tracing() {
     use tracing_subscriber::EnvFilter;
 
     let env_filter = EnvFilter::from_default_env();
-    // let enable_color = std::io::stdout().is_terminal(); // TODO
-    let enable_color = false;
+    let enable_color = std::io::stdout().is_terminal();
 
     tracing_subscriber::fmt()
         .pretty()
@@ -55,18 +55,28 @@ fn setup_tracing() {
         .init();
 }
 
-fn check_cli_args(opt: &Opt) -> Result<(), String> {
+fn check_cli_args(opt: &Opt) {
+    use clap::error::ErrorKind;
+
+    let mut cmd = Opt::command();
+
+    // TODO: how to specify the requirements with clap derive API?
+    if let (Some(_), None) | (None, Some(_)) = (&opt.access_key, &opt.secret_key) {
+        let msg = "access key and secret key must be specified together";
+        cmd.error(ErrorKind::MissingRequiredArgument, msg).exit();
+    }
+
     if let Some(ref s) = opt.domain_name {
         if s.contains('/') {
-            return Err(format!("expected domain name, found URL-like string: {s:?}"));
+            let msg = format!("expected domain name, found URL-like string: {s:?}");
+            cmd.error(ErrorKind::InvalidValue, msg).exit();
         }
     }
-    Ok(())
 }
 
 fn main() -> Result {
     let opt = Opt::parse();
-    check_cli_args(&opt).map_err(s3s_fs::Error::from_string)?;
+    check_cli_args(&opt);
 
     setup_tracing();
 
@@ -85,11 +95,13 @@ async fn run(opt: Opt) -> Result {
         // Enable authentication
         if let (Some(ak), Some(sk)) = (opt.access_key, opt.secret_key) {
             b.set_auth(SimpleAuth::from_single(ak, sk));
+            info!("authentication is enabled");
         }
 
         // Enable parsing virtual-hosted-style requests
         if let Some(domain_name) = opt.domain_name {
             b.set_base_domain(domain_name);
+            info!("virtual-hosted-style requests are enabled");
         }
 
         b.build()
