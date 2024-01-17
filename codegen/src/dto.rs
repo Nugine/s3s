@@ -202,11 +202,17 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     };
                     fields.push(field);
                 }
+
+                let s3_unwrapped_xml_output = ops
+                    .iter()
+                    .any(|(_, op)| op.s3_unwrapped_xml_output && op.output == rs_shape_name);
+
                 let ty = rust::Type::Struct(rust::Struct {
                     name: rs_shape_name.clone(),
                     fields,
                     doc: shape.traits.doc().map(ToOwned::to_owned),
 
+                    s3_unwrapped_xml_output,
                     xml_name: shape.traits.xml_name().map(o),
                     is_error_type: shape.traits.error().is_some(),
                 });
@@ -258,6 +264,7 @@ fn patch_types(space: &mut RustTypes) {
             name: ty.name.clone(),
             fields: ty.fields.iter().filter(|x| x.position == "xml").cloned().collect(),
             doc: ty.doc.clone(),
+            s3_unwrapped_xml_output: false,
             xml_name: None,
             is_error_type: false,
         };
@@ -297,6 +304,7 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
                 name: op.input.clone(),
                 fields: default(),
                 doc: None,
+                s3_unwrapped_xml_output: false,
                 xml_name: None,
                 is_error_type: false,
             }
@@ -316,6 +324,7 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
                 name: op.output.clone(),
                 fields: default(),
                 doc: None,
+                s3_unwrapped_xml_output: false,
                 xml_name: None,
                 is_error_type: false,
             }

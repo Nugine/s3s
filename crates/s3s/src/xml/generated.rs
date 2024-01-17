@@ -505,7 +505,7 @@ impl SerializeContent for GetBucketLifecycleConfigurationOutput {
 impl SerializeContent for GetBucketLocationOutput {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         if let Some(ref val) = self.location_constraint {
-            s.content("LocationConstraint", val)?;
+            val.serialize_content(s)?;
         }
         Ok(())
     }

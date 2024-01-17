@@ -209,6 +209,10 @@ impl Traits {
         self.get("smithy.api#xmlFlattened").is_some()
     }
 
+    pub fn s3_unwrapped_xml_output(&self) -> bool {
+        self.get("aws.customizations#s3UnwrappedXmlOutput").is_some()
+    }
+
     pub fn http_label(&self) -> Option<&Value> {
         self.get("smithy.api#httpLabel")
     }

@@ -155,7 +155,11 @@ fn codegen_xml_ser(ops: &Operations, rust_types: &RustTypes) {
                         }
                     } else if field.option_type {
                         g!("if let Some(ref val) = self.{} {{", field.name);
-                        g!("s.content(\"{xml_name}\", val)?;");
+                        if ty.s3_unwrapped_xml_output {
+                            g!("val.serialize_content(s)?;");
+                        } else {
+                            g!("s.content(\"{xml_name}\", val)?;");
+                        }
                         g!("}}");
                     } else {
                         let default_is_zero = match field.default_value.as_ref() {

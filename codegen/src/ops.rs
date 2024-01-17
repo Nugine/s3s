@@ -24,6 +24,8 @@ pub struct Operation {
     pub smithy_input: String,
     pub smithy_output: String,
 
+    pub s3_unwrapped_xml_output: bool,
+
     pub doc: Option<String>,
 
     pub http_method: String,
@@ -85,6 +87,8 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
 
             smithy_input,
             smithy_output,
+
+            s3_unwrapped_xml_output: sh.traits.s3_unwrapped_xml_output(),
 
             doc: sh.traits.doc().map(o),
 
