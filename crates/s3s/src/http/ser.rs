@@ -13,16 +13,16 @@ use std::fmt::Write as _;
 
 use hyper::header::{IntoHeaderName, InvalidHeaderValue};
 
-pub fn add_header<N, V>(res: &mut Response, name: N, value: V) -> S3Result
-where
-    N: IntoHeaderName,
-    V: TryIntoHeaderValue,
-    V::Error: std::error::Error + Send + Sync + 'static,
-{
-    let val = value.try_into_header_value().map_err(S3Error::internal_error)?;
-    res.headers.insert(name, val);
-    Ok(())
-}
+// pub fn add_header<N, V>(res: &mut Response, name: N, value: V) -> S3Result
+// where
+//     N: IntoHeaderName,
+//     V: TryIntoHeaderValue,
+//     V::Error: std::error::Error + Send + Sync + 'static,
+// {
+//     let val = value.try_into_header_value().map_err(S3Error::internal_error)?;
+//     res.headers.insert(name, val);
+//     Ok(())
+// }
 
 pub fn add_opt_header<N, V>(res: &mut Response, name: N, value: Option<V>) -> S3Result
 where

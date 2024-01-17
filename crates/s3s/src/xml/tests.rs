@@ -53,13 +53,13 @@ fn d001() {
     let parts = ans.parts.as_deref().unwrap();
     assert_eq!(parts.len(), 3);
 
-    assert_eq!(parts[0].part_number, 1);
+    assert_eq!(parts[0].part_number, Some(1));
     assert_eq!(parts[0].e_tag.as_deref(), Some("\"a54357aff0632cce46d942af68356b38\""));
 
-    assert_eq!(parts[1].part_number, 2);
+    assert_eq!(parts[1].part_number, Some(2));
     assert_eq!(parts[1].e_tag.as_deref(), Some("\"0c78aef83f66abc1fa1e8477f296d394\""));
 
-    assert_eq!(parts[2].part_number, 3);
+    assert_eq!(parts[2].part_number, Some(3));
     assert_eq!(parts[2].e_tag.as_deref(), Some("\"acbd18db4cc2f85cedef654fccc4a4d8\""));
 }
 
@@ -93,7 +93,7 @@ fn d002() {
 
     {
         let csv = ans.input_serialization.csv.as_ref().unwrap();
-        assert_eq!(csv.allow_quoted_record_delimiter, false);
+        assert_eq!(csv.allow_quoted_record_delimiter, Some(false));
     }
 }
 

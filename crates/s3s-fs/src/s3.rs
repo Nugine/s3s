@@ -237,7 +237,7 @@ impl S3 for FileSystem {
 
         let output = GetObjectOutput {
             body: Some(StreamingBlob::wrap(body)),
-            content_length: content_length_i64,
+            content_length: Some(content_length_i64),
             content_range,
             last_modified: Some(last_modified),
             metadata: object_metadata,
@@ -260,7 +260,7 @@ impl S3 for FileSystem {
             return Err(s3_error!(NoSuchBucket));
         }
 
-        Ok(S3Response::new(HeadBucketOutput {}))
+        Ok(S3Response::new(HeadBucketOutput::default()))
     }
 
     #[tracing::instrument]
@@ -282,7 +282,7 @@ impl S3 for FileSystem {
         let content_type = mime::APPLICATION_OCTET_STREAM;
 
         let output = HeadObjectOutput {
-            content_length: try_!(i64::try_from(file_len)),
+            content_length: Some(try_!(i64::try_from(file_len))),
             content_type: Some(content_type),
             last_modified: Some(last_modified),
             metadata: object_metadata,
@@ -387,7 +387,7 @@ impl S3 for FileSystem {
                     let object = Object {
                         key: Some(key_str),
                         last_modified: Some(last_modified),
-                        size: try_!(i64::try_from(size)),
+                        size: Some(try_!(i64::try_from(size))),
                         ..Default::default()
                     };
                     objects.push(object);
@@ -413,8 +413,8 @@ impl S3 for FileSystem {
         let key_count = try_!(i32::try_from(objects.len()));
 
         let output = ListObjectsV2Output {
-            key_count,
-            max_keys: key_count,
+            key_count: Some(key_count),
+            max_keys: Some(key_count),
             contents: Some(objects),
             delimiter: input.delimiter,
             encoding_type: input.encoding_type,
@@ -475,7 +475,7 @@ impl S3 for FileSystem {
         let object_path = self.get_object_path(&bucket, &key)?;
         let mut file_writer = self.prepare_file_write(&object_path).await?;
 
-        let mut md5_hash = Md5::new();
+        let mut md5_hash = <Md5 as Digest>::new();
         let stream = body.inspect_ok(|bytes| {
             md5_hash.update(bytes.as_ref());
             checksum.update(bytes.as_ref());
@@ -564,7 +564,7 @@ impl S3 for FileSystem {
 
         let file_path = self.resolve_upload_part_path(upload_id, part_number)?;
 
-        let mut md5_hash = Md5::new();
+        let mut md5_hash = <Md5 as Digest>::new();
         let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
 
         let mut file_writer = self.prepare_file_write(&file_path).await?;
@@ -628,7 +628,7 @@ impl S3 for FileSystem {
         let _ = try_!(src_file.seek(io::SeekFrom::Start(start)).await);
         let body = StreamingBlob::wrap(bytes_stream(ReaderStream::with_capacity(src_file, 4096), content_length_usize));
 
-        let mut md5_hash = Md5::new();
+        let mut md5_hash = <Md5 as Digest>::new();
         let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
 
         let mut file_writer = self.prepare_file_write(&dst_path).await?;
@@ -680,8 +680,8 @@ impl S3 for FileSystem {
 
             let part = Part {
                 last_modified: Some(last_modified),
-                part_number,
-                size,
+                part_number: Some(part_number),
+                size: Some(size),
                 ..Default::default()
             };
             parts.push(part);
@@ -729,7 +729,9 @@ impl S3 for FileSystem {
 
         let mut cnt: i32 = 0;
         for part in multipart_upload.parts.into_iter().flatten() {
-            let part_number = part.part_number;
+            let part_number = part
+                .part_number
+                .ok_or_else(|| s3_error!(InvalidRequest, "missing part number"))?;
             cnt += 1;
             if part_number != cnt {
                 return Err(s3_error!(InvalidRequest, "invalid part order"));
