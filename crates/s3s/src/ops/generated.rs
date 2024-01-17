@@ -150,6 +150,16 @@ impl http::TryIntoHeaderValue for ChecksumMode {
     }
 }
 
+impl http::TryIntoHeaderValue for LocationType {
+    type Error = http::InvalidHeaderValue;
+    fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
+        }
+    }
+}
+
 impl http::TryIntoHeaderValue for MetadataDirective {
     type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
@@ -305,6 +315,14 @@ impl http::TryFromHeaderValue for ChecksumAlgorithm {
 }
 
 impl http::TryFromHeaderValue for ChecksumMode {
+    type Error = http::ParseHeaderError;
+    fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
+    }
+}
+
+impl http::TryFromHeaderValue for LocationType {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
         let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
@@ -515,7 +533,7 @@ impl CompleteMultipartUpload {
     pub fn serialize_http(x: CompleteMultipartUploadOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
-        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
@@ -693,7 +711,7 @@ impl CopyObject {
         if let Some(ref val) = x.copy_object_result {
             http::set_xml_body(&mut res, val)?;
         }
-        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_COPY_SOURCE_VERSION_ID, x.copy_source_version_id)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
@@ -903,7 +921,7 @@ impl CreateMultipartUpload {
         http::set_xml_body(&mut res, &x)?;
         http::add_opt_header_timestamp(&mut res, X_AMZ_ABORT_DATE, x.abort_date, TimestampFormat::HttpDate)?;
         http::add_opt_header(&mut res, X_AMZ_ABORT_RULE_ID, x.abort_rule_id)?;
-        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_ALGORITHM, x.checksum_algorithm)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
@@ -1492,7 +1510,7 @@ impl DeleteObject {
 
     pub fn serialize_http(x: DeleteObjectOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::NO_CONTENT);
-        http::add_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
+        http::add_opt_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
         Ok(res)
@@ -2617,7 +2635,7 @@ impl GetObject {
             http::set_stream_body(&mut res, val);
         }
         http::add_opt_header(&mut res, ACCEPT_RANGES, x.accept_ranges)?;
-        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, CACHE_CONTROL, x.cache_control)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
@@ -2626,16 +2644,16 @@ impl GetObject {
         http::add_opt_header(&mut res, CONTENT_DISPOSITION, x.content_disposition)?;
         http::add_opt_header(&mut res, CONTENT_ENCODING, x.content_encoding)?;
         http::add_opt_header(&mut res, CONTENT_LANGUAGE, x.content_language)?;
-        http::add_header(&mut res, CONTENT_LENGTH, x.content_length)?;
+        http::add_opt_header(&mut res, CONTENT_LENGTH, x.content_length)?;
         http::add_opt_header(&mut res, CONTENT_RANGE, x.content_range)?;
         http::add_opt_header(&mut res, CONTENT_TYPE, x.content_type)?;
-        http::add_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
+        http::add_opt_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
         http::add_opt_header(&mut res, ETAG, x.e_tag)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header_timestamp(&mut res, EXPIRES, x.expires, TimestampFormat::HttpDate)?;
         http::add_opt_header_timestamp(&mut res, LAST_MODIFIED, x.last_modified, TimestampFormat::HttpDate)?;
         http::add_opt_metadata(&mut res, x.metadata)?;
-        http::add_header(&mut res, X_AMZ_MISSING_META, x.missing_meta)?;
+        http::add_opt_header(&mut res, X_AMZ_MISSING_META, x.missing_meta)?;
         http::add_opt_header(&mut res, X_AMZ_OBJECT_LOCK_LEGAL_HOLD, x.object_lock_legal_hold_status)?;
         http::add_opt_header(&mut res, X_AMZ_OBJECT_LOCK_MODE, x.object_lock_mode)?;
         http::add_opt_header_timestamp(
@@ -2644,7 +2662,7 @@ impl GetObject {
             x.object_lock_retain_until_date,
             TimestampFormat::DateTime,
         )?;
-        http::add_header(&mut res, X_AMZ_MP_PARTS_COUNT, x.parts_count)?;
+        http::add_opt_header(&mut res, X_AMZ_MP_PARTS_COUNT, x.parts_count)?;
         http::add_opt_header(&mut res, X_AMZ_REPLICATION_STATUS, x.replication_status)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_RESTORE, x.restore)?;
@@ -2653,7 +2671,7 @@ impl GetObject {
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
         http::add_opt_header(&mut res, X_AMZ_STORAGE_CLASS, x.storage_class)?;
-        http::add_header(&mut res, X_AMZ_TAGGING_COUNT, x.tag_count)?;
+        http::add_opt_header(&mut res, X_AMZ_TAGGING_COUNT, x.tag_count)?;
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
         http::add_opt_header(&mut res, X_AMZ_WEBSITE_REDIRECT_LOCATION, x.website_redirect_location)?;
         Ok(res)
@@ -2777,7 +2795,7 @@ impl GetObjectAttributes {
     pub fn serialize_http(x: GetObjectAttributesOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
-        http::add_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
+        http::add_opt_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
         http::add_opt_header_timestamp(&mut res, LAST_MODIFIED, x.last_modified, TimestampFormat::HttpDate)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
@@ -3109,8 +3127,13 @@ impl HeadBucket {
         })
     }
 
-    pub fn serialize_http(_: HeadBucketOutput) -> S3Result<http::Response> {
-        Ok(http::Response::with_status(http::StatusCode::OK))
+    pub fn serialize_http(x: HeadBucketOutput) -> S3Result<http::Response> {
+        let mut res = http::Response::with_status(http::StatusCode::OK);
+        http::add_opt_header(&mut res, X_AMZ_ACCESS_POINT_ALIAS, x.access_point_alias)?;
+        http::add_opt_header(&mut res, X_AMZ_BUCKET_LOCATION_NAME, x.bucket_location_name)?;
+        http::add_opt_header(&mut res, X_AMZ_BUCKET_LOCATION_TYPE, x.bucket_location_type)?;
+        http::add_opt_header(&mut res, X_AMZ_BUCKET_REGION, x.bucket_region)?;
+        Ok(res)
     }
 }
 
@@ -3194,7 +3217,7 @@ impl HeadObject {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::add_opt_header(&mut res, ACCEPT_RANGES, x.accept_ranges)?;
         http::add_opt_header(&mut res, X_AMZ_ARCHIVE_STATUS, x.archive_status)?;
-        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, CACHE_CONTROL, x.cache_control)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
@@ -3203,15 +3226,15 @@ impl HeadObject {
         http::add_opt_header(&mut res, CONTENT_DISPOSITION, x.content_disposition)?;
         http::add_opt_header(&mut res, CONTENT_ENCODING, x.content_encoding)?;
         http::add_opt_header(&mut res, CONTENT_LANGUAGE, x.content_language)?;
-        http::add_header(&mut res, CONTENT_LENGTH, x.content_length)?;
+        http::add_opt_header(&mut res, CONTENT_LENGTH, x.content_length)?;
         http::add_opt_header(&mut res, CONTENT_TYPE, x.content_type)?;
-        http::add_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
+        http::add_opt_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
         http::add_opt_header(&mut res, ETAG, x.e_tag)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header_timestamp(&mut res, EXPIRES, x.expires, TimestampFormat::HttpDate)?;
         http::add_opt_header_timestamp(&mut res, LAST_MODIFIED, x.last_modified, TimestampFormat::HttpDate)?;
         http::add_opt_metadata(&mut res, x.metadata)?;
-        http::add_header(&mut res, X_AMZ_MISSING_META, x.missing_meta)?;
+        http::add_opt_header(&mut res, X_AMZ_MISSING_META, x.missing_meta)?;
         http::add_opt_header(&mut res, X_AMZ_OBJECT_LOCK_LEGAL_HOLD, x.object_lock_legal_hold_status)?;
         http::add_opt_header(&mut res, X_AMZ_OBJECT_LOCK_MODE, x.object_lock_mode)?;
         http::add_opt_header_timestamp(
@@ -3220,7 +3243,7 @@ impl HeadObject {
             x.object_lock_retain_until_date,
             TimestampFormat::DateTime,
         )?;
-        http::add_header(&mut res, X_AMZ_MP_PARTS_COUNT, x.parts_count)?;
+        http::add_opt_header(&mut res, X_AMZ_MP_PARTS_COUNT, x.parts_count)?;
         http::add_opt_header(&mut res, X_AMZ_REPLICATION_STATUS, x.replication_status)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_RESTORE, x.restore)?;
@@ -4960,7 +4983,7 @@ impl PutObject {
 
     pub fn serialize_http(x: PutObjectOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
-        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA1, x.checksum_sha1)?;
@@ -5498,7 +5521,7 @@ impl UploadPart {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
-        let part_number: PartNumber = http::parse_opt_query(req, "partNumber")?.unwrap_or(0);
+        let part_number: PartNumber = http::parse_query(req, "partNumber")?;
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
 
@@ -5535,7 +5558,7 @@ impl UploadPart {
 
     pub fn serialize_http(x: UploadPartOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
-        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA1, x.checksum_sha1)?;
@@ -5605,7 +5628,7 @@ impl UploadPartCopy {
 
         let expected_source_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_SOURCE_EXPECTED_BUCKET_OWNER)?;
 
-        let part_number: PartNumber = http::parse_opt_query(req, "partNumber")?.unwrap_or(0);
+        let part_number: PartNumber = http::parse_query(req, "partNumber")?;
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
 
@@ -5647,7 +5670,7 @@ impl UploadPartCopy {
         if let Some(ref val) = x.copy_part_result {
             http::set_xml_body(&mut res, val)?;
         }
-        http::add_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
+        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_COPY_SOURCE_VERSION_ID, x.copy_source_version_id)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
@@ -6096,12 +6119,12 @@ pub fn resolve_route(
                     }
                 }
                 if let Some(qs) = qs {
-                    if qs.has("uploadId") && req.headers.contains_key("x-amz-copy-source") {
+                    if qs.has("partNumber") && qs.has("uploadId") && req.headers.contains_key("x-amz-copy-source") {
                         return Ok((&UploadPartCopy as &'static dyn super::Operation, false));
                     }
                 }
                 if let Some(qs) = qs {
-                    if qs.has("uploadId") {
+                    if qs.has("partNumber") && qs.has("uploadId") {
                         return Ok((&UploadPart as &'static dyn super::Operation, false));
                     }
                 }

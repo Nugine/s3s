@@ -6,9 +6,9 @@ import hashlib
 
 # https://github.com/awslabs/aws-sdk-rust/commits/main/aws-models/s3.json
 
-COMMIT = "d09fb3435954efee106e07f277f47808f29219d3"
+COMMIT = "7f1c89f5c26c9e61751293d1bed79c6de44fc98f"
 URL = f"https://github.com/awslabs/aws-sdk-rust/raw/{COMMIT}/aws-models/s3.json"
-SHA256 = "d280b085f83a95dd7e22aea88f72f699a489fd018861f20c23cfda9d1c4a052b"
+SHA256 = "8cea7cfdc587ff6f8282557fc8311a12e3355364f05f43b257f21b1a14f44e83"
 
 
 def sha256sum(arg: bytes | Path) -> str:
@@ -30,6 +30,8 @@ def download(dst: Path):
 
     sha256 = sha256sum(data)
     print(f"SHA256: {sha256}")
+    if sha256 != SHA256:
+        print("SHA256 mismatch")
 
     with open(dst, "wb") as f:
         f.write(data)

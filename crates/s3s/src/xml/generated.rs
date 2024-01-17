@@ -8,7 +8,9 @@ use std::io::Write;
 
 impl SerializeContent for AbortIncompleteMultipartUpload {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("DaysAfterInitiation", &self.days_after_initiation)?;
+        if let Some(ref val) = self.days_after_initiation {
+            s.content("DaysAfterInitiation", val)?;
+        }
         Ok(())
     }
 }
@@ -135,7 +137,9 @@ impl SerializeContent for CORSRule {
         if let Some(ref val) = self.id {
             s.content("ID", val)?;
         }
-        s.content("MaxAgeSeconds", &self.max_age_seconds)?;
+        if let Some(ref val) = self.max_age_seconds {
+            s.content("MaxAgeSeconds", val)?;
+        }
         Ok(())
     }
 }
@@ -280,14 +284,14 @@ impl SerializeContent for CreateMultipartUploadOutput {
 
 impl SerializeContent for DefaultRetention {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        if self.days != 0 {
-            s.content("Days", &self.days)?;
+        if let Some(ref val) = self.days {
+            s.content("Days", val)?;
         }
         if let Some(ref val) = self.mode {
             s.content("Mode", val)?;
         }
-        if self.years != 0 {
-            s.content("Years", &self.years)?;
+        if let Some(ref val) = self.years {
+            s.content("Years", val)?;
         }
         Ok(())
     }
@@ -295,7 +299,9 @@ impl SerializeContent for DefaultRetention {
 
 impl SerializeContent for DeleteMarkerEntry {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("IsLatest", &self.is_latest)?;
+        if let Some(ref val) = self.is_latest {
+            s.content("IsLatest", val)?;
+        }
         if let Some(ref val) = self.key {
             s.content("Key", val)?;
         }
@@ -341,7 +347,9 @@ impl SerializeContent for DeleteObjectsOutput {
 
 impl SerializeContent for DeletedObject {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("DeleteMarker", &self.delete_marker)?;
+        if let Some(ref val) = self.delete_marker {
+            s.content("DeleteMarker", val)?;
+        }
         if let Some(ref val) = self.delete_marker_version_id {
             s.content("DeleteMarkerVersionId", val)?;
         }
@@ -610,7 +618,9 @@ impl SerializeContent for GetObjectAttributesOutput {
         if let Some(ref val) = self.object_parts {
             s.content("ObjectParts", val)?;
         }
-        s.content("ObjectSize", &self.object_size)?;
+        if let Some(ref val) = self.object_size {
+            s.content("ObjectSize", val)?;
+        }
         if let Some(ref val) = self.storage_class {
             s.content("StorageClass", val)?;
         }
@@ -620,8 +630,12 @@ impl SerializeContent for GetObjectAttributesOutput {
 
 impl SerializeContent for GetObjectAttributesParts {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("IsTruncated", &self.is_truncated)?;
-        s.content("MaxParts", &self.max_parts)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
+        if let Some(ref val) = self.max_parts {
+            s.content("MaxParts", val)?;
+        }
         if let Some(ref val) = self.next_part_number_marker {
             s.content("NextPartNumberMarker", val)?;
         }
@@ -631,7 +645,9 @@ impl SerializeContent for GetObjectAttributesParts {
         if let Some(iter) = &self.parts {
             s.flattened_list("Part", iter)?;
         }
-        s.content("PartsCount", &self.total_parts_count)?;
+        if let Some(ref val) = self.total_parts_count {
+            s.content("PartsCount", val)?;
+        }
         Ok(())
     }
 }
@@ -906,8 +922,12 @@ impl SerializeContent for LifecycleRule {
 
 impl SerializeContent for LifecycleRuleAndOperator {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ObjectSizeGreaterThan", &self.object_size_greater_than)?;
-        s.content("ObjectSizeLessThan", &self.object_size_less_than)?;
+        if let Some(ref val) = self.object_size_greater_than {
+            s.content("ObjectSizeGreaterThan", val)?;
+        }
+        if let Some(ref val) = self.object_size_less_than {
+            s.content("ObjectSizeLessThan", val)?;
+        }
         if let Some(ref val) = self.prefix {
             s.content("Prefix", val)?;
         }
@@ -938,7 +958,9 @@ impl SerializeContent for ListBucketAnalyticsConfigurationsOutput {
         if let Some(ref val) = self.continuation_token {
             s.content("ContinuationToken", val)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
         if let Some(ref val) = self.next_continuation_token {
             s.content("NextContinuationToken", val)?;
         }
@@ -954,7 +976,9 @@ impl SerializeContent for ListBucketIntelligentTieringConfigurationsOutput {
         if let Some(iter) = &self.intelligent_tiering_configuration_list {
             s.flattened_list("IntelligentTieringConfiguration", iter)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
         if let Some(ref val) = self.next_continuation_token {
             s.content("NextContinuationToken", val)?;
         }
@@ -970,7 +994,9 @@ impl SerializeContent for ListBucketInventoryConfigurationsOutput {
         if let Some(iter) = &self.inventory_configuration_list {
             s.flattened_list("InventoryConfiguration", iter)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
         if let Some(ref val) = self.next_continuation_token {
             s.content("NextContinuationToken", val)?;
         }
@@ -983,7 +1009,9 @@ impl SerializeContent for ListBucketMetricsConfigurationsOutput {
         if let Some(ref val) = self.continuation_token {
             s.content("ContinuationToken", val)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
         if let Some(iter) = &self.metrics_configuration_list {
             s.flattened_list("MetricsConfiguration", iter)?;
         }
@@ -1020,11 +1048,15 @@ impl SerializeContent for ListMultipartUploadsOutput {
         if let Some(ref val) = self.encoding_type {
             s.content("EncodingType", val)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
         if let Some(ref val) = self.key_marker {
             s.content("KeyMarker", val)?;
         }
-        s.content("MaxUploads", &self.max_uploads)?;
+        if let Some(ref val) = self.max_uploads {
+            s.content("MaxUploads", val)?;
+        }
         if let Some(ref val) = self.next_key_marker {
             s.content("NextKeyMarker", val)?;
         }
@@ -1058,11 +1090,15 @@ impl SerializeContent for ListObjectVersionsOutput {
         if let Some(ref val) = self.encoding_type {
             s.content("EncodingType", val)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
         if let Some(ref val) = self.key_marker {
             s.content("KeyMarker", val)?;
         }
-        s.content("MaxKeys", &self.max_keys)?;
+        if let Some(ref val) = self.max_keys {
+            s.content("MaxKeys", val)?;
+        }
         if let Some(ref val) = self.name {
             s.content("Name", val)?;
         }
@@ -1099,11 +1135,15 @@ impl SerializeContent for ListObjectsOutput {
         if let Some(ref val) = self.encoding_type {
             s.content("EncodingType", val)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
         if let Some(ref val) = self.marker {
             s.content("Marker", val)?;
         }
-        s.content("MaxKeys", &self.max_keys)?;
+        if let Some(ref val) = self.max_keys {
+            s.content("MaxKeys", val)?;
+        }
         if let Some(ref val) = self.name {
             s.content("Name", val)?;
         }
@@ -1134,9 +1174,15 @@ impl SerializeContent for ListObjectsV2Output {
         if let Some(ref val) = self.encoding_type {
             s.content("EncodingType", val)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
-        s.content("KeyCount", &self.key_count)?;
-        s.content("MaxKeys", &self.max_keys)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
+        if let Some(ref val) = self.key_count {
+            s.content("KeyCount", val)?;
+        }
+        if let Some(ref val) = self.max_keys {
+            s.content("MaxKeys", val)?;
+        }
         if let Some(ref val) = self.name {
             s.content("Name", val)?;
         }
@@ -1164,11 +1210,15 @@ impl SerializeContent for ListPartsOutput {
         if let Some(ref val) = self.initiator {
             s.content("Initiator", val)?;
         }
-        s.content("IsTruncated", &self.is_truncated)?;
+        if let Some(ref val) = self.is_truncated {
+            s.content("IsTruncated", val)?;
+        }
         if let Some(ref val) = self.key {
             s.content("Key", val)?;
         }
-        s.content("MaxParts", &self.max_parts)?;
+        if let Some(ref val) = self.max_parts {
+            s.content("MaxParts", val)?;
+        }
         if let Some(ref val) = self.next_part_number_marker {
             s.content("NextPartNumberMarker", val)?;
         }
@@ -1196,6 +1246,9 @@ impl SerializeContent for LoggingEnabled {
         s.content("TargetBucket", &self.target_bucket)?;
         if let Some(iter) = &self.target_grants {
             s.list("TargetGrants", "Grant", iter)?;
+        }
+        if let Some(ref val) = self.target_object_key_format {
+            s.content("TargetObjectKeyFormat", val)?;
         }
         s.content("TargetPrefix", &self.target_prefix)?;
         Ok(())
@@ -1289,16 +1342,24 @@ impl SerializeContent for MultipartUpload {
 
 impl SerializeContent for NoncurrentVersionExpiration {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("NewerNoncurrentVersions", &self.newer_noncurrent_versions)?;
-        s.content("NoncurrentDays", &self.noncurrent_days)?;
+        if let Some(ref val) = self.newer_noncurrent_versions {
+            s.content("NewerNoncurrentVersions", val)?;
+        }
+        if let Some(ref val) = self.noncurrent_days {
+            s.content("NoncurrentDays", val)?;
+        }
         Ok(())
     }
 }
 
 impl SerializeContent for NoncurrentVersionTransition {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("NewerNoncurrentVersions", &self.newer_noncurrent_versions)?;
-        s.content("NoncurrentDays", &self.noncurrent_days)?;
+        if let Some(ref val) = self.newer_noncurrent_versions {
+            s.content("NewerNoncurrentVersions", val)?;
+        }
+        if let Some(ref val) = self.noncurrent_days {
+            s.content("NoncurrentDays", val)?;
+        }
         if let Some(ref val) = self.storage_class {
             s.content("StorageClass", val)?;
         }
@@ -1335,7 +1396,9 @@ impl SerializeContent for Object {
         if let Some(ref val) = self.restore_status {
             s.content("RestoreStatus", val)?;
         }
-        s.content("Size", &self.size)?;
+        if let Some(ref val) = self.size {
+            s.content("Size", val)?;
+        }
         if let Some(ref val) = self.storage_class {
             s.content("StorageClass", val)?;
         }
@@ -1423,8 +1486,12 @@ impl SerializeContent for ObjectPart {
         if let Some(ref val) = self.checksum_sha256 {
             s.content("ChecksumSHA256", val)?;
         }
-        s.content("PartNumber", &self.part_number)?;
-        s.content("Size", &self.size)?;
+        if let Some(ref val) = self.part_number {
+            s.content("PartNumber", val)?;
+        }
+        if let Some(ref val) = self.size {
+            s.content("Size", val)?;
+        }
         Ok(())
     }
 }
@@ -1443,7 +1510,9 @@ impl SerializeContent for ObjectVersion {
         if let Some(ref val) = self.e_tag {
             s.content("ETag", val)?;
         }
-        s.content("IsLatest", &self.is_latest)?;
+        if let Some(ref val) = self.is_latest {
+            s.content("IsLatest", val)?;
+        }
         if let Some(ref val) = self.key {
             s.content("Key", val)?;
         }
@@ -1456,7 +1525,9 @@ impl SerializeContent for ObjectVersion {
         if let Some(ref val) = self.restore_status {
             s.content("RestoreStatus", val)?;
         }
-        s.content("Size", &self.size)?;
+        if let Some(ref val) = self.size {
+            s.content("Size", val)?;
+        }
         if let Some(ref val) = self.storage_class {
             s.content("StorageClass", val)?;
         }
@@ -1528,8 +1599,27 @@ impl SerializeContent for Part {
         if let Some(ref val) = self.last_modified {
             s.timestamp("LastModified", val, TimestampFormat::DateTime)?;
         }
-        s.content("PartNumber", &self.part_number)?;
-        s.content("Size", &self.size)?;
+        if let Some(ref val) = self.part_number {
+            s.content("PartNumber", val)?;
+        }
+        if let Some(ref val) = self.size {
+            s.content("Size", val)?;
+        }
+        Ok(())
+    }
+}
+
+impl SerializeContent for PartitionDateSource {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        self.as_str().serialize_content(s)
+    }
+}
+
+impl SerializeContent for PartitionedPrefix {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        if let Some(ref val) = self.partition_date_source {
+            s.content("PartitionDateSource", val)?;
+        }
         Ok(())
     }
 }
@@ -1548,16 +1638,24 @@ impl SerializeContent for Permission {
 
 impl SerializeContent for PolicyStatus {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("IsPublic", &self.is_public)?;
+        if let Some(ref val) = self.is_public {
+            s.content("IsPublic", val)?;
+        }
         Ok(())
     }
 }
 
 impl SerializeContent for Progress {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("BytesProcessed", &self.bytes_processed)?;
-        s.content("BytesReturned", &self.bytes_returned)?;
-        s.content("BytesScanned", &self.bytes_scanned)?;
+        if let Some(ref val) = self.bytes_processed {
+            s.content("BytesProcessed", val)?;
+        }
+        if let Some(ref val) = self.bytes_returned {
+            s.content("BytesReturned", val)?;
+        }
+        if let Some(ref val) = self.bytes_scanned {
+            s.content("BytesScanned", val)?;
+        }
         Ok(())
     }
 }
@@ -1570,10 +1668,18 @@ impl SerializeContent for Protocol {
 
 impl SerializeContent for PublicAccessBlockConfiguration {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("BlockPublicAcls", &self.block_public_acls)?;
-        s.content("BlockPublicPolicy", &self.block_public_policy)?;
-        s.content("IgnorePublicAcls", &self.ignore_public_acls)?;
-        s.content("RestrictPublicBuckets", &self.restrict_public_buckets)?;
+        if let Some(ref val) = self.block_public_acls {
+            s.content("BlockPublicAcls", val)?;
+        }
+        if let Some(ref val) = self.block_public_policy {
+            s.content("BlockPublicPolicy", val)?;
+        }
+        if let Some(ref val) = self.ignore_public_acls {
+            s.content("IgnorePublicAcls", val)?;
+        }
+        if let Some(ref val) = self.restrict_public_buckets {
+            s.content("RestrictPublicBuckets", val)?;
+        }
         Ok(())
     }
 }
@@ -1668,7 +1774,9 @@ impl SerializeContent for ReplicationRule {
         if let Some(ref val) = self.prefix {
             s.content("Prefix", val)?;
         }
-        s.content("Priority", &self.priority)?;
+        if let Some(ref val) = self.priority {
+            s.content("Priority", val)?;
+        }
         if let Some(ref val) = self.source_selection_criteria {
             s.content("SourceSelectionCriteria", val)?;
         }
@@ -1721,14 +1829,18 @@ impl SerializeContent for ReplicationTimeStatus {
 
 impl SerializeContent for ReplicationTimeValue {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("Minutes", &self.minutes)?;
+        if let Some(ref val) = self.minutes {
+            s.content("Minutes", val)?;
+        }
         Ok(())
     }
 }
 
 impl SerializeContent for RestoreStatus {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("IsRestoreInProgress", &self.is_restore_in_progress)?;
+        if let Some(ref val) = self.is_restore_in_progress {
+            s.content("IsRestoreInProgress", val)?;
+        }
         if let Some(ref val) = self.restore_expiry_date {
             s.timestamp("RestoreExpiryDate", val, TimestampFormat::DateTime)?;
         }
@@ -1799,7 +1911,15 @@ impl SerializeContent for ServerSideEncryptionRule {
         if let Some(ref val) = self.apply_server_side_encryption_by_default {
             s.content("ApplyServerSideEncryptionByDefault", val)?;
         }
-        s.content("BucketKeyEnabled", &self.bucket_key_enabled)?;
+        if let Some(ref val) = self.bucket_key_enabled {
+            s.content("BucketKeyEnabled", val)?;
+        }
+        Ok(())
+    }
+}
+
+impl SerializeContent for SimplePrefix {
+    fn serialize_content<W: Write>(&self, _: &mut Serializer<W>) -> SerResult {
         Ok(())
     }
 }
@@ -1831,9 +1951,15 @@ impl SerializeContent for SseKmsEncryptedObjectsStatus {
 
 impl SerializeContent for Stats {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("BytesProcessed", &self.bytes_processed)?;
-        s.content("BytesReturned", &self.bytes_returned)?;
-        s.content("BytesScanned", &self.bytes_scanned)?;
+        if let Some(ref val) = self.bytes_processed {
+            s.content("BytesProcessed", val)?;
+        }
+        if let Some(ref val) = self.bytes_returned {
+            s.content("BytesReturned", val)?;
+        }
+        if let Some(ref val) = self.bytes_scanned {
+            s.content("BytesScanned", val)?;
+        }
         Ok(())
     }
 }
@@ -1887,6 +2013,18 @@ impl SerializeContent for TargetGrant {
     }
 }
 
+impl SerializeContent for TargetObjectKeyFormat {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        if let Some(ref val) = self.partitioned_prefix {
+            s.content("PartitionedPrefix", val)?;
+        }
+        if let Some(ref val) = self.simple_prefix {
+            s.content("SimplePrefix", val)?;
+        }
+        Ok(())
+    }
+}
+
 impl SerializeContent for Tiering {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         s.content("AccessTier", &self.access_tier)?;
@@ -1917,7 +2055,9 @@ impl SerializeContent for Transition {
         if let Some(ref val) = self.date {
             s.timestamp("Date", val, TimestampFormat::DateTime)?;
         }
-        s.content("Days", &self.days)?;
+        if let Some(ref val) = self.days {
+            s.content("Days", val)?;
+        }
         if let Some(ref val) = self.storage_class {
             s.content("StorageClass", val)?;
         }
@@ -2208,9 +2348,7 @@ impl<'xml> DeserializeContent<'xml> for AbortIncompleteMultipartUpload {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self {
-            days_after_initiation: days_after_initiation.unwrap_or(0),
-        })
+        Ok(Self { days_after_initiation })
     }
 }
 
@@ -2423,6 +2561,31 @@ impl<'xml> DeserializeContent<'xml> for BucketAccelerateStatus {
     }
 }
 
+impl<'xml> DeserializeContent<'xml> for BucketInfo {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut data_redundancy: Option<DataRedundancy> = None;
+        let mut type_: Option<BucketType> = None;
+        d.for_each_element(|d, x| match x {
+            b"DataRedundancy" => {
+                if data_redundancy.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                data_redundancy = Some(d.content()?);
+                Ok(())
+            }
+            b"Type" => {
+                if type_.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                type_ = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self { data_redundancy, type_ })
+    }
+}
+
 impl<'xml> DeserializeContent<'xml> for BucketLifecycleConfiguration {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         let mut rules: Option<LifecycleRules> = None;
@@ -2464,6 +2627,12 @@ impl<'xml> DeserializeContent<'xml> for BucketLoggingStatus {
 }
 
 impl<'xml> DeserializeContent<'xml> for BucketLogsPermission {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        String::deserialize_content(d).map(Self::from)
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for BucketType {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         String::deserialize_content(d).map(Self::from)
     }
@@ -2543,7 +2712,7 @@ impl<'xml> DeserializeContent<'xml> for CORSRule {
             allowed_origins: allowed_origins.ok_or(DeError::MissingField)?,
             expose_headers,
             id,
-            max_age_seconds: max_age_seconds.unwrap_or(0),
+            max_age_seconds,
         })
     }
 }
@@ -2610,7 +2779,7 @@ impl<'xml> DeserializeContent<'xml> for CSVInput {
             _ => Err(DeError::UnexpectedTagName),
         })?;
         Ok(Self {
-            allow_quoted_record_delimiter: allow_quoted_record_delimiter.unwrap_or(false),
+            allow_quoted_record_delimiter,
             comments,
             field_delimiter,
             file_header_info,
@@ -2750,7 +2919,7 @@ impl<'xml> DeserializeContent<'xml> for CompletedPart {
             checksum_sha1,
             checksum_sha256,
             e_tag,
-            part_number: part_number.unwrap_or(0),
+            part_number,
         })
     }
 }
@@ -2791,8 +2960,24 @@ impl<'xml> DeserializeContent<'xml> for Condition {
 
 impl<'xml> DeserializeContent<'xml> for CreateBucketConfiguration {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut bucket: Option<BucketInfo> = None;
+        let mut location: Option<LocationInfo> = None;
         let mut location_constraint: Option<BucketLocationConstraint> = None;
         d.for_each_element(|d, x| match x {
+            b"Bucket" => {
+                if bucket.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                bucket = Some(d.content()?);
+                Ok(())
+            }
+            b"Location" => {
+                if location.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                location = Some(d.content()?);
+                Ok(())
+            }
             b"LocationConstraint" => {
                 if location_constraint.is_some() {
                     return Err(DeError::DuplicateField);
@@ -2802,7 +2987,17 @@ impl<'xml> DeserializeContent<'xml> for CreateBucketConfiguration {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self { location_constraint })
+        Ok(Self {
+            bucket,
+            location,
+            location_constraint,
+        })
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for DataRedundancy {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        String::deserialize_content(d).map(Self::from)
     }
 }
 
@@ -2835,11 +3030,7 @@ impl<'xml> DeserializeContent<'xml> for DefaultRetention {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self {
-            days: days.unwrap_or(0),
-            mode,
-            years: years.unwrap_or(0),
-        })
+        Ok(Self { days, mode, years })
     }
 }
 
@@ -2864,7 +3055,7 @@ impl<'xml> DeserializeContent<'xml> for Delete {
         })?;
         Ok(Self {
             objects: objects.ok_or(DeError::MissingField)?,
-            quiet: quiet.unwrap_or(false),
+            quiet,
         })
     }
 }
@@ -3460,7 +3651,7 @@ impl<'xml> DeserializeContent<'xml> for InventoryConfiguration {
             filter,
             id: id.ok_or(DeError::MissingField)?,
             included_object_versions: included_object_versions.ok_or(DeError::MissingField)?,
-            is_enabled: is_enabled.unwrap_or(false),
+            is_enabled: is_enabled.ok_or(DeError::MissingField)?,
             optional_fields,
             schedule: schedule.ok_or(DeError::MissingField)?,
         })
@@ -3872,8 +4063,8 @@ impl<'xml> DeserializeContent<'xml> for LifecycleRuleAndOperator {
             _ => Err(DeError::UnexpectedTagName),
         })?;
         Ok(Self {
-            object_size_greater_than: object_size_greater_than.unwrap_or(0),
-            object_size_less_than: object_size_less_than.unwrap_or(0),
+            object_size_greater_than,
+            object_size_less_than,
             prefix,
             tags,
         })
@@ -3893,10 +4084,42 @@ impl<'xml> DeserializeContent<'xml> for LifecycleRuleFilter {
     }
 }
 
+impl<'xml> DeserializeContent<'xml> for LocationInfo {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut name: Option<LocationNameAsString> = None;
+        let mut type_: Option<LocationType> = None;
+        d.for_each_element(|d, x| match x {
+            b"Name" => {
+                if name.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                name = Some(d.content()?);
+                Ok(())
+            }
+            b"Type" => {
+                if type_.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                type_ = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self { name, type_ })
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for LocationType {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        String::deserialize_content(d).map(Self::from)
+    }
+}
+
 impl<'xml> DeserializeContent<'xml> for LoggingEnabled {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         let mut target_bucket: Option<TargetBucket> = None;
         let mut target_grants: Option<TargetGrants> = None;
+        let mut target_object_key_format: Option<TargetObjectKeyFormat> = None;
         let mut target_prefix: Option<TargetPrefix> = None;
         d.for_each_element(|d, x| match x {
             b"TargetBucket" => {
@@ -3913,6 +4136,13 @@ impl<'xml> DeserializeContent<'xml> for LoggingEnabled {
                 target_grants = Some(d.list_content("Grant")?);
                 Ok(())
             }
+            b"TargetObjectKeyFormat" => {
+                if target_object_key_format.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                target_object_key_format = Some(d.content()?);
+                Ok(())
+            }
             b"TargetPrefix" => {
                 if target_prefix.is_some() {
                     return Err(DeError::DuplicateField);
@@ -3925,6 +4155,7 @@ impl<'xml> DeserializeContent<'xml> for LoggingEnabled {
         Ok(Self {
             target_bucket: target_bucket.ok_or(DeError::MissingField)?,
             target_grants,
+            target_object_key_format,
             target_prefix: target_prefix.ok_or(DeError::MissingField)?,
         })
     }
@@ -4092,8 +4323,8 @@ impl<'xml> DeserializeContent<'xml> for NoncurrentVersionExpiration {
             _ => Err(DeError::UnexpectedTagName),
         })?;
         Ok(Self {
-            newer_noncurrent_versions: newer_noncurrent_versions.unwrap_or(0),
-            noncurrent_days: noncurrent_days.unwrap_or(0),
+            newer_noncurrent_versions,
+            noncurrent_days,
         })
     }
 }
@@ -4128,8 +4359,8 @@ impl<'xml> DeserializeContent<'xml> for NoncurrentVersionTransition {
             _ => Err(DeError::UnexpectedTagName),
         })?;
         Ok(Self {
-            newer_noncurrent_versions: newer_noncurrent_versions.unwrap_or(0),
-            noncurrent_days: noncurrent_days.unwrap_or(0),
+            newer_noncurrent_versions,
+            noncurrent_days,
             storage_class,
         })
     }
@@ -4452,6 +4683,29 @@ impl<'xml> DeserializeContent<'xml> for ParquetInput {
     }
 }
 
+impl<'xml> DeserializeContent<'xml> for PartitionDateSource {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        String::deserialize_content(d).map(Self::from)
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for PartitionedPrefix {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut partition_date_source: Option<PartitionDateSource> = None;
+        d.for_each_element(|d, x| match x {
+            b"PartitionDateSource" => {
+                if partition_date_source.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                partition_date_source = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self { partition_date_source })
+    }
+}
+
 impl<'xml> DeserializeContent<'xml> for Payer {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         String::deserialize_content(d).map(Self::from)
@@ -4494,9 +4748,9 @@ impl<'xml> DeserializeContent<'xml> for Progress {
             _ => Err(DeError::UnexpectedTagName),
         })?;
         Ok(Self {
-            bytes_processed: bytes_processed.unwrap_or(0),
-            bytes_returned: bytes_returned.unwrap_or(0),
-            bytes_scanned: bytes_scanned.unwrap_or(0),
+            bytes_processed,
+            bytes_returned,
+            bytes_scanned,
         })
     }
 }
@@ -4545,10 +4799,10 @@ impl<'xml> DeserializeContent<'xml> for PublicAccessBlockConfiguration {
             _ => Err(DeError::UnexpectedTagName),
         })?;
         Ok(Self {
-            block_public_acls: block_public_acls.unwrap_or(false),
-            block_public_policy: block_public_policy.unwrap_or(false),
-            ignore_public_acls: ignore_public_acls.unwrap_or(false),
-            restrict_public_buckets: restrict_public_buckets.unwrap_or(false),
+            block_public_acls,
+            block_public_policy,
+            ignore_public_acls,
+            restrict_public_buckets,
         })
     }
 }
@@ -4821,7 +5075,7 @@ impl<'xml> DeserializeContent<'xml> for ReplicationRule {
             filter,
             id,
             prefix,
-            priority: priority.unwrap_or(0),
+            priority,
             source_selection_criteria,
             status: status.ok_or(DeError::MissingField)?,
         })
@@ -4915,9 +5169,7 @@ impl<'xml> DeserializeContent<'xml> for ReplicationTimeValue {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self {
-            minutes: minutes.unwrap_or(0),
-        })
+        Ok(Self { minutes })
     }
 }
 
@@ -4953,9 +5205,7 @@ impl<'xml> DeserializeContent<'xml> for RequestProgress {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self {
-            enabled: enabled.unwrap_or(false),
-        })
+        Ok(Self { enabled })
     }
 }
 
@@ -5021,7 +5271,7 @@ impl<'xml> DeserializeContent<'xml> for RestoreRequest {
             _ => Err(DeError::UnexpectedTagName),
         })?;
         Ok(Self {
-            days: days.unwrap_or(0),
+            days,
             description,
             glacier_job_parameters,
             output_location,
@@ -5209,10 +5459,7 @@ impl<'xml> DeserializeContent<'xml> for ScanRange {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self {
-            end: end.unwrap_or(0),
-            start: start.unwrap_or(0),
-        })
+        Ok(Self { end, start })
     }
 }
 
@@ -5400,8 +5647,14 @@ impl<'xml> DeserializeContent<'xml> for ServerSideEncryptionRule {
         })?;
         Ok(Self {
             apply_server_side_encryption_by_default,
-            bucket_key_enabled: bucket_key_enabled.unwrap_or(false),
+            bucket_key_enabled,
         })
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for SimplePrefix {
+    fn deserialize_content(_: &mut Deserializer<'xml>) -> DeResult<Self> {
+        Ok(Self {})
     }
 }
 
@@ -5488,9 +5741,9 @@ impl<'xml> DeserializeContent<'xml> for Stats {
             _ => Err(DeError::UnexpectedTagName),
         })?;
         Ok(Self {
-            bytes_processed: bytes_processed.unwrap_or(0),
-            bytes_returned: bytes_returned.unwrap_or(0),
-            bytes_scanned: bytes_scanned.unwrap_or(0),
+            bytes_processed,
+            bytes_returned,
+            bytes_scanned,
         })
     }
 }
@@ -5624,6 +5877,34 @@ impl<'xml> DeserializeContent<'xml> for TargetGrant {
     }
 }
 
+impl<'xml> DeserializeContent<'xml> for TargetObjectKeyFormat {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut partitioned_prefix: Option<PartitionedPrefix> = None;
+        let mut simple_prefix: Option<SimplePrefix> = None;
+        d.for_each_element(|d, x| match x {
+            b"PartitionedPrefix" => {
+                if partitioned_prefix.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                partitioned_prefix = Some(d.content()?);
+                Ok(())
+            }
+            b"SimplePrefix" => {
+                if simple_prefix.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                simple_prefix = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            partitioned_prefix,
+            simple_prefix,
+        })
+    }
+}
+
 impl<'xml> DeserializeContent<'xml> for Tier {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         String::deserialize_content(d).map(Self::from)
@@ -5653,7 +5934,7 @@ impl<'xml> DeserializeContent<'xml> for Tiering {
         })?;
         Ok(Self {
             access_tier: access_tier.ok_or(DeError::MissingField)?,
-            days: days.unwrap_or(0),
+            days: days.ok_or(DeError::MissingField)?,
         })
     }
 }
@@ -5733,7 +6014,7 @@ impl<'xml> DeserializeContent<'xml> for Transition {
         })?;
         Ok(Self {
             date,
-            days: days.unwrap_or(0),
+            days,
             storage_class,
         })
     }

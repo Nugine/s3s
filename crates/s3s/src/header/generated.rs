@@ -48,13 +48,21 @@ pub const X_AMZ_ABORT_DATE: HeaderName = HeaderName::from_static("x-amz-abort-da
 
 pub const X_AMZ_ABORT_RULE_ID: HeaderName = HeaderName::from_static("x-amz-abort-rule-id");
 
+pub const X_AMZ_ACCESS_POINT_ALIAS: HeaderName = HeaderName::from_static("x-amz-access-point-alias");
+
 pub const X_AMZ_ACL: HeaderName = HeaderName::from_static("x-amz-acl");
 
 pub const X_AMZ_ARCHIVE_STATUS: HeaderName = HeaderName::from_static("x-amz-archive-status");
 
+pub const X_AMZ_BUCKET_LOCATION_NAME: HeaderName = HeaderName::from_static("x-amz-bucket-location-name");
+
+pub const X_AMZ_BUCKET_LOCATION_TYPE: HeaderName = HeaderName::from_static("x-amz-bucket-location-type");
+
 pub const X_AMZ_BUCKET_OBJECT_LOCK_ENABLED: HeaderName = HeaderName::from_static("x-amz-bucket-object-lock-enabled");
 
 pub const X_AMZ_BUCKET_OBJECT_LOCK_TOKEN: HeaderName = HeaderName::from_static("x-amz-bucket-object-lock-token");
+
+pub const X_AMZ_BUCKET_REGION: HeaderName = HeaderName::from_static("x-amz-bucket-region");
 
 pub const X_AMZ_BYPASS_GOVERNANCE_RETENTION: HeaderName = HeaderName::from_static("x-amz-bypass-governance-retention");
 
@@ -97,6 +105,8 @@ pub const X_AMZ_COPY_SOURCE_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5: HeaderName 
     HeaderName::from_static("x-amz-copy-source-server-side-encryption-customer-key-md5");
 
 pub const X_AMZ_COPY_SOURCE_VERSION_ID: HeaderName = HeaderName::from_static("x-amz-copy-source-version-id");
+
+pub const X_AMZ_CREATE_SESSION_MODE: HeaderName = HeaderName::from_static("x-amz-create-session-mode");
 
 pub const X_AMZ_DATE: HeaderName = HeaderName::from_static("x-amz-date");
 

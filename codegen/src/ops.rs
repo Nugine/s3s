@@ -35,6 +35,12 @@ pub struct Operation {
 
 pub type Operations = BTreeMap<String, Operation>;
 
+fn is_skipped_operation(op_name: &str) -> bool {
+    // TODO: handle these operations
+    let skipped = ["CreateSession", "ListDirectoryBuckets"];
+    skipped.contains(&op_name)
+}
+
 pub fn collect_operations(model: &smithy::Model) -> Operations {
     let mut operations: Operations = default();
     let mut insert = |name, op| assert!(operations.insert(name, op).is_none());
@@ -43,6 +49,10 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
         let smithy::Shape::Operation(sh) = shape else { continue };
 
         let op_name = dto::to_type_name(shape_name).to_owned();
+
+        if is_skipped_operation(&op_name) {
+            continue;
+        }
 
         let cvt = |n| {
             if n == "smithy.api#Unit" {
@@ -124,7 +134,6 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     g!();
 
     glines![
-        ""
         "#![allow(clippy::declare_interior_mutable_const)]"
         "#![allow(clippy::borrow_interior_mutable_const)]"
         "#![allow(clippy::needless_pass_by_value)]"
@@ -856,7 +865,7 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
                 Some(group) => {
                     // NOTE: To debug the routing order, uncomment the lines below.
                     // {
-                    //     println!("{} {:?}", method, pattern);
+                    //     println!("{method} {pattern:?}");
                     //     println!();
                     //     for route in group {
                     //         println!(
@@ -945,8 +954,8 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
 
                             let qs = route.required_query_strings.as_slice();
                             let hs = route.required_headers.as_slice();
-                            assert!(qs.len() <= 1);
-                            assert!(hs.len() <= 2);
+                            assert!(qs.len() <= 2, "qs = {qs:?}");
+                            assert!(hs.len() <= 2, "hs = {hs:?}");
 
                             if qs.is_empty() && hs.is_empty() {
                                 continue;
@@ -954,6 +963,9 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
 
                             let mut cond: String = default();
                             for q in qs {
+                                if cond.is_empty().not() {
+                                    cond.push_str(" && ");
+                                }
                                 cond.push_str(&f!("qs.has(\"{q}\")"));
                             }
                             for h in hs {
