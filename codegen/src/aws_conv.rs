@@ -104,7 +104,6 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     };
                     g!("{aws_path}::{aws_variant_name} => Self::from_static(Self::{s3s_variant_name}),");
                 }
-                g!("{aws_path}::Unknown(_) => Self::from(x.as_str().to_owned()),");
                 g!("_ => Self::from(x.as_str().to_owned()),");
                 g!("}})");
             }

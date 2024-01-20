@@ -224,7 +224,6 @@ impl AwsConversion for s3s::dto::AnalyticsS3ExportFileFormat {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::AnalyticsS3ExportFileFormat::Csv => Self::from_static(Self::CSV),
-            aws_sdk_s3::types::AnalyticsS3ExportFileFormat::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -242,7 +241,6 @@ impl AwsConversion for s3s::dto::ArchiveStatus {
         Ok(match x {
             aws_sdk_s3::types::ArchiveStatus::ArchiveAccess => Self::from_static(Self::ARCHIVE_ACCESS),
             aws_sdk_s3::types::ArchiveStatus::DeepArchiveAccess => Self::from_static(Self::DEEP_ARCHIVE_ACCESS),
-            aws_sdk_s3::types::ArchiveStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -279,7 +277,6 @@ impl AwsConversion for s3s::dto::BucketAccelerateStatus {
         Ok(match x {
             aws_sdk_s3::types::BucketAccelerateStatus::Enabled => Self::from_static(Self::ENABLED),
             aws_sdk_s3::types::BucketAccelerateStatus::Suspended => Self::from_static(Self::SUSPENDED),
-            aws_sdk_s3::types::BucketAccelerateStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -331,7 +328,6 @@ impl AwsConversion for s3s::dto::BucketCannedACL {
             aws_sdk_s3::types::BucketCannedAcl::Private => Self::from_static(Self::PRIVATE),
             aws_sdk_s3::types::BucketCannedAcl::PublicRead => Self::from_static(Self::PUBLIC_READ),
             aws_sdk_s3::types::BucketCannedAcl::PublicReadWrite => Self::from_static(Self::PUBLIC_READ_WRITE),
-            aws_sdk_s3::types::BucketCannedAcl::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -411,7 +407,6 @@ impl AwsConversion for s3s::dto::BucketLocationConstraint {
             aws_sdk_s3::types::BucketLocationConstraint::UsGovWest1 => Self::from_static(Self::US_GOV_WEST_1),
             aws_sdk_s3::types::BucketLocationConstraint::UsWest1 => Self::from_static(Self::US_WEST_1),
             aws_sdk_s3::types::BucketLocationConstraint::UsWest2 => Self::from_static(Self::US_WEST_2),
-            aws_sdk_s3::types::BucketLocationConstraint::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -447,7 +442,6 @@ impl AwsConversion for s3s::dto::BucketLogsPermission {
             aws_sdk_s3::types::BucketLogsPermission::FullControl => Self::from_static(Self::FULL_CONTROL),
             aws_sdk_s3::types::BucketLogsPermission::Read => Self::from_static(Self::READ),
             aws_sdk_s3::types::BucketLogsPermission::Write => Self::from_static(Self::WRITE),
-            aws_sdk_s3::types::BucketLogsPermission::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -464,7 +458,6 @@ impl AwsConversion for s3s::dto::BucketType {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::BucketType::Directory => Self::from_static(Self::DIRECTORY),
-            aws_sdk_s3::types::BucketType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -482,7 +475,6 @@ impl AwsConversion for s3s::dto::BucketVersioningStatus {
         Ok(match x {
             aws_sdk_s3::types::BucketVersioningStatus::Enabled => Self::from_static(Self::ENABLED),
             aws_sdk_s3::types::BucketVersioningStatus::Suspended => Self::from_static(Self::SUSPENDED),
-            aws_sdk_s3::types::BucketVersioningStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -623,7 +615,6 @@ impl AwsConversion for s3s::dto::ChecksumAlgorithm {
             aws_sdk_s3::types::ChecksumAlgorithm::Crc32C => Self::from_static(Self::CRC32C),
             aws_sdk_s3::types::ChecksumAlgorithm::Sha1 => Self::from_static(Self::SHA1),
             aws_sdk_s3::types::ChecksumAlgorithm::Sha256 => Self::from_static(Self::SHA256),
-            aws_sdk_s3::types::ChecksumAlgorithm::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -640,7 +631,6 @@ impl AwsConversion for s3s::dto::ChecksumMode {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::ChecksumMode::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::ChecksumMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -804,7 +794,6 @@ impl AwsConversion for s3s::dto::CompressionType {
             aws_sdk_s3::types::CompressionType::Bzip2 => Self::from_static(Self::BZIP2),
             aws_sdk_s3::types::CompressionType::Gzip => Self::from_static(Self::GZIP),
             aws_sdk_s3::types::CompressionType::None => Self::from_static(Self::NONE),
-            aws_sdk_s3::types::CompressionType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -1269,7 +1258,6 @@ impl AwsConversion for s3s::dto::DataRedundancy {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::DataRedundancy::SingleAvailabilityZone => Self::from_static(Self::SINGLE_AVAILABILITY_ZONE),
-            aws_sdk_s3::types::DataRedundancy::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -1832,7 +1820,6 @@ impl AwsConversion for s3s::dto::DeleteMarkerReplicationStatus {
         Ok(match x {
             aws_sdk_s3::types::DeleteMarkerReplicationStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::DeleteMarkerReplicationStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::DeleteMarkerReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -2076,7 +2063,6 @@ impl AwsConversion for s3s::dto::EncodingType {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::EncodingType::Url => Self::from_static(Self::URL),
-            aws_sdk_s3::types::EncodingType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -2221,7 +2207,6 @@ impl AwsConversion for s3s::dto::ExistingObjectReplicationStatus {
         Ok(match x {
             aws_sdk_s3::types::ExistingObjectReplicationStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::ExistingObjectReplicationStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::ExistingObjectReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -2239,7 +2224,6 @@ impl AwsConversion for s3s::dto::ExpirationStatus {
         Ok(match x {
             aws_sdk_s3::types::ExpirationStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::ExpirationStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::ExpirationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -2256,7 +2240,6 @@ impl AwsConversion for s3s::dto::ExpressionType {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::ExpressionType::Sql => Self::from_static(Self::SQL),
-            aws_sdk_s3::types::ExpressionType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -2275,7 +2258,6 @@ impl AwsConversion for s3s::dto::FileHeaderInfo {
             aws_sdk_s3::types::FileHeaderInfo::Ignore => Self::from_static(Self::IGNORE),
             aws_sdk_s3::types::FileHeaderInfo::None => Self::from_static(Self::NONE),
             aws_sdk_s3::types::FileHeaderInfo::Use => Self::from_static(Self::USE),
-            aws_sdk_s3::types::FileHeaderInfo::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -2312,7 +2294,6 @@ impl AwsConversion for s3s::dto::FilterRuleName {
         Ok(match x {
             aws_sdk_s3::types::FilterRuleName::Prefix => Self::from_static(Self::PREFIX),
             aws_sdk_s3::types::FilterRuleName::Suffix => Self::from_static(Self::SUFFIX),
-            aws_sdk_s3::types::FilterRuleName::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -3897,7 +3878,6 @@ impl AwsConversion for s3s::dto::IntelligentTieringAccessTier {
         Ok(match x {
             aws_sdk_s3::types::IntelligentTieringAccessTier::ArchiveAccess => Self::from_static(Self::ARCHIVE_ACCESS),
             aws_sdk_s3::types::IntelligentTieringAccessTier::DeepArchiveAccess => Self::from_static(Self::DEEP_ARCHIVE_ACCESS),
-            aws_sdk_s3::types::IntelligentTieringAccessTier::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -3978,7 +3958,6 @@ impl AwsConversion for s3s::dto::IntelligentTieringStatus {
         Ok(match x {
             aws_sdk_s3::types::IntelligentTieringStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::IntelligentTieringStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::IntelligentTieringStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -4098,7 +4077,6 @@ impl AwsConversion for s3s::dto::InventoryFormat {
             aws_sdk_s3::types::InventoryFormat::Csv => Self::from_static(Self::CSV),
             aws_sdk_s3::types::InventoryFormat::Orc => Self::from_static(Self::ORC),
             aws_sdk_s3::types::InventoryFormat::Parquet => Self::from_static(Self::PARQUET),
-            aws_sdk_s3::types::InventoryFormat::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -4116,7 +4094,6 @@ impl AwsConversion for s3s::dto::InventoryFrequency {
         Ok(match x {
             aws_sdk_s3::types::InventoryFrequency::Daily => Self::from_static(Self::DAILY),
             aws_sdk_s3::types::InventoryFrequency::Weekly => Self::from_static(Self::WEEKLY),
-            aws_sdk_s3::types::InventoryFrequency::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -4134,7 +4111,6 @@ impl AwsConversion for s3s::dto::InventoryIncludedObjectVersions {
         Ok(match x {
             aws_sdk_s3::types::InventoryIncludedObjectVersions::All => Self::from_static(Self::ALL),
             aws_sdk_s3::types::InventoryIncludedObjectVersions::Current => Self::from_static(Self::CURRENT),
-            aws_sdk_s3::types::InventoryIncludedObjectVersions::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -4173,7 +4149,6 @@ impl AwsConversion for s3s::dto::InventoryOptionalField {
             aws_sdk_s3::types::InventoryOptionalField::ReplicationStatus => Self::from_static(Self::REPLICATION_STATUS),
             aws_sdk_s3::types::InventoryOptionalField::Size => Self::from_static(Self::SIZE),
             aws_sdk_s3::types::InventoryOptionalField::StorageClass => Self::from_static(Self::STORAGE_CLASS),
-            aws_sdk_s3::types::InventoryOptionalField::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -4267,7 +4242,6 @@ impl AwsConversion for s3s::dto::JSONType {
         Ok(match x {
             aws_sdk_s3::types::JsonType::Document => Self::from_static(Self::DOCUMENT),
             aws_sdk_s3::types::JsonType::Lines => Self::from_static(Self::LINES),
-            aws_sdk_s3::types::JsonType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5061,7 +5035,6 @@ impl AwsConversion for s3s::dto::LocationType {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::LocationType::AvailabilityZone => Self::from_static(Self::AVAILABILITY_ZONE),
-            aws_sdk_s3::types::LocationType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5102,7 +5075,6 @@ impl AwsConversion for s3s::dto::MFADelete {
         Ok(match x {
             aws_sdk_s3::types::MfaDelete::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::MfaDelete::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::MfaDelete::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5120,7 +5092,6 @@ impl AwsConversion for s3s::dto::MFADeleteStatus {
         Ok(match x {
             aws_sdk_s3::types::MfaDeleteStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::MfaDeleteStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::MfaDeleteStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5138,7 +5109,6 @@ impl AwsConversion for s3s::dto::MetadataDirective {
         Ok(match x {
             aws_sdk_s3::types::MetadataDirective::Copy => Self::from_static(Self::COPY),
             aws_sdk_s3::types::MetadataDirective::Replace => Self::from_static(Self::REPLACE),
-            aws_sdk_s3::types::MetadataDirective::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5259,7 +5229,6 @@ impl AwsConversion for s3s::dto::MetricsStatus {
         Ok(match x {
             aws_sdk_s3::types::MetricsStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::MetricsStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::MetricsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5500,7 +5469,6 @@ impl AwsConversion for s3s::dto::ObjectAttributes {
             aws_sdk_s3::types::ObjectAttributes::ObjectParts => Self::from_static(Self::OBJECT_PARTS),
             aws_sdk_s3::types::ObjectAttributes::ObjectSize => Self::from_static(Self::OBJECT_SIZE),
             aws_sdk_s3::types::ObjectAttributes::StorageClass => Self::from_static(Self::STORAGE_CLASS),
-            aws_sdk_s3::types::ObjectAttributes::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5523,7 +5491,6 @@ impl AwsConversion for s3s::dto::ObjectCannedACL {
             aws_sdk_s3::types::ObjectCannedAcl::Private => Self::from_static(Self::PRIVATE),
             aws_sdk_s3::types::ObjectCannedAcl::PublicRead => Self::from_static(Self::PUBLIC_READ),
             aws_sdk_s3::types::ObjectCannedAcl::PublicReadWrite => Self::from_static(Self::PUBLIC_READ_WRITE),
-            aws_sdk_s3::types::ObjectCannedAcl::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5578,7 +5545,6 @@ impl AwsConversion for s3s::dto::ObjectLockEnabled {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::ObjectLockEnabled::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::ObjectLockEnabled::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5613,7 +5579,6 @@ impl AwsConversion for s3s::dto::ObjectLockLegalHoldStatus {
         Ok(match x {
             aws_sdk_s3::types::ObjectLockLegalHoldStatus::Off => Self::from_static(Self::OFF),
             aws_sdk_s3::types::ObjectLockLegalHoldStatus::On => Self::from_static(Self::ON),
-            aws_sdk_s3::types::ObjectLockLegalHoldStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5631,7 +5596,6 @@ impl AwsConversion for s3s::dto::ObjectLockMode {
         Ok(match x {
             aws_sdk_s3::types::ObjectLockMode::Compliance => Self::from_static(Self::COMPLIANCE),
             aws_sdk_s3::types::ObjectLockMode::Governance => Self::from_static(Self::GOVERNANCE),
-            aws_sdk_s3::types::ObjectLockMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5668,7 +5632,6 @@ impl AwsConversion for s3s::dto::ObjectLockRetentionMode {
         Ok(match x {
             aws_sdk_s3::types::ObjectLockRetentionMode::Compliance => Self::from_static(Self::COMPLIANCE),
             aws_sdk_s3::types::ObjectLockRetentionMode::Governance => Self::from_static(Self::GOVERNANCE),
-            aws_sdk_s3::types::ObjectLockRetentionMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5720,7 +5683,6 @@ impl AwsConversion for s3s::dto::ObjectOwnership {
             aws_sdk_s3::types::ObjectOwnership::BucketOwnerEnforced => Self::from_static(Self::BUCKET_OWNER_ENFORCED),
             aws_sdk_s3::types::ObjectOwnership::BucketOwnerPreferred => Self::from_static(Self::BUCKET_OWNER_PREFERRED),
             aws_sdk_s3::types::ObjectOwnership::ObjectWriter => Self::from_static(Self::OBJECT_WRITER),
-            aws_sdk_s3::types::ObjectOwnership::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5774,7 +5736,6 @@ impl AwsConversion for s3s::dto::ObjectStorageClass {
             aws_sdk_s3::types::ObjectStorageClass::Snow => Self::from_static(Self::SNOW),
             aws_sdk_s3::types::ObjectStorageClass::Standard => Self::from_static(Self::STANDARD),
             aws_sdk_s3::types::ObjectStorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
-            aws_sdk_s3::types::ObjectStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5826,7 +5787,6 @@ impl AwsConversion for s3s::dto::ObjectVersionStorageClass {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::ObjectVersionStorageClass::Standard => Self::from_static(Self::STANDARD),
-            aws_sdk_s3::types::ObjectVersionStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5843,7 +5803,6 @@ impl AwsConversion for s3s::dto::OptionalObjectAttributes {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::OptionalObjectAttributes::RestoreStatus => Self::from_static(Self::RESTORE_STATUS),
-            aws_sdk_s3::types::OptionalObjectAttributes::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5913,7 +5872,6 @@ impl AwsConversion for s3s::dto::OwnerOverride {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::OwnerOverride::Destination => Self::from_static(Self::DESTINATION),
-            aws_sdk_s3::types::OwnerOverride::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -6012,7 +5970,6 @@ impl AwsConversion for s3s::dto::PartitionDateSource {
         Ok(match x {
             aws_sdk_s3::types::PartitionDateSource::DeliveryTime => Self::from_static(Self::DELIVERY_TIME),
             aws_sdk_s3::types::PartitionDateSource::EventTime => Self::from_static(Self::EVENT_TIME),
-            aws_sdk_s3::types::PartitionDateSource::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -6047,7 +6004,6 @@ impl AwsConversion for s3s::dto::Payer {
         Ok(match x {
             aws_sdk_s3::types::Payer::BucketOwner => Self::from_static(Self::BUCKET_OWNER),
             aws_sdk_s3::types::Payer::Requester => Self::from_static(Self::REQUESTER),
-            aws_sdk_s3::types::Payer::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -6068,7 +6024,6 @@ impl AwsConversion for s3s::dto::Permission {
             aws_sdk_s3::types::Permission::ReadAcp => Self::from_static(Self::READ_ACP),
             aws_sdk_s3::types::Permission::Write => Self::from_static(Self::WRITE),
             aws_sdk_s3::types::Permission::WriteAcp => Self::from_static(Self::WRITE_ACP),
-            aws_sdk_s3::types::Permission::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -6141,7 +6096,6 @@ impl AwsConversion for s3s::dto::Protocol {
         Ok(match x {
             aws_sdk_s3::types::Protocol::Http => Self::from_static(Self::HTTP),
             aws_sdk_s3::types::Protocol::Https => Self::from_static(Self::HTTPS),
-            aws_sdk_s3::types::Protocol::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -7379,7 +7333,6 @@ impl AwsConversion for s3s::dto::QuoteFields {
         Ok(match x {
             aws_sdk_s3::types::QuoteFields::Always => Self::from_static(Self::ALWAYS),
             aws_sdk_s3::types::QuoteFields::Asneeded => Self::from_static(Self::ASNEEDED),
-            aws_sdk_s3::types::QuoteFields::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -7475,7 +7428,6 @@ impl AwsConversion for s3s::dto::ReplicaModificationsStatus {
         Ok(match x {
             aws_sdk_s3::types::ReplicaModificationsStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::ReplicaModificationsStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::ReplicaModificationsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -7589,7 +7541,6 @@ impl AwsConversion for s3s::dto::ReplicationRuleStatus {
         Ok(match x {
             aws_sdk_s3::types::ReplicationRuleStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::ReplicationRuleStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::ReplicationRuleStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -7610,7 +7561,6 @@ impl AwsConversion for s3s::dto::ReplicationStatus {
             aws_sdk_s3::types::ReplicationStatus::Failed => Self::from_static(Self::FAILED),
             aws_sdk_s3::types::ReplicationStatus::Pending => Self::from_static(Self::PENDING),
             aws_sdk_s3::types::ReplicationStatus::Replica => Self::from_static(Self::REPLICA),
-            aws_sdk_s3::types::ReplicationStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -7647,7 +7597,6 @@ impl AwsConversion for s3s::dto::ReplicationTimeStatus {
         Ok(match x {
             aws_sdk_s3::types::ReplicationTimeStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::ReplicationTimeStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::ReplicationTimeStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -7681,7 +7630,6 @@ impl AwsConversion for s3s::dto::RequestCharged {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::RequestCharged::Requester => Self::from_static(Self::REQUESTER),
-            aws_sdk_s3::types::RequestCharged::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -7698,7 +7646,6 @@ impl AwsConversion for s3s::dto::RequestPayer {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::RequestPayer::Requester => Self::from_static(Self::REQUESTER),
-            aws_sdk_s3::types::RequestPayer::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -7826,7 +7773,6 @@ impl AwsConversion for s3s::dto::RestoreRequestType {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::RestoreRequestType::Select => Self::from_static(Self::SELECT),
-            aws_sdk_s3::types::RestoreRequestType::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8049,7 +7995,6 @@ impl AwsConversion for s3s::dto::ServerSideEncryption {
             aws_sdk_s3::types::ServerSideEncryption::Aes256 => Self::from_static(Self::AES256),
             aws_sdk_s3::types::ServerSideEncryption::AwsKms => Self::from_static(Self::AWS_KMS),
             aws_sdk_s3::types::ServerSideEncryption::AwsKmsDsse => Self::from_static(Self::AWS_KMS_DSSE),
-            aws_sdk_s3::types::ServerSideEncryption::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8145,7 +8090,6 @@ impl AwsConversion for s3s::dto::SessionMode {
         Ok(match x {
             aws_sdk_s3::types::SessionMode::ReadOnly => Self::from_static(Self::READ_ONLY),
             aws_sdk_s3::types::SessionMode::ReadWrite => Self::from_static(Self::READ_WRITE),
-            aws_sdk_s3::types::SessionMode::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8215,7 +8159,6 @@ impl AwsConversion for s3s::dto::SseKmsEncryptedObjectsStatus {
         Ok(match x {
             aws_sdk_s3::types::SseKmsEncryptedObjectsStatus::Disabled => Self::from_static(Self::DISABLED),
             aws_sdk_s3::types::SseKmsEncryptedObjectsStatus::Enabled => Self::from_static(Self::ENABLED),
-            aws_sdk_s3::types::SseKmsEncryptedObjectsStatus::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8280,7 +8223,6 @@ impl AwsConversion for s3s::dto::StorageClass {
             aws_sdk_s3::types::StorageClass::Snow => Self::from_static(Self::SNOW),
             aws_sdk_s3::types::StorageClass::Standard => Self::from_static(Self::STANDARD),
             aws_sdk_s3::types::StorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
-            aws_sdk_s3::types::StorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8333,7 +8275,6 @@ impl AwsConversion for s3s::dto::StorageClassAnalysisSchemaVersion {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::StorageClassAnalysisSchemaVersion::V1 => Self::from_static(Self::V_1),
-            aws_sdk_s3::types::StorageClassAnalysisSchemaVersion::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8387,7 +8328,6 @@ impl AwsConversion for s3s::dto::TaggingDirective {
         Ok(match x {
             aws_sdk_s3::types::TaggingDirective::Copy => Self::from_static(Self::COPY),
             aws_sdk_s3::types::TaggingDirective::Replace => Self::from_static(Self::REPLACE),
-            aws_sdk_s3::types::TaggingDirective::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8444,7 +8384,6 @@ impl AwsConversion for s3s::dto::Tier {
             aws_sdk_s3::types::Tier::Bulk => Self::from_static(Self::BULK),
             aws_sdk_s3::types::Tier::Expedited => Self::from_static(Self::EXPEDITED),
             aws_sdk_s3::types::Tier::Standard => Self::from_static(Self::STANDARD),
-            aws_sdk_s3::types::Tier::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8529,7 +8468,6 @@ impl AwsConversion for s3s::dto::TransitionStorageClass {
             aws_sdk_s3::types::TransitionStorageClass::IntelligentTiering => Self::from_static(Self::INTELLIGENT_TIERING),
             aws_sdk_s3::types::TransitionStorageClass::OnezoneIa => Self::from_static(Self::ONEZONE_IA),
             aws_sdk_s3::types::TransitionStorageClass::StandardIa => Self::from_static(Self::STANDARD_IA),
-            aws_sdk_s3::types::TransitionStorageClass::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -8548,7 +8486,6 @@ impl AwsConversion for s3s::dto::Type {
             aws_sdk_s3::types::Type::AmazonCustomerByEmail => Self::from_static(Self::AMAZON_CUSTOMER_BY_EMAIL),
             aws_sdk_s3::types::Type::CanonicalUser => Self::from_static(Self::CANONICAL_USER),
             aws_sdk_s3::types::Type::Group => Self::from_static(Self::GROUP),
-            aws_sdk_s3::types::Type::Unknown(_) => Self::from(x.as_str().to_owned()),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
