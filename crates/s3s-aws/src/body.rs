@@ -2,13 +2,13 @@ use std::pin::Pin;
 use std::task::Context;
 use std::task::Poll;
 
-use aws_smithy_http::body::SdkBody;
+use aws_smithy_types::body::SdkBody;
 
 use futures::Stream;
 use hyper::body::HttpBody;
 
 pub fn s3s_body_into_sdk_body(body: s3s::Body) -> SdkBody {
-    SdkBody::from_dyn(body.boxed())
+    SdkBody::from_body_0_4(body.boxed())
 }
 
 pub fn sdk_body_into_s3s_body(body: SdkBody) -> s3s::Body {

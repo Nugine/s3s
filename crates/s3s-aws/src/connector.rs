@@ -1,21 +1,20 @@
+use crate::body::{s3s_body_into_sdk_body, sdk_body_into_s3s_body};
+
 use s3s::service::SharedS3Service;
-use s3s::{S3Error, S3Result};
+use s3s::S3Result;
 
 use std::ops::Not;
-use std::task::{Context, Poll};
 
-use aws_smithy_http::body::SdkBody;
-use aws_smithy_http::byte_stream::ByteStream;
-use aws_smithy_http::result::ConnectorError;
+use aws_smithy_runtime_api::client::http::{HttpConnector, HttpConnectorFuture};
+use aws_smithy_runtime_api::client::orchestrator::HttpRequest as AwsHttpRequest;
+use aws_smithy_runtime_api::client::orchestrator::HttpResponse as AwsHttpResponse;
+use aws_smithy_runtime_api::client::result::ConnectorError;
 
 use hyper::header::HOST;
 use hyper::http;
-use hyper::service::Service;
 use hyper::{Request, Response};
 
-use futures::future::BoxFuture;
-
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Connector(SharedS3Service);
 
 impl From<SharedS3Service> for Connector {
@@ -24,42 +23,35 @@ impl From<SharedS3Service> for Connector {
     }
 }
 
-fn on_err(e: S3Error) -> ConnectorError {
-    let kind = aws_smithy_types::retry::ErrorKind::ServerError;
+fn on_err<E>(e: E) -> ConnectorError
+where
+    E: std::error::Error + Send + Sync + 'static,
+{
+    let kind = aws_smithy_runtime_api::client::retries::ErrorKind::ServerError;
     ConnectorError::other(Box::new(e), Some(kind))
 }
 
-// From <https://github.com/awslabs/aws-sdk-rust/discussions/253#discussioncomment-1478233>
-impl Service<Request<SdkBody>> for Connector {
-    type Response = Response<SdkBody>;
-
-    type Error = ConnectorError;
-
-    type Future = BoxFuture<'static, Result<Self::Response, Self::Error>>;
-
-    fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-        self.0.poll_ready(cx).map_err(on_err)
-    }
-
-    fn call(&mut self, req: Request<SdkBody>) -> Self::Future {
-        let req = convert_input(req);
+impl HttpConnector for Connector {
+    fn call(&self, req: AwsHttpRequest) -> HttpConnectorFuture {
         let service = self.0.clone();
-        Box::pin(async move { convert_output(service.as_ref().call(req).await) })
+        HttpConnectorFuture::new_boxed(Box::pin(async move { convert_output(service.as_ref().call(convert_input(req)?).await) }))
     }
 }
 
-fn convert_input(mut req: Request<SdkBody>) -> Request<s3s::Body> {
+fn convert_input(req: AwsHttpRequest) -> Result<Request<s3s::Body>, ConnectorError> {
+    let mut req = req.try_into_http02x().map_err(on_err)?;
+
     if req.headers().contains_key(HOST).not() {
         let host = auto_host_header(req.uri());
         req.headers_mut().insert(HOST, host);
     }
 
-    req.map(|sdk_body| s3s::Body::from(hyper::Body::wrap_stream(ByteStream::from(sdk_body))))
+    Ok(req.map(sdk_body_into_s3s_body))
 }
 
-fn convert_output(result: S3Result<Response<s3s::Body>>) -> Result<Response<SdkBody>, ConnectorError> {
+fn convert_output(result: S3Result<Response<s3s::Body>>) -> Result<AwsHttpResponse, ConnectorError> {
     match result {
-        Ok(res) => Ok(res.map(|s3s_body| SdkBody::from(hyper::Body::from(s3s_body)))),
+        Ok(res) => res.map(s3s_body_into_sdk_body).try_into().map_err(on_err),
         Err(e) => Err(on_err(e)),
     }
 }

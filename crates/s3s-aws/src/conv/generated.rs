@@ -4300,6 +4300,27 @@ impl AwsConversion for s3s::dto::LambdaFunctionConfiguration {
     }
 }
 
+impl AwsConversion for s3s::dto::LifecycleExpiration {
+    type Target = aws_sdk_s3::types::LifecycleExpiration;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            date: try_from_aws(x.date)?,
+            days: try_from_aws(x.days)?,
+            expired_object_delete_marker: try_from_aws(x.expired_object_delete_marker)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_date(try_into_aws(x.date)?);
+        y = y.set_days(try_into_aws(x.days)?);
+        y = y.set_expired_object_delete_marker(try_into_aws(x.expired_object_delete_marker)?);
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::LifecycleRule {
     type Target = aws_sdk_s3::types::LifecycleRule;
     type Error = S3Error;

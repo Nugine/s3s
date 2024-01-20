@@ -29,17 +29,24 @@ macro_rules! wrap_sdk_error {
 
 // FIXME: this is actually an overloaded function
 
-pub struct SetStatusCode<'a, 'b, E, R>(pub &'a mut s3s::S3Error, pub &'b aws_smithy_http::result::ServiceError<E, R>);
+pub struct SetStatusCode<'a, 'b, E, R>(
+    pub &'a mut s3s::S3Error,
+    pub &'b aws_smithy_runtime_api::client::result::ServiceError<E, R>,
+);
 
 impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_runtime_api::client::orchestrator::HttpResponse> {
     pub fn call(self) {
         let Self(err, e) = self;
-        err.set_status_code(e.raw().status());
+        err.set_status_code(hyper_status_code_from_aws(e.raw().status()));
         // TODO: headers?
     }
 }
 
-impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_http::event_stream::RawMessage> {
+impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_types::event_stream::RawMessage> {
     #[allow(clippy::unused_self)]
     pub fn call(self) {}
+}
+
+fn hyper_status_code_from_aws(status_code: aws_smithy_runtime_api::http::StatusCode) -> hyper::StatusCode {
+    hyper::StatusCode::from_u16(status_code.as_u16()).unwrap()
 }

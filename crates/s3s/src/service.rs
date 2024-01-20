@@ -4,6 +4,7 @@ use crate::http::{Body, Request};
 use crate::s3_trait::S3;
 
 use std::convert::Infallible;
+use std::fmt;
 use std::future::{ready, Ready};
 use std::sync::Arc;
 use std::task::{Context, Poll};
@@ -86,7 +87,13 @@ impl S3Service {
     }
 }
 
-#[derive(Clone)]
+impl fmt::Debug for S3Service {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("S3Service").finish_non_exhaustive()
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct SharedS3Service(Arc<S3Service>);
 
 impl SharedS3Service {

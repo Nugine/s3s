@@ -5,9 +5,9 @@ edition = "2021"
 publish = false
 
 [dependencies]
-aws-config = "0.56.1"
-aws-credential-types = "0.56.1"
-aws-sdk-s3 = "0.34.0"
+aws-config = { version = "1.1.2", default-features = false }
+aws-credential-types = "1.1.2"
+aws-sdk-s3 = "1.12.0"
 clap = { version = "4.3.21", features = ["derive"] }
 hyper = { version = "0.14.27", features = ["full"] }
 s3s = { version = "0.9.0-dev", path = "../s3s" }
