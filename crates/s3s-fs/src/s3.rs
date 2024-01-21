@@ -195,11 +195,14 @@ impl S3 for FileSystem {
         let last_modified = Timestamp::from(try_!(file_metadata.modified()));
         let file_len = file_metadata.len();
 
-        let content_length = match input.range {
-            None => file_len,
+        let (content_length, content_range) = match input.range {
+            None => (file_len, None),
             Some(range) => {
                 let file_range = range.check(file_len)?;
-                file_range.end - file_range.start
+                (
+                    file_range.end - file_range.start,
+                    Some(format!("bytes {}-{}/{file_len}", file_range.start, file_range.end - 1)),
+                )
             }
         };
         let content_length_usize = try_!(usize::try_from(content_length));
@@ -232,6 +235,7 @@ impl S3 for FileSystem {
         let output = GetObjectOutput {
             body: Some(StreamingBlob::wrap(body)),
             content_length: content_length_i64,
+            content_range,
             last_modified: Some(last_modified),
             metadata: object_metadata,
             e_tag: Some(e_tag),

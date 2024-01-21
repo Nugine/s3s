@@ -111,7 +111,8 @@ impl Range {
         match *self {
             Range::Int { first, last } => match last {
                 Some(last) => {
-                    if first > last || last >= full_length {
+                    let last = last.min(full_length - 1);
+                    if first > last {
                         return Err(err());
                     }
                     // first <= last < full_length
