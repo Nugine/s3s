@@ -68,7 +68,6 @@ pub struct Struct {
     pub name: String,
     pub fields: Vec<StructField>,
     pub doc: Option<String>,
-    pub s3_unwrapped_xml_output: bool,
 
     pub xml_name: Option<String>,
     pub is_error_type: bool,
