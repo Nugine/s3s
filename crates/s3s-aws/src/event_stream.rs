@@ -1,7 +1,7 @@
 use sync_wrapper::{SyncFuture, SyncWrapper};
 use transform_stream::AsyncStream;
 
-type AwsSelectObjectContentEventStream = aws_smithy_http::event_stream::Receiver<
+type AwsSelectObjectContentEventStream = aws_sdk_s3::primitives::event_stream::EventReceiver<
     aws_sdk_s3::types::SelectObjectContentEventStream,
     aws_sdk_s3::types::error::SelectObjectContentEventStreamError,
 >;

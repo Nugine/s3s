@@ -3283,43 +3283,6 @@ impl fmt::Debug for CreateMultipartUploadOutput {
     }
 }
 
-pub struct CreateSessionOutput {
-    /// <p>The established temporary security credentials  for the created session..</p>
-    pub credentials: SessionCredentials,
-}
-
-impl fmt::Debug for CreateSessionOutput {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut d = f.debug_struct("CreateSessionOutput");
-        d.field("credentials", &self.credentials);
-        d.finish_non_exhaustive()
-    }
-}
-
-pub struct CreateSessionRequest {
-    /// <p>The name of the bucket that you create a session for.</p>
-    pub bucket: BucketName,
-    /// <p>Specifies the mode of the session that will be created, either <code>ReadWrite</code> or
-    /// <code>ReadOnly</code>. By default, a <code>ReadWrite</code> session is created. A
-    /// <code>ReadWrite</code> session is capable of executing all the Zonal endpoint APIs on a
-    /// directory bucket. A <code>ReadOnly</code> session is constrained to execute the following
-    /// Zonal endpoint APIs: <code>GetObject</code>, <code>HeadObject</code>, <code>ListObjectsV2</code>,
-    /// <code>GetObjectAttributes</code>, <code>ListParts</code>, and
-    /// <code>ListMultipartUploads</code>.</p>
-    pub session_mode: Option<SessionMode>,
-}
-
-impl fmt::Debug for CreateSessionRequest {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut d = f.debug_struct("CreateSessionRequest");
-        d.field("bucket", &self.bucket);
-        if let Some(ref val) = self.session_mode {
-            d.field("session_mode", val);
-        }
-        d.finish_non_exhaustive()
-    }
-}
-
 pub type CreationDate = Timestamp;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -10821,52 +10784,6 @@ impl fmt::Debug for ListBucketsOutput {
         }
         if let Some(ref val) = self.owner {
             d.field("owner", val);
-        }
-        d.finish_non_exhaustive()
-    }
-}
-
-#[derive(Default)]
-pub struct ListDirectoryBucketsOutput {
-    /// <p>The list of buckets owned by the requester. </p>
-    pub buckets: Option<Buckets>,
-    /// <p>If <code>ContinuationToken</code> was sent with the request, it is included in the
-    /// response. You can use the returned <code>ContinuationToken</code> for pagination of the list response.</p>
-    pub continuation_token: Option<DirectoryBucketToken>,
-}
-
-impl fmt::Debug for ListDirectoryBucketsOutput {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut d = f.debug_struct("ListDirectoryBucketsOutput");
-        if let Some(ref val) = self.buckets {
-            d.field("buckets", val);
-        }
-        if let Some(ref val) = self.continuation_token {
-            d.field("continuation_token", val);
-        }
-        d.finish_non_exhaustive()
-    }
-}
-
-#[derive(Default)]
-pub struct ListDirectoryBucketsRequest {
-    /// <p>
-    /// <code>ContinuationToken</code> indicates to Amazon S3 that the list is being continued on
-    /// this bucket with a token. <code>ContinuationToken</code> is obfuscated and is not a real
-    /// key. You can use this <code>ContinuationToken</code> for pagination of the list results.  </p>
-    pub continuation_token: Option<DirectoryBucketToken>,
-    /// <p>Maximum number of buckets to be returned in response. When the number is more than the count of buckets that are owned by an Amazon Web Services account, return all the buckets in response.</p>
-    pub max_directory_buckets: Option<MaxDirectoryBuckets>,
-}
-
-impl fmt::Debug for ListDirectoryBucketsRequest {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut d = f.debug_struct("ListDirectoryBucketsRequest");
-        if let Some(ref val) = self.continuation_token {
-            d.field("continuation_token", val);
-        }
-        if let Some(ref val) = self.max_directory_buckets {
-            d.field("max_directory_buckets", val);
         }
         d.finish_non_exhaustive()
     }

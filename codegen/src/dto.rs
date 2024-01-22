@@ -1,5 +1,5 @@
 use crate::o;
-use crate::ops::{is_op_input, Operations};
+use crate::ops::{is_op_input, Operations, SKIPPED_OPS};
 use crate::rust::codegen_doc;
 use crate::{rust, smithy};
 
@@ -287,6 +287,11 @@ fn patch_types(space: &mut RustTypes) {
 }
 
 fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
+    for op in SKIPPED_OPS {
+        space.remove(&format!("{op}Request"));
+        space.remove(&format!("{op}Output"));
+    }
+
     // unify operation input type
     for op in ops.values() {
         if op.name == "SelectObjectContent" {

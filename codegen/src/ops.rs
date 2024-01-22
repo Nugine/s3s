@@ -35,11 +35,8 @@ pub struct Operation {
 
 pub type Operations = BTreeMap<String, Operation>;
 
-fn is_skipped_operation(op_name: &str) -> bool {
-    // TODO: handle these operations
-    let skipped = ["CreateSession", "ListDirectoryBuckets"];
-    skipped.contains(&op_name)
-}
+// TODO: handle these operations
+pub const SKIPPED_OPS: &[&str] = &["CreateSession", "ListDirectoryBuckets"];
 
 pub fn collect_operations(model: &smithy::Model) -> Operations {
     let mut operations: Operations = default();
@@ -50,7 +47,7 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
 
         let op_name = dto::to_type_name(shape_name).to_owned();
 
-        if is_skipped_operation(&op_name) {
+        if SKIPPED_OPS.contains(&op_name.as_str()) {
             continue;
         }
 

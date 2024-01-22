@@ -75,12 +75,27 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                         continue;
                     }
 
+                    let field_ty = &rust_types[field.type_.as_str()];
+
                     let needs_unwrap = 'unwrap: {
+                        if field.type_ == "OptionalObjectAttributesList" {
+                            break 'unwrap true;
+                        }
                         if is_op_input(&ty.name, ops) && field.option_type.not() && field.is_required {
                             break 'unwrap true;
                         }
+                        let is_special_type = matches!(
+                            field_ty,
+                            rust::Type::StrEnum(_) | rust::Type::Alias(_) | rust::Type::List(_) | rust::Type::Timestamp(_)
+                        );
+                        if is_special_type {
+                            break 'unwrap false;
+                        }
                         field.option_type.not() && field.default_value.is_none()
                     };
+                    // if needs_unwrap {
+                    //     println!("{:?} {:?}\n", ty.name, field);
+                    // }
 
                     if needs_unwrap {
                         g!("{s3s_field_name}: unwrap_from_aws(x.{aws_field_name}, \"{s3s_field_name}\")?,");
@@ -153,7 +168,9 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     }
                 }
 
-                if is_op_input(&ty.name, ops) {
+                if has_unconditional_builder(&ty.name) {
+                    g!("Ok(y.build())");
+                } else if is_op_input(&ty.name, ops) || ty.fields.iter().any(|field| field.is_required) {
                     g!("y.build().map_err(S3Error::internal_error)");
                 } else {
                     g!("Ok(y.build())");
@@ -221,4 +238,8 @@ fn aws_ty_path(name: &str, ops: &Operations, rust_types: &RustTypes) -> String {
 
 fn contains_deprecated_field(name: &str) -> bool {
     matches!(name, "LifecycleRule" | "ReplicationRule")
+}
+
+fn has_unconditional_builder(name: &str) -> bool {
+    matches!(name, "AnalyticsExportDestination" | "InventoryDestination" | "RoutingRule")
 }
