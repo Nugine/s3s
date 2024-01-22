@@ -24,6 +24,8 @@ pub struct Operation {
     pub smithy_input: String,
     pub smithy_output: String,
 
+    pub s3_unwrapped_xml_output: bool,
+
     pub doc: Option<String>,
 
     pub http_method: String,
@@ -77,6 +79,12 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
             smithy_http_code
         };
 
+        // https://smithy.io/2.0/aws/customizations/s3-customizations.html
+        // https://github.com/Nugine/s3s/pull/127
+        if sh.traits.s3_unwrapped_xml_output() {
+            assert_eq!(op_name, "GetBucketLocation");
+        }
+
         let op = Operation {
             name: op_name.clone(),
 
@@ -85,6 +93,8 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
 
             smithy_input,
             smithy_output,
+
+            s3_unwrapped_xml_output: sh.traits.s3_unwrapped_xml_output(),
 
             doc: sh.traits.doc().map(o),
 
