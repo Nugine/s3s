@@ -48,6 +48,11 @@ fn normalize_path(path: &Path, delimiter: &str) -> Option<String> {
     Some(normalized)
 }
 
+/// <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range>
+fn fmt_content_range(start: u64, end_inclusive: u64, size: u64) -> String {
+    format!("bytes {start}-{end_inclusive}/{size}")
+}
+
 #[async_trait::async_trait]
 impl S3 for FileSystem {
     #[tracing::instrument]
@@ -199,10 +204,9 @@ impl S3 for FileSystem {
             None => (file_len, None),
             Some(range) => {
                 let file_range = range.check(file_len)?;
-                (
-                    file_range.end - file_range.start,
-                    Some(format!("bytes {}-{}/{file_len}", file_range.start, file_range.end - 1)),
-                )
+                let content_length = file_range.end - file_range.start;
+                let content_range = fmt_content_range(file_range.start, file_range.end - 1, file_len);
+                (content_length, Some(content_range))
             }
         };
         let content_length_usize = try_!(usize::try_from(content_length));
