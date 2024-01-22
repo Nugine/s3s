@@ -19,6 +19,15 @@ fn serialize_content<T: xml::SerializeContent>(val: &T) -> xml::SerResult<String
     Ok(String::from_utf8(buf).unwrap())
 }
 
+fn serialize<T: xml::Serialize>(val: &T) -> xml::SerResult<String> {
+    let mut buf = Vec::with_capacity(256);
+    {
+        let mut ser = xml::Serializer::new(&mut buf);
+        val.serialize(&mut ser)?;
+    }
+    Ok(String::from_utf8(buf).unwrap())
+}
+
 /// See <https://github.com/Nugine/s3s/issues/2>
 #[test]
 fn d001() {
@@ -145,4 +154,29 @@ fn s001() {
     let expected = "<Days>365</Days>";
 
     assert_eq!(ans, expected);
+}
+
+#[test]
+fn s002() {
+    {
+        let us_west_2 = crate::dto::BucketLocationConstraint::from_static(crate::dto::BucketLocationConstraint::US_WEST_2);
+        let val = crate::dto::GetBucketLocationOutput {
+            location_constraint: Some(us_west_2),
+        };
+
+        let ans = serialize(&val).unwrap();
+        let expected = "<LocationConstraint>us-west-2</LocationConstraint>";
+
+        assert_eq!(ans, expected);
+    }
+    {
+        let val = crate::dto::GetBucketLocationOutput {
+            location_constraint: None,
+        };
+
+        let ans = serialize(&val).unwrap();
+        let expected = "<LocationConstraint></LocationConstraint>";
+
+        assert_eq!(ans, expected);
+    }
 }
