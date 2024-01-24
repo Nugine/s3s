@@ -48,6 +48,11 @@ fn normalize_path(path: &Path, delimiter: &str) -> Option<String> {
     Some(normalized)
 }
 
+/// <https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range>
+fn fmt_content_range(start: u64, end_inclusive: u64, size: u64) -> String {
+    format!("bytes {start}-{end_inclusive}/{size}")
+}
+
 #[async_trait::async_trait]
 impl S3 for FileSystem {
     #[tracing::instrument]
@@ -95,9 +100,9 @@ impl S3 for FileSystem {
 
         debug!(from = %src_path.display(), to = %dst_path.display(), "copy file");
 
-        let src_metadata_path = self.get_metadata_path(bucket, key)?;
+        let src_metadata_path = self.get_metadata_path(bucket, key, None)?;
         if src_metadata_path.exists() {
-            let dst_metadata_path = self.get_metadata_path(&input.bucket, &input.key)?;
+            let dst_metadata_path = self.get_metadata_path(&input.bucket, &input.key, None)?;
             let _ = try_!(fs::copy(src_metadata_path, dst_metadata_path).await);
         }
 
@@ -195,11 +200,13 @@ impl S3 for FileSystem {
         let last_modified = Timestamp::from(try_!(file_metadata.modified()));
         let file_len = file_metadata.len();
 
-        let content_length = match input.range {
-            None => file_len,
+        let (content_length, content_range) = match input.range {
+            None => (file_len, None),
             Some(range) => {
                 let file_range = range.check(file_len)?;
-                file_range.end - file_range.start
+                let content_length = file_range.end - file_range.start;
+                let content_range = fmt_content_range(file_range.start, file_range.end - 1, file_len);
+                (content_length, Some(content_range))
             }
         };
         let content_length_usize = try_!(usize::try_from(content_length));
@@ -218,7 +225,7 @@ impl S3 for FileSystem {
 
         let body = bytes_stream(ReaderStream::with_capacity(file, 4096), content_length_usize);
 
-        let object_metadata = self.load_metadata(&input.bucket, &input.key).await?;
+        let object_metadata = self.load_metadata(&input.bucket, &input.key, None).await?;
 
         let md5_sum = self.get_md5_sum(&input.bucket, &input.key).await?;
         let e_tag = format!("\"{md5_sum}\"");
@@ -232,6 +239,7 @@ impl S3 for FileSystem {
         let output = GetObjectOutput {
             body: Some(StreamingBlob::wrap(body)),
             content_length: content_length_i64,
+            content_range,
             last_modified: Some(last_modified),
             metadata: object_metadata,
             e_tag: Some(e_tag),
@@ -269,7 +277,7 @@ impl S3 for FileSystem {
         let last_modified = Timestamp::from(try_!(file_metadata.modified()));
         let file_len = file_metadata.len();
 
-        let object_metadata = self.load_metadata(&input.bucket, &input.key).await?;
+        let object_metadata = self.load_metadata(&input.bucket, &input.key, None).await?;
 
         // TODO: detect content type
         let content_type = mime::APPLICATION_OCTET_STREAM;
@@ -496,7 +504,7 @@ impl S3 for FileSystem {
         debug!(path = %object_path.display(), ?size, %md5_sum, ?checksum, "write file");
 
         if let Some(ref metadata) = metadata {
-            self.save_metadata(&bucket, &key, metadata).await?;
+            self.save_metadata(&bucket, &key, metadata, None).await?;
         }
 
         let mut info: InternalInfo = default();
@@ -523,6 +531,11 @@ impl S3 for FileSystem {
     ) -> S3Result<S3Response<CreateMultipartUploadOutput>> {
         let input = req.input;
         let upload_id = self.create_upload_id(req.credentials.as_ref()).await?;
+
+        if let Some(ref metadata) = input.metadata {
+            self.save_metadata(&input.bucket, &input.key, metadata, Some(upload_id))
+                .await?;
+        }
 
         let output = CreateMultipartUploadOutput {
             bucket: Some(input.bucket),
@@ -707,6 +720,11 @@ impl S3 for FileSystem {
 
         self.delete_upload_id(&upload_id).await?;
 
+        if let Ok(Some(metadata)) = self.load_metadata(&bucket, &key, Some(upload_id)).await {
+            self.save_metadata(&bucket, &key, &metadata, None).await?;
+            let _ = self.delete_metadata(&bucket, &key, Some(upload_id));
+        }
+
         let object_path = self.get_object_path(&bucket, &key)?;
         let mut file_writer = self.prepare_file_write(&object_path).await?;
 
@@ -755,6 +773,8 @@ impl S3 for FileSystem {
         if self.verify_upload_id(req.credentials.as_ref(), &upload_id).await?.not() {
             return Err(s3_error!(AccessDenied));
         }
+
+        let _ = self.delete_metadata(&bucket, &key, Some(upload_id));
 
         let prefix = format!(".upload_id-{upload_id}");
         let mut iter = try_!(fs::read_dir(&self.root).await);

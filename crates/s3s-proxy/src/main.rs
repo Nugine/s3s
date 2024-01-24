@@ -5,6 +5,7 @@ use s3s::auth::SimpleAuth;
 use s3s::service::S3ServiceBuilder;
 
 use std::error::Error;
+use std::io::IsTerminal;
 use std::net::TcpListener;
 
 use aws_credential_types::provider::ProvideCredentials;
@@ -32,8 +33,7 @@ fn setup_tracing() {
     use tracing_subscriber::EnvFilter;
 
     let env_filter = EnvFilter::from_default_env();
-    // let enable_color = std::io::stdout().is_terminal(); // TODO
-    let enable_color = false;
+    let enable_color = std::io::stdout().is_terminal();
 
     tracing_subscriber::fmt()
         .pretty()
