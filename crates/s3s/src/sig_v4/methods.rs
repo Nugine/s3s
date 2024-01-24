@@ -4,45 +4,14 @@ use super::AmzDate;
 
 use crate::auth::SecretKey;
 use crate::http::OrderedHeaders;
-use crate::utils::crypto::hmac_sha256;
+use crate::utils::crypto::{hex, hex_sha256, hex_sha256_chunk, hmac_sha256};
 use crate::utils::stable_sort_by_first;
 
-use std::mem::MaybeUninit;
-
-use hex_simd::{AsOut, AsciiCase};
 use hyper::body::Bytes;
 use hyper::Method;
 use rust_utils::str::StrExt;
-use sha2::{Digest, Sha256};
 use smallvec::SmallVec;
 use zeroize::Zeroize;
-
-/// `f(hex(src))`
-fn hex_bytes32<R>(src: &[u8; 32], f: impl FnOnce(&str) -> R) -> R {
-    let buf: &mut [_] = &mut [MaybeUninit::uninit(); 64];
-    let ans = hex_simd::encode_as_str(src.as_ref(), buf.as_out(), AsciiCase::Lower);
-    f(ans)
-}
-
-/// `f(hex(sha256(data)))`
-fn hex_sha256<R>(data: &[u8], f: impl FnOnce(&str) -> R) -> R {
-    let src = Sha256::digest(data);
-    hex_bytes32(src.as_ref(), f)
-}
-
-/// `f(hex(sha256(chunk)))`
-fn hex_sha256_chunk<R>(chunk: &[Bytes], f: impl FnOnce(&str) -> R) -> R {
-    let src = {
-        let mut h = Sha256::new();
-        chunk.iter().for_each(|data| h.update(data));
-        h.finalize()
-    };
-    hex_bytes32(src.as_ref(), f)
-}
-
-fn hex(data: impl AsRef<[u8]>) -> String {
-    hex_simd::encode_to_string(data, hex_simd::AsciiCase::Lower)
-}
 
 /// custom uri encode
 #[allow(clippy::indexing_slicing, clippy::inline_always, clippy::unwrap_used)]

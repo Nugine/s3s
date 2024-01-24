@@ -13,6 +13,12 @@ categories = ["web-programming", "web-programming::http-server"]
 all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
+[features]
+openssl = ["dep:openssl"]
+
+[target.'cfg(not(windows))'.dependencies]
+openssl = { version = "0.10.62", optional = true }
+
 [dependencies]
 arrayvec = "0.7.4"
 async-trait = "0.1.73"
