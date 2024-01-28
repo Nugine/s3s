@@ -9,6 +9,7 @@
     clippy::missing_errors_doc, // TODO: docs
     clippy::let_underscore_untyped,
     clippy::module_name_repetitions,
+    clippy::multiple_crate_versions, // TODO: check later
 )]
 
 #[macro_use]

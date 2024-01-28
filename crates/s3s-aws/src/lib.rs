@@ -10,6 +10,7 @@
     clippy::missing_errors_doc, // TODO: docs
     clippy::wildcard_imports, //
     clippy::let_underscore_untyped,
+    clippy::multiple_crate_versions, // TODO: check later
 )]
 
 #[macro_use]
