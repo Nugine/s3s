@@ -8,12 +8,15 @@ use s3s::auth::SimpleAuth;
 use s3s::service::S3ServiceBuilder;
 
 use std::io::IsTerminal;
-use std::net::TcpListener;
 use std::path::PathBuf;
 
+use tokio::net::TcpListener;
+
 use clap::{CommandFactory, Parser};
-use hyper::server::Server;
 use tracing::info;
+
+use hyper_util::rt::{TokioExecutor, TokioIo};
+use hyper_util::server::conn::auto::Builder as ConnBuilder;
 
 #[derive(Debug, Parser)]
 #[command(version)]
@@ -108,18 +111,36 @@ async fn run(opt: Opt) -> Result {
     };
 
     // Run server
-    let listener = TcpListener::bind((opt.host.as_str(), opt.port))?;
+    let listener = TcpListener::bind((opt.host.as_str(), opt.port)).await?;
     let local_addr = listener.local_addr()?;
 
-    let server = Server::from_tcp(listener)?.serve(service.into_shared().into_make_service());
+    let hyper_service = service.into_shared();
 
+    let connection = ConnBuilder::new(TokioExecutor::new());
+
+    let server = async move {
+        loop {
+            let (socket, _) = match listener.accept().await {
+                Ok(ok) => ok,
+                Err(err) => {
+                    tracing::error!("error accepting connection: {err}");
+                    continue;
+                }
+            };
+            let service = hyper_service.clone();
+            let conn = connection.clone();
+            tokio::spawn(async move {
+                let _ = conn.serve_connection(TokioIo::new(socket), service).await;
+            });
+        }
+    };
+
+    let task = tokio::spawn(server);
     info!("server is running at http://{local_addr}");
-    server.with_graceful_shutdown(shutdown_signal()).await?;
+
+    tokio::signal::ctrl_c().await?;
+    task.abort();
 
     info!("server is stopped");
     Ok(())
-}
-
-async fn shutdown_signal() {
-    let _ = tokio::signal::ctrl_c().await;
 }

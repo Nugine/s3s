@@ -12,6 +12,8 @@ use std::task::Poll;
 use bytes::Bytes;
 use futures::Stream;
 
+use http_body::Frame;
+
 pin_project_lite::pin_project! {
     #[derive(Default)]
     pub struct Body {
@@ -31,7 +33,7 @@ pin_project_lite::pin_project! {
         },
         Hyper {
             #[pin]
-            inner: hyper::Body,
+            inner: hyper::body::Incoming,
         },
         DynStream {
             #[pin]
@@ -52,7 +54,7 @@ impl Body {
         }
     }
 
-    fn hyper(body: hyper::Body) -> Self {
+    fn hyper(body: hyper::body::Incoming) -> Self {
         Self {
             kind: Kind::Hyper { inner: body },
         }
@@ -62,6 +64,14 @@ impl Body {
         Self {
             kind: Kind::DynStream { inner: stream },
         }
+    }
+
+    #[must_use]
+    pub fn from_http_body<B>(body: B) -> Self
+    where
+        B: http_body::Body<Data = Bytes, Error = StdError> + Send + Sync + 'static,
+    {
+        Self::dyn_stream(Box::pin(crate::stream::BodyWrapper::new(body)))
     }
 }
 
@@ -83,8 +93,8 @@ impl From<String> for Body {
     }
 }
 
-impl From<hyper::Body> for Body {
-    fn from(body: hyper::Body) -> Self {
+impl From<hyper::body::Incoming> for Body {
+    fn from(body: hyper::body::Incoming) -> Self {
         Self::hyper(body)
     }
 }
@@ -100,7 +110,7 @@ impl http_body::Body for Body {
 
     type Error = StdError;
 
-    fn poll_data(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Result<Self::Data, Self::Error>>> {
+    fn poll_frame(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Result<Frame<Self::Data>, Self::Error>>> {
         let mut this = self.project();
         match this.kind.as_mut().project() {
             KindProj::Empty => {
@@ -112,22 +122,18 @@ impl http_body::Body for Body {
                 if bytes.is_empty() {
                     Poll::Ready(None)
                 } else {
-                    Poll::Ready(Some(Ok(bytes)))
+                    Poll::Ready(Some(Ok(Frame::data(bytes))))
                 }
             }
             KindProj::Hyper { inner } => {
-                http_body::Body::poll_data(inner, cx).map_err(|e| Box::new(e) as StdError)
+                http_body::Body::poll_frame(inner, cx).map_err(|e| Box::new(e) as StdError)
                 //
             }
             KindProj::DynStream { inner } => {
-                Stream::poll_next(inner, cx)
+                Stream::poll_next(inner, cx).map_ok(Frame::data)
                 //
             }
         }
-    }
-
-    fn poll_trailers(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<Option<hyper::HeaderMap>, Self::Error>> {
-        Poll::Ready(Ok(None)) // TODO: How to impl poll_trailers?
     }
 
     fn is_end_stream(&self) -> bool {
@@ -153,7 +159,14 @@ impl Stream for Body {
     type Item = Result<Bytes, StdError>;
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        http_body::Body::poll_data(self, cx)
+        match http_body::Body::poll_frame(self, cx) {
+            Poll::Ready(Some(Ok(f))) if f.is_data() => Poll::Ready(Some(Ok(f.into_data().expect("already checked")))),
+            Poll::Ready(Some(Ok(f))) if f.is_trailers() => Poll::Ready(None),
+            Poll::Ready(Some(Ok(_))) => Poll::Ready(Some(Err("unexpected BodyFrame".into()))),
+            Poll::Ready(Some(Err(err))) => Poll::Ready(Some(Err(err))),
+            Poll::Ready(None) => Poll::Ready(None),
+            Poll::Pending => Poll::Pending,
+        }
     }
 }
 
@@ -200,7 +213,7 @@ impl Body {
             return Ok(bytes);
         }
         let body = mem::take(self);
-        let bytes = hyper::body::to_bytes(body).await?;
+        let bytes = http_body_util::BodyExt::collect(body).await?.to_bytes();
         *self = Self::from(bytes.clone());
         Ok(bytes)
     }
@@ -219,20 +232,5 @@ impl Body {
             Kind::Once { inner } => Some(inner),
             _ => None,
         }
-    }
-
-    fn into_hyper(self) -> hyper::Body {
-        match self.kind {
-            Kind::Empty => hyper::Body::empty(),
-            Kind::Once { inner } => inner.into(),
-            Kind::Hyper { inner } => inner,
-            Kind::DynStream { inner } => hyper::Body::wrap_stream(inner),
-        }
-    }
-}
-
-impl From<Body> for hyper::Body {
-    fn from(value: Body) -> Self {
-        value.into_hyper()
     }
 }

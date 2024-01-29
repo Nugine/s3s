@@ -3,16 +3,18 @@
 
 use s3s::auth::SimpleAuth;
 use s3s::service::S3ServiceBuilder;
+use tokio::net::TcpListener;
 
 use std::error::Error;
 use std::io::IsTerminal;
-use std::net::TcpListener;
 
 use aws_credential_types::provider::ProvideCredentials;
 
 use clap::Parser;
-use hyper::server::Server;
 use tracing::info;
+
+use hyper_util::rt::{TokioExecutor, TokioIo};
+use hyper_util::server::conn::auto::Builder as ConnBuilder;
 
 #[derive(Debug, Parser)]
 struct Opt {
@@ -71,8 +73,28 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
     };
 
     // Run server
-    let listener = TcpListener::bind((opt.host.as_str(), opt.port))?;
-    let server = Server::from_tcp(listener)?.serve(service.into_shared().into_make_service());
+    let listener = TcpListener::bind((opt.host.as_str(), opt.port)).await?;
+
+    let hyper_service = service.into_shared();
+
+    let connection = ConnBuilder::new(TokioExecutor::new());
+
+    let server = async move {
+        loop {
+            let (socket, _) = match listener.accept().await {
+                Ok(ok) => ok,
+                Err(err) => {
+                    tracing::error!("error accepting connection: {err}");
+                    continue;
+                }
+            };
+            let service = hyper_service.clone();
+            let conn = connection.clone();
+            tokio::spawn(async move {
+                let _ = conn.serve_connection(TokioIo::new(socket), service).await;
+            });
+        }
+    };
 
     info!("server is running at http://{}:{}/", opt.host, opt.port);
     info!("server is forwarding requests to {}", opt.endpoint_url);

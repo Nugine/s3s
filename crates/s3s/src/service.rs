@@ -7,7 +7,6 @@ use std::convert::Infallible;
 use std::fmt;
 use std::future::{ready, Ready};
 use std::sync::Arc;
-use std::task::{Context, Poll};
 
 use futures::future::BoxFuture;
 use hyper::service::Service;
@@ -111,18 +110,14 @@ impl AsRef<S3Service> for SharedS3Service {
 
 // TODO(blocking): GAT?
 // See https://github.com/tower-rs/tower/issues/636
-impl Service<hyper::Request<hyper::Body>> for SharedS3Service {
+impl Service<hyper::Request<hyper::body::Incoming>> for SharedS3Service {
     type Response = hyper::Response<Body>;
 
     type Error = S3Error;
 
     type Future = BoxFuture<'static, Result<Self::Response, Self::Error>>;
 
-    fn poll_ready(&mut self, _: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-        Poll::Ready(Ok(())) // TODO: back pressure?
-    }
-
-    fn call(&mut self, req: hyper::Request<hyper::Body>) -> Self::Future {
+    fn call(&self, req: hyper::Request<hyper::body::Incoming>) -> Self::Future {
         let req = req.map(Body::from);
         let service = self.0.clone();
         Box::pin(service.call_shared(req))
@@ -139,11 +134,7 @@ impl<T, S: Clone> Service<T> for MakeService<S> {
 
     type Future = Ready<Result<Self::Response, Self::Error>>;
 
-    fn poll_ready(&mut self, _: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-        Poll::Ready(Ok(()))
-    }
-
-    fn call(&mut self, _: T) -> Self::Future {
+    fn call(&self, _: T) -> Self::Future {
         ready(Ok(self.0.clone()))
     }
 }
