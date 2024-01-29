@@ -69,6 +69,17 @@ fn serialize_error(mut e: S3Error) -> S3Result<Response> {
     Ok(res)
 }
 
+fn serialize_error_no_decl(mut e: S3Error) -> S3Result<Response> {
+    let status = e.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
+    let mut res = Response::with_status(status);
+    http::set_xml_body_no_decl(&mut res, &e)?;
+    if let Some(headers) = e.take_headers() {
+        res.headers = headers;
+    }
+    drop(e);
+    Ok(res)
+}
+
 fn unknown_operation() -> S3Error {
     S3Error::with_message(S3ErrorCode::NotImplemented, "Unknown operation")
 }

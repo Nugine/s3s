@@ -532,7 +532,7 @@ impl CompleteMultipartUpload {
 
     pub fn serialize_http(x: CompleteMultipartUploadOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
-        http::set_xml_body(&mut res, &x)?;
+        http::set_xml_body_no_decl(&mut res, &x)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
@@ -552,14 +552,16 @@ impl super::Operation for CompleteMultipartUpload {
     async fn call(&self, s3: &Arc<dyn S3>, req: &mut http::Request) -> S3Result<http::Response> {
         let input = Self::deserialize_http(req)?;
         let s3_req = super::build_s3_request(input, req);
-        let result = s3.complete_multipart_upload(s3_req).await;
-        let s3_resp = match result {
-            Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+        let s3 = s3.clone();
+        let fut = async move {
+            let result = s3.complete_multipart_upload(s3_req).await;
+            match result {
+                Ok(s3_resp) => Self::serialize_http(s3_resp.output).unwrap(),
+                Err(err) => super::serialize_error_no_decl(err).unwrap(),
+            }
         };
-        let mut resp = Self::serialize_http(s3_resp.output)?;
-        resp.headers.extend(s3_resp.headers);
-        resp.extensions.extend(s3_resp.extensions);
+        let mut resp = http::Response::with_status(http::StatusCode::OK);
+        http::set_keep_alive_xml_body(&mut resp, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;
         Ok(resp)
     }
 }

@@ -294,7 +294,11 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
                 }
 
                 if is_xml_output(ty) {
-                    g!("http::set_xml_body(&mut res, &x)?;");
+                    if op.name == "CompleteMultipartUpload" {
+                        g!("http::set_xml_body_no_decl(&mut res, &x)?;");
+                    } else {
+                        g!("http::set_xml_body(&mut res, &x)?;");
+                    }
                 } else if let Some(field) = ty.fields.iter().find(|x| x.position == "payload") {
                     match field.type_.as_str() {
                         "Policy" => {
@@ -652,25 +656,38 @@ fn codegen_op_http_call(op: &Operation) {
         g!("let overrided_headers = super::get_object::extract_overrided_response_headers(&s3_req)?;");
     }
 
-    g!("let result = s3.{method}(s3_req).await;");
-
-    glines![
-        "let s3_resp = match result {"
-        "    Ok(val) => val,"
-        "    Err(err) => return super::serialize_error(err),"
-        "};"
-    ];
-
-    g!("let mut resp = Self::serialize_http(s3_resp.output)?;");
-
-    if op.name == "GetObject" {
-        g!("resp.headers.extend(overrided_headers);");
-        g!("super::get_object::merge_custom_headers(&mut resp, s3_resp.headers);");
+    if op.name == "CompleteMultipartUpload" {
+        g!("let s3 = s3.clone();");
+        g!("let fut = async move {{");
+        g!("let result = s3.{method}(s3_req).await;");
+        g!("match result {{");
+        g!("Ok(s3_resp) => Self::serialize_http(s3_resp.output).unwrap(),");
+        g!("Err(err) => super::serialize_error_no_decl(err).unwrap(),");
+        g!("}}");
+        g!("}};");
+        g!("let mut resp = http::Response::with_status(http::StatusCode::OK);");
+        g!("http::set_keep_alive_xml_body(&mut resp, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;");
     } else {
-        g!("resp.headers.extend(s3_resp.headers);");
-    }
+        g!("let result = s3.{method}(s3_req).await;");
 
-    g!("resp.extensions.extend(s3_resp.extensions);");
+        glines![
+            "let s3_resp = match result {"
+            "    Ok(val) => val,"
+            "    Err(err) => return super::serialize_error(err),"
+            "};"
+        ];
+
+        g!("let mut resp = Self::serialize_http(s3_resp.output)?;");
+
+        if op.name == "GetObject" {
+            g!("resp.headers.extend(overrided_headers);");
+            g!("super::get_object::merge_custom_headers(&mut resp, s3_resp.headers);");
+        } else {
+            g!("resp.headers.extend(s3_resp.headers);");
+        }
+
+        g!("resp.extensions.extend(s3_resp.extensions);");
+    }
     g!("Ok(resp)");
 
     g!("}}");
