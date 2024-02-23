@@ -375,7 +375,6 @@ pub fn create_presigned_canonical_request(
 mod tests {
     use super::*;
 
-    use crate::http::OrderedHeaders;
     use crate::http::OrderedQs;
     use crate::sig_v4::PresignedUrlV4;
 

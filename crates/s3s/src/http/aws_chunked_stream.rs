@@ -7,7 +7,6 @@ use crate::sig_v4::AmzDate;
 use crate::stream::{ByteStream, DynByteStream, RemainingLength};
 use crate::utils::SyncBoxFuture;
 
-use std::convert::TryInto;
 use std::fmt::{self, Debug};
 use std::pin::Pin;
 use std::task::{Context, Poll};
