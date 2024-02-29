@@ -40,7 +40,7 @@ struct SignatureCtx {
     /// region
     region: Box<str>,
 
-    /// secret_key
+    /// secret key
     secret_key: SecretKey,
 
     /// previous chunk's signature
