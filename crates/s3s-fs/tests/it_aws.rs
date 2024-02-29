@@ -131,7 +131,7 @@ macro_rules! log_and_unwrap {
 async fn test_list_buckets() -> Result<()> {
     let c = Client::new(config());
     let response1 = log_and_unwrap!(c.list_buckets().send().await);
-    assert!(response1.buckets().is_some());
+    assert!(response1.buckets().is_empty());
 
     let bucket1 = format!("test-list-buckets-1-{}", Uuid::new_v4());
     let bucket1_str = bucket1.as_str();
@@ -142,13 +142,7 @@ async fn test_list_buckets() -> Result<()> {
     create_bucket(&c, bucket2_str).await?;
 
     let response2 = log_and_unwrap!(c.list_buckets().send().await);
-    assert!(response2.buckets().is_some());
-    let bucket_names: Vec<_> = response2
-        .buckets()
-        .unwrap()
-        .iter()
-        .filter_map(|bucket| bucket.name())
-        .collect();
+    let bucket_names: Vec<_> = response2.buckets().iter().filter_map(|bucket| bucket.name()).collect();
     assert!(bucket_names.contains(&bucket1_str));
     assert!(bucket_names.contains(&bucket2_str));
 
@@ -189,8 +183,7 @@ async fn test_list_objects_v2() -> Result<()> {
 
     let response = log_and_unwrap!(result);
 
-    assert!(response.contents().is_some());
-    let contents: Vec<_> = response.contents().unwrap().iter().filter_map(|obj| obj.key()).collect();
+    let contents: Vec<_> = response.contents().iter().filter_map(|obj| obj.key()).collect();
     assert!(!contents.is_empty());
     assert!(contents.contains(&key1));
     assert!(contents.contains(&key2));
@@ -232,7 +225,7 @@ async fn test_single_object() -> Result<()> {
             .send()
             .await?;
 
-        let content_length: usize = ans.content_length().try_into().unwrap();
+        let content_length: usize = ans.content_length().unwrap().try_into().unwrap();
         let checksum_crc32c = ans.checksum_crc32_c.unwrap();
         let body = ans.body.collect().await?.into_bytes();
 
@@ -307,7 +300,7 @@ async fn test_multipart() -> Result<()> {
     {
         let ans = c.get_object().bucket(bucket).key(key).send().await?;
 
-        let content_length: usize = ans.content_length().try_into().unwrap();
+        let content_length: usize = ans.content_length().unwrap().try_into().unwrap();
         let body = ans.body.collect().await?.into_bytes();
 
         assert_eq!(content_length, content.len());
@@ -390,7 +383,7 @@ async fn test_upload_part_copy() -> Result<()> {
     {
         let ans = c.get_object().bucket(bucket).key(key).send().await?;
 
-        let content_length: usize = ans.content_length().try_into().unwrap();
+        let content_length: usize = ans.content_length().unwrap().try_into().unwrap();
         let body = ans.body.collect().await?.into_bytes();
 
         assert_eq!(content_length, src_content.len());
