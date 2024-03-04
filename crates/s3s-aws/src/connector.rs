@@ -5,6 +5,8 @@ use s3s::S3Result;
 
 use std::ops::Not;
 
+use aws_sdk_s3::config::RuntimeComponents;
+use aws_smithy_runtime_api::client::http::{HttpClient, HttpConnectorSettings, SharedHttpConnector};
 use aws_smithy_runtime_api::client::http::{HttpConnector, HttpConnectorFuture};
 use aws_smithy_runtime_api::client::orchestrator::HttpRequest as AwsHttpRequest;
 use aws_smithy_runtime_api::client::orchestrator::HttpResponse as AwsHttpResponse;
@@ -13,6 +15,21 @@ use aws_smithy_runtime_api::client::result::ConnectorError;
 use hyper::header::HOST;
 use hyper::http;
 use hyper::{Request, Response};
+
+#[derive(Debug)]
+pub struct Client(SharedS3Service);
+
+impl HttpClient for Client {
+    fn http_connector(&self, _: &HttpConnectorSettings, _: &RuntimeComponents) -> SharedHttpConnector {
+        SharedHttpConnector::new(Connector(self.0.clone()))
+    }
+}
+
+impl From<SharedS3Service> for Client {
+    fn from(val: SharedS3Service) -> Self {
+        Self(val)
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct Connector(SharedS3Service);

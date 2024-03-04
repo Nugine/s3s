@@ -68,13 +68,13 @@ fn config() -> &'static SdkConfig {
             b.build()
         };
 
-        // Convert to aws http connector
-        let conn = s3s_aws::Connector::from(service.into_shared());
+        // Convert to aws http client
+        let client = s3s_aws::Client::from(service.into_shared());
 
         // Setup aws sdk config
         SdkConfig::builder()
             .credentials_provider(SharedCredentialsProvider::new(cred))
-            .http_connector(conn)
+            .http_client(client)
             .region(Region::new(REGION))
             .endpoint_url(format!("http://{DOMAIN_NAME}"))
             .build()

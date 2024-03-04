@@ -22,7 +22,7 @@ mod event_stream;
 pub mod conv;
 
 mod connector;
-pub use self::connector::Connector;
+pub use self::connector::{Client, Connector};
 
 mod proxy;
 pub use self::proxy::Proxy;
