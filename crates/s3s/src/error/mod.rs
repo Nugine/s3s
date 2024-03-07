@@ -9,6 +9,7 @@ use std::fmt;
 use std::io::Write;
 use std::str::FromStr;
 
+use hyper::HeaderMap;
 use hyper::StatusCode;
 
 pub type StdError = Box<dyn std::error::Error + Send + Sync + 'static>;
@@ -26,6 +27,7 @@ struct Inner {
     request_id: Option<String>,
     status_code: Option<StatusCode>,
     source: Option<StdError>,
+    headers: Option<HeaderMap>,
 }
 
 impl S3Error {
@@ -38,6 +40,7 @@ impl S3Error {
             request_id: None,
             status_code: None,
             source: None,
+            headers: None,
         }))
     }
 
@@ -75,6 +78,10 @@ impl S3Error {
         self.0.status_code = Some(val);
     }
 
+    pub fn set_headers(&mut self, val: HeaderMap) {
+        self.0.headers = Some(val);
+    }
+
     #[must_use]
     pub fn code(&self) -> &S3ErrorCode {
         &self.0.code
@@ -98,6 +105,16 @@ impl S3Error {
     #[must_use]
     pub fn status_code(&self) -> Option<StatusCode> {
         self.0.status_code.or_else(|| self.0.code.status_code())
+    }
+
+    #[must_use]
+    pub fn headers(&self) -> Option<&HeaderMap> {
+        self.0.headers.as_ref()
+    }
+
+    #[must_use]
+    pub(crate) fn take_headers(&mut self) -> Option<HeaderMap> {
+        self.0.headers.take()
     }
 
     #[must_use]

@@ -33,3 +33,32 @@ fn track_future_size() {
         assert_eq!(size, expected, "{name:?} size changed: prev {expected}, now {size}");
     }
 }
+
+#[test]
+fn error_custom_headers() {
+    fn redirect307(location: &str) -> S3Error {
+        let mut err = S3Error::new(S3ErrorCode::TemporaryRedirect);
+
+        err.set_headers({
+            let mut headers = HeaderMap::new();
+            headers.insert(crate::header::LOCATION, location.parse().unwrap());
+            headers
+        });
+
+        err
+    }
+
+    let res = serialize_error(redirect307("http://example.com")).unwrap();
+    assert_eq!(res.status, StatusCode::TEMPORARY_REDIRECT);
+    assert_eq!(res.headers.get("location").unwrap(), "http://example.com");
+
+    let body = res.body.bytes().unwrap();
+    let body = std::str::from_utf8(&body).unwrap();
+    assert_eq!(
+        body,
+        concat!(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+            "<Error><Code>TemporaryRedirect</Code></Error>"
+        )
+    );
+}
