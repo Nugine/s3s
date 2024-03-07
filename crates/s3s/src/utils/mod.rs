@@ -3,12 +3,6 @@ pub mod parser;
 
 pub mod format;
 
-use std::future::Future;
-use std::pin::Pin;
-
-/// `Pin<Box<dyn Future<Output = T> + Send + Sync + 'a>>`
-pub type SyncBoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + Sync + 'a>>;
-
 pub fn stable_sort_by_first<T>(v: &mut [(T, T)])
 where
     T: Ord,

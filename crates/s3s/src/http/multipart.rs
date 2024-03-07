@@ -5,12 +5,12 @@
 
 use crate::error::StdError;
 use crate::stream::ByteStream;
-use crate::utils::SyncBoxFuture;
 
 use std::fmt::{self, Debug};
 use std::mem;
 use std::pin::Pin;
 
+use futures::future::BoxFuture;
 use futures::stream::{Stream, StreamExt};
 use hyper::body::Bytes;
 use memchr::memchr_iter;
@@ -73,7 +73,7 @@ pub enum MultipartError {
 /// Returns an `Err` if the format is invalid
 pub async fn transform_multipart<S>(body_stream: S, boundary: &'_ [u8]) -> Result<Multipart, MultipartError>
 where
-    S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+    S: Stream<Item = Result<Bytes, StdError>> + Send + 'static,
 {
     let mut buf = Vec::new();
 
@@ -118,7 +118,7 @@ fn try_parse<S>(
     boundary: &'_ [u8],
 ) -> Result<Result<Multipart, MultipartError>, (Pin<Box<S>>, Box<[u8]>)>
 where
-    S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+    S: Stream<Item = Result<Bytes, StdError>> + Send + 'static,
 {
     #[allow(clippy::indexing_slicing)]
     let pat_without_crlf = &pat[..pat.len().wrapping_sub(2)];
@@ -233,7 +233,7 @@ pub enum FileStreamError {
 /// File stream
 pub struct FileStream {
     /// inner stream
-    inner: AsyncTryStream<Bytes, FileStreamError, SyncBoxFuture<'static, Result<(), FileStreamError>>>,
+    inner: AsyncTryStream<Bytes, FileStreamError, BoxFuture<'static, Result<(), FileStreamError>>>,
 }
 
 impl Debug for FileStream {
@@ -246,7 +246,7 @@ impl FileStream {
     /// Constructs a `FileStream`
     fn new<S>(body: Pin<Box<S>>, boundary: &'_ [u8], prev_bytes: Option<Bytes>) -> Self
     where
-        S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+        S: Stream<Item = Result<Bytes, StdError>> + Send + 'static,
     {
         /// internal async generator
         async fn gen<S>(
@@ -256,7 +256,7 @@ impl FileStream {
             prev_bytes: Option<Bytes>,
         ) -> Result<(), FileStreamError>
         where
-            S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+            S: Stream<Item = Result<Bytes, StdError>> + Send + 'static,
         {
             let mut state: u8;
 
@@ -336,7 +336,7 @@ impl FileStream {
         };
 
         Self {
-            inner: AsyncTryStream::new(|y| -> SyncBoxFuture<'static, Result<(), FileStreamError>> {
+            inner: AsyncTryStream::new(|y| -> BoxFuture<'static, Result<(), FileStreamError>> {
                 Box::pin(gen(y, body, crlf_pat, prev_bytes))
             }),
         }

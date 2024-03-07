@@ -5,13 +5,12 @@ use crate::error::StdError;
 use crate::sig_v4;
 use crate::sig_v4::AmzDate;
 use crate::stream::{ByteStream, DynByteStream, RemainingLength};
-use crate::utils::SyncBoxFuture;
 
 use std::fmt::{self, Debug};
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use futures::pin_mut;
+use futures::future::BoxFuture;
 use futures::stream::{Stream, StreamExt};
 use hyper::body::{Buf, Bytes};
 use memchr::memchr;
@@ -20,7 +19,7 @@ use transform_stream::AsyncTryStream;
 /// Aws chunked stream
 pub struct AwsChunkedStream {
     /// inner
-    inner: AsyncTryStream<Bytes, AwsChunkedStreamError, SyncBoxFuture<'static, Result<(), AwsChunkedStreamError>>>,
+    inner: AsyncTryStream<Bytes, AwsChunkedStreamError, BoxFuture<'static, Result<(), AwsChunkedStreamError>>>,
 
     remaining_length: usize,
 }
@@ -111,12 +110,13 @@ impl AwsChunkedStream {
         decoded_content_length: usize,
     ) -> Self
     where
-        S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+        S: Stream<Item = Result<Bytes, StdError>> + Send + 'static,
     {
-        let inner = AsyncTryStream::<_, _, SyncBoxFuture<'static, Result<(), AwsChunkedStreamError>>>::new(|mut y| {
+        let inner = AsyncTryStream::<_, _, BoxFuture<'static, Result<(), AwsChunkedStreamError>>>::new(|mut y| {
             #[allow(clippy::shadow_same)] // necessary for `pin_mut!`
             Box::pin(async move {
-                pin_mut!(body);
+                // pin_mut!(body);
+                let mut body = std::pin::pin!(body);
                 let mut prev_bytes = Bytes::new();
                 let mut buf: Vec<u8> = Vec::new();
                 let mut ctx = SignatureCtx {

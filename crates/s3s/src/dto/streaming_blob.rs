@@ -18,14 +18,14 @@ pub struct StreamingBlob {
 impl StreamingBlob {
     pub fn new<S>(stream: S) -> Self
     where
-        S: ByteStream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+        S: ByteStream<Item = Result<Bytes, StdError>> + Send + 'static,
     {
         Self { inner: Box::pin(stream) }
     }
 
     pub fn wrap<S, E>(stream: S) -> Self
     where
-        S: Stream<Item = Result<Bytes, E>> + Send + Sync + 'static,
+        S: Stream<Item = Result<Bytes, E>> + Send + 'static,
         E: std::error::Error + Send + Sync + 'static,
     {
         Self { inner: wrap(stream) }
@@ -95,7 +95,7 @@ pin_project_lite::pin_project! {
 
 impl<S, E> Stream for StreamWrapper<S>
 where
-    S: Stream<Item = Result<Bytes, E>> + Send + Sync + 'static,
+    S: Stream<Item = Result<Bytes, E>> + Send + 'static,
     E: std::error::Error + Send + Sync + 'static,
 {
     type Item = Result<Bytes, StdError>;
@@ -121,7 +121,7 @@ where
 
 fn wrap<S>(inner: S) -> DynByteStream
 where
-    StreamWrapper<S>: ByteStream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
+    StreamWrapper<S>: ByteStream<Item = Result<Bytes, StdError>> + Send + 'static,
 {
     Box::pin(StreamWrapper { inner })
 }
