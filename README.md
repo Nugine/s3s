@@ -35,7 +35,7 @@ The diagram above shows how `s3s` works.
 
 `s3s` converts operation outputs or errors to HTTP responses after calling the user-defined service.
 
-The data types, serialization and deserialization are generated from the smithy model in [aws-sdk-rust](https://github.com/awslabs/aws-sdk-rust) repository. We apply manual hacks to fix some problems in [smithy server codegen](https://awslabs.github.io/smithy-rs/design/server/overview.html) and make `s3s` ready to use now.
+The data types, serialization and deserialization are generated from the smithy model in [aws-sdk-rust](https://github.com/awslabs/aws-sdk-rust) repository. We apply manual hacks to fix some problems in [smithy server codegen](https://smithy-lang.github.io/smithy-rs/design/server/overview.html) and make `s3s` ready to use now.
 
 ## Security
 
