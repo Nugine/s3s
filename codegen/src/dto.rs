@@ -308,7 +308,7 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
         } else {
             assert!(op.smithy_input.ends_with("Request"));
             let Some(rust::Type::Struct(mut ty)) = space.remove(&op.smithy_input) else { panic!() };
-            ty.name = op.input.clone(); // rename type
+            ty.name.clone_from(&op.input); // rename type
             ty
         };
         assert!(space.insert(op.input.clone(), rust::Type::Struct(input_ty)).is_none());
@@ -329,7 +329,7 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
                 continue;
             }
             let rust::Type::Struct(mut ty) = space[&op.smithy_output].clone() else { panic!() };
-            ty.name = op.output.clone(); // duplicate type
+            ty.name.clone_from(&op.output); // duplicate type
             ty
         };
         assert!(space.insert(op.output.clone(), rust::Type::Struct(output_ty)).is_none());
