@@ -14,6 +14,8 @@ use futures::Stream;
 
 use http_body::Frame;
 
+type BoxBody = http_body_util::combinators::BoxBody<Bytes, StdError>;
+
 pin_project_lite::pin_project! {
     #[derive(Default)]
     pub struct Body {
@@ -34,6 +36,10 @@ pin_project_lite::pin_project! {
         Hyper {
             #[pin]
             inner: hyper::body::Incoming,
+        },
+        BoxBody {
+            #[pin]
+            inner: BoxBody,
         },
         DynStream {
             #[pin]
@@ -67,11 +73,16 @@ impl Body {
     }
 
     #[must_use]
-    pub fn from_http_body<B>(body: B) -> Self
+    pub fn http_body<B>(body: B) -> Self
     where
-        B: http_body::Body<Data = Bytes, Error = StdError> + Send + Sync + 'static,
+        B: http_body::Body<Data = Bytes> + Send + Sync + 'static,
+        StdError: From<B::Error>,
     {
-        Self::dyn_stream(Box::pin(crate::stream::BodyWrapper::new(body)))
+        Self {
+            kind: Kind::BoxBody {
+                inner: BoxBody::new(http_body_util::BodyExt::map_err(body, From::from)),
+            },
+        }
     }
 }
 
@@ -126,7 +137,11 @@ impl http_body::Body for Body {
                 }
             }
             KindProj::Hyper { inner } => {
-                http_body::Body::poll_frame(inner, cx).map_err(|e| Box::new(e) as StdError)
+                http_body::Body::poll_frame(inner, cx).map_err(From::from)
+                //
+            }
+            KindProj::BoxBody { inner } => {
+                http_body::Body::poll_frame(inner, cx)
                 //
             }
             KindProj::DynStream { inner } => {
@@ -141,6 +156,7 @@ impl http_body::Body for Body {
             Kind::Empty => true,
             Kind::Once { inner } => inner.is_empty(),
             Kind::Hyper { inner } => http_body::Body::is_end_stream(inner),
+            Kind::BoxBody { inner } => http_body::Body::is_end_stream(inner),
             Kind::DynStream { inner } => inner.remaining_length().exact() == Some(0),
         }
     }
@@ -150,6 +166,7 @@ impl http_body::Body for Body {
             Kind::Empty => http_body::SizeHint::with_exact(0),
             Kind::Once { inner } => http_body::SizeHint::with_exact(inner.len() as u64),
             Kind::Hyper { inner } => http_body::Body::size_hint(inner),
+            Kind::BoxBody { inner } => http_body::Body::size_hint(inner),
             Kind::DynStream { inner } => inner.remaining_length().into(),
         }
     }
@@ -176,6 +193,7 @@ impl ByteStream for Body {
             Kind::Empty => RemainingLength::new_exact(0),
             Kind::Once { inner } => RemainingLength::new_exact(inner.len()),
             Kind::Hyper { inner } => http_body::Body::size_hint(inner).into(),
+            Kind::BoxBody { inner } => http_body::Body::size_hint(inner).into(),
             Kind::DynStream { inner } => inner.remaining_length(),
         }
     }
@@ -191,6 +209,10 @@ impl fmt::Debug for Body {
             }
             Kind::Hyper { inner } => {
                 d.field("hyper", inner);
+            }
+            Kind::BoxBody { inner } => {
+                d.field("body", &"{..}");
+                d.field("remaining_length", &http_body::Body::size_hint(inner));
             }
             Kind::DynStream { inner } => {
                 d.field("dyn_stream", &"{..}");

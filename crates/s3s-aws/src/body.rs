@@ -5,5 +5,5 @@ pub fn s3s_body_into_sdk_body(body: s3s::Body) -> SdkBody {
 }
 
 pub fn sdk_body_into_s3s_body(body: SdkBody) -> s3s::Body {
-    s3s::Body::from_http_body(body)
+    s3s::Body::http_body(body)
 }
