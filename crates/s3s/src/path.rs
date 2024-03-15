@@ -87,6 +87,24 @@ impl S3Path {
             _ => None,
         }
     }
+
+    /// Returns the bucket name part if the path is bucket or object
+    #[must_use]
+    pub fn get_bucket_name(&self) -> Option<&str> {
+        match self {
+            Self::Root => None,
+            Self::Bucket { bucket } | Self::Object { bucket, .. } => Some(bucket),
+        }
+    }
+
+    /// Returns the object key part if the path is object
+    #[must_use]
+    pub fn get_object_key(&self) -> Option<&str> {
+        match self {
+            Self::Root | Self::Bucket { .. } => None,
+            Self::Object { key, .. } => Some(key),
+        }
+    }
 }
 
 /// See [bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)

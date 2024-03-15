@@ -7,7 +7,6 @@ use time::OffsetDateTime;
 pub struct PresignedUrlV2<'a> {
     pub access_key: &'a str,
     pub expires_time: OffsetDateTime,
-    pub expires_str: &'a str,
     pub signature: Cow<'a, str>,
 }
 
@@ -33,7 +32,6 @@ impl<'a> PresignedUrlV2<'a> {
         Ok(Self {
             access_key,
             expires_time,
-            expires_str,
             signature,
         })
     }
