@@ -161,7 +161,9 @@ impl SignatureContext<'_> {
         let string_to_sign = info.policy;
         let signature = sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region);
 
-        if signature != info.x_amz_signature {
+        let expected_signature = info.x_amz_signature;
+        if signature != expected_signature {
+            debug!(?signature, expected=?expected_signature, "signature mismatch");
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
@@ -214,7 +216,9 @@ impl SignatureContext<'_> {
             sig_v4::calculate_signature(&string_to_sign, &secret_key, amz_date, region)
         };
 
-        if signature != presigned_url.signature {
+        let expected_signature = presigned_url.signature;
+        if signature != expected_signature {
+            debug!(?signature, expected=?expected_signature, "signature mismatch");
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
@@ -288,8 +292,9 @@ impl SignatureContext<'_> {
             sig_v4::calculate_signature(&string_to_sign, &secret_key, &amz_date, region)
         };
 
-        if signature != authorization.signature {
-            debug!(?signature, expected=?authorization.signature, "signature mismatch");
+        let expected_signature = authorization.signature;
+        if signature != expected_signature {
+            debug!(?signature, expected=?expected_signature, "signature mismatch");
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
@@ -350,7 +355,11 @@ impl SignatureContext<'_> {
         let string_to_sign = sig_v2::create_string_to_sign(method, date, &self.hs, &uri_s3_path, self.qs);
         let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
 
-        if signature != auth_v2.signature {
+        debug!(?string_to_sign, "sig_v2 header_auth");
+
+        let expected_signature = auth_v2.signature;
+        if signature != expected_signature {
+            debug!(?signature, expected=?expected_signature, "signature mismatch");
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
@@ -378,7 +387,9 @@ impl SignatureContext<'_> {
             sig_v2::create_string_to_sign(self.req_method, presigned_url.expires_str, &self.hs, &uri_s3_path, self.qs);
         let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
 
-        if signature != presigned_url.signature {
+        let expected_signature = presigned_url.signature;
+        if signature != expected_signature {
+            debug!(?signature, expected=?expected_signature, "signature mismatch");
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
