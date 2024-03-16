@@ -175,14 +175,15 @@ impl http_body::Body for Body {
 impl Stream for Body {
     type Item = Result<Bytes, StdError>;
 
-    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        match http_body::Body::poll_frame(self, cx) {
-            Poll::Ready(Some(Ok(f))) if f.is_data() => Poll::Ready(Some(Ok(f.into_data().expect("already checked")))),
-            Poll::Ready(Some(Ok(f))) if f.is_trailers() => Poll::Ready(None),
-            Poll::Ready(Some(Ok(_))) => Poll::Ready(Some(Err("unexpected BodyFrame".into()))),
-            Poll::Ready(Some(Err(err))) => Poll::Ready(Some(Err(err))),
-            Poll::Ready(None) => Poll::Ready(None),
-            Poll::Pending => Poll::Pending,
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        loop {
+            match std::task::ready!(http_body::Body::poll_frame(self.as_mut(), cx)?) {
+                Some(frame) => match frame.into_data() {
+                    Ok(data) => return Poll::Ready(Some(Ok(data))),
+                    Err(_frame) => continue,
+                },
+                None => return Poll::Ready(None),
+            };
         }
     }
 }
