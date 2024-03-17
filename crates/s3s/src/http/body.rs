@@ -12,6 +12,10 @@ use std::task::Poll;
 use bytes::Bytes;
 use futures::Stream;
 
+use http_body::Frame;
+
+type BoxBody = http_body_util::combinators::BoxBody<Bytes, StdError>;
+
 pin_project_lite::pin_project! {
     #[derive(Default)]
     pub struct Body {
@@ -31,7 +35,11 @@ pin_project_lite::pin_project! {
         },
         Hyper {
             #[pin]
-            inner: hyper::Body,
+            inner: hyper::body::Incoming,
+        },
+        BoxBody {
+            #[pin]
+            inner: BoxBody,
         },
         DynStream {
             #[pin]
@@ -52,7 +60,7 @@ impl Body {
         }
     }
 
-    fn hyper(body: hyper::Body) -> Self {
+    fn hyper(body: hyper::body::Incoming) -> Self {
         Self {
             kind: Kind::Hyper { inner: body },
         }
@@ -61,6 +69,19 @@ impl Body {
     fn dyn_stream(stream: DynByteStream) -> Self {
         Self {
             kind: Kind::DynStream { inner: stream },
+        }
+    }
+
+    #[must_use]
+    pub fn http_body<B>(body: B) -> Self
+    where
+        B: http_body::Body<Data = Bytes> + Send + Sync + 'static,
+        StdError: From<B::Error>,
+    {
+        Self {
+            kind: Kind::BoxBody {
+                inner: BoxBody::new(http_body_util::BodyExt::map_err(body, From::from)),
+            },
         }
     }
 }
@@ -83,8 +104,8 @@ impl From<String> for Body {
     }
 }
 
-impl From<hyper::Body> for Body {
-    fn from(body: hyper::Body) -> Self {
+impl From<hyper::body::Incoming> for Body {
+    fn from(body: hyper::body::Incoming) -> Self {
         Self::hyper(body)
     }
 }
@@ -100,7 +121,7 @@ impl http_body::Body for Body {
 
     type Error = StdError;
 
-    fn poll_data(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Result<Self::Data, Self::Error>>> {
+    fn poll_frame(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Result<Frame<Self::Data>, Self::Error>>> {
         let mut this = self.project();
         match this.kind.as_mut().project() {
             KindProj::Empty => {
@@ -112,22 +133,22 @@ impl http_body::Body for Body {
                 if bytes.is_empty() {
                     Poll::Ready(None)
                 } else {
-                    Poll::Ready(Some(Ok(bytes)))
+                    Poll::Ready(Some(Ok(Frame::data(bytes))))
                 }
             }
             KindProj::Hyper { inner } => {
-                http_body::Body::poll_data(inner, cx).map_err(|e| Box::new(e) as StdError)
+                http_body::Body::poll_frame(inner, cx).map_err(From::from)
+                //
+            }
+            KindProj::BoxBody { inner } => {
+                http_body::Body::poll_frame(inner, cx)
                 //
             }
             KindProj::DynStream { inner } => {
-                Stream::poll_next(inner, cx)
+                Stream::poll_next(inner, cx).map_ok(Frame::data)
                 //
             }
         }
-    }
-
-    fn poll_trailers(self: Pin<&mut Self>, _cx: &mut Context<'_>) -> Poll<Result<Option<hyper::HeaderMap>, Self::Error>> {
-        Poll::Ready(Ok(None)) // TODO: How to impl poll_trailers?
     }
 
     fn is_end_stream(&self) -> bool {
@@ -135,6 +156,7 @@ impl http_body::Body for Body {
             Kind::Empty => true,
             Kind::Once { inner } => inner.is_empty(),
             Kind::Hyper { inner } => http_body::Body::is_end_stream(inner),
+            Kind::BoxBody { inner } => http_body::Body::is_end_stream(inner),
             Kind::DynStream { inner } => inner.remaining_length().exact() == Some(0),
         }
     }
@@ -144,6 +166,7 @@ impl http_body::Body for Body {
             Kind::Empty => http_body::SizeHint::with_exact(0),
             Kind::Once { inner } => http_body::SizeHint::with_exact(inner.len() as u64),
             Kind::Hyper { inner } => http_body::Body::size_hint(inner),
+            Kind::BoxBody { inner } => http_body::Body::size_hint(inner),
             Kind::DynStream { inner } => inner.remaining_length().into(),
         }
     }
@@ -152,8 +175,16 @@ impl http_body::Body for Body {
 impl Stream for Body {
     type Item = Result<Bytes, StdError>;
 
-    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        http_body::Body::poll_data(self, cx)
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        loop {
+            match std::task::ready!(http_body::Body::poll_frame(self.as_mut(), cx)?) {
+                Some(frame) => match frame.into_data() {
+                    Ok(data) => return Poll::Ready(Some(Ok(data))),
+                    Err(_frame) => continue,
+                },
+                None => return Poll::Ready(None),
+            };
+        }
     }
 }
 
@@ -163,6 +194,7 @@ impl ByteStream for Body {
             Kind::Empty => RemainingLength::new_exact(0),
             Kind::Once { inner } => RemainingLength::new_exact(inner.len()),
             Kind::Hyper { inner } => http_body::Body::size_hint(inner).into(),
+            Kind::BoxBody { inner } => http_body::Body::size_hint(inner).into(),
             Kind::DynStream { inner } => inner.remaining_length(),
         }
     }
@@ -178,6 +210,10 @@ impl fmt::Debug for Body {
             }
             Kind::Hyper { inner } => {
                 d.field("hyper", inner);
+            }
+            Kind::BoxBody { inner } => {
+                d.field("body", &"{..}");
+                d.field("remaining_length", &http_body::Body::size_hint(inner));
             }
             Kind::DynStream { inner } => {
                 d.field("dyn_stream", &"{..}");
@@ -200,7 +236,7 @@ impl Body {
             return Ok(bytes);
         }
         let body = mem::take(self);
-        let bytes = hyper::body::to_bytes(body).await?;
+        let bytes = http_body_util::BodyExt::collect(body).await?.to_bytes();
         *self = Self::from(bytes.clone());
         Ok(bytes)
     }
@@ -219,20 +255,5 @@ impl Body {
             Kind::Once { inner } => Some(inner),
             _ => None,
         }
-    }
-
-    fn into_hyper(self) -> hyper::Body {
-        match self.kind {
-            Kind::Empty => hyper::Body::empty(),
-            Kind::Once { inner } => inner.into(),
-            Kind::Hyper { inner } => inner,
-            Kind::DynStream { inner } => hyper::Body::wrap_stream(inner),
-        }
-    }
-}
-
-impl From<Body> for hyper::Body {
-    fn from(value: Body) -> Self {
-        value.into_hyper()
     }
 }

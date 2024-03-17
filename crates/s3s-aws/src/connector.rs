@@ -56,7 +56,7 @@ impl HttpConnector for Connector {
 }
 
 fn convert_input(req: AwsHttpRequest) -> Result<Request<s3s::Body>, ConnectorError> {
-    let mut req = req.try_into_http02x().map_err(on_err)?;
+    let mut req = req.try_into_http1x().map_err(on_err)?;
 
     if req.headers().contains_key(HOST).not() {
         let host = auto_host_header(req.uri());
