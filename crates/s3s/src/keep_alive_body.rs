@@ -82,4 +82,8 @@ where
             }
         }
     }
+
+    fn is_end_stream(&self) -> bool {
+        self.done
+    }
 }

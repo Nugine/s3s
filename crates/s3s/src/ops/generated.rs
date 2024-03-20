@@ -556,7 +556,11 @@ impl super::Operation for CompleteMultipartUpload {
         let fut = async move {
             let result = s3.complete_multipart_upload(s3_req).await;
             match result {
-                Ok(s3_resp) => Self::serialize_http(s3_resp.output).unwrap(),
+                Ok(s3_resp) => {
+                    let mut resp = Self::serialize_http(s3_resp.output).unwrap();
+                    resp.headers.extend(s3_resp.headers);
+                    resp
+                }
                 Err(err) => super::serialize_error_no_decl(err).unwrap(),
             }
         };

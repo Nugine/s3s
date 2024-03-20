@@ -661,7 +661,13 @@ fn codegen_op_http_call(op: &Operation) {
         g!("let fut = async move {{");
         g!("let result = s3.{method}(s3_req).await;");
         g!("match result {{");
-        g!("Ok(s3_resp) => Self::serialize_http(s3_resp.output).unwrap(),");
+        glines![
+            "Ok(s3_resp) => {
+                let mut resp = Self::serialize_http(s3_resp.output).unwrap();
+                resp.headers.extend(s3_resp.headers);
+                resp
+            }"
+        ];
         g!("Err(err) => super::serialize_error_no_decl(err).unwrap(),");
         g!("}}");
         g!("}};");
