@@ -8,6 +8,7 @@ use crate::http::{HeaderName, HeaderValue};
 use crate::keep_alive_body::KeepAliveBody;
 use crate::utils::format::fmt_timestamp;
 use crate::xml;
+use crate::StdError;
 
 use std::convert::Infallible;
 use std::fmt::Write as _;
@@ -108,7 +109,7 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
 
 pub fn set_keep_alive_xml_body(
     res: &mut Response,
-    fut: impl std::future::Future<Output = Response> + Send + Sync + 'static,
+    fut: impl std::future::Future<Output = Result<Response, StdError>> + Send + Sync + 'static,
     duration: std::time::Duration,
 ) -> S3Result {
     let mut buf = Vec::with_capacity(40);

@@ -47,7 +47,7 @@ impl<F> KeepAliveBody<F> {
 
 impl<F> Body for KeepAliveBody<F>
 where
-    F: Future<Output = Response>,
+    F: Future<Output = Result<Response, StdError>>,
 {
     type Data = Bytes;
 
@@ -72,9 +72,15 @@ where
                 return Poll::Ready(Some(Ok(Frame::trailers(std::mem::take(&mut response.headers)))));
             }
             match this.inner.as_mut().poll(cx) {
-                Poll::Ready(response) => {
-                    *this.response = Some(response);
-                }
+                Poll::Ready(response) => match response {
+                    Ok(response) => {
+                        *this.response = Some(response);
+                    }
+                    Err(e) => {
+                        *this.done = true;
+                        return Poll::Ready(Some(Err(e)));
+                    }
+                },
                 Poll::Pending => match this.interval.poll_tick(cx) {
                     Poll::Ready(_) => return Poll::Ready(Some(Ok(Frame::data(Bytes::from_static(b" "))))),
                     Poll::Pending => return Poll::Pending,

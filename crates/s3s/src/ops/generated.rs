@@ -557,11 +557,11 @@ impl super::Operation for CompleteMultipartUpload {
             let result = s3.complete_multipart_upload(s3_req).await;
             match result {
                 Ok(s3_resp) => {
-                    let mut resp = Self::serialize_http(s3_resp.output).unwrap();
+                    let mut resp = Self::serialize_http(s3_resp.output)?;
                     resp.headers.extend(s3_resp.headers);
-                    resp
+                    Ok(resp)
                 }
-                Err(err) => super::serialize_error_no_decl(err).unwrap(),
+                Err(err) => super::serialize_error_no_decl(err).map_err(Into::into),
             }
         };
         let mut resp = http::Response::with_status(http::StatusCode::OK);

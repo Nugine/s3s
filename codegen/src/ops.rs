@@ -663,12 +663,12 @@ fn codegen_op_http_call(op: &Operation) {
         g!("match result {{");
         glines![
             "Ok(s3_resp) => {
-                let mut resp = Self::serialize_http(s3_resp.output).unwrap();
+                let mut resp = Self::serialize_http(s3_resp.output)?;
                 resp.headers.extend(s3_resp.headers);
-                resp
+                Ok(resp)
             }"
         ];
-        g!("Err(err) => super::serialize_error_no_decl(err).unwrap(),");
+        g!("Err(err) => super::serialize_error_no_decl(err).map_err(Into::into),");
         g!("}}");
         g!("}};");
         g!("let mut resp = http::Response::with_status(http::StatusCode::OK);");
