@@ -668,7 +668,7 @@ fn codegen_op_http_call(op: &Operation) {
                 Ok(resp)
             }"
         ];
-        g!("Err(err) => super::serialize_error_no_decl(err).map_err(Into::into),");
+        g!("Err(err) => super::serialize_error(err, true).map_err(Into::into),");
         g!("}}");
         g!("}};");
         g!("let mut resp = http::Response::with_status(http::StatusCode::OK);");
@@ -679,7 +679,7 @@ fn codegen_op_http_call(op: &Operation) {
         glines![
             "let s3_resp = match result {"
             "    Ok(val) => val,"
-            "    Err(err) => return super::serialize_error(err),"
+            "    Err(err) => return super::serialize_error(err, false),"
             "};"
         ];
 
