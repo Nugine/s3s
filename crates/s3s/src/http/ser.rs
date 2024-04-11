@@ -107,6 +107,9 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
     Ok(())
 }
 
+#[allow(clippy::declare_interior_mutable_const)]
+const TRANSFER_ENCODING_CHUNKED: HeaderValue = HeaderValue::from_static("chunked");
+
 pub fn set_keep_alive_xml_body(
     res: &mut Response,
     fut: impl std::future::Future<Output = Result<Response, StdError>> + Send + Sync + 'static,
@@ -118,6 +121,8 @@ pub fn set_keep_alive_xml_body(
 
     res.body = Body::http_body(KeepAliveBody::with_initial_body(fut, buf.into(), duration));
     res.headers.insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
+    res.headers
+        .insert(hyper::header::TRANSFER_ENCODING, TRANSFER_ENCODING_CHUNKED);
     Ok(())
 }
 
