@@ -93,3 +93,71 @@ where
         self.done
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use http_body_util::BodyExt;
+    use hyper::{header::HeaderValue, StatusCode};
+
+    use super::*;
+
+    #[tokio::test]
+    async fn keep_alive_body() {
+        let body = KeepAliveBody::with_initial_body(
+            async {
+                let mut res = Response::with_status(StatusCode::OK);
+                res.body = Bytes::from_static(b" world").into();
+                res.headers.insert("key", HeaderValue::from_static("value"));
+                Ok(res)
+            },
+            Bytes::from_static(b"hello"),
+            Duration::from_secs(1),
+        );
+
+        let aggregated = body.collect().await.unwrap();
+
+        assert_eq!(aggregated.trailers().unwrap().get("key").unwrap(), "value");
+
+        let buf = aggregated.to_bytes();
+
+        assert_eq!(buf, b"hello world".as_slice());
+    }
+
+    #[tokio::test]
+    async fn keep_alive_body_no_initial() {
+        let body = KeepAliveBody::new(
+            async {
+                let mut res = Response::with_status(StatusCode::OK);
+                res.body = Bytes::from_static(b"hello world").into();
+                Ok(res)
+            },
+            Duration::from_secs(1),
+        );
+
+        let aggregated = body.collect().await.unwrap();
+
+        let buf = aggregated.to_bytes();
+
+        assert_eq!(buf, b"hello world".as_slice());
+    }
+
+    #[tokio::test]
+    async fn keep_alive_body_fill_withespace() {
+        let body = KeepAliveBody::new(
+            async {
+                tokio::time::sleep(Duration::from_millis(50)).await;
+
+                let mut res = Response::with_status(StatusCode::OK);
+                res.body = Bytes::from_static(b"hello world").into();
+                Ok(res)
+            },
+            Duration::from_millis(10),
+        );
+
+        let aggregated = body.collect().await.unwrap();
+
+        let buf = aggregated.to_bytes();
+
+        assert_eq!(buf, b"     hello world".as_slice());
+    }
+}
