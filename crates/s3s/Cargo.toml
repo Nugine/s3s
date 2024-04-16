@@ -1,13 +1,13 @@
 [package]
 name = "s3s"
 version = "0.10.0-dev"
-edition = "2021"
 description = "S3 Service Adapter"
-license = "Apache-2.0"
 readme = "../../README.md"
-repository = "https://github.com/Nugine/s3s"
 keywords = ["s3"]
 categories = ["web-programming", "web-programming::http-server"]
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
 
 [package.metadata.docs.rs]
 all-features = true

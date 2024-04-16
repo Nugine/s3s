@@ -1,8 +1,10 @@
 [package]
 name = "s3s-proxy"
 version = "0.0.0"
-edition = "2021"
 publish = false
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
 
 [dependencies]
 aws-config = { version = "1.1.7", default-features = false, features = [
