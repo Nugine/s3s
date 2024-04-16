@@ -178,6 +178,13 @@ impl SignatureContext<'_> {
 
         let presigned_url = PresignedUrlV4::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v4 fields"))?;
 
+        if presigned_url.algorithm != "AWS4-HMAC-SHA256" {
+            return Err(s3_error!(
+                NotImplemented,
+                "X-Amz-Algorithm other than AWS4-HMAC-SHA256 is not implemented"
+            ));
+        }
+
         // ASK: how to use it?
         let _content_sha256: Option<AmzContentSha256<'_>> = extract_amz_content_sha256(&self.hs)?;
 
