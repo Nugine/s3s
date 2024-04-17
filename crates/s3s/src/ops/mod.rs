@@ -24,6 +24,7 @@ use crate::stream::aggregate_unlimited;
 use crate::stream::VecByteStream;
 
 use std::mem;
+use std::net::SocketAddr;
 use std::ops::Not;
 use std::sync::Arc;
 
@@ -80,9 +81,13 @@ fn extract_host(req: &Request) -> S3Result<Option<String>> {
     Ok(Some(host.into()))
 }
 
+fn is_socket_addr(host: &str) -> bool {
+    host.parse::<SocketAddr>().is_ok()
+}
+
 fn extract_s3_path(host: Option<&str>, uri_path: &str, base_domain: Option<&str>) -> S3Result<S3Path> {
     let result = match (base_domain, host) {
-        (Some(base_domain), Some(host)) if base_domain != host => {
+        (Some(base_domain), Some(host)) if base_domain != host && !is_socket_addr(host) => {
             debug!(?base_domain, ?host, ?uri_path, "parsing virtual-hosted-style request");
             crate::path::parse_virtual_hosted_style(base_domain, host, uri_path)
         }
