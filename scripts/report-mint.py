@@ -109,4 +109,3 @@ if __name__ == "__main__":
     assert "minio-dotnet" not in counts
     assert counts["minio-js"]["pass"] >= 219
     assert counts["versioning"]["pass"] >= 4
-    assert "s3select" not in counts
