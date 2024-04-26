@@ -24,7 +24,7 @@ use crate::stream::aggregate_unlimited;
 use crate::stream::VecByteStream;
 
 use std::mem;
-use std::net::SocketAddr;
+use std::net::{IpAddr, SocketAddr};
 use std::ops::Not;
 use std::sync::Arc;
 
@@ -82,7 +82,7 @@ fn extract_host(req: &Request) -> S3Result<Option<String>> {
 }
 
 fn is_socket_addr(host: &str) -> bool {
-    host.parse::<SocketAddr>().is_ok()
+    host.parse::<SocketAddr>().is_ok() || host.parse::<IpAddr>().is_ok()
 }
 
 fn extract_s3_path(host: Option<&str>, uri_path: &str, base_domain: Option<&str>) -> S3Result<S3Path> {
