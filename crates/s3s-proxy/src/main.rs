@@ -77,31 +77,47 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
 
     let hyper_service = service.into_shared();
 
-    let connection = ConnBuilder::new(TokioExecutor::new());
+    let http_server = ConnBuilder::new(TokioExecutor::new());
+    let graceful = hyper_util::server::graceful::GracefulShutdown::new();
 
-    let server = async move {
-        loop {
-            let (socket, _) = match listener.accept().await {
-                Ok(ok) => ok,
-                Err(err) => {
-                    tracing::error!("error accepting connection: {err}");
-                    continue;
-                }
-            };
-            let service = hyper_service.clone();
-            let conn = connection.clone();
-            tokio::spawn(async move {
-                let _ = conn.serve_connection(TokioIo::new(socket), service).await;
-            });
-        }
-    };
+    let mut ctrl_c = std::pin::pin!(tokio::signal::ctrl_c());
 
     info!("server is running at http://{}:{}/", opt.host, opt.port);
     info!("server is forwarding requests to {}", opt.endpoint_url);
-    let task = tokio::spawn(server);
 
-    tokio::signal::ctrl_c().await?;
-    task.abort();
+    loop {
+        let (socket, _) = tokio::select! {
+            res =  listener.accept() => {
+                match res {
+                    Ok(conn) => conn,
+                    Err(err) => {
+                        tracing::error!("error accepting connection: {err}");
+                        continue;
+                    }
+                }
+            }
+            _ = ctrl_c.as_mut() => {
+                break;
+            }
+        };
+
+        let conn = http_server.serve_connection(TokioIo::new(socket), hyper_service.clone());
+        let conn = graceful.watch(conn.into_owned());
+        tokio::spawn(async move {
+            let _ = conn.await;
+        });
+    }
+
+    tokio::select! {
+        () = graceful.shutdown() => {
+             tracing::debug!("Gracefully shutdown!");
+        },
+        () = tokio::time::sleep(std::time::Duration::from_secs(10)) => {
+             tracing::debug!("Waited 10 seconds for graceful shutdown, aborting...");
+        }
+    }
+
+    info!("server is stopped");
 
     Ok(())
 }
