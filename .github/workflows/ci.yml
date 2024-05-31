@@ -69,3 +69,7 @@ jobs:
       - run: cargo install --path crates/s3s-proxy
       - run: ./scripts/e2e-mint.sh
       - run: ./scripts/report-mint.py /tmp/mint/log.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: e2e-mint-logs
+          path: ./target/s3s-proxy.log
