@@ -59,10 +59,14 @@ fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
     }
 }
 
-fn serialize_error(mut e: S3Error) -> S3Result<Response> {
+fn serialize_error(mut e: S3Error, no_decl: bool) -> S3Result<Response> {
     let status = e.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
     let mut res = Response::with_status(status);
-    http::set_xml_body(&mut res, &e)?;
+    if no_decl {
+        http::set_xml_body_no_decl(&mut res, &e)?;
+    } else {
+        http::set_xml_body(&mut res, &e)?;
+    }
     if let Some(headers) = e.take_headers() {
         res.headers = headers;
     }
@@ -185,7 +189,7 @@ pub async fn call(
         Ok(op) => op,
         Err(err) => {
             debug!(?err, "failed to prepare");
-            return serialize_error(err);
+            return serialize_error(err, false);
         }
     };
 
@@ -193,7 +197,7 @@ pub async fn call(
         Ok(resp) => resp,
         Err(err) => {
             debug!(op = %op.name(), ?err, "op returns error");
-            return serialize_error(err);
+            return serialize_error(err, false);
         }
     };
 

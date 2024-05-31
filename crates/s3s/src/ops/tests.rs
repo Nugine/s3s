@@ -48,7 +48,7 @@ fn error_custom_headers() {
         err
     }
 
-    let res = serialize_error(redirect307("http://example.com")).unwrap();
+    let res = serialize_error(redirect307("http://example.com"), false).unwrap();
     assert_eq!(res.status, StatusCode::TEMPORARY_REDIRECT);
     assert_eq!(res.headers.get("location").unwrap(), "http://example.com");
 

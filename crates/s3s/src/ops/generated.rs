@@ -474,7 +474,7 @@ impl super::Operation for AbortMultipartUpload {
         let result = s3.abort_multipart_upload(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -532,7 +532,7 @@ impl CompleteMultipartUpload {
 
     pub fn serialize_http(x: CompleteMultipartUploadOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
-        http::set_xml_body(&mut res, &x)?;
+        http::set_xml_body_no_decl(&mut res, &x)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
@@ -552,14 +552,35 @@ impl super::Operation for CompleteMultipartUpload {
     async fn call(&self, s3: &Arc<dyn S3>, req: &mut http::Request) -> S3Result<http::Response> {
         let input = Self::deserialize_http(req)?;
         let s3_req = super::build_s3_request(input, req);
-        let result = s3.complete_multipart_upload(s3_req).await;
-        let s3_resp = match result {
-            Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+        let s3 = s3.clone();
+        let fut = async move {
+            let result = s3.complete_multipart_upload(s3_req).await;
+            match result {
+                Ok(s3_resp) => {
+                    let mut resp = Self::serialize_http(s3_resp.output)?;
+                    resp.headers.extend(s3_resp.headers);
+                    Ok(resp)
+                }
+                Err(err) => super::serialize_error(err, true).map_err(Into::into),
+            }
         };
-        let mut resp = Self::serialize_http(s3_resp.output)?;
-        resp.headers.extend(s3_resp.headers);
-        resp.extensions.extend(s3_resp.extensions);
+        let mut resp = http::Response::with_status(http::StatusCode::OK);
+        http::set_keep_alive_xml_body(&mut resp, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;
+        http::add_opt_header(
+            &mut resp,
+            "trailer",
+            Some(
+                [
+                    X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED.as_str(),
+                    X_AMZ_EXPIRATION.as_str(),
+                    X_AMZ_REQUEST_CHARGED.as_str(),
+                    X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID.as_str(),
+                    X_AMZ_SERVER_SIDE_ENCRYPTION.as_str(),
+                    X_AMZ_VERSION_ID.as_str(),
+                ]
+                .join(","),
+            ),
+        )?;
         Ok(resp)
     }
 }
@@ -737,7 +758,7 @@ impl super::Operation for CopyObject {
         let result = s3.copy_object(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -804,7 +825,7 @@ impl super::Operation for CreateBucket {
         let result = s3.create_bucket(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -945,7 +966,7 @@ impl super::Operation for CreateMultipartUpload {
         let result = s3.create_multipart_upload(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -985,7 +1006,7 @@ impl super::Operation for DeleteBucket {
         let result = s3.delete_bucket(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1028,7 +1049,7 @@ impl super::Operation for DeleteBucketAnalyticsConfiguration {
         let result = s3.delete_bucket_analytics_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1068,7 +1089,7 @@ impl super::Operation for DeleteBucketCors {
         let result = s3.delete_bucket_cors(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1108,7 +1129,7 @@ impl super::Operation for DeleteBucketEncryption {
         let result = s3.delete_bucket_encryption(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1145,7 +1166,7 @@ impl super::Operation for DeleteBucketIntelligentTieringConfiguration {
         let result = s3.delete_bucket_intelligent_tiering_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1188,7 +1209,7 @@ impl super::Operation for DeleteBucketInventoryConfiguration {
         let result = s3.delete_bucket_inventory_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1228,7 +1249,7 @@ impl super::Operation for DeleteBucketLifecycle {
         let result = s3.delete_bucket_lifecycle(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1271,7 +1292,7 @@ impl super::Operation for DeleteBucketMetricsConfiguration {
         let result = s3.delete_bucket_metrics_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1311,7 +1332,7 @@ impl super::Operation for DeleteBucketOwnershipControls {
         let result = s3.delete_bucket_ownership_controls(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1351,7 +1372,7 @@ impl super::Operation for DeleteBucketPolicy {
         let result = s3.delete_bucket_policy(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1391,7 +1412,7 @@ impl super::Operation for DeleteBucketReplication {
         let result = s3.delete_bucket_replication(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1431,7 +1452,7 @@ impl super::Operation for DeleteBucketTagging {
         let result = s3.delete_bucket_tagging(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1471,7 +1492,7 @@ impl super::Operation for DeleteBucketWebsite {
         let result = s3.delete_bucket_website(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1529,7 +1550,7 @@ impl super::Operation for DeleteObject {
         let result = s3.delete_object(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1575,7 +1596,7 @@ impl super::Operation for DeleteObjectTagging {
         let result = s3.delete_object_tagging(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1634,7 +1655,7 @@ impl super::Operation for DeleteObjects {
         let result = s3.delete_objects(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1674,7 +1695,7 @@ impl super::Operation for DeletePublicAccessBlock {
         let result = s3.delete_public_access_block(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1720,7 +1741,7 @@ impl super::Operation for GetBucketAccelerateConfiguration {
         let result = s3.get_bucket_accelerate_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1762,7 +1783,7 @@ impl super::Operation for GetBucketAcl {
         let result = s3.get_bucket_acl(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1809,7 +1830,7 @@ impl super::Operation for GetBucketAnalyticsConfiguration {
         let result = s3.get_bucket_analytics_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1851,7 +1872,7 @@ impl super::Operation for GetBucketCors {
         let result = s3.get_bucket_cors(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1895,7 +1916,7 @@ impl super::Operation for GetBucketEncryption {
         let result = s3.get_bucket_encryption(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1936,7 +1957,7 @@ impl super::Operation for GetBucketIntelligentTieringConfiguration {
         let result = s3.get_bucket_intelligent_tiering_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -1983,7 +2004,7 @@ impl super::Operation for GetBucketInventoryConfiguration {
         let result = s3.get_bucket_inventory_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2025,7 +2046,7 @@ impl super::Operation for GetBucketLifecycleConfiguration {
         let result = s3.get_bucket_lifecycle_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2067,7 +2088,7 @@ impl super::Operation for GetBucketLocation {
         let result = s3.get_bucket_location(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2109,7 +2130,7 @@ impl super::Operation for GetBucketLogging {
         let result = s3.get_bucket_logging(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2156,7 +2177,7 @@ impl super::Operation for GetBucketMetricsConfiguration {
         let result = s3.get_bucket_metrics_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2198,7 +2219,7 @@ impl super::Operation for GetBucketNotificationConfiguration {
         let result = s3.get_bucket_notification_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2242,7 +2263,7 @@ impl super::Operation for GetBucketOwnershipControls {
         let result = s3.get_bucket_ownership_controls(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2286,7 +2307,7 @@ impl super::Operation for GetBucketPolicy {
         let result = s3.get_bucket_policy(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2330,7 +2351,7 @@ impl super::Operation for GetBucketPolicyStatus {
         let result = s3.get_bucket_policy_status(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2374,7 +2395,7 @@ impl super::Operation for GetBucketReplication {
         let result = s3.get_bucket_replication(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2416,7 +2437,7 @@ impl super::Operation for GetBucketRequestPayment {
         let result = s3.get_bucket_request_payment(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2458,7 +2479,7 @@ impl super::Operation for GetBucketTagging {
         let result = s3.get_bucket_tagging(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2500,7 +2521,7 @@ impl super::Operation for GetBucketVersioning {
         let result = s3.get_bucket_versioning(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2542,7 +2563,7 @@ impl super::Operation for GetBucketWebsite {
         let result = s3.get_bucket_website(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2691,7 +2712,7 @@ impl super::Operation for GetObject {
         let result = s3.get_object(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(overrided_headers);
@@ -2742,7 +2763,7 @@ impl super::Operation for GetObjectAcl {
         let result = s3.get_object_acl(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2815,7 +2836,7 @@ impl super::Operation for GetObjectAttributes {
         let result = s3.get_object_attributes(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2866,7 +2887,7 @@ impl super::Operation for GetObjectLegalHold {
         let result = s3.get_object_legal_hold(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2910,7 +2931,7 @@ impl super::Operation for GetObjectLockConfiguration {
         let result = s3.get_object_lock_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -2961,7 +2982,7 @@ impl super::Operation for GetObjectRetention {
         let result = s3.get_object_retention(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3011,7 +3032,7 @@ impl super::Operation for GetObjectTagging {
         let result = s3.get_object_tagging(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3060,7 +3081,7 @@ impl super::Operation for GetObjectTorrent {
         let result = s3.get_object_torrent(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3104,7 +3125,7 @@ impl super::Operation for GetPublicAccessBlock {
         let result = s3.get_public_access_block(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3149,7 +3170,7 @@ impl super::Operation for HeadBucket {
         let result = s3.head_bucket(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3270,7 +3291,7 @@ impl super::Operation for HeadObject {
         let result = s3.head_object(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3315,7 +3336,7 @@ impl super::Operation for ListBucketAnalyticsConfigurations {
         let result = s3.list_bucket_analytics_configurations(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3357,7 +3378,7 @@ impl super::Operation for ListBucketIntelligentTieringConfigurations {
         let result = s3.list_bucket_intelligent_tiering_configurations(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3402,7 +3423,7 @@ impl super::Operation for ListBucketInventoryConfigurations {
         let result = s3.list_bucket_inventory_configurations(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3447,7 +3468,7 @@ impl super::Operation for ListBucketMetricsConfigurations {
         let result = s3.list_bucket_metrics_configurations(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3482,7 +3503,7 @@ impl super::Operation for ListBuckets {
         let result = s3.list_buckets(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3546,7 +3567,7 @@ impl super::Operation for ListMultipartUploads {
         let result = s3.list_multipart_uploads(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3614,7 +3635,7 @@ impl super::Operation for ListObjectVersions {
         let result = s3.list_object_versions(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3679,7 +3700,7 @@ impl super::Operation for ListObjects {
         let result = s3.list_objects(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3750,7 +3771,7 @@ impl super::Operation for ListObjectsV2 {
         let result = s3.list_objects_v2(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3819,7 +3840,7 @@ impl super::Operation for ListParts {
         let result = s3.list_parts(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3865,7 +3886,7 @@ impl super::Operation for PutBucketAccelerateConfiguration {
         let result = s3.put_bucket_accelerate_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3932,7 +3953,7 @@ impl super::Operation for PutBucketAcl {
         let result = s3.put_bucket_acl(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -3978,7 +3999,7 @@ impl super::Operation for PutBucketAnalyticsConfiguration {
         let result = s3.put_bucket_analytics_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4027,7 +4048,7 @@ impl super::Operation for PutBucketCors {
         let result = s3.put_bucket_cors(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4076,7 +4097,7 @@ impl super::Operation for PutBucketEncryption {
         let result = s3.put_bucket_encryption(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4119,7 +4140,7 @@ impl super::Operation for PutBucketIntelligentTieringConfiguration {
         let result = s3.put_bucket_intelligent_tiering_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4165,7 +4186,7 @@ impl super::Operation for PutBucketInventoryConfiguration {
         let result = s3.put_bucket_inventory_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4211,7 +4232,7 @@ impl super::Operation for PutBucketLifecycleConfiguration {
         let result = s3.put_bucket_lifecycle_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4260,7 +4281,7 @@ impl super::Operation for PutBucketLogging {
         let result = s3.put_bucket_logging(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4306,7 +4327,7 @@ impl super::Operation for PutBucketMetricsConfiguration {
         let result = s3.put_bucket_metrics_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4353,7 +4374,7 @@ impl super::Operation for PutBucketNotificationConfiguration {
         let result = s3.put_bucket_notification_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4399,7 +4420,7 @@ impl super::Operation for PutBucketOwnershipControls {
         let result = s3.put_bucket_ownership_controls(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4452,7 +4473,7 @@ impl super::Operation for PutBucketPolicy {
         let result = s3.put_bucket_policy(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4504,7 +4525,7 @@ impl super::Operation for PutBucketReplication {
         let result = s3.put_bucket_replication(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4553,7 +4574,7 @@ impl super::Operation for PutBucketRequestPayment {
         let result = s3.put_bucket_request_payment(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4602,7 +4623,7 @@ impl super::Operation for PutBucketTagging {
         let result = s3.put_bucket_tagging(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4654,7 +4675,7 @@ impl super::Operation for PutBucketVersioning {
         let result = s3.put_bucket_versioning(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -4703,7 +4724,7 @@ impl super::Operation for PutBucketWebsite {
         let result = s3.put_bucket_website(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5013,7 +5034,7 @@ impl super::Operation for PutObject {
         let result = s3.put_object(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5089,7 +5110,7 @@ impl super::Operation for PutObjectAcl {
         let result = s3.put_object_acl(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5147,7 +5168,7 @@ impl super::Operation for PutObjectLegalHold {
         let result = s3.put_object_legal_hold(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5204,7 +5225,7 @@ impl super::Operation for PutObjectLockConfiguration {
         let result = s3.put_object_lock_configuration(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5266,7 +5287,7 @@ impl super::Operation for PutObjectRetention {
         let result = s3.put_object_retention(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5324,7 +5345,7 @@ impl super::Operation for PutObjectTagging {
         let result = s3.put_object_tagging(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5373,7 +5394,7 @@ impl super::Operation for PutPublicAccessBlock {
         let result = s3.put_public_access_block(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5429,7 +5450,7 @@ impl super::Operation for RestoreObject {
         let result = s3.restore_object(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5488,7 +5509,7 @@ impl super::Operation for SelectObjectContent {
         let result = s3.select_object_content(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5585,7 +5606,7 @@ impl super::Operation for UploadPart {
         let result = s3.upload_part(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5693,7 +5714,7 @@ impl super::Operation for UploadPartCopy {
         let result = s3.upload_part_copy(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);
@@ -5860,7 +5881,7 @@ impl super::Operation for WriteGetObjectResponse {
         let result = s3.write_get_object_response(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
-            Err(err) => return super::serialize_error(err),
+            Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
         resp.headers.extend(s3_resp.headers);

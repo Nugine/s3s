@@ -5,8 +5,10 @@ use crate::dto::SelectObjectContentEventStream;
 use crate::dto::{Metadata, StreamingBlob, Timestamp, TimestampFormat};
 use crate::error::{S3Error, S3Result};
 use crate::http::{HeaderName, HeaderValue};
+use crate::keep_alive_body::KeepAliveBody;
 use crate::utils::format::fmt_timestamp;
 use crate::xml;
+use crate::StdError;
 
 use std::convert::Infallible;
 use std::fmt::Write as _;
@@ -100,6 +102,34 @@ pub fn set_xml_body<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result 
             .and_then(|()| val.serialize(&mut ser))
             .map_err(S3Error::internal_error)?;
     }
+    res.body = Body::from(buf);
+    res.headers.insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
+    Ok(())
+}
+
+#[allow(clippy::declare_interior_mutable_const)]
+const TRANSFER_ENCODING_CHUNKED: HeaderValue = HeaderValue::from_static("chunked");
+
+pub fn set_keep_alive_xml_body(
+    res: &mut Response,
+    fut: impl std::future::Future<Output = Result<Response, StdError>> + Send + Sync + 'static,
+    duration: std::time::Duration,
+) -> S3Result {
+    let mut buf = Vec::with_capacity(40);
+    let mut ser = xml::Serializer::new(&mut buf);
+    ser.decl().map_err(S3Error::internal_error)?;
+
+    res.body = Body::http_body(KeepAliveBody::with_initial_body(fut, buf.into(), duration));
+    res.headers.insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
+    res.headers
+        .insert(hyper::header::TRANSFER_ENCODING, TRANSFER_ENCODING_CHUNKED);
+    Ok(())
+}
+
+pub fn set_xml_body_no_decl<T: xml::Serialize>(res: &mut Response, val: &T) -> S3Result {
+    let mut buf = Vec::with_capacity(256);
+    let mut ser = xml::Serializer::new(&mut buf);
+    val.serialize(&mut ser).map_err(S3Error::internal_error)?;
     res.body = Body::from(buf);
     res.headers.insert(hyper::header::CONTENT_TYPE, APPLICATION_XML);
     Ok(())
