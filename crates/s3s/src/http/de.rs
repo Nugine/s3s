@@ -257,8 +257,8 @@ impl TryFromHeaderValue for bool {
 
     fn try_from_header_value(val: &HeaderValue) -> Result<Self, Self::Error> {
         match val.as_bytes() {
-            b"true" => Ok(true),
-            b"false" => Ok(false),
+            b"true" | b"True" => Ok(true),
+            b"false" | b"False" => Ok(false),
             _ => Err(ParseHeaderError::Boolean),
         }
     }

@@ -58,7 +58,7 @@ pub struct StructureMember {
 pub struct OperationShape {
     pub input: OperationInput,
     pub output: OperationOutput,
-    pub errors: Option<Vec<OperationError>>,
+    // pub errors: Option<Vec<OperationError>>,
     pub traits: Traits,
 }
 
@@ -74,7 +74,7 @@ pub struct OperationOutput {
 
 #[derive(Debug, Deserialize)]
 pub struct OperationError {
-    pub target: String,
+    // pub target: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -96,13 +96,13 @@ pub struct ListMember {
 
 #[derive(Debug, Deserialize)]
 pub struct ServiceShape {
-    pub version: String,
-    pub operations: Vec<ServiceOperation>,
+    // pub version: String,
+    // pub operations: Vec<ServiceOperation>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ServiceOperation {
-    pub target: String,
+    // pub target: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -125,13 +125,13 @@ pub struct EnumShape {
 
 #[derive(Debug, Deserialize)]
 pub struct EnumMember {
-    pub target: String,
+    // pub target: String,
     pub traits: Traits,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct BlobShape {
-    pub traits: Traits,
+    // pub traits: Traits,
 }
 
 #[derive(Debug, Deserialize)]
@@ -154,13 +154,13 @@ pub struct MapShape {
 #[derive(Debug, Deserialize)]
 pub struct MapKey {
     pub target: String,
-    pub traits: Traits,
+    // pub traits: Traits,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MapValue {
     pub target: String,
-    pub traits: Traits,
+    // pub traits: Traits,
 }
 
 impl Traits {

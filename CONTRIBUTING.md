@@ -2,7 +2,7 @@
 
 |               Toolchain               | Version |
 | :-----------------------------------: | :-----: |
-|      [Rust](https://rustup.rs/)       | ^1.70.0 |
+|      [Rust](https://rustup.rs/)       | ^1.77.2 |
 | [just](https://github.com/casey/just) |    -    |
 |                Python                 |  ^3.10  |
 |                Docker                 |    -    |

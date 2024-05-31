@@ -1,8 +1,10 @@
 [package]
 name = "s3s-proxy"
 version = "0.0.0"
-edition = "2021"
 publish = false
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
 
 [dependencies]
 aws-config = { version = "1.1.7", default-features = false, features = [
@@ -11,14 +13,15 @@ aws-config = { version = "1.1.7", default-features = false, features = [
 aws-credential-types = "1.1.7"
 aws-sdk-s3 = "1.17.0"
 clap = { version = "4.3.21", features = ["derive"] }
-hyper-util = { version = "0.1.3", features = [
-    "server",
+hyper-util = { version = "0.1.5", features = [
+    "server-auto",
+    "server-graceful",
     "http1",
     "http2",
     "tokio",
 ] }
-s3s = { version = "0.10.0-dev", path = "../s3s" }
-s3s-aws = { version = "0.10.0-dev", path = "../s3s-aws" }
+s3s = { version = "0.10.1-dev", path = "../s3s" }
+s3s-aws = { version = "0.10.1-dev", path = "../s3s-aws" }
 tokio = { version = "1.31.0", features = ["full"] }
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter", "time"] }

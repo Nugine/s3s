@@ -446,7 +446,7 @@ impl S3 for FileSystem {
 
         let Some(body) = body else { return Err(s3_error!(IncompleteBody)) };
 
-        let mut checksum: crate::checksum::ChecksumCalculator = default();
+        let mut checksum: s3s::checksum::ChecksumHasher = default();
         if input.checksum_crc32.is_some() {
             checksum.crc32 = Some(default());
         }
