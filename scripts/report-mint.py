@@ -42,11 +42,12 @@ if __name__ == "__main__":
             if len(line) == 0:
                 continue
 
-            if line.find("{") != 0:
-                line = line[line.find("{") :]
+            json_str = line
+            if json_str.find("{") != 0:
+                json_str = json_str[json_str.find("{") :]
 
             try:
-                json_value = json.loads(line)
+                json_value = json.loads(json_str)
             except Exception:
                 print(f"error parsing log line: {line}")
                 continue
@@ -89,7 +90,6 @@ if __name__ == "__main__":
 
     passed_groups = [
         "aws-sdk-go",
-        "aws-sdk-php",
         "aws-sdk-ruby",
         "awscli",
         "minio-go",
@@ -106,6 +106,10 @@ if __name__ == "__main__":
 
     # FIXME: E2E tests
     # https://github.com/Nugine/s3s/issues/4
+
     assert "minio-dotnet" not in counts
     assert counts["minio-js"]["pass"] >= 219
     assert counts["versioning"]["pass"] >= 4
+
+    # https://github.com/Nugine/s3s/pull/141#issuecomment-2142662531
+    assert counts["aws-sdk-php"]["pass"] >= 10
