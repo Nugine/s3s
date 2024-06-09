@@ -21,21 +21,12 @@ pin_project_lite::pin_project! {
         done: bool,
     }
 }
-impl<F> KeepAliveBody<F> {
-    pub fn new(inner: F, interval: Duration) -> Self {
-        Self {
-            inner,
-            initial_body: None,
-            response: None,
-            interval: tokio::time::interval(interval),
-            done: false,
-        }
-    }
 
-    pub fn with_initial_body(inner: F, initial_body: Bytes, interval: Duration) -> Self {
+impl<F> KeepAliveBody<F> {
+    pub fn new(inner: F, interval: Duration, initial_body: Option<Bytes>) -> Self {
         Self {
             inner,
-            initial_body: Some(initial_body),
+            initial_body,
             response: None,
             interval: tokio::time::interval(interval),
             done: false,
@@ -101,15 +92,15 @@ mod tests {
 
     #[tokio::test]
     async fn keep_alive_body() {
-        let body = KeepAliveBody::with_initial_body(
+        let body = KeepAliveBody::new(
             async {
                 let mut res = Response::with_status(StatusCode::OK);
                 res.body = Bytes::from_static(b" world").into();
                 res.headers.insert("key", HeaderValue::from_static("value"));
                 Ok(res)
             },
-            Bytes::from_static(b"hello"),
             Duration::from_secs(1),
+            Some(Bytes::from_static(b"hello")),
         );
 
         let aggregated = body.collect().await.unwrap();
@@ -130,6 +121,7 @@ mod tests {
                 Ok(res)
             },
             Duration::from_secs(1),
+            None,
         );
 
         let aggregated = body.collect().await.unwrap();
@@ -150,6 +142,7 @@ mod tests {
                 Ok(res)
             },
             Duration::from_millis(10),
+            None,
         );
 
         let aggregated = body.collect().await.unwrap();
