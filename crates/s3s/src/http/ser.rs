@@ -5,7 +5,7 @@ use crate::dto::SelectObjectContentEventStream;
 use crate::dto::{Metadata, StreamingBlob, Timestamp, TimestampFormat};
 use crate::error::{S3Error, S3Result};
 use crate::http::{HeaderName, HeaderValue};
-use crate::keep_alive_body::KeepAliveBody;
+use crate::http::KeepAliveBody;
 use crate::utils::format::fmt_timestamp;
 use crate::xml;
 use crate::StdError;

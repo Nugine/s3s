@@ -43,7 +43,6 @@ pub mod service;
 pub mod stream;
 
 pub mod checksum;
-pub mod keep_alive_body;
 
 pub use self::error::*;
 pub use self::http::Body;

@@ -1,15 +1,13 @@
-use std::{
-    future::Future,
-    pin::Pin,
-    task::{Context, Poll},
-    time::Duration,
-};
+use crate::{http::Response, StdError};
+
+use std::future::Future;
+use std::pin::Pin;
+use std::task::{Context, Poll};
+use std::time::Duration;
 
 use bytes::Bytes;
 use http_body::{Body, Frame};
 use tokio::time::Interval;
-
-use crate::{http::Response, StdError};
 
 // sends whitespace while the future is pending
 pin_project_lite::pin_project! {
@@ -145,7 +143,7 @@ mod tests {
     async fn keep_alive_body_fill_withespace() {
         let body = KeepAliveBody::new(
             async {
-                tokio::time::sleep(Duration::from_millis(50)).await;
+                tokio::time::sleep(Duration::from_millis(45)).await;
 
                 let mut res = Response::with_status(StatusCode::OK);
                 res.body = Bytes::from_static(b"hello world").into();
