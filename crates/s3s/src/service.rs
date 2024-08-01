@@ -124,6 +124,25 @@ impl Service<hyper::Request<hyper::body::Incoming>> for SharedS3Service {
     }
 }
 
+#[cfg(feature = "tower")]
+impl tower::Service<hyper::Request<hyper::body::Incoming>> for SharedS3Service {
+    type Response = hyper::Response<Body>;
+
+    type Error = S3Error;
+
+    type Future = BoxFuture<'static, Result<Self::Response, Self::Error>>;
+
+    fn poll_ready(&mut self, _cx: &mut std::task::Context<'_>) -> std::task::Poll<Result<(), Self::Error>> {
+        std::task::Poll::Ready(Ok(()))
+    }
+
+    fn call(&mut self, req: hyper::Request<hyper::body::Incoming>) -> Self::Future {
+        let req = req.map(Body::from);
+        let service = self.0.clone();
+        Box::pin(service.call_shared(req))
+    }
+}
+
 #[derive(Clone)]
 pub struct MakeService<S>(S);
 
