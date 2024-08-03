@@ -237,7 +237,7 @@ fn aws_ty_path(name: &str, ops: &Operations, rust_types: &RustTypes) -> String {
 }
 
 fn contains_deprecated_field(name: &str) -> bool {
-    matches!(name, "LifecycleRule" | "ReplicationRule")
+    matches!(name, "LifecycleRule" | "ReplicationRule" | "GetObjectOutput" | "HeadObjectOutput")
 }
 
 fn has_unconditional_builder(name: &str) -> bool {

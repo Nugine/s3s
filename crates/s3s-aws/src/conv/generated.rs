@@ -3297,6 +3297,7 @@ impl AwsConversion for s3s::dto::GetObjectOutput {
     type Target = aws_sdk_s3::operation::get_object::GetObjectOutput;
     type Error = S3Error;
 
+    #[allow(deprecated)]
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             accept_ranges: try_from_aws(x.accept_ranges)?,
@@ -3338,6 +3339,7 @@ impl AwsConversion for s3s::dto::GetObjectOutput {
         })
     }
 
+    #[allow(deprecated)]
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_accept_ranges(try_into_aws(x.accept_ranges)?);
@@ -3708,6 +3710,7 @@ impl AwsConversion for s3s::dto::HeadObjectOutput {
     type Target = aws_sdk_s3::operation::head_object::HeadObjectOutput;
     type Error = S3Error;
 
+    #[allow(deprecated)]
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             accept_ranges: try_from_aws(x.accept_ranges)?,
@@ -3747,6 +3750,7 @@ impl AwsConversion for s3s::dto::HeadObjectOutput {
         })
     }
 
+    #[allow(deprecated)]
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_accept_ranges(try_into_aws(x.accept_ranges)?);
