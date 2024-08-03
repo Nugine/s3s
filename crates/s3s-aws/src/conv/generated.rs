@@ -3664,6 +3664,12 @@ impl AwsConversion for s3s::dto::HeadObjectInput {
             part_number: try_from_aws(x.part_number)?,
             range: try_from_aws(x.range)?,
             request_payer: try_from_aws(x.request_payer)?,
+            response_cache_control: try_from_aws(x.response_cache_control)?,
+            response_content_disposition: try_from_aws(x.response_content_disposition)?,
+            response_content_encoding: try_from_aws(x.response_content_encoding)?,
+            response_content_language: try_from_aws(x.response_content_language)?,
+            response_content_type: try_from_aws(x.response_content_type)?,
+            response_expires: try_from_aws(x.response_expires)?,
             sse_customer_algorithm: try_from_aws(x.sse_customer_algorithm)?,
             sse_customer_key: try_from_aws(x.sse_customer_key)?,
             sse_customer_key_md5: try_from_aws(x.sse_customer_key_md5)?,
@@ -3684,6 +3690,12 @@ impl AwsConversion for s3s::dto::HeadObjectInput {
         y = y.set_part_number(try_into_aws(x.part_number)?);
         y = y.set_range(try_into_aws(x.range)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
+        y = y.set_response_cache_control(try_into_aws(x.response_cache_control)?);
+        y = y.set_response_content_disposition(try_into_aws(x.response_content_disposition)?);
+        y = y.set_response_content_encoding(try_into_aws(x.response_content_encoding)?);
+        y = y.set_response_content_language(try_into_aws(x.response_content_language)?);
+        y = y.set_response_content_type(try_into_aws(x.response_content_type)?);
+        y = y.set_response_expires(try_into_aws(x.response_expires)?);
         y = y.set_sse_customer_algorithm(try_into_aws(x.sse_customer_algorithm)?);
         y = y.set_sse_customer_key(try_into_aws(x.sse_customer_key)?);
         y = y.set_sse_customer_key_md5(try_into_aws(x.sse_customer_key_md5)?);

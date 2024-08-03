@@ -3205,6 +3205,20 @@ impl HeadObject {
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
 
+        let response_cache_control: Option<ResponseCacheControl> = http::parse_opt_query(req, "response-cache-control")?;
+
+        let response_content_disposition: Option<ResponseContentDisposition> =
+            http::parse_opt_query(req, "response-content-disposition")?;
+
+        let response_content_encoding: Option<ResponseContentEncoding> = http::parse_opt_query(req, "response-content-encoding")?;
+
+        let response_content_language: Option<ResponseContentLanguage> = http::parse_opt_query(req, "response-content-language")?;
+
+        let response_content_type: Option<ResponseContentType> = http::parse_opt_query(req, "response-content-type")?;
+
+        let response_expires: Option<ResponseExpires> =
+            http::parse_opt_query_timestamp(req, "response-expires", TimestampFormat::HttpDate)?;
+
         let sse_customer_algorithm: Option<SSECustomerAlgorithm> =
             http::parse_opt_header(req, &X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM)?;
 
@@ -3227,6 +3241,12 @@ impl HeadObject {
             part_number,
             range,
             request_payer,
+            response_cache_control,
+            response_content_disposition,
+            response_content_encoding,
+            response_content_language,
+            response_content_type,
+            response_expires,
             sse_customer_algorithm,
             sse_customer_key,
             sse_customer_key_md5,

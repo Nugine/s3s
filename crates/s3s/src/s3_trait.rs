@@ -109,7 +109,7 @@ pub trait S3: Send + Sync + 'static {
     /// request as appropriate). If the condition persists, the SDKs throw an exception (or, for
     /// the SDKs that don't use exceptions, they return an error). </p>
     /// <p>Note that if <code>CompleteMultipartUpload</code> fails, applications should be prepared
-    /// to retry the failed requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ErrorBestPractices.html">Amazon S3 Error Best
+    /// to retry any failed requests (including 500 error responses). For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ErrorBestPractices.html">Amazon S3 Error Best
     /// Practices</a>.</p>
     /// <important>
     /// <p>You can't use <code>Content-Type: application/x-www-form-urlencoded</code> for the
@@ -266,7 +266,9 @@ pub trait S3: Send + Sync + 'static {
     /// </note>
     /// <p>Both the
     /// Region that you want to copy the object from and the Region that you want to copy the
-    /// object to must be enabled for your account.</p>
+    /// object to must be enabled for your account. For more information about how to enable a Region for your account, see <a href="https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-regions.html#manage-acct-regions-enable-standalone">Enable
+    /// or disable a Region for standalone accounts</a> in the
+    /// <i>Amazon Web Services Account Management Guide</i>.</p>
     /// <important>
     /// <p>Amazon S3 transfer acceleration does not support cross-Region copies. If you request a
     /// cross-Region copy using a transfer acceleration endpoint, you get a <code>400 Bad
@@ -305,7 +307,7 @@ pub trait S3: Send + Sync + 'static {
     /// <li>
     /// <p>If the destination bucket is a general purpose bucket, you must have
     /// <b>
-    /// <code>s3:PubObject</code>
+    /// <code>s3:PutObject</code>
     /// </b>
     /// permission to write the object copy to the destination bucket. </p>
     /// </li>
@@ -340,10 +342,10 @@ pub trait S3: Send + Sync + 'static {
     /// </dd>
     /// <dt>Response and special errors</dt>
     /// <dd>
-    /// <p>When the request is an HTTP 1.1 request, the response is chunk encoded.
-    /// When the request is not an HTTP 1.1 request, the response would not contain the <code>Content-Length</code>.
-    /// You always need to read the entire response body to check if the copy succeeds.
-    /// to keep the connection alive while we copy the data. </p>
+    /// <p>When the request is an HTTP 1.1 request, the response is chunk encoded. When
+    /// the request is not an HTTP 1.1 request, the response would not contain the
+    /// <code>Content-Length</code>. You always need to read the entire response body
+    /// to check if the copy succeeds. </p>
     /// <ul>
     /// <li>
     /// <p>If the copy is successful, you receive a response with information about the copied
@@ -361,7 +363,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>If the error occurs during the copy operation, the error response is
     /// embedded in the <code>200 OK</code> response. For example, in a cross-region copy, you
     /// may encounter throttling and receive a <code>200 OK</code> response.
-    /// For more information, see <a href="repost.aws/knowledge-center/s3-resolve-200-internalerror">Resolve
+    /// For more information, see <a href="https://repost.aws/knowledge-center/s3-resolve-200-internalerror">Resolve
     /// the Error 200 response when copying objects to Amazon S3</a>.
     /// The <code>200 OK</code> status code means the copy was accepted, but  
     /// it doesn't mean the copy is complete. Another example is
@@ -383,7 +385,7 @@ pub trait S3: Send + Sync + 'static {
     /// <dd>
     /// <p>The copy request charge is based on the storage class and Region that you specify for
     /// the destination object. The request can also result in a data retrieval charge for the
-    /// source if the source storage class bills for data retrieval. For pricing information, see
+    /// source if the source storage class bills for data retrieval. If the copy source is in a different region, the data transfer is billed to the copy source account. For pricing information, see
     /// <a href="http://aws.amazon.com/s3/pricing/">Amazon S3 pricing</a>.</p>
     /// </dd>
     /// <dt>HTTP Host header syntax</dt>
@@ -476,13 +478,22 @@ pub trait S3: Send + Sync + 'static {
     /// <code>x-amz-object-ownership</code> header, then the
     /// <code>s3:PutBucketOwnershipControls</code> permission is required.</p>
     /// <important>
-    /// <p>If your <code>CreateBucket</code> request sets <code>BucketOwnerEnforced</code> for
-    /// Amazon S3 Object Ownership and specifies a bucket ACL that provides access to an external
-    /// Amazon Web Services account, your request fails with a <code>400</code> error and returns the
-    /// <code>InvalidBucketAcLWithObjectOwnership</code> error code. For more information,
-    /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-ownership-existing-bucket.html">Setting Object
-    /// Ownership on an existing bucket </a> in the <i>Amazon S3 User Guide</i>.
-    /// </p>
+    /// <p> To set an ACL on a bucket as part of a
+    /// <code>CreateBucket</code> request, you must explicitly set S3
+    /// Object Ownership for the bucket to a different value than the
+    /// default, <code>BucketOwnerEnforced</code>. Additionally, if your
+    /// desired bucket ACL grants public access, you must first create the
+    /// bucket (without the bucket ACL) and then explicitly disable Block
+    /// Public Access on the bucket before using <code>PutBucketAcl</code>
+    /// to set the ACL. If you try to create a bucket with a public ACL,
+    /// the request will fail. </p>
+    /// <p> For the majority of modern use cases in S3, we recommend
+    /// that you keep all Block Public Access settings enabled and keep
+    /// ACLs disabled. If you would like to share data with users outside
+    /// of your account, you can use bucket policies as needed. For more
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Controlling ownership of objects and disabling ACLs for your
+    /// bucket </a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html">Blocking public access to your Amazon S3 storage </a> in
+    /// the <i>Amazon S3 User Guide</i>. </p>
     /// </important>
     /// </li>
     /// <li>
@@ -1260,12 +1271,13 @@ pub trait S3: Send + Sync + 'static {
     /// <p>Removes an object from a bucket. The behavior depends on the bucket's versioning state: </p>
     /// <ul>
     /// <li>
-    /// <p>If versioning is enabled, the operation removes the null version (if there is one) of an object and inserts a delete marker,
-    /// which becomes the latest version of the object. If there isn't a null version, Amazon S3 does
-    /// not remove any objects but will still respond that the command was successful.</p>
+    /// <p>If bucket versioning is not enabled, the operation permanently deletes the object.</p>
     /// </li>
     /// <li>
-    /// <p>If versioning is suspended or not enabled, the operation permanently deletes the object.</p>
+    /// <p>If bucket versioning is enabled, the operation inserts a delete marker, which becomes the current version of the object. To permanently delete an object in a versioned bucket, you must include the object’s <code>versionId</code> in the request. For more information about versioning-enabled buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/DeletingObjectVersions.html">Deleting object versions from a versioning-enabled bucket</a>.</p>
+    /// </li>
+    /// <li>
+    /// <p>If bucket versioning is suspended, the operation removes the object that has a null <code>versionId</code>, if there is one, and inserts a delete marker that becomes the current version of the object. If there isn't an object with a null <code>versionId</code>, and all versions of the object have a <code>versionId</code>, Amazon S3 does not remove the object and only inserts a delete marker. To permanently delete an object that has a <code>versionId</code>, you must include the object’s <code>versionId</code> in the request. For more information about versioning-suspended buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/DeletingObjectsfromVersioningSuspendedBuckets.html">Deleting objects from versioning-suspended buckets</a>.</p>
     /// </li>
     /// </ul>
     /// <note>
@@ -1325,7 +1337,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>
     /// <b>
     /// <code>s3:DeleteObjectVersion</code>
-    /// </b> - To delete a specific version of an object from a versiong-enabled bucket, you must have the <code>s3:DeleteObjectVersion</code> permission.</p>
+    /// </b> - To delete a specific version of an object from a versioning-enabled bucket, you must have the <code>s3:DeleteObjectVersion</code> permission.</p>
     /// </li>
     /// </ul>
     /// </li>
@@ -1448,7 +1460,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>
     /// <b>
     /// <code>s3:DeleteObjectVersion</code>
-    /// </b> - To delete a specific version of an object from a versiong-enabled bucket, you must specify the <code>s3:DeleteObjectVersion</code> permission.</p>
+    /// </b> - To delete a specific version of an object from a versioning-enabled bucket, you must specify the <code>s3:DeleteObjectVersion</code> permission.</p>
     /// </li>
     /// </ul>
     /// </li>
@@ -1805,12 +1817,12 @@ pub trait S3: Send + Sync + 'static {
     /// <p>This operation is not supported by directory buckets.</p>
     /// </note>
     /// <note>
-    /// <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an
-    /// object key name prefix, one or more object tags, or a combination of both. Accordingly,
+    /// <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an object key name prefix, one or more object tags, object size, or any combination of these. Accordingly, this section describes the latest API. The previous version of the API supported filtering based only on an object key name prefix, which is supported for backward compatibility.
+    /// For the related API description, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html">GetBucketLifecycle</a>. Accordingly,
     /// this section describes the latest API. The response describes the new filter element
     /// that you can use to specify a filter to select a subset of objects to which the rule
     /// applies. If you are using a previous version of the lifecycle configuration, it still
-    /// works. For the earlier action, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLifecycle.html">GetBucketLifecycle</a>.</p>
+    /// works. For the earlier action, </p>
     /// </note>
     /// <p>Returns the lifecycle configuration information set on the bucket. For information about
     /// lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle
@@ -2860,7 +2872,7 @@ pub trait S3: Send + Sync + 'static {
     /// <p>If the bucket does not exist or you do not have permission to access it, the
     /// <code>HEAD</code> request returns a generic <code>400 Bad Request</code>, <code>403
     /// Forbidden</code> or <code>404 Not Found</code> code. A message body is not included, so
-    /// you cannot determine the exception beyond these error codes.</p>
+    /// you cannot determine the exception beyond these HTTP response codes.</p>
     /// <note>
     /// <p>
     /// <b>Directory buckets </b> - You must make requests for this API operation to the Zonal endpoint. These endpoints support virtual-hosted-style requests in the format <code>https://<i>bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-Regions-and-Zones.html">Regional and Zonal endpoints</a> in the
@@ -4250,11 +4262,8 @@ pub trait S3: Send + Sync + 'static {
     /// lifecycle configuration. For information about lifecycle configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html">Managing
     /// your storage lifecycle</a>.</p>
     /// <note>
-    /// <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an
-    /// object key name prefix, one or more object tags, or a combination of both. Accordingly,
-    /// this section describes the latest API. The previous version of the API supported
-    /// filtering based only on an object key name prefix, which is supported for backward
-    /// compatibility. For the related API description, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html">PutBucketLifecycle</a>.</p>
+    /// <p>Bucket lifecycle configuration now supports specifying a lifecycle rule using an object key name prefix, one or more object tags, object size, or any combination of these. Accordingly, this section describes the latest API. The previous version of the API supported filtering based only on an object key name prefix, which is supported for backward compatibility.
+    /// For the related API description, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketLifecycle.html">PutBucketLifecycle</a>.</p>
     /// </note>
     /// <dl>
     /// <dt>Rules</dt>
@@ -4265,9 +4274,7 @@ pub trait S3: Send + Sync + 'static {
     /// Each rule consists of the following:</p>
     /// <ul>
     /// <li>
-    /// <p>A filter identifying a subset of objects to which the rule applies. The
-    /// filter can be based on a key name prefix, object tags, or a combination of
-    /// both.</p>
+    /// <p>A filter identifying a subset of objects to which the rule applies. The filter can be based on a key name prefix, object tags, object size, or any combination of these.</p>
     /// </li>
     /// <li>
     /// <p>A status indicating whether the rule is in effect.</p>
@@ -5512,10 +5519,6 @@ pub trait S3: Send + Sync + 'static {
     /// <ul>
     /// <li>
     /// <p>
-    /// <code>select</code> - Perform a select query on an archived object</p>
-    /// </li>
-    /// <li>
-    /// <p>
     /// <code>restore an archive</code> - Restore an archived object</p>
     /// </li>
     /// </ul>
@@ -5538,60 +5541,6 @@ pub trait S3: Send + Sync + 'static {
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Protecting Data Using Server-Side Encryption</a> in the
     /// <i>Amazon S3 User Guide</i>
     /// </p>
-    /// </li>
-    /// </ul>
-    /// <p>Define the SQL expression for the <code>SELECT</code> type of restoration for your query
-    /// in the request body's <code>SelectParameters</code> structure. You can use expressions like
-    /// the following examples.</p>
-    /// <ul>
-    /// <li>
-    /// <p>The following expression returns all records from the specified object.</p>
-    /// <p>
-    /// <code>SELECT * FROM Object</code>
-    /// </p>
-    /// </li>
-    /// <li>
-    /// <p>Assuming that you are not using any headers for data stored in the object, you can
-    /// specify columns with positional headers.</p>
-    /// <p>
-    /// <code>SELECT s._1, s._2 FROM Object s WHERE s._3 > 100</code>
-    /// </p>
-    /// </li>
-    /// <li>
-    /// <p>If you have headers and you set the <code>fileHeaderInfo</code> in the
-    /// <code>CSV</code> structure in the request body to <code>USE</code>, you can
-    /// specify headers in the query. (If you set the <code>fileHeaderInfo</code> field to
-    /// <code>IGNORE</code>, the first row is skipped for the query.) You cannot mix
-    /// ordinal positions with header column names. </p>
-    /// <p>
-    /// <code>SELECT s.Id, s.FirstName, s.SSN FROM S3Object s</code>
-    /// </p>
-    /// </li>
-    /// </ul>
-    /// <p>When making a select request, you can also do the following:</p>
-    /// <ul>
-    /// <li>
-    /// <p>To expedite your queries, specify the <code>Expedited</code> tier. For more
-    /// information about tiers, see "Restoring Archives," later in this topic.</p>
-    /// </li>
-    /// <li>
-    /// <p>Specify details about the data serialization format of both the input object that
-    /// is being queried and the serialization of the CSV-encoded query results.</p>
-    /// </li>
-    /// </ul>
-    /// <p>The following are additional important facts about the select feature:</p>
-    /// <ul>
-    /// <li>
-    /// <p>The output results are new Amazon S3 objects. Unlike archive retrievals, they are
-    /// stored until explicitly deleted-manually or through a lifecycle configuration.</p>
-    /// </li>
-    /// <li>
-    /// <p>You can issue more than one select request on the same Amazon S3 object. Amazon S3 doesn't
-    /// duplicate requests, so avoid issuing duplicate requests.</p>
-    /// </li>
-    /// <li>
-    /// <p> Amazon S3 accepts a select request even if the object has already been restored. A
-    /// select request doesn’t return error response <code>409</code>.</p>
     /// </li>
     /// </ul>
     /// <dl>
@@ -5709,8 +5658,7 @@ pub trait S3: Send + Sync + 'static {
     /// </li>
     /// <li>
     /// <p>
-    /// <i>Cause: Object restore is already in progress. (This error
-    /// does not apply to SELECT type requests.)</i>
+    /// <i>Cause: Object restore is already in progress.</i>
     /// </p>
     /// </li>
     /// <li>
@@ -6118,13 +6066,13 @@ pub trait S3: Send + Sync + 'static {
     /// </li>
     /// <li>
     /// <p>If the destination bucket is a general purpose bucket, you must have the <b>
-    /// <code>s3:PubObject</code>
+    /// <code>s3:PutObject</code>
     /// </b> permission to write the object copy to the destination bucket.
     /// </p>
     /// </li>
     /// </ul>
     /// <p>For information about permissions required to use the multipart upload API, see
-    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuAndPermissions.html">Multipart Upload and Permissions</a> in the
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html#mpuAndPermissions">Multipart upload API and permissions</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     /// </li>
     /// <li>
@@ -6138,9 +6086,11 @@ pub trait S3: Send + Sync + 'static {
     /// directory bucket, you must have the <b>
     /// <code>s3express:CreateSession</code>
     /// </b> permission in
-    /// the <code>Action</code> element of a policy to read the object
-    /// .
-    /// By default, the session is in the <code>ReadWrite</code> mode. If you want to restrict the access, you can explicitly set the <code>s3express:SessionMode</code> condition key to <code>ReadOnly</code> on the copy source bucket.</p>
+    /// the <code>Action</code> element of a policy to read the object. By
+    /// default, the session is in the <code>ReadWrite</code> mode. If you
+    /// want to restrict the access, you can explicitly set the
+    /// <code>s3express:SessionMode</code> condition key to
+    /// <code>ReadOnly</code> on the copy source bucket.</p>
     /// </li>
     /// <li>
     /// <p>If the copy destination is a directory bucket, you must have the

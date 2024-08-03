@@ -1313,6 +1313,12 @@ impl S3 for Proxy {
         b = b.set_part_number(try_into_aws(input.part_number)?);
         b = b.set_range(try_into_aws(input.range)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
+        b = b.set_response_cache_control(try_into_aws(input.response_cache_control)?);
+        b = b.set_response_content_disposition(try_into_aws(input.response_content_disposition)?);
+        b = b.set_response_content_encoding(try_into_aws(input.response_content_encoding)?);
+        b = b.set_response_content_language(try_into_aws(input.response_content_language)?);
+        b = b.set_response_content_type(try_into_aws(input.response_content_type)?);
+        b = b.set_response_expires(try_into_aws(input.response_expires)?);
         b = b.set_sse_customer_algorithm(try_into_aws(input.sse_customer_algorithm)?);
         b = b.set_sse_customer_key(try_into_aws(input.sse_customer_key)?);
         b = b.set_sse_customer_key_md5(try_into_aws(input.sse_customer_key_md5)?);

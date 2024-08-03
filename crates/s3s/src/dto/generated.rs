@@ -40,7 +40,7 @@ pub struct AbortMultipartUploadInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -1145,7 +1145,7 @@ pub struct CompleteMultipartUploadInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -1615,7 +1615,7 @@ pub struct CopyObjectInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -2518,7 +2518,7 @@ pub struct CreateBucketInput {
     /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
     /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
     /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
     /// </p>
     pub bucket: BucketName,
     /// <p>The configuration information for the bucket.</p>
@@ -2645,7 +2645,7 @@ pub struct CreateMultipartUploadInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -3513,7 +3513,7 @@ pub struct DeleteBucketInput {
     /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
     /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
     /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
     /// </p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
@@ -3738,7 +3738,7 @@ pub struct DeleteBucketPolicyInput {
     /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
     /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
     /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
     /// </p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
@@ -4001,7 +4001,7 @@ pub struct DeleteObjectInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -4164,7 +4164,7 @@ pub struct DeleteObjectsInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -6685,8 +6685,7 @@ impl FromStr for FileHeaderInfo {
     }
 }
 
-/// <p>Specifies the Amazon S3 object key name to filter on and whether to filter on the suffix or
-/// prefix of the key name.</p>
+/// <p>Specifies the Amazon S3 object key name to filter on. An object key name is the name assigned to an object in your Amazon S3 bucket. You specify whether to filter on the suffix or prefix of the object key name. A prefix is a specific string of characters at the beginning of an object key name, which you can use to organize objects. For example, you can start the key names of related objects with a prefix, such as <code>2023-</code> or  <code>engineering/</code>. Then, you can use <code>FilterRule</code> to find objects in a bucket with key names that have the same prefix. A suffix is similar to a prefix, but it is at the end of the object key name instead of at the beginning.</p>
 #[derive(Default)]
 pub struct FilterRule {
     /// <p>The object key name prefix or suffix identifying one or more objects to which the
@@ -7359,7 +7358,7 @@ pub struct GetBucketPolicyInput {
     /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
     /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
     /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
     /// </p>
     /// <p>
     /// <b>Access points</b> - When you use this API operation with an access point, provide the alias of the access point in place of the bucket name.</p>
@@ -7754,7 +7753,7 @@ pub struct GetObjectAttributesInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -7985,7 +7984,7 @@ pub struct GetObjectInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -8954,7 +8953,7 @@ pub struct HeadBucketInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -9001,7 +9000,7 @@ pub struct HeadBucketOutput {
     /// </note>
     pub access_point_alias: Option<AccessPointAlias>,
     /// <p>The name of the location where the bucket will be created.</p>
-    /// <p>For directory buckets, the AZ ID of the Availability Zone where the bucket is created. An example AZ ID value is <code>usw2-az2</code>.</p>
+    /// <p>For directory buckets, the AZ ID of the Availability Zone where the bucket is created. An example AZ ID value is <code>usw2-az1</code>.</p>
     /// <note>
     /// <p>This functionality is only supported by directory buckets.</p>
     /// </note>
@@ -9043,7 +9042,7 @@ pub struct HeadObjectInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -9151,6 +9150,18 @@ pub struct HeadObjectInput {
     /// satisfiable, S3 returns a <code>416 - Requested Range Not Satisfiable</code> error.</p>
     pub range: Option<Range>,
     pub request_payer: Option<RequestPayer>,
+    /// <p>Sets the <code>Cache-Control</code> header of the response.</p>
+    pub response_cache_control: Option<ResponseCacheControl>,
+    /// <p>Sets the <code>Content-Disposition</code> header of the response.</p>
+    pub response_content_disposition: Option<ResponseContentDisposition>,
+    /// <p>Sets the <code>Content-Encoding</code> header of the response.</p>
+    pub response_content_encoding: Option<ResponseContentEncoding>,
+    /// <p>Sets the <code>Content-Language</code> header of the response.</p>
+    pub response_content_language: Option<ResponseContentLanguage>,
+    /// <p>Sets the <code>Content-Type</code> header of the response.</p>
+    pub response_content_type: Option<ResponseContentType>,
+    /// <p>Sets the <code>Expires</code> header of the response.</p>
+    pub response_expires: Option<ResponseExpires>,
     /// <p>Specifies the algorithm to use when encrypting the object (for example,
     /// AES256).</p>
     /// <note>
@@ -9210,6 +9221,24 @@ impl fmt::Debug for HeadObjectInput {
         }
         if let Some(ref val) = self.request_payer {
             d.field("request_payer", val);
+        }
+        if let Some(ref val) = self.response_cache_control {
+            d.field("response_cache_control", val);
+        }
+        if let Some(ref val) = self.response_content_disposition {
+            d.field("response_content_disposition", val);
+        }
+        if let Some(ref val) = self.response_content_encoding {
+            d.field("response_content_encoding", val);
+        }
+        if let Some(ref val) = self.response_content_language {
+            d.field("response_content_language", val);
+        }
+        if let Some(ref val) = self.response_content_type {
+            d.field("response_content_type", val);
+        }
+        if let Some(ref val) = self.response_expires {
+            d.field("response_expires", val);
         }
         if let Some(ref val) = self.sse_customer_algorithm {
             d.field("sse_customer_algorithm", val);
@@ -9574,10 +9603,11 @@ pub type IfUnmodifiedSince = Timestamp;
 
 /// <p>Container for the <code>Suffix</code> element.</p>
 pub struct IndexDocument {
-    /// <p>A suffix that is appended to a request that is for a directory on the website endpoint
-    /// (for example,if the suffix is index.html and you make a request to samplebucket/images/ the
-    /// data that is returned will be for the object with the key name images/index.html) The
-    /// suffix must not be empty and must not include a slash character.</p>
+    /// <p>A suffix that is appended to a request that is for a directory on the website endpoint.
+    /// (For example, if the suffix is <code>index.html</code> and you make a request to
+    /// <code>samplebucket/images/</code>, the data that is returned will be for the object with
+    /// the key name <code>images/index.html</code>.) The suffix must not be empty and must not
+    /// include a slash character.</p>
     /// <important>
     /// <p>Replacement must be made for object keys containing special characters (such as carriage returns) when using
     /// XML requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-xml-related-constraints">
@@ -10458,8 +10488,8 @@ impl fmt::Debug for LifecycleRuleAndOperator {
 }
 
 /// <p>The <code>Filter</code> is used to identify objects that a Lifecycle Rule applies to. A
-/// <code>Filter</code> must have exactly one of <code>Prefix</code>, <code>Tag</code>, or
-/// <code>And</code> specified.</p>
+/// <code>Filter</code> can have exactly one of <code>Prefix</code>, <code>Tag</code>, <code>ObjectSizeGreaterThan</code>, <code>ObjectSizeLessThan</code>, or
+/// <code>And</code> specified. If the <code>Filter</code> element is left empty, the Lifecycle Rule applies to all objects in the bucket.</p>
 #[derive(Debug)]
 #[non_exhaustive]
 pub enum LifecycleRuleFilter {
@@ -10795,7 +10825,7 @@ pub struct ListMultipartUploadsInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -10968,7 +10998,11 @@ pub struct ListMultipartUploadsOutput {
     /// </note>
     pub prefix: Option<Prefix>,
     pub request_charged: Option<RequestCharged>,
-    /// <p>Upload ID after which listing began.</p>
+    /// <p>Together with key-marker, specifies the multipart upload after which listing should
+    /// begin. If key-marker is not specified, the upload-id-marker parameter is ignored.
+    /// Otherwise, any multipart uploads for a key equal to the key-marker might be included in the
+    /// list only if they have an upload ID lexicographically greater than the specified
+    /// <code>upload-id-marker</code>.</p>
     /// <note>
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
@@ -11205,7 +11239,7 @@ pub struct ListObjectsInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -11302,7 +11336,10 @@ pub struct ListObjectsOutput {
     /// in the response. Each rolled-up result counts as only one return against the
     /// <code>MaxKeys</code> value.</p>
     pub delimiter: Option<Delimiter>,
-    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
+    /// <p>Encoding type used by Amazon S3 to encode object keys in the response. If using
+    /// <code>url</code>, non-ASCII characters used in an object's key name will be URL encoded.
+    /// For example, the object <code>test_file(3).png</code> will appear as
+    /// <code>test_file%283%29.png</code>.</p>
     pub encoding_type: Option<EncodingType>,
     /// <p>A flag that indicates whether Amazon S3 returned all of the results that satisfied the search
     /// criteria.</p>
@@ -11376,7 +11413,7 @@ pub struct ListObjectsV2Input {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -11409,7 +11446,10 @@ pub struct ListObjectsV2Input {
     /// </ul>
     /// </note>
     pub delimiter: Option<Delimiter>,
-    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
+    /// <p>Encoding type used by Amazon S3 to encode object keys in the response. If using
+    /// <code>url</code>, non-ASCII characters used in an object's key name will be URL encoded.
+    /// For example, the object <code>test_file(3).png</code> will appear as
+    /// <code>test_file%283%29.png</code>.</p>
     pub encoding_type: Option<EncodingType>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -11637,7 +11677,7 @@ pub struct ListPartsInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -11775,9 +11815,8 @@ pub struct ListPartsOutput {
     /// <b>Directory buckets</b> - The bucket owner is returned as the object owner for all the parts.</p>
     /// </note>
     pub owner: Option<Owner>,
-    /// <p>When a list is truncated, this element specifies the last part in the list, as well as
-    /// the value to use for the part-number-marker request parameter in a subsequent
-    /// request.</p>
+    /// <p>Specifies the part after which listing should begin. Only parts with higher part numbers
+    /// will be listed.</p>
     pub part_number_marker: Option<PartNumberMarker>,
     /// <p>Container for elements related to a particular part. A response can contain zero or
     /// more <code>Part</code> elements.</p>
@@ -11857,7 +11896,7 @@ pub type Location = String;
 #[derive(Default)]
 pub struct LocationInfo {
     /// <p>The name of the location where the bucket will be created.</p>
-    /// <p>For directory buckets, the AZ ID of the Availability Zone where the bucket will be created. An example AZ ID value is <code>usw2-az2</code>.</p>
+    /// <p>For directory buckets, the name of the location is the AZ ID of the Availability Zone where the bucket will be created. An example AZ ID value is <code>usw2-az1</code>.</p>
     pub name: Option<LocationNameAsString>,
     /// <p>The type of location where the bucket will be created.</p>
     pub type_: Option<LocationType>,
@@ -12362,9 +12401,9 @@ impl fmt::Debug for NoSuchUpload {
 /// object versions at a specific period in the object's lifetime.</p>
 #[derive(Default)]
 pub struct NoncurrentVersionExpiration {
-    /// <p>Specifies how many newer noncurrent versions must exist before Amazon S3 can perform the
-    /// associated action on a given version. If there are this many more recent noncurrent
-    /// versions, Amazon S3 will take the associated action. For more information about noncurrent
+    /// <p>Specifies how many noncurrent versions Amazon S3 will retain. You can specify up to 100
+    /// noncurrent versions to retain. Amazon S3 will permanently delete any additional noncurrent
+    /// versions beyond the specified number to retain. For more information about noncurrent
     /// versions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html">Lifecycle configuration
     /// elements</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub newer_noncurrent_versions: Option<VersionCount>,
@@ -12399,10 +12438,10 @@ impl fmt::Debug for NoncurrentVersionExpiration {
 /// class at a specific period in the object's lifetime.</p>
 #[derive(Default)]
 pub struct NoncurrentVersionTransition {
-    /// <p>Specifies how many newer noncurrent versions must exist before Amazon S3 can perform the
-    /// associated action on a given version. If there are this many more recent noncurrent
-    /// versions, Amazon S3 will take the associated action. For more information about noncurrent
-    /// versions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html">Lifecycle configuration
+    /// <p>Specifies how many noncurrent versions Amazon S3 will retain in the same storage class before
+    /// transitioning objects. You can specify up to 100 noncurrent versions to retain. Amazon S3 will
+    /// transition any additional noncurrent versions beyond the specified number to retain. For
+    /// more information about noncurrent versions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/intro-lifecycle-rules.html">Lifecycle configuration
     /// elements</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub newer_noncurrent_versions: Option<VersionCount>,
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the
@@ -14486,7 +14525,7 @@ pub struct PutBucketPolicyInput {
     /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
     /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
     /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
     /// </p>
     pub bucket: BucketName,
     /// <p>Indicates the algorithm used to create the checksum for the object when you use the SDK. This header will not provide any
@@ -15039,7 +15078,7 @@ pub struct PutObjectInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -17255,7 +17294,7 @@ impl FromStr for ServerSideEncryption {
 pub struct ServerSideEncryptionByDefault {
     /// <p>Amazon Web Services Key Management Service (KMS) customer Amazon Web Services KMS key ID to use for the default
     /// encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
-    /// <code>aws:kms</code>.</p>
+    /// <code>aws:kms</code> or <code>aws:kms:dsse</code>.</p>
     /// <p>You can specify the key ID, key alias, or the Amazon Resource Name (ARN) of the KMS
     /// key.</p>
     /// <ul>
@@ -18064,7 +18103,7 @@ pub struct UploadPartCopyInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -18380,7 +18419,7 @@ pub struct UploadPartInput {
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
     /// <i>Bucket_name</i>.s3express-<i>az_id</i>.<i>region</i>.amazonaws.com</code>. Path-style requests are not supported.  Directory bucket names must be unique in the chosen Availability Zone. Bucket names must follow the format <code>
     /// <i>bucket_base_name</i>--<i>az-id</i>--x-s3</code> (for example, <code>
-    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az2</i>--x-s3</code>). For information about bucket naming
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming
     /// restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming
     /// rules</a> in the <i>Amazon S3 User Guide</i>.</p>
     /// <p>
@@ -23561,6 +23600,18 @@ pub mod builders {
 
         request_payer: Option<RequestPayer>,
 
+        response_cache_control: Option<ResponseCacheControl>,
+
+        response_content_disposition: Option<ResponseContentDisposition>,
+
+        response_content_encoding: Option<ResponseContentEncoding>,
+
+        response_content_language: Option<ResponseContentLanguage>,
+
+        response_content_type: Option<ResponseContentType>,
+
+        response_expires: Option<ResponseExpires>,
+
         sse_customer_algorithm: Option<SSECustomerAlgorithm>,
 
         sse_customer_key: Option<SSECustomerKey>,
@@ -23623,6 +23674,36 @@ pub mod builders {
 
         pub fn set_request_payer(&mut self, field: Option<RequestPayer>) -> &mut Self {
             self.request_payer = field;
+            self
+        }
+
+        pub fn set_response_cache_control(&mut self, field: Option<ResponseCacheControl>) -> &mut Self {
+            self.response_cache_control = field;
+            self
+        }
+
+        pub fn set_response_content_disposition(&mut self, field: Option<ResponseContentDisposition>) -> &mut Self {
+            self.response_content_disposition = field;
+            self
+        }
+
+        pub fn set_response_content_encoding(&mut self, field: Option<ResponseContentEncoding>) -> &mut Self {
+            self.response_content_encoding = field;
+            self
+        }
+
+        pub fn set_response_content_language(&mut self, field: Option<ResponseContentLanguage>) -> &mut Self {
+            self.response_content_language = field;
+            self
+        }
+
+        pub fn set_response_content_type(&mut self, field: Option<ResponseContentType>) -> &mut Self {
+            self.response_content_type = field;
+            self
+        }
+
+        pub fn set_response_expires(&mut self, field: Option<ResponseExpires>) -> &mut Self {
+            self.response_expires = field;
             self
         }
 
@@ -23713,6 +23794,42 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn response_cache_control(mut self, field: Option<ResponseCacheControl>) -> Self {
+            self.response_cache_control = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_content_disposition(mut self, field: Option<ResponseContentDisposition>) -> Self {
+            self.response_content_disposition = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_content_encoding(mut self, field: Option<ResponseContentEncoding>) -> Self {
+            self.response_content_encoding = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_content_language(mut self, field: Option<ResponseContentLanguage>) -> Self {
+            self.response_content_language = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_content_type(mut self, field: Option<ResponseContentType>) -> Self {
+            self.response_content_type = field;
+            self
+        }
+
+        #[must_use]
+        pub fn response_expires(mut self, field: Option<ResponseExpires>) -> Self {
+            self.response_expires = field;
+            self
+        }
+
+        #[must_use]
         pub fn sse_customer_algorithm(mut self, field: Option<SSECustomerAlgorithm>) -> Self {
             self.sse_customer_algorithm = field;
             self
@@ -23748,6 +23865,12 @@ pub mod builders {
             let part_number = self.part_number;
             let range = self.range;
             let request_payer = self.request_payer;
+            let response_cache_control = self.response_cache_control;
+            let response_content_disposition = self.response_content_disposition;
+            let response_content_encoding = self.response_content_encoding;
+            let response_content_language = self.response_content_language;
+            let response_content_type = self.response_content_type;
+            let response_expires = self.response_expires;
             let sse_customer_algorithm = self.sse_customer_algorithm;
             let sse_customer_key = self.sse_customer_key;
             let sse_customer_key_md5 = self.sse_customer_key_md5;
@@ -23764,6 +23887,12 @@ pub mod builders {
                 part_number,
                 range,
                 request_payer,
+                response_cache_control,
+                response_content_disposition,
+                response_content_encoding,
+                response_content_language,
+                response_content_type,
+                response_expires,
                 sse_customer_algorithm,
                 sse_customer_key,
                 sse_customer_key_md5,
