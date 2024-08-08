@@ -59,7 +59,7 @@ fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
     }
 }
 
-fn serialize_error(mut e: S3Error, no_decl: bool) -> S3Result<Response> {
+pub(crate) fn serialize_error(mut e: S3Error, no_decl: bool) -> S3Result<Response> {
     let status = e.status_code().unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
     let mut res = Response::with_status(status);
     if no_decl {

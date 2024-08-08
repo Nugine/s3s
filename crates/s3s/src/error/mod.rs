@@ -1,8 +1,9 @@
 mod generated;
 pub use self::generated::*;
 
+use crate::http;
+use crate::ops;
 use crate::xml;
-
 use std::borrow::Cow;
 use std::convert::Infallible;
 use std::fmt;
@@ -123,6 +124,17 @@ impl S3Error {
         E: std::error::Error + Send + Sync + 'static,
     {
         Self::with_source(S3ErrorCode::InternalError, Box::new(source))
+    }
+
+    /// Serialize an `S3Error` into an `Response` that can be sent back to the client.
+    /// This can be useful in creating middleware around an S3 Service implementation
+    /// that want to send consistent error messages to clients on errors.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`S3Error`] if it was not possible to serialize the error into XML.
+    pub fn to_hyper_response(self) -> S3Result<hyper::Response<http::Body>> {
+        ops::serialize_error(self, false).map(Into::into)
     }
 }
 
