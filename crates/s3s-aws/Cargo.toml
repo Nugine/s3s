@@ -1,6 +1,6 @@
 [package]
 name = "s3s-aws"
-version = "0.10.1-dev"
+version = "0.10.1"
 description = "S3 service adapter integrated with aws-sdk-s3"
 readme = "../../README.md"
 keywords = ["s3"]
@@ -16,7 +16,7 @@ aws-smithy-runtime-api = { version = "1.2.0", features = ["client", "http-1x"] }
 aws-smithy-types = { version = "1.1.8", features = ["http-body-1-x"] }
 aws-smithy-types-convert = { version = "0.60.8", features = ["convert-time"] }
 hyper = "1.1.0"
-s3s = { version = "0.10.1-dev", path = "../s3s" }
+s3s = { version = "0.10.1", path = "../s3s" }
 sync_wrapper = "1.0.0"
 tracing = "0.1.37"
 transform-stream = "0.3.0"
