@@ -135,13 +135,13 @@ mod tests {
     async fn keep_alive_body_fill_withespace() {
         let body = KeepAliveBody::new(
             async {
-                tokio::time::sleep(Duration::from_millis(45)).await;
+                tokio::time::sleep(Duration::from_millis(450)).await;
 
                 let mut res = Response::with_status(StatusCode::OK);
                 res.body = Bytes::from_static(b"hello world").into();
                 Ok(res)
             },
-            Duration::from_millis(10),
+            Duration::from_millis(100),
             None,
         );
 
