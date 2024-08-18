@@ -32,6 +32,7 @@ pub trait S3Auth: Send + Sync + 'static {
     /// Common fields in the context:
     /// + [`cx.credentials()`](S3AuthContext::credentials)
     /// + [`cx.s3_path()`](S3AuthContext::s3_path)
+    /// + [`cx.s3_op().name()`](crate::S3Operation::name)
     /// + [`cx.extensions_mut()`](S3AuthContext::extensions_mut)
     async fn check_access(&self, cx: &mut S3AuthContext<'_>) -> S3Result<()> {
         match cx.credentials() {

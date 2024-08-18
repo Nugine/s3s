@@ -259,18 +259,6 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
             req.s3ext.credentials = credentials;
         }
 
-        if let Some(auth) = auth {
-            let mut cx = S3AuthContext {
-                credentials: req.s3ext.credentials.as_ref(),
-                s3_path,
-                method: &req.method,
-                uri: &req.uri,
-                headers: &req.headers,
-                extensions: &mut req.extensions,
-            };
-            auth.check_access(&mut cx).await?;
-        }
-
         if body_changed {
             // invalidate the original content length
             if let Some(val) = req.headers.get_mut(header::CONTENT_LENGTH) {
@@ -320,6 +308,21 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
     }
 
     debug!(op = %op.name(), ?s3_path, "resolved route");
+
+    if let Some(auth) = auth {
+        let mut cx = S3AuthContext {
+            credentials: req.s3ext.credentials.as_ref(),
+            s3_path,
+            s3_op: &crate::S3Operation { name: op.name() },
+            method: &req.method,
+            uri: &req.uri,
+            headers: &req.headers,
+            extensions: &mut req.extensions,
+        };
+        auth.check_access(&mut cx).await?;
+    }
+
+    debug!(op = %op.name(), ?s3_path, "checked access");
 
     if needs_full_body {
         extract_full_body(content_length, &mut req.body).await?;

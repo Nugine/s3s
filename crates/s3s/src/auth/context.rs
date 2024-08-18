@@ -1,6 +1,7 @@
 use super::Credentials;
 
 use crate::path::S3Path;
+use crate::S3Operation;
 
 use hyper::http::Extensions;
 use hyper::HeaderMap;
@@ -10,6 +11,7 @@ use hyper::Uri;
 pub struct S3AuthContext<'a> {
     pub(crate) credentials: Option<&'a Credentials>,
     pub(crate) s3_path: &'a S3Path,
+    pub(crate) s3_op: &'a S3Operation,
 
     pub(crate) method: &'a Method,
     pub(crate) uri: &'a Uri,
@@ -33,6 +35,12 @@ impl<'a> S3AuthContext<'a> {
     #[must_use]
     pub fn s3_path(&self) -> &S3Path {
         self.s3_path
+    }
+
+    /// Returns the S3 operation of current request.
+    #[must_use]
+    pub fn s3_op(&self) -> &S3Operation {
+        self.s3_op
     }
 
     #[must_use]
