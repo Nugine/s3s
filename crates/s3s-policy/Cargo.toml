@@ -1,0 +1,9 @@
+[package]
+name = "s3s-policy"
+version = "0.0.0"
+description = "S3 Policy Language"
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
+
+[dependencies]
