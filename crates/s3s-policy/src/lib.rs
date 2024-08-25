@@ -8,3 +8,5 @@
 #![warn(
     clippy::dbg_macro, //
 )]
+
+pub mod model;
