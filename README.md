@@ -50,6 +50,8 @@ It is up to the user to implement security enhancements such as **HTTP body leng
 
 ## Sponsor
 
+We have a reward funds pool for contributors: <https://github.com/Nugine/s3s/issues/174>
+
 If my open-source work has been helpful to you, please [sponsor me](https://github.com/Nugine#sponsor).
 
 Every little bit helps. Thank you!
