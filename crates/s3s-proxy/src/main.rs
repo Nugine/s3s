@@ -26,7 +26,7 @@ struct Opt {
     port: u16,
 
     #[clap(long)]
-    domain_name: Option<String>,
+    domain: Option<String>,
 
     #[clap(long)]
     endpoint_url: String,
@@ -66,8 +66,8 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
         }
 
         // Enable parsing virtual-hosted-style requests
-        if let Some(domain_name) = opt.domain_name {
-            b.set_host(SingleDomain::new(domain_name));
+        if let Some(domain) = opt.domain {
+            b.set_host(SingleDomain::new(domain));
         }
 
         b.build()

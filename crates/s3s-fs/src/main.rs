@@ -40,7 +40,7 @@ struct Opt {
 
     /// Domain name used for virtual-hosted-style requests.
     #[arg(long)]
-    domain_name: Option<String>,
+    domain: Option<String>,
 
     /// Root directory of stored data.
     root: PathBuf,
@@ -70,7 +70,7 @@ fn check_cli_args(opt: &Opt) {
         cmd.error(ErrorKind::MissingRequiredArgument, msg).exit();
     }
 
-    if let Some(ref s) = opt.domain_name {
+    if let Some(ref s) = opt.domain {
         if s.contains('/') {
             let msg = format!("expected domain name, found URL-like string: {s:?}");
             cmd.error(ErrorKind::InvalidValue, msg).exit();
@@ -103,8 +103,8 @@ async fn run(opt: Opt) -> Result {
         }
 
         // Enable parsing virtual-hosted-style requests
-        if let Some(domain_name) = opt.domain_name {
-            b.set_host(SingleDomain::new(domain_name));
+        if let Some(domain) = opt.domain {
+            b.set_host(SingleDomain::new(domain));
             info!("virtual-hosted-style requests are enabled");
         }
 
