@@ -35,15 +35,14 @@ mod sig_v2;
 mod sig_v4;
 mod xml;
 
-pub mod header;
-
 pub mod auth;
+pub mod checksum;
 pub mod dto;
+pub mod header;
+pub mod host;
 pub mod path;
 pub mod service;
 pub mod stream;
-
-pub mod checksum;
 
 pub use self::error::*;
 pub use self::http::Body;

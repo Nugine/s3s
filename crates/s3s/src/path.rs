@@ -186,19 +186,12 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
 /// Parses a virtual-hosted-style request
 /// # Errors
 /// Returns an `Err` if the s3 path is invalid
-pub fn parse_virtual_hosted_style<'a>(base_domain: &str, host: &'a str, uri_path: &'a str) -> Result<S3Path, ParseS3PathError> {
-    if host == base_domain {
-        return parse_path_style(uri_path);
-    }
+pub fn parse_virtual_hosted_style(vh_bucket: Option<&str>, uri_path: &str) -> Result<S3Path, ParseS3PathError> {
+    let Some(bucket) = vh_bucket else { return parse_path_style(uri_path) };
 
     let Some(key) = uri_path.strip_prefix('/') else { return Err(ParseS3PathError::InvalidPath) };
 
-    let bucket = match host.strip_suffix(base_domain).and_then(|h| h.strip_suffix('.')) {
-        Some(b) => b.to_owned(),
-        None => host.to_ascii_lowercase(),
-    };
-
-    if !check_bucket_name(&bucket) {
+    if !check_bucket_name(bucket) {
         return Err(ParseS3PathError::InvalidBucketName);
     }
 
@@ -219,6 +212,8 @@ pub fn parse_virtual_hosted_style<'a>(base_domain: &str, host: &'a str, uri_path
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    use crate::host::{S3Host, SingleDomain};
 
     #[test]
     fn bucket_naming_rules() {
@@ -262,37 +257,41 @@ mod tests {
     #[test]
     fn virtual_hosted_style() {
         {
-            let base_domain = "s3.us-east-1.amazonaws.com";
+            let s3_host = SingleDomain::new("s3.us-east-1.amazonaws.com");
             let host = "s3.us-east-1.amazonaws.com";
             let uri_path = "/example.com/homepage.html";
-            let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
+            let vh = s3_host.parse_host_header(host).unwrap();
+            let ans = parse_virtual_hosted_style(vh.bucket(), uri_path);
             let expected = Ok(S3Path::object("example.com", "homepage.html"));
             assert_eq!(ans, expected);
         }
 
         {
-            let base_domain = "s3.eu-west-1.amazonaws.com";
+            let s3_host = SingleDomain::new("s3.eu-west-1.amazonaws.com");
             let host = "doc-example-bucket1.eu.s3.eu-west-1.amazonaws.com";
             let uri_path = "/homepage.html";
-            let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
+            let vh = s3_host.parse_host_header(host).unwrap();
+            let ans = parse_virtual_hosted_style(vh.bucket(), uri_path);
             let expected = Ok(S3Path::object("doc-example-bucket1.eu", "homepage.html"));
             assert_eq!(ans, expected);
         }
 
         {
-            let base_domain = "s3.eu-west-1.amazonaws.com";
+            let s3_host = SingleDomain::new("s3.eu-west-1.amazonaws.com");
             let host = "doc-example-bucket1.eu.s3.eu-west-1.amazonaws.com";
             let uri_path = "/";
-            let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
+            let vh = s3_host.parse_host_header(host).unwrap();
+            let ans = parse_virtual_hosted_style(vh.bucket(), uri_path);
             let expected = Ok(S3Path::bucket("doc-example-bucket1.eu"));
             assert_eq!(ans, expected);
         }
 
         {
-            let base_domain = "s3.us-east-1.amazonaws.com";
+            let s3_host = SingleDomain::new("s3.us-east-1.amazonaws.com");
             let host = "example.com";
             let uri_path = "/homepage.html";
-            let ans = parse_virtual_hosted_style(base_domain, host, uri_path);
+            let vh = s3_host.parse_host_header(host).unwrap();
+            let ans = parse_virtual_hosted_style(vh.bucket(), uri_path);
             let expected = Ok(S3Path::object("example.com", "homepage.html"));
             assert_eq!(ans, expected);
         }

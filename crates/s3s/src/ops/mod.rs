@@ -13,6 +13,7 @@ use crate::auth::S3Auth;
 use crate::auth::S3AuthContext;
 use crate::error::*;
 use crate::header;
+use crate::host::S3Host;
 use crate::http;
 use crate::http::Body;
 use crate::http::{OrderedHeaders, OrderedQs};
@@ -85,27 +86,16 @@ fn extract_host(req: &Request) -> S3Result<Option<String>> {
     Ok(Some(host.into()))
 }
 
-fn is_socket_addr(host: &str) -> bool {
+fn is_socket_addr_or_ip_addr(host: &str) -> bool {
     host.parse::<SocketAddr>().is_ok() || host.parse::<IpAddr>().is_ok()
 }
 
-fn extract_s3_path(host: Option<&str>, uri_path: &str, base_domain: Option<&str>) -> S3Result<S3Path> {
-    let result = match (base_domain, host) {
-        (Some(base_domain), Some(host)) if base_domain != host && !is_socket_addr(host) => {
-            debug!(?base_domain, ?host, ?uri_path, "parsing virtual-hosted-style request");
-            crate::path::parse_virtual_hosted_style(base_domain, host, uri_path)
-        }
-        _ => {
-            debug!(?uri_path, "parsing path-style request");
-            crate::path::parse_path_style(uri_path)
-        }
-    };
-
-    result.map_err(|err| match err {
+fn convert_parse_s3_path_error(err: &ParseS3PathError) -> S3Error {
+    match err {
         ParseS3PathError::InvalidPath => s3_error!(InvalidURI),
         ParseS3PathError::InvalidBucketName => s3_error!(InvalidBucketName),
         ParseS3PathError::KeyTooLong => s3_error!(KeyTooLongError),
-    })
+    }
 }
 
 fn extract_qs(req_uri: &Uri) -> S3Result<Option<OrderedQs>> {
@@ -183,9 +173,9 @@ pub async fn call(
     req: &mut Request,
     s3: &Arc<dyn S3>,
     auth: Option<&dyn S3Auth>,
-    base_domain: Option<&str>,
+    host: Option<&dyn S3Host>,
 ) -> S3Result<Response> {
-    let op = match prepare(req, auth, base_domain).await {
+    let op = match prepare(req, auth, host).await {
         Ok(op) => op,
         Err(err) => {
             debug!(?err, "failed to prepare");
@@ -204,7 +194,8 @@ pub async fn call(
     Ok(resp)
 }
 
-async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Option<&str>) -> S3Result<&'static dyn Operation> {
+#[allow(clippy::too_many_lines)]
+async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, s3_host: Option<&dyn S3Host>) -> S3Result<&'static dyn Operation> {
     let s3_path;
     let mut content_length;
     {
@@ -212,10 +203,31 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
             .map_err(|_| S3ErrorCode::InvalidURI)?
             .into_owned();
 
-        let host = extract_host(req)?;
+        let host_header = extract_host(req)?;
+        let vh;
+        let vh_bucket;
+        {
+            let result = 'parse: {
+                if let (Some(host_header), Some(s3_host)) = (host_header.as_deref(), s3_host) {
+                    if !is_socket_addr_or_ip_addr(host_header) {
+                        debug!(?host_header, ?decoded_uri_path, "parsing virtual-hosted-style request");
 
-        req.s3ext.s3_path = Some(extract_s3_path(host.as_deref(), &decoded_uri_path, base_domain)?);
-        s3_path = req.s3ext.s3_path.as_ref().unwrap();
+                        vh = s3_host.parse_host_header(host_header)?;
+                        debug!(?vh);
+
+                        vh_bucket = vh.bucket();
+                        break 'parse crate::path::parse_virtual_hosted_style(vh_bucket, &decoded_uri_path);
+                    }
+                }
+
+                debug!(?decoded_uri_path, "parsing path-style request");
+                vh_bucket = None;
+                crate::path::parse_path_style(&decoded_uri_path)
+            };
+
+            req.s3ext.s3_path = Some(result.map_err(|err| convert_parse_s3_path_error(&err))?);
+            s3_path = req.s3ext.s3_path.as_ref().unwrap();
+        }
 
         req.s3ext.qs = extract_qs(&req.uri)?;
         content_length = extract_content_length(req);
@@ -229,7 +241,6 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
         {
             let mut scx = SignatureContext {
                 auth,
-                base_domain,
 
                 req_method: &req.method,
                 req_uri: &req.uri,
@@ -239,9 +250,8 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, base_domain: Opti
                 hs,
 
                 decoded_uri_path,
-                s3_path,
+                vh_bucket,
 
-                host: host.as_deref(),
                 content_length,
                 decoded_content_length,
                 mime,

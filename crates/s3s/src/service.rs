@@ -1,5 +1,6 @@
 use crate::auth::S3Auth;
 use crate::error::{S3Error, S3Result};
+use crate::host::S3Host;
 use crate::http::{Body, Request};
 use crate::s3_trait::S3;
 
@@ -15,7 +16,7 @@ use tracing::{debug, error};
 pub struct S3ServiceBuilder {
     s3: Arc<dyn S3>,
     auth: Option<Box<dyn S3Auth>>,
-    base_domain: Option<String>,
+    host: Option<Box<dyn S3Host>>,
 }
 
 impl S3ServiceBuilder {
@@ -24,7 +25,7 @@ impl S3ServiceBuilder {
         Self {
             s3: Arc::new(s3),
             auth: None,
-            base_domain: None,
+            host: None,
         }
     }
 
@@ -32,8 +33,8 @@ impl S3ServiceBuilder {
         self.auth = Some(Box::new(auth));
     }
 
-    pub fn set_base_domain(&mut self, base_domain: impl Into<String>) {
-        self.base_domain = Some(base_domain.into());
+    pub fn set_host(&mut self, host: impl S3Host) {
+        self.host = Some(Box::new(host));
     }
 
     #[must_use]
@@ -41,7 +42,7 @@ impl S3ServiceBuilder {
         S3Service {
             s3: self.s3,
             auth: self.auth,
-            base_domain: self.base_domain,
+            host: self.host,
         }
     }
 }
@@ -49,7 +50,7 @@ impl S3ServiceBuilder {
 pub struct S3Service {
     s3: Arc<dyn S3>,
     auth: Option<Box<dyn S3Auth>>,
-    base_domain: Option<String>,
+    host: Option<Box<dyn S3Host>>,
 }
 
 impl S3Service {
@@ -65,8 +66,8 @@ impl S3Service {
 
         let s3 = &self.s3;
         let auth = self.auth.as_deref();
-        let base_domain = self.base_domain.as_deref();
-        let result = crate::ops::call(&mut req, s3, auth, base_domain).await.map(Into::into);
+        let host = self.host.as_deref();
+        let result = crate::ops::call(&mut req, s3, auth, host).await.map(Into::into);
 
         match result {
             Ok(ref res) => debug!(?res),

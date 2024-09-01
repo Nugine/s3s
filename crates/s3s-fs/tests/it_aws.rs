@@ -5,6 +5,7 @@
 )]
 
 use s3s::auth::SimpleAuth;
+use s3s::host::SingleDomain;
 use s3s::service::S3ServiceBuilder;
 use s3s_fs::FileSystem;
 
@@ -64,7 +65,7 @@ fn config() -> &'static SdkConfig {
         let service = {
             let mut b = S3ServiceBuilder::new(fs);
             b.set_auth(SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key()));
-            b.set_base_domain(DOMAIN_NAME);
+            b.set_host(SingleDomain::new(DOMAIN_NAME));
             b.build()
         };
 
