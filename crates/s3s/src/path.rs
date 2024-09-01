@@ -146,7 +146,7 @@ pub fn check_bucket_name(name: &str) -> bool {
 }
 
 /// Check if the key is valid
-/// 
+///
 /// The name for a key is a sequence of Unicode characters whose UTF-8 encoding is at most 1,024 bytes long.
 /// See [object keys](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys)
 #[must_use]
