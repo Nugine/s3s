@@ -67,7 +67,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
 
         // Enable parsing virtual-hosted-style requests
         if let Some(domain) = opt.domain {
-            b.set_host(SingleDomain::new(domain));
+            b.set_host(SingleDomain::new(&domain)?);
         }
 
         b.build()

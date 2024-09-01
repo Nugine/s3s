@@ -65,7 +65,7 @@ fn config() -> &'static SdkConfig {
         let service = {
             let mut b = S3ServiceBuilder::new(fs);
             b.set_auth(SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key()));
-            b.set_host(SingleDomain::new(DOMAIN_NAME));
+            b.set_host(SingleDomain::new(DOMAIN_NAME).unwrap());
             b.build()
         };
 
