@@ -2,6 +2,7 @@
 #![deny(clippy::all, clippy::pedantic)]
 
 use s3s::auth::SimpleAuth;
+use s3s::host::SingleDomain;
 use s3s::service::S3ServiceBuilder;
 use tokio::net::TcpListener;
 
@@ -66,7 +67,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
 
         // Enable parsing virtual-hosted-style requests
         if let Some(domain_name) = opt.domain_name {
-            b.set_base_domain(domain_name);
+            b.set_host(SingleDomain::new(domain_name));
         }
 
         b.build()

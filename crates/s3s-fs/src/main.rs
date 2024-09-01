@@ -5,6 +5,7 @@ use s3s_fs::FileSystem;
 use s3s_fs::Result;
 
 use s3s::auth::SimpleAuth;
+use s3s::host::SingleDomain;
 use s3s::service::S3ServiceBuilder;
 
 use std::io::IsTerminal;
@@ -103,7 +104,7 @@ async fn run(opt: Opt) -> Result {
 
         // Enable parsing virtual-hosted-style requests
         if let Some(domain_name) = opt.domain_name {
-            b.set_base_domain(domain_name);
+            b.set_host(SingleDomain::new(domain_name));
             info!("virtual-hosted-style requests are enabled");
         }
 

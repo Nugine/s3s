@@ -4,7 +4,6 @@ use crate::error::*;
 use crate::http;
 use crate::http::{AwsChunkedStream, Body, Multipart};
 use crate::http::{OrderedHeaders, OrderedQs};
-use crate::path::S3Path;
 use crate::sig_v2;
 use crate::sig_v2::{AuthorizationV2, PresignedUrlV2};
 use crate::sig_v4;
@@ -54,7 +53,6 @@ fn extract_amz_date(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<AmzDate>> {
 
 pub struct SignatureContext<'a> {
     pub auth: Option<&'a dyn S3Auth>,
-    pub base_domain: Option<&'a str>,
 
     pub req_method: &'a Method,
     pub req_uri: &'a Uri,
@@ -64,9 +62,8 @@ pub struct SignatureContext<'a> {
     pub hs: OrderedHeaders<'a>,
 
     pub decoded_uri_path: String,
-    pub s3_path: &'a S3Path,
+    pub vh_bucket: Option<&'a str>,
 
-    pub host: Option<&'a str>,
     pub content_length: Option<u64>,
     pub mime: Option<Mime>,
     pub decoded_content_length: Option<usize>,
@@ -354,13 +351,6 @@ impl SignatureContext<'_> {
         None
     }
 
-    fn v2_virtual_hosted_bucket(&self) -> Option<&str> {
-        match (self.base_domain, self.host) {
-            (Some(base_domain), Some(host)) if base_domain != host => self.s3_path.get_bucket_name(),
-            _ => None,
-        }
-    }
-
     pub async fn v2_check_header_auth(&mut self, auth_v2: AuthorizationV2<'_>) -> S3Result<Credentials> {
         let method = &self.req_method;
 
@@ -373,10 +363,14 @@ impl SignatureContext<'_> {
         let access_key = auth_v2.access_key;
         let secret_key = auth.get_secret_key(access_key).await?;
 
-        let vh_bucket = self.v2_virtual_hosted_bucket();
-
-        let string_to_sign =
-            sig_v2::create_string_to_sign(sig_v2::Mode::HeaderAuth, method, self.req_uri.path(), self.qs, &self.hs, vh_bucket);
+        let string_to_sign = sig_v2::create_string_to_sign(
+            sig_v2::Mode::HeaderAuth,
+            method,
+            self.req_uri.path(),
+            self.qs,
+            &self.hs,
+            self.vh_bucket,
+        );
         let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
 
         debug!(?string_to_sign, "sig_v2 header_auth");
@@ -405,15 +399,13 @@ impl SignatureContext<'_> {
         let access_key = presigned_url.access_key;
         let secret_key = auth.get_secret_key(access_key).await?;
 
-        let vh_bucket = self.v2_virtual_hosted_bucket();
-
         let string_to_sign = sig_v2::create_string_to_sign(
             sig_v2::Mode::PresignedUrl,
             self.req_method,
             self.req_uri.path(),
             self.qs,
             &self.hs,
-            vh_bucket,
+            self.vh_bucket,
         );
         let signature = sig_v2::calculate_signature(&secret_key, &string_to_sign);
 
