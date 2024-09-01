@@ -14,5 +14,6 @@ s3s-fs \
     --secret-key    SKEXAMPLES3S    \
     --host          localhost       \
     --port          8014            \
-    --domain-name   localhost:8014  \
+    --domain        localhost:8014  \
+    --domain        localhost       \
     "$DATA_DIR"

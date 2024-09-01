@@ -257,7 +257,7 @@ mod tests {
     #[test]
     fn virtual_hosted_style() {
         {
-            let s3_host = SingleDomain::new("s3.us-east-1.amazonaws.com");
+            let s3_host = SingleDomain::new("s3.us-east-1.amazonaws.com").unwrap();
             let host = "s3.us-east-1.amazonaws.com";
             let uri_path = "/example.com/homepage.html";
             let vh = s3_host.parse_host_header(host).unwrap();
@@ -267,7 +267,7 @@ mod tests {
         }
 
         {
-            let s3_host = SingleDomain::new("s3.eu-west-1.amazonaws.com");
+            let s3_host = SingleDomain::new("s3.eu-west-1.amazonaws.com").unwrap();
             let host = "doc-example-bucket1.eu.s3.eu-west-1.amazonaws.com";
             let uri_path = "/homepage.html";
             let vh = s3_host.parse_host_header(host).unwrap();
@@ -277,7 +277,7 @@ mod tests {
         }
 
         {
-            let s3_host = SingleDomain::new("s3.eu-west-1.amazonaws.com");
+            let s3_host = SingleDomain::new("s3.eu-west-1.amazonaws.com").unwrap();
             let host = "doc-example-bucket1.eu.s3.eu-west-1.amazonaws.com";
             let uri_path = "/";
             let vh = s3_host.parse_host_header(host).unwrap();
@@ -287,7 +287,7 @@ mod tests {
         }
 
         {
-            let s3_host = SingleDomain::new("s3.us-east-1.amazonaws.com");
+            let s3_host = SingleDomain::new("s3.us-east-1.amazonaws.com").unwrap();
             let host = "example.com";
             let uri_path = "/homepage.html";
             let vh = s3_host.parse_host_header(host).unwrap();

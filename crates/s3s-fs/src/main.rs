@@ -5,10 +5,11 @@ use s3s_fs::FileSystem;
 use s3s_fs::Result;
 
 use s3s::auth::SimpleAuth;
-use s3s::host::SingleDomain;
+use s3s::host::MultiDomain;
 use s3s::service::S3ServiceBuilder;
 
 use std::io::IsTerminal;
+use std::ops::Not;
 use std::path::PathBuf;
 
 use tokio::net::TcpListener;
@@ -38,9 +39,9 @@ struct Opt {
     #[arg(long)]
     secret_key: Option<String>,
 
-    /// Domain name used for virtual-hosted-style requests.
+    /// Domain names used for virtual-hosted-style requests.
     #[arg(long)]
-    domain_name: Option<String>,
+    domain: Vec<String>,
 
     /// Root directory of stored data.
     root: PathBuf,
@@ -70,7 +71,7 @@ fn check_cli_args(opt: &Opt) {
         cmd.error(ErrorKind::MissingRequiredArgument, msg).exit();
     }
 
-    if let Some(ref s) = opt.domain_name {
+    for s in &opt.domain {
         if s.contains('/') {
             let msg = format!("expected domain name, found URL-like string: {s:?}");
             cmd.error(ErrorKind::InvalidValue, msg).exit();
@@ -103,8 +104,8 @@ async fn run(opt: Opt) -> Result {
         }
 
         // Enable parsing virtual-hosted-style requests
-        if let Some(domain_name) = opt.domain_name {
-            b.set_host(SingleDomain::new(domain_name));
+        if opt.domain.is_empty().not() {
+            b.set_host(MultiDomain::new(&opt.domain)?);
             info!("virtual-hosted-style requests are enabled");
         }
 

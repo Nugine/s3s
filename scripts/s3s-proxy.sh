@@ -21,5 +21,5 @@ export RUST_BACKTRACE=full
 s3s-proxy \
     --host          localhost               \
     --port          8014                    \
-    --domain-name   localhost:8014          \
+    --domain        localhost:8014          \
     --endpoint-url  http://localhost:9000
