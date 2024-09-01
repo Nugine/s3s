@@ -149,9 +149,10 @@ impl MultiDomain {
     /// Create a new `MultiDomain` with the base domains.
     ///
     /// # Errors
-    /// Returns an error if any of the base domains are invalid.
-    ///
-    /// Returns an error if any of the base domains overlap with each other.
+    /// Returns an error if
+    /// + any of the base domains are invalid.
+    /// + any of the base domains overlap with each other.
+    /// + no base domains are specified.
     pub fn new<I>(base_domains: I) -> Result<Self, DomainError>
     where
         I: IntoIterator,
