@@ -10,13 +10,13 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-async-trait = "0.1.73"
-aws-sdk-s3 = "1.17.0"
-aws-smithy-runtime-api = { version = "1.2.0", features = ["client", "http-1x"] }
-aws-smithy-types = { version = "1.1.8", features = ["http-body-1-x"] }
+async-trait = "0.1.82"
+aws-sdk-s3 = "1.51.0"
+aws-smithy-runtime-api = { version = "1.7.2", features = ["client", "http-1x"] }
+aws-smithy-types = { version = "1.2.6", features = ["http-body-1-x"] }
 aws-smithy-types-convert = { version = "0.60.8", features = ["convert-time"] }
-hyper = "1.1.0"
+hyper = "1.4.1"
 s3s = { version = "0.11.0-dev", path = "../s3s" }
-sync_wrapper = "1.0.0"
-tracing = "0.1.37"
+sync_wrapper = "1.0.1"
+tracing = "0.1.40"
 transform-stream = "0.3.0"

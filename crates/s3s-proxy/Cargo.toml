@@ -7,13 +7,13 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-aws-config = { version = "1.1.7", default-features = false, features = [
+aws-config = { version = "1.5.6", default-features = false, features = [
     "behavior-version-latest",
 ] }
-aws-credential-types = "1.1.7"
-aws-sdk-s3 = "1.17.0"
-clap = { version = "4.3.21", features = ["derive"] }
-hyper-util = { version = "0.1.5", features = [
+aws-credential-types = "1.2.1"
+aws-sdk-s3 = "1.51.0"
+clap = { version = "4.5.17", features = ["derive"] }
+hyper-util = { version = "0.1.8", features = [
     "server-auto",
     "server-graceful",
     "http1",
@@ -22,6 +22,6 @@ hyper-util = { version = "0.1.5", features = [
 ] }
 s3s = { version = "0.11.0-dev", path = "../s3s" }
 s3s-aws = { version = "0.11.0-dev", path = "../s3s-aws" }
-tokio = { version = "1.31.0", features = ["full"] }
-tracing = "0.1.37"
-tracing-subscriber = { version = "0.3.17", features = ["env-filter", "time"] }
+tokio = { version = "1.40.0", features = ["full"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter", "time"] }

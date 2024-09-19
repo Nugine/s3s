@@ -9,7 +9,7 @@ codegen-writer = "0.2.0"
 heck = "0.5.0"
 nugine-rust-utils = "0.3.1"
 numeric_cast = "0.2.1"
-regex = "1.9.3"
-serde = { version = "1.0.183", features = ["derive"] }
-serde_json = { version = "1.0.104", features = ["preserve_order"] }
+regex = "1.10.6"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_json = { version = "1.0.128", features = ["preserve_order"] }
 serde_urlencoded = "0.7.1"
