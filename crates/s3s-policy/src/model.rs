@@ -1,6 +1,7 @@
 //! <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_grammar.html>
 
 use std::marker::PhantomData;
+use std::slice;
 
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
@@ -280,6 +281,40 @@ where
     }
 }
 
+impl<T> OneOrMore<T> {
+    pub fn as_slice(&self) -> &[T] {
+        match self {
+            OneOrMore::One(t) => slice::from_ref(t),
+            OneOrMore::More(ts) => ts,
+        }
+    }
+
+    pub fn as_mut_slice(&mut self) -> &mut [T] {
+        match self {
+            OneOrMore::One(t) => slice::from_mut(t),
+            OneOrMore::More(ts) => ts,
+        }
+    }
+}
+
+impl<T> WildcardOneOrMore<T> {
+    pub fn as_slice(&self) -> Option<&[T]> {
+        match self {
+            WildcardOneOrMore::Wildcard => None,
+            WildcardOneOrMore::One(t) => Some(slice::from_ref(t)),
+            WildcardOneOrMore::More(ts) => Some(ts),
+        }
+    }
+
+    pub fn as_mut_slice(&mut self) -> Option<&mut [T]> {
+        match self {
+            WildcardOneOrMore::Wildcard => None,
+            WildcardOneOrMore::One(t) => Some(slice::from_mut(t)),
+            WildcardOneOrMore::More(ts) => Some(ts),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -457,42 +492,9 @@ mod tests {
         }
     }
 
-    /// <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json>
     #[test]
     fn example1() {
-        let json = r#"
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "FirstStatement",
-      "Effect": "Allow",
-      "Action": ["iam:ChangePassword"],
-      "Resource": "*"
-    },
-    {
-      "Sid": "SecondStatement",
-      "Effect": "Allow",
-      "Action": "s3:ListAllMyBuckets",
-      "Resource": "*"
-    },
-    {
-      "Sid": "ThirdStatement",
-      "Effect": "Allow",
-      "Action": [
-        "s3:List*",
-        "s3:Get*"
-      ],
-      "Resource": [
-        "arn:aws:s3:::confidential-data",
-        "arn:aws:s3:::confidential-data/*"
-      ],
-      "Condition": {"Bool": {"aws:MultiFactorAuthPresent": "true"}}
-    }
-  ]
-}
-"#;
-
+        let json = crate::tests::example1_json();
         let policy: Policy = serde_json::from_str(json).unwrap();
 
         let expected = Policy {
@@ -541,20 +543,9 @@ mod tests {
         }
     }
 
-    /// <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json>
     #[test]
     fn example2() {
-        let json = r#"
-{
-    "Version": "2012-10-17",
-    "Statement": {
-        "Effect": "Allow",
-        "Action": "s3:ListBucket",
-        "Resource": "arn:aws:s3:::example_bucket"
-    }
-}    
-"#;
-
+        let json = crate::tests::example2_json();
         let policy: Policy = serde_json::from_str(json).unwrap();
 
         let expected = Policy {
@@ -579,25 +570,9 @@ mod tests {
         }
     }
 
-    /// <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json>
     #[test]
     fn example3() {
-        let json = r#"
-{
-  "Version": "2012-10-17",
-  "Statement": [{
-    "Sid": "1",
-    "Effect": "Allow",
-    "Principal": {"AWS": ["arn:aws:iam::account-id:root"]},
-    "Action": "s3:*",
-    "Resource": [
-      "arn:aws:s3:::mybucket",
-      "arn:aws:s3:::mybucket/*"
-    ]
-  }]
-}
-"#;
-
+        let json = crate::tests::example3_json();
         let policy: Policy = serde_json::from_str(json).unwrap();
 
         let expected = Policy {
