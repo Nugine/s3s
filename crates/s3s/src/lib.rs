@@ -18,6 +18,7 @@
     clippy::let_underscore_untyped,
     clippy::inline_always,
 )]
+#![allow(clippy::needless_return)]
 
 #[macro_use]
 mod utils;

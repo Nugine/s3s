@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 #![deny(clippy::all, clippy::pedantic)]
+#![allow(clippy::needless_return)]
 
 use s3s::auth::SimpleAuth;
 use s3s::host::SingleDomain;
