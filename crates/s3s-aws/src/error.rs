@@ -34,7 +34,7 @@ pub struct SetStatusCode<'a, 'b, E, R>(
     pub &'b aws_smithy_runtime_api::client::result::ServiceError<E, R>,
 );
 
-impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_runtime_api::client::orchestrator::HttpResponse> {
+impl<E> SetStatusCode<'_, '_, E, aws_smithy_runtime_api::client::orchestrator::HttpResponse> {
     pub fn call(self) {
         let Self(err, e) = self;
         err.set_status_code(hyper_status_code_from_aws(e.raw().status()));
@@ -42,7 +42,7 @@ impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_runtime_api::client::orchest
     }
 }
 
-impl<'a, 'b, E> SetStatusCode<'a, 'b, E, aws_smithy_types::event_stream::RawMessage> {
+impl<E> SetStatusCode<'_, '_, E, aws_smithy_types::event_stream::RawMessage> {
     #[allow(clippy::unused_self)]
     pub fn call(self) {}
 }

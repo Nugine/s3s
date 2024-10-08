@@ -20,7 +20,7 @@ pub struct S3AuthContext<'a> {
     pub(crate) extensions: &'a mut Extensions,
 }
 
-impl<'a> S3AuthContext<'a> {
+impl S3AuthContext<'_> {
     /// Returns the credentials of current request.
     ///
     /// `None` means anonymous request.
