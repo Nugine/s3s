@@ -48,8 +48,8 @@ pin-project-lite = "0.2.14"
 quick-xml = { version = "0.36.1", features = ["serialize"] }
 serde = { version = "1.0.210", features = ["derive"] }
 serde_urlencoded = "0.7.1"
-sha1 = { version = "0.10.6", features = ["asm"] }
-sha2 = { version = "0.10.8", features = ["asm"] }
+sha1 = "0.10.6"
+sha2 = "0.10.8"
 smallvec = "1.13.2"
 thiserror = "1.0.63"
 time = { version = "0.3.36", features = ["formatting", "parsing", "macros"] }
