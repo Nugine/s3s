@@ -649,8 +649,12 @@ fn codegen_op_http_call(op: &Operation) {
     let method = op.name.to_snake_case();
 
     g!("let input = Self::deserialize_http(req)?;");
-    g!("let s3_req = super::build_s3_request(input, req);");
+    g!("let mut s3_req = super::build_s3_request(input, req);");
     g!("let s3 = ccx.s3;");
+
+    g!("if let Some(access) = ccx.access {{");
+    g!("    access.{method}(&mut s3_req).await?;");
+    g!("}}");
 
     if op.name == "GetObject" {
         g!("let overrided_headers = super::get_object::extract_overrided_response_headers(&s3_req)?;");
