@@ -13,6 +13,14 @@ on:
   workflow_dispatch:
 
 jobs:
+  skip-check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5
+
   develop:
     runs-on: ubuntu-latest
     strategy:
@@ -58,6 +66,8 @@ jobs:
       - run: cargo test --all-features
 
   mint:
+    needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
     name: e2e (s3s-proxy, mint)
     runs-on: ubuntu-latest
     steps:
