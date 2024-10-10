@@ -36,6 +36,7 @@ jobs:
         with:
           toolchain: ${{ matrix.toolchain }}
           components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
       - uses: taiki-e/install-action@v2
         with:
           tool: just
@@ -48,12 +49,11 @@ jobs:
       - run: cargo install --path crates/s3s-fs --features binary
 
   cross-test:
+    needs: skip-check
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        toolchain:
-          - stable
         os:
           - ubuntu-latest
           - windows-latest
@@ -62,8 +62,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: ${{ matrix.toolchain }}
-      - run: cargo test --all-features
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v2
+      - if: needs.skip-check.outputs.should_skip != 'true'
+        run: cargo test --all-features
 
   mint:
     needs: skip-check
@@ -74,7 +76,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: nightly
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v2
       - run: docker pull minio/mint:edge
       - run: docker pull minio/minio:latest
       - run: cargo install --path crates/s3s-proxy
