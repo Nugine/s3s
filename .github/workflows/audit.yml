@@ -4,17 +4,20 @@ on:
   push:
     branches:
       - main
+      - 'feat/**'
     paths: 
       - '**/Cargo.toml'
       - '**/Cargo.lock'
   pull_request:
     branches:
       - main
+      - 'feat/**'
     paths: 
       - '**/Cargo.toml'
       - '**/Cargo.lock'
   schedule:
     - cron: '0 0 * * 0' # at midnight of each sunday
+  workflow_dispatch:
 
 jobs:
   audit:

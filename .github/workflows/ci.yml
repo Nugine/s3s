@@ -1,15 +1,17 @@
+name: CI
+
 on:
   push:
     branches:
       - main
+      - 'feat/**'
   pull_request:
     branches:
       - main
-  schedule: # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
+      - 'feat/**'
+  schedule:
     - cron: '0 0 * * 0' # at midnight of each sunday
   workflow_dispatch:
-
-name: CI
 
 jobs:
   develop:
