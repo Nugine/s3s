@@ -1,5 +1,4 @@
-use super::Credentials;
-
+use crate::auth::Credentials;
 use crate::path::S3Path;
 use crate::S3Operation;
 
@@ -8,7 +7,7 @@ use hyper::HeaderMap;
 use hyper::Method;
 use hyper::Uri;
 
-pub struct S3AuthContext<'a> {
+pub struct S3AccessContext<'a> {
     pub(crate) credentials: Option<&'a Credentials>,
     pub(crate) s3_path: &'a S3Path,
     pub(crate) s3_op: &'a S3Operation,
@@ -20,7 +19,7 @@ pub struct S3AuthContext<'a> {
     pub(crate) extensions: &'a mut Extensions,
 }
 
-impl S3AuthContext<'_> {
+impl S3AccessContext<'_> {
     /// Returns the credentials of current request.
     ///
     /// `None` means anonymous request.

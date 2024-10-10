@@ -9,8 +9,8 @@ mod get_object;
 #[cfg(test)]
 mod tests;
 
+use crate::access::{S3Access, S3AccessContext};
 use crate::auth::S3Auth;
-use crate::auth::S3AuthContext;
 use crate::error::*;
 use crate::header;
 use crate::host::S3Host;
@@ -49,6 +49,7 @@ pub struct CallContext<'a> {
     pub s3: &'a Arc<dyn S3>,
     pub host: Option<&'a dyn S3Host>,
     pub auth: Option<&'a dyn S3Auth>,
+    pub access: Option<&'a dyn S3Access>,
 }
 
 fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
@@ -320,8 +321,8 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<&'static 
 
     debug!(op = %op.name(), ?s3_path, "resolved route");
 
-    if let Some(auth) = ccx.auth {
-        let mut cx = S3AuthContext {
+    {
+        let mut acx = S3AccessContext {
             credentials: req.s3ext.credentials.as_ref(),
             s3_path,
             s3_op: &crate::S3Operation { name: op.name() },
@@ -330,7 +331,10 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<&'static 
             headers: &req.headers,
             extensions: &mut req.extensions,
         };
-        auth.check_access(&mut cx).await?;
+        match ccx.access {
+            Some(access) => access.check(&mut acx).await?,
+            None => crate::access::default_check(&mut acx)?,
+        }
     }
 
     debug!(op = %op.name(), ?s3_path, "checked access");

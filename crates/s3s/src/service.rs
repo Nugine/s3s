@@ -1,3 +1,4 @@
+use crate::access::S3Access;
 use crate::auth::S3Auth;
 use crate::error::{S3Error, S3Result};
 use crate::host::S3Host;
@@ -17,6 +18,7 @@ pub struct S3ServiceBuilder {
     s3: Arc<dyn S3>,
     host: Option<Box<dyn S3Host>>,
     auth: Option<Box<dyn S3Auth>>,
+    access: Option<Box<dyn S3Access>>,
 }
 
 impl S3ServiceBuilder {
@@ -24,8 +26,9 @@ impl S3ServiceBuilder {
     pub fn new(s3: impl S3) -> Self {
         Self {
             s3: Arc::new(s3),
-            auth: None,
             host: None,
+            auth: None,
+            access: None,
         }
     }
 
@@ -37,12 +40,17 @@ impl S3ServiceBuilder {
         self.auth = Some(Box::new(auth));
     }
 
+    pub fn set_access(&mut self, access: impl S3Access) {
+        self.access = Some(Box::new(access));
+    }
+
     #[must_use]
     pub fn build(self) -> S3Service {
         S3Service {
             s3: self.s3,
             host: self.host,
             auth: self.auth,
+            access: self.access,
         }
     }
 }
@@ -51,6 +59,7 @@ pub struct S3Service {
     s3: Arc<dyn S3>,
     host: Option<Box<dyn S3Host>>,
     auth: Option<Box<dyn S3Auth>>,
+    access: Option<Box<dyn S3Access>>,
 }
 
 impl S3Service {
@@ -68,6 +77,7 @@ impl S3Service {
             s3: &self.s3,
             host: self.host.as_deref(),
             auth: self.auth.as_deref(),
+            access: self.access.as_deref(),
         };
         let result = crate::ops::call(&mut req, &ccx).await.map(Into::into);
 
