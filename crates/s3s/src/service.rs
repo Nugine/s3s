@@ -1,3 +1,4 @@
+use crate::access::S3Access;
 use crate::auth::S3Auth;
 use crate::error::{S3Error, S3Result};
 use crate::host::S3Host;
@@ -15,8 +16,9 @@ use tracing::{debug, error};
 
 pub struct S3ServiceBuilder {
     s3: Arc<dyn S3>,
-    auth: Option<Box<dyn S3Auth>>,
     host: Option<Box<dyn S3Host>>,
+    auth: Option<Box<dyn S3Auth>>,
+    access: Option<Box<dyn S3Access>>,
 }
 
 impl S3ServiceBuilder {
@@ -24,33 +26,40 @@ impl S3ServiceBuilder {
     pub fn new(s3: impl S3) -> Self {
         Self {
             s3: Arc::new(s3),
-            auth: None,
             host: None,
+            auth: None,
+            access: None,
         }
-    }
-
-    pub fn set_auth(&mut self, auth: impl S3Auth) {
-        self.auth = Some(Box::new(auth));
     }
 
     pub fn set_host(&mut self, host: impl S3Host) {
         self.host = Some(Box::new(host));
     }
 
+    pub fn set_auth(&mut self, auth: impl S3Auth) {
+        self.auth = Some(Box::new(auth));
+    }
+
+    pub fn set_access(&mut self, access: impl S3Access) {
+        self.access = Some(Box::new(access));
+    }
+
     #[must_use]
     pub fn build(self) -> S3Service {
         S3Service {
             s3: self.s3,
-            auth: self.auth,
             host: self.host,
+            auth: self.auth,
+            access: self.access,
         }
     }
 }
 
 pub struct S3Service {
     s3: Arc<dyn S3>,
-    auth: Option<Box<dyn S3Auth>>,
     host: Option<Box<dyn S3Host>>,
+    auth: Option<Box<dyn S3Auth>>,
+    access: Option<Box<dyn S3Access>>,
 }
 
 impl S3Service {
@@ -64,10 +73,13 @@ impl S3Service {
 
         let mut req = Request::from(req);
 
-        let s3 = &self.s3;
-        let auth = self.auth.as_deref();
-        let host = self.host.as_deref();
-        let result = crate::ops::call(&mut req, s3, auth, host).await.map(Into::into);
+        let ccx = crate::ops::CallContext {
+            s3: &self.s3,
+            host: self.host.as_deref(),
+            auth: self.auth.as_deref(),
+            access: self.access.as_deref(),
+        };
+        let result = crate::ops::call(&mut req, &ccx).await.map(Into::into);
 
         match result {
             Ok(ref res) => debug!(?res),

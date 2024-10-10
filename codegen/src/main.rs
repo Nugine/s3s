@@ -16,6 +16,7 @@
 mod rust;
 mod smithy;
 
+mod access;
 mod dto;
 mod error;
 mod headers;
@@ -77,6 +78,12 @@ fn main() {
         let path = "crates/s3s/src/ops/generated.rs";
         let gen = Codegen::create_file(path).unwrap();
         codegen_writer::scoped(gen, || ops::codegen(&ops, &rust_types));
+    }
+
+    {
+        let path = "crates/s3s/src/access/generated.rs";
+        let gen = Codegen::create_file(path).unwrap();
+        codegen_writer::scoped(gen, || access::codegen(&ops));
     }
 
     {

@@ -36,6 +36,7 @@ mod sig_v2;
 mod sig_v4;
 mod xml;
 
+pub mod access;
 pub mod auth;
 pub mod checksum;
 pub mod dto;

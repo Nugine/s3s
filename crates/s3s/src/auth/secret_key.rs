@@ -2,6 +2,12 @@ use std::fmt;
 
 use zeroize::Zeroize;
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Credentials {
+    pub access_key: String,
+    pub secret_key: SecretKey,
+}
+
 #[derive(Clone, PartialEq, Eq)]
 pub struct SecretKey(Box<str>);
 
