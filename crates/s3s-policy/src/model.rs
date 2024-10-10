@@ -457,42 +457,9 @@ mod tests {
         }
     }
 
-    /// <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json>
     #[test]
     fn example1() {
-        let json = r#"
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "FirstStatement",
-      "Effect": "Allow",
-      "Action": ["iam:ChangePassword"],
-      "Resource": "*"
-    },
-    {
-      "Sid": "SecondStatement",
-      "Effect": "Allow",
-      "Action": "s3:ListAllMyBuckets",
-      "Resource": "*"
-    },
-    {
-      "Sid": "ThirdStatement",
-      "Effect": "Allow",
-      "Action": [
-        "s3:List*",
-        "s3:Get*"
-      ],
-      "Resource": [
-        "arn:aws:s3:::confidential-data",
-        "arn:aws:s3:::confidential-data/*"
-      ],
-      "Condition": {"Bool": {"aws:MultiFactorAuthPresent": "true"}}
-    }
-  ]
-}
-"#;
-
+        let json = crate::tests::example1_json();
         let policy: Policy = serde_json::from_str(json).unwrap();
 
         let expected = Policy {
@@ -541,20 +508,9 @@ mod tests {
         }
     }
 
-    /// <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json>
     #[test]
     fn example2() {
-        let json = r#"
-{
-    "Version": "2012-10-17",
-    "Statement": {
-        "Effect": "Allow",
-        "Action": "s3:ListBucket",
-        "Resource": "arn:aws:s3:::example_bucket"
-    }
-}    
-"#;
-
+        let json = crate::tests::example2_json();
         let policy: Policy = serde_json::from_str(json).unwrap();
 
         let expected = Policy {
@@ -579,25 +535,9 @@ mod tests {
         }
     }
 
-    /// <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policies-json>
     #[test]
     fn example3() {
-        let json = r#"
-{
-  "Version": "2012-10-17",
-  "Statement": [{
-    "Sid": "1",
-    "Effect": "Allow",
-    "Principal": {"AWS": ["arn:aws:iam::account-id:root"]},
-    "Action": "s3:*",
-    "Resource": [
-      "arn:aws:s3:::mybucket",
-      "arn:aws:s3:::mybucket/*"
-    ]
-  }]
-}
-"#;
-
+        let json = crate::tests::example3_json();
         let policy: Policy = serde_json::from_str(json).unwrap();
 
         let expected = Policy {
