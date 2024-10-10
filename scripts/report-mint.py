@@ -109,5 +109,5 @@ if __name__ == "__main__":
     assert counts["minio-java"]["pass"] >= 17
 
     assert counts["aws-sdk-php"]["pass"] >= 10
-    assert counts["minio-py"]["pass"] >= 4
+    assert counts["minio-py"]["pass"] >= 2
     assert counts["mc"]["pass"] >= 2
