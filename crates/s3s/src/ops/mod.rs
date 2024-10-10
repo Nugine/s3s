@@ -42,7 +42,13 @@ use tracing::debug;
 pub trait Operation: Send + Sync + 'static {
     fn name(&self) -> &'static str;
 
-    async fn call(&self, s3: &Arc<dyn S3>, req: &mut Request) -> S3Result<Response>;
+    async fn call(&self, ccx: &CallContext<'_>, req: &mut Request) -> S3Result<Response>;
+}
+
+pub struct CallContext<'a> {
+    pub s3: &'a Arc<dyn S3>,
+    pub host: Option<&'a dyn S3Host>,
+    pub auth: Option<&'a dyn S3Auth>,
 }
 
 fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
@@ -169,13 +175,8 @@ fn fmt_content_length(len: usize) -> http::HeaderValue {
     }
 }
 
-pub async fn call(
-    req: &mut Request,
-    s3: &Arc<dyn S3>,
-    auth: Option<&dyn S3Auth>,
-    host: Option<&dyn S3Host>,
-) -> S3Result<Response> {
-    let op = match prepare(req, auth, host).await {
+pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response> {
+    let op = match prepare(req, ccx).await {
         Ok(op) => op,
         Err(err) => {
             debug!(?err, "failed to prepare");
@@ -183,7 +184,7 @@ pub async fn call(
         }
     };
 
-    let resp = match op.call(s3, req).await {
+    let resp = match op.call(ccx, req).await {
         Ok(resp) => resp,
         Err(err) => {
             debug!(op = %op.name(), ?err, "op returns error");
@@ -195,7 +196,7 @@ pub async fn call(
 }
 
 #[allow(clippy::too_many_lines)]
-async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, s3_host: Option<&dyn S3Host>) -> S3Result<&'static dyn Operation> {
+async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<&'static dyn Operation> {
     let s3_path;
     let mut content_length;
     {
@@ -208,7 +209,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, s3_host: Option<&
         let vh_bucket;
         {
             let result = 'parse: {
-                if let (Some(host_header), Some(s3_host)) = (host_header.as_deref(), s3_host) {
+                if let (Some(host_header), Some(s3_host)) = (host_header.as_deref(), ccx.host) {
                     if !is_socket_addr_or_ip_addr(host_header) {
                         debug!(?host_header, ?decoded_uri_path, "parsing virtual-hosted-style request");
 
@@ -240,7 +241,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, s3_host: Option<&
         let transformed_body;
         {
             let mut scx = SignatureContext {
-                auth,
+                auth: ccx.auth,
 
                 req_method: &req.method,
                 req_uri: &req.uri,
@@ -319,7 +320,7 @@ async fn prepare(req: &mut Request, auth: Option<&dyn S3Auth>, s3_host: Option<&
 
     debug!(op = %op.name(), ?s3_path, "resolved route");
 
-    if let Some(auth) = auth {
+    if let Some(auth) = ccx.auth {
         let mut cx = S3AuthContext {
             credentials: req.s3ext.credentials.as_ref(),
             s3_path,
