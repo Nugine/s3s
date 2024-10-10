@@ -1,6 +1,7 @@
 //! <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_grammar.html>
 
 use std::marker::PhantomData;
+use std::slice;
 
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
@@ -277,6 +278,40 @@ where
         }
 
         deserializer.deserialize_any(Visitor(PhantomData))
+    }
+}
+
+impl<T> OneOrMore<T> {
+    pub fn as_slice(&self) -> &[T] {
+        match self {
+            OneOrMore::One(t) => slice::from_ref(t),
+            OneOrMore::More(ts) => ts,
+        }
+    }
+
+    pub fn as_mut_slice(&mut self) -> &mut [T] {
+        match self {
+            OneOrMore::One(t) => slice::from_mut(t),
+            OneOrMore::More(ts) => ts,
+        }
+    }
+}
+
+impl<T> WildcardOneOrMore<T> {
+    pub fn as_slice(&self) -> Option<&[T]> {
+        match self {
+            WildcardOneOrMore::Wildcard => None,
+            WildcardOneOrMore::One(t) => Some(slice::from_ref(t)),
+            WildcardOneOrMore::More(ts) => Some(ts),
+        }
+    }
+
+    pub fn as_mut_slice(&mut self) -> Option<&mut [T]> {
+        match self {
+            WildcardOneOrMore::Wildcard => None,
+            WildcardOneOrMore::One(t) => Some(slice::from_mut(t)),
+            WildcardOneOrMore::More(ts) => Some(ts),
+        }
     }
 }
 
