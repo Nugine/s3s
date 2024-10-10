@@ -8,8 +8,12 @@
 #![warn(
     clippy::dbg_macro, //
 )]
+#![allow(
+    clippy::module_name_repetitions, //
+)]
 
 pub mod model;
+pub mod pattern;
 
 #[cfg(test)]
 mod tests;
