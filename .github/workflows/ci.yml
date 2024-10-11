@@ -14,14 +14,21 @@ on:
 
 jobs:
   skip-check:
+    permissions:
+      actions: write
+      contents: read
     runs-on: ubuntu-latest
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
     steps:
       - id: skip_check
         uses: fkirc/skip-duplicate-actions@v5
+        with:
+          cancel_others: true
+          paths_ignore: '["*.md"]'
 
   develop:
+    needs: skip-check
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -50,6 +57,7 @@ jobs:
 
   cross-test:
     needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -64,8 +72,7 @@ jobs:
         with:
           toolchain: stable
       - uses: Swatinem/rust-cache@v2
-      - if: needs.skip-check.outputs.should_skip != 'true'
-        run: cargo test --all-features
+      - run: cargo test --all-features
 
   mint:
     needs: skip-check
