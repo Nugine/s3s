@@ -8414,7 +8414,7 @@ impl AwsConversion for s3s::dto::TransitionDefaultMinimumObjectSize {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
-            aws_sdk_s3::types::TransitionDefaultMinimumObjectSize::AllStorageClasses128k => {
+            aws_sdk_s3::types::TransitionDefaultMinimumObjectSize::AllStorageClasses128K => {
                 Self::from_static(Self::ALL_STORAGE_CLASSES_128K)
             }
             aws_sdk_s3::types::TransitionDefaultMinimumObjectSize::VariesByStorageClass => {

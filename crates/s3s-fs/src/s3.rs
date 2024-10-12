@@ -323,6 +323,7 @@ impl S3 for FileSystem {
         let output = ListBucketsOutput {
             buckets: Some(buckets),
             owner: None,
+            ..Default::default()
         };
         Ok(S3Response::new(output))
     }
