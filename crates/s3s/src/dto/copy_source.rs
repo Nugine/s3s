@@ -6,7 +6,7 @@ use crate::path;
 use std::fmt::Write;
 
 /// x-amz-copy-source
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CopySource {
     /// bucket repr
     Bucket {

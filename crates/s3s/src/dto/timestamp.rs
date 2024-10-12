@@ -8,7 +8,7 @@ use time::format_description::well_known::Rfc3339;
 use time::format_description::FormatItem;
 use time::macros::format_description;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Timestamp(time::OffsetDateTime);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

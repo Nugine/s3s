@@ -391,9 +391,14 @@ pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
 
 fn codegen_struct(ty: &rust::Struct, rust_types: &RustTypes, ops: &Operations) {
     codegen_doc(ty.doc.as_deref());
-    if can_derive_default(ty, rust_types) {
-        g!("#[derive(Default)]");
+
+    {
+        let derives = struct_derives(ty, rust_types);
+        if !derives.is_empty() {
+            g!("#[derive({})]", derives.join(", "));
+        }
     }
+
     // g!("#[non_exhaustive]"); // TODO: builder?
 
     g!("pub struct {} {{", ty.name);
@@ -494,7 +499,7 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes) {
 
 fn codegen_struct_enum(ty: &rust::StructEnum, _rust_types: &RustTypes) {
     codegen_doc(ty.doc.as_deref());
-    g!("#[derive(Debug)]");
+    g!("#[derive(Debug, Clone)]");
     g!("#[non_exhaustive]");
     g!("pub enum {} {{", ty.name);
 
@@ -526,6 +531,26 @@ fn codegen_tests(ops: &Operations) {
     }
 
     g!("}}");
+}
+
+fn struct_derives(ty: &rust::Struct, rust_types: &RustTypes) -> Vec<&'static str> {
+    let mut derives = Vec::new();
+    if can_derive_clone(ty, rust_types) {
+        derives.push("Clone");
+    }
+    if can_derive_default(ty, rust_types) {
+        derives.push("Default");
+    }
+    derives
+}
+
+fn can_derive_clone(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
+    ty.fields.iter().all(|field| {
+        if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
+            return false;
+        }
+        true
+    })
 }
 
 fn can_derive_default(ty: &rust::Struct, rust_types: &RustTypes) -> bool {
