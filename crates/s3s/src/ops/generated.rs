@@ -289,6 +289,16 @@ impl http::TryIntoHeaderValue for TaggingDirective {
     }
 }
 
+impl http::TryIntoHeaderValue for TransitionDefaultMinimumObjectSize {
+    type Error = http::InvalidHeaderValue;
+    fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
+        }
+    }
+}
+
 impl http::TryFromHeaderValue for ArchiveStatus {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
@@ -433,6 +443,14 @@ impl http::TryFromHeaderValue for TaggingDirective {
     }
 }
 
+impl http::TryFromHeaderValue for TransitionDefaultMinimumObjectSize {
+    type Error = http::ParseHeaderError;
+    fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
+    }
+}
+
 pub struct AbortMultipartUpload;
 
 impl AbortMultipartUpload {
@@ -502,6 +520,8 @@ impl CompleteMultipartUpload {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
+        let if_none_match: Option<IfNoneMatch> = http::parse_opt_header(req, &IF_NONE_MATCH)?;
+
         let multipart_upload: Option<CompletedMultipartUpload> = http::take_opt_xml_body(req)?;
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
@@ -523,6 +543,7 @@ impl CompleteMultipartUpload {
             checksum_sha1,
             checksum_sha256,
             expected_bucket_owner,
+            if_none_match,
             key,
             multipart_upload,
             request_payer,
@@ -2145,6 +2166,11 @@ impl GetBucketLifecycleConfiguration {
     pub fn serialize_http(x: GetBucketLifecycleConfigurationOutput) -> S3Result<http::Response> {
         let mut res = http::Response::with_status(http::StatusCode::OK);
         http::set_xml_body(&mut res, &x)?;
+        http::add_opt_header(
+            &mut res,
+            X_AMZ_TRANSITION_DEFAULT_MINIMUM_OBJECT_SIZE,
+            x.transition_default_minimum_object_size,
+        )?;
         Ok(res)
     }
 }
@@ -3727,8 +3753,15 @@ impl super::Operation for ListBucketMetricsConfigurations {
 pub struct ListBuckets;
 
 impl ListBuckets {
-    pub fn deserialize_http(_: &mut http::Request) -> S3Result<ListBucketsInput> {
-        Ok(ListBucketsInput {})
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketsInput> {
+        let continuation_token: Option<Token> = http::parse_opt_query(req, "continuation-token")?;
+
+        let max_buckets: Option<MaxBuckets> = http::parse_opt_query(req, "max-buckets")?;
+
+        Ok(ListBucketsInput {
+            continuation_token,
+            max_buckets,
+        })
     }
 
     pub fn serialize_http(x: ListBucketsOutput) -> S3Result<http::Response> {
@@ -4506,16 +4539,26 @@ impl PutBucketLifecycleConfiguration {
 
         let lifecycle_configuration: Option<BucketLifecycleConfiguration> = http::take_opt_xml_body(req)?;
 
+        let transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize> =
+            http::parse_opt_header(req, &X_AMZ_TRANSITION_DEFAULT_MINIMUM_OBJECT_SIZE)?;
+
         Ok(PutBucketLifecycleConfigurationInput {
             bucket,
             checksum_algorithm,
             expected_bucket_owner,
             lifecycle_configuration,
+            transition_default_minimum_object_size,
         })
     }
 
-    pub fn serialize_http(_: PutBucketLifecycleConfigurationOutput) -> S3Result<http::Response> {
-        Ok(http::Response::with_status(http::StatusCode::OK))
+    pub fn serialize_http(x: PutBucketLifecycleConfigurationOutput) -> S3Result<http::Response> {
+        let mut res = http::Response::with_status(http::StatusCode::OK);
+        http::add_opt_header(
+            &mut res,
+            X_AMZ_TRANSITION_DEFAULT_MINIMUM_OBJECT_SIZE,
+            x.transition_default_minimum_object_size,
+        )?;
+        Ok(res)
     }
 }
 
@@ -5129,6 +5172,8 @@ impl PutObject {
 
         let grant_write_acp: Option<GrantWriteACP> = http::parse_opt_header(req, &X_AMZ_GRANT_WRITE_ACP)?;
 
+        let if_none_match: Option<IfNoneMatch> = http::parse_opt_header(req, &IF_NONE_MATCH)?;
+
         let metadata: Option<Metadata> = http::parse_opt_metadata(req)?;
 
         let object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus> =
@@ -5186,6 +5231,7 @@ impl PutObject {
             grant_read,
             grant_read_acp,
             grant_write_acp,
+            if_none_match,
             key,
             metadata,
             object_lock_legal_hold_status,
@@ -5254,6 +5300,8 @@ impl PutObject {
         let grant_read_acp: Option<GrantReadACP> = http::parse_field_value(&m, "x-amz-grant-read-acp")?;
 
         let grant_write_acp: Option<GrantWriteACP> = http::parse_field_value(&m, "x-amz-grant-write-acp")?;
+
+        let if_none_match: Option<IfNoneMatch> = http::parse_field_value(&m, "if-none-match")?;
 
         let metadata: Option<Metadata> = {
             let mut metadata = Metadata::default();
@@ -5327,6 +5375,7 @@ impl PutObject {
             grant_read,
             grant_read_acp,
             grant_write_acp,
+            if_none_match,
             key,
             metadata,
             object_lock_legal_hold_status,

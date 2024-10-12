@@ -940,13 +940,22 @@ impl SerializeContent for LifecycleRuleAndOperator {
 
 impl SerializeContent for LifecycleRuleFilter {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        match self {
-            Self::And(x) => s.content("And", x),
-            Self::ObjectSizeGreaterThan(x) => s.content("ObjectSizeGreaterThan", x),
-            Self::ObjectSizeLessThan(x) => s.content("ObjectSizeLessThan", x),
-            Self::Prefix(x) => s.content("Prefix", x),
-            Self::Tag(x) => s.content("Tag", x),
+        if let Some(ref val) = self.and {
+            s.content("And", val)?;
         }
+        if let Some(ref val) = self.object_size_greater_than {
+            s.content("ObjectSizeGreaterThan", val)?;
+        }
+        if let Some(ref val) = self.object_size_less_than {
+            s.content("ObjectSizeLessThan", val)?;
+        }
+        if let Some(ref val) = self.prefix {
+            s.content("Prefix", val)?;
+        }
+        if let Some(ref val) = self.tag {
+            s.content("Tag", val)?;
+        }
+        Ok(())
     }
 }
 
@@ -1026,6 +1035,9 @@ impl SerializeContent for ListBucketsOutput {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         if let Some(iter) = &self.buckets {
             s.list("Buckets", "Bucket", iter)?;
+        }
+        if let Some(ref val) = self.continuation_token {
+            s.content("ContinuationToken", val)?;
         }
         if let Some(ref val) = self.owner {
             s.content("Owner", val)?;
@@ -1799,11 +1811,16 @@ impl SerializeContent for ReplicationRuleAndOperator {
 
 impl SerializeContent for ReplicationRuleFilter {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        match self {
-            Self::And(x) => s.content("And", x),
-            Self::Prefix(x) => s.content("Prefix", x),
-            Self::Tag(x) => s.content("Tag", x),
+        if let Some(ref val) = self.and {
+            s.content("And", val)?;
         }
+        if let Some(ref val) = self.prefix {
+            s.content("Prefix", val)?;
+        }
+        if let Some(ref val) = self.tag {
+            s.content("Tag", val)?;
+        }
+        Ok(())
     }
 }
 
@@ -4073,13 +4090,55 @@ impl<'xml> DeserializeContent<'xml> for LifecycleRuleAndOperator {
 
 impl<'xml> DeserializeContent<'xml> for LifecycleRuleFilter {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.element(|d, x| match x {
-            b"And" => Ok(Self::And(d.content()?)),
-            b"ObjectSizeGreaterThan" => Ok(Self::ObjectSizeGreaterThan(d.content()?)),
-            b"ObjectSizeLessThan" => Ok(Self::ObjectSizeLessThan(d.content()?)),
-            b"Prefix" => Ok(Self::Prefix(d.content()?)),
-            b"Tag" => Ok(Self::Tag(d.content()?)),
+        let mut and: Option<LifecycleRuleAndOperator> = None;
+        let mut object_size_greater_than: Option<ObjectSizeGreaterThanBytes> = None;
+        let mut object_size_less_than: Option<ObjectSizeLessThanBytes> = None;
+        let mut prefix: Option<Prefix> = None;
+        let mut tag: Option<Tag> = None;
+        d.for_each_element(|d, x| match x {
+            b"And" => {
+                if and.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                and = Some(d.content()?);
+                Ok(())
+            }
+            b"ObjectSizeGreaterThan" => {
+                if object_size_greater_than.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                object_size_greater_than = Some(d.content()?);
+                Ok(())
+            }
+            b"ObjectSizeLessThan" => {
+                if object_size_less_than.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                object_size_less_than = Some(d.content()?);
+                Ok(())
+            }
+            b"Prefix" => {
+                if prefix.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                prefix = Some(d.content()?);
+                Ok(())
+            }
+            b"Tag" => {
+                if tag.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                tag = Some(d.content()?);
+                Ok(())
+            }
             _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            and,
+            object_size_greater_than,
+            object_size_less_than,
+            prefix,
+            tag,
         })
     }
 }
@@ -5107,12 +5166,34 @@ impl<'xml> DeserializeContent<'xml> for ReplicationRuleAndOperator {
 
 impl<'xml> DeserializeContent<'xml> for ReplicationRuleFilter {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.element(|d, x| match x {
-            b"And" => Ok(Self::And(d.content()?)),
-            b"Prefix" => Ok(Self::Prefix(d.content()?)),
-            b"Tag" => Ok(Self::Tag(d.content()?)),
+        let mut and: Option<ReplicationRuleAndOperator> = None;
+        let mut prefix: Option<Prefix> = None;
+        let mut tag: Option<Tag> = None;
+        d.for_each_element(|d, x| match x {
+            b"And" => {
+                if and.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                and = Some(d.content()?);
+                Ok(())
+            }
+            b"Prefix" => {
+                if prefix.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                prefix = Some(d.content()?);
+                Ok(())
+            }
+            b"Tag" => {
+                if tag.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                tag = Some(d.content()?);
+                Ok(())
+            }
             _ => Err(DeError::UnexpectedTagName),
-        })
+        })?;
+        Ok(Self { and, prefix, tag })
     }
 }
 

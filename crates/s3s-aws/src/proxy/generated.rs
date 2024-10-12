@@ -51,6 +51,7 @@ impl S3 for Proxy {
         b = b.set_checksum_sha1(try_into_aws(input.checksum_sha1)?);
         b = b.set_checksum_sha256(try_into_aws(input.checksum_sha256)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
+        b = b.set_if_none_match(try_into_aws(input.if_none_match)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
         b = b.set_multipart_upload(try_into_aws(input.multipart_upload)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
@@ -1433,7 +1434,10 @@ impl S3 for Proxy {
     ) -> S3Result<S3Response<s3s::dto::ListBucketsOutput>> {
         let input = req.input;
         debug!(?input);
-        let result = self.0.list_buckets().send().await;
+        let mut b = self.0.list_buckets();
+        b = b.set_continuation_token(try_into_aws(input.continuation_token)?);
+        b = b.set_max_buckets(try_into_aws(input.max_buckets)?);
+        let result = b.send().await;
         match result {
             Ok(output) => {
                 let headers = super::meta::build_headers(&output)?;
@@ -1779,6 +1783,7 @@ impl S3 for Proxy {
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_lifecycle_configuration(try_into_aws(input.lifecycle_configuration)?);
+        b = b.set_transition_default_minimum_object_size(try_into_aws(input.transition_default_minimum_object_size)?);
         let result = b.send().await;
         match result {
             Ok(output) => {
@@ -2068,6 +2073,7 @@ impl S3 for Proxy {
         b = b.set_grant_read(try_into_aws(input.grant_read)?);
         b = b.set_grant_read_acp(try_into_aws(input.grant_read_acp)?);
         b = b.set_grant_write_acp(try_into_aws(input.grant_write_acp)?);
+        b = b.set_if_none_match(try_into_aws(input.if_none_match)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
         b = b.set_metadata(try_into_aws(input.metadata)?);
         b = b.set_object_lock_legal_hold_status(try_into_aws(input.object_lock_legal_hold_status)?);

@@ -989,12 +989,12 @@ pub type CacheControl = String;
 /// <p>Contains all the possible checksum or digest values for an object.</p>
 #[derive(Clone, Default)]
 pub struct Checksum {
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1164,12 +1164,12 @@ pub struct CompleteMultipartUploadInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32C checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32C checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -1185,6 +1185,11 @@ pub struct CompleteMultipartUploadInput {
     pub checksum_sha256: Option<ChecksumSHA256>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
+    /// <p>Uploads the object only if the object key name does not already exist in the bucket specified. Otherwise, Amazon S3 returns a <code>412 Precondition Failed</code> error.</p>
+    /// <p>If a conflicting operation occurs during the upload S3 returns a <code>409 ConditionalRequestConflict</code> response.  On a 409 failure you should re-initiate the multipart upload with <code>CreateMultipartUpload</code> and re-upload each part.</p>
+    /// <p>Expects the '*' (asterisk) character.</p>
+    /// <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>, or <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-requests.html">Conditional requests</a> in the <i>Amazon S3 User Guide</i>.</p>
+    pub if_none_match: Option<IfNoneMatch>,
     /// <p>Object key for which the multipart upload was initiated.</p>
     pub key: ObjectKey,
     /// <p>The container for the multipart upload request information.</p>
@@ -1237,6 +1242,9 @@ impl fmt::Debug for CompleteMultipartUploadInput {
         if let Some(ref val) = self.expected_bucket_owner {
             d.field("expected_bucket_owner", val);
         }
+        if let Some(ref val) = self.if_none_match {
+            d.field("if_none_match", val);
+        }
         d.field("key", &self.key);
         if let Some(ref val) = self.multipart_upload {
             d.field("multipart_upload", val);
@@ -1275,16 +1283,13 @@ pub struct CompleteMultipartUploadOutput {
     pub bucket: Option<BucketName>,
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1319,17 +1324,10 @@ pub struct CompleteMultipartUploadOutput {
     /// <p>The URI that identifies the newly created object.</p>
     pub location: Option<Location>,
     pub request_charged: Option<RequestCharged>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the newly created object, in case the bucket has versioning turned
     /// on.</p>
@@ -1410,12 +1408,12 @@ impl fmt::Debug for CompletedMultipartUpload {
 /// <p>Details of the parts that were uploaded.</p>
 #[derive(Clone, Default)]
 pub struct CompletedPart {
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1644,7 +1642,9 @@ pub struct CopyObjectInput {
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     /// <note>
-    /// <p>This functionality is not supported when the destination bucket is a directory bucket.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets  
+    /// to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
     /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Specifies the caching behavior along the request/reply chain.</p>
@@ -1945,51 +1945,80 @@ pub struct CopyObjectInput {
     /// <p>This functionality is not supported when the destination bucket is a directory bucket.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>Specifies the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
+    /// <p>Specifies the Amazon Web Services KMS Encryption Context as an additional encryption context to use for the destination object encryption. The value of
     /// this header is a base64-encoded UTF-8 string holding JSON with the encryption context
-    /// key-value pairs. This value must be explicitly added to specify encryption context for
-    /// <code>CopyObject</code> requests.</p>
-    /// <note>
-    /// <p>This functionality is not supported when the destination bucket is a directory bucket.</p>
-    /// </note>
+    /// key-value pairs.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - This value must be explicitly added to specify encryption context for
+    /// <code>CopyObject</code> requests if you want an additional encryption context for your destination object. The additional encryption context of the source object won't be copied to the destination object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html#encryption-context">Encryption context</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>Specifies the KMS ID (Key ID, Key ARN, or Key Alias) to use for object encryption. All GET and PUT requests for an
+    /// <p>Specifies the KMS key ID (Key ID, Key ARN, or Key Alias) to use for object encryption. All GET and PUT requests for an
     /// object protected by KMS will fail if they're not made via SSL or using SigV4. For
     /// information about configuring any of the officially supported Amazon Web Services SDKs and Amazon Web Services CLI, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version">Specifying the
     /// Signature Version in Request Authentication</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
-    /// <note>
-    /// <p>This functionality is not supported when the destination bucket is a directory bucket.</p>
-    /// </note>
+    /// <p>
+    /// <b>Directory buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code>, you must specify the <code>
+    /// x-amz-server-side-encryption-aws-kms-key-id</code> header with the ID (Key ID or Key ARN) of the KMS
+    /// symmetric encryption customer managed key to use. Otherwise, you get an HTTP <code>400 Bad Request</code> error. Only use the key ID or key ARN. The key alias format of the KMS key isn't supported. Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket.
+    /// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.
+    /// </p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
-    /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>). Unrecognized or unsupported values won’t write a destination object and will receive a <code>400 Bad Request</code> response. </p>
+    /// <p>The server-side encryption algorithm used when storing this object in Amazon S3. Unrecognized or unsupported values won’t write a destination object and will receive a <code>400 Bad Request</code> response. </p>
     /// <p>Amazon S3 automatically encrypts all new objects that are copied to an S3 bucket.
     /// When copying an object, if you don't specify encryption information in your copy
     /// request, the encryption setting of the target object is set to the default
     /// encryption configuration of the destination bucket. By default, all buckets have a
     /// base level of encryption configuration that uses server-side encryption with Amazon S3
-    /// managed keys (SSE-S3). If the destination bucket has a default encryption
-    /// configuration that uses server-side encryption with Key Management Service (KMS) keys
-    /// (SSE-KMS), dual-layer server-side encryption with Amazon Web Services KMS keys (DSSE-KMS), or
-    /// server-side encryption with customer-provided encryption keys (SSE-C), Amazon S3 uses
+    /// managed keys (SSE-S3). If the destination bucket has a different default encryption
+    /// configuration, Amazon S3 uses
+    /// the corresponding encryption key to encrypt the target
+    /// object copy.</p>
+    /// <p>With server-side
+    /// encryption, Amazon S3 encrypts your data as it writes your data to disks in its data
+    /// centers and decrypts the data when you access it. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using
+    /// Server-Side Encryption</a> in the
+    /// <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>General purpose buckets </b>
+    /// </p>
+    /// <ul>
+    /// <li>
+    /// <p>For general purpose buckets, there are the following supported options for server-side encryption: server-side encryption with Key Management Service (KMS) keys
+    /// (SSE-KMS), dual-layer server-side encryption with Amazon Web Services KMS keys (DSSE-KMS), and
+    /// server-side encryption with customer-provided encryption keys (SSE-C). Amazon S3 uses
     /// the corresponding KMS key, or a customer-provided key to encrypt the target
     /// object copy.</p>
+    /// </li>
+    /// <li>
     /// <p>When you perform a <code>CopyObject</code> operation, if you want to use a
     /// different type of encryption setting for the target object, you can specify
     /// appropriate encryption-related headers to encrypt the target object with an Amazon S3 managed key, a
     /// KMS key, or a customer-provided key. If the encryption setting in
     /// your request is different from the default encryption configuration of the
     /// destination bucket, the encryption setting in your request takes precedence. </p>
-    /// <p>With server-side
-    /// encryption, Amazon S3 encrypts your data as it writes your data to disks in its data
-    /// centers and decrypts the data when you access it. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using
-    /// Server-Side Encryption</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
+    /// </li>
+    /// </ul>
+    /// <p>
+    /// <b>Directory buckets </b>
+    /// </p>
+    /// <ul>
+    /// <li>
+    /// <p>For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your
+    /// <code>CreateSession</code> requests or <code>PUT</code> object requests. Then, new objects
+    /// are automatically encrypted with the desired encryption settings. For more
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-serv-side-encryption.html">Protecting data with server-side encryption</a> in the <i>Amazon S3 User Guide</i>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.</p>
+    /// </li>
+    /// <li>
+    /// <p>To encrypt new object copies to a directory bucket with SSE-KMS, we recommend you specify SSE-KMS as the directory bucket's default encryption configuration with a KMS key (specifically, a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a>).
+    /// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported. Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket. After you specify a customer managed key for SSE-KMS, you can't override the customer managed key for the bucket's SSE-KMS configuration.
+    /// Then, when you perform a <code>CopyObject</code> operation and want to specify server-side encryption settings for new object copies with SSE-KMS in the encryption-related request headers, you must ensure the encryption key is the same customer managed key that you specified for the directory bucket's default encryption configuration.
+    /// </p>
+    /// </li>
+    /// </ul>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>If the <code>x-amz-storage-class</code> header is not used, the copied object will be stored in the
     /// <code>STANDARD</code> Storage Class by default. The <code>STANDARD</code> storage class provides high durability and
@@ -2248,9 +2277,6 @@ impl CopyObjectInput {
 pub struct CopyObjectOutput {
     /// <p>Indicates whether the copied object uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Container for all response elements.</p>
     pub copy_object_result: Option<CopyObjectResult>,
@@ -2281,21 +2307,11 @@ pub struct CopyObjectOutput {
     /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The
     /// value of this header is a base64-encoded UTF-8 string holding JSON with the encryption
     /// context key-value pairs.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the newly created copy.</p>
     /// <note>
@@ -2347,11 +2363,11 @@ impl fmt::Debug for CopyObjectOutput {
 /// <p>Container for all response elements.</p>
 #[derive(Clone, Default)]
 pub struct CopyObjectResult {
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -2398,12 +2414,12 @@ impl fmt::Debug for CopyObjectResult {
 /// <p>Container for all response elements.</p>
 #[derive(Clone, Default)]
 pub struct CopyPartResult {
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -2667,14 +2683,16 @@ pub struct CreateMultipartUploadInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with
-    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS). Setting this header to
+    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS).</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - Setting this header to
     /// <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with
-    /// SSE-KMS.</p>
-    /// <p>Specifying this header with an object action doesn’t affect bucket-level settings for S3
+    /// SSE-KMS. Also, specifying this header with a PUT action doesn't affect bucket-level settings for S3
     /// Bucket Key.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>
+    /// <b>Directory buckets</b> - S3 Bucket Keys are always enabled for <code>GET</code> and <code>PUT</code> operations in a directory bucket and can’t be disabled. S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets  
+    /// to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-Batch-Ops">the Copy operation in Batch Operations</a>, or
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
@@ -3025,22 +3043,50 @@ pub struct CreateMultipartUploadInput {
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     /// <p>Specifies the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
-    /// this header is a base64-encoded UTF-8 string holding JSON with the encryption context
-    /// key-value pairs.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// this header is a Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>Specifies the ID (Key ID, Key ARN, or Key Alias) of the symmetric encryption customer managed key to use for object encryption.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>Specifies the KMS key ID (Key ID, Key ARN, or Key Alias) to use for object encryption. If the KMS key doesn't exist in the same
+    /// account that's issuing the command, you must use the full Key ARN not the Key ID.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code> or <code>aws:kms:dsse</code>, this header specifies the ID (Key ID, Key ARN, or Key Alias) of the KMS
+    /// key to use. If you specify
+    /// <code>x-amz-server-side-encryption:aws:kms</code> or
+    /// <code>x-amz-server-side-encryption:aws:kms:dsse</code>, but do not provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key
+    /// (<code>aws/s3</code>) to protect the data.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code>, you must specify the <code>
+    /// x-amz-server-side-encryption-aws-kms-key-id</code> header with the ID (Key ID or Key ARN) of the KMS
+    /// symmetric encryption customer managed key to use. Otherwise, you get an HTTP <code>400 Bad Request</code> error. Only use the key ID or key ARN. The key alias format of the KMS key isn't supported. Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket.
+    /// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.
+    /// </p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <b>Directory buckets </b> - For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your
+    /// <code>CreateSession</code> requests or <code>PUT</code> object requests. Then, new objects
+    /// are automatically encrypted with the desired encryption settings. For more
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-serv-side-encryption.html">Protecting data with server-side encryption</a> in the <i>Amazon S3 User Guide</i>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.         
+    /// </p>
+    /// <p>In the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>) using the REST API, the encryption request headers must match the encryption settings that are specified in the <code>CreateSession</code> request.
+    /// You can't override the values of the encryption settings (<code>x-amz-server-side-encryption</code>, <code>x-amz-server-side-encryption-aws-kms-key-id</code>, <code>x-amz-server-side-encryption-context</code>, and <code>x-amz-server-side-encryption-bucket-key-enabled</code>) that are specified in the <code>CreateSession</code> request.
+    /// You don't need to explicitly specify these encryption settings values in Zonal endpoint API calls, and   
+    /// Amazon S3 will use the encryption settings values from the <code>CreateSession</code> request to protect new objects in the directory bucket.
+    /// </p>
     /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
+    /// <p>When you use the CLI or the Amazon Web Services SDKs, for <code>CreateSession</code>, the session token refreshes automatically to avoid service interruptions when a session expires. The CLI or the Amazon Web Services SDKs use the bucket's default encryption configuration for the
+    /// <code>CreateSession</code> request. It's not supported to override the encryption settings values in the <code>CreateSession</code> request.
+    /// So in the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>),
+    /// the encryption request headers must match the default encryption configuration of the directory bucket.
+    ///
+    /// </p>
     /// </note>
+    /// </li>
+    /// </ul>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The
     /// STANDARD storage class provides high durability and high availability. Depending on
@@ -3201,9 +3247,6 @@ pub struct CreateMultipartUploadOutput {
     pub bucket: Option<BucketName>,
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
@@ -3223,24 +3266,13 @@ pub struct CreateMultipartUploadOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The
-    /// value of this header is a base64-encoded UTF-8 string holding JSON with the encryption
-    /// context key-value pairs.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
+    /// this header is a Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.</p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>ID for the initiated multipart upload.</p>
     pub upload_id: Option<MultipartUploadId>,
@@ -3336,7 +3368,7 @@ pub type Days = i32;
 
 pub type DaysAfterInitiation = i32;
 
-/// <p>The container element for specifying the default Object Lock retention settings for new
+/// <p>The container element for optionally specifying the default Object Lock retention settings for new
 /// objects placed in the specified bucket.</p>
 /// <note>
 /// <ul>
@@ -3486,8 +3518,18 @@ impl fmt::Debug for DeleteBucketCorsOutput {
 pub struct DeleteBucketEncryptionInput {
     /// <p>The name of the bucket containing the server-side encryption configuration to
     /// delete.</p>
+    /// <p>
+    /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
+    /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
+    /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// </p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
+    /// <note>
+    /// <p>For directory buckets, this header is not supported in this API operation. If you specify this header, the request fails with the HTTP status code
+    /// <code>501 Not Implemented</code>.</p>
+    /// </note>
     pub expected_bucket_owner: Option<AccountId>,
 }
 
@@ -4218,16 +4260,24 @@ pub struct DeleteObjectsInput {
     /// </code> with the supported algorithm from the following list: </p>
     /// <ul>
     /// <li>
-    /// <p>CRC32</p>
+    /// <p>
+    /// <code>CRC32</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>CRC32C</p>
+    /// <p>
+    /// <code>CRC32C</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA1</p>
+    /// <p>
+    /// <code>SHA1</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA256</p>
+    /// <p>
+    /// <code>SHA256</code>
+    /// </p>
     /// </li>
     /// </ul>
     /// <p>For more
@@ -4480,11 +4530,19 @@ pub type EmailAddress = String;
 
 pub type EnableRequestProgress = bool;
 
-/// <p>Requests Amazon S3 to encode the object keys in the response and specifies the encoding
-/// method to use. An object key can contain any Unicode character; however, the XML 1.0 parser
-/// cannot parse some characters, such as characters with an ASCII value from 0 to 10. For
-/// characters that are not supported in XML 1.0, you can add this parameter to request that
-/// Amazon S3 encode the keys in the response.</p>
+/// <p>Encoding type used by Amazon S3 to encode the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html">object keys</a> in the response.
+/// Responses are encoded only in UTF-8. An object key can contain any Unicode character.
+/// However, the XML 1.0 parser can't parse certain characters, such as characters with an
+/// ASCII value from 0 to 10. For characters that aren't supported in XML 1.0, you can add this
+/// parameter to request that Amazon S3 encode the keys in the response. For more information about
+/// characters to avoid in object key names, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-guidelines">Object key naming
+/// guidelines</a>.</p>
+/// <note>
+/// <p>When using the URL encoding type, non-ASCII characters that are used in an object's
+/// key name will be percent-encoded according to UTF-8 code values. For example, the object
+/// <code>test_file(3).png</code> will appear as
+/// <code>test_file%283%29.png</code>.</p>
+/// </note>
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EncodingType(Cow<'static, str>);
 
@@ -4553,6 +4611,12 @@ impl fmt::Debug for Encryption {
 
 /// <p>Specifies encryption-related information for an Amazon S3 bucket that is a destination for
 /// replicated objects.</p>
+/// <note>
+/// <p>If you're specifying a customer managed KMS key, we recommend using a fully qualified
+/// KMS key ARN. If you use a KMS key alias instead, then KMS resolves the key within the
+/// requester’s account. This behavior can result in data that's encrypted with a KMS key
+/// that belongs to the requester, and not the bucket owner.</p>
+/// </note>
 #[derive(Clone, Default)]
 pub struct EncryptionConfiguration {
     /// <p>Specifies the ID (Key ARN or Alias ARN) of the customer managed Amazon Web Services KMS key stored in
@@ -6530,9 +6594,11 @@ impl fmt::Debug for EventBridgeConfiguration {
 
 pub type EventList = List<Event>;
 
-/// <p>Optional configuration to replicate existing source bucket objects. For more
-/// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html#existing-object-replication">Replicating Existing Objects</a> in the <i>Amazon S3 User Guide</i>.
+/// <p>Optional configuration to replicate existing source bucket objects.
 /// </p>
+/// <note>
+/// <p>This parameter is no longer supported. To replicate existing objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html">Replicating existing objects with S3 Batch Replication</a> in the <i>Amazon S3 User Guide</i>.</p>
+/// </note>
 #[derive(Clone)]
 pub struct ExistingObjectReplication {
     /// <p>Specifies whether Amazon S3 replicates existing source bucket objects. </p>
@@ -6983,8 +7049,18 @@ impl fmt::Debug for GetBucketCorsOutput {
 pub struct GetBucketEncryptionInput {
     /// <p>The name of the bucket from which the server-side encryption configuration is
     /// retrieved.</p>
+    /// <p>
+    /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
+    /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
+    /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// </p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
+    /// <note>
+    /// <p>For directory buckets, this header is not supported in this API operation. If you specify this header, the request fails with the HTTP status code
+    /// <code>501 Not Implemented</code>.</p>
+    /// </note>
     pub expected_bucket_owner: Option<AccountId>,
 }
 
@@ -7136,6 +7212,20 @@ impl GetBucketLifecycleConfigurationInput {
 pub struct GetBucketLifecycleConfigurationOutput {
     /// <p>Container for a lifecycle rule.</p>
     pub rules: Option<LifecycleRules>,
+    /// <p>Indicates which default minimum object size behavior is applied to the lifecycle configuration.</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <code>all_storage_classes_128K</code> - Objects smaller than 128 KB will not transition to any storage class by default. </p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <code>varies_by_storage_class</code> - Objects smaller than 128 KB will transition to Glacier Flexible Retrieval or Glacier Deep Archive storage classes. By default, all other storage classes will prevent transitions smaller than 128 KB.
+    /// </p>
+    /// </li>
+    /// </ul>
+    /// <p>To customize the minimum object size for any transition you can add a filter that specifies a custom <code>ObjectSizeGreaterThan</code> or <code>ObjectSizeLessThan</code> in the body of your transition rule.  Custom filters always take precedence over the default transition behavior.</p>
+    pub transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize>,
 }
 
 impl fmt::Debug for GetBucketLifecycleConfigurationOutput {
@@ -7143,6 +7233,9 @@ impl fmt::Debug for GetBucketLifecycleConfigurationOutput {
         let mut d = f.debug_struct("GetBucketLifecycleConfigurationOutput");
         if let Some(ref val) = self.rules {
             d.field("rules", val);
+        }
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            d.field("transition_default_minimum_object_size", val);
         }
         d.finish_non_exhaustive()
     }
@@ -8052,6 +8145,11 @@ pub struct GetObjectInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>To retrieve the checksum, this mode must be enabled.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - In addition, if you enable checksum mode and the object is uploaded with a
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_Checksum.html">checksum</a>
+    /// and encrypted with an Key Management Service (KMS) key, you must have permission to use the
+    /// <code>kms:Decrypt</code> action to retrieve the checksum.</p>
     pub checksum_mode: Option<ChecksumMode>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -8399,17 +8497,14 @@ pub struct GetObjectOutput {
     pub body: Option<StreamingBlob>,
     /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -8522,17 +8617,9 @@ pub struct GetObjectOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
-    /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
-    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
+    /// <p>The server-side encryption algorithm used when you store this object in Amazon S3.</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Provides storage class information of the object. Amazon S3 returns this header for all
     /// objects except for S3 Standard storage class objects.</p>
@@ -9058,7 +9145,7 @@ impl HeadBucketInput {
 pub struct HeadBucketOutput {
     /// <p>Indicates whether the bucket name used in the request is an access point alias.</p>
     /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
+    /// <p>For directory buckets, the value of this field is <code>false</code>.</p>
     /// </note>
     pub access_point_alias: Option<AccessPointAlias>,
     /// <p>The name of the location where the bucket will be created.</p>
@@ -9073,9 +9160,6 @@ pub struct HeadBucketOutput {
     /// </note>
     pub bucket_location_type: Option<LocationType>,
     /// <p>The Region that the bucket is located.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_region: Option<Region>,
 }
 
@@ -9118,9 +9202,15 @@ pub struct HeadObjectInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>To retrieve the checksum, this parameter must be enabled.</p>
-    /// <p>In addition, if you enable <code>ChecksumMode</code> and the object is encrypted with
-    /// Amazon Web Services Key Management Service (Amazon Web Services KMS), you must have permission to use the
-    /// <code>kms:Decrypt</code> action for the request to succeed.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - If you enable checksum mode and the object is uploaded with a
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_Checksum.html">checksum</a>
+    /// and encrypted with an Key Management Service (KMS) key, you must have permission to use the
+    /// <code>kms:Decrypt</code> action to retrieve the checksum.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - If you enable <code>ChecksumMode</code> and the object is encrypted with
+    /// Amazon Web Services Key Management Service (Amazon Web Services KMS), you must also have the
+    /// <code>kms:GenerateDataKey</code> and <code>kms:Decrypt</code> permissions in IAM identity-based policies and KMS key policies for the KMS key to retrieve the checksum of the object.</p>
     pub checksum_mode: Option<ChecksumMode>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -9337,18 +9427,15 @@ pub struct HeadObjectOutput {
     pub archive_status: Option<ArchiveStatus>,
     /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -9505,17 +9592,10 @@ pub struct HeadObjectOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Provides storage class information of the object. Amazon S3 returns this header for all
     /// objects except for S3 Standard storage class objects.</p>
@@ -10562,23 +10642,44 @@ impl fmt::Debug for LifecycleRuleAndOperator {
 /// <p>The <code>Filter</code> is used to identify objects that a Lifecycle Rule applies to. A
 /// <code>Filter</code> can have exactly one of <code>Prefix</code>, <code>Tag</code>, <code>ObjectSizeGreaterThan</code>, <code>ObjectSizeLessThan</code>, or
 /// <code>And</code> specified. If the <code>Filter</code> element is left empty, the Lifecycle Rule applies to all objects in the bucket.</p>
-#[derive(Debug, Clone)]
-#[non_exhaustive]
-pub enum LifecycleRuleFilter {
-    And(LifecycleRuleAndOperator),
+#[derive(Clone, Default)]
+pub struct LifecycleRuleFilter {
+    pub and: Option<LifecycleRuleAndOperator>,
     /// <p>Minimum object size to which the rule applies.</p>
-    ObjectSizeGreaterThan(ObjectSizeGreaterThanBytes),
+    pub object_size_greater_than: Option<ObjectSizeGreaterThanBytes>,
     /// <p>Maximum object size to which the rule applies.</p>
-    ObjectSizeLessThan(ObjectSizeLessThanBytes),
+    pub object_size_less_than: Option<ObjectSizeLessThanBytes>,
     /// <p>Prefix identifying one or more objects to which the rule applies.</p>
     /// <important>
     /// <p>Replacement must be made for object keys containing special characters (such as carriage returns) when using
     /// XML requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-xml-related-constraints">
     /// XML related object key constraints</a>.</p>
     /// </important>
-    Prefix(Prefix),
+    pub prefix: Option<Prefix>,
     /// <p>This tag must exist in the object's tag set in order for the rule to apply.</p>
-    Tag(Tag),
+    pub tag: Option<Tag>,
+}
+
+impl fmt::Debug for LifecycleRuleFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("LifecycleRuleFilter");
+        if let Some(ref val) = self.and {
+            d.field("and", val);
+        }
+        if let Some(ref val) = self.object_size_greater_than {
+            d.field("object_size_greater_than", val);
+        }
+        if let Some(ref val) = self.object_size_less_than {
+            d.field("object_size_less_than", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tag {
+            d.field("tag", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type LifecycleRules = List<LifecycleRule>;
@@ -10858,11 +10959,27 @@ impl fmt::Debug for ListBucketMetricsConfigurationsOutput {
 }
 
 #[derive(Clone, Default)]
-pub struct ListBucketsInput {}
+pub struct ListBucketsInput {
+    /// <p>
+    /// <code>ContinuationToken</code> indicates to Amazon S3 that the list is being continued on
+    /// this bucket with a token. <code>ContinuationToken</code> is obfuscated and is not a real
+    /// key. You can use this <code>ContinuationToken</code> for pagination of the list results.  </p>
+    /// <p>Length Constraints: Minimum length of 0. Maximum length of 1024.</p>
+    /// <p>Required: No.</p>
+    pub continuation_token: Option<Token>,
+    /// <p>Maximum number of buckets to be returned in response. When the number is more than the count of buckets that are owned by an Amazon Web Services account, return all the buckets in response.</p>
+    pub max_buckets: Option<MaxBuckets>,
+}
 
 impl fmt::Debug for ListBucketsInput {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("ListBucketsInput");
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.max_buckets {
+            d.field("max_buckets", val);
+        }
         d.finish_non_exhaustive()
     }
 }
@@ -10878,6 +10995,10 @@ impl ListBucketsInput {
 pub struct ListBucketsOutput {
     /// <p>The list of buckets owned by the requester.</p>
     pub buckets: Option<Buckets>,
+    /// <p>
+    /// <code>ContinuationToken</code> is included in the
+    /// response when there are more buckets that can be listed with pagination. The next <code>ListBuckets</code> request to Amazon S3 can be continued with this <code>ContinuationToken</code>. <code>ContinuationToken</code> is obfuscated and is not a real bucket.</p>
+    pub continuation_token: Option<NextToken>,
     /// <p>The owner of the buckets listed.</p>
     pub owner: Option<Owner>,
 }
@@ -10887,6 +11008,9 @@ impl fmt::Debug for ListBucketsOutput {
         let mut d = f.debug_struct("ListBucketsOutput");
         if let Some(ref val) = self.buckets {
             d.field("buckets", val);
+        }
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
         }
         if let Some(ref val) = self.owner {
             d.field("owner", val);
@@ -11415,10 +11539,19 @@ pub struct ListObjectsOutput {
     /// in the response. Each rolled-up result counts as only one return against the
     /// <code>MaxKeys</code> value.</p>
     pub delimiter: Option<Delimiter>,
-    /// <p>Encoding type used by Amazon S3 to encode object keys in the response. If using
-    /// <code>url</code>, non-ASCII characters used in an object's key name will be URL encoded.
-    /// For example, the object <code>test_file(3).png</code> will appear as
+    /// <p>Encoding type used by Amazon S3 to encode the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html">object keys</a> in the response.
+    /// Responses are encoded only in UTF-8. An object key can contain any Unicode character.
+    /// However, the XML 1.0 parser can't parse certain characters, such as characters with an
+    /// ASCII value from 0 to 10. For characters that aren't supported in XML 1.0, you can add this
+    /// parameter to request that Amazon S3 encode the keys in the response. For more information about
+    /// characters to avoid in object key names, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-guidelines">Object key naming
+    /// guidelines</a>.</p>
+    /// <note>
+    /// <p>When using the URL encoding type, non-ASCII characters that are used in an object's
+    /// key name will be percent-encoded according to UTF-8 code values. For example, the object
+    /// <code>test_file(3).png</code> will appear as
     /// <code>test_file%283%29.png</code>.</p>
+    /// </note>
     pub encoding_type: Option<EncodingType>,
     /// <p>A flag that indicates whether Amazon S3 returned all of the results that satisfied the search
     /// criteria.</p>
@@ -11526,10 +11659,19 @@ pub struct ListObjectsV2Input {
     /// </ul>
     /// </note>
     pub delimiter: Option<Delimiter>,
-    /// <p>Encoding type used by Amazon S3 to encode object keys in the response. If using
-    /// <code>url</code>, non-ASCII characters used in an object's key name will be URL encoded.
-    /// For example, the object <code>test_file(3).png</code> will appear as
+    /// <p>Encoding type used by Amazon S3 to encode the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html">object keys</a> in the response.
+    /// Responses are encoded only in UTF-8. An object key can contain any Unicode character.
+    /// However, the XML 1.0 parser can't parse certain characters, such as characters with an
+    /// ASCII value from 0 to 10. For characters that aren't supported in XML 1.0, you can add this
+    /// parameter to request that Amazon S3 encode the keys in the response. For more information about
+    /// characters to avoid in object key names, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-guidelines">Object key naming
+    /// guidelines</a>.</p>
+    /// <note>
+    /// <p>When using the URL encoding type, non-ASCII characters that are used in an object's
+    /// key name will be percent-encoded according to UTF-8 code values. For example, the object
+    /// <code>test_file(3).png</code> will appear as
     /// <code>test_file%283%29.png</code>.</p>
+    /// </note>
     pub encoding_type: Option<EncodingType>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -12156,6 +12298,8 @@ impl FromStr for MFADeleteStatus {
 pub type Marker = String;
 
 pub type MaxAgeSeconds = i32;
+
+pub type MaxBuckets = i32;
 
 pub type MaxDirectoryBuckets = i32;
 
@@ -13176,11 +13320,11 @@ impl FromStr for ObjectOwnership {
 #[derive(Clone, Default)]
 pub struct ObjectPart {
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -13606,11 +13750,11 @@ impl fmt::Debug for ParquetInput {
 #[derive(Clone, Default)]
 pub struct Part {
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -13716,7 +13860,14 @@ impl FromStr for PartitionDateSource {
 /// <p>PartitionedPrefix defaults to EventTime delivery when server access logs are delivered.</p>
 #[derive(Clone, Default)]
 pub struct PartitionedPrefix {
-    /// <p>Specifies the partition date source for the partitioned prefix. PartitionDateSource can be EventTime or DeliveryTime.</p>
+    /// <p>Specifies the partition date source for the partitioned prefix.
+    /// <code>PartitionDateSource</code> can be <code>EventTime</code> or
+    /// <code>DeliveryTime</code>.</p>
+    /// <p>For <code>DeliveryTime</code>, the time in the log file names corresponds to the
+    /// delivery time for the log files. </p>
+    /// <p> For <code>EventTime</code>, The logs delivered are for a specific day only. The year,
+    /// month, and day correspond to the day on which the event occurred, and the hour, minutes and
+    /// seconds are set to 00 in the key.</p>
     pub partition_date_source: Option<PartitionDateSource>,
 }
 
@@ -13958,7 +14109,7 @@ pub struct PublicAccessBlockConfiguration {
     /// prevent new public ACLs from being set.</p>
     pub ignore_public_acls: Option<Setting>,
     /// <p>Specifies whether Amazon S3 should restrict public bucket policies for this bucket. Setting
-    /// this element to <code>TRUE</code> restricts access to this bucket to only Amazon Web Service principals and authorized users within this account if the bucket has
+    /// this element to <code>TRUE</code> restricts access to this bucket to only Amazon Web Servicesservice principals and authorized users within this account if the bucket has
     /// a public policy.</p>
     /// <p>Enabling this setting doesn't affect previously stored bucket policies, except that
     /// public and cross-account access within any public bucket policy, including non-public
@@ -14238,12 +14389,13 @@ impl fmt::Debug for PutBucketCorsOutput {
 #[derive(Clone)]
 pub struct PutBucketEncryptionInput {
     /// <p>Specifies default encryption for a bucket using server-side encryption with different
-    /// key options. By default, all buckets have a default encryption configuration that uses
-    /// server-side encryption with Amazon S3 managed keys (SSE-S3). You can optionally configure
-    /// default encryption for a bucket by using server-side encryption with an Amazon Web Services KMS key
-    /// (SSE-KMS) or a customer-provided key (SSE-C). For information about the bucket default
-    /// encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Bucket Default Encryption</a>
-    /// in the <i>Amazon S3 User Guide</i>.</p>
+    /// key options.</p>
+    /// <p>
+    /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
+    /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
+    /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// </p>
     pub bucket: BucketName,
     /// <p>Indicates the algorithm used to create the checksum for the object when you use the SDK. This header will not provide any
     /// additional functionality if you don't use the SDK. When you send this header, there must be a corresponding <code>x-amz-checksum</code> or
@@ -14252,12 +14404,22 @@ pub struct PutBucketEncryptionInput {
     /// the <i>Amazon S3 User Guide</i>.</p>
     /// <p>If you provide an individual checksum, Amazon S3 ignores any provided
     /// <code>ChecksumAlgorithm</code> parameter.</p>
+    /// <note>
+    /// <p>For directory buckets, when you use Amazon Web Services SDKs, <code>CRC32</code> is the default checksum algorithm that's used for performance.</p>
+    /// </note>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
     /// <p>The base64-encoded 128-bit MD5 digest of the server-side encryption
     /// configuration.</p>
     /// <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
+    /// <note>
+    /// <p>This functionality is not supported for directory buckets.</p>
+    /// </note>
     pub content_md5: Option<ContentMD5>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
+    /// <note>
+    /// <p>For directory buckets, this header is not supported in this API operation. If you specify this header, the request fails with the HTTP status code
+    /// <code>501 Not Implemented</code>.</p>
+    /// </note>
     pub expected_bucket_owner: Option<AccountId>,
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
@@ -14392,6 +14554,20 @@ pub struct PutBucketLifecycleConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
     /// <p>Container for lifecycle rules. You can add as many as 1,000 rules.</p>
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
+    /// <p>Indicates which default minimum object size behavior is applied to the lifecycle configuration.</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <code>all_storage_classes_128K</code> - Objects smaller than 128 KB will not transition to any storage class by default. </p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <code>varies_by_storage_class</code> - Objects smaller than 128 KB will transition to Glacier Flexible Retrieval or Glacier Deep Archive storage classes. By default, all other storage classes will prevent transitions smaller than 128 KB.
+    /// </p>
+    /// </li>
+    /// </ul>
+    /// <p>To customize the minimum object size for any transition you can add a filter that specifies a custom <code>ObjectSizeGreaterThan</code> or <code>ObjectSizeLessThan</code> in the body of your transition rule.  Custom filters always take precedence over the default transition behavior.</p>
+    pub transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize>,
 }
 
 impl fmt::Debug for PutBucketLifecycleConfigurationInput {
@@ -14407,6 +14583,9 @@ impl fmt::Debug for PutBucketLifecycleConfigurationInput {
         if let Some(ref val) = self.lifecycle_configuration {
             d.field("lifecycle_configuration", val);
         }
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            d.field("transition_default_minimum_object_size", val);
+        }
         d.finish_non_exhaustive()
     }
 }
@@ -14419,11 +14598,29 @@ impl PutBucketLifecycleConfigurationInput {
 }
 
 #[derive(Clone, Default)]
-pub struct PutBucketLifecycleConfigurationOutput {}
+pub struct PutBucketLifecycleConfigurationOutput {
+    /// <p>Indicates which default minimum object size behavior is applied to the lifecycle configuration.</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <code>all_storage_classes_128K</code> - Objects smaller than 128 KB will not transition to any storage class by default. </p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <code>varies_by_storage_class</code> - Objects smaller than 128 KB will transition to Glacier Flexible Retrieval or Glacier Deep Archive storage classes. By default, all other storage classes will prevent transitions smaller than 128 KB.
+    /// </p>
+    /// </li>
+    /// </ul>
+    /// <p>To customize the minimum object size for any transition you can add a filter that specifies a custom <code>ObjectSizeGreaterThan</code> or <code>ObjectSizeLessThan</code> in the body of your transition rule.  Custom filters always take precedence over the default transition behavior.</p>
+    pub transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize>,
+}
 
 impl fmt::Debug for PutBucketLifecycleConfigurationOutput {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("PutBucketLifecycleConfigurationOutput");
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            d.field("transition_default_minimum_object_size", val);
+        }
         d.finish_non_exhaustive()
     }
 }
@@ -14637,16 +14834,24 @@ pub struct PutBucketPolicyInput {
     /// </code> with the supported algorithm from the following list: </p>
     /// <ul>
     /// <li>
-    /// <p>CRC32</p>
+    /// <p>
+    /// <code>CRC32</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>CRC32C</p>
+    /// <p>
+    /// <code>CRC32C</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA1</p>
+    /// <p>
+    /// <code>SHA1</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA256</p>
+    /// <p>
+    /// <code>SHA256</code>
+    /// </p>
     /// </li>
     /// </ul>
     /// <p>For more
@@ -15196,14 +15401,16 @@ pub struct PutObjectInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with
-    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS). Setting this header to
+    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS).</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - Setting this header to
     /// <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with
-    /// SSE-KMS.</p>
-    /// <p>Specifying this header with a PUT action doesn’t affect bucket-level settings for S3
+    /// SSE-KMS. Also, specifying this header with a PUT action doesn't affect bucket-level settings for S3
     /// Bucket Key.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>
+    /// <b>Directory buckets</b> - S3 Bucket Keys are always enabled for <code>GET</code> and <code>PUT</code> operations in a directory bucket and can’t be disabled. S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets  
+    /// to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-Batch-Ops">the Copy operation in Batch Operations</a>, or
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Can be used to specify caching behavior along the request/reply chain. For more
     /// information, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9</a>.</p>
@@ -15218,16 +15425,24 @@ pub struct PutObjectInput {
     /// </code> with the supported algorithm from the following list: </p>
     /// <ul>
     /// <li>
-    /// <p>CRC32</p>
+    /// <p>
+    /// <code>CRC32</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>CRC32C</p>
+    /// <p>
+    /// <code>CRC32C</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA1</p>
+    /// <p>
+    /// <code>SHA1</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA256</p>
+    /// <p>
+    /// <code>SHA256</code>
+    /// </p>
     /// </li>
     /// </ul>
     /// <p>For more
@@ -15242,12 +15457,12 @@ pub struct PutObjectInput {
     /// </note>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32C checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32C checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -15343,6 +15558,11 @@ pub struct PutObjectInput {
     /// </ul>
     /// </note>
     pub grant_write_acp: Option<GrantWriteACP>,
+    /// <p>Uploads the object only if the object key name does not already exist in the bucket specified. Otherwise, Amazon S3 returns a <code>412 Precondition Failed</code> error.</p>
+    /// <p>If a conflicting operation occurs during the upload S3 returns a <code>409 ConditionalRequestConflict</code> response. On a 409 failure you should retry the upload.</p>
+    /// <p>Expects the '*' (asterisk) character.</p>
+    /// <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>, or <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-requests.html">Conditional requests</a> in the <i>Amazon S3 User Guide</i>.</p>
+    pub if_none_match: Option<IfNoneMatch>,
     /// <p>Object key for which the PUT action was initiated.</p>
     pub key: ObjectKey,
     /// <p>A map of metadata to store with the object in S3.</p>
@@ -15386,29 +15606,35 @@ pub struct PutObjectInput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>Specifies the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
-    /// this header is a base64-encoded UTF-8 string holding JSON with the encryption context
-    /// key-value pairs. This value is stored as object metadata and automatically gets passed on
-    /// to Amazon Web Services KMS for future <code>GetObject</code> or <code>CopyObject</code> operations on
-    /// this object. This value must be explicitly added during <code>CopyObject</code> operations.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>Specifies the Amazon Web Services KMS Encryption Context as an additional encryption context to use for object encryption. The value of
+    /// this header is a Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.
+    /// This value is stored as object metadata and automatically gets passed on
+    /// to Amazon Web Services KMS for future <code>GetObject</code> operations on
+    /// this object.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - This value must be explicitly added during <code>CopyObject</code> operations if you want an additional encryption context for your object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html#encryption-context">Encryption context</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If <code>x-amz-server-side-encryption</code> has a valid value of <code>aws:kms</code>
-    /// or <code>aws:kms:dsse</code>, this header specifies the ID (Key ID, Key ARN, or Key Alias) of the Key Management Service (KMS)
-    /// symmetric encryption customer managed key that was used for the object. If you specify
+    /// <p>Specifies the KMS key ID (Key ID, Key ARN, or Key Alias) to use for object encryption. If the KMS key doesn't exist in the same
+    /// account that's issuing the command, you must use the full Key ARN not the Key ID.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code> or <code>aws:kms:dsse</code>, this header specifies the ID (Key ID, Key ARN, or Key Alias) of the KMS
+    /// key to use. If you specify
     /// <code>x-amz-server-side-encryption:aws:kms</code> or
-    /// <code>x-amz-server-side-encryption:aws:kms:dsse</code>, but do not provide<code>
-    /// x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key
-    /// (<code>aws/s3</code>) to protect the data. If the KMS key does not exist in the same
-    /// account that's issuing the command, you must use the full ARN and not just the ID. </p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <code>x-amz-server-side-encryption:aws:kms:dsse</code>, but do not provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key
+    /// (<code>aws/s3</code>) to protect the data.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code>, you must specify the <code>
+    /// x-amz-server-side-encryption-aws-kms-key-id</code> header with the ID (Key ID or Key ARN) of the KMS
+    /// symmetric encryption customer managed key to use. Otherwise, you get an HTTP <code>400 Bad Request</code> error. Only use the key ID or key ARN. The key alias format of the KMS key isn't supported. Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket.
+    /// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.
+    /// </p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm that was used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
+    /// <ul>
+    /// <li>
     /// <p>
     /// <b>General purpose buckets </b> - You have four mutually exclusive options to protect data using server-side encryption in
     /// Amazon S3, depending on how you choose to manage the encryption keys. Specifically, the
@@ -15418,8 +15644,29 @@ pub struct PutObjectInput {
     /// encrypt data at rest by using server-side encryption with other key options. For more
     /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side
     /// Encryption</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// </li>
+    /// <li>
     /// <p>
-    /// <b>Directory buckets </b> - For directory buckets, only the server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) value is supported.</p>
+    /// <b>Directory buckets </b> - For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your
+    /// <code>CreateSession</code> requests or <code>PUT</code> object requests. Then, new objects
+    /// are automatically encrypted with the desired encryption settings. For more
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-serv-side-encryption.html">Protecting data with server-side encryption</a> in the <i>Amazon S3 User Guide</i>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.         
+    /// </p>
+    /// <p>In the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>) using the REST API, the encryption request headers must match the encryption settings that are specified in the <code>CreateSession</code> request.
+    /// You can't override the values of the encryption settings (<code>x-amz-server-side-encryption</code>, <code>x-amz-server-side-encryption-aws-kms-key-id</code>, <code>x-amz-server-side-encryption-context</code>, and <code>x-amz-server-side-encryption-bucket-key-enabled</code>) that are specified in the <code>CreateSession</code> request.
+    /// You don't need to explicitly specify these encryption settings values in Zonal endpoint API calls, and   
+    /// Amazon S3 will use the encryption settings values from the <code>CreateSession</code> request to protect new objects in the directory bucket.
+    /// </p>
+    /// <note>
+    /// <p>When you use the CLI or the Amazon Web Services SDKs, for <code>CreateSession</code>, the session token refreshes automatically to avoid service interruptions when a session expires. The CLI or the Amazon Web Services SDKs use the bucket's default encryption configuration for the
+    /// <code>CreateSession</code> request. It's not supported to override the encryption settings values in the <code>CreateSession</code> request.
+    /// So in the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>),
+    /// the encryption request headers must match the default encryption configuration of the directory bucket.
+    ///
+    /// </p>
+    /// </note>
+    /// </li>
+    /// </ul>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The
     /// STANDARD storage class provides high durability and high availability. Depending on
@@ -15533,6 +15780,9 @@ impl fmt::Debug for PutObjectInput {
         }
         if let Some(ref val) = self.grant_write_acp {
             d.field("grant_write_acp", val);
+        }
+        if let Some(ref val) = self.if_none_match {
+            d.field("if_none_match", val);
         }
         d.field("key", &self.key);
         if let Some(ref val) = self.metadata {
@@ -15742,16 +15992,13 @@ impl fmt::Debug for PutObjectLockConfigurationOutput {
 pub struct PutObjectOutput {
     /// <p>Indicates whether the uploaded object uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -15797,27 +16044,15 @@ pub struct PutObjectOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The
-    /// value of this header is a base64-encoded UTF-8 string holding JSON with the encryption
-    /// context key-value pairs. This value is stored as object metadata and automatically gets
-    /// passed on to Amazon Web Services KMS for future <code>GetObject</code> or <code>CopyObject</code>
+    /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
+    /// this header is a Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.
+    /// This value is stored as object metadata and automatically gets
+    /// passed on to Amazon Web Services KMS for future <code>GetObject</code>
     /// operations on this object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If <code>x-amz-server-side-encryption</code> has a valid value of <code>aws:kms</code>
-    /// or <code>aws:kms:dsse</code>, this header indicates the ID of the Key Management Service (KMS)
-    /// symmetric encryption customer managed key that was used for the object. </p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
-    /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
-    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
+    /// <p>The server-side encryption algorithm used when you store this object in Amazon S3.</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the object.</p>
     /// <p>If you enable versioning for a bucket, Amazon S3 automatically generates a unique version ID
@@ -16187,7 +16422,12 @@ pub type RecordDelimiter = String;
 /// <p>The container for the records event.</p>
 #[derive(Clone, Default)]
 pub struct RecordsEvent {
-    /// <p>The byte array of partial, one or more result records.</p>
+    /// <p>The byte array of partial, one or more result records. S3 Select doesn't guarantee that
+    /// a record will be self-contained in one record frame. To ensure continuous streaming of
+    /// data, S3 Select might split the same record across multiple record frames instead of
+    /// aggregating the results in memory. Some S3 clients (for example, the SDK for Java) handle this behavior by creating a <code>ByteStream</code> out of the response by
+    /// default. Other clients might not handle this behavior by default. In those cases, you must
+    /// aggregate the results on the client side and parse the response.</p>
     pub payload: Option<Body>,
 }
 
@@ -16378,9 +16618,11 @@ pub struct ReplicationRule {
     /// <p>A container for information about the replication destination and its configurations
     /// including enabling the S3 Replication Time Control (S3 RTC).</p>
     pub destination: Destination,
-    /// <p>Optional configuration to replicate existing source bucket objects. For more
-    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html#existing-object-replication">Replicating Existing Objects</a> in the <i>Amazon S3 User Guide</i>.
+    /// <p>Optional configuration to replicate existing source bucket objects.
     /// </p>
+    /// <note>
+    /// <p>This parameter is no longer supported. To replicate existing objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html">Replicating existing objects with S3 Batch Replication</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// </note>
     pub existing_object_replication: Option<ExistingObjectReplication>,
     pub filter: Option<ReplicationRuleFilter>,
     /// <p>A unique identifier for the rule. The maximum value is 255 characters.</p>
@@ -16480,9 +16722,8 @@ impl fmt::Debug for ReplicationRuleAndOperator {
 /// <p>A filter that identifies the subset of objects to which the replication rule applies. A
 /// <code>Filter</code> must specify exactly one <code>Prefix</code>, <code>Tag</code>, or
 /// an <code>And</code> child element.</p>
-#[derive(Debug, Clone)]
-#[non_exhaustive]
-pub enum ReplicationRuleFilter {
+#[derive(Clone, Default)]
+pub struct ReplicationRuleFilter {
     /// <p>A container for specifying rule filters. The filters determine the subset of objects to
     /// which the rule applies. This element is required only if you specify more than one filter.
     /// For example: </p>
@@ -16496,7 +16737,7 @@ pub enum ReplicationRuleFilter {
     /// in an <code>And</code> tag.</p>
     /// </li>
     /// </ul>
-    And(ReplicationRuleAndOperator),
+    pub and: Option<ReplicationRuleAndOperator>,
     /// <p>An object key name prefix that identifies the subset of objects to which the rule
     /// applies.</p>
     /// <important>
@@ -16504,10 +16745,26 @@ pub enum ReplicationRuleFilter {
     /// XML requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-xml-related-constraints">
     /// XML related object key constraints</a>.</p>
     /// </important>
-    Prefix(Prefix),
+    pub prefix: Option<Prefix>,
     /// <p>A container for specifying a tag key and value. </p>
     /// <p>The rule applies only to objects that have the tag in their tag set.</p>
-    Tag(Tag),
+    pub tag: Option<Tag>,
+}
+
+impl fmt::Debug for ReplicationRuleFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ReplicationRuleFilter");
+        if let Some(ref val) = self.and {
+            d.field("and", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tag {
+            d.field("tag", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -16908,10 +17165,18 @@ pub struct RestoreRequest {
     pub glacier_job_parameters: Option<GlacierJobParameters>,
     /// <p>Describes the location where the restore job's output is stored.</p>
     pub output_location: Option<OutputLocation>,
+    /// <important>
+    /// <p>Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+    /// </p>
+    /// </important>
     /// <p>Describes the parameters for Select job types.</p>
     pub select_parameters: Option<SelectParameters>,
     /// <p>Retrieval tier at which the restore will be processed.</p>
     pub tier: Option<Tier>,
+    /// <important>
+    /// <p>Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+    /// </p>
+    /// </important>
     /// <p>Type of restore request.</p>
     pub type_: Option<RestoreRequestType>,
 }
@@ -17205,6 +17470,10 @@ pub enum SelectObjectContentEvent {
     Stats(StatsEvent),
 }
 
+/// <note>
+/// <p>Learn Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+/// </p>
+/// </note>
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query
 /// Language (SQL) statement. In the request, along with the SQL expression, you must specify a
 /// data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data
@@ -17282,6 +17551,10 @@ impl fmt::Debug for SelectObjectContentOutput {
     }
 }
 
+/// <note>
+/// <p>Learn Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+/// </p>
+/// </note>
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query
 /// Language (SQL) statement. In the request, along with the SQL expression, you must specify a
 /// data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data
@@ -17344,9 +17617,19 @@ impl fmt::Debug for SelectObjectContentRequest {
     }
 }
 
+/// <important>
+/// <p>Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+/// </p>
+/// </important>
 /// <p>Describes the parameters for Select job types.</p>
+/// <p>Learn <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">How to optimize querying your data in Amazon S3</a>  using
+/// <a href="https://docs.aws.amazon.com/athena/latest/ug/what-is.html">Amazon Athena</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/transforming-objects.html">S3 Object Lambda</a>, or client-side filtering.</p>
 #[derive(Clone)]
 pub struct SelectParameters {
+    /// <important>
+    /// <p>Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+    /// </p>
+    /// </important>
     /// <p>The expression that is used to query the object.</p>
     pub expression: Expression,
     /// <p>The type of the provided expression (for example, SQL).</p>
@@ -17410,16 +17693,46 @@ impl FromStr for ServerSideEncryption {
 
 /// <p>Describes the default server-side encryption to apply to new objects in the bucket. If a
 /// PUT Object request doesn't specify any server-side encryption, this default encryption will
-/// be applied. If you don't specify a customer managed key at configuration, Amazon S3 automatically creates
-/// an Amazon Web Services KMS key in your Amazon Web Services account the first time that you add an object encrypted
-/// with SSE-KMS to a bucket. By default, Amazon S3 uses this KMS key for SSE-KMS. For more
-/// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PUT Bucket encryption</a> in
-/// the <i>Amazon S3 API Reference</i>.</p>
+/// be applied. For more
+/// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PutBucketEncryption</a>.</p>
+/// <note>
+/// <ul>
+/// <li>
+/// <p>
+/// <b>General purpose buckets</b> - If you don't specify a customer managed key at configuration, Amazon S3 automatically creates
+/// an Amazon Web Services KMS key (<code>aws/s3</code>) in your Amazon Web Services account the first time that you add an object encrypted
+/// with SSE-KMS to a bucket. By default, Amazon S3 uses this KMS key for SSE-KMS. </p>
+/// </li>
+/// <li>
+/// <p>
+/// <b>Directory buckets</b> - Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket.
+/// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.
+/// </p>
+/// </li>
+/// <li>
+/// <p>
+/// <b>Directory buckets</b> - For directory buckets, there are only two supported options for server-side encryption: SSE-S3 and SSE-KMS.</p>
+/// </li>
+/// </ul>
+/// </note>
 #[derive(Clone)]
 pub struct ServerSideEncryptionByDefault {
-    /// <p>Amazon Web Services Key Management Service (KMS) customer Amazon Web Services KMS key ID to use for the default
-    /// encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
+    /// <p>Amazon Web Services Key Management Service (KMS) customer managed key ID to use for the default
+    /// encryption. </p>
+    /// <note>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <b>General purpose buckets</b> - This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
     /// <code>aws:kms</code> or <code>aws:kms:dsse</code>.</p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <b>Directory buckets</b> - This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
+    /// <code>aws:kms</code>.</p>
+    /// </li>
+    /// </ul>
+    /// </note>
     /// <p>You can specify the key ID, key alias, or the Amazon Resource Name (ARN) of the KMS
     /// key.</p>
     /// <ul>
@@ -17436,16 +17749,34 @@ pub struct ServerSideEncryptionByDefault {
     /// </p>
     /// </li>
     /// </ul>
-    /// <p>If you use a key ID, you can run into a LogDestination undeliverable error when creating
-    /// a VPC flow log. </p>
-    /// <p>If you are using encryption with cross-account or Amazon Web Services service operations you must use
+    /// <p>If you are using encryption with cross-account or Amazon Web Services service operations, you must use
     /// a fully qualified KMS key ARN. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html#bucket-encryption-update-bucket-policy">Using encryption for cross-account operations</a>.</p>
+    /// <note>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <b>General purpose buckets</b> - If you're specifying a customer managed KMS key, we recommend using a fully qualified
+    /// KMS key ARN. If you use a KMS key alias instead, then KMS resolves the key within the
+    /// requester’s account. This behavior can result in data that's encrypted with a KMS key
+    /// that belongs to the requester, and not the bucket owner. Also, if you use a key ID, you can run into a LogDestination undeliverable error when creating
+    /// a VPC flow log.
+    /// </p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <b>Directory buckets</b> - When you specify an <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">KMS customer managed key</a> for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported.</p>
+    /// </li>
+    /// </ul>
+    /// </note>
     /// <important>
     /// <p>Amazon S3 only supports symmetric encryption KMS keys. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Asymmetric keys in Amazon Web Services KMS</a> in the <i>Amazon Web Services Key Management Service
     /// Developer Guide</i>.</p>
     /// </important>
     pub kms_master_key_id: Option<SSEKMSKeyId>,
     /// <p>Server-side encryption algorithm to use for the default encryption.</p>
+    /// <note>
+    /// <p>For directory buckets, there are only two supported values for server-side encryption: <code>AES256</code> and <code>aws:kms</code>.</p>
+    /// </note>
     pub sse_algorithm: ServerSideEncryption,
 }
 
@@ -17477,6 +17808,21 @@ impl fmt::Debug for ServerSideEncryptionConfiguration {
 }
 
 /// <p>Specifies the default server-side encryption configuration.</p>
+/// <note>
+/// <ul>
+/// <li>
+/// <p>
+/// <b>General purpose buckets</b> - If you're specifying a customer managed KMS key, we recommend using a fully qualified
+/// KMS key ARN. If you use a KMS key alias instead, then KMS resolves the key within the
+/// requester’s account. This behavior can result in data that's encrypted with a KMS key
+/// that belongs to the requester, and not the bucket owner.</p>
+/// </li>
+/// <li>
+/// <p>
+/// <b>Directory buckets</b> - When you specify an <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">KMS customer managed key</a> for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported.</p>
+/// </li>
+/// </ul>
+/// </note>
 #[derive(Clone, Default)]
 pub struct ServerSideEncryptionRule {
     /// <p>Specifies the default server-side encryption to apply to new objects in the bucket. If a
@@ -17486,9 +17832,22 @@ pub struct ServerSideEncryptionRule {
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS
     /// (SSE-KMS) for new objects in the bucket. Existing objects are not affected. Setting the
     /// <code>BucketKeyEnabled</code> element to <code>true</code> causes Amazon S3 to use an S3
-    /// Bucket Key. By default, S3 Bucket Key is not enabled.</p>
-    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the
+    /// Bucket Key. </p>
+    /// <note>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <b>General purpose buckets</b> - By default, S3 Bucket Key is not enabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <b>Directory buckets</b> - S3 Bucket Keys are always enabled for <code>GET</code> and <code>PUT</code> operations in a directory bucket and can’t be disabled. S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets  
+    /// to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-Batch-Ops">the Copy operation in Batch Operations</a>, or
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
+    /// </li>
+    /// </ul>
+    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
 }
 
@@ -17512,7 +17871,7 @@ pub type SessionCredentialValue = String;
 /// <p>The established temporary security credentials of the session.</p>
 /// <note>
 /// <p>
-/// <b>Directory buckets</b> - These session credentials are only supported for the authentication and authorization of Zonal endpoint APIs on directory buckets.</p>
+/// <b>Directory buckets</b> - These session credentials are only supported for the authentication and authorization of Zonal endpoint API operations on directory buckets.</p>
 /// </note>
 #[derive(Clone)]
 pub struct SessionCredentials {
@@ -18136,6 +18495,44 @@ impl fmt::Debug for Transition {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TransitionDefaultMinimumObjectSize(Cow<'static, str>);
+
+impl TransitionDefaultMinimumObjectSize {
+    pub const ALL_STORAGE_CLASSES_128K: &'static str = "all_storage_classes_128K";
+
+    pub const VARIES_BY_STORAGE_CLASS: &'static str = "varies_by_storage_class";
+
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+
+    #[must_use]
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for TransitionDefaultMinimumObjectSize {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<TransitionDefaultMinimumObjectSize> for Cow<'static, str> {
+    fn from(s: TransitionDefaultMinimumObjectSize) -> Self {
+        s.0
+    }
+}
+
+impl FromStr for TransitionDefaultMinimumObjectSize {
+    type Err = Infallible;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self::from(s.to_owned()))
+    }
+}
+
 pub type TransitionList = List<Transition>;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -18472,9 +18869,6 @@ impl UploadPartCopyInput {
 pub struct UploadPartCopyOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Container for all response elements.</p>
     pub copy_part_result: Option<CopyPartResult>,
@@ -18498,17 +18892,10 @@ pub struct UploadPartCopyOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
@@ -18574,12 +18961,12 @@ pub struct UploadPartInput {
     /// supplied in the <code>CreateMultipartUpload</code> request.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32C checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32C checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -18698,16 +19085,13 @@ impl UploadPartInput {
 pub struct UploadPartOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -18738,17 +19122,10 @@ pub struct UploadPartOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
@@ -18873,7 +19250,7 @@ pub struct WriteGetObjectResponseInput {
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
     /// <p>This header can be used as a data integrity check to verify that the data received is
-    /// the same data that was originally sent. This specifies the base64-encoded, 32-bit CRC32
+    /// the same data that was originally sent. This specifies the base64-encoded, 32-bit CRC-32
     /// checksum of the object returned by the Object Lambda function. This may not match the
     /// checksum for the object stored in Amazon S3. Amazon S3 will perform validation of the checksum values
     /// only when the original <code>GetObject</code> request required checksum validation. For
@@ -18884,7 +19261,7 @@ pub struct WriteGetObjectResponseInput {
     /// <p></p>
     pub checksum_crc32: Option<ChecksumCRC32>,
     /// <p>This header can be used as a data integrity check to verify that the data received is
-    /// the same data that was originally sent. This specifies the base64-encoded, 32-bit CRC32C
+    /// the same data that was originally sent. This specifies the base64-encoded, 32-bit CRC-32C
     /// checksum of the object returned by the Object Lambda function. This may not match the
     /// checksum for the object stored in Amazon S3. Amazon S3 will perform validation of the checksum values
     /// only when the original <code>GetObject</code> request required checksum validation. For
@@ -19432,6 +19809,8 @@ pub mod builders {
 
         expected_bucket_owner: Option<AccountId>,
 
+        if_none_match: Option<IfNoneMatch>,
+
         key: Option<ObjectKey>,
 
         multipart_upload: Option<CompletedMultipartUpload>,
@@ -19475,6 +19854,11 @@ pub mod builders {
 
         pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) -> &mut Self {
+            self.if_none_match = field;
             self
         }
 
@@ -19550,6 +19934,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn if_none_match(mut self, field: Option<IfNoneMatch>) -> Self {
+            self.if_none_match = field;
+            self
+        }
+
+        #[must_use]
         pub fn key(mut self, field: ObjectKey) -> Self {
             self.key = Some(field);
             self
@@ -19598,6 +19988,7 @@ pub mod builders {
             let checksum_sha1 = self.checksum_sha1;
             let checksum_sha256 = self.checksum_sha256;
             let expected_bucket_owner = self.expected_bucket_owner;
+            let if_none_match = self.if_none_match;
             let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
             let multipart_upload = self.multipart_upload;
             let request_payer = self.request_payer;
@@ -19612,6 +20003,7 @@ pub mod builders {
                 checksum_sha1,
                 checksum_sha256,
                 expected_bucket_owner,
+                if_none_match,
                 key,
                 multipart_upload,
                 request_payer,
@@ -24244,11 +24636,42 @@ pub mod builders {
 
     /// A builder for [`ListBucketsInput`]
     #[derive(Default)]
-    pub struct ListBucketsInputBuilder {}
+    pub struct ListBucketsInputBuilder {
+        continuation_token: Option<Token>,
+
+        max_buckets: Option<MaxBuckets>,
+    }
 
     impl ListBucketsInputBuilder {
+        pub fn set_continuation_token(&mut self, field: Option<Token>) -> &mut Self {
+            self.continuation_token = field;
+            self
+        }
+
+        pub fn set_max_buckets(&mut self, field: Option<MaxBuckets>) -> &mut Self {
+            self.max_buckets = field;
+            self
+        }
+
+        #[must_use]
+        pub fn continuation_token(mut self, field: Option<Token>) -> Self {
+            self.continuation_token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn max_buckets(mut self, field: Option<MaxBuckets>) -> Self {
+            self.max_buckets = field;
+            self
+        }
+
         pub fn build(self) -> Result<ListBucketsInput, BuildError> {
-            Ok(ListBucketsInput {})
+            let continuation_token = self.continuation_token;
+            let max_buckets = self.max_buckets;
+            Ok(ListBucketsInput {
+                continuation_token,
+                max_buckets,
+            })
         }
     }
 
@@ -25681,6 +26104,8 @@ pub mod builders {
         expected_bucket_owner: Option<AccountId>,
 
         lifecycle_configuration: Option<BucketLifecycleConfiguration>,
+
+        transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize>,
     }
 
     impl PutBucketLifecycleConfigurationInputBuilder {
@@ -25701,6 +26126,14 @@ pub mod builders {
 
         pub fn set_lifecycle_configuration(&mut self, field: Option<BucketLifecycleConfiguration>) -> &mut Self {
             self.lifecycle_configuration = field;
+            self
+        }
+
+        pub fn set_transition_default_minimum_object_size(
+            &mut self,
+            field: Option<TransitionDefaultMinimumObjectSize>,
+        ) -> &mut Self {
+            self.transition_default_minimum_object_size = field;
             self
         }
 
@@ -25728,16 +26161,24 @@ pub mod builders {
             self
         }
 
+        #[must_use]
+        pub fn transition_default_minimum_object_size(mut self, field: Option<TransitionDefaultMinimumObjectSize>) -> Self {
+            self.transition_default_minimum_object_size = field;
+            self
+        }
+
         pub fn build(self) -> Result<PutBucketLifecycleConfigurationInput, BuildError> {
             let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
             let checksum_algorithm = self.checksum_algorithm;
             let expected_bucket_owner = self.expected_bucket_owner;
             let lifecycle_configuration = self.lifecycle_configuration;
+            let transition_default_minimum_object_size = self.transition_default_minimum_object_size;
             Ok(PutBucketLifecycleConfigurationInput {
                 bucket,
                 checksum_algorithm,
                 expected_bucket_owner,
                 lifecycle_configuration,
+                transition_default_minimum_object_size,
             })
         }
     }
@@ -26665,6 +27106,8 @@ pub mod builders {
 
         grant_write_acp: Option<GrantWriteACP>,
 
+        if_none_match: Option<IfNoneMatch>,
+
         key: Option<ObjectKey>,
 
         metadata: Option<Metadata>,
@@ -26804,6 +27247,11 @@ pub mod builders {
 
         pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) -> &mut Self {
             self.grant_write_acp = field;
+            self
+        }
+
+        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) -> &mut Self {
+            self.if_none_match = field;
             self
         }
 
@@ -27015,6 +27463,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn if_none_match(mut self, field: Option<IfNoneMatch>) -> Self {
+            self.if_none_match = field;
+            self
+        }
+
+        #[must_use]
         pub fn key(mut self, field: ObjectKey) -> Self {
             self.key = Some(field);
             self
@@ -27127,6 +27581,7 @@ pub mod builders {
             let grant_read = self.grant_read;
             let grant_read_acp = self.grant_read_acp;
             let grant_write_acp = self.grant_write_acp;
+            let if_none_match = self.if_none_match;
             let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
             let metadata = self.metadata;
             let object_lock_legal_hold_status = self.object_lock_legal_hold_status;
@@ -27165,6 +27620,7 @@ pub mod builders {
                 grant_read,
                 grant_read_acp,
                 grant_write_acp,
+                if_none_match,
                 key,
                 metadata,
                 object_lock_legal_hold_status,
