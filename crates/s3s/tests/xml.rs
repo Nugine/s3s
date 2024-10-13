@@ -1,4 +1,4 @@
-use crate::xml;
+use s3s::xml;
 
 use std::fmt;
 
@@ -64,7 +64,7 @@ where
 
 /// See <https://github.com/Nugine/s3s/issues/2>
 #[test]
-fn d001() {
+fn completed_multipart_upload() {
     let input = r#"
         <CompleteMultipartUpload>
             <Part>
@@ -82,7 +82,7 @@ fn d001() {
         </CompleteMultipartUpload>
     "#;
 
-    let ans = deserialize::<crate::dto::CompletedMultipartUpload>(input.as_bytes()).unwrap();
+    let ans = deserialize::<s3s::dto::CompletedMultipartUpload>(input.as_bytes()).unwrap();
 
     let parts = ans.parts.as_deref().unwrap();
     assert_eq!(parts.len(), 3);
@@ -100,8 +100,9 @@ fn d001() {
 }
 
 #[test]
-fn d002() {
-    let input = r#"
+fn select_object_content_request() {
+    {
+        let input = r#"
         <SelectObjectContentRequest xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
             <Expression>select * from s3object</Expression>
             <ExpressionType>SQL</ExpressionType>
@@ -125,18 +126,44 @@ fn d002() {
         </SelectObjectContentRequest>
     "#;
 
-    let ans = deserialize::<crate::dto::SelectObjectContentRequest>(input.as_bytes()).unwrap();
+        let ans = deserialize::<s3s::dto::SelectObjectContentRequest>(input.as_bytes()).unwrap();
 
-    {
-        let csv = ans.input_serialization.csv.as_ref().unwrap();
-        assert_eq!(csv.allow_quoted_record_delimiter, Some(false));
+        {
+            let csv = ans.input_serialization.csv.as_ref().unwrap();
+            assert_eq!(csv.allow_quoted_record_delimiter, Some(false));
+        }
+
+        test_serde(&ans);
     }
 
-    test_serde(&ans);
+    {
+        let input = r#"
+    <SelectObjectContentRequest xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+        <Expression>select * from s3object</Expression>
+        <ExpressionType>SQL</ExpressionType>
+        <InputSerialization>
+            <CSV />
+        </InputSerialization>
+        <OutputSerialization>
+            <CSV />
+        </OutputSerialization>
+        <RequestProgress>
+            <Enabled>true</Enabled>
+        </RequestProgress>
+    </SelectObjectContentRequest>
+"#;
+
+        let ans = deserialize::<s3s::dto::SelectObjectContentRequest>(input.as_bytes()).unwrap();
+
+        assert!(ans.input_serialization.csv.is_some());
+        assert!(ans.output_serialization.csv.is_some());
+
+        test_serde(&ans);
+    }
 }
 
 #[test]
-fn d003() {
+fn tagging() {
     let input = r#"
         <Tagging xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
             <TagSet>
@@ -148,7 +175,7 @@ fn d003() {
         </Tagging>
     "#;
 
-    let ans = deserialize::<crate::dto::Tagging>(input.as_bytes()).unwrap();
+    let ans = deserialize::<s3s::dto::Tagging>(input.as_bytes()).unwrap();
 
     assert_eq!(ans.tag_set.len(), 1);
     let tag = &ans.tag_set[0];
@@ -159,34 +186,8 @@ fn d003() {
 }
 
 #[test]
-fn d004() {
-    let input = r#"
-        <SelectObjectContentRequest xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
-            <Expression>select * from s3object</Expression>
-            <ExpressionType>SQL</ExpressionType>
-            <InputSerialization>
-                <CSV />
-            </InputSerialization>
-            <OutputSerialization>
-                <CSV />
-            </OutputSerialization>
-            <RequestProgress>
-                <Enabled>true</Enabled>
-            </RequestProgress>
-        </SelectObjectContentRequest>
-    "#;
-
-    let ans = deserialize::<crate::dto::SelectObjectContentRequest>(input.as_bytes()).unwrap();
-
-    assert!(ans.input_serialization.csv.is_some());
-    assert!(ans.output_serialization.csv.is_some());
-
-    test_serde(&ans);
-}
-
-#[test]
-fn s001() {
-    let val = crate::dto::LifecycleExpiration {
+fn lifecycle_expiration() {
+    let val = s3s::dto::LifecycleExpiration {
         date: None,
         days: Some(365),
         expired_object_delete_marker: None,
@@ -201,10 +202,10 @@ fn s001() {
 }
 
 #[test]
-fn s002() {
+fn get_bucket_location_output() {
     {
-        let us_west_2 = crate::dto::BucketLocationConstraint::from_static(crate::dto::BucketLocationConstraint::US_WEST_2);
-        let val = crate::dto::GetBucketLocationOutput {
+        let us_west_2 = s3s::dto::BucketLocationConstraint::from_static(s3s::dto::BucketLocationConstraint::US_WEST_2);
+        let val = s3s::dto::GetBucketLocationOutput {
             location_constraint: Some(us_west_2),
         };
 
@@ -216,7 +217,7 @@ fn s002() {
         test_serde(&val);
     }
     {
-        let val = crate::dto::GetBucketLocationOutput {
+        let val = s3s::dto::GetBucketLocationOutput {
             location_constraint: None,
         };
 
