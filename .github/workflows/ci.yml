@@ -94,3 +94,22 @@ jobs:
         with:
           name: e2e-mint-logs
           path: ./target/s3s-proxy.log
+
+  e2e-fs:
+    needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
+    name: e2e (s3s-fs, s3s-e2e)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: stable
+      - uses: Swatinem/rust-cache@v2
+      - run: ./scripts/e2e-fs.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: e2e-fs-logs
+          path: |
+            ./target/s3s-fs.log
+            ./target/s3s-e2e.log
