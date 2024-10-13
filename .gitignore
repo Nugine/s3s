@@ -3,3 +3,4 @@
 .vscode
 
 /codegen/s3.json
+.env
