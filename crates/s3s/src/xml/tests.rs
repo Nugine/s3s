@@ -1,5 +1,17 @@
 use crate::xml;
 
+use std::fmt;
+
+fn deserialize_content<T>(input: &[u8]) -> xml::DeResult<T>
+where
+    T: for<'xml> xml::DeserializeContent<'xml>,
+{
+    let mut d = xml::Deserializer::new(input);
+    let ans = T::deserialize_content(&mut d)?;
+    d.expect_eof()?;
+    Ok(ans)
+}
+
 fn deserialize<T>(input: &[u8]) -> xml::DeResult<T>
 where
     T: for<'xml> xml::Deserialize<'xml>,
@@ -26,6 +38,28 @@ fn serialize<T: xml::Serialize>(val: &T) -> xml::SerResult<String> {
         val.serialize(&mut ser)?;
     }
     Ok(String::from_utf8(buf).unwrap())
+}
+
+fn test_serde<T>(val: &T)
+where
+    T: for<'xml> xml::Deserialize<'xml>,
+    T: xml::Serialize,
+    T: fmt::Debug + PartialEq,
+{
+    let xml = serialize(val).unwrap();
+    let ans = deserialize::<T>(xml.as_bytes()).unwrap();
+    assert_eq!(*val, ans);
+}
+
+fn test_serde_content<T>(val: &T)
+where
+    T: for<'xml> xml::DeserializeContent<'xml>,
+    T: xml::SerializeContent,
+    T: fmt::Debug + PartialEq,
+{
+    let xml = serialize_content(val).unwrap();
+    let ans = deserialize_content::<T>(xml.as_bytes()).unwrap();
+    assert_eq!(*val, ans);
 }
 
 /// See <https://github.com/Nugine/s3s/issues/2>
@@ -61,6 +95,8 @@ fn d001() {
 
     assert_eq!(parts[2].part_number, Some(3));
     assert_eq!(parts[2].e_tag.as_deref(), Some("\"acbd18db4cc2f85cedef654fccc4a4d8\""));
+
+    test_serde(&ans);
 }
 
 #[test]
@@ -95,6 +131,8 @@ fn d002() {
         let csv = ans.input_serialization.csv.as_ref().unwrap();
         assert_eq!(csv.allow_quoted_record_delimiter, Some(false));
     }
+
+    test_serde(&ans);
 }
 
 #[test]
@@ -116,6 +154,8 @@ fn d003() {
     let tag = &ans.tag_set[0];
     assert_eq!(tag.key, "Key4");
     assert_eq!(tag.value, "Value4");
+
+    test_serde(&ans);
 }
 
 #[test]
@@ -140,6 +180,8 @@ fn d004() {
 
     assert!(ans.input_serialization.csv.is_some());
     assert!(ans.output_serialization.csv.is_some());
+
+    test_serde(&ans);
 }
 
 #[test]
@@ -154,6 +196,8 @@ fn s001() {
     let expected = "<Days>365</Days>";
 
     assert_eq!(ans, expected);
+
+    test_serde_content(&val);
 }
 
 #[test]
@@ -168,6 +212,8 @@ fn s002() {
         let expected = "<LocationConstraint>us-west-2</LocationConstraint>";
 
         assert_eq!(ans, expected);
+
+        test_serde(&val);
     }
     {
         let val = crate::dto::GetBucketLocationOutput {
@@ -178,5 +224,7 @@ fn s002() {
         let expected = "<LocationConstraint></LocationConstraint>";
 
         assert_eq!(ans, expected);
+
+        test_serde(&val);
     }
 }
