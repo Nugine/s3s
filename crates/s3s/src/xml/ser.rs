@@ -115,6 +115,7 @@ impl<W: Write> Serializer<W> {
         self.event(Event::Decl(BytesDecl::new("1.0", Some("UTF-8"), None)))
     }
 
+    #[allow(clippy::missing_panics_doc)]
     pub fn timestamp(&mut self, name: &str, val: &Timestamp, fmt: TimestampFormat) -> SerResult {
         fmt_timestamp(val, fmt, |b| self.content(name, str::from_ascii_simd(b).unwrap()))
     }

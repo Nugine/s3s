@@ -1,3 +1,5 @@
+#![allow(clippy::missing_errors_doc)] // TODO
+
 mod de;
 pub use self::de::*;
 
