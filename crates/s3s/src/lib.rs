@@ -34,7 +34,6 @@ mod s3_op;
 mod s3_trait;
 mod sig_v2;
 mod sig_v4;
-mod xml;
 
 pub mod access;
 pub mod auth;
@@ -45,6 +44,7 @@ pub mod host;
 pub mod path;
 pub mod service;
 pub mod stream;
+pub mod xml;
 
 pub use self::error::*;
 pub use self::http::Body;
