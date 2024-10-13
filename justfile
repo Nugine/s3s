@@ -16,6 +16,7 @@ codegen:
     ./scripts/download-model.py codegen/s3.json
     cargo run -p s3s-codegen -- codegen/s3.json
     cargo fmt
+    cargo check
 
 install-s3s-fs:
     cargo install --offline --path crates/s3s-fs --features binary

@@ -499,7 +499,7 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes) {
 
 fn codegen_struct_enum(ty: &rust::StructEnum, _rust_types: &RustTypes) {
     codegen_doc(ty.doc.as_deref());
-    g!("#[derive(Debug, Clone)]");
+    g!("#[derive(Debug, Clone, PartialEq)]");
     g!("#[non_exhaustive]");
     g!("pub enum {} {{", ty.name);
 
@@ -541,10 +541,22 @@ fn struct_derives(ty: &rust::Struct, rust_types: &RustTypes) -> Vec<&'static str
     if can_derive_default(ty, rust_types) {
         derives.push("Default");
     }
+    if can_derive_partial_eq(ty, rust_types) {
+        derives.push("PartialEq");
+    }
     derives
 }
 
 fn can_derive_clone(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
+    ty.fields.iter().all(|field| {
+        if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
+            return false;
+        }
+        true
+    })
+}
+
+fn can_derive_partial_eq(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
     ty.fields.iter().all(|field| {
         if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
             return false;
