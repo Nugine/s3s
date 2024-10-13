@@ -8,9 +8,6 @@ pub use self::ser::*;
 
 mod generated;
 
-#[cfg(test)]
-mod tests;
-
 mod manually {
     use super::*;
 
