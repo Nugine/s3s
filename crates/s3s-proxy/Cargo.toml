@@ -7,13 +7,13 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-aws-config = { version = "1.5.6", default-features = false, features = [
+aws-config = { version = "1.5.8", default-features = false, features = [
     "behavior-version-latest",
 ] }
 aws-credential-types = "1.2.1"
-aws-sdk-s3 = "1.51.0"
-clap = { version = "4.5.17", features = ["derive"] }
-hyper-util = { version = "0.1.8", features = [
+aws-sdk-s3 = "1.56.0"
+clap = { version = "4.5.20", features = ["derive"] }
+hyper-util = { version = "0.1.9", features = [
     "server-auto",
     "server-graceful",
     "http1",

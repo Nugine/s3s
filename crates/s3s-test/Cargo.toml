@@ -19,14 +19,14 @@ tokio = { version = "1.40.0", features = ["full"] }
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.18", features = ["env-filter", "time"] }
 aws-credential-types = "1.2.1"
-aws-sdk-s3 = "1.51.0"
-clap = { version = "4.5.17", features = ["derive"] }
+aws-sdk-s3 = "1.56.0"
+clap = { version = "4.5.20", features = ["derive"] }
 dotenvy = "0.15.7"
 serde_json = "1.0.128"
 indexmap = "2.6.0"
 colored = "2.1.0"
 
 [dependencies.aws-config]
-version = "1.5.6"
+version = "1.5.8"
 default-features = false
 features = ["behavior-version-latest"]
