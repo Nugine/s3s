@@ -2,6 +2,8 @@ use s3s::xml;
 
 use std::fmt;
 
+use rust_utils::default::default;
+
 fn deserialize_content<T>(input: &[u8]) -> xml::DeResult<T>
 where
     T: for<'xml> xml::DeserializeContent<'xml>,
@@ -228,4 +230,17 @@ fn get_bucket_location_output() {
 
         test_serde(&val);
     }
+}
+
+#[test]
+fn get_bucket_notification_configuration_output() {
+    let xml = "<NotificationConfiguration></NotificationConfiguration>";
+
+    let val = deserialize::<s3s::dto::NotificationConfiguration>(xml.as_bytes()).unwrap();
+    assert_eq!(val, default());
+    test_serde(&val);
+
+    let val = deserialize::<s3s::dto::GetBucketNotificationConfigurationOutput>(xml.as_bytes()).unwrap();
+    assert_eq!(val, default());
+    test_serde(&val);
 }

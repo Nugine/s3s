@@ -328,8 +328,13 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
             if op.smithy_output == op.output {
                 continue;
             }
-            let rust::Type::Struct(mut ty) = space[&op.smithy_output].clone() else { panic!() };
+            assert_eq!(op.name, "GetBucketNotificationConfiguration");
+            assert_eq!(op.output, "GetBucketNotificationConfigurationOutput");
+            let rust::Type::Struct(ref origin) = space[&op.smithy_output] else { panic!() };
+            let mut ty = origin.clone();
             ty.name.clone_from(&op.output); // duplicate type
+            assert!(origin.xml_name.is_none());
+            ty.xml_name = Some(origin.name.clone());
             ty
         };
         assert!(space.insert(op.output.clone(), rust::Type::Struct(output_ty)).is_none());

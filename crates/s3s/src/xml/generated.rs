@@ -944,13 +944,13 @@ impl<'xml> Deserialize<'xml> for GetBucketLoggingOutput {
 
 impl Serialize for GetBucketNotificationConfigurationOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("GetBucketNotificationConfigurationOutput", self)
+        s.content("NotificationConfiguration", self)
     }
 }
 
 impl<'xml> Deserialize<'xml> for GetBucketNotificationConfigurationOutput {
     fn deserialize(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        d.named_element("GetBucketNotificationConfigurationOutput", Deserializer::content)
+        d.named_element("NotificationConfiguration", Deserializer::content)
     }
 }
 
