@@ -1,23 +1,36 @@
 #![allow(clippy::wildcard_imports)]
 #![allow(clippy::cast_possible_truncation, clippy::cast_precision_loss)]
 
-use std::time::Instant;
-
 use crate::report::*;
 use crate::tcx::*;
 
+use std::sync::Arc;
+use std::time::Instant;
+
+use tokio::spawn;
 use tracing::info;
 use tracing::instrument;
+use tracing::Instrument;
 
 macro_rules! run_fn {
     ($call:expr) => {{
         let t0 = std::time::Instant::now();
-        let result = $call.await;
+        let result = spawn($call.in_current_span()).await;
         let duration_ns = t0.elapsed().as_nanos() as u64;
         let duration_ms = duration_ns as f64 / 1e6;
         let summary = match result {
-            Ok(_) => FnSummary {
+            Ok(Ok(_)) => FnSummary {
                 result: FnResult::Ok,
+                duration_ns,
+                duration_ms,
+            },
+            Ok(Err(ref e)) => FnSummary {
+                result: FnResult::Err(e.to_string()),
+                duration_ns,
+                duration_ms,
+            },
+            Err(ref e) if e.is_panic() => FnSummary {
+                result: FnResult::Panicked,
                 duration_ns,
                 duration_ms,
             },
@@ -74,7 +87,7 @@ pub async fn run(tcx: &mut TestContext) -> Report {
     }
 }
 
-#[instrument(skip(suite), fields(suite_name = suite.name))]
+#[instrument(skip(suite), fields(name = suite.name))]
 async fn run_suite(suite: &SuiteInfo) -> SuiteReport {
     let total_fixtures = suite.fixtures.len();
     info!(total_fixtures, "Test suite start");
@@ -88,14 +101,14 @@ async fn run_suite(suite: &SuiteInfo) -> SuiteReport {
     'run: {
         let (result, summary) = run_fn!((suite.setup)());
         setup_summary = Some(summary);
-        let Ok(mut suite_data) = result else { break 'run };
+        let Ok(Ok(suite_data)) = result else { break 'run };
 
         for fixture in suite.fixtures.values() {
             let report = run_fixture(fixture, &suite_data).await;
             fixtures.push(report);
         }
 
-        let (_, summary) = run_fn!((suite.teardown)(&mut suite_data));
+        let (_, summary) = run_fn!((suite.teardown)(suite_data));
         teardown_summary = Some(summary);
     }
 
@@ -115,7 +128,7 @@ async fn run_suite(suite: &SuiteInfo) -> SuiteReport {
     }
 }
 
-#[instrument(skip(fixture, suite_data), fields(fixture_name = fixture.name))]
+#[instrument(skip(fixture, suite_data), fields(name = fixture.name))]
 async fn run_fixture(fixture: &FixtureInfo, suite_data: &ArcAny) -> FixtureReport {
     let total_cases = fixture.cases.len();
     info!(total_cases, "Test fixture start");
@@ -128,9 +141,9 @@ async fn run_fixture(fixture: &FixtureInfo, suite_data: &ArcAny) -> FixtureRepor
 
     'run: {
         info!("Test fixture setup");
-        let (result, summary) = run_fn!((fixture.setup)(suite_data));
+        let (result, summary) = run_fn!((fixture.setup)(Arc::clone(suite_data)));
         setup_summary = Some(summary);
-        let Ok(mut fixture_data) = result else { break 'run };
+        let Ok(Ok(fixture_data)) = result else { break 'run };
 
         for case in fixture.cases.values() {
             let report = run_case(case, &fixture_data).await;
@@ -138,7 +151,7 @@ async fn run_fixture(fixture: &FixtureInfo, suite_data: &ArcAny) -> FixtureRepor
         }
 
         info!("Test fixture teardown");
-        let (_, summary) = run_fn!((fixture.teardown)(&mut fixture_data));
+        let (_, summary) = run_fn!((fixture.teardown)(fixture_data));
         teardown_summary = Some(summary);
     }
 
@@ -158,12 +171,12 @@ async fn run_fixture(fixture: &FixtureInfo, suite_data: &ArcAny) -> FixtureRepor
     }
 }
 
-#[instrument(skip(case, fixture_data), fields(case_name = case.name))]
+#[instrument(skip(case, fixture_data), fields(name = case.name))]
 async fn run_case(case: &CaseInfo, fixture_data: &ArcAny) -> CaseReport {
     info!("Test case start");
 
     let t0 = Instant::now();
-    let (_, summary) = run_fn!((case.run)(fixture_data));
+    let (_, summary) = run_fn!((case.run)(Arc::clone(fixture_data)));
 
     info!(?summary, "Test case end");
 

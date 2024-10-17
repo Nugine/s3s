@@ -4,6 +4,7 @@ use crate::traits::TestCase;
 use crate::traits::TestFixture;
 use crate::traits::TestSuite;
 
+use std::any::type_name;
 use std::future::Future;
 use std::marker::PhantomData;
 use std::pin::Pin;
@@ -15,12 +16,12 @@ pub(crate) type ArcAny = Arc<dyn std::any::Any + Send + Sync + 'static>;
 type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
 
 type SuiteSetupFn = Box<dyn Fn() -> BoxFuture<'static, Result<ArcAny, Failed>>>;
-type SuiteTeardownFn = Box<dyn for<'a> Fn(&'a mut ArcAny) -> BoxFuture<'a, Result>>;
+type SuiteTeardownFn = Box<dyn Fn(ArcAny) -> BoxFuture<'static, Result>>;
 
-type FixtureSetupFn = Box<dyn for<'a> Fn(&'a ArcAny) -> BoxFuture<'a, Result<ArcAny, Failed>>>;
-type FixtureTeardownFn = Box<dyn for<'a> Fn(&'a mut ArcAny) -> BoxFuture<'a, Result>>;
+type FixtureSetupFn = Box<dyn Fn(ArcAny) -> BoxFuture<'static, Result<ArcAny, Failed>>>;
+type FixtureTeardownFn = Box<dyn Fn(ArcAny) -> BoxFuture<'static, Result>>;
 
-type CaseRunFn = Box<dyn for<'a> Fn(&'a ArcAny) -> BoxFuture<'a, Result>>;
+type CaseRunFn = Box<dyn Fn(ArcAny) -> BoxFuture<'static, Result>>;
 
 pub struct TestContext {
     pub(crate) suites: IndexMap<String, SuiteInfo>,
@@ -28,6 +29,7 @@ pub struct TestContext {
 
 pub(crate) struct SuiteInfo {
     pub(crate) name: String,
+    // pub(crate) type_id: TypeId,
     pub(crate) setup: SuiteSetupFn,
     pub(crate) teardown: SuiteTeardownFn,
     pub(crate) fixtures: IndexMap<String, FixtureInfo>,
@@ -35,6 +37,7 @@ pub(crate) struct SuiteInfo {
 
 pub(crate) struct FixtureInfo {
     pub(crate) name: String,
+    // pub(crate) type_id: TypeId,
     pub(crate) setup: FixtureSetupFn,
     pub(crate) teardown: FixtureTeardownFn,
     pub(crate) cases: IndexMap<String, CaseInfo>,
@@ -52,12 +55,19 @@ pub enum CaseTag {
     ShouldPanic,
 }
 
-fn downcast_ref<T: 'static>(any: &ArcAny) -> &T {
-    (*any).downcast_ref().unwrap()
+fn wrap<T: Send + Sync + 'static>(x: T) -> ArcAny {
+    Arc::new(x)
 }
 
-fn downcast_mut<T: 'static>(any: &mut ArcAny) -> &mut T {
-    Arc::get_mut(any).unwrap().downcast_mut().unwrap()
+fn downcast<T: Send + Sync + 'static>(any: ArcAny) -> Arc<T> {
+    Arc::downcast(any).unwrap()
+}
+
+fn unwrap<T: Send + Sync + 'static>(any: ArcAny) -> Result<T> {
+    match Arc::try_unwrap(downcast::<T>(any)) {
+        Ok(x) => Ok(x),
+        Err(_) => Err(Failed::from_string(format!("Arc<{}> is leaked", type_name::<T>()))),
+    }
 }
 
 impl TestContext {
@@ -72,8 +82,9 @@ impl TestContext {
                 name.clone(),
                 SuiteInfo {
                     name: name.clone(),
-                    setup: Box::new(|| Box::pin(async { S::setup().await.map(|x| Arc::new(x) as ArcAny) })),
-                    teardown: Box::new(|any| Box::pin(S::teardown(downcast_mut(any)))),
+                    // type_id: TypeId::of::<S>(),
+                    setup: Box::new(|| Box::pin(async { S::setup().await.map(wrap) })),
+                    teardown: Box::new(|any| Box::pin(async move { S::teardown(unwrap(any)?).await })),
                     fixtures: IndexMap::new(),
                 },
             );
@@ -98,10 +109,9 @@ impl<S: TestSuite> SuiteBuilder<'_, S> {
                 name.clone(),
                 FixtureInfo {
                     name: name.clone(),
-                    setup: Box::new(|any| {
-                        Box::pin(async move { X::setup(downcast_ref(any)).await.map(|x| Arc::new(x) as ArcAny) })
-                    }),
-                    teardown: Box::new(|any| Box::pin(X::teardown(downcast_mut(any)))),
+                    // type_id: TypeId::of::<X>(),
+                    setup: Box::new(|any| Box::pin(async move { X::setup(downcast(any)).await.map(wrap) })),
+                    teardown: Box::new(|any| Box::pin(async move { X::teardown(unwrap(any)?).await })),
                     cases: IndexMap::new(),
                 },
             );
@@ -129,7 +139,7 @@ where
             name.clone(),
             CaseInfo {
                 name: name.clone(),
-                run: Box::new(move |any| Box::pin(case.run(downcast_ref(any)))),
+                run: Box::new(move |any| Box::pin(case.run(downcast(any)))),
                 tags: Vec::new(),
             },
         );
