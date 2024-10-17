@@ -27,3 +27,11 @@ impl fmt::Display for Failed {
         }
     }
 }
+
+impl Failed {
+    pub fn from_string(s: impl Into<String>) -> Self {
+        Self {
+            source: Some(s.into().into()),
+        }
+    }
+}

@@ -1,19 +1,20 @@
 use crate::error::Result;
 
 use std::future::Future;
+use std::sync::Arc;
 
 pub trait TestSuite: Sized + Send + Sync + 'static {
     fn setup() -> impl Future<Output = Result<Self>> + Send + 'static;
 
-    fn teardown(&mut self) -> impl Future<Output = Result> + Send + '_ {
+    fn teardown(self) -> impl Future<Output = Result> + Send + 'static {
         async { Ok(()) }
     }
 }
 
 pub trait TestFixture<S: TestSuite>: Sized + Send + Sync + 'static {
-    fn setup(suite: &S) -> impl Future<Output = Result<Self>> + Send + '_;
+    fn setup(suite: Arc<S>) -> impl Future<Output = Result<Self>> + Send + 'static;
 
-    fn teardown(&mut self) -> impl Future<Output = Result> + Send + '_ {
+    fn teardown(self) -> impl Future<Output = Result> + Send + 'static {
         async { Ok(()) }
     }
 }
@@ -24,7 +25,7 @@ where
     X: TestFixture<S>,
     S: TestSuite,
 {
-    fn run<'a>(&self, fixture: &'a X) -> impl Future<Output = Result> + Send + 'a;
+    fn run(&self, fixture: Arc<X>) -> impl Future<Output = Result> + Send + 'static;
 }
 
 trait AsyncFn<'a, A> {
@@ -50,12 +51,12 @@ where
 
 impl<C, X, S> TestCase<X, S> for C
 where
-    C: for<'a> AsyncFn<'a, (&'a X,), Output = Result>,
+    C: for<'a> AsyncFn<'a, (Arc<X>,), Output = Result>,
     C: Send + Sync + 'static,
     X: TestFixture<S>,
     S: TestSuite,
 {
-    fn run<'a>(&self, fixture: &'a X) -> impl Future<Output = Result> + Send + 'a {
+    fn run(&self, fixture: Arc<X>) -> impl Future<Output = Result> + Send + 'static {
         AsyncFn::call(self, (fixture,))
     }
 }
