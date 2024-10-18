@@ -17,7 +17,7 @@ pub type AbortDate = Timestamp;
 /// wait before permanently removing all parts of the upload. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/mpuoverview.html#mpu-abort-incomplete-mpu-lifecycle-config">
 /// Aborting Incomplete Multipart Uploads Using a Bucket Lifecycle Configuration</a> in
 /// the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct AbortIncompleteMultipartUpload {
     /// <p>Specifies the number of days after which Amazon S3 aborts an incomplete multipart
     /// upload.</p>
@@ -34,6 +34,7 @@ impl fmt::Debug for AbortIncompleteMultipartUpload {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct AbortMultipartUploadInput {
     /// <p>The bucket name to which the upload was taking place. </p>
     /// <p>
@@ -84,7 +85,7 @@ impl AbortMultipartUploadInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct AbortMultipartUploadOutput {
     pub request_charged: Option<RequestCharged>,
 }
@@ -104,7 +105,7 @@ pub type AbortRuleId = String;
 /// <p>Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html">Amazon S3
 /// Transfer Acceleration</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct AccelerateConfiguration {
     /// <p>Specifies the transfer acceleration status of the bucket.</p>
     pub status: Option<BucketAccelerateStatus>,
@@ -123,7 +124,7 @@ impl fmt::Debug for AccelerateConfiguration {
 pub type AcceptRanges = String;
 
 /// <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct AccessControlPolicy {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -145,6 +146,7 @@ impl fmt::Debug for AccessControlPolicy {
 }
 
 /// <p>A container for information about access control for replicas.</p>
+#[derive(Clone, PartialEq)]
 pub struct AccessControlTranslation {
     /// <p>Specifies the replica ownership. For default and valid values, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTreplication.html">PUT bucket
     /// replication</a> in the <i>Amazon S3 API Reference</i>.</p>
@@ -184,7 +186,7 @@ pub type AllowedOrigins = List<AllowedOrigin>;
 /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter.
 /// The operator must have at least two predicates in any combination, and an object must match
 /// all of the predicates for the filter to apply.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct AnalyticsAndOperator {
     /// <p>The prefix to use when evaluating an AND predicate: The prefix that an object must have
     /// to be included in the metrics results.</p>
@@ -208,6 +210,7 @@ impl fmt::Debug for AnalyticsAndOperator {
 
 /// <p>Specifies the configuration and any analyses for the analytics filter of an Amazon S3
 /// bucket.</p>
+#[derive(Clone, PartialEq)]
 pub struct AnalyticsConfiguration {
     /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly
     /// one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided,
@@ -235,6 +238,7 @@ impl fmt::Debug for AnalyticsConfiguration {
 pub type AnalyticsConfigurationList = List<AnalyticsConfiguration>;
 
 /// <p>Where to publish the analytics results.</p>
+#[derive(Clone, PartialEq)]
 pub struct AnalyticsExportDestination {
     /// <p>A destination signifying output to an S3 bucket.</p>
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
@@ -251,7 +255,7 @@ impl fmt::Debug for AnalyticsExportDestination {
 /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly
 /// one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided,
 /// all objects will be considered in any analysis.</p>
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 #[non_exhaustive]
 pub enum AnalyticsFilter {
     /// <p>A conjunction (logical AND) of predicates, which is used in evaluating an analytics
@@ -266,6 +270,7 @@ pub enum AnalyticsFilter {
 pub type AnalyticsId = String;
 
 /// <p>Contains information about where to publish the analytics results.</p>
+#[derive(Clone, PartialEq)]
 pub struct AnalyticsS3BucketDestination {
     /// <p>The Amazon Resource Name (ARN) of the bucket to which data is exported.</p>
     pub bucket: BucketName,
@@ -372,7 +377,7 @@ impl FromStr for ArchiveStatus {
 }
 
 /// <p> In terms of implementation, a Bucket is a resource.  </p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Bucket {
     /// <p>Date the bucket was created. This date can change when making changes to your bucket,
     /// such as editing its bucket policy.</p>
@@ -434,7 +439,7 @@ impl FromStr for BucketAccelerateStatus {
 
 /// <p>The requested bucket name is not available. The bucket namespace is shared by all users
 /// of the system. Select a different name and try again.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct BucketAlreadyExists {}
 
 impl fmt::Debug for BucketAlreadyExists {
@@ -448,7 +453,7 @@ impl fmt::Debug for BucketAlreadyExists {
 /// in all Amazon Web Services Regions except in the North Virginia Region. For legacy compatibility, if you
 /// re-create an existing bucket that you already own in the North Virginia Region, Amazon S3
 /// returns 200 OK and resets the bucket access control lists (ACLs).</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct BucketAlreadyOwnedByYou {}
 
 impl fmt::Debug for BucketAlreadyOwnedByYou {
@@ -505,7 +510,7 @@ impl FromStr for BucketCannedACL {
 /// <note>
 /// <p>This functionality is only supported by directory buckets.</p>
 /// </note>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct BucketInfo {
     /// <p>The number of Availability Zone that's used for redundancy for the bucket.</p>
     pub data_redundancy: Option<DataRedundancy>,
@@ -531,7 +536,7 @@ pub type BucketKeyEnabled = bool;
 /// <p>Specifies the lifecycle configuration for objects in an Amazon S3 bucket. For more
 /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">Object Lifecycle Management</a>
 /// in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct BucketLifecycleConfiguration {
     /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
     pub rules: LifecycleRules,
@@ -638,7 +643,7 @@ impl FromStr for BucketLocationConstraint {
 pub type BucketLocationName = String;
 
 /// <p>Container for logging status information.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct BucketLoggingStatus {
     pub logging_enabled: Option<LoggingEnabled>,
 }
@@ -783,7 +788,7 @@ pub type BytesScanned = i64;
 /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html">Enabling
 /// Cross-Origin Resource Sharing</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CORSConfiguration {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add
     /// up to 100 rules to the configuration.</p>
@@ -799,7 +804,7 @@ impl fmt::Debug for CORSConfiguration {
 }
 
 /// <p>Specifies a cross-origin access rule for an Amazon S3 bucket.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CORSRule {
     /// <p>Headers that are specified in the <code>Access-Control-Request-Headers</code> header.
     /// These headers are allowed in a preflight OPTIONS request. In response to any preflight
@@ -846,7 +851,7 @@ pub type CORSRules = List<CORSRule>;
 
 /// <p>Describes how an uncompressed comma-separated values (CSV)-formatted input object is
 /// formatted.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CSVInput {
     /// <p>Specifies that CSV field values may contain quoted record delimiters and such records
     /// should be allowed. Default value is FALSE. Setting this value to TRUE may lower
@@ -928,7 +933,7 @@ impl fmt::Debug for CSVInput {
 
 /// <p>Describes how uncompressed comma-separated values (CSV)-formatted results are
 /// formatted.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CSVOutput {
     /// <p>The value used to separate individual fields in a record. You can specify an arbitrary
     /// delimiter.</p>
@@ -982,14 +987,14 @@ impl fmt::Debug for CSVOutput {
 pub type CacheControl = String;
 
 /// <p>Contains all the possible checksum or digest values for an object.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Checksum {
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1121,7 +1126,7 @@ pub type Comments = String;
 /// string specified by a delimiter. CommonPrefixes lists keys that act like subdirectories in
 /// the directory specified by Prefix. For example, if the prefix is notes/ and the delimiter
 /// is a slash (/) as in notes/summer/july, the common prefix is notes/summer/. </p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CommonPrefix {
     /// <p>Container for the specified common prefix.</p>
     pub prefix: Option<Prefix>,
@@ -1139,6 +1144,7 @@ impl fmt::Debug for CommonPrefix {
 
 pub type CommonPrefixList = List<CommonPrefix>;
 
+#[derive(Clone, PartialEq)]
 pub struct CompleteMultipartUploadInput {
     /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     /// <p>
@@ -1158,12 +1164,12 @@ pub struct CompleteMultipartUploadInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32C checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32C checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -1179,6 +1185,11 @@ pub struct CompleteMultipartUploadInput {
     pub checksum_sha256: Option<ChecksumSHA256>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
+    /// <p>Uploads the object only if the object key name does not already exist in the bucket specified. Otherwise, Amazon S3 returns a <code>412 Precondition Failed</code> error.</p>
+    /// <p>If a conflicting operation occurs during the upload S3 returns a <code>409 ConditionalRequestConflict</code> response.  On a 409 failure you should re-initiate the multipart upload with <code>CreateMultipartUpload</code> and re-upload each part.</p>
+    /// <p>Expects the '*' (asterisk) character.</p>
+    /// <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>, or <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-requests.html">Conditional requests</a> in the <i>Amazon S3 User Guide</i>.</p>
+    pub if_none_match: Option<IfNoneMatch>,
     /// <p>Object key for which the multipart upload was initiated.</p>
     pub key: ObjectKey,
     /// <p>The container for the multipart upload request information.</p>
@@ -1231,6 +1242,9 @@ impl fmt::Debug for CompleteMultipartUploadInput {
         if let Some(ref val) = self.expected_bucket_owner {
             d.field("expected_bucket_owner", val);
         }
+        if let Some(ref val) = self.if_none_match {
+            d.field("if_none_match", val);
+        }
         d.field("key", &self.key);
         if let Some(ref val) = self.multipart_upload {
             d.field("multipart_upload", val);
@@ -1259,7 +1273,7 @@ impl CompleteMultipartUploadInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CompleteMultipartUploadOutput {
     /// <p>The name of the bucket that contains the newly created object. Does not return the access point
     /// ARN or access point alias if used.</p>
@@ -1269,16 +1283,13 @@ pub struct CompleteMultipartUploadOutput {
     pub bucket: Option<BucketName>,
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1313,17 +1324,10 @@ pub struct CompleteMultipartUploadOutput {
     /// <p>The URI that identifies the newly created object.</p>
     pub location: Option<Location>,
     pub request_charged: Option<RequestCharged>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the newly created object, in case the bucket has versioning turned
     /// on.</p>
@@ -1383,7 +1387,7 @@ impl fmt::Debug for CompleteMultipartUploadOutput {
 }
 
 /// <p>The container for the completed multipart upload details.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CompletedMultipartUpload {
     /// <p>Array of CompletedPart data types.</p>
     /// <p>If you do not supply a valid <code>Part</code> with your request, the service sends back
@@ -1402,14 +1406,14 @@ impl fmt::Debug for CompletedMultipartUpload {
 }
 
 /// <p>Details of the parts that were uploaded.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CompletedPart {
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -1517,7 +1521,7 @@ impl FromStr for CompressionType {
 /// apply. For example, 1. If request is for pages in the <code>/docs</code> folder, redirect
 /// to the <code>/documents</code> folder. 2. If request results in HTTP error 4xx, redirect
 /// request to another host where you might process the error.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Condition {
     /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error
     /// code equals this value, then the specified redirect is applied. Required when parent
@@ -1569,7 +1573,7 @@ pub type ContentMD5 = String;
 pub type ContentRange = String;
 
 /// <p></p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ContinuationEvent {}
 
 impl fmt::Debug for ContinuationEvent {
@@ -1579,6 +1583,7 @@ impl fmt::Debug for ContinuationEvent {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct CopyObjectInput {
     /// <p>The canned access control list (ACL) to apply to the object.</p>
     /// <p>When you copy an object, the ACL metadata is not preserved and is set
@@ -1637,7 +1642,9 @@ pub struct CopyObjectInput {
     /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     /// <note>
-    /// <p>This functionality is not supported when the destination bucket is a directory bucket.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets  
+    /// to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
     /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Specifies the caching behavior along the request/reply chain.</p>
@@ -1938,51 +1945,80 @@ pub struct CopyObjectInput {
     /// <p>This functionality is not supported when the destination bucket is a directory bucket.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>Specifies the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
+    /// <p>Specifies the Amazon Web Services KMS Encryption Context as an additional encryption context to use for the destination object encryption. The value of
     /// this header is a base64-encoded UTF-8 string holding JSON with the encryption context
-    /// key-value pairs. This value must be explicitly added to specify encryption context for
-    /// <code>CopyObject</code> requests.</p>
-    /// <note>
-    /// <p>This functionality is not supported when the destination bucket is a directory bucket.</p>
-    /// </note>
+    /// key-value pairs.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - This value must be explicitly added to specify encryption context for
+    /// <code>CopyObject</code> requests if you want an additional encryption context for your destination object. The additional encryption context of the source object won't be copied to the destination object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html#encryption-context">Encryption context</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>Specifies the KMS ID (Key ID, Key ARN, or Key Alias) to use for object encryption. All GET and PUT requests for an
+    /// <p>Specifies the KMS key ID (Key ID, Key ARN, or Key Alias) to use for object encryption. All GET and PUT requests for an
     /// object protected by KMS will fail if they're not made via SSL or using SigV4. For
     /// information about configuring any of the officially supported Amazon Web Services SDKs and Amazon Web Services CLI, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version">Specifying the
     /// Signature Version in Request Authentication</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
-    /// <note>
-    /// <p>This functionality is not supported when the destination bucket is a directory bucket.</p>
-    /// </note>
+    /// <p>
+    /// <b>Directory buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code>, you must specify the <code>
+    /// x-amz-server-side-encryption-aws-kms-key-id</code> header with the ID (Key ID or Key ARN) of the KMS
+    /// symmetric encryption customer managed key to use. Otherwise, you get an HTTP <code>400 Bad Request</code> error. Only use the key ID or key ARN. The key alias format of the KMS key isn't supported. Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket.
+    /// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.
+    /// </p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
-    /// <p>The server-side encryption algorithm used when storing this object in Amazon S3 (for example,
-    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>). Unrecognized or unsupported values won’t write a destination object and will receive a <code>400 Bad Request</code> response. </p>
+    /// <p>The server-side encryption algorithm used when storing this object in Amazon S3. Unrecognized or unsupported values won’t write a destination object and will receive a <code>400 Bad Request</code> response. </p>
     /// <p>Amazon S3 automatically encrypts all new objects that are copied to an S3 bucket.
     /// When copying an object, if you don't specify encryption information in your copy
     /// request, the encryption setting of the target object is set to the default
     /// encryption configuration of the destination bucket. By default, all buckets have a
     /// base level of encryption configuration that uses server-side encryption with Amazon S3
-    /// managed keys (SSE-S3). If the destination bucket has a default encryption
-    /// configuration that uses server-side encryption with Key Management Service (KMS) keys
-    /// (SSE-KMS), dual-layer server-side encryption with Amazon Web Services KMS keys (DSSE-KMS), or
-    /// server-side encryption with customer-provided encryption keys (SSE-C), Amazon S3 uses
+    /// managed keys (SSE-S3). If the destination bucket has a different default encryption
+    /// configuration, Amazon S3 uses
+    /// the corresponding encryption key to encrypt the target
+    /// object copy.</p>
+    /// <p>With server-side
+    /// encryption, Amazon S3 encrypts your data as it writes your data to disks in its data
+    /// centers and decrypts the data when you access it. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using
+    /// Server-Side Encryption</a> in the
+    /// <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>General purpose buckets </b>
+    /// </p>
+    /// <ul>
+    /// <li>
+    /// <p>For general purpose buckets, there are the following supported options for server-side encryption: server-side encryption with Key Management Service (KMS) keys
+    /// (SSE-KMS), dual-layer server-side encryption with Amazon Web Services KMS keys (DSSE-KMS), and
+    /// server-side encryption with customer-provided encryption keys (SSE-C). Amazon S3 uses
     /// the corresponding KMS key, or a customer-provided key to encrypt the target
     /// object copy.</p>
+    /// </li>
+    /// <li>
     /// <p>When you perform a <code>CopyObject</code> operation, if you want to use a
     /// different type of encryption setting for the target object, you can specify
     /// appropriate encryption-related headers to encrypt the target object with an Amazon S3 managed key, a
     /// KMS key, or a customer-provided key. If the encryption setting in
     /// your request is different from the default encryption configuration of the
     /// destination bucket, the encryption setting in your request takes precedence. </p>
-    /// <p>With server-side
-    /// encryption, Amazon S3 encrypts your data as it writes your data to disks in its data
-    /// centers and decrypts the data when you access it. For more information about server-side encryption, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Using
-    /// Server-Side Encryption</a> in the
-    /// <i>Amazon S3 User Guide</i>.</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
+    /// </li>
+    /// </ul>
+    /// <p>
+    /// <b>Directory buckets </b>
+    /// </p>
+    /// <ul>
+    /// <li>
+    /// <p>For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your
+    /// <code>CreateSession</code> requests or <code>PUT</code> object requests. Then, new objects
+    /// are automatically encrypted with the desired encryption settings. For more
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-serv-side-encryption.html">Protecting data with server-side encryption</a> in the <i>Amazon S3 User Guide</i>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.</p>
+    /// </li>
+    /// <li>
+    /// <p>To encrypt new object copies to a directory bucket with SSE-KMS, we recommend you specify SSE-KMS as the directory bucket's default encryption configuration with a KMS key (specifically, a <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a>).
+    /// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported. Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket. After you specify a customer managed key for SSE-KMS, you can't override the customer managed key for the bucket's SSE-KMS configuration.
+    /// Then, when you perform a <code>CopyObject</code> operation and want to specify server-side encryption settings for new object copies with SSE-KMS in the encryption-related request headers, you must ensure the encryption key is the same customer managed key that you specified for the directory bucket's default encryption configuration.
+    /// </p>
+    /// </li>
+    /// </ul>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>If the <code>x-amz-storage-class</code> header is not used, the copied object will be stored in the
     /// <code>STANDARD</code> Storage Class by default. The <code>STANDARD</code> storage class provides high durability and
@@ -2237,13 +2273,10 @@ impl CopyObjectInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CopyObjectOutput {
     /// <p>Indicates whether the copied object uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Container for all response elements.</p>
     pub copy_object_result: Option<CopyObjectResult>,
@@ -2274,21 +2307,11 @@ pub struct CopyObjectOutput {
     /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The
     /// value of this header is a base64-encoded UTF-8 string holding JSON with the encryption
     /// context key-value pairs.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the newly created copy.</p>
     /// <note>
@@ -2338,13 +2361,13 @@ impl fmt::Debug for CopyObjectOutput {
 }
 
 /// <p>Container for all response elements.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CopyObjectResult {
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -2389,14 +2412,14 @@ impl fmt::Debug for CopyObjectResult {
 }
 
 /// <p>Container for all response elements.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CopyPartResult {
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -2461,7 +2484,7 @@ pub type CopySourceSSECustomerKeyMD5 = String;
 pub type CopySourceVersionId = String;
 
 /// <p>The configuration information for the bucket.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CreateBucketConfiguration {
     /// <p>Specifies the information about the bucket that will be created.</p>
     /// <note>
@@ -2503,6 +2526,7 @@ impl fmt::Debug for CreateBucketConfiguration {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct CreateBucketInput {
     /// <p>The canned ACL to apply to the bucket.</p>
     /// <note>
@@ -2601,7 +2625,7 @@ impl CreateBucketInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CreateBucketOutput {
     /// <p>A forward slash followed by the name of the bucket.</p>
     pub location: Option<Location>,
@@ -2617,6 +2641,7 @@ impl fmt::Debug for CreateBucketOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct CreateMultipartUploadInput {
     /// <p>The canned ACL to apply to the object. Amazon S3 supports a set of
     /// predefined ACLs, known as <i>canned ACLs</i>. Each canned ACL
@@ -2658,14 +2683,16 @@ pub struct CreateMultipartUploadInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with
-    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS). Setting this header to
+    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS).</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - Setting this header to
     /// <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with
-    /// SSE-KMS.</p>
-    /// <p>Specifying this header with an object action doesn’t affect bucket-level settings for S3
+    /// SSE-KMS. Also, specifying this header with a PUT action doesn't affect bucket-level settings for S3
     /// Bucket Key.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>
+    /// <b>Directory buckets</b> - S3 Bucket Keys are always enabled for <code>GET</code> and <code>PUT</code> operations in a directory bucket and can’t be disabled. S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets  
+    /// to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-Batch-Ops">the Copy operation in Batch Operations</a>, or
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
@@ -3016,22 +3043,50 @@ pub struct CreateMultipartUploadInput {
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
     /// <p>Specifies the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
-    /// this header is a base64-encoded UTF-8 string holding JSON with the encryption context
-    /// key-value pairs.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// this header is a Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>Specifies the ID (Key ID, Key ARN, or Key Alias) of the symmetric encryption customer managed key to use for object encryption.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>Specifies the KMS key ID (Key ID, Key ARN, or Key Alias) to use for object encryption. If the KMS key doesn't exist in the same
+    /// account that's issuing the command, you must use the full Key ARN not the Key ID.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code> or <code>aws:kms:dsse</code>, this header specifies the ID (Key ID, Key ARN, or Key Alias) of the KMS
+    /// key to use. If you specify
+    /// <code>x-amz-server-side-encryption:aws:kms</code> or
+    /// <code>x-amz-server-side-encryption:aws:kms:dsse</code>, but do not provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key
+    /// (<code>aws/s3</code>) to protect the data.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code>, you must specify the <code>
+    /// x-amz-server-side-encryption-aws-kms-key-id</code> header with the ID (Key ID or Key ARN) of the KMS
+    /// symmetric encryption customer managed key to use. Otherwise, you get an HTTP <code>400 Bad Request</code> error. Only use the key ID or key ARN. The key alias format of the KMS key isn't supported. Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket.
+    /// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.
+    /// </p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <b>Directory buckets </b> - For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your
+    /// <code>CreateSession</code> requests or <code>PUT</code> object requests. Then, new objects
+    /// are automatically encrypted with the desired encryption settings. For more
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-serv-side-encryption.html">Protecting data with server-side encryption</a> in the <i>Amazon S3 User Guide</i>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.         
+    /// </p>
+    /// <p>In the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>) using the REST API, the encryption request headers must match the encryption settings that are specified in the <code>CreateSession</code> request.
+    /// You can't override the values of the encryption settings (<code>x-amz-server-side-encryption</code>, <code>x-amz-server-side-encryption-aws-kms-key-id</code>, <code>x-amz-server-side-encryption-context</code>, and <code>x-amz-server-side-encryption-bucket-key-enabled</code>) that are specified in the <code>CreateSession</code> request.
+    /// You don't need to explicitly specify these encryption settings values in Zonal endpoint API calls, and   
+    /// Amazon S3 will use the encryption settings values from the <code>CreateSession</code> request to protect new objects in the directory bucket.
+    /// </p>
     /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
+    /// <p>When you use the CLI or the Amazon Web Services SDKs, for <code>CreateSession</code>, the session token refreshes automatically to avoid service interruptions when a session expires. The CLI or the Amazon Web Services SDKs use the bucket's default encryption configuration for the
+    /// <code>CreateSession</code> request. It's not supported to override the encryption settings values in the <code>CreateSession</code> request.
+    /// So in the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>),
+    /// the encryption request headers must match the default encryption configuration of the directory bucket.
+    ///
+    /// </p>
     /// </note>
+    /// </li>
+    /// </ul>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The
     /// STANDARD storage class provides high durability and high availability. Depending on
@@ -3163,7 +3218,7 @@ impl CreateMultipartUploadInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct CreateMultipartUploadOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete
     /// multipart uploads and the prefix in the lifecycle rule matches the object name in the
@@ -3192,9 +3247,6 @@ pub struct CreateMultipartUploadOutput {
     pub bucket: Option<BucketName>,
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
@@ -3214,24 +3266,13 @@ pub struct CreateMultipartUploadOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The
-    /// value of this header is a base64-encoded UTF-8 string holding JSON with the encryption
-    /// context key-value pairs.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
+    /// this header is a Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.</p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>ID for the initiated multipart upload.</p>
     pub upload_id: Option<MultipartUploadId>,
@@ -3327,7 +3368,7 @@ pub type Days = i32;
 
 pub type DaysAfterInitiation = i32;
 
-/// <p>The container element for specifying the default Object Lock retention settings for new
+/// <p>The container element for optionally specifying the default Object Lock retention settings for new
 /// objects placed in the specified bucket.</p>
 /// <note>
 /// <ul>
@@ -3342,7 +3383,7 @@ pub type DaysAfterInitiation = i32;
 /// </li>
 /// </ul>
 /// </note>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DefaultRetention {
     /// <p>The number of days that you want to specify for the default retention period. Must be
     /// used with <code>Mode</code>.</p>
@@ -3372,7 +3413,7 @@ impl fmt::Debug for DefaultRetention {
 }
 
 /// <p>Container for the objects to delete.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Delete {
     /// <p>The object to delete.</p>
     /// <note>
@@ -3398,6 +3439,7 @@ impl fmt::Debug for Delete {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketAnalyticsConfigurationInput {
     /// <p>The name of the bucket from which an analytics configuration is deleted.</p>
     pub bucket: BucketName,
@@ -3426,7 +3468,7 @@ impl DeleteBucketAnalyticsConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketAnalyticsConfigurationOutput {}
 
 impl fmt::Debug for DeleteBucketAnalyticsConfigurationOutput {
@@ -3436,6 +3478,7 @@ impl fmt::Debug for DeleteBucketAnalyticsConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketCorsInput {
     /// <p>Specifies the bucket whose <code>cors</code> configuration is being deleted.</p>
     pub bucket: BucketName,
@@ -3461,7 +3504,7 @@ impl DeleteBucketCorsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketCorsOutput {}
 
 impl fmt::Debug for DeleteBucketCorsOutput {
@@ -3471,11 +3514,22 @@ impl fmt::Debug for DeleteBucketCorsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketEncryptionInput {
     /// <p>The name of the bucket containing the server-side encryption configuration to
     /// delete.</p>
+    /// <p>
+    /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
+    /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
+    /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// </p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
+    /// <note>
+    /// <p>For directory buckets, this header is not supported in this API operation. If you specify this header, the request fails with the HTTP status code
+    /// <code>501 Not Implemented</code>.</p>
+    /// </note>
     pub expected_bucket_owner: Option<AccountId>,
 }
 
@@ -3497,7 +3551,7 @@ impl DeleteBucketEncryptionInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketEncryptionOutput {}
 
 impl fmt::Debug for DeleteBucketEncryptionOutput {
@@ -3507,6 +3561,7 @@ impl fmt::Debug for DeleteBucketEncryptionOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketInput {
     /// <p>Specifies the bucket being deleted.</p>
     /// <p>
@@ -3542,6 +3597,7 @@ impl DeleteBucketInput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -3565,7 +3621,7 @@ impl DeleteBucketIntelligentTieringConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketIntelligentTieringConfigurationOutput {}
 
 impl fmt::Debug for DeleteBucketIntelligentTieringConfigurationOutput {
@@ -3575,6 +3631,7 @@ impl fmt::Debug for DeleteBucketIntelligentTieringConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketInventoryConfigurationInput {
     /// <p>The name of the bucket containing the inventory configuration to delete.</p>
     pub bucket: BucketName,
@@ -3603,7 +3660,7 @@ impl DeleteBucketInventoryConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketInventoryConfigurationOutput {}
 
 impl fmt::Debug for DeleteBucketInventoryConfigurationOutput {
@@ -3613,6 +3670,7 @@ impl fmt::Debug for DeleteBucketInventoryConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketLifecycleInput {
     /// <p>The bucket name of the lifecycle to delete.</p>
     pub bucket: BucketName,
@@ -3638,7 +3696,7 @@ impl DeleteBucketLifecycleInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketLifecycleOutput {}
 
 impl fmt::Debug for DeleteBucketLifecycleOutput {
@@ -3648,6 +3706,7 @@ impl fmt::Debug for DeleteBucketLifecycleOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketMetricsConfigurationInput {
     /// <p>The name of the bucket containing the metrics configuration to delete.</p>
     pub bucket: BucketName,
@@ -3677,7 +3736,7 @@ impl DeleteBucketMetricsConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketMetricsConfigurationOutput {}
 
 impl fmt::Debug for DeleteBucketMetricsConfigurationOutput {
@@ -3687,7 +3746,7 @@ impl fmt::Debug for DeleteBucketMetricsConfigurationOutput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketOutput {}
 
 impl fmt::Debug for DeleteBucketOutput {
@@ -3697,6 +3756,7 @@ impl fmt::Debug for DeleteBucketOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketOwnershipControlsInput {
     /// <p>The Amazon S3 bucket whose <code>OwnershipControls</code> you want to delete. </p>
     pub bucket: BucketName,
@@ -3722,7 +3782,7 @@ impl DeleteBucketOwnershipControlsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketOwnershipControlsOutput {}
 
 impl fmt::Debug for DeleteBucketOwnershipControlsOutput {
@@ -3732,6 +3792,7 @@ impl fmt::Debug for DeleteBucketOwnershipControlsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketPolicyInput {
     /// <p>The bucket name.</p>
     /// <p>
@@ -3767,7 +3828,7 @@ impl DeleteBucketPolicyInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketPolicyOutput {}
 
 impl fmt::Debug for DeleteBucketPolicyOutput {
@@ -3777,6 +3838,7 @@ impl fmt::Debug for DeleteBucketPolicyOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketReplicationInput {
     /// <p> The bucket name. </p>
     pub bucket: BucketName,
@@ -3802,7 +3864,7 @@ impl DeleteBucketReplicationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketReplicationOutput {}
 
 impl fmt::Debug for DeleteBucketReplicationOutput {
@@ -3812,6 +3874,7 @@ impl fmt::Debug for DeleteBucketReplicationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketTaggingInput {
     /// <p>The bucket that has the tag set to be removed.</p>
     pub bucket: BucketName,
@@ -3837,7 +3900,7 @@ impl DeleteBucketTaggingInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketTaggingOutput {}
 
 impl fmt::Debug for DeleteBucketTaggingOutput {
@@ -3847,6 +3910,7 @@ impl fmt::Debug for DeleteBucketTaggingOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteBucketWebsiteInput {
     /// <p>The bucket name for which you want to remove the website configuration. </p>
     pub bucket: BucketName,
@@ -3872,7 +3936,7 @@ impl DeleteBucketWebsiteInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteBucketWebsiteOutput {}
 
 impl fmt::Debug for DeleteBucketWebsiteOutput {
@@ -3885,7 +3949,7 @@ impl fmt::Debug for DeleteBucketWebsiteOutput {
 pub type DeleteMarker = bool;
 
 /// <p>Information about the delete marker.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteMarkerEntry {
     /// <p>Specifies whether the object is (true) or is not (false) the latest version of an
     /// object.</p>
@@ -3934,7 +3998,7 @@ impl fmt::Debug for DeleteMarkerEntry {
 /// <p>If you are using an earlier version of the replication configuration, Amazon S3 handles
 /// replication of delete markers differently. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-add-config.html#replication-backward-compat-considerations">Backward Compatibility</a>.</p>
 /// </note>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteMarkerReplication {
     /// <p>Indicates whether to replicate delete markers.</p>
     /// <note>
@@ -3995,6 +4059,7 @@ pub type DeleteMarkerVersionId = String;
 
 pub type DeleteMarkers = List<DeleteMarkerEntry>;
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteObjectInput {
     /// <p>The bucket name of the bucket containing the object. </p>
     /// <p>
@@ -4070,7 +4135,7 @@ impl DeleteObjectInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteObjectOutput {
     /// <p>Indicates whether the specified object version that was permanently deleted was (true) or was
     /// not (false) a delete marker before deletion. In a simple DELETE, this header indicates whether (true) or
@@ -4104,6 +4169,7 @@ impl fmt::Debug for DeleteObjectOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteObjectTaggingInput {
     /// <p>The bucket name containing the objects from which to remove the tags. </p>
     /// <p>
@@ -4142,7 +4208,7 @@ impl DeleteObjectTaggingInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was removed from.</p>
     pub version_id: Option<ObjectVersionId>,
@@ -4158,6 +4224,7 @@ impl fmt::Debug for DeleteObjectTaggingOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeleteObjectsInput {
     /// <p>The bucket name containing the objects to delete. </p>
     /// <p>
@@ -4193,16 +4260,24 @@ pub struct DeleteObjectsInput {
     /// </code> with the supported algorithm from the following list: </p>
     /// <ul>
     /// <li>
-    /// <p>CRC32</p>
+    /// <p>
+    /// <code>CRC32</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>CRC32C</p>
+    /// <p>
+    /// <code>CRC32C</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA1</p>
+    /// <p>
+    /// <code>SHA1</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA256</p>
+    /// <p>
+    /// <code>SHA256</code>
+    /// </p>
     /// </li>
     /// </ul>
     /// <p>For more
@@ -4266,7 +4341,7 @@ impl DeleteObjectsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeleteObjectsOutput {
     /// <p>Container element for a successful delete. It identifies the object that was
     /// successfully deleted.</p>
@@ -4293,6 +4368,7 @@ impl fmt::Debug for DeleteObjectsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct DeletePublicAccessBlockInput {
     /// <p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete.
     /// </p>
@@ -4319,7 +4395,7 @@ impl DeletePublicAccessBlockInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeletePublicAccessBlockOutput {}
 
 impl fmt::Debug for DeletePublicAccessBlockOutput {
@@ -4330,7 +4406,7 @@ impl fmt::Debug for DeletePublicAccessBlockOutput {
 }
 
 /// <p>Information about the deleted object.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct DeletedObject {
     /// <p>Indicates whether the specified object version that was permanently deleted was (true) or was
     /// not (false) a delete marker before deletion. In a simple DELETE, this header indicates whether (true) or
@@ -4382,6 +4458,7 @@ pub type Description = String;
 
 /// <p>Specifies information about where to publish analysis or configuration results for an
 /// Amazon S3 bucket and S3 Replication Time Control (S3 RTC).</p>
+#[derive(Clone, PartialEq)]
 pub struct Destination {
     /// <p>Specify this only in a cross-account scenario (where source and destination bucket
     /// owners are not the same), and you want to change replica ownership to the Amazon Web Services account
@@ -4453,11 +4530,19 @@ pub type EmailAddress = String;
 
 pub type EnableRequestProgress = bool;
 
-/// <p>Requests Amazon S3 to encode the object keys in the response and specifies the encoding
-/// method to use. An object key can contain any Unicode character; however, the XML 1.0 parser
-/// cannot parse some characters, such as characters with an ASCII value from 0 to 10. For
-/// characters that are not supported in XML 1.0, you can add this parameter to request that
-/// Amazon S3 encode the keys in the response.</p>
+/// <p>Encoding type used by Amazon S3 to encode the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html">object keys</a> in the response.
+/// Responses are encoded only in UTF-8. An object key can contain any Unicode character.
+/// However, the XML 1.0 parser can't parse certain characters, such as characters with an
+/// ASCII value from 0 to 10. For characters that aren't supported in XML 1.0, you can add this
+/// parameter to request that Amazon S3 encode the keys in the response. For more information about
+/// characters to avoid in object key names, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-guidelines">Object key naming
+/// guidelines</a>.</p>
+/// <note>
+/// <p>When using the URL encoding type, non-ASCII characters that are used in an object's
+/// key name will be percent-encoded according to UTF-8 code values. For example, the object
+/// <code>test_file(3).png</code> will appear as
+/// <code>test_file%283%29.png</code>.</p>
+/// </note>
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EncodingType(Cow<'static, str>);
 
@@ -4495,6 +4580,7 @@ impl FromStr for EncodingType {
 }
 
 /// <p>Contains the type of server-side encryption used.</p>
+#[derive(Clone, PartialEq)]
 pub struct Encryption {
     /// <p>The server-side encryption algorithm used when storing job results in Amazon S3 (for example,
     /// AES256, <code>aws:kms</code>).</p>
@@ -4525,7 +4611,13 @@ impl fmt::Debug for Encryption {
 
 /// <p>Specifies encryption-related information for an Amazon S3 bucket that is a destination for
 /// replicated objects.</p>
-#[derive(Default)]
+/// <note>
+/// <p>If you're specifying a customer managed KMS key, we recommend using a fully qualified
+/// KMS key ARN. If you use a KMS key alias instead, then KMS resolves the key within the
+/// requester’s account. This behavior can result in data that's encrypted with a KMS key
+/// that belongs to the requester, and not the bucket owner.</p>
+/// </note>
+#[derive(Clone, Default, PartialEq)]
 pub struct EncryptionConfiguration {
     /// <p>Specifies the ID (Key ARN or Alias ARN) of the customer managed Amazon Web Services KMS key stored in
     /// Amazon Web Services Key Management Service (KMS) for the destination bucket. Amazon S3 uses this key to
@@ -4551,7 +4643,7 @@ pub type End = i64;
 /// <p>A message that indicates the request is complete and no more messages will be sent. You
 /// should not assume that the request is complete until the client receives an
 /// <code>EndEvent</code>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct EndEvent {}
 
 impl fmt::Debug for EndEvent {
@@ -4562,7 +4654,7 @@ impl fmt::Debug for EndEvent {
 }
 
 /// <p>Container for all error elements.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Error {
     /// <p>The error code is a string that uniquely identifies an error condition. It is meant to
     /// be read and understood by programs that detect and handle errors by type. The following is
@@ -6466,6 +6558,7 @@ impl fmt::Debug for Error {
 pub type ErrorCode = String;
 
 /// <p>The error information.</p>
+#[derive(Clone, PartialEq)]
 pub struct ErrorDocument {
     /// <p>The object key name to use when a 4XX class error occurs.</p>
     /// <important>
@@ -6489,7 +6582,7 @@ pub type ErrorMessage = String;
 pub type Errors = List<Error>;
 
 /// <p>A container for specifying the configuration for Amazon EventBridge.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct EventBridgeConfiguration {}
 
 impl fmt::Debug for EventBridgeConfiguration {
@@ -6501,9 +6594,12 @@ impl fmt::Debug for EventBridgeConfiguration {
 
 pub type EventList = List<Event>;
 
-/// <p>Optional configuration to replicate existing source bucket objects. For more
-/// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html#existing-object-replication">Replicating Existing Objects</a> in the <i>Amazon S3 User Guide</i>.
+/// <p>Optional configuration to replicate existing source bucket objects.
 /// </p>
+/// <note>
+/// <p>This parameter is no longer supported. To replicate existing objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html">Replicating existing objects with S3 Batch Replication</a> in the <i>Amazon S3 User Guide</i>.</p>
+/// </note>
+#[derive(Clone, PartialEq)]
 pub struct ExistingObjectReplication {
     /// <p>Specifies whether Amazon S3 replicates existing source bucket objects. </p>
     pub status: ExistingObjectReplicationStatus,
@@ -6686,7 +6782,7 @@ impl FromStr for FileHeaderInfo {
 }
 
 /// <p>Specifies the Amazon S3 object key name to filter on. An object key name is the name assigned to an object in your Amazon S3 bucket. You specify whether to filter on the suffix or prefix of the object key name. A prefix is a specific string of characters at the beginning of an object key name, which you can use to organize objects. For example, you can start the key names of related objects with a prefix, such as <code>2023-</code> or  <code>engineering/</code>. Then, you can use <code>FilterRule</code> to find objects in a bucket with key names that have the same prefix. A suffix is similar to a prefix, but it is at the end of the object key name instead of at the beginning.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct FilterRule {
     /// <p>The object key name prefix or suffix identifying one or more objects to which the
     /// filtering rule applies. The maximum length is 1,024 characters. Overlapping prefixes and
@@ -6754,6 +6850,7 @@ impl FromStr for FilterRuleName {
 
 pub type FilterRuleValue = String;
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketAccelerateConfigurationInput {
     /// <p>The name of the bucket for which the accelerate configuration is retrieved.</p>
     pub bucket: BucketName,
@@ -6783,7 +6880,7 @@ impl GetBucketAccelerateConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketAccelerateConfigurationOutput {
     pub request_charged: Option<RequestCharged>,
     /// <p>The accelerate configuration of the bucket.</p>
@@ -6803,6 +6900,7 @@ impl fmt::Debug for GetBucketAccelerateConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketAclInput {
     /// <p>Specifies the S3 bucket whose ACL is being requested.</p>
     /// <p>When you use this API operation with an access point, provide the alias of the access point in place of the bucket name.</p>
@@ -6833,7 +6931,7 @@ impl GetBucketAclInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -6854,6 +6952,7 @@ impl fmt::Debug for GetBucketAclOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketAnalyticsConfigurationInput {
     /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
     pub bucket: BucketName,
@@ -6882,7 +6981,7 @@ impl GetBucketAnalyticsConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketAnalyticsConfigurationOutput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: Option<AnalyticsConfiguration>,
@@ -6898,6 +6997,7 @@ impl fmt::Debug for GetBucketAnalyticsConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketCorsInput {
     /// <p>The bucket name for which to get the cors configuration.</p>
     /// <p>When you use this API operation with an access point, provide the alias of the access point in place of the bucket name.</p>
@@ -6928,7 +7028,7 @@ impl GetBucketCorsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketCorsOutput {
     /// <p>A set of origins and methods (cross-origin access that you want to allow). You can add
     /// up to 100 rules to the configuration.</p>
@@ -6945,11 +7045,22 @@ impl fmt::Debug for GetBucketCorsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketEncryptionInput {
     /// <p>The name of the bucket from which the server-side encryption configuration is
     /// retrieved.</p>
+    /// <p>
+    /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
+    /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
+    /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// </p>
     pub bucket: BucketName,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
+    /// <note>
+    /// <p>For directory buckets, this header is not supported in this API operation. If you specify this header, the request fails with the HTTP status code
+    /// <code>501 Not Implemented</code>.</p>
+    /// </note>
     pub expected_bucket_owner: Option<AccountId>,
 }
 
@@ -6971,7 +7082,7 @@ impl GetBucketEncryptionInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketEncryptionOutput {
     pub server_side_encryption_configuration: Option<ServerSideEncryptionConfiguration>,
 }
@@ -6986,6 +7097,7 @@ impl fmt::Debug for GetBucketEncryptionOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -7009,7 +7121,7 @@ impl GetBucketIntelligentTieringConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketIntelligentTieringConfigurationOutput {
     /// <p>Container for S3 Intelligent-Tiering configuration.</p>
     pub intelligent_tiering_configuration: Option<IntelligentTieringConfiguration>,
@@ -7025,6 +7137,7 @@ impl fmt::Debug for GetBucketIntelligentTieringConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketInventoryConfigurationInput {
     /// <p>The name of the bucket containing the inventory configuration to retrieve.</p>
     pub bucket: BucketName,
@@ -7053,7 +7166,7 @@ impl GetBucketInventoryConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketInventoryConfigurationOutput {
     /// <p>Specifies the inventory configuration.</p>
     pub inventory_configuration: Option<InventoryConfiguration>,
@@ -7069,6 +7182,7 @@ impl fmt::Debug for GetBucketInventoryConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketLifecycleConfigurationInput {
     /// <p>The name of the bucket for which to get the lifecycle information.</p>
     pub bucket: BucketName,
@@ -7094,10 +7208,24 @@ impl GetBucketLifecycleConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketLifecycleConfigurationOutput {
     /// <p>Container for a lifecycle rule.</p>
     pub rules: Option<LifecycleRules>,
+    /// <p>Indicates which default minimum object size behavior is applied to the lifecycle configuration.</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <code>all_storage_classes_128K</code> - Objects smaller than 128 KB will not transition to any storage class by default. </p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <code>varies_by_storage_class</code> - Objects smaller than 128 KB will transition to Glacier Flexible Retrieval or Glacier Deep Archive storage classes. By default, all other storage classes will prevent transitions smaller than 128 KB.
+    /// </p>
+    /// </li>
+    /// </ul>
+    /// <p>To customize the minimum object size for any transition you can add a filter that specifies a custom <code>ObjectSizeGreaterThan</code> or <code>ObjectSizeLessThan</code> in the body of your transition rule.  Custom filters always take precedence over the default transition behavior.</p>
+    pub transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize>,
 }
 
 impl fmt::Debug for GetBucketLifecycleConfigurationOutput {
@@ -7106,10 +7234,14 @@ impl fmt::Debug for GetBucketLifecycleConfigurationOutput {
         if let Some(ref val) = self.rules {
             d.field("rules", val);
         }
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            d.field("transition_default_minimum_object_size", val);
+        }
         d.finish_non_exhaustive()
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketLocationInput {
     /// <p>The name of the bucket for which to get the location.</p>
     /// <p>When you use this API operation with an access point, provide the alias of the access point in place of the bucket name.</p>
@@ -7140,7 +7272,7 @@ impl GetBucketLocationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketLocationOutput {
     /// <p>Specifies the Region where the bucket resides. For a list of all the Amazon S3 supported
     /// location constraints by Region, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Regions and Endpoints</a>. Buckets in
@@ -7158,6 +7290,7 @@ impl fmt::Debug for GetBucketLocationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketLoggingInput {
     /// <p>The bucket name for which to get the logging information.</p>
     pub bucket: BucketName,
@@ -7183,7 +7316,7 @@ impl GetBucketLoggingInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketLoggingOutput {
     pub logging_enabled: Option<LoggingEnabled>,
 }
@@ -7198,6 +7331,7 @@ impl fmt::Debug for GetBucketLoggingOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketMetricsConfigurationInput {
     /// <p>The name of the bucket containing the metrics configuration to retrieve.</p>
     pub bucket: BucketName,
@@ -7227,7 +7361,7 @@ impl GetBucketMetricsConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketMetricsConfigurationOutput {
     /// <p>Specifies the metrics configuration.</p>
     pub metrics_configuration: Option<MetricsConfiguration>,
@@ -7243,6 +7377,7 @@ impl fmt::Debug for GetBucketMetricsConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketNotificationConfigurationInput {
     /// <p>The name of the bucket for which to get the notification configuration.</p>
     /// <p>When you use this API operation with an access point, provide the alias of the access point in place of the bucket name.</p>
@@ -7275,7 +7410,7 @@ impl GetBucketNotificationConfigurationInput {
 
 /// <p>A container for specifying the notification configuration of the bucket. If this element
 /// is empty, notifications are turned off for the bucket.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketNotificationConfigurationOutput {
     /// <p>Enables delivery of events to Amazon EventBridge.</p>
     pub event_bridge_configuration: Option<EventBridgeConfiguration>,
@@ -7309,6 +7444,7 @@ impl fmt::Debug for GetBucketNotificationConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketOwnershipControlsInput {
     /// <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to retrieve.
     /// </p>
@@ -7335,7 +7471,7 @@ impl GetBucketOwnershipControlsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketOwnershipControlsOutput {
     /// <p>The <code>OwnershipControls</code> (BucketOwnerEnforced, BucketOwnerPreferred, or
     /// ObjectWriter) currently in effect for this Amazon S3 bucket.</p>
@@ -7352,6 +7488,7 @@ impl fmt::Debug for GetBucketOwnershipControlsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketPolicyInput {
     /// <p>The bucket name to get the bucket policy for.</p>
     /// <p>
@@ -7397,7 +7534,7 @@ impl GetBucketPolicyInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketPolicyOutput {
     /// <p>The bucket policy as a JSON document.</p>
     pub policy: Option<Policy>,
@@ -7413,6 +7550,7 @@ impl fmt::Debug for GetBucketPolicyOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketPolicyStatusInput {
     /// <p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>
     pub bucket: BucketName,
@@ -7438,7 +7576,7 @@ impl GetBucketPolicyStatusInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketPolicyStatusOutput {
     /// <p>The policy status for the specified bucket.</p>
     pub policy_status: Option<PolicyStatus>,
@@ -7454,6 +7592,7 @@ impl fmt::Debug for GetBucketPolicyStatusOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketReplicationInput {
     /// <p>The bucket name for which to get the replication information.</p>
     pub bucket: BucketName,
@@ -7479,7 +7618,7 @@ impl GetBucketReplicationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
@@ -7494,6 +7633,7 @@ impl fmt::Debug for GetBucketReplicationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketRequestPaymentInput {
     /// <p>The name of the bucket for which to get the payment request configuration</p>
     pub bucket: BucketName,
@@ -7519,7 +7659,7 @@ impl GetBucketRequestPaymentInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketRequestPaymentOutput {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Option<Payer>,
@@ -7535,6 +7675,7 @@ impl fmt::Debug for GetBucketRequestPaymentOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketTaggingInput {
     /// <p>The name of the bucket for which to get the tagging information.</p>
     pub bucket: BucketName,
@@ -7560,7 +7701,7 @@ impl GetBucketTaggingInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketTaggingOutput {
     /// <p>Contains the tag set.</p>
     pub tag_set: TagSet,
@@ -7574,6 +7715,7 @@ impl fmt::Debug for GetBucketTaggingOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketVersioningInput {
     /// <p>The name of the bucket for which to get the versioning information.</p>
     pub bucket: BucketName,
@@ -7599,7 +7741,7 @@ impl GetBucketVersioningInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketVersioningOutput {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This
     /// element is only returned if the bucket has been configured with MFA delete. If the bucket
@@ -7622,6 +7764,7 @@ impl fmt::Debug for GetBucketVersioningOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetBucketWebsiteInput {
     /// <p>The bucket name for which to get the website configuration.</p>
     pub bucket: BucketName,
@@ -7647,7 +7790,7 @@ impl GetBucketWebsiteInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetBucketWebsiteOutput {
     /// <p>The object key name of the website error document to use for 4XX class errors.</p>
     pub error_document: Option<ErrorDocument>,
@@ -7680,6 +7823,7 @@ impl fmt::Debug for GetBucketWebsiteOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetObjectAclInput {
     /// <p>The bucket name that contains the object for which to get the ACL information. </p>
     /// <p>
@@ -7722,7 +7866,7 @@ impl GetObjectAclInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetObjectAclOutput {
     /// <p>A list of grants.</p>
     pub grants: Option<Grants>,
@@ -7747,6 +7891,7 @@ impl fmt::Debug for GetObjectAclOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetObjectAttributesInput {
     /// <p>The name of the bucket that contains the object.</p>
     /// <p>
@@ -7847,7 +7992,7 @@ impl GetObjectAttributesInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetObjectAttributesOutput {
     /// <p>The checksum or digest of the object.</p>
     pub checksum: Option<Checksum>,
@@ -7918,7 +8063,7 @@ impl fmt::Debug for GetObjectAttributesOutput {
 }
 
 /// <p>A collection of parts associated with a multipart upload.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetObjectAttributesParts {
     /// <p>Indicates whether the returned list of parts is truncated. A value of <code>true</code>
     /// indicates that the list was truncated. A list can be truncated if the number of parts
@@ -7978,6 +8123,7 @@ impl fmt::Debug for GetObjectAttributesParts {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetObjectInput {
     /// <p>The bucket name containing the object. </p>
     /// <p>
@@ -7999,6 +8145,11 @@ pub struct GetObjectInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>To retrieve the checksum, this mode must be enabled.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - In addition, if you enable checksum mode and the object is uploaded with a
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_Checksum.html">checksum</a>
+    /// and encrypted with an Key Management Service (KMS) key, you must have permission to use the
+    /// <code>kms:Decrypt</code> action to retrieve the checksum.</p>
     pub checksum_mode: Option<ChecksumMode>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -8238,6 +8389,7 @@ impl GetObjectInput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetObjectLegalHoldInput {
     /// <p>The bucket name containing the object whose legal hold status you want to retrieve. </p>
     /// <p>
@@ -8277,7 +8429,7 @@ impl GetObjectLegalHoldInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetObjectLegalHoldOutput {
     /// <p>The current legal hold status for the specified object.</p>
     pub legal_hold: Option<ObjectLockLegalHold>,
@@ -8293,6 +8445,7 @@ impl fmt::Debug for GetObjectLegalHoldOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetObjectLockConfigurationInput {
     /// <p>The bucket whose Object Lock configuration you want to retrieve.</p>
     /// <p>
@@ -8320,7 +8473,7 @@ impl GetObjectLockConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetObjectLockConfigurationOutput {
     /// <p>The specified bucket's Object Lock configuration.</p>
     pub object_lock_configuration: Option<ObjectLockConfiguration>,
@@ -8344,17 +8497,14 @@ pub struct GetObjectOutput {
     pub body: Option<StreamingBlob>,
     /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -8467,17 +8617,9 @@ pub struct GetObjectOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
-    /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
-    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
+    /// <p>The server-side encryption algorithm used when you store this object in Amazon S3.</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Provides storage class information of the object. Amazon S3 returns this header for all
     /// objects except for S3 Standard storage class objects.</p>
@@ -8624,6 +8766,7 @@ impl fmt::Debug for GetObjectOutput {
 
 pub type GetObjectResponseStatusCode = i32;
 
+#[derive(Clone, PartialEq)]
 pub struct GetObjectRetentionInput {
     /// <p>The bucket name containing the object whose retention settings you want to retrieve. </p>
     /// <p>
@@ -8663,7 +8806,7 @@ impl GetObjectRetentionInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetObjectRetentionOutput {
     /// <p>The container element for an object's retention settings.</p>
     pub retention: Option<ObjectLockRetention>,
@@ -8679,6 +8822,7 @@ impl fmt::Debug for GetObjectRetentionOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetObjectTaggingInput {
     /// <p>The bucket name containing the object for which to get the tagging information. </p>
     /// <p>
@@ -8721,7 +8865,7 @@ impl GetObjectTaggingInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetObjectTaggingOutput {
     /// <p>Contains the tag set.</p>
     pub tag_set: TagSet,
@@ -8740,6 +8884,7 @@ impl fmt::Debug for GetObjectTaggingOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetObjectTorrentInput {
     /// <p>The name of the bucket containing the object for which to get the torrent files.</p>
     pub bucket: BucketName,
@@ -8792,6 +8937,7 @@ impl fmt::Debug for GetObjectTorrentOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct GetPublicAccessBlockInput {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want
     /// to retrieve. </p>
@@ -8818,7 +8964,7 @@ impl GetPublicAccessBlockInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct GetPublicAccessBlockOutput {
     /// <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3
     /// bucket.</p>
@@ -8836,6 +8982,7 @@ impl fmt::Debug for GetPublicAccessBlockOutput {
 }
 
 /// <p>Container for S3 Glacier job parameters.</p>
+#[derive(Clone, PartialEq)]
 pub struct GlacierJobParameters {
     /// <p>Retrieval tier at which the restore will be processed.</p>
     pub tier: Tier,
@@ -8850,7 +8997,7 @@ impl fmt::Debug for GlacierJobParameters {
 }
 
 /// <p>Container for grant information.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Grant {
     /// <p>The person being granted permissions.</p>
     pub grantee: Option<Grantee>,
@@ -8882,6 +9029,7 @@ pub type GrantWrite = String;
 pub type GrantWriteACP = String;
 
 /// <p>Container for the person being granted permissions.</p>
+#[derive(Clone, PartialEq)]
 pub struct Grantee {
     /// <p>Screen name of the grantee.</p>
     pub display_name: Option<DisplayName>,
@@ -8947,6 +9095,7 @@ impl fmt::Debug for Grantee {
 
 pub type Grants = List<Grant>;
 
+#[derive(Clone, PartialEq)]
 pub struct HeadBucketInput {
     /// <p>The bucket name.</p>
     /// <p>
@@ -8992,11 +9141,11 @@ impl HeadBucketInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct HeadBucketOutput {
     /// <p>Indicates whether the bucket name used in the request is an access point alias.</p>
     /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
+    /// <p>For directory buckets, the value of this field is <code>false</code>.</p>
     /// </note>
     pub access_point_alias: Option<AccessPointAlias>,
     /// <p>The name of the location where the bucket will be created.</p>
@@ -9011,9 +9160,6 @@ pub struct HeadBucketOutput {
     /// </note>
     pub bucket_location_type: Option<LocationType>,
     /// <p>The Region that the bucket is located.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_region: Option<Region>,
 }
 
@@ -9036,6 +9182,7 @@ impl fmt::Debug for HeadBucketOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct HeadObjectInput {
     /// <p>The name of the bucket that contains the object.</p>
     /// <p>
@@ -9055,9 +9202,15 @@ pub struct HeadObjectInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>To retrieve the checksum, this parameter must be enabled.</p>
-    /// <p>In addition, if you enable <code>ChecksumMode</code> and the object is encrypted with
-    /// Amazon Web Services Key Management Service (Amazon Web Services KMS), you must have permission to use the
-    /// <code>kms:Decrypt</code> action for the request to succeed.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - If you enable checksum mode and the object is uploaded with a
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_Checksum.html">checksum</a>
+    /// and encrypted with an Key Management Service (KMS) key, you must have permission to use the
+    /// <code>kms:Decrypt</code> action to retrieve the checksum.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - If you enable <code>ChecksumMode</code> and the object is encrypted with
+    /// Amazon Web Services Key Management Service (Amazon Web Services KMS), you must also have the
+    /// <code>kms:GenerateDataKey</code> and <code>kms:Decrypt</code> permissions in IAM identity-based policies and KMS key policies for the KMS key to retrieve the checksum of the object.</p>
     pub checksum_mode: Option<ChecksumMode>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -9263,7 +9416,7 @@ impl HeadObjectInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct HeadObjectOutput {
     /// <p>Indicates that a range of bytes was specified.</p>
     pub accept_ranges: Option<AcceptRanges>,
@@ -9274,18 +9427,15 @@ pub struct HeadObjectOutput {
     pub archive_status: Option<ArchiveStatus>,
     /// <p>Indicates whether the object uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -9442,17 +9592,10 @@ pub struct HeadObjectOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Provides storage class information of the object. Amazon S3 returns this header for all
     /// objects except for S3 Standard storage class objects.</p>
@@ -9602,6 +9745,7 @@ pub type IfNoneMatch = String;
 pub type IfUnmodifiedSince = Timestamp;
 
 /// <p>Container for the <code>Suffix</code> element.</p>
+#[derive(Clone, PartialEq)]
 pub struct IndexDocument {
     /// <p>A suffix that is appended to a request that is for a directory on the website endpoint.
     /// (For example, if the suffix is <code>index.html</code> and you make a request to
@@ -9627,7 +9771,7 @@ impl fmt::Debug for IndexDocument {
 pub type Initiated = Timestamp;
 
 /// <p>Container element that identifies who initiated the multipart upload. </p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Initiator {
     /// <p>Name of the Principal.</p>
     /// <note>
@@ -9658,7 +9802,7 @@ impl fmt::Debug for Initiator {
 }
 
 /// <p>Describes the serialization format of the object.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct InputSerialization {
     /// <p>Describes the serialization of a CSV-encoded object.</p>
     pub csv: Option<CSVInput>,
@@ -9730,7 +9874,7 @@ impl FromStr for IntelligentTieringAccessTier {
 
 /// <p>A container for specifying S3 Intelligent-Tiering filters. The filters determine the
 /// subset of objects to which the rule applies.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct IntelligentTieringAndOperator {
     /// <p>An object key name prefix that identifies the subset of objects to which the
     /// configuration applies.</p>
@@ -9757,6 +9901,7 @@ impl fmt::Debug for IntelligentTieringAndOperator {
 /// <p>For information about the S3 Intelligent-Tiering storage class, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class
 /// for automatically optimizing frequently and infrequently accessed
 /// objects</a>.</p>
+#[derive(Clone, PartialEq)]
 pub struct IntelligentTieringConfiguration {
     /// <p>Specifies a bucket filter. The configuration only includes objects that meet the
     /// filter's criteria.</p>
@@ -9788,7 +9933,7 @@ pub type IntelligentTieringDays = i32;
 
 /// <p>The <code>Filter</code> is used to identify objects that the S3 Intelligent-Tiering
 /// configuration applies to.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct IntelligentTieringFilter {
     /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter.
     /// The operator must have at least two predicates, and an object must match all of the
@@ -9869,7 +10014,7 @@ impl FromStr for IntelligentTieringStatus {
 /// <code>InvalidObjectState</code> error. For information about restoring archived objects,
 /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring
 /// Archived Objects</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct InvalidObjectState {
     pub access_tier: Option<IntelligentTieringAccessTier>,
     pub storage_class: Option<StorageClass>,
@@ -9890,6 +10035,7 @@ impl fmt::Debug for InvalidObjectState {
 
 /// <p>Specifies the inventory configuration for an Amazon S3 bucket. For more information, see
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGETInventoryConfig.html">GET Bucket inventory</a> in the <i>Amazon S3 API Reference</i>. </p>
+#[derive(Clone, PartialEq)]
 pub struct InventoryConfiguration {
     /// <p>Contains information about where to publish the inventory results.</p>
     pub destination: InventoryDestination,
@@ -9935,6 +10081,7 @@ impl fmt::Debug for InventoryConfiguration {
 pub type InventoryConfigurationList = List<InventoryConfiguration>;
 
 /// <p>Specifies the inventory configuration for an Amazon S3 bucket.</p>
+#[derive(Clone, PartialEq)]
 pub struct InventoryDestination {
     /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional)
     /// where inventory results are published.</p>
@@ -9951,7 +10098,7 @@ impl fmt::Debug for InventoryDestination {
 
 /// <p>Contains the type of server-side encryption used to encrypt the inventory
 /// results.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct InventoryEncryption {
     /// <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
     pub ssekms: Option<SSEKMS>,
@@ -9974,6 +10121,7 @@ impl fmt::Debug for InventoryEncryption {
 
 /// <p>Specifies an inventory filter. The inventory only includes objects that meet the
 /// filter's criteria.</p>
+#[derive(Clone, PartialEq)]
 pub struct InventoryFilter {
     /// <p>The prefix that an object must have to be included in the inventory results.</p>
     pub prefix: Prefix,
@@ -10173,6 +10321,7 @@ pub type InventoryOptionalFields = List<InventoryOptionalField>;
 
 /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional)
 /// where inventory results are published.</p>
+#[derive(Clone, PartialEq)]
 pub struct InventoryS3BucketDestination {
     /// <p>The account ID that owns the destination S3 bucket. If no account ID is provided, the
     /// owner is not validated before exporting data. </p>
@@ -10212,6 +10361,7 @@ impl fmt::Debug for InventoryS3BucketDestination {
 }
 
 /// <p>Specifies the schedule for generating inventory results.</p>
+#[derive(Clone, PartialEq)]
 pub struct InventorySchedule {
     /// <p>Specifies how frequently inventory results are produced.</p>
     pub frequency: InventoryFrequency,
@@ -10236,7 +10386,7 @@ pub type IsRestoreInProgress = bool;
 pub type IsTruncated = bool;
 
 /// <p>Specifies JSON as object's input serialization format.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct JSONInput {
     /// <p>The type of JSON. Valid values: Document, Lines.</p>
     pub type_: Option<JSONType>,
@@ -10253,7 +10403,7 @@ impl fmt::Debug for JSONInput {
 }
 
 /// <p>Specifies JSON as request's output serialization format.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct JSONOutput {
     /// <p>The value used to separate individual records in the output. If no value is specified,
     /// Amazon S3 uses a newline character ('\n').</p>
@@ -10319,6 +10469,7 @@ pub type KeyPrefixEquals = String;
 pub type LambdaFunctionArn = String;
 
 /// <p>A container for specifying the configuration for Lambda notifications.</p>
+#[derive(Clone, PartialEq)]
 pub struct LambdaFunctionConfiguration {
     /// <p>The Amazon S3 bucket event for which to invoke the Lambda function. For more information,
     /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported
@@ -10353,7 +10504,7 @@ pub type LastModified = Timestamp;
 /// <p>Container for the expiration for the lifecycle of the object.</p>
 /// <p>For more information see, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html">Managing your storage
 /// lifecycle</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct LifecycleExpiration {
     /// <p>Indicates at what date the object is to be moved or deleted. The date value must conform
     /// to the ISO 8601 format. The time is always midnight UTC.</p>
@@ -10386,6 +10537,7 @@ impl fmt::Debug for LifecycleExpiration {
 /// <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
 /// <p>For more information see, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html">Managing your storage
 /// lifecycle</a> in the <i>Amazon S3 User Guide</i>.</p>
+#[derive(Clone, PartialEq)]
 pub struct LifecycleRule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     /// <p>Specifies the expiration for the lifecycle of the object in the form of date, days and,
@@ -10455,7 +10607,7 @@ impl fmt::Debug for LifecycleRule {
 /// <p>This is used in a Lifecycle Rule Filter to apply a logical AND to two or more
 /// predicates. The Lifecycle Rule will apply to any object matching all of the predicates
 /// configured inside the And operator.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct LifecycleRuleAndOperator {
     /// <p>Minimum object size to which the rule applies.</p>
     pub object_size_greater_than: Option<ObjectSizeGreaterThanBytes>,
@@ -10490,27 +10642,49 @@ impl fmt::Debug for LifecycleRuleAndOperator {
 /// <p>The <code>Filter</code> is used to identify objects that a Lifecycle Rule applies to. A
 /// <code>Filter</code> can have exactly one of <code>Prefix</code>, <code>Tag</code>, <code>ObjectSizeGreaterThan</code>, <code>ObjectSizeLessThan</code>, or
 /// <code>And</code> specified. If the <code>Filter</code> element is left empty, the Lifecycle Rule applies to all objects in the bucket.</p>
-#[derive(Debug)]
-#[non_exhaustive]
-pub enum LifecycleRuleFilter {
-    And(LifecycleRuleAndOperator),
+#[derive(Clone, Default, PartialEq)]
+pub struct LifecycleRuleFilter {
+    pub and: Option<LifecycleRuleAndOperator>,
     /// <p>Minimum object size to which the rule applies.</p>
-    ObjectSizeGreaterThan(ObjectSizeGreaterThanBytes),
+    pub object_size_greater_than: Option<ObjectSizeGreaterThanBytes>,
     /// <p>Maximum object size to which the rule applies.</p>
-    ObjectSizeLessThan(ObjectSizeLessThanBytes),
+    pub object_size_less_than: Option<ObjectSizeLessThanBytes>,
     /// <p>Prefix identifying one or more objects to which the rule applies.</p>
     /// <important>
     /// <p>Replacement must be made for object keys containing special characters (such as carriage returns) when using
     /// XML requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-xml-related-constraints">
     /// XML related object key constraints</a>.</p>
     /// </important>
-    Prefix(Prefix),
+    pub prefix: Option<Prefix>,
     /// <p>This tag must exist in the object's tag set in order for the rule to apply.</p>
-    Tag(Tag),
+    pub tag: Option<Tag>,
+}
+
+impl fmt::Debug for LifecycleRuleFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("LifecycleRuleFilter");
+        if let Some(ref val) = self.and {
+            d.field("and", val);
+        }
+        if let Some(ref val) = self.object_size_greater_than {
+            d.field("object_size_greater_than", val);
+        }
+        if let Some(ref val) = self.object_size_less_than {
+            d.field("object_size_less_than", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tag {
+            d.field("tag", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 pub type LifecycleRules = List<LifecycleRule>;
 
+#[derive(Clone, PartialEq)]
 pub struct ListBucketAnalyticsConfigurationsInput {
     /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
     pub bucket: BucketName,
@@ -10542,7 +10716,7 @@ impl ListBucketAnalyticsConfigurationsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
     /// <p>The list of analytics configurations for a bucket.</p>
     pub analytics_configuration_list: Option<AnalyticsConfigurationList>,
@@ -10580,6 +10754,7 @@ impl fmt::Debug for ListBucketAnalyticsConfigurationsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ListBucketIntelligentTieringConfigurationsInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -10606,7 +10781,7 @@ impl ListBucketIntelligentTieringConfigurationsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListBucketIntelligentTieringConfigurationsOutput {
     /// <p>The <code>ContinuationToken</code> that represents a placeholder from where this request
     /// should begin.</p>
@@ -10642,6 +10817,7 @@ impl fmt::Debug for ListBucketIntelligentTieringConfigurationsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ListBucketInventoryConfigurationsInput {
     /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
     pub bucket: BucketName,
@@ -10675,7 +10851,7 @@ impl ListBucketInventoryConfigurationsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListBucketInventoryConfigurationsOutput {
     /// <p>If sent in the request, the marker that is used as a starting point for this inventory
     /// configuration list response.</p>
@@ -10711,6 +10887,7 @@ impl fmt::Debug for ListBucketInventoryConfigurationsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ListBucketMetricsConfigurationsInput {
     /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
     pub bucket: BucketName,
@@ -10744,7 +10921,7 @@ impl ListBucketMetricsConfigurationsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListBucketMetricsConfigurationsOutput {
     /// <p>The marker that is used as a starting point for this metrics configuration list
     /// response. This value is present if it was sent in the request.</p>
@@ -10781,12 +10958,28 @@ impl fmt::Debug for ListBucketMetricsConfigurationsOutput {
     }
 }
 
-#[derive(Default)]
-pub struct ListBucketsInput {}
+#[derive(Clone, Default, PartialEq)]
+pub struct ListBucketsInput {
+    /// <p>
+    /// <code>ContinuationToken</code> indicates to Amazon S3 that the list is being continued on
+    /// this bucket with a token. <code>ContinuationToken</code> is obfuscated and is not a real
+    /// key. You can use this <code>ContinuationToken</code> for pagination of the list results.  </p>
+    /// <p>Length Constraints: Minimum length of 0. Maximum length of 1024.</p>
+    /// <p>Required: No.</p>
+    pub continuation_token: Option<Token>,
+    /// <p>Maximum number of buckets to be returned in response. When the number is more than the count of buckets that are owned by an Amazon Web Services account, return all the buckets in response.</p>
+    pub max_buckets: Option<MaxBuckets>,
+}
 
 impl fmt::Debug for ListBucketsInput {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("ListBucketsInput");
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
+        if let Some(ref val) = self.max_buckets {
+            d.field("max_buckets", val);
+        }
         d.finish_non_exhaustive()
     }
 }
@@ -10798,10 +10991,14 @@ impl ListBucketsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListBucketsOutput {
     /// <p>The list of buckets owned by the requester.</p>
     pub buckets: Option<Buckets>,
+    /// <p>
+    /// <code>ContinuationToken</code> is included in the
+    /// response when there are more buckets that can be listed with pagination. The next <code>ListBuckets</code> request to Amazon S3 can be continued with this <code>ContinuationToken</code>. <code>ContinuationToken</code> is obfuscated and is not a real bucket.</p>
+    pub continuation_token: Option<NextToken>,
     /// <p>The owner of the buckets listed.</p>
     pub owner: Option<Owner>,
 }
@@ -10812,6 +11009,9 @@ impl fmt::Debug for ListBucketsOutput {
         if let Some(ref val) = self.buckets {
             d.field("buckets", val);
         }
+        if let Some(ref val) = self.continuation_token {
+            d.field("continuation_token", val);
+        }
         if let Some(ref val) = self.owner {
             d.field("owner", val);
         }
@@ -10819,6 +11019,7 @@ impl fmt::Debug for ListBucketsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ListMultipartUploadsInput {
     /// <p>The name of the bucket to which the multipart upload was initiated. </p>
     /// <p>
@@ -10944,7 +11145,7 @@ impl ListMultipartUploadsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListMultipartUploadsOutput {
     /// <p>The name of the bucket to which the multipart upload was initiated. Does not return the
     /// access point ARN or access point alias if used.</p>
@@ -11058,6 +11259,7 @@ impl fmt::Debug for ListMultipartUploadsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ListObjectVersionsInput {
     /// <p>The bucket name that contains the objects. </p>
     pub bucket: BucketName,
@@ -11133,7 +11335,7 @@ impl ListObjectVersionsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListObjectVersionsOutput {
     /// <p>All of the keys rolled up into a common prefix count as a single return when calculating
     /// the number of returns.</p>
@@ -11233,6 +11435,7 @@ impl fmt::Debug for ListObjectVersionsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ListObjectsInput {
     /// <p>The name of the bucket containing the objects.</p>
     /// <p>
@@ -11310,7 +11513,7 @@ impl ListObjectsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListObjectsOutput {
     /// <p>All of the keys (up to 1,000) rolled up in a common prefix count as a single return when
     /// calculating the number of returns. </p>
@@ -11336,10 +11539,19 @@ pub struct ListObjectsOutput {
     /// in the response. Each rolled-up result counts as only one return against the
     /// <code>MaxKeys</code> value.</p>
     pub delimiter: Option<Delimiter>,
-    /// <p>Encoding type used by Amazon S3 to encode object keys in the response. If using
-    /// <code>url</code>, non-ASCII characters used in an object's key name will be URL encoded.
-    /// For example, the object <code>test_file(3).png</code> will appear as
+    /// <p>Encoding type used by Amazon S3 to encode the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html">object keys</a> in the response.
+    /// Responses are encoded only in UTF-8. An object key can contain any Unicode character.
+    /// However, the XML 1.0 parser can't parse certain characters, such as characters with an
+    /// ASCII value from 0 to 10. For characters that aren't supported in XML 1.0, you can add this
+    /// parameter to request that Amazon S3 encode the keys in the response. For more information about
+    /// characters to avoid in object key names, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-guidelines">Object key naming
+    /// guidelines</a>.</p>
+    /// <note>
+    /// <p>When using the URL encoding type, non-ASCII characters that are used in an object's
+    /// key name will be percent-encoded according to UTF-8 code values. For example, the object
+    /// <code>test_file(3).png</code> will appear as
     /// <code>test_file%283%29.png</code>.</p>
+    /// </note>
     pub encoding_type: Option<EncodingType>,
     /// <p>A flag that indicates whether Amazon S3 returned all of the results that satisfied the search
     /// criteria.</p>
@@ -11408,6 +11620,7 @@ impl fmt::Debug for ListObjectsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ListObjectsV2Input {
     /// <p>
     /// <b>Directory buckets</b> - When you use this operation with a directory bucket, you must use virtual-hosted-style requests in the format <code>
@@ -11446,10 +11659,19 @@ pub struct ListObjectsV2Input {
     /// </ul>
     /// </note>
     pub delimiter: Option<Delimiter>,
-    /// <p>Encoding type used by Amazon S3 to encode object keys in the response. If using
-    /// <code>url</code>, non-ASCII characters used in an object's key name will be URL encoded.
-    /// For example, the object <code>test_file(3).png</code> will appear as
+    /// <p>Encoding type used by Amazon S3 to encode the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html">object keys</a> in the response.
+    /// Responses are encoded only in UTF-8. An object key can contain any Unicode character.
+    /// However, the XML 1.0 parser can't parse certain characters, such as characters with an
+    /// ASCII value from 0 to 10. For characters that aren't supported in XML 1.0, you can add this
+    /// parameter to request that Amazon S3 encode the keys in the response. For more information about
+    /// characters to avoid in object key names, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-guidelines">Object key naming
+    /// guidelines</a>.</p>
+    /// <note>
+    /// <p>When using the URL encoding type, non-ASCII characters that are used in an object's
+    /// key name will be percent-encoded according to UTF-8 code values. For example, the object
+    /// <code>test_file(3).png</code> will appear as
     /// <code>test_file%283%29.png</code>.</p>
+    /// </note>
     pub encoding_type: Option<EncodingType>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
     pub expected_bucket_owner: Option<AccountId>,
@@ -11535,7 +11757,7 @@ impl ListObjectsV2Input {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListObjectsV2Output {
     /// <p>All of the keys (up to 1,000) that share the same prefix are grouped together. When counting the total numbers of returns by this API operation,
     /// this group of keys is considered as one item.</p>
@@ -11671,6 +11893,7 @@ impl fmt::Debug for ListObjectsV2Output {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct ListPartsInput {
     /// <p>The name of the bucket to which the parts are being uploaded. </p>
     /// <p>
@@ -11765,7 +11988,7 @@ impl ListPartsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ListPartsOutput {
     /// <p>If the bucket has a lifecycle rule configured with an action to abort incomplete
     /// multipart uploads and the prefix in the lifecycle rule matches the object name in the
@@ -11893,7 +12116,7 @@ pub type Location = String;
 /// <note>
 /// <p>This functionality is only supported by directory buckets.</p>
 /// </note>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct LocationInfo {
     /// <p>The name of the location where the bucket will be created.</p>
     /// <p>For directory buckets, the name of the location is the AZ ID of the Availability Zone where the bucket will be created. An example AZ ID value is <code>usw2-az1</code>.</p>
@@ -11958,6 +12181,7 @@ impl FromStr for LocationType {
 /// <p>Describes where logs are stored and the prefix that Amazon S3 assigns to all log object keys
 /// for a bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTlogging.html">PUT Bucket logging</a> in the
 /// <i>Amazon S3 API Reference</i>.</p>
+#[derive(Clone, PartialEq)]
 pub struct LoggingEnabled {
     /// <p>Specifies the bucket where you want Amazon S3 to store server access logs. You can have your
     /// logs delivered to any bucket that you own, including the same bucket that is being logged.
@@ -12075,6 +12299,8 @@ pub type Marker = String;
 
 pub type MaxAgeSeconds = i32;
 
+pub type MaxBuckets = i32;
+
 pub type MaxDirectoryBuckets = i32;
 
 pub type MaxKeys = i32;
@@ -12126,7 +12352,7 @@ impl FromStr for MetadataDirective {
 }
 
 /// <p>A metadata key-value pair to store with an object.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct MetadataEntry {
     /// <p>Name of the object.</p>
     pub name: Option<MetadataKey>,
@@ -12153,6 +12379,7 @@ pub type MetadataValue = String;
 
 /// <p> A container specifying replication metrics-related settings enabling replication
 /// metrics and events.</p>
+#[derive(Clone, PartialEq)]
 pub struct Metrics {
     /// <p> A container specifying the time threshold for emitting the
     /// <code>s3:Replication:OperationMissedThreshold</code> event. </p>
@@ -12175,7 +12402,7 @@ impl fmt::Debug for Metrics {
 /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter.
 /// The operator must have at least two predicates, and an object must match all of the
 /// predicates in order for the filter to apply.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct MetricsAndOperator {
     /// <p>The access point ARN used when evaluating an <code>AND</code> predicate.</p>
     pub access_point_arn: Option<AccessPointArn>,
@@ -12206,6 +12433,7 @@ impl fmt::Debug for MetricsAndOperator {
 /// configuration, note that this is a full replacement of the existing metrics configuration.
 /// If you don't include the elements you want to keep, they are erased. For more information,
 /// see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTMetricConfiguration.html">PutBucketMetricsConfiguration</a>.</p>
+#[derive(Clone, PartialEq)]
 pub struct MetricsConfiguration {
     /// <p>Specifies a metrics configuration filter. The metrics configuration will only include
     /// objects that meet the filter's criteria. A filter must be a prefix, an object tag, an
@@ -12232,7 +12460,7 @@ pub type MetricsConfigurationList = List<MetricsConfiguration>;
 /// <p>Specifies a metrics configuration filter. The metrics configuration only includes
 /// objects that meet the filter's criteria. A filter must be a prefix, an object tag, an
 /// access point ARN, or a conjunction (MetricsAndOperator). For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketMetricsConfiguration.html">PutBucketMetricsConfiguration</a>.</p>
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 #[non_exhaustive]
 pub enum MetricsFilter {
     /// <p>The access point ARN used when evaluating a metrics filter.</p>
@@ -12292,7 +12520,7 @@ pub type Minutes = i32;
 pub type MissingMeta = i32;
 
 /// <p>Container for the <code>MultipartUpload</code> for the Amazon S3 object.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct MultipartUpload {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
@@ -12363,7 +12591,7 @@ pub type NextUploadIdMarker = String;
 pub type NextVersionIdMarker = String;
 
 /// <p>The specified bucket does not exist.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct NoSuchBucket {}
 
 impl fmt::Debug for NoSuchBucket {
@@ -12374,7 +12602,7 @@ impl fmt::Debug for NoSuchBucket {
 }
 
 /// <p>The specified key does not exist.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct NoSuchKey {}
 
 impl fmt::Debug for NoSuchKey {
@@ -12385,7 +12613,7 @@ impl fmt::Debug for NoSuchKey {
 }
 
 /// <p>The specified multipart upload does not exist.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct NoSuchUpload {}
 
 impl fmt::Debug for NoSuchUpload {
@@ -12399,7 +12627,7 @@ impl fmt::Debug for NoSuchUpload {
 /// deletes the noncurrent object versions. You set this lifecycle configuration action on a
 /// bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent
 /// object versions at a specific period in the object's lifetime.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct NoncurrentVersionExpiration {
     /// <p>Specifies how many noncurrent versions Amazon S3 will retain. You can specify up to 100
     /// noncurrent versions to retain. Amazon S3 will permanently delete any additional noncurrent
@@ -12436,7 +12664,7 @@ impl fmt::Debug for NoncurrentVersionExpiration {
 /// <code>STANDARD_IA</code>, <code>ONEZONE_IA</code>, <code>INTELLIGENT_TIERING</code>,
 /// <code>GLACIER_IR</code>, <code>GLACIER</code>, or <code>DEEP_ARCHIVE</code> storage
 /// class at a specific period in the object's lifetime.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct NoncurrentVersionTransition {
     /// <p>Specifies how many noncurrent versions Amazon S3 will retain in the same storage class before
     /// transitioning objects. You can specify up to 100 noncurrent versions to retain. Amazon S3 will
@@ -12472,7 +12700,7 @@ impl fmt::Debug for NoncurrentVersionTransition {
 pub type NoncurrentVersionTransitionList = List<NoncurrentVersionTransition>;
 
 /// <p>The specified content does not exist.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct NotFound {}
 
 impl fmt::Debug for NotFound {
@@ -12484,7 +12712,7 @@ impl fmt::Debug for NotFound {
 
 /// <p>A container for specifying the notification configuration of the bucket. If this element
 /// is empty, notifications are turned off for the bucket.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct NotificationConfiguration {
     /// <p>Enables delivery of events to Amazon EventBridge.</p>
     pub event_bridge_configuration: Option<EventBridgeConfiguration>,
@@ -12522,7 +12750,7 @@ impl fmt::Debug for NotificationConfiguration {
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/notification-how-to-filtering.html">Configuring event
 /// notifications using object key name filtering</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct NotificationConfigurationFilter {
     pub key: Option<S3KeyFilter>,
 }
@@ -12542,7 +12770,7 @@ impl fmt::Debug for NotificationConfigurationFilter {
 pub type NotificationId = String;
 
 /// <p>An object consists of data and its descriptive metadata.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Object {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithmList>,
@@ -12634,7 +12862,7 @@ impl fmt::Debug for Object {
 }
 
 /// <p>This action is not allowed against this storage tier.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ObjectAlreadyInActiveTierError {}
 
 impl fmt::Debug for ObjectAlreadyInActiveTierError {
@@ -12739,6 +12967,7 @@ impl FromStr for ObjectCannedACL {
 }
 
 /// <p>Object Identifier is unique value to identify objects.</p>
+#[derive(Clone, PartialEq)]
 pub struct ObjectIdentifier {
     /// <p>Key name of the object.</p>
     /// <important>
@@ -12772,7 +13001,7 @@ pub type ObjectKey = String;
 pub type ObjectList = List<Object>;
 
 /// <p>The container element for Object Lock configuration parameters.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ObjectLockConfiguration {
     /// <p>Indicates whether this bucket has an Object Lock configuration enabled. Enable
     /// <code>ObjectLockEnabled</code> when you apply <code>ObjectLockConfiguration</code> to a
@@ -12838,7 +13067,7 @@ impl FromStr for ObjectLockEnabled {
 pub type ObjectLockEnabledForBucket = bool;
 
 /// <p>A legal hold configuration for an object.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ObjectLockLegalHold {
     /// <p>Indicates whether the specified object has a legal hold in place.</p>
     pub status: Option<ObjectLockLegalHoldStatus>,
@@ -12933,7 +13162,7 @@ impl FromStr for ObjectLockMode {
 pub type ObjectLockRetainUntilDate = Timestamp;
 
 /// <p>A Retention configuration for an object.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ObjectLockRetention {
     /// <p>Indicates the Retention mode for the specified object.</p>
     pub mode: Option<ObjectLockRetentionMode>,
@@ -12993,7 +13222,7 @@ impl FromStr for ObjectLockRetentionMode {
 }
 
 /// <p>The container element for an Object Lock rule.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ObjectLockRule {
     /// <p>The default Object Lock retention mode and period that you want to apply to new objects
     /// placed in the specified bucket. Bucket settings require both a mode and a period. The
@@ -13016,7 +13245,7 @@ pub type ObjectLockToken = String;
 
 /// <p>The source object of the COPY action is not in the active tier and is only stored in
 /// Amazon S3 Glacier.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ObjectNotInActiveTierError {}
 
 impl fmt::Debug for ObjectNotInActiveTierError {
@@ -13088,14 +13317,14 @@ impl FromStr for ObjectOwnership {
 }
 
 /// <p>A container for elements related to an individual part.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ObjectPart {
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -13205,7 +13434,7 @@ impl FromStr for ObjectStorageClass {
 }
 
 /// <p>The version of an object.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ObjectVersion {
     /// <p>The algorithm that was used to create a checksum of the object.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithmList>,
@@ -13349,7 +13578,7 @@ impl FromStr for OptionalObjectAttributes {
 pub type OptionalObjectAttributesList = List<OptionalObjectAttributes>;
 
 /// <p>Describes the location where the restore job's output is stored.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct OutputLocation {
     /// <p>Describes an S3 location that will receive the results of the restore request.</p>
     pub s3: Option<S3Location>,
@@ -13366,7 +13595,7 @@ impl fmt::Debug for OutputLocation {
 }
 
 /// <p>Describes how results of the Select job are serialized.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct OutputSerialization {
     /// <p>Describes the serialization of CSV-encoded Select results.</p>
     pub csv: Option<CSVOutput>,
@@ -13388,7 +13617,7 @@ impl fmt::Debug for OutputSerialization {
 }
 
 /// <p>Container for the owner's display name and ID.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Owner {
     /// <p>Container for the display name of the owner. This value is only supported in the
     /// following Amazon Web Services Regions:</p>
@@ -13476,7 +13705,7 @@ impl FromStr for OwnerOverride {
 }
 
 /// <p>The container element for a bucket's ownership controls.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct OwnershipControls {
     /// <p>The container element for an ownership control rule.</p>
     pub rules: OwnershipControlsRules,
@@ -13491,6 +13720,7 @@ impl fmt::Debug for OwnershipControls {
 }
 
 /// <p>The container element for an ownership control rule.</p>
+#[derive(Clone, PartialEq)]
 pub struct OwnershipControlsRule {
     pub object_ownership: ObjectOwnership,
 }
@@ -13506,7 +13736,7 @@ impl fmt::Debug for OwnershipControlsRule {
 pub type OwnershipControlsRules = List<OwnershipControlsRule>;
 
 /// <p>Container for Parquet.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ParquetInput {}
 
 impl fmt::Debug for ParquetInput {
@@ -13517,14 +13747,14 @@ impl fmt::Debug for ParquetInput {
 }
 
 /// <p>Container for elements related to a part.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Part {
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -13628,9 +13858,16 @@ impl FromStr for PartitionDateSource {
 /// <code>[DestinationPrefix][SourceAccountId]/[SourceRegion]/[SourceBucket]/[YYYY]/[MM]/[DD]/[YYYY]-[MM]-[DD]-[hh]-[mm]-[ss]-[UniqueString]</code>
 /// </p>
 /// <p>PartitionedPrefix defaults to EventTime delivery when server access logs are delivered.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PartitionedPrefix {
-    /// <p>Specifies the partition date source for the partitioned prefix. PartitionDateSource can be EventTime or DeliveryTime.</p>
+    /// <p>Specifies the partition date source for the partitioned prefix.
+    /// <code>PartitionDateSource</code> can be <code>EventTime</code> or
+    /// <code>DeliveryTime</code>.</p>
+    /// <p>For <code>DeliveryTime</code>, the time in the log file names corresponds to the
+    /// delivery time for the log files. </p>
+    /// <p> For <code>EventTime</code>, The logs delivered are for a specific day only. The year,
+    /// month, and day correspond to the day on which the event occurred, and the hour, minutes and
+    /// seconds are set to 00 in the key.</p>
     pub partition_date_source: Option<PartitionDateSource>,
 }
 
@@ -13735,7 +13972,7 @@ impl FromStr for Permission {
 pub type Policy = String;
 
 /// <p>The container element for a bucket's policy status.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PolicyStatus {
     /// <p>The policy status for this bucket. <code>TRUE</code> indicates that this bucket is
     /// public. <code>FALSE</code> indicates that the bucket is not public.</p>
@@ -13757,7 +13994,7 @@ pub type Prefix = String;
 pub type Priority = i32;
 
 /// <p>This data type contains information about progress of an operation.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Progress {
     /// <p>The current number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<BytesProcessed>,
@@ -13784,7 +14021,7 @@ impl fmt::Debug for Progress {
 }
 
 /// <p>This data type contains information about the progress event of an operation.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ProgressEvent {
     /// <p>The Progress event details.</p>
     pub details: Option<Progress>,
@@ -13841,7 +14078,7 @@ impl FromStr for Protocol {
 /// <p>The PublicAccessBlock configuration that you want to apply to this Amazon S3 bucket. You can
 /// enable the configuration options in any combination. For more information about when Amazon S3
 /// considers a bucket or object public, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">The Meaning of "Public"</a> in the <i>Amazon S3 User Guide</i>. </p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PublicAccessBlockConfiguration {
     /// <p>Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket
     /// and objects in this bucket. Setting this element to <code>TRUE</code> causes the following
@@ -13872,7 +14109,7 @@ pub struct PublicAccessBlockConfiguration {
     /// prevent new public ACLs from being set.</p>
     pub ignore_public_acls: Option<Setting>,
     /// <p>Specifies whether Amazon S3 should restrict public bucket policies for this bucket. Setting
-    /// this element to <code>TRUE</code> restricts access to this bucket to only Amazon Web Service principals and authorized users within this account if the bucket has
+    /// this element to <code>TRUE</code> restricts access to this bucket to only Amazon Web Servicesservice principals and authorized users within this account if the bucket has
     /// a public policy.</p>
     /// <p>Enabling this setting doesn't affect previously stored bucket policies, except that
     /// public and cross-account access within any public bucket policy, including non-public
@@ -13899,6 +14136,7 @@ impl fmt::Debug for PublicAccessBlockConfiguration {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketAccelerateConfigurationInput {
     /// <p>Container for setting the transfer acceleration state.</p>
     pub accelerate_configuration: AccelerateConfiguration,
@@ -13938,7 +14176,7 @@ impl PutBucketAccelerateConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketAccelerateConfigurationOutput {}
 
 impl fmt::Debug for PutBucketAccelerateConfigurationOutput {
@@ -13948,6 +14186,7 @@ impl fmt::Debug for PutBucketAccelerateConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketAclInput {
     /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<BucketCannedACL>,
@@ -14032,7 +14271,7 @@ impl PutBucketAclInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketAclOutput {}
 
 impl fmt::Debug for PutBucketAclOutput {
@@ -14042,6 +14281,7 @@ impl fmt::Debug for PutBucketAclOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketAnalyticsConfigurationInput {
     /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: AnalyticsConfiguration,
@@ -14073,7 +14313,7 @@ impl PutBucketAnalyticsConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketAnalyticsConfigurationOutput {}
 
 impl fmt::Debug for PutBucketAnalyticsConfigurationOutput {
@@ -14083,6 +14323,7 @@ impl fmt::Debug for PutBucketAnalyticsConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketCorsInput {
     /// <p>Specifies the bucket impacted by the <code>cors</code>configuration.</p>
     pub bucket: BucketName,
@@ -14135,7 +14376,7 @@ impl PutBucketCorsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketCorsOutput {}
 
 impl fmt::Debug for PutBucketCorsOutput {
@@ -14145,14 +14386,16 @@ impl fmt::Debug for PutBucketCorsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketEncryptionInput {
     /// <p>Specifies default encryption for a bucket using server-side encryption with different
-    /// key options. By default, all buckets have a default encryption configuration that uses
-    /// server-side encryption with Amazon S3 managed keys (SSE-S3). You can optionally configure
-    /// default encryption for a bucket by using server-side encryption with an Amazon Web Services KMS key
-    /// (SSE-KMS) or a customer-provided key (SSE-C). For information about the bucket default
-    /// encryption feature, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html">Amazon S3 Bucket Default Encryption</a>
-    /// in the <i>Amazon S3 User Guide</i>.</p>
+    /// key options.</p>
+    /// <p>
+    /// <b>Directory buckets </b> - When you use this operation with a directory bucket, you must use path-style requests in the format <code>https://s3express-control.<i>region_code</i>.amazonaws.com/<i>bucket-name</i>
+    /// </code>. Virtual-hosted-style requests aren't supported. Directory bucket names must be unique in the chosen Availability Zone. Bucket names must also follow the format <code>
+    /// <i>bucket_base_name</i>--<i>az_id</i>--x-s3</code> (for example, <code>
+    /// <i>DOC-EXAMPLE-BUCKET</i>--<i>usw2-az1</i>--x-s3</code>). For information about bucket naming restrictions, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>
+    /// </p>
     pub bucket: BucketName,
     /// <p>Indicates the algorithm used to create the checksum for the object when you use the SDK. This header will not provide any
     /// additional functionality if you don't use the SDK. When you send this header, there must be a corresponding <code>x-amz-checksum</code> or
@@ -14161,12 +14404,22 @@ pub struct PutBucketEncryptionInput {
     /// the <i>Amazon S3 User Guide</i>.</p>
     /// <p>If you provide an individual checksum, Amazon S3 ignores any provided
     /// <code>ChecksumAlgorithm</code> parameter.</p>
+    /// <note>
+    /// <p>For directory buckets, when you use Amazon Web Services SDKs, <code>CRC32</code> is the default checksum algorithm that's used for performance.</p>
+    /// </note>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
     /// <p>The base64-encoded 128-bit MD5 digest of the server-side encryption
     /// configuration.</p>
     /// <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
+    /// <note>
+    /// <p>This functionality is not supported for directory buckets.</p>
+    /// </note>
     pub content_md5: Option<ContentMD5>,
     /// <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
+    /// <note>
+    /// <p>For directory buckets, this header is not supported in this API operation. If you specify this header, the request fails with the HTTP status code
+    /// <code>501 Not Implemented</code>.</p>
+    /// </note>
     pub expected_bucket_owner: Option<AccountId>,
     pub server_side_encryption_configuration: ServerSideEncryptionConfiguration,
 }
@@ -14196,7 +14449,7 @@ impl PutBucketEncryptionInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketEncryptionOutput {}
 
 impl fmt::Debug for PutBucketEncryptionOutput {
@@ -14206,6 +14459,7 @@ impl fmt::Debug for PutBucketEncryptionOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketIntelligentTieringConfigurationInput {
     /// <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
     pub bucket: BucketName,
@@ -14232,7 +14486,7 @@ impl PutBucketIntelligentTieringConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketIntelligentTieringConfigurationOutput {}
 
 impl fmt::Debug for PutBucketIntelligentTieringConfigurationOutput {
@@ -14242,6 +14496,7 @@ impl fmt::Debug for PutBucketIntelligentTieringConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketInventoryConfigurationInput {
     /// <p>The name of the bucket where the inventory configuration will be stored.</p>
     pub bucket: BucketName,
@@ -14273,7 +14528,7 @@ impl PutBucketInventoryConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketInventoryConfigurationOutput {}
 
 impl fmt::Debug for PutBucketInventoryConfigurationOutput {
@@ -14283,6 +14538,7 @@ impl fmt::Debug for PutBucketInventoryConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketLifecycleConfigurationInput {
     /// <p>The name of the bucket for which to set the configuration.</p>
     pub bucket: BucketName,
@@ -14298,6 +14554,20 @@ pub struct PutBucketLifecycleConfigurationInput {
     pub expected_bucket_owner: Option<AccountId>,
     /// <p>Container for lifecycle rules. You can add as many as 1,000 rules.</p>
     pub lifecycle_configuration: Option<BucketLifecycleConfiguration>,
+    /// <p>Indicates which default minimum object size behavior is applied to the lifecycle configuration.</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <code>all_storage_classes_128K</code> - Objects smaller than 128 KB will not transition to any storage class by default. </p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <code>varies_by_storage_class</code> - Objects smaller than 128 KB will transition to Glacier Flexible Retrieval or Glacier Deep Archive storage classes. By default, all other storage classes will prevent transitions smaller than 128 KB.
+    /// </p>
+    /// </li>
+    /// </ul>
+    /// <p>To customize the minimum object size for any transition you can add a filter that specifies a custom <code>ObjectSizeGreaterThan</code> or <code>ObjectSizeLessThan</code> in the body of your transition rule.  Custom filters always take precedence over the default transition behavior.</p>
+    pub transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize>,
 }
 
 impl fmt::Debug for PutBucketLifecycleConfigurationInput {
@@ -14313,6 +14583,9 @@ impl fmt::Debug for PutBucketLifecycleConfigurationInput {
         if let Some(ref val) = self.lifecycle_configuration {
             d.field("lifecycle_configuration", val);
         }
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            d.field("transition_default_minimum_object_size", val);
+        }
         d.finish_non_exhaustive()
     }
 }
@@ -14324,16 +14597,35 @@ impl PutBucketLifecycleConfigurationInput {
     }
 }
 
-#[derive(Default)]
-pub struct PutBucketLifecycleConfigurationOutput {}
+#[derive(Clone, Default, PartialEq)]
+pub struct PutBucketLifecycleConfigurationOutput {
+    /// <p>Indicates which default minimum object size behavior is applied to the lifecycle configuration.</p>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <code>all_storage_classes_128K</code> - Objects smaller than 128 KB will not transition to any storage class by default. </p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <code>varies_by_storage_class</code> - Objects smaller than 128 KB will transition to Glacier Flexible Retrieval or Glacier Deep Archive storage classes. By default, all other storage classes will prevent transitions smaller than 128 KB.
+    /// </p>
+    /// </li>
+    /// </ul>
+    /// <p>To customize the minimum object size for any transition you can add a filter that specifies a custom <code>ObjectSizeGreaterThan</code> or <code>ObjectSizeLessThan</code> in the body of your transition rule.  Custom filters always take precedence over the default transition behavior.</p>
+    pub transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize>,
+}
 
 impl fmt::Debug for PutBucketLifecycleConfigurationOutput {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("PutBucketLifecycleConfigurationOutput");
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            d.field("transition_default_minimum_object_size", val);
+        }
         d.finish_non_exhaustive()
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketLoggingInput {
     /// <p>The name of the bucket for which to set the logging parameters.</p>
     pub bucket: BucketName,
@@ -14379,7 +14671,7 @@ impl PutBucketLoggingInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketLoggingOutput {}
 
 impl fmt::Debug for PutBucketLoggingOutput {
@@ -14389,6 +14681,7 @@ impl fmt::Debug for PutBucketLoggingOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketMetricsConfigurationInput {
     /// <p>The name of the bucket for which the metrics configuration is set.</p>
     pub bucket: BucketName,
@@ -14421,7 +14714,7 @@ impl PutBucketMetricsConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketMetricsConfigurationOutput {}
 
 impl fmt::Debug for PutBucketMetricsConfigurationOutput {
@@ -14431,6 +14724,7 @@ impl fmt::Debug for PutBucketMetricsConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketNotificationConfigurationInput {
     /// <p>The name of the bucket.</p>
     pub bucket: BucketName,
@@ -14464,7 +14758,7 @@ impl PutBucketNotificationConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketNotificationConfigurationOutput {}
 
 impl fmt::Debug for PutBucketNotificationConfigurationOutput {
@@ -14474,6 +14768,7 @@ impl fmt::Debug for PutBucketNotificationConfigurationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketOwnershipControlsInput {
     /// <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to set.</p>
     pub bucket: BucketName,
@@ -14509,7 +14804,7 @@ impl PutBucketOwnershipControlsInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketOwnershipControlsOutput {}
 
 impl fmt::Debug for PutBucketOwnershipControlsOutput {
@@ -14519,6 +14814,7 @@ impl fmt::Debug for PutBucketOwnershipControlsOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketPolicyInput {
     /// <p>The name of the bucket.</p>
     /// <p>
@@ -14538,16 +14834,24 @@ pub struct PutBucketPolicyInput {
     /// </code> with the supported algorithm from the following list: </p>
     /// <ul>
     /// <li>
-    /// <p>CRC32</p>
+    /// <p>
+    /// <code>CRC32</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>CRC32C</p>
+    /// <p>
+    /// <code>CRC32C</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA1</p>
+    /// <p>
+    /// <code>SHA1</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA256</p>
+    /// <p>
+    /// <code>SHA256</code>
+    /// </p>
     /// </li>
     /// </ul>
     /// <p>For more
@@ -14612,7 +14916,7 @@ impl PutBucketPolicyInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketPolicyOutput {}
 
 impl fmt::Debug for PutBucketPolicyOutput {
@@ -14622,6 +14926,7 @@ impl fmt::Debug for PutBucketPolicyOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketReplicationInput {
     /// <p>The name of the bucket</p>
     pub bucket: BucketName,
@@ -14673,7 +14978,7 @@ impl PutBucketReplicationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketReplicationOutput {}
 
 impl fmt::Debug for PutBucketReplicationOutput {
@@ -14683,6 +14988,7 @@ impl fmt::Debug for PutBucketReplicationOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketRequestPaymentInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -14730,7 +15036,7 @@ impl PutBucketRequestPaymentInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketRequestPaymentOutput {}
 
 impl fmt::Debug for PutBucketRequestPaymentOutput {
@@ -14740,6 +15046,7 @@ impl fmt::Debug for PutBucketRequestPaymentOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketTaggingInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -14787,7 +15094,7 @@ impl PutBucketTaggingInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketTaggingOutput {}
 
 impl fmt::Debug for PutBucketTaggingOutput {
@@ -14797,6 +15104,7 @@ impl fmt::Debug for PutBucketTaggingOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketVersioningInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -14851,7 +15159,7 @@ impl PutBucketVersioningInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketVersioningOutput {}
 
 impl fmt::Debug for PutBucketVersioningOutput {
@@ -14861,6 +15169,7 @@ impl fmt::Debug for PutBucketVersioningOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutBucketWebsiteInput {
     /// <p>The bucket name.</p>
     pub bucket: BucketName,
@@ -14908,7 +15217,7 @@ impl PutBucketWebsiteInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutBucketWebsiteOutput {}
 
 impl fmt::Debug for PutBucketWebsiteOutput {
@@ -14918,6 +15227,7 @@ impl fmt::Debug for PutBucketWebsiteOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutObjectAclInput {
     /// <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned
     /// ACL</a>.</p>
@@ -15027,7 +15337,7 @@ impl PutObjectAclInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutObjectAclOutput {
     pub request_charged: Option<RequestCharged>,
 }
@@ -15091,14 +15401,16 @@ pub struct PutObjectInput {
     /// <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts through the Amazon Web Services SDKs, you provide the Outposts access point ARN in place of the bucket name. For more information about S3 on Outposts ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub bucket: BucketName,
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with
-    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS). Setting this header to
+    /// server-side encryption using Key Management Service (KMS) keys (SSE-KMS).</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - Setting this header to
     /// <code>true</code> causes Amazon S3 to use an S3 Bucket Key for object encryption with
-    /// SSE-KMS.</p>
-    /// <p>Specifying this header with a PUT action doesn’t affect bucket-level settings for S3
+    /// SSE-KMS. Also, specifying this header with a PUT action doesn't affect bucket-level settings for S3
     /// Bucket Key.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>
+    /// <b>Directory buckets</b> - S3 Bucket Keys are always enabled for <code>GET</code> and <code>PUT</code> operations in a directory bucket and can’t be disabled. S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets  
+    /// to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-Batch-Ops">the Copy operation in Batch Operations</a>, or
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Can be used to specify caching behavior along the request/reply chain. For more
     /// information, see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9</a>.</p>
@@ -15113,16 +15425,24 @@ pub struct PutObjectInput {
     /// </code> with the supported algorithm from the following list: </p>
     /// <ul>
     /// <li>
-    /// <p>CRC32</p>
+    /// <p>
+    /// <code>CRC32</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>CRC32C</p>
+    /// <p>
+    /// <code>CRC32C</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA1</p>
+    /// <p>
+    /// <code>SHA1</code>
+    /// </p>
     /// </li>
     /// <li>
-    /// <p>SHA256</p>
+    /// <p>
+    /// <code>SHA256</code>
+    /// </p>
     /// </li>
     /// </ul>
     /// <p>For more
@@ -15137,12 +15457,12 @@ pub struct PutObjectInput {
     /// </note>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32C checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32C checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -15238,6 +15558,11 @@ pub struct PutObjectInput {
     /// </ul>
     /// </note>
     pub grant_write_acp: Option<GrantWriteACP>,
+    /// <p>Uploads the object only if the object key name does not already exist in the bucket specified. Otherwise, Amazon S3 returns a <code>412 Precondition Failed</code> error.</p>
+    /// <p>If a conflicting operation occurs during the upload S3 returns a <code>409 ConditionalRequestConflict</code> response. On a 409 failure you should retry the upload.</p>
+    /// <p>Expects the '*' (asterisk) character.</p>
+    /// <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>, or <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/conditional-requests.html">Conditional requests</a> in the <i>Amazon S3 User Guide</i>.</p>
+    pub if_none_match: Option<IfNoneMatch>,
     /// <p>Object key for which the PUT action was initiated.</p>
     pub key: ObjectKey,
     /// <p>A map of metadata to store with the object in S3.</p>
@@ -15281,29 +15606,35 @@ pub struct PutObjectInput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>Specifies the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
-    /// this header is a base64-encoded UTF-8 string holding JSON with the encryption context
-    /// key-value pairs. This value is stored as object metadata and automatically gets passed on
-    /// to Amazon Web Services KMS for future <code>GetObject</code> or <code>CopyObject</code> operations on
-    /// this object. This value must be explicitly added during <code>CopyObject</code> operations.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>Specifies the Amazon Web Services KMS Encryption Context as an additional encryption context to use for object encryption. The value of
+    /// this header is a Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.
+    /// This value is stored as object metadata and automatically gets passed on
+    /// to Amazon Web Services KMS for future <code>GetObject</code> operations on
+    /// this object.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - This value must be explicitly added during <code>CopyObject</code> operations if you want an additional encryption context for your object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html#encryption-context">Encryption context</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If <code>x-amz-server-side-encryption</code> has a valid value of <code>aws:kms</code>
-    /// or <code>aws:kms:dsse</code>, this header specifies the ID (Key ID, Key ARN, or Key Alias) of the Key Management Service (KMS)
-    /// symmetric encryption customer managed key that was used for the object. If you specify
+    /// <p>Specifies the KMS key ID (Key ID, Key ARN, or Key Alias) to use for object encryption. If the KMS key doesn't exist in the same
+    /// account that's issuing the command, you must use the full Key ARN not the Key ID.</p>
+    /// <p>
+    /// <b>General purpose buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code> or <code>aws:kms:dsse</code>, this header specifies the ID (Key ID, Key ARN, or Key Alias) of the KMS
+    /// key to use. If you specify
     /// <code>x-amz-server-side-encryption:aws:kms</code> or
-    /// <code>x-amz-server-side-encryption:aws:kms:dsse</code>, but do not provide<code>
-    /// x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key
-    /// (<code>aws/s3</code>) to protect the data. If the KMS key does not exist in the same
-    /// account that's issuing the command, you must use the full ARN and not just the ID. </p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <code>x-amz-server-side-encryption:aws:kms:dsse</code>, but do not provide <code>x-amz-server-side-encryption-aws-kms-key-id</code>, Amazon S3 uses the Amazon Web Services managed key
+    /// (<code>aws/s3</code>) to protect the data.</p>
+    /// <p>
+    /// <b>Directory buckets</b> - If you specify <code>x-amz-server-side-encryption</code> with <code>aws:kms</code>, you must specify the <code>
+    /// x-amz-server-side-encryption-aws-kms-key-id</code> header with the ID (Key ID or Key ARN) of the KMS
+    /// symmetric encryption customer managed key to use. Otherwise, you get an HTTP <code>400 Bad Request</code> error. Only use the key ID or key ARN. The key alias format of the KMS key isn't supported. Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket.
+    /// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.
+    /// </p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm that was used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
+    /// <ul>
+    /// <li>
     /// <p>
     /// <b>General purpose buckets </b> - You have four mutually exclusive options to protect data using server-side encryption in
     /// Amazon S3, depending on how you choose to manage the encryption keys. Specifically, the
@@ -15313,8 +15644,29 @@ pub struct PutObjectInput {
     /// encrypt data at rest by using server-side encryption with other key options. For more
     /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingServerSideEncryption.html">Using Server-Side
     /// Encryption</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// </li>
+    /// <li>
     /// <p>
-    /// <b>Directory buckets </b> - For directory buckets, only the server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) value is supported.</p>
+    /// <b>Directory buckets </b> - For directory buckets, there are only two supported options for server-side encryption: server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) and server-side encryption with KMS keys (SSE-KMS) (<code>aws:kms</code>). We recommend that the bucket's default encryption uses the desired encryption configuration and you don't override the bucket default encryption in your
+    /// <code>CreateSession</code> requests or <code>PUT</code> object requests. Then, new objects
+    /// are automatically encrypted with the desired encryption settings. For more
+    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-serv-side-encryption.html">Protecting data with server-side encryption</a> in the <i>Amazon S3 User Guide</i>. For more information about the encryption overriding behaviors in directory buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-express-specifying-kms-encryption.html">Specifying server-side encryption with KMS for new object uploads</a>.         
+    /// </p>
+    /// <p>In the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>) using the REST API, the encryption request headers must match the encryption settings that are specified in the <code>CreateSession</code> request.
+    /// You can't override the values of the encryption settings (<code>x-amz-server-side-encryption</code>, <code>x-amz-server-side-encryption-aws-kms-key-id</code>, <code>x-amz-server-side-encryption-context</code>, and <code>x-amz-server-side-encryption-bucket-key-enabled</code>) that are specified in the <code>CreateSession</code> request.
+    /// You don't need to explicitly specify these encryption settings values in Zonal endpoint API calls, and   
+    /// Amazon S3 will use the encryption settings values from the <code>CreateSession</code> request to protect new objects in the directory bucket.
+    /// </p>
+    /// <note>
+    /// <p>When you use the CLI or the Amazon Web Services SDKs, for <code>CreateSession</code>, the session token refreshes automatically to avoid service interruptions when a session expires. The CLI or the Amazon Web Services SDKs use the bucket's default encryption configuration for the
+    /// <code>CreateSession</code> request. It's not supported to override the encryption settings values in the <code>CreateSession</code> request.
+    /// So in the Zonal endpoint API calls (except <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>),
+    /// the encryption request headers must match the default encryption configuration of the directory bucket.
+    ///
+    /// </p>
+    /// </note>
+    /// </li>
+    /// </ul>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>By default, Amazon S3 uses the STANDARD Storage Class to store newly created objects. The
     /// STANDARD storage class provides high durability and high availability. Depending on
@@ -15429,6 +15781,9 @@ impl fmt::Debug for PutObjectInput {
         if let Some(ref val) = self.grant_write_acp {
             d.field("grant_write_acp", val);
         }
+        if let Some(ref val) = self.if_none_match {
+            d.field("if_none_match", val);
+        }
         d.field("key", &self.key);
         if let Some(ref val) = self.metadata {
             d.field("metadata", val);
@@ -15483,6 +15838,7 @@ impl PutObjectInput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutObjectLegalHoldInput {
     /// <p>The bucket name containing the object that you want to place a legal hold on. </p>
     /// <p>
@@ -15545,7 +15901,7 @@ impl PutObjectLegalHoldInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutObjectLegalHoldOutput {
     pub request_charged: Option<RequestCharged>,
 }
@@ -15560,6 +15916,7 @@ impl fmt::Debug for PutObjectLegalHoldOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutObjectLockConfigurationInput {
     /// <p>The bucket whose Object Lock configuration you want to create or replace.</p>
     pub bucket: BucketName,
@@ -15616,7 +15973,7 @@ impl PutObjectLockConfigurationInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutObjectLockConfigurationOutput {
     pub request_charged: Option<RequestCharged>,
 }
@@ -15631,20 +15988,17 @@ impl fmt::Debug for PutObjectLockConfigurationOutput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutObjectOutput {
     /// <p>Indicates whether the uploaded object uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -15690,27 +16044,15 @@ pub struct PutObjectOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The
-    /// value of this header is a base64-encoded UTF-8 string holding JSON with the encryption
-    /// context key-value pairs. This value is stored as object metadata and automatically gets
-    /// passed on to Amazon Web Services KMS for future <code>GetObject</code> or <code>CopyObject</code>
+    /// <p>If present, indicates the Amazon Web Services KMS Encryption Context to use for object encryption. The value of
+    /// this header is a Base64-encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.
+    /// This value is stored as object metadata and automatically gets
+    /// passed on to Amazon Web Services KMS for future <code>GetObject</code>
     /// operations on this object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub ssekms_encryption_context: Option<SSEKMSEncryptionContext>,
-    /// <p>If <code>x-amz-server-side-encryption</code> has a valid value of <code>aws:kms</code>
-    /// or <code>aws:kms:dsse</code>, this header indicates the ID of the Key Management Service (KMS)
-    /// symmetric encryption customer managed key that was used for the object. </p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
-    /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
-    /// <code>AES256</code>, <code>aws:kms</code>, <code>aws:kms:dsse</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
+    /// <p>The server-side encryption algorithm used when you store this object in Amazon S3.</p>
     pub server_side_encryption: Option<ServerSideEncryption>,
     /// <p>Version ID of the object.</p>
     /// <p>If you enable versioning for a bucket, Amazon S3 automatically generates a unique version ID
@@ -15776,6 +16118,7 @@ impl fmt::Debug for PutObjectOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutObjectRetentionInput {
     /// <p>The bucket name that contains the object you want to apply this Object Retention
     /// configuration to. </p>
@@ -15845,7 +16188,7 @@ impl PutObjectRetentionInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutObjectRetentionOutput {
     pub request_charged: Option<RequestCharged>,
 }
@@ -15860,6 +16203,7 @@ impl fmt::Debug for PutObjectRetentionOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutObjectTaggingInput {
     /// <p>The bucket name containing the object. </p>
     /// <p>
@@ -15922,7 +16266,7 @@ impl PutObjectTaggingInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutObjectTaggingOutput {
     /// <p>The versionId of the object the tag-set was added to.</p>
     pub version_id: Option<ObjectVersionId>,
@@ -15938,6 +16282,7 @@ impl fmt::Debug for PutObjectTaggingOutput {
     }
 }
 
+#[derive(Clone, PartialEq)]
 pub struct PutPublicAccessBlockInput {
     /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want
     /// to set.</p>
@@ -15986,7 +16331,7 @@ impl PutPublicAccessBlockInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct PutPublicAccessBlockOutput {}
 
 impl fmt::Debug for PutPublicAccessBlockOutput {
@@ -16000,6 +16345,7 @@ pub type QueueArn = String;
 
 /// <p>Specifies the configuration for publishing messages to an Amazon Simple Queue Service
 /// (Amazon SQS) queue when Amazon S3 detects specified events.</p>
+#[derive(Clone, PartialEq)]
 pub struct QueueConfiguration {
     /// <p>A collection of bucket events for which to send notifications</p>
     pub events: EventList,
@@ -16074,9 +16420,14 @@ impl FromStr for QuoteFields {
 pub type RecordDelimiter = String;
 
 /// <p>The container for the records event.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct RecordsEvent {
-    /// <p>The byte array of partial, one or more result records.</p>
+    /// <p>The byte array of partial, one or more result records. S3 Select doesn't guarantee that
+    /// a record will be self-contained in one record frame. To ensure continuous streaming of
+    /// data, S3 Select might split the same record across multiple record frames instead of
+    /// aggregating the results in memory. Some S3 clients (for example, the SDK for Java) handle this behavior by creating a <code>ByteStream</code> out of the response by
+    /// default. Other clients might not handle this behavior by default. In those cases, you must
+    /// aggregate the results on the client side and parse the response.</p>
     pub payload: Option<Body>,
 }
 
@@ -16092,7 +16443,7 @@ impl fmt::Debug for RecordsEvent {
 
 /// <p>Specifies how requests are redirected. In the event of an error, you can specify a
 /// different error code to return.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Redirect {
     /// <p>The host name to use in the redirect request.</p>
     pub host_name: Option<HostName>,
@@ -16149,6 +16500,7 @@ impl fmt::Debug for Redirect {
 
 /// <p>Specifies the redirect behavior of all requests to a website endpoint of an Amazon S3
 /// bucket.</p>
+#[derive(Clone, PartialEq)]
 pub struct RedirectAllRequestsTo {
     /// <p>Name of the host where requests are redirected.</p>
     pub host_name: HostName,
@@ -16185,6 +16537,7 @@ pub type ReplicaKmsKeyID = String;
 /// replication configuration is the earlier version, V1. In the earlier version, this
 /// element is not allowed.</p>
 /// </note>
+#[derive(Clone, PartialEq)]
 pub struct ReplicaModifications {
     /// <p>Specifies whether Amazon S3 replicates modifications on replicas.</p>
     pub status: ReplicaModificationsStatus,
@@ -16238,6 +16591,7 @@ impl FromStr for ReplicaModificationsStatus {
 
 /// <p>A container for replication rules. You can add up to 1,000 rules. The maximum size of a
 /// replication configuration is 2 MB.</p>
+#[derive(Clone, PartialEq)]
 pub struct ReplicationConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the Identity and Access Management (IAM) role that Amazon S3 assumes when
     /// replicating objects. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-how-setup.html">How to Set Up Replication</a>
@@ -16258,14 +16612,17 @@ impl fmt::Debug for ReplicationConfiguration {
 }
 
 /// <p>Specifies which Amazon S3 objects to replicate and where to store the replicas.</p>
+#[derive(Clone, PartialEq)]
 pub struct ReplicationRule {
     pub delete_marker_replication: Option<DeleteMarkerReplication>,
     /// <p>A container for information about the replication destination and its configurations
     /// including enabling the S3 Replication Time Control (S3 RTC).</p>
     pub destination: Destination,
-    /// <p>Optional configuration to replicate existing source bucket objects. For more
-    /// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/replication-what-is-isnot-replicated.html#existing-object-replication">Replicating Existing Objects</a> in the <i>Amazon S3 User Guide</i>.
+    /// <p>Optional configuration to replicate existing source bucket objects.
     /// </p>
+    /// <note>
+    /// <p>This parameter is no longer supported. To replicate existing objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html">Replicating existing objects with S3 Batch Replication</a> in the <i>Amazon S3 User Guide</i>.</p>
+    /// </note>
     pub existing_object_replication: Option<ExistingObjectReplication>,
     pub filter: Option<ReplicationRuleFilter>,
     /// <p>A unique identifier for the rule. The maximum value is 255 characters.</p>
@@ -16340,7 +16697,7 @@ impl fmt::Debug for ReplicationRule {
 /// in an <code>And</code> tag.</p>
 /// </li>
 /// </ul>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ReplicationRuleAndOperator {
     /// <p>An object key name prefix that identifies the subset of objects to which the rule
     /// applies.</p>
@@ -16365,9 +16722,8 @@ impl fmt::Debug for ReplicationRuleAndOperator {
 /// <p>A filter that identifies the subset of objects to which the replication rule applies. A
 /// <code>Filter</code> must specify exactly one <code>Prefix</code>, <code>Tag</code>, or
 /// an <code>And</code> child element.</p>
-#[derive(Debug)]
-#[non_exhaustive]
-pub enum ReplicationRuleFilter {
+#[derive(Clone, Default, PartialEq)]
+pub struct ReplicationRuleFilter {
     /// <p>A container for specifying rule filters. The filters determine the subset of objects to
     /// which the rule applies. This element is required only if you specify more than one filter.
     /// For example: </p>
@@ -16381,7 +16737,7 @@ pub enum ReplicationRuleFilter {
     /// in an <code>And</code> tag.</p>
     /// </li>
     /// </ul>
-    And(ReplicationRuleAndOperator),
+    pub and: Option<ReplicationRuleAndOperator>,
     /// <p>An object key name prefix that identifies the subset of objects to which the rule
     /// applies.</p>
     /// <important>
@@ -16389,10 +16745,26 @@ pub enum ReplicationRuleFilter {
     /// XML requests. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-xml-related-constraints">
     /// XML related object key constraints</a>.</p>
     /// </important>
-    Prefix(Prefix),
+    pub prefix: Option<Prefix>,
     /// <p>A container for specifying a tag key and value. </p>
     /// <p>The rule applies only to objects that have the tag in their tag set.</p>
-    Tag(Tag),
+    pub tag: Option<Tag>,
+}
+
+impl fmt::Debug for ReplicationRuleFilter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ReplicationRuleFilter");
+        if let Some(ref val) = self.and {
+            d.field("and", val);
+        }
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        if let Some(ref val) = self.tag {
+            d.field("tag", val);
+        }
+        d.finish_non_exhaustive()
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -16482,6 +16854,7 @@ impl FromStr for ReplicationStatus {
 /// <p> A container specifying S3 Replication Time Control (S3 RTC) related information, including whether S3 RTC is
 /// enabled and the time when all objects and operations on objects must be replicated. Must be
 /// specified together with a <code>Metrics</code> block. </p>
+#[derive(Clone, PartialEq)]
 pub struct ReplicationTime {
     /// <p> Specifies whether the replication time is enabled. </p>
     pub status: ReplicationTimeStatus,
@@ -16539,7 +16912,7 @@ impl FromStr for ReplicationTimeStatus {
 
 /// <p> A container specifying the time value for S3 Replication Time Control (S3 RTC) and replication metrics
 /// <code>EventThreshold</code>. </p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ReplicationTimeValue {
     /// <p> Contains an integer specifying time in minutes. </p>
     /// <p> Valid value: 15</p>
@@ -16643,6 +17016,7 @@ impl FromStr for RequestPayer {
 }
 
 /// <p>Container for Payer.</p>
+#[derive(Clone, PartialEq)]
 pub struct RequestPaymentConfiguration {
     /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Payer,
@@ -16658,7 +17032,7 @@ impl fmt::Debug for RequestPaymentConfiguration {
 
 /// <p>Container for specifying if periodic <code>QueryProgress</code> messages should be
 /// sent.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct RequestProgress {
     /// <p>Specifies whether periodic QueryProgress frames should be sent. Valid values: TRUE,
     /// FALSE. Default value: FALSE.</p>
@@ -16695,6 +17069,7 @@ pub type Restore = String;
 
 pub type RestoreExpiryDate = Timestamp;
 
+#[derive(Clone, PartialEq)]
 pub struct RestoreObjectInput {
     /// <p>The bucket name containing the object to restore. </p>
     /// <p>
@@ -16752,7 +17127,7 @@ impl RestoreObjectInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct RestoreObjectOutput {
     pub request_charged: Option<RequestCharged>,
     /// <p>Indicates the path in the provided S3 output location where Select results will be
@@ -16776,7 +17151,7 @@ impl fmt::Debug for RestoreObjectOutput {
 pub type RestoreOutputPath = String;
 
 /// <p>Container for restore job parameters.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct RestoreRequest {
     /// <p>Lifetime of the active copy in days. Do not use with restores that specify
     /// <code>OutputLocation</code>.</p>
@@ -16790,10 +17165,18 @@ pub struct RestoreRequest {
     pub glacier_job_parameters: Option<GlacierJobParameters>,
     /// <p>Describes the location where the restore job's output is stored.</p>
     pub output_location: Option<OutputLocation>,
+    /// <important>
+    /// <p>Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+    /// </p>
+    /// </important>
     /// <p>Describes the parameters for Select job types.</p>
     pub select_parameters: Option<SelectParameters>,
     /// <p>Retrieval tier at which the restore will be processed.</p>
     pub tier: Option<Tier>,
+    /// <important>
+    /// <p>Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+    /// </p>
+    /// </important>
     /// <p>Type of restore request.</p>
     pub type_: Option<RestoreRequestType>,
 }
@@ -16869,7 +17252,7 @@ impl FromStr for RestoreRequestType {
 /// <note>
 /// <p>This functionality is not supported for directory buckets. Only the S3 Express One Zone storage class is supported by directory buckets to store objects.</p>
 /// </note>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct RestoreStatus {
     /// <p>Specifies whether the object is currently being restored. If the object restoration is
     /// in progress, the header returns the value <code>TRUE</code>. For example:</p>
@@ -16911,6 +17294,7 @@ pub type Role = String;
 /// <p>Specifies the redirect behavior and when a redirect is applied. For more information
 /// about routing rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html#advanced-conditional-redirects">Configuring advanced conditional redirects</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
+#[derive(Clone, PartialEq)]
 pub struct RoutingRule {
     /// <p>A container for describing a condition that must be met for the specified redirect to
     /// apply. For example, 1. If request is for pages in the <code>/docs</code> folder, redirect
@@ -16937,7 +17321,7 @@ impl fmt::Debug for RoutingRule {
 pub type RoutingRules = List<RoutingRule>;
 
 /// <p>A container for object key name prefix and suffix filtering rules.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct S3KeyFilter {
     pub filter_rules: Option<FilterRuleList>,
 }
@@ -16953,6 +17337,7 @@ impl fmt::Debug for S3KeyFilter {
 }
 
 /// <p>Describes an Amazon S3 location that will receive the results of the restore request.</p>
+#[derive(Clone, PartialEq)]
 pub struct S3Location {
     /// <p>A list of grants that control access to the staged results.</p>
     pub access_control_list: Option<Grants>,
@@ -17005,6 +17390,7 @@ pub type SSECustomerKey = String;
 pub type SSECustomerKeyMD5 = String;
 
 /// <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
+#[derive(Clone, PartialEq)]
 pub struct SSEKMS {
     /// <p>Specifies the ID of the Key Management Service (KMS) symmetric encryption customer managed key to use for
     /// encrypting inventory reports.</p>
@@ -17024,7 +17410,7 @@ pub type SSEKMSEncryptionContext = String;
 pub type SSEKMSKeyId = String;
 
 /// <p>Specifies the use of SSE-S3 to encrypt delivered inventory reports.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct SSES3 {}
 
 impl fmt::Debug for SSES3 {
@@ -17038,7 +17424,7 @@ impl fmt::Debug for SSES3 {
 /// when its first byte is contained by the range. This parameter is optional, but when
 /// specified, it must not be empty. See RFC 2616, Section 14.35.1 about how to specify the
 /// start and end of the range.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ScanRange {
     /// <p>Specifies the end of the byte range. This parameter is optional. Valid values:
     /// non-negative integers. The default value is one less than the size of the object being
@@ -17069,7 +17455,7 @@ impl fmt::Debug for ScanRange {
 }
 
 /// <p>The container for selecting objects from a content event stream.</p>
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 #[non_exhaustive]
 pub enum SelectObjectContentEvent {
     /// <p>The Continuation Event.</p>
@@ -17084,12 +17470,17 @@ pub enum SelectObjectContentEvent {
     Stats(StatsEvent),
 }
 
+/// <note>
+/// <p>Learn Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+/// </p>
+/// </note>
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query
 /// Language (SQL) statement. In the request, along with the SQL expression, you must specify a
 /// data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data
 /// into records. It returns only records that match the specified SQL expression. You must
 /// also specify the data serialization format for the response. For more information, see
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
+#[derive(Clone, PartialEq)]
 pub struct SelectObjectContentInput {
     /// <p>The S3 bucket.</p>
     pub bucket: BucketName,
@@ -17160,12 +17551,17 @@ impl fmt::Debug for SelectObjectContentOutput {
     }
 }
 
+/// <note>
+/// <p>Learn Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+/// </p>
+/// </note>
 /// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query
 /// Language (SQL) statement. In the request, along with the SQL expression, you must specify a
 /// data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data
 /// into records. It returns only records that match the specified SQL expression. You must
 /// also specify the data serialization format for the response. For more information, see
 /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
+#[derive(Clone, PartialEq)]
 pub struct SelectObjectContentRequest {
     /// <p>The expression that is used to query the object.</p>
     pub expression: Expression,
@@ -17221,8 +17617,19 @@ impl fmt::Debug for SelectObjectContentRequest {
     }
 }
 
+/// <important>
+/// <p>Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+/// </p>
+/// </important>
 /// <p>Describes the parameters for Select job types.</p>
+/// <p>Learn <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">How to optimize querying your data in Amazon S3</a>  using
+/// <a href="https://docs.aws.amazon.com/athena/latest/ug/what-is.html">Amazon Athena</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/transforming-objects.html">S3 Object Lambda</a>, or client-side filtering.</p>
+#[derive(Clone, PartialEq)]
 pub struct SelectParameters {
+    /// <important>
+    /// <p>Amazon S3 Select is no longer available to new customers. Existing customers of Amazon S3 Select can continue to use the feature as usual. <a href="http://aws.amazon.com/blogs/storage/how-to-optimize-querying-your-data-in-amazon-s3/">Learn more</a>
+    /// </p>
+    /// </important>
     /// <p>The expression that is used to query the object.</p>
     pub expression: Expression,
     /// <p>The type of the provided expression (for example, SQL).</p>
@@ -17286,15 +17693,46 @@ impl FromStr for ServerSideEncryption {
 
 /// <p>Describes the default server-side encryption to apply to new objects in the bucket. If a
 /// PUT Object request doesn't specify any server-side encryption, this default encryption will
-/// be applied. If you don't specify a customer managed key at configuration, Amazon S3 automatically creates
-/// an Amazon Web Services KMS key in your Amazon Web Services account the first time that you add an object encrypted
-/// with SSE-KMS to a bucket. By default, Amazon S3 uses this KMS key for SSE-KMS. For more
-/// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PUT Bucket encryption</a> in
-/// the <i>Amazon S3 API Reference</i>.</p>
+/// be applied. For more
+/// information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTencryption.html">PutBucketEncryption</a>.</p>
+/// <note>
+/// <ul>
+/// <li>
+/// <p>
+/// <b>General purpose buckets</b> - If you don't specify a customer managed key at configuration, Amazon S3 automatically creates
+/// an Amazon Web Services KMS key (<code>aws/s3</code>) in your Amazon Web Services account the first time that you add an object encrypted
+/// with SSE-KMS to a bucket. By default, Amazon S3 uses this KMS key for SSE-KMS. </p>
+/// </li>
+/// <li>
+/// <p>
+/// <b>Directory buckets</b> - Your SSE-KMS configuration can only support 1 <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">customer managed key</a> per directory bucket for the lifetime of the bucket.
+/// <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk">Amazon Web Services managed key</a> (<code>aws/s3</code>) isn't supported.
+/// </p>
+/// </li>
+/// <li>
+/// <p>
+/// <b>Directory buckets</b> - For directory buckets, there are only two supported options for server-side encryption: SSE-S3 and SSE-KMS.</p>
+/// </li>
+/// </ul>
+/// </note>
+#[derive(Clone, PartialEq)]
 pub struct ServerSideEncryptionByDefault {
-    /// <p>Amazon Web Services Key Management Service (KMS) customer Amazon Web Services KMS key ID to use for the default
-    /// encryption. This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
+    /// <p>Amazon Web Services Key Management Service (KMS) customer managed key ID to use for the default
+    /// encryption. </p>
+    /// <note>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <b>General purpose buckets</b> - This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
     /// <code>aws:kms</code> or <code>aws:kms:dsse</code>.</p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <b>Directory buckets</b> - This parameter is allowed if and only if <code>SSEAlgorithm</code> is set to
+    /// <code>aws:kms</code>.</p>
+    /// </li>
+    /// </ul>
+    /// </note>
     /// <p>You can specify the key ID, key alias, or the Amazon Resource Name (ARN) of the KMS
     /// key.</p>
     /// <ul>
@@ -17311,16 +17749,34 @@ pub struct ServerSideEncryptionByDefault {
     /// </p>
     /// </li>
     /// </ul>
-    /// <p>If you use a key ID, you can run into a LogDestination undeliverable error when creating
-    /// a VPC flow log. </p>
-    /// <p>If you are using encryption with cross-account or Amazon Web Services service operations you must use
+    /// <p>If you are using encryption with cross-account or Amazon Web Services service operations, you must use
     /// a fully qualified KMS key ARN. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html#bucket-encryption-update-bucket-policy">Using encryption for cross-account operations</a>.</p>
+    /// <note>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <b>General purpose buckets</b> - If you're specifying a customer managed KMS key, we recommend using a fully qualified
+    /// KMS key ARN. If you use a KMS key alias instead, then KMS resolves the key within the
+    /// requester’s account. This behavior can result in data that's encrypted with a KMS key
+    /// that belongs to the requester, and not the bucket owner. Also, if you use a key ID, you can run into a LogDestination undeliverable error when creating
+    /// a VPC flow log.
+    /// </p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <b>Directory buckets</b> - When you specify an <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">KMS customer managed key</a> for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported.</p>
+    /// </li>
+    /// </ul>
+    /// </note>
     /// <important>
     /// <p>Amazon S3 only supports symmetric encryption KMS keys. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Asymmetric keys in Amazon Web Services KMS</a> in the <i>Amazon Web Services Key Management Service
     /// Developer Guide</i>.</p>
     /// </important>
     pub kms_master_key_id: Option<SSEKMSKeyId>,
     /// <p>Server-side encryption algorithm to use for the default encryption.</p>
+    /// <note>
+    /// <p>For directory buckets, there are only two supported values for server-side encryption: <code>AES256</code> and <code>aws:kms</code>.</p>
+    /// </note>
     pub sse_algorithm: ServerSideEncryption,
 }
 
@@ -17336,7 +17792,7 @@ impl fmt::Debug for ServerSideEncryptionByDefault {
 }
 
 /// <p>Specifies the default server-side-encryption configuration.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct ServerSideEncryptionConfiguration {
     /// <p>Container for information about a particular server-side encryption configuration
     /// rule.</p>
@@ -17352,7 +17808,22 @@ impl fmt::Debug for ServerSideEncryptionConfiguration {
 }
 
 /// <p>Specifies the default server-side encryption configuration.</p>
-#[derive(Default)]
+/// <note>
+/// <ul>
+/// <li>
+/// <p>
+/// <b>General purpose buckets</b> - If you're specifying a customer managed KMS key, we recommend using a fully qualified
+/// KMS key ARN. If you use a KMS key alias instead, then KMS resolves the key within the
+/// requester’s account. This behavior can result in data that's encrypted with a KMS key
+/// that belongs to the requester, and not the bucket owner.</p>
+/// </li>
+/// <li>
+/// <p>
+/// <b>Directory buckets</b> - When you specify an <a href="https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk">KMS customer managed key</a> for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported.</p>
+/// </li>
+/// </ul>
+/// </note>
+#[derive(Clone, Default, PartialEq)]
 pub struct ServerSideEncryptionRule {
     /// <p>Specifies the default server-side encryption to apply to new objects in the bucket. If a
     /// PUT Object request doesn't specify any server-side encryption, this default encryption will
@@ -17361,9 +17832,22 @@ pub struct ServerSideEncryptionRule {
     /// <p>Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS
     /// (SSE-KMS) for new objects in the bucket. Existing objects are not affected. Setting the
     /// <code>BucketKeyEnabled</code> element to <code>true</code> causes Amazon S3 to use an S3
-    /// Bucket Key. By default, S3 Bucket Key is not enabled.</p>
-    /// <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the
+    /// Bucket Key. </p>
+    /// <note>
+    /// <ul>
+    /// <li>
+    /// <p>
+    /// <b>General purpose buckets</b> - By default, S3 Bucket Key is not enabled. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html">Amazon S3 Bucket Keys</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
+    /// </li>
+    /// <li>
+    /// <p>
+    /// <b>Directory buckets</b> - S3 Bucket Keys are always enabled for <code>GET</code> and <code>PUT</code> operations in a directory bucket and can’t be disabled. S3 Bucket Keys aren't supported, when you copy SSE-KMS encrypted objects from general purpose buckets  
+    /// to directory buckets, from directory buckets to general purpose buckets, or between directory buckets, through <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_CopyObject.html">CopyObject</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_UploadPartCopy.html">UploadPartCopy</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-objects-Batch-Ops">the Copy operation in Batch Operations</a>, or
+    /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
+    /// </li>
+    /// </ul>
+    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
 }
 
@@ -17387,8 +17871,9 @@ pub type SessionCredentialValue = String;
 /// <p>The established temporary security credentials of the session.</p>
 /// <note>
 /// <p>
-/// <b>Directory buckets</b> - These session credentials are only supported for the authentication and authorization of Zonal endpoint APIs on directory buckets.</p>
+/// <b>Directory buckets</b> - These session credentials are only supported for the authentication and authorization of Zonal endpoint API operations on directory buckets.</p>
 /// </note>
+#[derive(Clone, PartialEq)]
 pub struct SessionCredentials {
     /// <p>A unique identifier that's associated with a secret access key. The access key ID and the secret access key are used together to sign programmatic Amazon Web Services requests cryptographically. </p>
     pub access_key_id: AccessKeyIdValue,
@@ -17460,7 +17945,7 @@ pub type Setting = bool;
 /// <p>
 /// <code>[DestinationPrefix][YYYY]-[MM]-[DD]-[hh]-[mm]-[ss]-[UniqueString]</code>
 /// </p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct SimplePrefix {}
 
 impl fmt::Debug for SimplePrefix {
@@ -17479,7 +17964,7 @@ pub type SkipValidation = bool;
 /// objects. Currently, Amazon S3 supports only the filter that you can specify for objects created
 /// with server-side encryption using a customer managed key stored in Amazon Web Services Key Management Service
 /// (SSE-KMS).</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct SourceSelectionCriteria {
     /// <p>A filter that you can specify for selections for modifications on replicas. Amazon S3 doesn't
     /// replicate replica modifications by default. In the latest version of replication
@@ -17512,6 +17997,7 @@ impl fmt::Debug for SourceSelectionCriteria {
 
 /// <p>A container for filter information for the selection of S3 objects encrypted with Amazon Web Services
 /// KMS.</p>
+#[derive(Clone, PartialEq)]
 pub struct SseKmsEncryptedObjects {
     /// <p>Specifies whether Amazon S3 replicates objects created with server-side encryption using an
     /// Amazon Web Services KMS key stored in Amazon Web Services Key Management Service.</p>
@@ -17569,7 +18055,7 @@ pub type Start = i64;
 pub type StartAfter = String;
 
 /// <p>Container for the stats details.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Stats {
     /// <p>The total number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<BytesProcessed>,
@@ -17596,7 +18082,7 @@ impl fmt::Debug for Stats {
 }
 
 /// <p>Container for the Stats Event.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct StatsEvent {
     /// <p>The Stats event details.</p>
     pub details: Option<Stats>,
@@ -17670,7 +18156,7 @@ impl FromStr for StorageClass {
 
 /// <p>Specifies data related to access patterns to be collected and made available to analyze
 /// the tradeoffs between different storage classes for an Amazon S3 bucket.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct StorageClassAnalysis {
     /// <p>Specifies how data related to the storage class analysis for an Amazon S3 bucket should be
     /// exported.</p>
@@ -17689,6 +18175,7 @@ impl fmt::Debug for StorageClassAnalysis {
 
 /// <p>Container for data related to the storage class analysis for an Amazon S3 bucket for
 /// export.</p>
+#[derive(Clone, PartialEq)]
 pub struct StorageClassAnalysisDataExport {
     /// <p>The place to store the data for an analysis.</p>
     pub destination: AnalyticsExportDestination,
@@ -17745,6 +18232,7 @@ impl FromStr for StorageClassAnalysisSchemaVersion {
 pub type Suffix = String;
 
 /// <p>A container of a key value name pair.</p>
+#[derive(Clone, PartialEq)]
 pub struct Tag {
     /// <p>Name of the object key.</p>
     pub key: ObjectKey,
@@ -17766,7 +18254,7 @@ pub type TagCount = i32;
 pub type TagSet = List<Tag>;
 
 /// <p>Container for <code>TagSet</code> elements.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Tagging {
     /// <p>A collection for a set of tags</p>
     pub tag_set: TagSet,
@@ -17826,7 +18314,7 @@ pub type TargetBucket = String;
 /// <p>Buckets that use the bucket owner enforced setting for Object Ownership don't support
 /// target grants. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html#grant-log-delivery-permissions-general">Permissions server access log delivery</a> in the
 /// <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct TargetGrant {
     /// <p>Container for the person being granted permissions.</p>
     pub grantee: Option<Grantee>,
@@ -17850,7 +18338,7 @@ impl fmt::Debug for TargetGrant {
 pub type TargetGrants = List<TargetGrant>;
 
 /// <p>Amazon S3 key format for log objects. Only one format, PartitionedPrefix or SimplePrefix, is allowed.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct TargetObjectKeyFormat {
     /// <p>Partitioned S3 key for log objects.</p>
     pub partitioned_prefix: Option<PartitionedPrefix>,
@@ -17916,6 +18404,7 @@ impl FromStr for Tier {
 /// <p>The S3 Intelligent-Tiering storage class is designed to optimize storage costs by
 /// automatically moving data to the most cost-effective storage access tier, without
 /// additional operational overhead.</p>
+#[derive(Clone, PartialEq)]
 pub struct Tiering {
     /// <p>S3 Intelligent-Tiering access tier. See <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html#sc-dynamic-data-access">Storage class
     /// for automatically optimizing frequently and infrequently accessed objects</a> for a
@@ -17945,6 +18434,7 @@ pub type TopicArn = String;
 
 /// <p>A container for specifying the configuration for publication of messages to an Amazon
 /// Simple Notification Service (Amazon SNS) topic when Amazon S3 detects specified events.</p>
+#[derive(Clone, PartialEq)]
 pub struct TopicConfiguration {
     /// <p>The Amazon S3 bucket event about which to send notifications. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Supported
@@ -17977,7 +18467,7 @@ pub type TopicConfigurationList = List<TopicConfiguration>;
 /// <p>Specifies when an object transitions to a specified storage class. For more information
 /// about Amazon S3 lifecycle configuration rules, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-transition-general-considerations.html">Transitioning
 /// Objects Using Amazon S3 Lifecycle</a> in the <i>Amazon S3 User Guide</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct Transition {
     /// <p>Indicates when objects are transitioned to the specified storage class. The date value
     /// must be in ISO 8601 format. The time is always midnight UTC.</p>
@@ -18002,6 +18492,44 @@ impl fmt::Debug for Transition {
             d.field("storage_class", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TransitionDefaultMinimumObjectSize(Cow<'static, str>);
+
+impl TransitionDefaultMinimumObjectSize {
+    pub const ALL_STORAGE_CLASSES_128K: &'static str = "all_storage_classes_128K";
+
+    pub const VARIES_BY_STORAGE_CLASS: &'static str = "varies_by_storage_class";
+
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+
+    #[must_use]
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for TransitionDefaultMinimumObjectSize {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<TransitionDefaultMinimumObjectSize> for Cow<'static, str> {
+    fn from(s: TransitionDefaultMinimumObjectSize) -> Self {
+        s.0
+    }
+}
+
+impl FromStr for TransitionDefaultMinimumObjectSize {
+    type Err = Infallible;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -18097,6 +18625,7 @@ pub type URI = String;
 
 pub type UploadIdMarker = String;
 
+#[derive(Clone, PartialEq)]
 pub struct UploadPartCopyInput {
     /// <p>The bucket name.</p>
     /// <p>
@@ -18336,13 +18865,10 @@ impl UploadPartCopyInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct UploadPartCopyOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
     /// <p>Container for all response elements.</p>
     pub copy_part_result: Option<CopyPartResult>,
@@ -18366,17 +18892,10 @@ pub struct UploadPartCopyOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
@@ -18442,12 +18961,12 @@ pub struct UploadPartInput {
     /// supplied in the <code>CreateMultipartUpload</code> request.</p>
     pub checksum_algorithm: Option<ChecksumAlgorithm>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32 checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32 checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
     /// <p>This header can be used as a data integrity check to verify that the data received is the same data that was originally sent.
-    /// This header specifies the base64-encoded, 32-bit CRC32C checksum of the object. For more information, see
+    /// This header specifies the base64-encoded, 32-bit CRC-32C checksum of the object. For more information, see
     /// <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html">Checking object integrity</a> in the
     /// <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32c: Option<ChecksumCRC32C>,
@@ -18562,20 +19081,17 @@ impl UploadPartInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct UploadPartOutput {
     /// <p>Indicates whether the multipart upload uses an S3 Bucket Key for server-side encryption
     /// with Key Management Service (KMS) keys (SSE-KMS).</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
     pub bucket_key_enabled: Option<BucketKeyEnabled>,
-    /// <p>The base64-encoded, 32-bit CRC32 checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32 checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
     pub checksum_crc32: Option<ChecksumCRC32>,
-    /// <p>The base64-encoded, 32-bit CRC32C checksum of the object. This will only be present if it was uploaded
+    /// <p>The base64-encoded, 32-bit CRC-32C checksum of the object. This will only be present if it was uploaded
     /// with the object. When you use an API operation on an object that was uploaded using multipart uploads, this value may not be a direct checksum value of the full object. Instead, it's a calculation based on the checksum values of each individual part. For more information about how checksums are calculated
     /// with multipart uploads, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html#large-object-checksums">
     /// Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
@@ -18606,17 +19122,10 @@ pub struct UploadPartOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub sse_customer_key_md5: Option<SSECustomerKeyMD5>,
-    /// <p>If present, indicates the ID of the Key Management Service (KMS) symmetric encryption customer managed key
-    /// that was used for the object.</p>
-    /// <note>
-    /// <p>This functionality is not supported for directory buckets.</p>
-    /// </note>
+    /// <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
     pub ssekms_key_id: Option<SSEKMSKeyId>,
     /// <p>The server-side encryption algorithm used when you store this object in Amazon S3 (for example,
     /// <code>AES256</code>, <code>aws:kms</code>).</p>
-    /// <note>
-    /// <p>For directory buckets, only server-side encryption with Amazon S3 managed keys (SSE-S3) (<code>AES256</code>) is supported.</p>
-    /// </note>
     pub server_side_encryption: Option<ServerSideEncryption>,
 }
 
@@ -18670,7 +19179,7 @@ pub type VersionIdMarker = String;
 
 /// <p>Describes the versioning state of an Amazon S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html">PUT
 /// Bucket versioning</a> in the <i>Amazon S3 API Reference</i>.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct VersioningConfiguration {
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This
     /// element is only returned if the bucket has been configured with MFA delete. If the bucket
@@ -18694,7 +19203,7 @@ impl fmt::Debug for VersioningConfiguration {
 }
 
 /// <p>Specifies website configuration parameters for an Amazon S3 bucket.</p>
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct WebsiteConfiguration {
     /// <p>The name of the error document for the website.</p>
     pub error_document: Option<ErrorDocument>,
@@ -18741,7 +19250,7 @@ pub struct WriteGetObjectResponseInput {
     /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<CacheControl>,
     /// <p>This header can be used as a data integrity check to verify that the data received is
-    /// the same data that was originally sent. This specifies the base64-encoded, 32-bit CRC32
+    /// the same data that was originally sent. This specifies the base64-encoded, 32-bit CRC-32
     /// checksum of the object returned by the Object Lambda function. This may not match the
     /// checksum for the object stored in Amazon S3. Amazon S3 will perform validation of the checksum values
     /// only when the original <code>GetObject</code> request required checksum validation. For
@@ -18752,7 +19261,7 @@ pub struct WriteGetObjectResponseInput {
     /// <p></p>
     pub checksum_crc32: Option<ChecksumCRC32>,
     /// <p>This header can be used as a data integrity check to verify that the data received is
-    /// the same data that was originally sent. This specifies the base64-encoded, 32-bit CRC32C
+    /// the same data that was originally sent. This specifies the base64-encoded, 32-bit CRC-32C
     /// checksum of the object returned by the Object Lambda function. This may not match the
     /// checksum for the object stored in Amazon S3. Amazon S3 will perform validation of the checksum values
     /// only when the original <code>GetObject</code> request required checksum validation. For
@@ -19078,7 +19587,7 @@ impl WriteGetObjectResponseInput {
     }
 }
 
-#[derive(Default)]
+#[derive(Clone, Default, PartialEq)]
 pub struct WriteGetObjectResponseOutput {}
 
 impl fmt::Debug for WriteGetObjectResponseOutput {
@@ -19300,6 +19809,8 @@ pub mod builders {
 
         expected_bucket_owner: Option<AccountId>,
 
+        if_none_match: Option<IfNoneMatch>,
+
         key: Option<ObjectKey>,
 
         multipart_upload: Option<CompletedMultipartUpload>,
@@ -19343,6 +19854,11 @@ pub mod builders {
 
         pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) -> &mut Self {
+            self.if_none_match = field;
             self
         }
 
@@ -19418,6 +19934,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn if_none_match(mut self, field: Option<IfNoneMatch>) -> Self {
+            self.if_none_match = field;
+            self
+        }
+
+        #[must_use]
         pub fn key(mut self, field: ObjectKey) -> Self {
             self.key = Some(field);
             self
@@ -19466,6 +19988,7 @@ pub mod builders {
             let checksum_sha1 = self.checksum_sha1;
             let checksum_sha256 = self.checksum_sha256;
             let expected_bucket_owner = self.expected_bucket_owner;
+            let if_none_match = self.if_none_match;
             let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
             let multipart_upload = self.multipart_upload;
             let request_payer = self.request_payer;
@@ -19480,6 +20003,7 @@ pub mod builders {
                 checksum_sha1,
                 checksum_sha256,
                 expected_bucket_owner,
+                if_none_match,
                 key,
                 multipart_upload,
                 request_payer,
@@ -24112,11 +24636,42 @@ pub mod builders {
 
     /// A builder for [`ListBucketsInput`]
     #[derive(Default)]
-    pub struct ListBucketsInputBuilder {}
+    pub struct ListBucketsInputBuilder {
+        continuation_token: Option<Token>,
+
+        max_buckets: Option<MaxBuckets>,
+    }
 
     impl ListBucketsInputBuilder {
+        pub fn set_continuation_token(&mut self, field: Option<Token>) -> &mut Self {
+            self.continuation_token = field;
+            self
+        }
+
+        pub fn set_max_buckets(&mut self, field: Option<MaxBuckets>) -> &mut Self {
+            self.max_buckets = field;
+            self
+        }
+
+        #[must_use]
+        pub fn continuation_token(mut self, field: Option<Token>) -> Self {
+            self.continuation_token = field;
+            self
+        }
+
+        #[must_use]
+        pub fn max_buckets(mut self, field: Option<MaxBuckets>) -> Self {
+            self.max_buckets = field;
+            self
+        }
+
         pub fn build(self) -> Result<ListBucketsInput, BuildError> {
-            Ok(ListBucketsInput {})
+            let continuation_token = self.continuation_token;
+            let max_buckets = self.max_buckets;
+            Ok(ListBucketsInput {
+                continuation_token,
+                max_buckets,
+            })
         }
     }
 
@@ -25549,6 +26104,8 @@ pub mod builders {
         expected_bucket_owner: Option<AccountId>,
 
         lifecycle_configuration: Option<BucketLifecycleConfiguration>,
+
+        transition_default_minimum_object_size: Option<TransitionDefaultMinimumObjectSize>,
     }
 
     impl PutBucketLifecycleConfigurationInputBuilder {
@@ -25569,6 +26126,14 @@ pub mod builders {
 
         pub fn set_lifecycle_configuration(&mut self, field: Option<BucketLifecycleConfiguration>) -> &mut Self {
             self.lifecycle_configuration = field;
+            self
+        }
+
+        pub fn set_transition_default_minimum_object_size(
+            &mut self,
+            field: Option<TransitionDefaultMinimumObjectSize>,
+        ) -> &mut Self {
+            self.transition_default_minimum_object_size = field;
             self
         }
 
@@ -25596,16 +26161,24 @@ pub mod builders {
             self
         }
 
+        #[must_use]
+        pub fn transition_default_minimum_object_size(mut self, field: Option<TransitionDefaultMinimumObjectSize>) -> Self {
+            self.transition_default_minimum_object_size = field;
+            self
+        }
+
         pub fn build(self) -> Result<PutBucketLifecycleConfigurationInput, BuildError> {
             let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
             let checksum_algorithm = self.checksum_algorithm;
             let expected_bucket_owner = self.expected_bucket_owner;
             let lifecycle_configuration = self.lifecycle_configuration;
+            let transition_default_minimum_object_size = self.transition_default_minimum_object_size;
             Ok(PutBucketLifecycleConfigurationInput {
                 bucket,
                 checksum_algorithm,
                 expected_bucket_owner,
                 lifecycle_configuration,
+                transition_default_minimum_object_size,
             })
         }
     }
@@ -26533,6 +27106,8 @@ pub mod builders {
 
         grant_write_acp: Option<GrantWriteACP>,
 
+        if_none_match: Option<IfNoneMatch>,
+
         key: Option<ObjectKey>,
 
         metadata: Option<Metadata>,
@@ -26672,6 +27247,11 @@ pub mod builders {
 
         pub fn set_grant_write_acp(&mut self, field: Option<GrantWriteACP>) -> &mut Self {
             self.grant_write_acp = field;
+            self
+        }
+
+        pub fn set_if_none_match(&mut self, field: Option<IfNoneMatch>) -> &mut Self {
+            self.if_none_match = field;
             self
         }
 
@@ -26883,6 +27463,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn if_none_match(mut self, field: Option<IfNoneMatch>) -> Self {
+            self.if_none_match = field;
+            self
+        }
+
+        #[must_use]
         pub fn key(mut self, field: ObjectKey) -> Self {
             self.key = Some(field);
             self
@@ -26995,6 +27581,7 @@ pub mod builders {
             let grant_read = self.grant_read;
             let grant_read_acp = self.grant_read_acp;
             let grant_write_acp = self.grant_write_acp;
+            let if_none_match = self.if_none_match;
             let key = self.key.ok_or_else(|| BuildError::missing_field("key"))?;
             let metadata = self.metadata;
             let object_lock_legal_hold_status = self.object_lock_legal_hold_status;
@@ -27033,6 +27620,7 @@ pub mod builders {
                 grant_read,
                 grant_read_acp,
                 grant_write_acp,
+                if_none_match,
                 key,
                 metadata,
                 object_lock_legal_hold_status,

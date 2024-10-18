@@ -282,6 +282,9 @@ pub const X_AMZ_TAGGING_COUNT: HeaderName = HeaderName::from_static("x-amz-taggi
 
 pub const X_AMZ_TAGGING_DIRECTIVE: HeaderName = HeaderName::from_static("x-amz-tagging-directive");
 
+pub const X_AMZ_TRANSITION_DEFAULT_MINIMUM_OBJECT_SIZE: HeaderName =
+    HeaderName::from_static("x-amz-transition-default-minimum-object-size");
+
 pub const X_AMZ_VERSION_ID: HeaderName = HeaderName::from_static("x-amz-version-id");
 
 pub const X_AMZ_WEBSITE_REDIRECT_LOCATION: HeaderName = HeaderName::from_static("x-amz-website-redirect-location");

@@ -115,6 +115,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     let s3s_variant_name = variant.name.as_str();
                     let aws_variant_name = match s3s_variant_name {
                         "CRC32C" => "Crc32C".to_owned(),
+                        "ALL_STORAGE_CLASSES_128K" => "AllStorageClasses128K".to_owned(),
                         _ => s3s_variant_name.to_upper_camel_case(),
                     };
                     g!("{aws_path}::{aws_variant_name} => Self::from_static(Self::{s3s_variant_name}),");

@@ -1,4 +1,18 @@
-use crate::xml;
+use s3s::xml;
+
+use std::fmt;
+
+use rust_utils::default::default;
+
+fn deserialize_content<T>(input: &[u8]) -> xml::DeResult<T>
+where
+    T: for<'xml> xml::DeserializeContent<'xml>,
+{
+    let mut d = xml::Deserializer::new(input);
+    let ans = T::deserialize_content(&mut d)?;
+    d.expect_eof()?;
+    Ok(ans)
+}
 
 fn deserialize<T>(input: &[u8]) -> xml::DeResult<T>
 where
@@ -28,9 +42,31 @@ fn serialize<T: xml::Serialize>(val: &T) -> xml::SerResult<String> {
     Ok(String::from_utf8(buf).unwrap())
 }
 
+fn test_serde<T>(val: &T)
+where
+    T: for<'xml> xml::Deserialize<'xml>,
+    T: xml::Serialize,
+    T: fmt::Debug + PartialEq,
+{
+    let xml = serialize(val).unwrap();
+    let ans = deserialize::<T>(xml.as_bytes()).unwrap();
+    assert_eq!(*val, ans);
+}
+
+fn test_serde_content<T>(val: &T)
+where
+    T: for<'xml> xml::DeserializeContent<'xml>,
+    T: xml::SerializeContent,
+    T: fmt::Debug + PartialEq,
+{
+    let xml = serialize_content(val).unwrap();
+    let ans = deserialize_content::<T>(xml.as_bytes()).unwrap();
+    assert_eq!(*val, ans);
+}
+
 /// See <https://github.com/Nugine/s3s/issues/2>
 #[test]
-fn d001() {
+fn completed_multipart_upload() {
     let input = r#"
         <CompleteMultipartUpload>
             <Part>
@@ -48,7 +84,7 @@ fn d001() {
         </CompleteMultipartUpload>
     "#;
 
-    let ans = deserialize::<crate::dto::CompletedMultipartUpload>(input.as_bytes()).unwrap();
+    let ans = deserialize::<s3s::dto::CompletedMultipartUpload>(input.as_bytes()).unwrap();
 
     let parts = ans.parts.as_deref().unwrap();
     assert_eq!(parts.len(), 3);
@@ -61,11 +97,14 @@ fn d001() {
 
     assert_eq!(parts[2].part_number, Some(3));
     assert_eq!(parts[2].e_tag.as_deref(), Some("\"acbd18db4cc2f85cedef654fccc4a4d8\""));
+
+    test_serde(&ans);
 }
 
 #[test]
-fn d002() {
-    let input = r#"
+fn select_object_content_request() {
+    {
+        let input = r#"
         <SelectObjectContentRequest xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
             <Expression>select * from s3object</Expression>
             <ExpressionType>SQL</ExpressionType>
@@ -89,16 +128,44 @@ fn d002() {
         </SelectObjectContentRequest>
     "#;
 
-    let ans = deserialize::<crate::dto::SelectObjectContentRequest>(input.as_bytes()).unwrap();
+        let ans = deserialize::<s3s::dto::SelectObjectContentRequest>(input.as_bytes()).unwrap();
+
+        {
+            let csv = ans.input_serialization.csv.as_ref().unwrap();
+            assert_eq!(csv.allow_quoted_record_delimiter, Some(false));
+        }
+
+        test_serde(&ans);
+    }
 
     {
-        let csv = ans.input_serialization.csv.as_ref().unwrap();
-        assert_eq!(csv.allow_quoted_record_delimiter, Some(false));
+        let input = r#"
+    <SelectObjectContentRequest xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+        <Expression>select * from s3object</Expression>
+        <ExpressionType>SQL</ExpressionType>
+        <InputSerialization>
+            <CSV />
+        </InputSerialization>
+        <OutputSerialization>
+            <CSV />
+        </OutputSerialization>
+        <RequestProgress>
+            <Enabled>true</Enabled>
+        </RequestProgress>
+    </SelectObjectContentRequest>
+"#;
+
+        let ans = deserialize::<s3s::dto::SelectObjectContentRequest>(input.as_bytes()).unwrap();
+
+        assert!(ans.input_serialization.csv.is_some());
+        assert!(ans.output_serialization.csv.is_some());
+
+        test_serde(&ans);
     }
 }
 
 #[test]
-fn d003() {
+fn tagging() {
     let input = r#"
         <Tagging xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
             <TagSet>
@@ -110,41 +177,19 @@ fn d003() {
         </Tagging>
     "#;
 
-    let ans = deserialize::<crate::dto::Tagging>(input.as_bytes()).unwrap();
+    let ans = deserialize::<s3s::dto::Tagging>(input.as_bytes()).unwrap();
 
     assert_eq!(ans.tag_set.len(), 1);
     let tag = &ans.tag_set[0];
     assert_eq!(tag.key, "Key4");
     assert_eq!(tag.value, "Value4");
+
+    test_serde(&ans);
 }
 
 #[test]
-fn d004() {
-    let input = r#"
-        <SelectObjectContentRequest xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
-            <Expression>select * from s3object</Expression>
-            <ExpressionType>SQL</ExpressionType>
-            <InputSerialization>
-                <CSV />
-            </InputSerialization>
-            <OutputSerialization>
-                <CSV />
-            </OutputSerialization>
-            <RequestProgress>
-                <Enabled>true</Enabled>
-            </RequestProgress>
-        </SelectObjectContentRequest>
-    "#;
-
-    let ans = deserialize::<crate::dto::SelectObjectContentRequest>(input.as_bytes()).unwrap();
-
-    assert!(ans.input_serialization.csv.is_some());
-    assert!(ans.output_serialization.csv.is_some());
-}
-
-#[test]
-fn s001() {
-    let val = crate::dto::LifecycleExpiration {
+fn lifecycle_expiration() {
+    let val = s3s::dto::LifecycleExpiration {
         date: None,
         days: Some(365),
         expired_object_delete_marker: None,
@@ -154,13 +199,15 @@ fn s001() {
     let expected = "<Days>365</Days>";
 
     assert_eq!(ans, expected);
+
+    test_serde_content(&val);
 }
 
 #[test]
-fn s002() {
+fn get_bucket_location_output() {
     {
-        let us_west_2 = crate::dto::BucketLocationConstraint::from_static(crate::dto::BucketLocationConstraint::US_WEST_2);
-        let val = crate::dto::GetBucketLocationOutput {
+        let us_west_2 = s3s::dto::BucketLocationConstraint::from_static(s3s::dto::BucketLocationConstraint::US_WEST_2);
+        let val = s3s::dto::GetBucketLocationOutput {
             location_constraint: Some(us_west_2),
         };
 
@@ -168,9 +215,11 @@ fn s002() {
         let expected = "<LocationConstraint>us-west-2</LocationConstraint>";
 
         assert_eq!(ans, expected);
+
+        test_serde(&val);
     }
     {
-        let val = crate::dto::GetBucketLocationOutput {
+        let val = s3s::dto::GetBucketLocationOutput {
             location_constraint: None,
         };
 
@@ -178,5 +227,20 @@ fn s002() {
         let expected = "<LocationConstraint></LocationConstraint>";
 
         assert_eq!(ans, expected);
+
+        test_serde(&val);
     }
+}
+
+#[test]
+fn get_bucket_notification_configuration_output() {
+    let xml = "<NotificationConfiguration></NotificationConfiguration>";
+
+    let val = deserialize::<s3s::dto::NotificationConfiguration>(xml.as_bytes()).unwrap();
+    assert_eq!(val, default());
+    test_serde(&val);
+
+    let val = deserialize::<s3s::dto::GetBucketNotificationConfigurationOutput>(xml.as_bytes()).unwrap();
+    assert_eq!(val, default());
+    test_serde(&val);
 }

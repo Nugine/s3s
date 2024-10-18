@@ -669,6 +669,7 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+            if_none_match: try_from_aws(x.if_none_match)?,
             key: unwrap_from_aws(x.key, "key")?,
             multipart_upload: try_from_aws(x.multipart_upload)?,
             request_payer: try_from_aws(x.request_payer)?,
@@ -687,6 +688,7 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
+        y = y.set_if_none_match(try_into_aws(x.if_none_match)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
         y = y.set_multipart_upload(try_into_aws(x.multipart_upload)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
@@ -2557,12 +2559,14 @@ impl AwsConversion for s3s::dto::GetBucketLifecycleConfigurationOutput {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             rules: try_from_aws(x.rules)?,
+            transition_default_minimum_object_size: try_from_aws(x.transition_default_minimum_object_size)?,
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_rules(try_into_aws(x.rules)?);
+        y = y.set_transition_default_minimum_object_size(try_into_aws(x.transition_default_minimum_object_size)?);
         Ok(y.build())
     }
 }
@@ -4338,25 +4342,23 @@ impl AwsConversion for s3s::dto::LifecycleRuleFilter {
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
-        Ok(match x {
-            aws_sdk_s3::types::LifecycleRuleFilter::And(v) => Self::And(try_from_aws(v)?),
-            aws_sdk_s3::types::LifecycleRuleFilter::ObjectSizeGreaterThan(v) => Self::ObjectSizeGreaterThan(try_from_aws(v)?),
-            aws_sdk_s3::types::LifecycleRuleFilter::ObjectSizeLessThan(v) => Self::ObjectSizeLessThan(try_from_aws(v)?),
-            aws_sdk_s3::types::LifecycleRuleFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
-            aws_sdk_s3::types::LifecycleRuleFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
-            _ => unimplemented!("unknown variant of aws_sdk_s3::types::LifecycleRuleFilter: {x:?}"),
+        Ok(Self {
+            and: try_from_aws(x.and)?,
+            object_size_greater_than: try_from_aws(x.object_size_greater_than)?,
+            object_size_less_than: try_from_aws(x.object_size_less_than)?,
+            prefix: try_from_aws(x.prefix)?,
+            tag: try_from_aws(x.tag)?,
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(match x {
-            Self::And(v) => aws_sdk_s3::types::LifecycleRuleFilter::And(try_into_aws(v)?),
-            Self::ObjectSizeGreaterThan(v) => aws_sdk_s3::types::LifecycleRuleFilter::ObjectSizeGreaterThan(try_into_aws(v)?),
-            Self::ObjectSizeLessThan(v) => aws_sdk_s3::types::LifecycleRuleFilter::ObjectSizeLessThan(try_into_aws(v)?),
-            Self::Prefix(v) => aws_sdk_s3::types::LifecycleRuleFilter::Prefix(try_into_aws(v)?),
-            Self::Tag(v) => aws_sdk_s3::types::LifecycleRuleFilter::Tag(try_into_aws(v)?),
-            _ => unimplemented!("unknown variant of LifecycleRuleFilter: {x:?}"),
-        })
+        let mut y = Self::Target::builder();
+        y = y.set_and(try_into_aws(x.and)?);
+        y = y.set_object_size_greater_than(try_into_aws(x.object_size_greater_than)?);
+        y = y.set_object_size_less_than(try_into_aws(x.object_size_less_than)?);
+        y = y.set_prefix(try_into_aws(x.prefix)?);
+        y = y.set_tag(try_into_aws(x.tag)?);
+        Ok(y.build())
     }
 }
 
@@ -4541,13 +4543,16 @@ impl AwsConversion for s3s::dto::ListBucketsInput {
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
-        let _ = x;
-        Ok(Self {})
+        Ok(Self {
+            continuation_token: try_from_aws(x.continuation_token)?,
+            max_buckets: try_from_aws(x.max_buckets)?,
+        })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        let _ = x;
-        let y = Self::Target::builder();
+        let mut y = Self::Target::builder();
+        y = y.set_continuation_token(try_into_aws(x.continuation_token)?);
+        y = y.set_max_buckets(try_into_aws(x.max_buckets)?);
         y.build().map_err(S3Error::internal_error)
     }
 }
@@ -4559,6 +4564,7 @@ impl AwsConversion for s3s::dto::ListBucketsOutput {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             buckets: try_from_aws(x.buckets)?,
+            continuation_token: try_from_aws(x.continuation_token)?,
             owner: try_from_aws(x.owner)?,
         })
     }
@@ -4566,6 +4572,7 @@ impl AwsConversion for s3s::dto::ListBucketsOutput {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_buckets(try_into_aws(x.buckets)?);
+        y = y.set_continuation_token(try_into_aws(x.continuation_token)?);
         y = y.set_owner(try_into_aws(x.owner)?);
         Ok(y.build())
     }
@@ -6377,6 +6384,7 @@ impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             lifecycle_configuration: try_from_aws(x.lifecycle_configuration)?,
+            transition_default_minimum_object_size: try_from_aws(x.transition_default_minimum_object_size)?,
         })
     }
 
@@ -6386,6 +6394,7 @@ impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationInput {
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_lifecycle_configuration(try_into_aws(x.lifecycle_configuration)?);
+        y = y.set_transition_default_minimum_object_size(try_into_aws(x.transition_default_minimum_object_size)?);
         y.build().map_err(S3Error::internal_error)
     }
 }
@@ -6395,13 +6404,14 @@ impl AwsConversion for s3s::dto::PutBucketLifecycleConfigurationOutput {
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
-        let _ = x;
-        Ok(Self {})
+        Ok(Self {
+            transition_default_minimum_object_size: try_from_aws(x.transition_default_minimum_object_size)?,
+        })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        let _ = x;
-        let y = Self::Target::builder();
+        let mut y = Self::Target::builder();
+        y = y.set_transition_default_minimum_object_size(try_into_aws(x.transition_default_minimum_object_size)?);
         Ok(y.build())
     }
 }
@@ -6904,6 +6914,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
             grant_read: try_from_aws(x.grant_read)?,
             grant_read_acp: try_from_aws(x.grant_read_acp)?,
             grant_write_acp: try_from_aws(x.grant_write_acp)?,
+            if_none_match: try_from_aws(x.if_none_match)?,
             key: unwrap_from_aws(x.key, "key")?,
             metadata: try_from_aws(x.metadata)?,
             object_lock_legal_hold_status: try_from_aws(x.object_lock_legal_hold_status)?,
@@ -6946,6 +6957,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
         y = y.set_grant_read(try_into_aws(x.grant_read)?);
         y = y.set_grant_read_acp(try_into_aws(x.grant_read_acp)?);
         y = y.set_grant_write_acp(try_into_aws(x.grant_write_acp)?);
+        y = y.set_if_none_match(try_into_aws(x.if_none_match)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
         y = y.set_metadata(try_into_aws(x.metadata)?);
         y = y.set_object_lock_legal_hold_status(try_into_aws(x.object_lock_legal_hold_status)?);
@@ -7457,21 +7469,19 @@ impl AwsConversion for s3s::dto::ReplicationRuleFilter {
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
-        Ok(match x {
-            aws_sdk_s3::types::ReplicationRuleFilter::And(v) => Self::And(try_from_aws(v)?),
-            aws_sdk_s3::types::ReplicationRuleFilter::Prefix(v) => Self::Prefix(try_from_aws(v)?),
-            aws_sdk_s3::types::ReplicationRuleFilter::Tag(v) => Self::Tag(try_from_aws(v)?),
-            _ => unimplemented!("unknown variant of aws_sdk_s3::types::ReplicationRuleFilter: {x:?}"),
+        Ok(Self {
+            and: try_from_aws(x.and)?,
+            prefix: try_from_aws(x.prefix)?,
+            tag: try_from_aws(x.tag)?,
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        Ok(match x {
-            Self::And(v) => aws_sdk_s3::types::ReplicationRuleFilter::And(try_into_aws(v)?),
-            Self::Prefix(v) => aws_sdk_s3::types::ReplicationRuleFilter::Prefix(try_into_aws(v)?),
-            Self::Tag(v) => aws_sdk_s3::types::ReplicationRuleFilter::Tag(try_into_aws(v)?),
-            _ => unimplemented!("unknown variant of ReplicationRuleFilter: {x:?}"),
-        })
+        let mut y = Self::Target::builder();
+        y = y.set_and(try_into_aws(x.and)?);
+        y = y.set_prefix(try_into_aws(x.prefix)?);
+        y = y.set_tag(try_into_aws(x.tag)?);
+        Ok(y.build())
     }
 }
 
@@ -8395,6 +8405,27 @@ impl AwsConversion for s3s::dto::Transition {
         y = y.set_days(try_into_aws(x.days)?);
         y = y.set_storage_class(try_into_aws(x.storage_class)?);
         Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::TransitionDefaultMinimumObjectSize {
+    type Target = aws_sdk_s3::types::TransitionDefaultMinimumObjectSize;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(match x {
+            aws_sdk_s3::types::TransitionDefaultMinimumObjectSize::AllStorageClasses128K => {
+                Self::from_static(Self::ALL_STORAGE_CLASSES_128K)
+            }
+            aws_sdk_s3::types::TransitionDefaultMinimumObjectSize::VariesByStorageClass => {
+                Self::from_static(Self::VARIES_BY_STORAGE_CLASS)
+            }
+            _ => Self::from(x.as_str().to_owned()),
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        Ok(aws_sdk_s3::types::TransitionDefaultMinimumObjectSize::from(x.as_str()))
     }
 }
 

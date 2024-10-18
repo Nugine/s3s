@@ -328,8 +328,13 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
             if op.smithy_output == op.output {
                 continue;
             }
-            let rust::Type::Struct(mut ty) = space[&op.smithy_output].clone() else { panic!() };
+            assert_eq!(op.name, "GetBucketNotificationConfiguration");
+            assert_eq!(op.output, "GetBucketNotificationConfigurationOutput");
+            let rust::Type::Struct(ref origin) = space[&op.smithy_output] else { panic!() };
+            let mut ty = origin.clone();
             ty.name.clone_from(&op.output); // duplicate type
+            assert!(origin.xml_name.is_none());
+            ty.xml_name = Some(origin.name.clone());
             ty
         };
         assert!(space.insert(op.output.clone(), rust::Type::Struct(output_ty)).is_none());
@@ -391,9 +396,14 @@ pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
 
 fn codegen_struct(ty: &rust::Struct, rust_types: &RustTypes, ops: &Operations) {
     codegen_doc(ty.doc.as_deref());
-    if can_derive_default(ty, rust_types) {
-        g!("#[derive(Default)]");
+
+    {
+        let derives = struct_derives(ty, rust_types);
+        if !derives.is_empty() {
+            g!("#[derive({})]", derives.join(", "));
+        }
     }
+
     // g!("#[non_exhaustive]"); // TODO: builder?
 
     g!("pub struct {} {{", ty.name);
@@ -494,7 +504,7 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes) {
 
 fn codegen_struct_enum(ty: &rust::StructEnum, _rust_types: &RustTypes) {
     codegen_doc(ty.doc.as_deref());
-    g!("#[derive(Debug)]");
+    g!("#[derive(Debug, Clone, PartialEq)]");
     g!("#[non_exhaustive]");
     g!("pub enum {} {{", ty.name);
 
@@ -526,6 +536,38 @@ fn codegen_tests(ops: &Operations) {
     }
 
     g!("}}");
+}
+
+fn struct_derives(ty: &rust::Struct, rust_types: &RustTypes) -> Vec<&'static str> {
+    let mut derives = Vec::new();
+    if can_derive_clone(ty, rust_types) {
+        derives.push("Clone");
+    }
+    if can_derive_default(ty, rust_types) {
+        derives.push("Default");
+    }
+    if can_derive_partial_eq(ty, rust_types) {
+        derives.push("PartialEq");
+    }
+    derives
+}
+
+fn can_derive_clone(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
+    ty.fields.iter().all(|field| {
+        if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
+            return false;
+        }
+        true
+    })
+}
+
+fn can_derive_partial_eq(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
+    ty.fields.iter().all(|field| {
+        if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
+            return false;
+        }
+        true
+    })
 }
 
 fn can_derive_default(ty: &rust::Struct, rust_types: &RustTypes) -> bool {
