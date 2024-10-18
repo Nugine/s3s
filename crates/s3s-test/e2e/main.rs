@@ -24,7 +24,6 @@ use std::sync::Arc;
 
 use aws_sdk_s3::error::ProvideErrorMetadata;
 use aws_sdk_s3::error::SdkError;
-use aws_sdk_s3::Client;
 use tracing::error;
 
 fn check<T, E>(result: Result<T, SdkError<E>>, allowed_codes: &[&str]) -> Result<Option<T>, SdkError<E>>
@@ -47,60 +46,61 @@ where
     }
 }
 
-#[tracing::instrument(skip(c))]
-async fn delete_bucket(c: &Client, bucket: &str) -> Result<()> {
-    let result = c.delete_bucket().bucket(bucket).send().await;
+#[tracing::instrument(skip(s3))]
+async fn delete_bucket(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
+    let result = s3.delete_bucket().bucket(bucket).send().await;
     check(result, &["NoSuchBucket"])?;
     Ok(())
 }
 
-#[tracing::instrument(skip(c))]
-async fn create_bucket(c: &Client, bucket: &str) -> Result<()> {
-    c.create_bucket().bucket(bucket).send().await?;
+#[tracing::instrument(skip(s3))]
+async fn create_bucket(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
+    s3.create_bucket().bucket(bucket).send().await?;
     Ok(())
 }
 
 struct E2E {
-    client: Client,
+    s3: aws_sdk_s3::Client,
 }
 
 impl TestSuite for E2E {
     async fn setup() -> Result<Self> {
         let sdk_conf = aws_config::from_env().load().await;
-        let s3_conf = aws_sdk_s3::config::Builder::from(&sdk_conf)
-            .force_path_style(true) // FIXME: remove force_path_style
-            .build();
-        let client = Client::from_conf(s3_conf);
-        Ok(Self { client })
+
+        let s3 = aws_sdk_s3::Client::from_conf(
+            aws_sdk_s3::config::Builder::from(&sdk_conf)
+                .force_path_style(true) // FIXME: remove force_path_style
+                .build(),
+        );
+
+        Ok(Self { s3 })
     }
 }
 
 struct Basic {
-    client: Client,
+    s3: aws_sdk_s3::Client,
 }
 
 impl TestFixture<E2E> for Basic {
     async fn setup(suite: Arc<E2E>) -> Result<Self> {
-        Ok(Self {
-            client: suite.client.clone(),
-        })
+        Ok(Self { s3: suite.s3.clone() })
     }
 }
 
 impl Basic {
     async fn test_list_buckets(self: Arc<Self>) -> Result<()> {
-        let c = &self.client;
+        let s3 = &self.s3;
 
         let buckets = ["test-list-buckets-1", "test-list-buckets-2"];
         for &bucket in &buckets {
-            delete_bucket(c, bucket).await?;
+            delete_bucket(s3, bucket).await?;
         }
 
         for &bucket in &buckets {
-            create_bucket(c, bucket).await?;
+            create_bucket(s3, bucket).await?;
         }
 
-        let resp = c.list_buckets().send().await?;
+        let resp = s3.list_buckets().send().await?;
         let bucket_list: Vec<_> = resp.buckets.as_deref().unwrap().iter().filter_map(|b| b.name()).collect();
 
         for &bucket in &buckets {
@@ -108,7 +108,7 @@ impl Basic {
         }
 
         for &bucket in &buckets {
-            delete_bucket(c, bucket).await?;
+            delete_bucket(s3, bucket).await?;
         }
 
         Ok(())
