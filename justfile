@@ -30,8 +30,8 @@ codegen:
     cargo fmt
     cargo check
 
-install name:
-    uv run ./scripts/install.py {{name}}
+install name *ARGS:
+    uv run ./scripts/install.py {{name}} {{ARGS}}
 
 # ------------------------------------------------
 
