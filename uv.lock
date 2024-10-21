@@ -1,0 +1,12 @@
+version = 1
+requires-python = ">=3.13"
+
+[manifest]
+members = [
+    "s3s-model",
+]
+
+[[package]]
+name = "s3s-model"
+version = "0.0.0"
+source = { virtual = "model" }

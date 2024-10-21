@@ -1,0 +1,5 @@
+[tool.uv.workspace]
+members = ["model"]
+
+[tool.ruff]
+cache-dir = ".cache/ruff"
