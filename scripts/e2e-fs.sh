@@ -1,8 +1,5 @@
 #!/bin/bash -ex
 
-cargo build -p s3s-fs --bins --release --features binary
-cargo build -p s3s-test --bins --release
-
 DATA_DIR="/tmp/s3s-e2e"
 mkdir -p "$DATA_DIR"
 
@@ -10,7 +7,9 @@ if [ -z "$RUST_LOG" ]; then
     export RUST_LOG="s3s_fs=debug,s3s=debug"
 fi
 
-./target/release/s3s-fs \
+killall s3s-fs || echo
+
+s3s-fs \
     --access-key    AKEXAMPLES3S    \
     --secret-key    SKEXAMPLES3S    \
     --host          localhost       \
@@ -31,6 +30,4 @@ if [ -z "$RUST_LOG" ]; then
 fi
 export RUST_BACKTRACE=full
 
-./target/release/s3s-e2e "$@" | tee target/s3s-e2e.log
-
-killall s3s-fs
+s3s-e2e "$@"

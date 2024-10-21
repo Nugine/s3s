@@ -20,17 +20,17 @@ def sh(cmd):
 
 @installer("s3s-fs")
 def install_s3s_fs():
-    sh("cargo install --offline --path crates/s3s-fs --features binary")
+    sh("cargo install --path crates/s3s-fs --features binary")
 
 
 @installer("s3s-proxy")
 def install_s3s_proxy():
-    sh("cargo install --offline --path crates/s3s-proxy")
+    sh("cargo install --path crates/s3s-proxy")
 
 
 @installer("s3s-e2e")
 def install_s3s_e2e():
-    sh("cargo install --offline --path crates/s3s-test --bin s3s-e2e")
+    sh("cargo install --path crates/s3s-test --bin s3s-e2e")
 
 
 @installer("all")

@@ -1,6 +1,10 @@
+use std::path::Path;
 use std::path::PathBuf;
+use std::process::ExitCode;
+use std::process::Termination;
 
 use crate::report::FnResult;
+use crate::report::Report;
 use crate::tcx::TestContext;
 
 use clap::Parser;
@@ -37,18 +41,13 @@ fn status(passed: bool) -> ColoredString {
     }
 }
 
-#[tokio::main]
-async fn async_main(opt: &Opt, register: impl FnOnce(&mut TestContext)) -> Result<(), StdError> {
-    let mut tcx = TestContext::new();
-    register(&mut tcx);
+fn write_report(json_path: &Path, report: &Report) -> Result<(), StdError> {
+    let report_json = serde_json::to_string_pretty(&report)?;
+    std::fs::write(json_path, report_json)?;
+    Ok(())
+}
 
-    let report = crate::runner::run(&mut tcx).await;
-
-    if let Some(ref json_path) = opt.json {
-        let report_json = serde_json::to_string_pretty(&report)?;
-        std::fs::write(json_path, report_json)?;
-    }
-
+fn print_summary(report: &Report) {
     let w = format!("{:.3}", report.duration_ms).len();
 
     for suite in &report.suites {
@@ -87,16 +86,35 @@ async fn async_main(opt: &Opt, register: impl FnOnce(&mut TestContext)) -> Resul
     let status = status(report.suite_count.all_passed());
     let duration = report.duration_ms;
     println!("{status} {duration:>w$.3}ms");
-
-    Ok(())
 }
 
-pub fn main(register: impl FnOnce(&mut TestContext)) {
+#[tokio::main]
+async fn async_main(opt: &Opt, register: impl FnOnce(&mut TestContext)) -> ExitCode {
+    let mut tcx = TestContext::new();
+    register(&mut tcx);
+
+    let report = crate::runner::run(&mut tcx).await;
+
+    if let Some(ref json_path) = opt.json {
+        if let Err(err) = write_report(json_path, &report) {
+            eprintln!("Failed to write report: {err}");
+            return ExitCode::from(2);
+        }
+    }
+
+    print_summary(&report);
+
+    if report.suite_count.all_passed() {
+        ExitCode::from(0)
+    } else {
+        ExitCode::from(1)
+    }
+}
+
+#[must_use]
+pub fn main(register: impl FnOnce(&mut TestContext)) -> impl Termination {
     dotenvy::dotenv().ok();
     setup_tracing();
     let opt = Opt::parse();
-    if let Err(err) = async_main(&opt, register) {
-        eprintln!("{err}");
-        std::process::exit(1);
-    }
+    async_main(&opt, register)
 }
