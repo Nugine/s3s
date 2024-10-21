@@ -136,6 +136,9 @@ impl S3 for FileSystem {
     async fn delete_object(&self, req: S3Request<DeleteObjectInput>) -> S3Result<S3Response<DeleteObjectOutput>> {
         let input = req.input;
         let path = self.get_object_path(&input.bucket, &input.key)?;
+        if path.exists().not() {
+            return Err(s3_error!(NoSuchKey));
+        }
         if input.key.ends_with('/') {
             let mut dir = try_!(fs::read_dir(&path).await);
             let is_empty = try_!(dir.next_entry().await).is_none();
@@ -143,7 +146,7 @@ impl S3 for FileSystem {
                 try_!(fs::remove_dir(&path).await);
             }
         } else {
-            try_!(fs::remove_file(path).await);
+            try_!(fs::remove_file(&path).await);
         }
         let output = DeleteObjectOutput::default(); // TODO: handle other fields
         Ok(S3Response::new(output))

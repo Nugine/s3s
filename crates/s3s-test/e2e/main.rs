@@ -15,6 +15,7 @@
     clippy::multiple_crate_versions, // TODO: check later
 )]
 
+use aws_sdk_s3::primitives::ByteStream;
 use s3s_test::Result;
 use s3s_test::TestFixture;
 use s3s_test::TestSuite;
@@ -48,15 +49,34 @@ where
 }
 
 #[tracing::instrument(skip(s3))]
-async fn delete_bucket(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
+async fn create_bucket(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
+    s3.create_bucket().bucket(bucket).send().await?;
+    Ok(())
+}
+
+#[tracing::instrument(skip(s3))]
+async fn delete_bucket_loose(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
     let result = s3.delete_bucket().bucket(bucket).send().await;
     check(result, &["NoSuchBucket"])?;
     Ok(())
 }
 
 #[tracing::instrument(skip(s3))]
-async fn create_bucket(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
-    s3.create_bucket().bucket(bucket).send().await?;
+async fn delete_bucket_strict(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
+    s3.delete_bucket().bucket(bucket).send().await?;
+    Ok(())
+}
+
+#[tracing::instrument(skip(s3))]
+async fn delete_object_loose(s3: &aws_sdk_s3::Client, bucket: &str, key: &str) -> Result<()> {
+    let result = s3.delete_object().bucket(bucket).key(key).send().await;
+    check(result, &["NoSuchKey", "NoSuchBucket"])?;
+    Ok(())
+}
+
+#[tracing::instrument(skip(s3))]
+async fn delete_object_strict(s3: &aws_sdk_s3::Client, bucket: &str, key: &str) -> Result<()> {
+    s3.delete_object().bucket(bucket).key(key).send().await?;
     Ok(())
 }
 
@@ -93,8 +113,9 @@ impl Basic {
         let s3 = &self.s3;
 
         let buckets = ["test-list-buckets-1", "test-list-buckets-2"];
+
         for &bucket in &buckets {
-            delete_bucket(s3, bucket).await?;
+            delete_bucket_loose(s3, bucket).await?;
         }
 
         for &bucket in &buckets {
@@ -106,11 +127,80 @@ impl Basic {
 
         for &bucket in &buckets {
             assert!(bucket_list.contains(&bucket));
+            s3.head_bucket().bucket(bucket).send().await?;
         }
 
         for &bucket in &buckets {
-            delete_bucket(s3, bucket).await?;
+            delete_bucket_strict(s3, bucket).await?;
         }
+
+        Ok(())
+    }
+
+    async fn test_list_objects(self: Arc<Self>) -> Result<()> {
+        let s3 = &self.s3;
+
+        let bucket = "test-list-objects";
+        let keys = ["file-1", "file-2", "file-3"];
+        let content = "hello world 你好世界 123456 !@#$%😂^&*()";
+
+        delete_bucket_loose(s3, bucket).await?;
+
+        create_bucket(s3, bucket).await?;
+
+        for &key in &keys {
+            s3.put_object()
+                .bucket(bucket)
+                .key(key)
+                .body(ByteStream::from_static(content.as_bytes()))
+                .send()
+                .await?;
+        }
+
+        let resp = s3.list_objects_v2().bucket(bucket).send().await?;
+        let object_list: Vec<_> = resp.contents.as_deref().unwrap().iter().filter_map(|o| o.key()).collect();
+
+        for &key in &keys {
+            assert!(object_list.contains(&key));
+            s3.head_object().bucket(bucket).key(key).send().await?;
+        }
+
+        for &key in &keys {
+            delete_object_strict(s3, bucket, key).await?;
+        }
+
+        delete_bucket_strict(s3, bucket).await?;
+
+        Ok(())
+    }
+
+    async fn test_get_object(self: Arc<Self>) -> Result<()> {
+        let s3 = &self.s3;
+
+        let bucket = "test-get-object";
+        let key = "file-1";
+        let content = "hello world 你好世界 123456 !@#$%😂^&*()";
+
+        delete_object_loose(s3, bucket, key).await?;
+        delete_bucket_loose(s3, bucket).await?;
+
+        create_bucket(s3, bucket).await?;
+
+        s3.put_object()
+            .bucket(bucket)
+            .key(key)
+            .body(ByteStream::from_static(content.as_bytes()))
+            .send()
+            .await?;
+
+        let resp = s3.get_object().bucket(bucket).key(key).send().await?;
+
+        let body = resp.body.collect().await?;
+        let body = String::from_utf8(body.to_vec())?;
+        assert_eq!(body, content);
+
+        delete_object_strict(s3, bucket, key).await?;
+        delete_bucket_strict(s3, bucket).await?;
 
         Ok(())
     }
@@ -127,5 +217,7 @@ fn main() -> impl Termination {
         }
 
         case!(E2E, Basic, test_list_buckets);
+        case!(E2E, Basic, test_list_objects);
+        case!(E2E, Basic, test_get_object);
     })
 }
