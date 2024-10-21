@@ -128,5 +128,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
+      - run: docker pull minio/minio:latest
       - run: just install s3s-e2e
       - run: ./scripts/e2e-minio.sh
