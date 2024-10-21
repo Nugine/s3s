@@ -1,32 +1,39 @@
+dev:
+    just fetch
+    just fmt
+    just lint
+    just test
+
+fetch:
+    uv sync
+    cargo fetch
+
 fmt:
+    uvx ruff format
     cargo fmt
 
-dev:
-    cargo fmt
+lint:
+    uvx ruff check
     cargo clippy --all-features --all-targets
-    cargo test
+
+test:
+    cargo test --all-features
 
 doc:
     RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc --open --no-deps --all-features
 
-download-model:
-    ./scripts/download-model.py --force codegen/s3.json
+model:
+    uv run model/main.py update
 
 codegen:
-    ./scripts/download-model.py codegen/s3.json
-    cargo run -p s3s-codegen -- codegen/s3.json
+    cargo run -p s3s-codegen -- model/s3.json
     cargo fmt
     cargo check
 
-install-s3s-fs:
-    cargo install --offline --path crates/s3s-fs --features binary
+install name:
+    uv run ./scripts/install.py {{name}}
 
-install-s3s-proxy:
-    cargo install --offline --path crates/s3s-proxy
-
-install:
-    just install-s3s-fs
-    just install-s3s-proxy
+# ------------------------------------------------
 
 sync-version:
     cargo set-version -p s3s            0.11.0-dev
