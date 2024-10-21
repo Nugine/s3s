@@ -1,11 +1,15 @@
 # Development Guide
 
+## Requirements
+
 |               Toolchain               | Version |
 | :-----------------------------------: | :-----: |
 |      [Rust](https://rustup.rs/)       | ^1.81.0 |
-| [just](https://github.com/casey/just) |    -    |
-|                Python                 |  ^3.10  |
+| [just](https://github.com/casey/just) |    ^1.36.0    |
+|                [uv](https://github.com/astral-sh/uv)                 |  ^0.4.24  |
 |                Docker                 |    -    |
+
+## Workflow
 
 Get the source code
 
@@ -14,28 +18,28 @@ git clone https://github.com/Nugine/s3s.git
 cd s3s
 ```
 
-#### Run basic checks and tests
+### Run basic checks and tests
 
 ```bash
 just dev
 ```
 
-#### Open documentation
+### Run the codegen
 
 ```bash
-just doc
-```
-
-#### Run the codegen
-
-```bash
-just download-model
+just model
 just codegen
 ```
 
 It should change nothing if you are running the latest code.
 
-#### Play the test server
+### Open documentation
+
+```bash
+just doc
+```
+
+### Play the test server
 
 Install `s3s-fs` from source
 
@@ -46,7 +50,7 @@ cargo install --path crates/s3s-fs --features binary
 You can also use the shortcut
 
 ```bash
-just install-s3s-fs
+just install s3s-fs
 ```
 
 Or install from crates.io
@@ -70,12 +74,12 @@ Secret Key: SKEXAMPLES3S
 
 Then you can explore it with your favorite S3 client!
 
-#### Run E2E tests
+### Run E2E tests
 
 Install `s3s-proxy`
 
 ```bash
-just install-s3s-proxy
+just install s3s-proxy
 ```
 
 Run the combined server and save logs
@@ -89,3 +93,9 @@ Open a new terminal, then run the test suite
 ```bash
 ./scripts/mint.sh | tee target/mint.log
 ```
+
+## Git
+
+### Commit Message
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
