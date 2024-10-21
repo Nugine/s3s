@@ -77,6 +77,15 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: just ci-test
 
+  audit:
+    needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@cargo-audit
+      - run: cargo audit -D warnings
+
   mint:
     needs: skip-check
     if: needs.skip-check.outputs.should_skip != 'true'
