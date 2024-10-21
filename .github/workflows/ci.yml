@@ -119,3 +119,14 @@ jobs:
         with:
           name: e2e-fs.logs
           path: ./target/s3s-fs.log
+
+  e2e-minio:
+    name: e2e (s3s-e2e, minio)
+    needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: just install s3s-e2e
+      - run: ./scripts/e2e-minio.sh
