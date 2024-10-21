@@ -27,8 +27,21 @@ jobs:
           cancel_others: true
           paths_ignore: '["*.md"]'
 
-  develop:
+  python:
     needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@just
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+      - run: just ci-python
+
+  rust:
+    needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -39,21 +52,13 @@ jobs:
           - nightly
     steps:
       - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@just
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ matrix.toolchain }}
           components: rustfmt, clippy
       - uses: Swatinem/rust-cache@v2
-      - uses: taiki-e/install-action@v2
-        with:
-          tool: just
-      - run: cargo fmt --all -- --check
-      - run: cargo clippy --all-features --all-targets -- -D warnings
-      - run: cargo test --all-features
-      - run: |
-          just codegen
-          ./scripts/assert-unchanged.sh
-      - run: cargo install --path crates/s3s-fs --features binary
+      - run: just ci-rust
 
   cross-test:
     needs: skip-check
@@ -63,16 +68,14 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-latest
           - windows-latest
           - macos-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: stable
+      - uses: taiki-e/install-action@just
+      - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test --all-features
+      - run: just ci-test
 
   mint:
     needs: skip-check

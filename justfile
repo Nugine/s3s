@@ -48,3 +48,25 @@ publish:
     cargo publish -p s3s-aws
     cargo publish -p s3s-fs
     cargo publish -p s3s-test
+
+# ------------------------------------------------
+
+assert_unchanged:
+    #!/bin/bash -ex
+    [[ -z "$(git status -s)" ]] # https://stackoverflow.com/a/9393642
+
+ci-rust:
+    cargo fmt --all --check
+    cargo clippy --all-features --all-targets -- -D warnings
+    just ci-test
+    just codegen
+    just assert_unchanged
+
+ci-test:
+    cargo test --all-features
+
+ci-python:
+    uvx ruff format --check
+    uvx ruff check
+    just model
+    just assert_unchanged
