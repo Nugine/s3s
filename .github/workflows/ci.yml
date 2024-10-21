@@ -86,42 +86,36 @@ jobs:
       - uses: taiki-e/install-action@cargo-audit
       - run: cargo audit -D warnings
 
-  mint:
+  mint-proxy-minio:
+    name: e2e (mint, s3s-proxy, minio)
     needs: skip-check
     if: needs.skip-check.outputs.should_skip != 'true'
-    name: e2e (s3s-proxy, mint)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: ./.github/actions/setup
       - run: docker pull minio/mint:edge
       - run: docker pull minio/minio:latest
-      - run: cargo install --path crates/s3s-proxy
+      - run: just install s3s-proxy
       - run: ./scripts/e2e-mint.sh
       - run: ./scripts/report-mint.py /tmp/mint/log.json
       - uses: actions/upload-artifact@v4
         with:
-          name: e2e-mint-logs
+          name: mint-proxy-minio.logs
           path: ./target/s3s-proxy.log
 
   e2e-fs:
+    name: e2e (s3s-e2e, s3s-fs)
     needs: skip-check
     if: needs.skip-check.outputs.should_skip != 'true'
-    name: e2e (s3s-fs, s3s-e2e)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: stable
-      - uses: Swatinem/rust-cache@v2
+      - uses: ./.github/actions/setup
+      - run: just install s3s-e2e
+      - run: just install s3s-fs
       - run: ./scripts/e2e-fs.sh
       - uses: actions/upload-artifact@v4
         with:
-          name: e2e-fs-logs
-          path: |
-            ./target/s3s-fs.log
-            ./target/s3s-e2e.log
+          name: e2e-fs.logs
+          path: ./target/s3s-fs.log

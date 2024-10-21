@@ -124,7 +124,11 @@ impl S3 for FileSystem {
     async fn delete_bucket(&self, req: S3Request<DeleteBucketInput>) -> S3Result<S3Response<DeleteBucketOutput>> {
         let input = req.input;
         let path = self.get_bucket_path(&input.bucket)?;
-        try_!(fs::remove_dir_all(path).await);
+        if path.exists() {
+            try_!(fs::remove_dir_all(path).await);
+        } else {
+            return Err(s3_error!(NoSuchBucket));
+        }
         Ok(S3Response::new(DeleteBucketOutput {}))
     }
 

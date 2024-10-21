@@ -20,6 +20,7 @@ use s3s_test::TestFixture;
 use s3s_test::TestSuite;
 
 use std::fmt;
+use std::process::Termination;
 use std::sync::Arc;
 
 use aws_sdk_s3::error::ProvideErrorMetadata;
@@ -115,7 +116,7 @@ impl Basic {
     }
 }
 
-fn main() {
+fn main() -> impl Termination {
     s3s_test::cli::main(|tcx| {
         macro_rules! case {
             ($s:ident, $x:ident, $c:ident) => {{
@@ -126,5 +127,5 @@ fn main() {
         }
 
         case!(E2E, Basic, test_list_buckets);
-    });
+    })
 }
