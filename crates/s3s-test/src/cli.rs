@@ -1,3 +1,4 @@
+use std::ops::Not;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::ExitCode;
@@ -10,6 +11,7 @@ use crate::tcx::TestContext;
 use clap::Parser;
 use colored::ColoredString;
 use colored::Colorize;
+use regex::RegexSet;
 
 type StdError = Box<dyn std::error::Error + Send + Sync + 'static>;
 
@@ -31,6 +33,9 @@ fn setup_tracing() {
 struct Opt {
     #[clap(long)]
     json: Option<PathBuf>,
+
+    #[clap(long)]
+    filter: Vec<String>,
 }
 
 fn status(passed: bool) -> ColoredString {
@@ -92,6 +97,17 @@ fn print_summary(report: &Report) {
 async fn async_main(opt: &Opt, register: impl FnOnce(&mut TestContext)) -> ExitCode {
     let mut tcx = TestContext::new();
     register(&mut tcx);
+
+    if opt.filter.is_empty().not() {
+        let filter_set = match RegexSet::new(&opt.filter) {
+            Ok(x) => x,
+            Err(err) => {
+                eprintln!("Failed to build filter set: {err}");
+                return ExitCode::from(2);
+            }
+        };
+        tcx.filter(&filter_set);
+    }
 
     let report = crate::runner::run(&mut tcx).await;
 
