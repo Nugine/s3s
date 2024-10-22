@@ -49,33 +49,33 @@ where
 }
 
 #[tracing::instrument(skip(s3))]
-async fn create_bucket(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
+async fn create_bucket(s3: &aws_sdk_s3::Client, bucket: &str) -> Result {
     s3.create_bucket().bucket(bucket).send().await?;
     Ok(())
 }
 
 #[tracing::instrument(skip(s3))]
-async fn delete_bucket_loose(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
+async fn delete_bucket_loose(s3: &aws_sdk_s3::Client, bucket: &str) -> Result {
     let result = s3.delete_bucket().bucket(bucket).send().await;
     check(result, &["NoSuchBucket"])?;
     Ok(())
 }
 
 #[tracing::instrument(skip(s3))]
-async fn delete_bucket_strict(s3: &aws_sdk_s3::Client, bucket: &str) -> Result<()> {
+async fn delete_bucket_strict(s3: &aws_sdk_s3::Client, bucket: &str) -> Result {
     s3.delete_bucket().bucket(bucket).send().await?;
     Ok(())
 }
 
 #[tracing::instrument(skip(s3))]
-async fn delete_object_loose(s3: &aws_sdk_s3::Client, bucket: &str, key: &str) -> Result<()> {
+async fn delete_object_loose(s3: &aws_sdk_s3::Client, bucket: &str, key: &str) -> Result {
     let result = s3.delete_object().bucket(bucket).key(key).send().await;
     check(result, &["NoSuchKey", "NoSuchBucket"])?;
     Ok(())
 }
 
 #[tracing::instrument(skip(s3))]
-async fn delete_object_strict(s3: &aws_sdk_s3::Client, bucket: &str, key: &str) -> Result<()> {
+async fn delete_object_strict(s3: &aws_sdk_s3::Client, bucket: &str, key: &str) -> Result {
     s3.delete_object().bucket(bucket).key(key).send().await?;
     Ok(())
 }
@@ -109,7 +109,7 @@ impl TestFixture<E2E> for Basic {
 }
 
 impl Basic {
-    async fn test_list_buckets(self: Arc<Self>) -> Result<()> {
+    async fn test_list_buckets(self: Arc<Self>) -> Result {
         let s3 = &self.s3;
 
         let buckets = ["test-list-buckets-1", "test-list-buckets-2"];
@@ -143,7 +143,7 @@ impl Basic {
         Ok(())
     }
 
-    async fn test_list_objects(self: Arc<Self>) -> Result<()> {
+    async fn test_list_objects(self: Arc<Self>) -> Result {
         let s3 = &self.s3;
 
         let bucket = "test-list-objects";
@@ -188,7 +188,7 @@ impl Basic {
         Ok(())
     }
 
-    async fn test_get_object(self: Arc<Self>) -> Result<()> {
+    async fn test_get_object(self: Arc<Self>) -> Result {
         let s3 = &self.s3;
 
         let bucket = "test-get-object";
@@ -226,6 +226,66 @@ impl Basic {
     }
 }
 
+struct Put {
+    s3: aws_sdk_s3::Client,
+    bucket: String,
+    key: String,
+}
+
+impl TestFixture<E2E> for Put {
+    async fn setup(suite: Arc<E2E>) -> Result<Self> {
+        let s3 = &suite.s3;
+        let bucket = "test-put";
+        let key = "file";
+
+        delete_object_loose(s3, bucket, key).await?;
+        delete_bucket_loose(s3, bucket).await?;
+
+        create_bucket(s3, bucket).await?;
+
+        Ok(Self {
+            s3: suite.s3.clone(),
+            bucket: bucket.to_owned(),
+            key: key.to_owned(),
+        })
+    }
+
+    async fn teardown(self) -> Result {
+        let Self { s3, bucket, key } = &self;
+
+        delete_object_loose(s3, bucket, key).await?;
+        delete_bucket_loose(s3, bucket).await?;
+
+        Ok(())
+    }
+}
+
+impl Put {
+    async fn test_put_object_tiny(self: Arc<Self>) -> Result {
+        let s3 = &self.s3;
+        let bucket = self.bucket.as_str();
+        let key = self.key.as_str();
+
+        let contents = ["", "1", "22", "333"];
+
+        for content in contents {
+            s3.put_object()
+                .bucket(bucket)
+                .key(key)
+                .body(ByteStream::from_static(content.as_bytes()))
+                .send()
+                .await?;
+
+            let resp = s3.get_object().bucket(bucket).key(key).send().await?;
+            let body = resp.body.collect().await?;
+            let body = String::from_utf8(body.to_vec())?;
+            assert_eq!(body, content);
+        }
+
+        Ok(())
+    }
+}
+
 fn main() -> impl Termination {
     s3s_test::cli::main(|tcx| {
         macro_rules! case {
@@ -239,5 +299,6 @@ fn main() -> impl Termination {
         case!(E2E, Basic, test_list_buckets);
         case!(E2E, Basic, test_list_objects);
         case!(E2E, Basic, test_get_object);
+        case!(E2E, Put, test_put_object_tiny);
     })
 }
