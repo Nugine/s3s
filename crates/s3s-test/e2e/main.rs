@@ -114,24 +114,30 @@ impl Basic {
 
         let buckets = ["test-list-buckets-1", "test-list-buckets-2"];
 
-        for &bucket in &buckets {
-            delete_bucket_loose(s3, bucket).await?;
+        {
+            for &bucket in &buckets {
+                delete_bucket_loose(s3, bucket).await?;
+            }
         }
 
-        for &bucket in &buckets {
-            create_bucket(s3, bucket).await?;
+        {
+            for &bucket in &buckets {
+                create_bucket(s3, bucket).await?;
+            }
+
+            let resp = s3.list_buckets().send().await?;
+            let bucket_list: Vec<_> = resp.buckets.as_deref().unwrap().iter().filter_map(|b| b.name()).collect();
+
+            for &bucket in &buckets {
+                assert!(bucket_list.contains(&bucket));
+                s3.head_bucket().bucket(bucket).send().await?;
+            }
         }
 
-        let resp = s3.list_buckets().send().await?;
-        let bucket_list: Vec<_> = resp.buckets.as_deref().unwrap().iter().filter_map(|b| b.name()).collect();
-
-        for &bucket in &buckets {
-            assert!(bucket_list.contains(&bucket));
-            s3.head_bucket().bucket(bucket).send().await?;
-        }
-
-        for &bucket in &buckets {
-            delete_bucket_strict(s3, bucket).await?;
+        {
+            for &bucket in &buckets {
+                delete_bucket_strict(s3, bucket).await?;
+            }
         }
 
         Ok(())
@@ -144,32 +150,40 @@ impl Basic {
         let keys = ["file-1", "file-2", "file-3"];
         let content = "hello world 你好世界 123456 !@#$%😂^&*()";
 
-        delete_bucket_loose(s3, bucket).await?;
-
-        create_bucket(s3, bucket).await?;
-
-        for &key in &keys {
-            s3.put_object()
-                .bucket(bucket)
-                .key(key)
-                .body(ByteStream::from_static(content.as_bytes()))
-                .send()
-                .await?;
+        {
+            for key in &keys {
+                delete_object_loose(s3, bucket, key).await?;
+            }
+            delete_bucket_loose(s3, bucket).await?;
         }
 
-        let resp = s3.list_objects_v2().bucket(bucket).send().await?;
-        let object_list: Vec<_> = resp.contents.as_deref().unwrap().iter().filter_map(|o| o.key()).collect();
+        {
+            create_bucket(s3, bucket).await?;
 
-        for &key in &keys {
-            assert!(object_list.contains(&key));
-            s3.head_object().bucket(bucket).key(key).send().await?;
+            for &key in &keys {
+                s3.put_object()
+                    .bucket(bucket)
+                    .key(key)
+                    .body(ByteStream::from_static(content.as_bytes()))
+                    .send()
+                    .await?;
+            }
+
+            let resp = s3.list_objects_v2().bucket(bucket).send().await?;
+            let object_list: Vec<_> = resp.contents.as_deref().unwrap().iter().filter_map(|o| o.key()).collect();
+
+            for &key in &keys {
+                assert!(object_list.contains(&key));
+                s3.head_object().bucket(bucket).key(key).send().await?;
+            }
         }
 
-        for &key in &keys {
-            delete_object_strict(s3, bucket, key).await?;
+        {
+            for &key in &keys {
+                delete_object_strict(s3, bucket, key).await?;
+            }
+            delete_bucket_strict(s3, bucket).await?;
         }
-
-        delete_bucket_strict(s3, bucket).await?;
 
         Ok(())
     }
@@ -181,26 +195,32 @@ impl Basic {
         let key = "file-1";
         let content = "hello world 你好世界 123456 !@#$%😂^&*()";
 
-        delete_object_loose(s3, bucket, key).await?;
-        delete_bucket_loose(s3, bucket).await?;
+        {
+            delete_object_loose(s3, bucket, key).await?;
+            delete_bucket_loose(s3, bucket).await?;
+        }
 
-        create_bucket(s3, bucket).await?;
+        {
+            create_bucket(s3, bucket).await?;
 
-        s3.put_object()
-            .bucket(bucket)
-            .key(key)
-            .body(ByteStream::from_static(content.as_bytes()))
-            .send()
-            .await?;
+            s3.put_object()
+                .bucket(bucket)
+                .key(key)
+                .body(ByteStream::from_static(content.as_bytes()))
+                .send()
+                .await?;
 
-        let resp = s3.get_object().bucket(bucket).key(key).send().await?;
+            let resp = s3.get_object().bucket(bucket).key(key).send().await?;
 
-        let body = resp.body.collect().await?;
-        let body = String::from_utf8(body.to_vec())?;
-        assert_eq!(body, content);
+            let body = resp.body.collect().await?;
+            let body = String::from_utf8(body.to_vec())?;
+            assert_eq!(body, content);
+        }
 
-        delete_object_strict(s3, bucket, key).await?;
-        delete_bucket_strict(s3, bucket).await?;
+        {
+            delete_object_strict(s3, bucket, key).await?;
+            delete_bucket_strict(s3, bucket).await?;
+        }
 
         Ok(())
     }

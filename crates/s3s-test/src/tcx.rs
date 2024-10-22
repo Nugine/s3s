@@ -7,10 +7,12 @@ use crate::traits::TestSuite;
 use std::any::type_name;
 use std::future::Future;
 use std::marker::PhantomData;
+use std::ops::Not;
 use std::pin::Pin;
 use std::sync::Arc;
 
 use indexmap::IndexMap;
+use regex::RegexSet;
 
 pub(crate) type ArcAny = Arc<dyn std::any::Any + Send + Sync + 'static>;
 type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
@@ -93,6 +95,19 @@ impl TestContext {
             suite: &mut self.suites[&name],
             _marker: PhantomData,
         }
+    }
+
+    pub fn filter(&mut self, filter_set: &RegexSet) {
+        self.suites.retain(|_, suite| {
+            suite.fixtures.retain(|_, fixture| {
+                fixture.cases.retain(|_, case| {
+                    let id = format!("{}/{}/{}", suite.name, fixture.name, case.name);
+                    filter_set.is_match(&id)
+                });
+                fixture.cases.is_empty().not()
+            });
+            suite.fixtures.is_empty().not()
+        });
     }
 }
 
