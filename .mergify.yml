@@ -1,0 +1,3 @@
+queue_rules:
+  - merge_method: fast-forward
+    name: default
