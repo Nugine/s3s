@@ -1,3 +1,4 @@
+use std::env;
 use std::fmt;
 
 pub type Result<T = (), E = Failed> = std::result::Result<T, E>;
@@ -12,6 +13,20 @@ where
     E: std::error::Error + Send + Sync + 'static,
 {
     fn from(source: E) -> Self {
+        if env::var("RUST_BACKTRACE").is_ok() {
+            eprintln!("Failed: {source}");
+            eprintln!("Backtrace:\n");
+            backtrace::trace(|frame| {
+                backtrace::resolve_frame(frame, |symbol| {
+                    if let (Some(name), Some(filename), Some(colno)) = (symbol.name(), symbol.filename(), symbol.colno()) {
+                        if filename.components().any(|c| c.as_os_str().to_str() == Some("s3s")) {
+                            eprintln!("{name}\n  at {}:{colno}\n", filename.display());
+                        }
+                    }
+                });
+                true
+            });
+        }
         Self {
             source: Some(Box::new(source)),
         }

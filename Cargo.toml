@@ -6,3 +6,6 @@ resolver = "2"
 edition = "2021"
 repository = "https://github.com/Nugine/s3s"
 license = "Apache-2.0"
+
+[profile.release]
+debug = "line-tables-only"
