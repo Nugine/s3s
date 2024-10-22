@@ -1,14 +1,5 @@
 name: "setup"
 description: "setup environment for s3s"
-inputs:
-  cache-shared-key:
-    description: "rust-cache shared-key"
-    required: false
-    default: ""
-  cache-save-if:
-    description: "rust-cache save-if"
-    required: false
-    default: true
 runs:
   using: "composite"
   steps:
@@ -18,6 +9,3 @@ runs:
         enable-cache: true
     - uses: dtolnay/rust-toolchain@stable
     - uses: Swatinem/rust-cache@v2
-      with:
-        shared-key: ${{ inputs.cache-shared-key }}
-        save-if: ${{ inputs.cache-save-if }}

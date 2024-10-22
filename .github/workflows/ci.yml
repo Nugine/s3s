@@ -86,32 +86,17 @@ jobs:
       - uses: taiki-e/install-action@cargo-audit
       - run: cargo audit -D warnings
 
-  build-e2e:
+  mint-proxy-minio:
+    name: e2e (mint, s3s-proxy, minio)
     needs: skip-check
     if: needs.skip-check.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        with:
-          cache-shared-key: "e2e"
-          cache-save-if: true
-      - run: just install all
-
-  mint-proxy-minio:
-    name: e2e (mint, s3s-proxy, minio)
-    needs: [skip-check, build-e2e]
-    if: needs.skip-check.outputs.should_skip != 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-        with:
-          cache-shared-key: "e2e"
-          cache-save-if: false
-      - run: just install all
       - run: docker pull minio/mint:edge
       - run: docker pull minio/minio:latest
+      - run: just install s3s-proxy
       - run: ./scripts/e2e-mint.sh
       - run: ./scripts/report-mint.py /tmp/mint/log.json
       - uses: actions/upload-artifact@v4
@@ -121,16 +106,14 @@ jobs:
 
   e2e-fs:
     name: e2e (s3s-e2e, s3s-fs)
-    needs: [skip-check, build-e2e]
+    needs: skip-check
     if: needs.skip-check.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        with:
-          cache-shared-key: "e2e"
-          cache-save-if: false
-      - run: just install all
+      - run: just install s3s-e2e
+      - run: just install s3s-fs
       - run: ./scripts/e2e-fs.sh
       - uses: actions/upload-artifact@v4
         with:
@@ -139,15 +122,12 @@ jobs:
 
   e2e-minio:
     name: e2e (s3s-e2e, minio)
-    needs: [skip-check, build-e2e]
+    needs: skip-check
     if: needs.skip-check.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-        with:
-          cache-shared-key: "e2e"
-          cache-save-if: false
-      - run: just install all
       - run: docker pull minio/minio:latest
+      - run: just install s3s-e2e
       - run: ./scripts/e2e-minio.sh
