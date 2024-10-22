@@ -36,6 +36,9 @@ struct Opt {
 
     #[clap(long)]
     filter: Vec<String>,
+
+    #[clap(long)]
+    list: bool,
 }
 
 fn status(passed: bool) -> ColoredString {
@@ -107,6 +110,22 @@ async fn async_main(opt: &Opt, register: impl FnOnce(&mut TestContext)) -> ExitC
             }
         };
         tcx.filter(&filter_set);
+    }
+
+    if opt.list {
+        for suite in tcx.suites.values() {
+            let suite_name = suite.name.magenta();
+            println!("{suite_name}");
+            for fixture in suite.fixtures.values() {
+                let fixture_name = fixture.name.blue();
+                println!("{suite_name}/{fixture_name}");
+                for case in fixture.cases.values() {
+                    let case_name = case.name.cyan();
+                    println!("{suite_name}/{fixture_name}/{case_name}");
+                }
+            }
+        }
+        return ExitCode::from(0);
     }
 
     let report = crate::runner::run(&mut tcx).await;
