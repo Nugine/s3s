@@ -19,8 +19,11 @@ use aws_sdk_s3::primitives::ByteStream;
 use s3s_test::Result;
 use s3s_test::TestFixture;
 use s3s_test::TestSuite;
+use tracing::debug;
+use tracing::warn;
 
 use std::fmt;
+use std::ops::Not;
 use std::process::Termination;
 use std::sync::Arc;
 
@@ -82,6 +85,7 @@ async fn delete_object_strict(s3: &aws_sdk_s3::Client, bucket: &str, key: &str) 
 
 struct E2E {
     s3: aws_sdk_s3::Client,
+    sts: aws_sdk_sts::Client,
 }
 
 impl TestSuite for E2E {
@@ -94,7 +98,9 @@ impl TestSuite for E2E {
                 .build(),
         );
 
-        Ok(Self { s3 })
+        let sts = aws_sdk_sts::Client::new(&sdk_conf);
+
+        Ok(Self { s3, sts })
     }
 }
 
@@ -286,6 +292,47 @@ impl Put {
     }
 }
 
+#[allow(clippy::upper_case_acronyms)]
+struct STS {
+    sts: aws_sdk_sts::Client,
+}
+
+impl TestFixture<E2E> for STS {
+    async fn setup(suite: Arc<E2E>) -> Result<Self> {
+        Ok(Self { sts: suite.sts.clone() })
+    }
+}
+
+impl STS {
+    async fn test_assume_role(self: Arc<Self>) -> Result<()> {
+        let sts = &self.sts;
+
+        let result = sts.assume_role().role_arn("example").role_session_name("test").send().await;
+
+        // FIXME: NotImplemented
+        if let Err(SdkError::ServiceError(ref err)) = &result {
+            if err.raw().status().as_u16() == 501 {
+                warn!(?err, "STS:AssumeRole is not implemented");
+                return Ok(());
+            }
+        }
+
+        let resp = result?;
+
+        let credentials = resp.credentials().unwrap();
+        assert!(credentials.access_key_id().is_empty().not(), "Expected non-empty access key ID");
+        assert!(credentials.secret_access_key().is_empty().not(), "Expected non-empty secret access key");
+        assert!(credentials.session_token().is_empty().not(), "Expected session token in the response");
+
+        debug!(ak=?credentials.access_key_id());
+        debug!(sk=?credentials.secret_access_key());
+        debug!(st=?credentials.session_token());
+        debug!(exp=?credentials.expiration());
+
+        Ok(())
+    }
+}
+
 fn main() -> impl Termination {
     s3s_test::cli::main(|tcx| {
         macro_rules! case {
@@ -300,5 +347,6 @@ fn main() -> impl Termination {
         case!(E2E, Basic, test_list_objects);
         case!(E2E, Basic, test_get_object);
         case!(E2E, Put, test_put_object_tiny);
+        case!(E2E, STS, test_assume_role);
     })
 }
