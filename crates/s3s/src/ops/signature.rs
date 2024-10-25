@@ -158,7 +158,8 @@ impl SignatureContext<'_> {
         let secret_key = auth.get_secret_key(&access_key).await?;
 
         let string_to_sign = info.policy;
-        let signature = sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region, credential.aws_service);
+        let signature =
+            sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region, credential.aws_service);
 
         let expected_signature = info.x_amz_signature;
         if signature != expected_signature {

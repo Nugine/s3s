@@ -263,7 +263,13 @@ pub fn create_chunk_string_to_sign(
 
 /// calculate signature
 #[must_use]
-pub fn calculate_signature(string_to_sign: &str, secret_key: &SecretKey, amz_date: &AmzDate, region: &str, service: &str) -> String {
+pub fn calculate_signature(
+    string_to_sign: &str,
+    secret_key: &SecretKey,
+    amz_date: &AmzDate,
+    region: &str,
+    service: &str,
+) -> String {
     let mut secret = {
         let secret_key = secret_key.expose();
         let mut buf = <SmallVec<[u8; 128]>>::with_capacity(secret_key.len().saturating_add(4));
@@ -787,7 +793,13 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, &secret_access_key, &info.amz_date, info.credential.aws_region, info.credential.aws_service);
+        let signature = calculate_signature(
+            &string_to_sign,
+            &secret_access_key,
+            &info.amz_date,
+            info.credential.aws_region,
+            info.credential.aws_service,
+        );
         assert_eq!(signature, "aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404");
         assert_eq!(signature, info.signature);
     }
