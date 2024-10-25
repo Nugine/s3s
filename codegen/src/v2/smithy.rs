@@ -163,6 +163,15 @@ pub struct MapValue {
     // pub traits: Traits,
 }
 
+impl Model {
+    pub fn load_json(path: &str) -> Self {
+        let json = std::fs::read_to_string(path).unwrap();
+        let model: Self = serde_json::from_str(&json).unwrap();
+        assert_eq!(model.smithy, "2.0");
+        model
+    }
+}
+
 impl Traits {
     pub fn get(&self, key: &str) -> Option<&Value> {
         let map = self.0.as_ref()?;

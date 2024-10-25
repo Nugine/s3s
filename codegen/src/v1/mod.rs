@@ -1,5 +1,7 @@
+use crate::v2::smithy;
+use crate::v2::utils::o;
+
 mod rust;
-mod smithy;
 
 mod access;
 mod dto;
@@ -14,17 +16,8 @@ mod aws_proxy;
 
 use codegen_writer::Codegen;
 
-fn o<T: ToOwned + ?Sized>(x: &T) -> T::Owned {
-    x.to_owned()
-}
-
 pub fn run() {
-    let model: smithy::Model = {
-        let json_path = "model/s3.json";
-        let json_file = std::fs::read(json_path).unwrap();
-        serde_json::from_slice(&json_file).unwrap()
-    };
-    assert_eq!(model.smithy, "2.0");
+    let model = smithy::Model::load_json("model/s3.json");
 
     let ops = ops::collect_operations(&model);
     let rust_types = dto::collect_rust_types(&model, &ops);
