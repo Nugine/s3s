@@ -1,7 +1,7 @@
-use crate::o;
-use crate::ops::{is_op_input, Operations, SKIPPED_OPS};
-use crate::rust::codegen_doc;
-use crate::{rust, smithy};
+use super::o;
+use super::ops::{is_op_input, Operations, SKIPPED_OPS};
+use super::rust::codegen_doc;
+use super::{rust, smithy};
 
 use std::borrow::Cow;
 use std::collections::BTreeMap;

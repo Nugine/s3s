@@ -1,8 +1,8 @@
-use crate::dto::RustTypes;
-use crate::rust::default_value_literal;
-use crate::xml::{is_xml_output, is_xml_payload};
-use crate::{dto, rust, smithy};
-use crate::{headers, o};
+use super::dto::RustTypes;
+use super::rust::default_value_literal;
+use super::xml::{is_xml_output, is_xml_payload};
+use super::{dto, rust, smithy};
+use super::{headers, o};
 
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet, HashMap};
@@ -336,7 +336,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
                 for field in &ty.fields {
                     if field.position == "header" {
                         let field_name = field.name.as_str();
-                        let header_name = crate::headers::to_constant_name(field.http_header.as_deref().unwrap());
+                        let header_name = headers::to_constant_name(field.http_header.as_deref().unwrap());
 
                         let field_type = &rust_types[field.type_.as_str()];
                         if let rust::Type::Timestamp(ts_ty) = field_type {

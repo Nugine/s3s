@@ -1,4 +1,4 @@
-use crate::ops::Operations;
+use super::ops::Operations;
 
 use codegen_writer::g;
 use codegen_writer::glines;

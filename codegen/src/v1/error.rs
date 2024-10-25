@@ -1,5 +1,5 @@
-use crate::o;
-use crate::smithy;
+use super::o;
+use super::smithy;
 
 use std::collections::BTreeMap;
 use std::ops::Not;

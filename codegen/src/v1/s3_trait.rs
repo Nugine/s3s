@@ -1,5 +1,5 @@
-use crate::ops::Operations;
-use crate::rust::codegen_doc;
+use super::ops::Operations;
+use super::rust::codegen_doc;
 
 use codegen_writer::g;
 use codegen_writer::glines;

@@ -1,4 +1,4 @@
-use crate::smithy;
+use super::smithy;
 
 use std::collections::BTreeSet;
 
