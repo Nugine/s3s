@@ -158,7 +158,7 @@ impl SignatureContext<'_> {
         let secret_key = auth.get_secret_key(&access_key).await?;
 
         let string_to_sign = info.policy;
-        let signature = sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region);
+        let signature = sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region, credential.aws_service);
 
         let expected_signature = info.x_amz_signature;
         if signature != expected_signature {
@@ -220,7 +220,7 @@ impl SignatureContext<'_> {
             let amz_date = &presigned_url.amz_date;
             let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, amz_date, region, service);
 
-            sig_v4::calculate_signature(&string_to_sign, &secret_key, amz_date, region)
+            sig_v4::calculate_signature(&string_to_sign, &secret_key, amz_date, region, service)
         };
 
         let expected_signature = presigned_url.signature;
@@ -243,18 +243,27 @@ impl SignatureContext<'_> {
             a.signed_headers.sort_unstable();
             a
         };
+        let region = authorization.credential.aws_region;
+        let service = authorization.credential.aws_service;
+
+        if !matches!(service, "s3" | "sts") {
+            return Err(s3_error!(NotImplemented, "unknown service"));
+        }
 
         let auth = require_auth(self.auth)?;
 
-        let amz_content_sha256 =
-            extract_amz_content_sha256(&self.hs)?.ok_or_else(|| invalid_request!("missing header: x-amz-content-sha256"))?;
+        let amz_content_sha256 = extract_amz_content_sha256(&self.hs)?;
+
+        if service == "s3" && amz_content_sha256.is_none() {
+            return Err(invalid_request!("missing header: x-amz-content-sha256"));
+        }
 
         let access_key = authorization.credential.access_key_id;
         let secret_key = auth.get_secret_key(access_key).await?;
 
         let amz_date = extract_amz_date(&self.hs)?.ok_or_else(|| invalid_request!("missing header: x-amz-date"))?;
 
-        let is_stream = matches!(amz_content_sha256, AmzContentSha256::MultipleChunks);
+        let is_stream = matches!(amz_content_sha256, Some(AmzContentSha256::MultipleChunks));
 
         let signature = {
             let method = &self.req_method;
@@ -268,13 +277,13 @@ impl SignatureContext<'_> {
                 let payload = sig_v4::Payload::MultipleChunks;
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
             } else if matches!(*self.req_method, Method::GET | Method::HEAD) {
-                let payload = if matches!(amz_content_sha256, AmzContentSha256::UnsignedPayload) {
+                let payload = if matches!(amz_content_sha256, Some(AmzContentSha256::UnsignedPayload)) {
                     sig_v4::Payload::Unsigned
                 } else {
                     sig_v4::Payload::Empty
                 };
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
-            } else if matches!(amz_content_sha256, AmzContentSha256::UnsignedPayload) {
+            } else if matches!(amz_content_sha256, Some(AmzContentSha256::UnsignedPayload)) {
                 sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, sig_v4::Payload::Unsigned)
             } else {
                 let bytes = super::extract_full_body(self.content_length, self.req_body).await?;
@@ -296,11 +305,8 @@ impl SignatureContext<'_> {
                     )
                 }
             };
-
-            let region = authorization.credential.aws_region;
-            let service = authorization.credential.aws_service;
             let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, &amz_date, region, service);
-            sig_v4::calculate_signature(&string_to_sign, &secret_key, &amz_date, region)
+            sig_v4::calculate_signature(&string_to_sign, &secret_key, &amz_date, region, service)
         };
 
         let expected_signature = authorization.signature;

@@ -99,7 +99,7 @@ fn check_signature(ctx: &SignatureCtx, expected_signature: &[u8], chunk_data: &[
     let string_to_sign =
         sig_v4::create_chunk_string_to_sign(&ctx.amz_date, &ctx.region, &ctx.service, &ctx.prev_signature, chunk_data);
 
-    let chunk_signature = sig_v4::calculate_signature(&string_to_sign, &ctx.secret_key, &ctx.amz_date, &ctx.region);
+    let chunk_signature = sig_v4::calculate_signature(&string_to_sign, &ctx.secret_key, &ctx.amz_date, &ctx.region, &ctx.service);
 
     (chunk_signature.as_bytes() == expected_signature).then(|| chunk_signature.into())
 }

@@ -263,7 +263,7 @@ pub fn create_chunk_string_to_sign(
 
 /// calculate signature
 #[must_use]
-pub fn calculate_signature(string_to_sign: &str, secret_key: &SecretKey, amz_date: &AmzDate, region: &str) -> String {
+pub fn calculate_signature(string_to_sign: &str, secret_key: &SecretKey, amz_date: &AmzDate, region: &str, service: &str) -> String {
     let mut secret = {
         let secret_key = secret_key.expose();
         let mut buf = <SmallVec<[u8; 128]>>::with_capacity(secret_key.len().saturating_add(4));
@@ -283,7 +283,7 @@ pub fn calculate_signature(string_to_sign: &str, secret_key: &SecretKey, amz_dat
     let date_region_key = hmac_sha256(date_key, region); // TODO: use a `Region` type
 
     // DateRegionServiceKey
-    let date_region_service_key = hmac_sha256(date_region_key, "s3");
+    let date_region_service_key = hmac_sha256(date_region_key, service);
 
     // SigningKey
     let signing_key = hmac_sha256(date_region_service_key, "aws4_request");
@@ -438,7 +438,7 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(signature, "f0e8bdb87c964420e857bd35b5d6ed310bd44f0170aba48dd91039c6036bdb41");
     }
 
@@ -495,7 +495,7 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(signature, "98ad721746da40c64f1a55b78f14c238d841ea1380cd77a1b5971af0ece108bd");
     }
 
@@ -555,7 +555,7 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(signature, "4f232c4386841ef735655705268965c44a0e4690baa4adea153f7db9fa80a0a9",);
     }
 
@@ -583,7 +583,7 @@ mod tests {
             )
         );
 
-        let chunk1_signature = calculate_signature(&chunk1_string_to_sign, &secret_access_key, &date, region);
+        let chunk1_signature = calculate_signature(&chunk1_string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(chunk1_signature, "ad80c730a21e5b8d04586a2213dd63b9a0e99e0e2307b0ade35a65485a288648");
 
         let chunk2_string_to_sign =
@@ -600,7 +600,7 @@ mod tests {
             )
         );
 
-        let chunk2_signature = calculate_signature(&chunk2_string_to_sign, &secret_access_key, &date, region);
+        let chunk2_signature = calculate_signature(&chunk2_string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(chunk2_signature, "0055627c9e194cb4542bae2aa5492e3c1575bbb81b612b7d234b86a503ef5497");
 
         let chunk3_string_to_sign = create_chunk_string_to_sign(&date, region, service, &chunk2_signature, &[]);
@@ -616,7 +616,7 @@ mod tests {
             )
         );
 
-        let chunk3_signature = calculate_signature(&chunk3_string_to_sign, &secret_access_key, &date, region);
+        let chunk3_signature = calculate_signature(&chunk3_string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(chunk3_signature, "b6c6ea8a5354eaf15b3cb7646744f4275b71ea724fed81ceb9323e279d449df9");
     }
 
@@ -668,7 +668,7 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(signature, "fea454ca298b7da1c68078a5d1bdbfbbe0d65c699e0f91ac7a200a0136783543");
     }
 
@@ -721,7 +721,7 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(signature, "34b48302e7b5fa45bde8084f4b7868a86f0a534bc59db6670ed5711ef69dc6f7");
     }
 
@@ -787,7 +787,7 @@ mod tests {
             )
         );
 
-        let signature = calculate_signature(&string_to_sign, &secret_access_key, &info.amz_date, info.credential.aws_region);
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &info.amz_date, info.credential.aws_region, info.credential.aws_service);
         assert_eq!(signature, "aeeed9bbccd4d02ee5c0109b86d86835f995330da4c265957d157751f604d404");
         assert_eq!(signature, info.signature);
     }
@@ -836,7 +836,7 @@ mod tests {
 
             let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
 
-            let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
+            let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
             assert_eq!(signature, "96ad058ca27352e0fc2bd4efd8973792077570667bdaf749655f42e204bc649c");
         }
     }
