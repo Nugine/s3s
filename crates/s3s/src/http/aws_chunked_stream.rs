@@ -40,6 +40,9 @@ struct SignatureCtx {
     /// region
     region: Box<str>,
 
+    //// service
+    service: Box<str>,
+
     /// secret key
     secret_key: SecretKey,
 
@@ -93,7 +96,8 @@ fn parse_chunk_meta(mut input: &[u8]) -> nom::IResult<&[u8], ChunkMeta<'_>> {
 
 /// check signature
 fn check_signature(ctx: &SignatureCtx, expected_signature: &[u8], chunk_data: &[Bytes]) -> Option<Box<str>> {
-    let string_to_sign = sig_v4::create_chunk_string_to_sign(&ctx.amz_date, &ctx.region, &ctx.prev_signature, chunk_data);
+    let string_to_sign =
+        sig_v4::create_chunk_string_to_sign(&ctx.amz_date, &ctx.region, &ctx.service, &ctx.prev_signature, chunk_data);
 
     let chunk_signature = sig_v4::calculate_signature(&string_to_sign, &ctx.secret_key, &ctx.amz_date, &ctx.region);
 
@@ -107,6 +111,7 @@ impl AwsChunkedStream {
         seed_signature: Box<str>,
         amz_date: AmzDate,
         region: Box<str>,
+        service: Box<str>,
         secret_key: SecretKey,
         decoded_content_length: usize,
     ) -> Self
@@ -122,6 +127,7 @@ impl AwsChunkedStream {
                 let mut ctx = SignatureCtx {
                     amz_date,
                     region,
+                    service,
                     secret_key,
                     prev_signature: seed_signature,
                 };
@@ -340,6 +346,7 @@ mod tests {
         let seed_signature = "4f232c4386841ef735655705268965c44a0e4690baa4adea153f7db9fa80a0a9";
         let timestamp = "20130524T000000Z";
         let region = "us-east-1";
+        let service = "s3";
         let secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
 
         let date = AmzDate::parse(timestamp).unwrap();
@@ -350,6 +357,7 @@ mod tests {
             seed_signature.into(),
             date,
             region.into(),
+            service.into(),
             secret_access_key.into(),
             decoded_content_length,
         );

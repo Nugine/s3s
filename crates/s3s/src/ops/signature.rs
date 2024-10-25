@@ -216,8 +216,9 @@ impl SignatureContext<'_> {
             let canonical_request = sig_v4::create_presigned_canonical_request(method, uri_path, qs.as_ref(), &headers);
 
             let region = presigned_url.credential.aws_region;
+            let service = presigned_url.credential.aws_service;
             let amz_date = &presigned_url.amz_date;
-            let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, amz_date, region);
+            let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, amz_date, region, service);
 
             sig_v4::calculate_signature(&string_to_sign, &secret_key, amz_date, region)
         };
@@ -297,7 +298,8 @@ impl SignatureContext<'_> {
             };
 
             let region = authorization.credential.aws_region;
-            let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, &amz_date, region);
+            let service = authorization.credential.aws_service;
+            let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, &amz_date, region, service);
             sig_v4::calculate_signature(&string_to_sign, &secret_key, &amz_date, region)
         };
 
@@ -317,6 +319,7 @@ impl SignatureContext<'_> {
                 signature.into(),
                 amz_date,
                 authorization.credential.aws_region.into(),
+                authorization.credential.aws_service.into(),
                 secret_key.clone(),
                 decoded_content_length,
             );

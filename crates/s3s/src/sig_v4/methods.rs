@@ -185,7 +185,7 @@ pub fn create_canonical_request(
 
 /// create string to sign
 #[must_use]
-pub fn create_string_to_sign(canonical_request: &str, amz_date: &AmzDate, region: &str) -> String {
+pub fn create_string_to_sign(canonical_request: &str, amz_date: &AmzDate, region: &str, service: &str) -> String {
     let mut ans = String::with_capacity(256);
 
     {
@@ -204,7 +204,9 @@ pub fn create_string_to_sign(canonical_request: &str, amz_date: &AmzDate, region
         ans.push_str(&amz_date.fmt_date());
         ans.push('/');
         ans.push_str(region); // TODO: use a `Region` type
-        ans.push_str("/s3/aws4_request\n");
+        ans.push('/');
+        ans.push_str(service);
+        ans.push_str("/aws4_request\n");
     }
 
     {
@@ -216,7 +218,13 @@ pub fn create_string_to_sign(canonical_request: &str, amz_date: &AmzDate, region
 }
 
 /// create `string_to_sign` of a chunk
-pub fn create_chunk_string_to_sign(amz_date: &AmzDate, region: &str, prev_signature: &str, chunk_data: &[Bytes]) -> String {
+pub fn create_chunk_string_to_sign(
+    amz_date: &AmzDate,
+    region: &str,
+    service: &str,
+    prev_signature: &str,
+    chunk_data: &[Bytes],
+) -> String {
     let mut ans = String::with_capacity(256);
 
     {
@@ -230,7 +238,9 @@ pub fn create_chunk_string_to_sign(amz_date: &AmzDate, region: &str, prev_signat
         ans.push_str(&amz_date.fmt_date());
         ans.push('/');
         ans.push_str(region); // TODO: use a `Region` type
-        ans.push_str("/s3/aws4_request\n");
+        ans.push('/');
+        ans.push_str(service);
+        ans.push_str("/aws4_request\n");
     }
     {
         ans.push_str(prev_signature);
@@ -385,6 +395,7 @@ mod tests {
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
+        let service = "s3";
         let path = "/test.txt";
 
         let headers = OrderedHeaders::from_slice_unchecked(&[
@@ -416,7 +427,7 @@ mod tests {
         );
 
         let date = AmzDate::parse(timestamp).unwrap();
-        let string_to_sign = create_string_to_sign(&canonical_request, &date, region);
+        let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
         assert_eq!(
             string_to_sign,
             concat!(
@@ -438,6 +449,7 @@ mod tests {
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
+        let service = "s3";
         let path = "/test$file.text";
 
         let headers = OrderedHeaders::from_slice_unchecked(&[
@@ -472,7 +484,7 @@ mod tests {
         );
 
         let date = AmzDate::parse(timestamp).unwrap();
-        let string_to_sign = create_string_to_sign(&canonical_request, &date, region);
+        let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
         assert_eq!(
             string_to_sign,
             concat!(
@@ -494,6 +506,7 @@ mod tests {
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
+        let service = "s3";
         let path = "/examplebucket/chunkObject.txt";
 
         let headers = OrderedHeaders::from_slice_unchecked(&[
@@ -531,7 +544,7 @@ mod tests {
         );
 
         let date = AmzDate::parse(timestamp).unwrap();
-        let string_to_sign = create_string_to_sign(&canonical_request, &date, region);
+        let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
         assert_eq!(
             string_to_sign,
             concat!(
@@ -551,12 +564,13 @@ mod tests {
         let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
         let timestamp = "20130524T000000Z";
         let region = "us-east-1";
+        let service = "s3";
         let date = AmzDate::parse(timestamp).unwrap();
 
         let seed_signature = "4f232c4386841ef735655705268965c44a0e4690baa4adea153f7db9fa80a0a9";
 
         let chunk1_string_to_sign =
-            create_chunk_string_to_sign(&date, region, seed_signature, &[Bytes::from(vec![b'a'; 64 * 1024])]);
+            create_chunk_string_to_sign(&date, region, service, seed_signature, &[Bytes::from(vec![b'a'; 64 * 1024])]);
         assert_eq!(
             chunk1_string_to_sign,
             concat!(
@@ -573,7 +587,7 @@ mod tests {
         assert_eq!(chunk1_signature, "ad80c730a21e5b8d04586a2213dd63b9a0e99e0e2307b0ade35a65485a288648");
 
         let chunk2_string_to_sign =
-            create_chunk_string_to_sign(&date, region, &chunk1_signature, &[Bytes::from(vec![b'a'; 1024])]);
+            create_chunk_string_to_sign(&date, region, service, &chunk1_signature, &[Bytes::from(vec![b'a'; 1024])]);
         assert_eq!(
             chunk2_string_to_sign,
             concat!(
@@ -589,7 +603,7 @@ mod tests {
         let chunk2_signature = calculate_signature(&chunk2_string_to_sign, &secret_access_key, &date, region);
         assert_eq!(chunk2_signature, "0055627c9e194cb4542bae2aa5492e3c1575bbb81b612b7d234b86a503ef5497");
 
-        let chunk3_string_to_sign = create_chunk_string_to_sign(&date, region, &chunk2_signature, &[]);
+        let chunk3_string_to_sign = create_chunk_string_to_sign(&date, region, service, &chunk2_signature, &[]);
         assert_eq!(
             chunk3_string_to_sign,
             concat!(
@@ -613,6 +627,7 @@ mod tests {
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
+        let service = "s3";
         let path = "/";
 
         let headers = OrderedHeaders::from_slice_unchecked(&[
@@ -642,7 +657,7 @@ mod tests {
         );
 
         let date = AmzDate::parse(timestamp).unwrap();
-        let string_to_sign = create_string_to_sign(&canonical_request, &date, region);
+        let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
         assert_eq!(
             string_to_sign,
             concat!(
@@ -664,6 +679,7 @@ mod tests {
         let timestamp = "20130524T000000Z";
         // let bucket = "examplebucket";
         let region = "us-east-1";
+        let service = "s3";
         let path = "/";
 
         let headers = OrderedHeaders::from_slice_unchecked(&[
@@ -694,7 +710,7 @@ mod tests {
         );
 
         let date = AmzDate::parse(timestamp).unwrap();
-        let string_to_sign = create_string_to_sign(&canonical_request, &date, region);
+        let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
         assert_eq!(
             string_to_sign,
             concat!(
@@ -755,7 +771,12 @@ mod tests {
             "UNSIGNED-PAYLOAD",
         ));
 
-        let string_to_sign = create_string_to_sign(&canonical_request, &info.amz_date, info.credential.aws_region);
+        let string_to_sign = create_string_to_sign(
+            &canonical_request,
+            &info.amz_date,
+            info.credential.aws_region,
+            info.credential.aws_service,
+        );
         assert_eq!(
             string_to_sign,
             concat!(
@@ -798,6 +819,7 @@ mod tests {
         let payload = Payload::Empty;
         let date = AmzDate::parse(x_amz_date).unwrap();
         let region = "us-east-1";
+        let service = "s3";
 
         let secret_access_key = SecretKey::from("minioadmin");
 
@@ -812,7 +834,7 @@ mod tests {
 
             let canonical_request = create_canonical_request(req.method(), uri_path, query_strings, &signed_headers, payload);
 
-            let string_to_sign = create_string_to_sign(&canonical_request, &date, region);
+            let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
 
             let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region);
             assert_eq!(signature, "96ad058ca27352e0fc2bd4efd8973792077570667bdaf749655f42e204bc649c");
