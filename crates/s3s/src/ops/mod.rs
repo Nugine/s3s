@@ -20,6 +20,7 @@ use crate::http::{OrderedHeaders, OrderedQs};
 use crate::http::{Request, Response};
 use crate::path::{ParseS3PathError, S3Path};
 use crate::request::S3Request;
+use crate::route::S3Route;
 use crate::s3_trait::S3;
 use crate::stream::aggregate_unlimited;
 use crate::stream::VecByteStream;
@@ -50,6 +51,7 @@ pub struct CallContext<'a> {
     pub host: Option<&'a dyn S3Host>,
     pub auth: Option<&'a dyn S3Auth>,
     pub access: Option<&'a dyn S3Access>,
+    pub route: Option<&'a dyn S3Route>,
 }
 
 fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
@@ -177,7 +179,7 @@ fn fmt_content_length(len: usize) -> http::HeaderValue {
 }
 
 pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response> {
-    let op = match prepare(req, ccx).await {
+    let prep = match prepare(req, ccx).await {
         Ok(op) => op,
         Err(err) => {
             debug!(?err, "failed to prepare");
@@ -185,19 +187,45 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
         }
     };
 
-    let resp = match op.call(ccx, req).await {
-        Ok(resp) => resp,
-        Err(err) => {
-            debug!(op = %op.name(), ?err, "op returns error");
-            return serialize_error(err, false);
+    match prep {
+        Prepare::S3(op) => {
+            match op.call(ccx, req).await {
+                Ok(resp) => {
+                    Ok(resp) //
+                }
+                Err(err) => {
+                    debug!(op = %op.name(), ?err, "op returns error");
+                    return serialize_error(err, false);
+                }
+            }
         }
-    };
+        Prepare::CustomRoute => {
+            let body = mem::take(&mut req.body);
+            let s3_req = build_s3_request(body, req);
+            let route = ccx.route.unwrap();
+            match route.call(s3_req).await {
+                Ok(s3_resp) => Ok(Response {
+                    status: s3_resp.output.0,
+                    headers: s3_resp.headers,
+                    body: s3_resp.output.1,
+                    extensions: s3_resp.extensions,
+                }),
+                Err(err) => {
+                    debug!(?err, "custom route returns error");
+                    return serialize_error(err, false);
+                }
+            }
+        }
+    }
+}
 
-    Ok(resp)
+enum Prepare {
+    S3(&'static dyn Operation),
+    CustomRoute,
 }
 
 #[allow(clippy::too_many_lines)]
-async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<&'static dyn Operation> {
+async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> {
     let s3_path;
     let mut content_length;
     {
@@ -288,6 +316,12 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<&'static 
         debug!(?body_changed, ?decoded_content_length, ?has_multipart);
     }
 
+    if let Some(route) = ccx.route {
+        if route.is_match(&req.method, &req.uri, &req.headers, &mut req.extensions) {
+            return Ok(Prepare::CustomRoute);
+        }
+    }
+
     let (op, needs_full_body) = 'resolve: {
         if let Some(multipart) = &mut req.s3ext.multipart {
             if req.method == Method::POST {
@@ -343,5 +377,5 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<&'static 
         extract_full_body(content_length, &mut req.body).await?;
     }
 
-    Ok(op)
+    Ok(Prepare::S3(op))
 }

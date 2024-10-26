@@ -3,6 +3,7 @@ use crate::auth::S3Auth;
 use crate::error::{S3Error, S3Result};
 use crate::host::S3Host;
 use crate::http::{Body, Request};
+use crate::route::S3Route;
 use crate::s3_trait::S3;
 
 use std::convert::Infallible;
@@ -19,6 +20,7 @@ pub struct S3ServiceBuilder {
     host: Option<Box<dyn S3Host>>,
     auth: Option<Box<dyn S3Auth>>,
     access: Option<Box<dyn S3Access>>,
+    route: Option<Box<dyn S3Route>>,
 }
 
 impl S3ServiceBuilder {
@@ -29,6 +31,7 @@ impl S3ServiceBuilder {
             host: None,
             auth: None,
             access: None,
+            route: None,
         }
     }
 
@@ -44,6 +47,10 @@ impl S3ServiceBuilder {
         self.access = Some(Box::new(access));
     }
 
+    pub fn set_route(&mut self, route: impl S3Route) {
+        self.route = Some(Box::new(route));
+    }
+
     #[must_use]
     pub fn build(self) -> S3Service {
         S3Service {
@@ -51,6 +58,7 @@ impl S3ServiceBuilder {
             host: self.host,
             auth: self.auth,
             access: self.access,
+            route: self.route,
         }
     }
 }
@@ -60,6 +68,7 @@ pub struct S3Service {
     host: Option<Box<dyn S3Host>>,
     auth: Option<Box<dyn S3Auth>>,
     access: Option<Box<dyn S3Access>>,
+    route: Option<Box<dyn S3Route>>,
 }
 
 impl S3Service {
@@ -78,6 +87,7 @@ impl S3Service {
             host: self.host.as_deref(),
             auth: self.auth.as_deref(),
             access: self.access.as_deref(),
+            route: self.route.as_deref(),
         };
         let result = crate::ops::call(&mut req, &ccx).await.map(Into::into);
 

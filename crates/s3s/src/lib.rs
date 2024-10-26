@@ -42,6 +42,7 @@ pub mod dto;
 pub mod header;
 pub mod host;
 pub mod path;
+pub mod route;
 pub mod service;
 pub mod stream;
 pub mod xml;
