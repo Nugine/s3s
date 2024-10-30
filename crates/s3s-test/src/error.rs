@@ -14,8 +14,8 @@ where
 {
     fn from(source: E) -> Self {
         if env::var("RUST_BACKTRACE").is_ok() {
-            eprintln!("Failed: {source}");
-            eprintln!("Backtrace:\n");
+            eprintln!("Failed: {source:#?}\n");
+            eprintln!("Backtrace:");
             backtrace::trace(|frame| {
                 backtrace::resolve_frame(frame, |symbol| {
                     if let (Some(name), Some(filename), Some(colno)) = (symbol.name(), symbol.filename(), symbol.colno()) {
