@@ -42,7 +42,7 @@ pub struct Serializer<W: Write> {
 #[error("XML serialization error: {inner}")]
 pub struct SerError {
     /// inner error
-    inner: quick_xml::Error,
+    inner: std::io::Error,
 }
 
 /// XML serialization result
@@ -56,7 +56,7 @@ impl<W: Write> Serializer<W> {
 
     /// Writes an event
     fn event(&mut self, event: Event<'_>) -> SerResult {
-        self.inner.write_event(event).map_err(wrap_xml)
+        self.inner.write_event(event).map_err(|err| SerError { inner: err })
     }
 
     /// Writes an element
@@ -167,11 +167,6 @@ impl SerializeContent for dto::Event {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         self.as_ref().serialize_content(s)
     }
-}
-
-/// wrap error
-const fn wrap_xml(inner: quick_xml::Error) -> SerError {
-    SerError { inner }
 }
 
 /// start event
