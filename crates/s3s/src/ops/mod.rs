@@ -66,6 +66,7 @@ fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
         extensions,
         headers,
         uri,
+        method: req.method.clone(),
     }
 }
 

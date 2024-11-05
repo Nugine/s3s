@@ -1,7 +1,7 @@
 use crate::auth::Credentials;
 
 use hyper::http::{Extensions, HeaderValue};
-use hyper::{HeaderMap, Uri};
+use hyper::{HeaderMap, Method, Uri};
 use rust_utils::default::default;
 
 #[derive(Debug)]
@@ -25,6 +25,9 @@ pub struct S3Request<T> {
 
     // Raw URI
     pub uri: Uri,
+
+    /// HTTP method
+    pub method: Method,
 }
 
 impl<T> S3Request<T> {
@@ -35,6 +38,7 @@ impl<T> S3Request<T> {
             extensions: default(),
             headers: default(),
             uri: default(),
+            method: default(),
         }
     }
 
@@ -45,6 +49,7 @@ impl<T> S3Request<T> {
             extensions: self.extensions,
             headers: self.headers,
             uri: self.uri,
+            method: self.method,
         }
     }
 }
