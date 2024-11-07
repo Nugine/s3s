@@ -59,6 +59,7 @@ def install_s3s_proxy(args: CliArgs):
 
 @installer("s3s-e2e")
 def install_s3s_e2e(args: CliArgs):
+    sh("touch crates/s3s-e2e/build.rs")
     cargo_install(args, "s3s-e2e")
 
 

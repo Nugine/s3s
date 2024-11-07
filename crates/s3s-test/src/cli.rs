@@ -18,6 +18,9 @@ type StdError = Box<dyn std::error::Error + Send + Sync + 'static>;
 pub use clap;
 
 #[doc(hidden)]
+pub use const_str;
+
+#[doc(hidden)]
 pub struct Options {
     pub json: Option<PathBuf>,
     pub filter: Vec<String>,
@@ -153,13 +156,32 @@ pub fn main(reg: impl FnOnce(&mut TestContext), opt: &Options) -> impl Terminati
     async_main(reg, opt)
 }
 
+#[doc(hidden)]
+#[must_use]
+pub const fn unwrap<'a>(s: Option<&'a str>, default: &'a str) -> &'a str {
+    match s {
+        Some(s) => s,
+        None => default,
+    }
+}
+
 #[macro_export]
 macro_rules! main {
     ($register:expr) => {
         use s3s_test::cli::clap;
 
+        const LONG_VERSION: &str = {
+            use s3s_test::cli::const_str;
+            use s3s_test::cli::unwrap;
+            const PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
+            const GIT_COMMIT: &str = unwrap(option_env!("S3S_GIT_COMMIT"), "-");
+            const GIT_BRANCH: &str = unwrap(option_env!("S3S_GIT_BRANCH"), "-");
+            const GIT_TAG: &str = unwrap(option_env!("S3S_GIT_TAG"), "-");
+            const_str::format!("{}\nbranch: {}\ncommit: {}\ntag: {}", PKG_VERSION, GIT_BRANCH, GIT_COMMIT, GIT_TAG)
+        };
+
         #[derive(Debug, clap::Parser)]
-        #[clap(version)]
+        #[clap(version, long_version = LONG_VERSION)]
         struct Opt {
             #[clap(long)]
             json: Option<::std::path::PathBuf>,

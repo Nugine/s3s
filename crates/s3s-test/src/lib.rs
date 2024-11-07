@@ -19,6 +19,7 @@ mod error;
 mod runner;
 mod traits;
 
+pub mod build;
 pub mod cli;
 pub mod report;
 pub mod tcx;

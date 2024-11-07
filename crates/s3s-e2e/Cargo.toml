@@ -20,3 +20,6 @@ aws-sdk-sts = { version = "1.46.0", features = ["behavior-version-latest"] }
 version = "1.5.8"
 default-features = false
 features = ["behavior-version-latest"]
+
+[build-dependencies]
+s3s-test = { version = "0.11.0-dev", path = "../s3s-test" }
