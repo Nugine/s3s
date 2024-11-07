@@ -15,21 +15,19 @@
     clippy::multiple_crate_versions, // TODO: check later
 )]
 
-use aws_sdk_s3::primitives::ByteStream;
+use s3s_test::tcx::TestContext;
 use s3s_test::Result;
 use s3s_test::TestFixture;
 use s3s_test::TestSuite;
-use tracing::debug;
-use tracing::warn;
 
 use std::fmt;
 use std::ops::Not;
-use std::process::Termination;
 use std::sync::Arc;
 
 use aws_sdk_s3::error::ProvideErrorMetadata;
 use aws_sdk_s3::error::SdkError;
-use tracing::error;
+use aws_sdk_s3::primitives::ByteStream;
+use tracing::{debug, error, warn};
 
 fn check<T, E>(result: Result<T, SdkError<E>>, allowed_codes: &[&str]) -> Result<Option<T>, SdkError<E>>
 where
@@ -333,20 +331,20 @@ impl STS {
     }
 }
 
-fn main() -> impl Termination {
-    s3s_test::cli::main(|tcx| {
-        macro_rules! case {
-            ($s:ident, $x:ident, $c:ident) => {{
-                let mut suite = tcx.suite::<$s>(stringify!($s));
-                let mut fixture = suite.fixture::<$x>(stringify!($x));
-                fixture.case(stringify!($c), $x::$c);
-            }};
-        }
+fn register(tcx: &mut TestContext) {
+    macro_rules! case {
+        ($s:ident, $x:ident, $c:ident) => {{
+            let mut suite = tcx.suite::<$s>(stringify!($s));
+            let mut fixture = suite.fixture::<$x>(stringify!($x));
+            fixture.case(stringify!($c), $x::$c);
+        }};
+    }
 
-        case!(E2E, Basic, test_list_buckets);
-        case!(E2E, Basic, test_list_objects);
-        case!(E2E, Basic, test_get_object);
-        case!(E2E, Put, test_put_object_tiny);
-        case!(E2E, STS, test_assume_role);
-    })
+    case!(E2E, Basic, test_list_buckets);
+    case!(E2E, Basic, test_list_objects);
+    case!(E2E, Basic, test_get_object);
+    case!(E2E, Put, test_put_object_tiny);
+    case!(E2E, STS, test_assume_role);
 }
+
+s3s_test::main!(register);

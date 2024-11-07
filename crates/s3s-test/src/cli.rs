@@ -8,16 +8,28 @@ use crate::report::FnResult;
 use crate::report::Report;
 use crate::tcx::TestContext;
 
-use clap::Parser;
 use colored::ColoredString;
 use colored::Colorize;
 use regex::RegexSet;
 
 type StdError = Box<dyn std::error::Error + Send + Sync + 'static>;
 
-fn setup_tracing() {
+#[doc(hidden)]
+pub use clap;
+
+#[doc(hidden)]
+pub struct Options {
+    pub json: Option<PathBuf>,
+    pub filter: Vec<String>,
+    pub list: bool,
+}
+
+#[doc(hidden)]
+pub fn setup() {
     use std::io::IsTerminal;
     use tracing_subscriber::EnvFilter;
+
+    dotenvy::dotenv().ok();
 
     let env_filter = EnvFilter::from_default_env();
     let enable_color = std::io::stdout().is_terminal();
@@ -27,18 +39,6 @@ fn setup_tracing() {
         .with_env_filter(env_filter)
         .with_ansi(enable_color)
         .init();
-}
-
-#[derive(Debug, Parser)]
-struct Opt {
-    #[clap(long)]
-    json: Option<PathBuf>,
-
-    #[clap(long)]
-    filter: Vec<String>,
-
-    #[clap(long)]
-    list: bool,
 }
 
 fn status(passed: bool) -> ColoredString {
@@ -97,9 +97,9 @@ fn print_summary(report: &Report) {
 }
 
 #[tokio::main]
-async fn async_main(opt: &Opt, register: impl FnOnce(&mut TestContext)) -> ExitCode {
+async fn async_main(reg: impl FnOnce(&mut TestContext), opt: &Options) -> ExitCode {
     let mut tcx = TestContext::new();
-    register(&mut tcx);
+    reg(&mut tcx);
 
     if opt.filter.is_empty().not() {
         let filter_set = match RegexSet::new(&opt.filter) {
@@ -146,10 +146,39 @@ async fn async_main(opt: &Opt, register: impl FnOnce(&mut TestContext)) -> ExitC
     }
 }
 
+#[doc(hidden)]
 #[must_use]
-pub fn main(register: impl FnOnce(&mut TestContext)) -> impl Termination {
-    dotenvy::dotenv().ok();
-    setup_tracing();
-    let opt = Opt::parse();
-    async_main(&opt, register)
+pub fn main(reg: impl FnOnce(&mut TestContext), opt: &Options) -> impl Termination {
+    setup();
+    async_main(reg, opt)
+}
+
+#[macro_export]
+macro_rules! main {
+    ($register:expr) => {
+        #[derive(Debug, s3s_test::cli::clap::Parser)]
+        struct Opt {
+            #[clap(long)]
+            json: Option<::std::path::PathBuf>,
+
+            #[clap(long)]
+            filter: Vec<::std::string::String>,
+
+            #[clap(long)]
+            list: bool,
+        }
+
+        fn main() -> impl ::std::process::Termination {
+            use s3s_test::cli::clap::Parser as _;
+            let opt = Opt::parse();
+            s3s_test::cli::main(
+                $register,
+                &s3s_test::cli::Options {
+                    json: opt.json,
+                    filter: opt.filter,
+                    list: opt.list,
+                },
+            )
+        }
+    };
 }
