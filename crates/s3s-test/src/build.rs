@@ -1,3 +1,4 @@
+use std::env;
 use std::process::Command;
 
 pub fn collect_info() {
@@ -9,6 +10,9 @@ pub fn collect_info() {
     }
     if let Some(tag) = git_tag() {
         println!("cargo:rustc-env=S3S_GIT_TAG={tag}");
+    }
+    if let Ok(val) = env::var("PROFILE") {
+        println!("cargo:rustc-env=S3S_PROFILE={val}");
     }
 }
 

@@ -177,7 +177,15 @@ macro_rules! main {
             const GIT_COMMIT: &str = unwrap(option_env!("S3S_GIT_COMMIT"), "-");
             const GIT_BRANCH: &str = unwrap(option_env!("S3S_GIT_BRANCH"), "-");
             const GIT_TAG: &str = unwrap(option_env!("S3S_GIT_TAG"), "-");
-            const_str::format!("{}\nbranch: {}\ncommit: {}\ntag: {}", PKG_VERSION, GIT_BRANCH, GIT_COMMIT, GIT_TAG)
+            const PROFILE: &str = unwrap(option_env!("S3S_PROFILE"), "-");
+            const_str::format!(
+                "{}\nbranch: {}\ncommit: {}\ntag: {}\nprofile: {}",
+                PKG_VERSION,
+                GIT_BRANCH,
+                GIT_COMMIT,
+                GIT_TAG,
+                PROFILE
+            )
         };
 
         #[derive(Debug, clap::Parser)]
