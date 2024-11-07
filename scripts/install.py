@@ -59,7 +59,7 @@ def install_s3s_proxy(args: CliArgs):
 
 @installer("s3s-e2e")
 def install_s3s_e2e(args: CliArgs):
-    cargo_install(args, "s3s-test", bin="s3s-e2e")
+    cargo_install(args, "s3s-e2e")
 
 
 @installer("all")

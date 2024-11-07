@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 
-cargo build -p s3s-test --bins --release
+cargo build -p s3s-e2e --release
 
 export AWS_ACCESS_KEY_ID=minioadmin
 export AWS_SECRET_ACCESS_KEY=minioadmin

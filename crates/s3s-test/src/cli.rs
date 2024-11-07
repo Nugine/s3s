@@ -156,7 +156,10 @@ pub fn main(reg: impl FnOnce(&mut TestContext), opt: &Options) -> impl Terminati
 #[macro_export]
 macro_rules! main {
     ($register:expr) => {
-        #[derive(Debug, s3s_test::cli::clap::Parser)]
+        use s3s_test::cli::clap;
+
+        #[derive(Debug, clap::Parser)]
+        #[clap(version)]
         struct Opt {
             #[clap(long)]
             json: Option<::std::path::PathBuf>,
@@ -169,7 +172,7 @@ macro_rules! main {
         }
 
         fn main() -> impl ::std::process::Termination {
-            use s3s_test::cli::clap::Parser as _;
+            use clap::Parser as _;
             let opt = Opt::parse();
             s3s_test::cli::main(
                 $register,
