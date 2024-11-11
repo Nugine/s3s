@@ -55,12 +55,12 @@ impl<W: Write> Serializer<W> {
     }
 
     /// Writes an event
-    fn event(&mut self, event: Event<'_>) -> SerResult {
+    pub fn event(&mut self, event: Event<'_>) -> SerResult {
         self.inner.write_event(event).map_err(|err| SerError { inner: err })
     }
 
     /// Writes an element
-    fn element(&mut self, name: &str, f: impl FnOnce(&mut Self) -> SerResult) -> SerResult {
+    pub fn element(&mut self, name: &str, f: impl FnOnce(&mut Self) -> SerResult) -> SerResult {
         self.event(start(name))?;
         f(self)?;
         self.event(end(name))

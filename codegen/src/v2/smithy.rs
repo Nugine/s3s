@@ -173,6 +173,11 @@ impl Model {
 }
 
 impl Traits {
+    pub fn set(&mut self, key: &str, value: Value) {
+        let map = self.0.get_or_insert_with(Map::new);
+        map.insert(key.to_owned(), value);
+    }
+
     pub fn get(&self, key: &str) -> Option<&Value> {
         let map = self.0.as_ref()?;
         map.get(key)

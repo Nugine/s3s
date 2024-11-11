@@ -16,7 +16,8 @@ use rust_utils::default::default;
 use serde_json::Value;
 
 pub fn to_type_name(shape_name: &str) -> &str {
-    shape_name.strip_prefix("com.amazonaws.s3#").unwrap()
+    let Some((_, name)) = shape_name.split_once('#') else { panic!() };
+    name
 }
 
 pub type RustTypes = BTreeMap<String, rust::Type>;

@@ -29,13 +29,17 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     for (&ty_name, &xml_name) in &root_type_names {
         match xml_name {
             Some(xml_name) if xml_name != ty_name => {
-                g!("//   Serialize: {ty_name} {xml_name:?}");
+                if can_impl_serialize(ty_name) {
+                    g!("//   Serialize: {ty_name} {xml_name:?}");
+                }
                 if can_impl_deserialize(rust_types, ty_name) {
                     g!("// Deserialize: {ty_name} {xml_name:?}");
                 }
             }
             _ => {
-                g!("//   Serialize: {ty_name}");
+                if can_impl_serialize(ty_name) {
+                    g!("//   Serialize: {ty_name}");
+                }
                 if can_impl_deserialize(rust_types, ty_name) {
                     g!("// Deserialize: {ty_name}");
                 }
@@ -44,8 +48,10 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     }
     g!();
     for ty_name in &field_type_names {
-        g!("//   SerializeContent: {ty_name}");
-        if can_impl_deserialize(rust_types, ty_name) {
+        if can_impl_serialize_content(ty_name) {
+            g!("//   SerializeContent: {ty_name}");
+        }
+        if can_impl_deserialize_content(rust_types, ty_name) {
             g!("// DeserializeContent: {ty_name}");
         }
     }
@@ -100,7 +106,7 @@ fn collect_xml_types<'a>(
     }
 
     {
-        let extra = ["Progress", "Stats"];
+        let extra = ["Progress", "Stats", "AssumeRoleOutput"];
         for ty_name in extra {
             root_type_names.insert(ty_name, None);
             field_type_names.insert(ty_name);
@@ -153,7 +159,28 @@ fn collect_xml_types<'a>(
     (root_type_names, field_type_names)
 }
 
+const SPECIAL_TYPES: &[&str] = &["AssumeRoleOutput"];
+
+fn can_impl_serialize(ty_name: &str) -> bool {
+    if SPECIAL_TYPES.contains(&ty_name) {
+        return false;
+    }
+    can_impl_serialize_content(ty_name)
+}
+
+fn can_impl_serialize_content(_ty_name: &str) -> bool {
+    true
+}
+
 fn can_impl_deserialize(rust_types: &RustTypes, ty_name: &str) -> bool {
+    if SPECIAL_TYPES.contains(&ty_name) {
+        return false;
+    }
+
+    can_impl_deserialize_content(rust_types, ty_name)
+}
+
+fn can_impl_deserialize_content(rust_types: &RustTypes, ty_name: &str) -> bool {
     let rust_type = &rust_types[ty_name];
     match rust_type {
         rust::Type::Struct(ty) => {
@@ -191,7 +218,7 @@ fn codegen_xml_serde(ops: &Operations, rust_types: &RustTypes, root_type_names: 
         // https://github.com/Nugine/s3s/issues/2
         let xml_name = xml_name.or(ty.xml_name.as_deref()).unwrap_or(&ty.name);
 
-        {
+        if can_impl_serialize(&ty.name) {
             g!("impl Serialize for {} {{", ty.name);
             g!("fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {{");
 
@@ -280,7 +307,7 @@ fn codegen_xml_serde_content(ops: &Operations, rust_types: &RustTypes, field_typ
 
 #[allow(clippy::too_many_lines)]
 fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, ty: &rust::Struct) {
-    {
+    if can_impl_serialize_content(&ty.name) {
         g!("impl SerializeContent for {} {{", ty.name);
         g!(
             "fn serialize_content<W: Write>(&self, {}: &mut Serializer<W>) -> SerResult {{",
@@ -341,7 +368,7 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
         g!("}}");
         g!();
     }
-    if can_impl_deserialize(rust_types, &ty.name) {
+    if can_impl_deserialize_content(rust_types, &ty.name) {
         g!("impl<'xml> DeserializeContent<'xml> for {} {{", ty.name);
         g!(
             "fn deserialize_content({}: &mut Deserializer<'xml>) -> DeResult<Self> {{",

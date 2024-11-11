@@ -9,6 +9,7 @@ mod error;
 mod headers;
 mod ops;
 mod s3_trait;
+mod sts;
 mod xml;
 
 mod aws_conv;
@@ -17,7 +18,13 @@ mod aws_proxy;
 use codegen_writer::Codegen;
 
 pub fn run() {
-    let model = smithy::Model::load_json("model/s3.json");
+    let model = {
+        let mut s3_model = smithy::Model::load_json("model/s3.json");
+        let mut sts_model = smithy::Model::load_json("model/sts.json");
+        sts::reduce(&mut sts_model);
+        s3_model.shapes.append(&mut sts_model.shapes);
+        s3_model
+    };
 
     let ops = ops::collect_operations(&model);
     let rust_types = dto::collect_rust_types(&model, &ops);

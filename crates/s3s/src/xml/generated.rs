@@ -118,6 +118,10 @@ use std::io::Write;
 // DeserializeContent: AccessControlPolicy
 //   SerializeContent: AccessControlTranslation
 // DeserializeContent: AccessControlTranslation
+//   SerializeContent: AccessKeyIdType
+// DeserializeContent: AccessKeyIdType
+//   SerializeContent: AccessKeySecretType
+// DeserializeContent: AccessKeySecretType
 //   SerializeContent: AccessPointArn
 // DeserializeContent: AccessPointArn
 //   SerializeContent: AccountId
@@ -144,6 +148,14 @@ use std::io::Write;
 // DeserializeContent: AnalyticsS3BucketDestination
 //   SerializeContent: AnalyticsS3ExportFileFormat
 // DeserializeContent: AnalyticsS3ExportFileFormat
+//   SerializeContent: ArnType
+// DeserializeContent: ArnType
+//   SerializeContent: AssumeRoleOutput
+// DeserializeContent: AssumeRoleOutput
+//   SerializeContent: AssumedRoleIdType
+// DeserializeContent: AssumedRoleIdType
+//   SerializeContent: AssumedRoleUser
+// DeserializeContent: AssumedRoleUser
 //   SerializeContent: Bucket
 // DeserializeContent: Bucket
 //   SerializeContent: BucketAccelerateStatus
@@ -216,10 +228,14 @@ use std::io::Write;
 //   SerializeContent: CreateMultipartUploadOutput
 //   SerializeContent: CreationDate
 // DeserializeContent: CreationDate
+//   SerializeContent: Credentials
+// DeserializeContent: Credentials
 //   SerializeContent: DataRedundancy
 // DeserializeContent: DataRedundancy
 //   SerializeContent: Date
 // DeserializeContent: Date
+//   SerializeContent: DateType
+// DeserializeContent: DateType
 //   SerializeContent: Days
 // DeserializeContent: Days
 //   SerializeContent: DaysAfterInitiation
@@ -495,6 +511,8 @@ use std::io::Write;
 // DeserializeContent: NextUploadIdMarker
 //   SerializeContent: NextVersionIdMarker
 // DeserializeContent: NextVersionIdMarker
+//   SerializeContent: NonNegativeIntegerType
+// DeserializeContent: NonNegativeIntegerType
 //   SerializeContent: NoncurrentVersionExpiration
 // DeserializeContent: NoncurrentVersionExpiration
 //   SerializeContent: NoncurrentVersionTransition
@@ -677,6 +695,8 @@ use std::io::Write;
 // DeserializeContent: SimplePrefix
 //   SerializeContent: Size
 // DeserializeContent: Size
+//   SerializeContent: SourceIdentityType
+// DeserializeContent: SourceIdentityType
 //   SerializeContent: SourceSelectionCriteria
 // DeserializeContent: SourceSelectionCriteria
 //   SerializeContent: SseKmsEncryptedObjects
@@ -717,6 +737,8 @@ use std::io::Write;
 // DeserializeContent: Tiering
 //   SerializeContent: Token
 // DeserializeContent: Token
+//   SerializeContent: TokenType
+// DeserializeContent: TokenType
 //   SerializeContent: TopicArn
 // DeserializeContent: TopicArn
 //   SerializeContent: TopicConfiguration
@@ -1653,6 +1675,104 @@ impl SerializeContent for AnalyticsS3ExportFileFormat {
 impl<'xml> DeserializeContent<'xml> for AnalyticsS3ExportFileFormat {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         String::deserialize_content(d).map(Self::from)
+    }
+}
+impl SerializeContent for AssumeRoleOutput {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        if let Some(ref val) = self.assumed_role_user {
+            s.content("AssumedRoleUser", val)?;
+        }
+        if let Some(ref val) = self.credentials {
+            s.content("Credentials", val)?;
+        }
+        if let Some(ref val) = self.packed_policy_size {
+            s.content("PackedPolicySize", val)?;
+        }
+        if let Some(ref val) = self.source_identity {
+            s.content("SourceIdentity", val)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for AssumeRoleOutput {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut assumed_role_user: Option<AssumedRoleUser> = None;
+        let mut credentials: Option<Credentials> = None;
+        let mut packed_policy_size: Option<NonNegativeIntegerType> = None;
+        let mut source_identity: Option<SourceIdentityType> = None;
+        d.for_each_element(|d, x| match x {
+            b"AssumedRoleUser" => {
+                if assumed_role_user.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                assumed_role_user = Some(d.content()?);
+                Ok(())
+            }
+            b"Credentials" => {
+                if credentials.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                credentials = Some(d.content()?);
+                Ok(())
+            }
+            b"PackedPolicySize" => {
+                if packed_policy_size.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                packed_policy_size = Some(d.content()?);
+                Ok(())
+            }
+            b"SourceIdentity" => {
+                if source_identity.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                source_identity = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            assumed_role_user,
+            credentials,
+            packed_policy_size,
+            source_identity,
+        })
+    }
+}
+impl SerializeContent for AssumedRoleUser {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        s.content("Arn", &self.arn)?;
+        s.content("AssumedRoleId", &self.assumed_role_id)?;
+        Ok(())
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for AssumedRoleUser {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut arn: Option<ArnType> = None;
+        let mut assumed_role_id: Option<AssumedRoleIdType> = None;
+        d.for_each_element(|d, x| match x {
+            b"Arn" => {
+                if arn.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                arn = Some(d.content()?);
+                Ok(())
+            }
+            b"AssumedRoleId" => {
+                if assumed_role_id.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                assumed_role_id = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            arn: arn.ok_or(DeError::MissingField)?,
+            assumed_role_id: assumed_role_id.ok_or(DeError::MissingField)?,
+        })
     }
 }
 impl SerializeContent for Bucket {
@@ -2636,6 +2756,61 @@ impl SerializeContent for CreateMultipartUploadOutput {
     }
 }
 
+impl SerializeContent for Credentials {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        s.content("AccessKeyId", &self.access_key_id)?;
+        s.timestamp("Expiration", &self.expiration, TimestampFormat::DateTime)?;
+        s.content("SecretAccessKey", &self.secret_access_key)?;
+        s.content("SessionToken", &self.session_token)?;
+        Ok(())
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for Credentials {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut access_key_id: Option<AccessKeyIdType> = None;
+        let mut expiration: Option<DateType> = None;
+        let mut secret_access_key: Option<AccessKeySecretType> = None;
+        let mut session_token: Option<TokenType> = None;
+        d.for_each_element(|d, x| match x {
+            b"AccessKeyId" => {
+                if access_key_id.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                access_key_id = Some(d.content()?);
+                Ok(())
+            }
+            b"Expiration" => {
+                if expiration.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                expiration = Some(d.timestamp(TimestampFormat::DateTime)?);
+                Ok(())
+            }
+            b"SecretAccessKey" => {
+                if secret_access_key.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                secret_access_key = Some(d.content()?);
+                Ok(())
+            }
+            b"SessionToken" => {
+                if session_token.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                session_token = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            access_key_id: access_key_id.ok_or(DeError::MissingField)?,
+            expiration: expiration.ok_or(DeError::MissingField)?,
+            secret_access_key: secret_access_key.ok_or(DeError::MissingField)?,
+            session_token: session_token.ok_or(DeError::MissingField)?,
+        })
+    }
+}
 impl SerializeContent for DataRedundancy {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         self.as_str().serialize_content(s)

@@ -244,3 +244,34 @@ fn get_bucket_notification_configuration_output() {
     assert_eq!(val, default());
     test_serde(&val);
 }
+
+#[test]
+fn assume_role_output() {
+    let xml = r#"
+<AssumeRoleResponse xmlns="https://sts.amazonaws.com/doc/2011-06-15/">
+  <AssumeRoleResult>
+    <SourceIdentity>Alice</SourceIdentity>
+    <AssumedRoleUser>
+      <Arn>arn:aws:sts::123456789012:assumed-role/demo/TestAR</Arn>
+      <AssumedRoleId>ARO123EXAMPLE123:TestAR</AssumedRoleId>
+    </AssumedRoleUser>
+    <Credentials>
+      <AccessKeyId>ASIAIOSFODNN7EXAMPLE</AccessKeyId>
+      <SecretAccessKey>wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY</SecretAccessKey>
+      <SessionToken>
+       AQoDYXdzEPT//////////wEXAMPLEtc764bNrC9SAPBSM22wDOk4x4HIZ8j4FZTwdQW
+       LWsKWHGBuFqwAeMicRXmxfpSPfIeoIYRqTflfKD8YUuwthAx7mSEI/qkPpKPi/kMcGd
+       QrmGdeehM4IC1NtBmUpp2wUE8phUZampKsburEDy0KPkyQDYwT7WZ0wq5VSXDvp75YU
+       9HFvlRd8Tx6q6fE8YQcHNVXAkiY9q6d+xo0rKwT38xVqr7ZD0u0iPPkUL64lIZbqBAz
+       +scqKmlzm8FDrypNC9Yjc8fPOLn9FX9KSYvKTr4rvx3iSIlTJabIQwj2ICCR/oLxBA==
+      </SessionToken>
+      <Expiration>2019-11-09T13:34:41Z</Expiration>
+    </Credentials>
+    <PackedPolicySize>6</PackedPolicySize>
+  </AssumeRoleResult>
+</AssumeRoleResponse>
+    "#;
+
+    let val = deserialize::<s3s::dto::AssumeRoleOutput>(xml.as_bytes()).unwrap();
+    test_serde(&val);
+}
