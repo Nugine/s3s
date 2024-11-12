@@ -1,0 +1,559 @@
+{
+    "SelectObjectContent": [
+        {
+            "error_code": "AmbiguousFieldName",
+            "description": "The field name matches to multiple fields in the file. Check the SQL expression and the file, and try again.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "Busy",
+            "description": "The service is unavailable. Try again later.",
+            "http_status_code": 503
+        },
+        {
+            "error_code": "CastFailed",
+            "description": "An attempt to convert from one data type to another using CAST failed in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ColumnTooLong",
+            "description": "The length of a column in the result is greater than maxCharsPerColumn of 1 MB.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "CSVEscapingRecordDelimiter",
+            "description": "A quoted record delimiter was found in the file. To allow quoted record delimiters, set AllowQuotedRecordDelimiter to 'TRUE'.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "CSVParsingError",
+            "description": "An error occurred while parsing the CSV file. Check the file and try again.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "CSVUnescapedQuote",
+            "description": "An unescaped quote was found while parsing the CSV file. To allow quoted record delimiters, set AllowQuotedRecordDelimiter to 'TRUE'.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EmptyRequestBody",
+            "description": "The request body cannot be empty.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorBindingDoesNotExist",
+            "description": "A column name or a path provided does not exist in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorInvalidArguments",
+            "description": "There is an incorrect number of arguments in the function call in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorInvalidTimestampFormatPattern",
+            "description": "The timestamp format string in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorInvalidTimestampFormatPatternSymbol",
+            "description": "The timestamp format pattern contains a symbol in the SQL expression that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorInvalidTimestampFormatPatternSymbolForParsing",
+            "description": "The timestamp format pattern contains a valid format symbol that cannot be applied to timestamp parsing in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorInvalidTimestampFormatPatternToken",
+            "description": "The timestamp format pattern contains a token in the SQL expression that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorLikePatternInvalidEscapeSequence",
+            "description": "An argument given to the LIKE expression was not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorNegativeLimit",
+            "description": "LIMIT must not be negative.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorTimestampFormatPatternDuplicateFields",
+            "description": "The timestamp format pattern contains multiple format specifiers representing the timestamp field in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorTimestampFormatPatternHourClockAmPmMismatch",
+            "description": "The timestamp format pattern contains a 12-hour hour of day format symbol but doesn't also contain an AM/PM field, or it contains a 24-hour hour of day format specifier and contains an AM/PM field in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "EvaluatorUnterminatedTimestampFormatPatternToken",
+            "description": "The timestamp format pattern contains an unterminated token in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ExpressionTooLong",
+            "description": "The SQL expression is too long. The maximum byte-length for an SQL expression is 256 KB.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ExternalEvalException",
+            "description": "The query cannot be evaluated. Check the file and try again.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "IllegalSqlFunctionArgument",
+            "description": "An illegal argument was used in the SQL function.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "IncorrectSqlFunctionArgumentType",
+            "description": "An incorrect argument type was specified in a function call in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "IntegerOverflow",
+            "description": "An integer overflow or underflow occurred in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InternalError",
+            "description": "An internal error occurred.",
+            "http_status_code": 500
+        },
+        {
+            "error_code": "InvalidCast",
+            "description": "An attempt to convert from one data type to another using CAST failed in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidColumnIndex",
+            "description": "The column index in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidCompressionFormat",
+            "description": "The file is not in a supported compression format. Only GZIP and BZIP2 are supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidDataSource",
+            "description": "The data source type is not valid. Only CSV, JSON, and Parquet are supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidDataType",
+            "description": "The SQL expression contains a data type that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidExpressionType",
+            "description": "The ExpressionType value is not valid. Only SQL expressions are supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidFileHeaderInfo",
+            "description": "The FileHeaderInfo value is not valid. Only NONE, USE, and IGNORE are supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidJsonType",
+            "description": "The JsonType value is not valid. Only DOCUMENT and LINES are supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidKeyPath",
+            "description": "The key path in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidQuoteFields",
+            "description": "The QuoteFields value is not valid. Only ALWAYS and ASNEEDED are supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidRequestParameter",
+            "description": "The value of a parameter in the SelectRequest element is not valid. Check the service API documentation and try again.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidScanRange",
+            "description": "The provided scan range is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidTableAlias",
+            "description": "The SQL expression contains a table alias that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "InvalidTextEncoding",
+            "description": "The encoding type is not valid. Only UTF-8 encoding is supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "JSONParsingError",
+            "description": "An error occurred while parsing the JSON file. Check the file and try again.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "LexerInvalidChar",
+            "description": "The SQL expression contains a character that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "LexerInvalidIONLiteral",
+            "description": "The SQL expression contains an operator that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "LexerInvalidLiteral",
+            "description": "The SQL expression contains an operator that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "LexerInvalidOperator",
+            "description": "The SQL expression contains a literal that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "LikeInvalidInputs",
+            "description": "The argument given to the LIKE clause in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "MalformedXML",
+            "description": "The XML provided was not well formed or did not validate against our published schema. Check the service documentation and try again.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "MaxOperatorsExceeded",
+            "description": "Failed to parse SQL expression, try reducing complexity. For example, reduce number of operators used.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "MethodNotAllowed",
+            "description": "The specified method is not allowed against this resource.",
+            "http_status_code": 405
+        },
+        {
+            "error_code": "MissingRequiredParameter",
+            "description": "The SelectRequest entity is missing a required parameter. Check the service documentation and try again.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "MultipleDataSourcesUnsupported",
+            "description": "Multiple data sources are not supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "NumberFormatError",
+            "description": "An error occurred while parsing a number. This error can be caused by underflow or overflow of integers.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ObjectSerializationConflict",
+            "description": "InputSerialization specifies more than one format (CSV, JSON, or Parquet), or OutputSerialization specifies more than one format (CSV or JSON). For InputSerialization and OutputSerialization, you can specify only one format for each.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "OverMaxColumn",
+            "description": "The number of columns in the result is greater than the maximum allowable number of columns.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "OverMaxParquetBlockSize",
+            "description": "The Parquet file is above the max row group size.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "OverMaxRecordSize",
+            "description": "The length of a record in the input or result is greater than the maxCharsPerRecord limit of 1 MB.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParquetParsingError",
+            "description": "An error occurred while parsing the Parquet file. Check the file and try again.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParquetUnsupportedCompressionCodec",
+            "description": "The specified Parquet compression codec is not supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseAsteriskIsNotAloneInSelectList",
+            "description": "Other expressions are not allowed in the SELECT list when * is used without dot notation in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseCannotMixSqbAndWildcardInSelectList",
+            "description": "Cannot mix [] and * in the same expression in a SELECT list in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseCastArity",
+            "description": "The SQL expression CAST has incorrect arity.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseEmptySelect",
+            "description": "The SQL expression contains an empty SELECT clause.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpected2TokenTypes",
+            "description": "The expected token in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedArgumentDelimiter",
+            "description": "The expected argument delimiter in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedDatePart",
+            "description": "The expected date part in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedExpression",
+            "description": "The expected SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedIdentForAlias",
+            "description": "The expected identifier for the alias in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedIdentForAt",
+            "description": "The expected identifier for AT name in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedIdentForGroupName",
+            "description": "GROUP is not supported in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedKeyword",
+            "description": "The expected keyword in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedLeftParenAfterCast",
+            "description": "The expected left parenthesis after CAST in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedLeftParenBuiltinFunctionCall",
+            "description": "The expected left parenthesis in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedLeftParenValueConstructor",
+            "description": "The expected left parenthesis in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedMember",
+            "description": "The SQL expression contains an unsupported use of MEMBER.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedNumber",
+            "description": "The expected number in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedRightParenBuiltinFunctionCall",
+            "description": "The expected right parenthesis character in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedTokenType",
+            "description": "The expected token in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedTypeName",
+            "description": "The expected type name in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseExpectedWhenClause",
+            "description": "The expected WHEN clause in the SQL expression was not found. CASE is not supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseInvalidContextForWildcardInSelectList",
+            "description": "The use of * in the SELECT list in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseInvalidPathComponent",
+            "description": "The SQL expression contains a path component that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseInvalidTypeParam",
+            "description": "The SQL expression contains a parameter value that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseMalformedJoin",
+            "description": "JOIN is not supported in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseMissingIdentAfterAt",
+            "description": "The expected identifier after the @ symbol in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseNonUnaryAgregateFunctionCall",
+            "description": "Only one argument is supported for aggregate functions in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseSelectMissingFrom",
+            "description": "The SQL expression contains a missing FROM after the SELECT list.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnExpectedKeyword",
+            "description": "The SQL expression contains an unexpected keyword.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnexpectedOperator",
+            "description": "The SQL expression contains an unexpected operator.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnexpectedTerm",
+            "description": "The SQL expression contains an unexpected term.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnexpectedToken",
+            "description": "The SQL expression contains an unexpected token.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnknownOperator",
+            "description": "The SQL expression contains an operator that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnsupportedAlias",
+            "description": "The SQL expression contains an unsupported use of ALIAS.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnsupportedCallWithStar",
+            "description": "Only COUNT with (*) as a parameter is supported in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnsupportedCase",
+            "description": "The SQL expression contains an unsupported use of CASE.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnsupportedCaseClause",
+            "description": "The SQL expression contains an unsupported use of CASE.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnsupportedLiteralsGroupBy",
+            "description": "The SQL expression contains an unsupported use of GROUP BY.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnsupportedSelect",
+            "description": "The SQL expression contains an unsupported use of SELECT.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnsupportedSyntax",
+            "description": "The SQL expression contains unsupported syntax.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ParseUnsupportedToken",
+            "description": "The SQL expression contains an unsupported token.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "TruncatedInput",
+            "description": "Object decompression failed. Check that the object is properly compressed using the format specified in the request.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnauthorizedAccess",
+            "description": "You are not authorized to perform this operation.",
+            "http_status_code": 401
+        },
+        {
+            "error_code": "UnrecognizedFormatException",
+            "description": "We encountered a record type that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedFunction",
+            "description": "We encountered an unsupported SQL function.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedParquetType",
+            "description": "The specified Parquet type is not supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedRangeHeader",
+            "description": "A range header is not supported for this operation.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedScanRangeInput",
+            "description": "Scan range queries are not supported on this type of object.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedSqlOperation",
+            "description": "We encountered an unsupported SQL operation.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedSqlStructure",
+            "description": "We encountered an unsupported SQL structure. Check the SQL Reference.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedStorageClass",
+            "description": "We encountered a storage class that is not supported. Only STANDARD, STANDARD_IA, and ONEZONE_IA storage classes are supported.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedSyntax",
+            "description": "We encountered syntax that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "UnsupportedTypeForQuerying",
+            "description": "Your query contains an unsupported type for comparison (e.g. verifying that a Parquet INT96 column type is greater than 0).",
+            "http_status_code": 400
+        },
+        {
+            "error_code": "ValueParseFailure",
+            "description": "A timestamp parse failure occurred in the SQL expression.",
+            "http_status_code": 400
+        }
+    ]
+}
