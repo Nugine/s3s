@@ -196,8 +196,16 @@ impl SignatureContext<'_> {
                 .ok_or_else(|| invalid_request!("invalid amz date"))?;
 
             let duration = now - date;
-            if duration.is_positive().not() {
-                return Err(invalid_request!("invalid presigned url date"))?;
+
+            // Allow requests that are up to 15 minutes in the future.
+            // This is to account for clock skew between the client and server.
+            // See also https://github.com/minio/minio/blob/b5177993b371817699d3fa25685f54f88d8bfcce/cmd/signature-v4.go#L238-L242
+
+            // TODO: configurable max_skew_time
+
+            let max_skew_time = time::Duration::seconds(15 * 60);
+            if duration.is_negative() && duration.abs() > max_skew_time {
+                return Err(s3_error!(RequestTimeTooSkewed, "request date is later than server time too much"));
             }
 
             if duration > presigned_url.expires {
