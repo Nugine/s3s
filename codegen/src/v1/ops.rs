@@ -118,7 +118,7 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
 }
 
 pub fn is_op_input(name: &str, ops: &Operations) -> bool {
-    name.strip_suffix("Input").map_or(false, |x| ops.contains_key(x))
+    name.strip_suffix("Input").is_some_and(|x| ops.contains_key(x))
 }
 
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
