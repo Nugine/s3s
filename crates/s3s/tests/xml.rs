@@ -2,7 +2,7 @@ use s3s::xml;
 
 use std::fmt;
 
-use rust_utils::default::default;
+use stdx::default::default;
 
 fn deserialize_content<T>(input: &[u8]) -> xml::DeResult<T>
 where

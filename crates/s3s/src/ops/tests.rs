@@ -2,7 +2,7 @@ use super::*;
 
 use crate::service::S3Service;
 
-use rust_utils::mem::output_size;
+use stdx::mem::output_size;
 
 #[test]
 #[ignore]

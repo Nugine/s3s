@@ -10,7 +10,7 @@ use std::ops::Not;
 
 use codegen_writer::g;
 use codegen_writer::glines;
-use rust_utils::default::default;
+use stdx::default::default;
 
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     declare_codegen!();

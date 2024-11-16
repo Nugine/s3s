@@ -10,7 +10,7 @@ use std::convert::Infallible;
 use std::fmt;
 use std::str::FromStr;
 
-use rust_utils::default::default;
+use stdx::default::default;
 pub type AbortDate = Timestamp;
 
 /// <p>Specifies the days since the initiation of an incomplete multipart upload that Amazon S3 will

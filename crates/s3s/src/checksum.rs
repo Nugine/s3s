@@ -4,7 +4,7 @@ use std::hash::Hasher;
 
 use digest::Digest;
 use numeric_cast::TruncatingCast;
-use rust_utils::default::default;
+use stdx::default::default;
 
 #[derive(Default)]
 pub struct ChecksumHasher {

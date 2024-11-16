@@ -12,8 +12,8 @@ use std::ops::Not;
 use codegen_writer::g;
 use codegen_writer::glines;
 use heck::{ToShoutySnakeCase, ToSnakeCase};
-use rust_utils::default::default;
 use serde_json::Value;
+use stdx::default::default;
 
 pub fn to_type_name(shape_name: &str) -> &str {
     let Some((_, name)) = shape_name.split_once('#') else { panic!() };
@@ -358,7 +358,7 @@ pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
         "use std::fmt;"
         "use std::str::FromStr;"
         ""
-        "use rust_utils::default::default;"
+        "use stdx::default::default;"
     ];
 
     for rust_type in rust_types.values() {

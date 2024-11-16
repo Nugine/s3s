@@ -11,7 +11,7 @@ use std::io::Write;
 
 use quick_xml::events::{BytesDecl, BytesEnd, BytesStart, BytesText, Event};
 use quick_xml::writer::Writer;
-use rust_utils::str::StrExt;
+use stdx::str::StrExt;
 
 /// A data type that can be serialized with AWS restXml serializer
 pub trait Serialize {

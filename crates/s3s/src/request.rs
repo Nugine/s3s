@@ -2,7 +2,7 @@ use crate::auth::Credentials;
 
 use hyper::http::{Extensions, HeaderValue};
 use hyper::{HeaderMap, Method, Uri};
-use rust_utils::default::default;
+use stdx::default::default;
 
 #[derive(Debug)]
 #[non_exhaustive]

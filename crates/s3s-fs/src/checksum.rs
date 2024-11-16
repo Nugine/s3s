@@ -1,6 +1,6 @@
 use crate::fs::InternalInfo;
 
-use rust_utils::default::default;
+use stdx::default::default;
 
 pub fn modify_internal_info(info: &mut serde_json::Map<String, serde_json::Value>, checksum: &s3s::dto::Checksum) {
     if let Some(checksum_crc32) = &checksum.checksum_crc32 {

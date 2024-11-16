@@ -7,7 +7,7 @@ use crate::S3ErrorCode;
 use std::ops;
 
 use atoi::FromRadix10Checked;
-use rust_utils::str::StrExt;
+use stdx::str::StrExt;
 
 /// HTTP Range header
 ///
@@ -151,7 +151,7 @@ impl http::TryFromHeaderValue for Range {
     type Error = ParseRangeError;
 
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
-        let header = str::from_ascii_simd(val.as_bytes()).ok_or(ParseRangeError { _priv: () })?;
+        let header = str::from_ascii_simd(val.as_bytes()).map_err(|_| ParseRangeError { _priv: () })?;
         Self::parse(header)
     }
 }

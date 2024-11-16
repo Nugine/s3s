@@ -8,6 +8,7 @@ publish = false
 codegen-writer = "0.2.0"
 heck = "0.5.0"
 nugine-rust-utils = "0.3.1"
+std-next = "0.1.1"
 numeric_cast = "0.2.1"
 regex = "1.11.0"
 serde = { version = "1.0.210", features = ["derive"] }

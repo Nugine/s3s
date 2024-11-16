@@ -22,7 +22,7 @@ use tokio_util::io::ReaderStream;
 use futures::TryStreamExt;
 use md5::{Digest, Md5};
 use numeric_cast::NumericCast;
-use rust_utils::default::default;
+use stdx::default::default;
 use tracing::debug;
 use uuid::Uuid;
 

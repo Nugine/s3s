@@ -9,8 +9,8 @@ use crate::utils::stable_sort_by_first;
 
 use hyper::body::Bytes;
 use hyper::Method;
-use rust_utils::str::StrExt;
 use smallvec::SmallVec;
+use stdx::str::StrExt;
 use zeroize::Zeroize;
 
 /// custom uri encode

@@ -2,7 +2,7 @@ use crate::error::S3Result;
 
 use std::borrow::Cow;
 
-use rust_utils::default::default;
+use stdx::default::default;
 
 #[derive(Debug, Clone)]
 pub struct VirtualHost<'a> {

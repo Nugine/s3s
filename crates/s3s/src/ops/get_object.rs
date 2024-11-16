@@ -13,7 +13,7 @@ use hyper::http::HeaderName;
 use hyper::http::HeaderValue;
 use hyper::HeaderMap;
 
-use rust_utils::default::default;
+use stdx::default::default;
 
 pub fn extract_overrided_response_headers(req: &S3Request<GetObjectInput>) -> S3Result<HeaderMap<HeaderValue>> {
     let mut map: HeaderMap<HeaderValue> = default();

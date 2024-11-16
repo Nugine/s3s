@@ -10,7 +10,7 @@ use codegen_writer::g;
 use codegen_writer::glines;
 use heck::ToShoutySnakeCase;
 use regex::Regex;
-use rust_utils::default::default;
+use stdx::default::default;
 
 struct Error {
     code: String,
