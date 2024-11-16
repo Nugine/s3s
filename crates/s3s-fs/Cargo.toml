@@ -42,7 +42,7 @@ numeric_cast = "0.2.1"
 path-absolutize = "3.1.1"
 s3s = { version = "0.11.0-dev", path = "../s3s" }
 serde_json = "1.0.128"
-thiserror = "1.0.64"
+thiserror = "2.0.3"
 time = "0.3.36"
 tokio = { version = "1.40.0", features = ["fs", "io-util"] }
 tokio-util = { version = "0.7.12", features = ["io"] }
