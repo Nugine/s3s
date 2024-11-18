@@ -71,6 +71,8 @@ pub struct Struct {
 
     pub xml_name: Option<String>,
     pub is_error_type: bool,
+
+    pub is_custom_extension: bool,
 }
 
 #[allow(clippy::struct_excessive_bools)]

@@ -255,11 +255,6 @@ impl Traits {
         self.get("smithy.api#error")?.as_str()
     }
 
-    pub fn from_value(value: Value) -> Self {
-        let Value::Object(map) = value else { panic!() };
-        Self(Some(map))
-    }
-
     pub fn minio(&self) -> bool {
         self.get("s3s#minio").is_some()
     }

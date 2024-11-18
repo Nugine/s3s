@@ -275,3 +275,21 @@ fn assume_role_output() {
     let val = deserialize::<s3s::dto::AssumeRoleOutput>(xml.as_bytes()).unwrap();
     test_serde(&val);
 }
+
+// #[test]
+// fn minio_versioning_configuration() {
+//     let xml = r#"
+// <VersioningConfiguration>
+//     <Status>Enabled</Status>
+//     <ExcludedPrefixes>
+//         <Prefix>a</Prefix>
+//     </ExcludedPrefixes>
+//     <ExcludedPrefixes>
+//         <Prefix>b</Prefix>
+//     </ExcludedPrefixes>
+//     <ExcludeFolders>true</ExcludeFolders>
+// </VersioningConfiguration>
+//     "#;
+//     let val = deserialize::<s3s::dto::VersioningConfiguration>(xml.as_bytes()).unwrap();
+//     test_serde(&val);
+// }

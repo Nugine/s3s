@@ -213,6 +213,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
 
                     xml_name: shape.traits.xml_name().map(o),
                     is_error_type: shape.traits.error().is_some(),
+                    is_custom_extension: shape.traits.minio(),
                 });
                 insert(rs_shape_name, ty);
             }
@@ -264,6 +265,7 @@ fn patch_types(space: &mut RustTypes) {
             doc: ty.doc.clone(),
             xml_name: None,
             is_error_type: false,
+            is_custom_extension: false,
         };
 
         ty.fields.iter().for_each(|x| assert!(x.name != "request"));
@@ -309,6 +311,7 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
                 doc: None,
                 xml_name: None,
                 is_error_type: false,
+                is_custom_extension: false,
             }
         } else {
             assert!(op.smithy_input.ends_with("Request"));
@@ -328,6 +331,7 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
                 doc: None,
                 xml_name: None,
                 is_error_type: false,
+                is_custom_extension: false,
             }
         } else {
             if op.smithy_output == op.output {

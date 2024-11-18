@@ -1,0 +1,59 @@
+{
+    "smithy": "2.0",
+    "shapes": {
+        "com.amazonaws.s3#ForceDelete": {
+            "type": "boolean"
+        },
+        "com.amazonaws.s3#DeleteBucketRequest": {
+            "type": "structure",
+            "members": {
+                "ForceDelete": {
+                    "target": "com.amazonaws.s3#ForceDelete",
+                    "traits": {
+                        "smithy.api#httpHeader": "x-minio-force-delete",
+                        "s3s#minio": ""
+                    }
+                }
+            }
+        },
+        "com.amazonaws.s3#ExcludeFolders": {
+            "type": "boolean"
+        },
+        "com.amazonaws.s3#ExcludedPrefix": {
+            "type": "structure",
+            "members": {
+                "Prefix": {
+                    "target": "com.amazonaws.s3#Prefix"
+                }
+            },
+            "traits": {
+                "s3s#minio": ""
+            }
+        },
+        "com.amazonaws.s3#ExcludedPrefixes": {
+            "type": "list",
+            "member": {
+                "target": "com.amazonaws.s3#ExcludedPrefix"
+            }
+        },
+        "com.amazonaws.s3#VersioningConfiguration": {
+            "type": "structure",
+            "members": {
+                "ExcludedPrefixes": {
+                    "target": "com.amazonaws.s3#ExcludedPrefixes",
+                    "traits": {
+                        "s3s#minio": "",
+                        "smithy.api#xmlFlattened": "",
+                        "smithy.api#xmlName": "ExcludedPrefixes"
+                    }
+                },
+                "ExcludeFolders": {
+                    "target": "com.amazonaws.s3#ExcludeFolders",
+                    "traits": {
+                        "s3s#minio": ""
+                    }
+                }
+            }
+        }
+    }
+}
