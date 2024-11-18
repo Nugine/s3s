@@ -7,6 +7,7 @@ mod access;
 mod dto;
 mod error;
 mod headers;
+mod minio;
 mod ops;
 mod s3_trait;
 mod sts;
@@ -23,6 +24,7 @@ pub fn run() {
         let mut sts_model = smithy::Model::load_json("model/sts.json");
         sts::reduce(&mut sts_model);
         s3_model.shapes.append(&mut sts_model.shapes);
+        minio::patch(&mut s3_model);
         s3_model
     };
 

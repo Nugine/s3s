@@ -69,6 +69,11 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                         s => s,
                     };
 
+                    if field.is_custom_extension {
+                        g!("{s3s_field_name}: None,");
+                        continue;
+                    }
+
                     if field.type_ == "SelectObjectContentEventStream" {
                         g!("{s3s_field_name}: Some(crate::event_stream::from_aws(x.{aws_field_name})),");
                         continue;
@@ -159,6 +164,9 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                 }
 
                 for field in &ty.fields {
+                    if field.is_custom_extension {
+                        continue;
+                    }
                     let s3s_field_name = field.name.as_str();
                     let aws_field_name = match s3s_field_name {
                         "checksum_crc32c" => "checksum_crc32_c",

@@ -28,7 +28,7 @@ pub enum Shape {
     Service(ServiceShape),
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Default)]
 #[serde(transparent)]
 pub struct Traits(Option<Map<String, Value>>);
 
@@ -253,5 +253,14 @@ impl Traits {
 
     pub fn error(&self) -> Option<&str> {
         self.get("smithy.api#error")?.as_str()
+    }
+
+    pub fn from_value(value: Value) -> Self {
+        let Value::Object(map) = value else { panic!() };
+        Self(Some(map))
+    }
+
+    pub fn minio(&self) -> bool {
+        self.get("s3s#minio").is_some()
     }
 }

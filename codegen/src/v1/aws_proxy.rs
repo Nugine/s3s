@@ -54,6 +54,10 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
             };
 
             for field in ty.fields.iter().chain(flattened_fields) {
+                if field.is_custom_extension {
+                    continue;
+                }
+
                 let s3s_field_name = match ty.name.as_str() {
                     "SelectObjectContentInput" if field.name == "request" => continue,
                     "SelectObjectContentInput" if field.position == "xml" => f!("request.{}", field.name),
