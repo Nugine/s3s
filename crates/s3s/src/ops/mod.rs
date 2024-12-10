@@ -10,7 +10,7 @@ mod get_object;
 mod tests;
 
 use crate::access::{S3Access, S3AccessContext};
-use crate::auth::S3Auth;
+use crate::auth::{Credentials, S3Auth};
 use crate::error::*;
 use crate::header;
 use crate::host::S3Host;
@@ -55,18 +55,23 @@ pub struct CallContext<'a> {
 }
 
 fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
-    let credentials = req.s3ext.credentials.take();
-    let extensions = mem::take(&mut req.extensions);
-    let headers = mem::take(&mut req.headers);
+    let method = req.method.clone();
     let uri = mem::take(&mut req.uri);
+    let headers = mem::take(&mut req.headers);
+    let extensions = mem::take(&mut req.extensions);
+    let credentials = req.s3ext.credentials.take();
+    let region = req.s3ext.region.take();
+    let service = req.s3ext.service.take();
 
     S3Request {
-        input,
-        credentials,
-        extensions,
-        headers,
+        method,
         uri,
-        method: req.method.clone(),
+        headers,
+        input,
+        extensions,
+        credentials,
+        region,
+        service,
     }
 }
 
@@ -297,7 +302,20 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
             transformed_body = scx.transformed_body;
 
             req.s3ext.multipart = scx.multipart;
-            req.s3ext.credentials = credentials;
+
+            match credentials {
+                Some(cred) => {
+                    req.s3ext.credentials = Some(Credentials {
+                        access_key: cred.access_key,
+                        secret_key: cred.secret_key,
+                    });
+                    req.s3ext.region = cred.region;
+                    req.s3ext.service = cred.service;
+                }
+                None => {
+                    req.s3ext.credentials = None;
+                }
+            }
         }
 
         if body_changed {

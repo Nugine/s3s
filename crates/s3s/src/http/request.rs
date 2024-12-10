@@ -30,6 +30,8 @@ pub(crate) struct S3Extensions {
     pub vec_stream: Option<VecByteStream>,
 
     pub credentials: Option<Credentials>,
+    pub region: Option<String>,
+    pub service: Option<String>,
 }
 
 impl From<hyper::Request<Body>> for Request {

@@ -1,5 +1,5 @@
-use crate::auth::Credentials;
 use crate::auth::S3Auth;
+use crate::auth::SecretKey;
 use crate::error::*;
 use crate::http;
 use crate::http::{AwsChunkedStream, Body, Multipart};
@@ -72,12 +72,19 @@ pub struct SignatureContext<'a> {
     pub multipart: Option<Multipart>,
 }
 
+pub struct CredentialsExt {
+    pub access_key: String,
+    pub secret_key: SecretKey,
+    pub region: Option<String>,
+    pub service: Option<String>,
+}
+
 fn require_auth(auth: Option<&dyn S3Auth>) -> S3Result<&dyn S3Auth> {
     auth.ok_or_else(|| s3_error!(NotImplemented, "This service has no authentication provider"))
 }
 
 impl SignatureContext<'_> {
-    pub async fn check(&mut self) -> S3Result<Option<Credentials>> {
+    pub async fn check(&mut self) -> S3Result<Option<CredentialsExt>> {
         if let Some(result) = self.v2_check().await {
             debug!("checked signature v2");
             return Ok(Some(result?));
@@ -92,7 +99,7 @@ impl SignatureContext<'_> {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn v4_check(&mut self) -> Option<S3Result<Credentials>> {
+    pub async fn v4_check(&mut self) -> Option<S3Result<CredentialsExt>> {
         // POST auth
         if self.req_method == Method::POST {
             if let Some(ref mime) = self.mime {
@@ -120,7 +127,7 @@ impl SignatureContext<'_> {
         None
     }
 
-    pub async fn v4_check_post_signature(&mut self) -> S3Result<Credentials> {
+    pub async fn v4_check_post_signature(&mut self) -> S3Result<CredentialsExt> {
         let auth = require_auth(self.auth)?;
 
         let multipart = {
@@ -157,9 +164,11 @@ impl SignatureContext<'_> {
         let access_key = credential.access_key_id.to_owned();
         let secret_key = auth.get_secret_key(&access_key).await?;
 
+        let region = credential.aws_region;
+        let service = credential.aws_service;
+
         let string_to_sign = info.policy;
-        let signature =
-            sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, credential.aws_region, credential.aws_service);
+        let signature = sig_v4::calculate_signature(string_to_sign, &secret_key, &amz_date, region, service);
 
         let expected_signature = info.x_amz_signature;
         if signature != expected_signature {
@@ -167,11 +176,19 @@ impl SignatureContext<'_> {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
+        let region = region.to_owned();
+        let service = service.to_owned();
+
         self.multipart = Some(multipart);
-        Ok(Credentials { access_key, secret_key })
+        Ok(CredentialsExt {
+            access_key,
+            secret_key,
+            region: Some(region),
+            service: Some(service),
+        })
     }
 
-    pub async fn v4_check_presigned_url(&mut self) -> S3Result<Credentials> {
+    pub async fn v4_check_presigned_url(&mut self) -> S3Result<CredentialsExt> {
         let qs = self.qs.unwrap(); // assume: qs has "X-Amz-Signature"
 
         let presigned_url = PresignedUrlV4::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v4 fields"))?;
@@ -217,6 +234,9 @@ impl SignatureContext<'_> {
         let access_key = presigned_url.credential.access_key_id;
         let secret_key = auth.get_secret_key(access_key).await?;
 
+        let region = presigned_url.credential.aws_region;
+        let service = presigned_url.credential.aws_service;
+
         let signature = {
             let headers = self.hs.find_multiple(&presigned_url.signed_headers);
             let method = &self.req_method;
@@ -224,8 +244,6 @@ impl SignatureContext<'_> {
 
             let canonical_request = sig_v4::create_presigned_canonical_request(method, uri_path, qs.as_ref(), &headers);
 
-            let region = presigned_url.credential.aws_region;
-            let service = presigned_url.credential.aws_service;
             let amz_date = &presigned_url.amz_date;
             let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, amz_date, region, service);
 
@@ -238,14 +256,16 @@ impl SignatureContext<'_> {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        Ok(Credentials {
+        Ok(CredentialsExt {
             access_key: access_key.into(),
             secret_key,
+            region: Some(region.into()),
+            service: Some(service.into()),
         })
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn v4_check_header_auth(&mut self) -> S3Result<Credentials> {
+    pub async fn v4_check_header_auth(&mut self) -> S3Result<CredentialsExt> {
         let authorization: AuthorizationV4<'_> = {
             // assume: headers has "authorization"
             let mut a = extract_authorization_v4(&self.hs)?.unwrap();
@@ -344,14 +364,16 @@ impl SignatureContext<'_> {
             self.transformed_body = Some(Body::from(stream.into_byte_stream()));
         }
 
-        Ok(Credentials {
+        Ok(CredentialsExt {
             access_key: access_key.into(),
             secret_key,
+            region: Some(region.into()),
+            service: Some(service.into()),
         })
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn v2_check(&mut self) -> Option<S3Result<Credentials>> {
+    pub async fn v2_check(&mut self) -> Option<S3Result<CredentialsExt>> {
         if let Some(qs) = self.qs {
             if qs.has("Signature") {
                 debug!("checking presigned url");
@@ -369,7 +391,7 @@ impl SignatureContext<'_> {
         None
     }
 
-    pub async fn v2_check_header_auth(&mut self, auth_v2: AuthorizationV2<'_>) -> S3Result<Credentials> {
+    pub async fn v2_check_header_auth(&mut self, auth_v2: AuthorizationV2<'_>) -> S3Result<CredentialsExt> {
         let method = &self.req_method;
 
         let date = self.hs.get_unique("date").or_else(|| self.hs.get_unique("x-amz-date"));
@@ -399,13 +421,15 @@ impl SignatureContext<'_> {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        Ok(Credentials {
+        Ok(CredentialsExt {
             access_key: access_key.into(),
             secret_key,
+            region: None,
+            service: Some("s3".into()),
         })
     }
 
-    pub async fn v2_check_presigned_url(&mut self) -> S3Result<Credentials> {
+    pub async fn v2_check_presigned_url(&mut self) -> S3Result<CredentialsExt> {
         let qs = self.qs.unwrap(); // assume: qs has "Signature"
         let presigned_url = PresignedUrlV2::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v2 fields"))?;
 
@@ -433,9 +457,11 @@ impl SignatureContext<'_> {
             return Err(s3_error!(SignatureDoesNotMatch));
         }
 
-        Ok(Credentials {
+        Ok(CredentialsExt {
             access_key: access_key.into(),
             secret_key,
+            region: None,
+            service: Some("s3".into()),
         })
     }
 }
