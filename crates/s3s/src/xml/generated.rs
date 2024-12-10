@@ -287,6 +287,10 @@ use std::io::Write;
 // DeserializeContent: Event
 //   SerializeContent: EventBridgeConfiguration
 // DeserializeContent: EventBridgeConfiguration
+//   SerializeContent: ExcludeFolders
+// DeserializeContent: ExcludeFolders
+//   SerializeContent: ExcludedPrefix
+// DeserializeContent: ExcludedPrefix
 //   SerializeContent: ExistingObjectReplication
 // DeserializeContent: ExistingObjectReplication
 //   SerializeContent: ExistingObjectReplicationStatus
@@ -3369,6 +3373,31 @@ impl SerializeContent for EventBridgeConfiguration {
 impl<'xml> DeserializeContent<'xml> for EventBridgeConfiguration {
     fn deserialize_content(_: &mut Deserializer<'xml>) -> DeResult<Self> {
         Ok(Self {})
+    }
+}
+impl SerializeContent for ExcludedPrefix {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        if let Some(ref val) = self.prefix {
+            s.content("Prefix", val)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for ExcludedPrefix {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut prefix: Option<Prefix> = None;
+        d.for_each_element(|d, x| match x {
+            b"Prefix" => {
+                if prefix.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                prefix = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self { prefix })
     }
 }
 impl SerializeContent for ExistingObjectReplication {
@@ -8979,6 +9008,12 @@ impl<'xml> DeserializeContent<'xml> for Type {
 }
 impl SerializeContent for VersioningConfiguration {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        if let Some(ref val) = self.exclude_folders {
+            s.content("ExcludeFolders", val)?;
+        }
+        if let Some(iter) = &self.excluded_prefixes {
+            s.flattened_list("ExcludedPrefixes", iter)?;
+        }
         if let Some(ref val) = self.mfa_delete {
             s.content("MfaDelete", val)?;
         }
@@ -8991,9 +9026,23 @@ impl SerializeContent for VersioningConfiguration {
 
 impl<'xml> DeserializeContent<'xml> for VersioningConfiguration {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut exclude_folders: Option<ExcludeFolders> = None;
+        let mut excluded_prefixes: Option<ExcludedPrefixes> = None;
         let mut mfa_delete: Option<MFADelete> = None;
         let mut status: Option<BucketVersioningStatus> = None;
         d.for_each_element(|d, x| match x {
+            b"ExcludeFolders" => {
+                if exclude_folders.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                exclude_folders = Some(d.content()?);
+                Ok(())
+            }
+            b"ExcludedPrefixes" => {
+                let ans: ExcludedPrefix = d.content()?;
+                excluded_prefixes.get_or_insert_with(List::new).push(ans);
+                Ok(())
+            }
             b"MfaDelete" => {
                 if mfa_delete.is_some() {
                     return Err(DeError::DuplicateField);
@@ -9010,7 +9059,12 @@ impl<'xml> DeserializeContent<'xml> for VersioningConfiguration {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self { mfa_delete, status })
+        Ok(Self {
+            exclude_folders,
+            excluded_prefixes,
+            mfa_delete,
+            status,
+        })
     }
 }
 impl SerializeContent for WebsiteConfiguration {
