@@ -117,7 +117,27 @@ fn collect_errors(model: &smithy::Model) -> Errors {
         err.status.push(status);
     }
 
+    patch_extra_errors(&mut errors);
+
     errors
+}
+
+// https://github.com/Nugine/s3s/issues/224
+fn patch_extra_errors(errors: &mut Errors) {
+    // https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ReplicationErrorCodeList
+    {
+        let code = "ReplicationConfigurationNotFoundError";
+        let desc = "There is no replication configuration for this bucket.";
+        let status = "404 Not Found";
+        errors.insert(
+            code.to_owned(),
+            Error {
+                code: code.to_owned(),
+                description: vec![Some(desc.to_owned())],
+                status: vec![Some(status.to_owned())],
+            },
+        );
+    }
 }
 
 #[allow(clippy::too_many_lines)]
