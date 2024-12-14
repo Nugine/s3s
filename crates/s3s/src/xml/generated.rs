@@ -8665,8 +8665,12 @@ impl<'xml> DeserializeContent<'xml> for StorageClassAnalysisSchemaVersion {
 }
 impl SerializeContent for Tag {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("Key", &self.key)?;
-        s.content("Value", &self.value)?;
+        if let Some(ref val) = self.key {
+            s.content("Key", val)?;
+        }
+        if let Some(ref val) = self.value {
+            s.content("Value", val)?;
+        }
         Ok(())
     }
 }
@@ -8692,10 +8696,7 @@ impl<'xml> DeserializeContent<'xml> for Tag {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self {
-            key: key.ok_or(DeError::MissingField)?,
-            value: value.ok_or(DeError::MissingField)?,
-        })
+        Ok(Self { key, value })
     }
 }
 impl SerializeContent for Tagging {

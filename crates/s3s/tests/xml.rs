@@ -181,8 +181,8 @@ fn tagging() {
 
     assert_eq!(ans.tag_set.len(), 1);
     let tag = &ans.tag_set[0];
-    assert_eq!(tag.key, "Key4");
-    assert_eq!(tag.value, "Value4");
+    assert_eq!(tag.key.as_deref(), Some("Key4"));
+    assert_eq!(tag.value.as_deref(), Some("Value4"));
 
     test_serde(&ans);
 }

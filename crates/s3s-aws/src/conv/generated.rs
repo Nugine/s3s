@@ -8236,25 +8236,6 @@ impl AwsConversion for s3s::dto::StorageClassAnalysisSchemaVersion {
     }
 }
 
-impl AwsConversion for s3s::dto::Tag {
-    type Target = aws_sdk_s3::types::Tag;
-    type Error = S3Error;
-
-    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
-        Ok(Self {
-            key: try_from_aws(x.key)?,
-            value: try_from_aws(x.value)?,
-        })
-    }
-
-    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
-        let mut y = Self::Target::builder();
-        y = y.set_key(Some(try_into_aws(x.key)?));
-        y = y.set_value(Some(try_into_aws(x.value)?));
-        y.build().map_err(S3Error::internal_error)
-    }
-}
-
 impl AwsConversion for s3s::dto::Tagging {
     type Target = aws_sdk_s3::types::Tagging;
     type Error = S3Error;

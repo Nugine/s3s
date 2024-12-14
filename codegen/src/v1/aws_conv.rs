@@ -27,6 +27,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
             "SelectObjectContentRequest" => continue,
             "SelectObjectContentInput" => continue,
             "AssumeRoleOutput" => continue,
+            "Tag" => continue,
             _ if super::sts::NAMES.iter().any(|n| n.eq_ignore_ascii_case(name)) => continue,
             _ => {}
         }

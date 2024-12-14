@@ -246,6 +246,21 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
 }
 
 fn patch_types(space: &mut RustTypes) {
+    // patch Tag
+    {
+        let Some(rust::Type::Struct(ty)) = space.get_mut("Tag") else { panic!() };
+        for field in &mut ty.fields {
+            if field.name == "key" {
+                field.is_required = false;
+                field.option_type = true;
+            }
+            if field.name == "value" {
+                field.is_required = false;
+                field.option_type = true;
+            }
+        }
+    }
+
     // patch LifecycleExpiration
     {
         let Some(rust::Type::Struct(ty)) = space.get_mut("LifecycleExpiration") else { panic!() };
