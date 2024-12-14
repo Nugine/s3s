@@ -54,6 +54,8 @@ pub struct StrEnum {
     pub name: String,
     pub variants: Vec<StrEnumVariant>,
     pub doc: Option<String>,
+
+    pub is_custom_extension: bool,
 }
 
 #[derive(Debug, Clone)]

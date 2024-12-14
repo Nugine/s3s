@@ -26,7 +26,7 @@ model:
     uv run model/main.py update
 
 codegen:
-    cargo run -p s3s-codegen -- model/s3.json
+    cargo run -p s3s-codegen
     cargo fmt
     cargo check
 
