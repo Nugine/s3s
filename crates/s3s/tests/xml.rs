@@ -1,6 +1,8 @@
 use s3s::xml;
 
 use std::fmt;
+use std::ops::Not;
+use std::sync::LazyLock;
 
 use stdx::default::default;
 
@@ -276,20 +278,80 @@ fn assume_role_output() {
     test_serde(&val);
 }
 
-// #[test]
-// fn minio_versioning_configuration() {
-//     let xml = r#"
-// <VersioningConfiguration>
-//     <Status>Enabled</Status>
-//     <ExcludedPrefixes>
-//         <Prefix>a</Prefix>
-//     </ExcludedPrefixes>
-//     <ExcludedPrefixes>
-//         <Prefix>b</Prefix>
-//     </ExcludedPrefixes>
-//     <ExcludeFolders>true</ExcludeFolders>
-// </VersioningConfiguration>
-//     "#;
-//     let val = deserialize::<s3s::dto::VersioningConfiguration>(xml.as_bytes()).unwrap();
-//     test_serde(&val);
-// }
+fn git_branch() -> String {
+    let output = std::process::Command::new("git")
+        .args(["rev-parse", "--abbrev-ref", "HEAD"])
+        .output()
+        .unwrap();
+    let stdout = core::str::from_utf8(&output.stdout).unwrap();
+    stdout.trim().to_owned()
+}
+
+static IS_MINIO_BRANCH: LazyLock<bool> = LazyLock::new(|| {
+    matches!(git_branch().as_str(), "minio" | "feat/minio") //
+});
+
+#[test]
+fn minio_versioning_configuration() {
+    if IS_MINIO_BRANCH.not() {
+        return;
+    }
+
+    let xml = r#"
+<VersioningConfiguration>
+    <Status>Enabled</Status>
+    <ExcludedPrefixes>
+        <Prefix>a</Prefix>
+    </ExcludedPrefixes>
+    <ExcludedPrefixes>
+        <Prefix>b</Prefix>
+    </ExcludedPrefixes>
+    <ExcludeFolders>true</ExcludeFolders>
+</VersioningConfiguration>
+    "#;
+    let val = deserialize::<s3s::dto::VersioningConfiguration>(xml.as_bytes()).unwrap();
+    test_serde(&val);
+}
+
+#[test]
+fn minio_delete_replication() {
+    if IS_MINIO_BRANCH.not() {
+        return;
+    }
+
+    let xml = r#"
+<ReplicationConfiguration>
+    <Rule>
+        <ID>cte4oalu3vqltovlh28g</ID>
+        <Status>Enabled</Status>
+        <Priority>0</Priority>
+        <DeleteMarkerReplication>
+            <Status>Enabled</Status>
+        </DeleteMarkerReplication>
+        <DeleteReplication>
+            <Status>Enabled</Status>
+        </DeleteReplication>
+        <Destination>
+            <Bucket>arn:minio:replication:us-east-1:e02ce029-7459-4be2-8267-064712b0ead4:buc2</Bucket>
+        </Destination>
+        <Filter>
+            <Prefix></Prefix>
+            <And></And>
+            <Tag></Tag>
+        </Filter>
+        <SourceSelectionCriteria>
+            <ReplicaModifications>
+                <Status>Enabled</Status>
+            </ReplicaModifications>
+        </SourceSelectionCriteria>
+        <ExistingObjectReplication>
+            <Status>Enabled</Status>
+        </ExistingObjectReplication>
+    </Rule>
+    <Role>
+    </Role>
+</ReplicationConfiguration>
+    "#;
+    let val = deserialize::<s3s::dto::ReplicationConfiguration>(xml.as_bytes()).unwrap();
+    test_serde(&val);
+}

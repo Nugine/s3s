@@ -54,6 +54,51 @@
                     }
                 }
             }
+        },
+        "com.amazonaws.s3#ReplicationRule": {
+            "type": "structure",
+            "members": {
+                "DeleteReplication": {
+                    "target": "com.amazonaws.s3#DeleteReplication",
+                    "traits": {
+                        "s3s#minio": ""
+                    }
+                }
+            }
+        },
+        "com.amazonaws.s3#DeleteReplication": {
+            "type": "structure",
+            "members": {
+                "Status": {
+                    "target": "com.amazonaws.s3#DeleteReplicationStatus",
+                    "traits": {
+                        "smithy.api#required": {}
+                    }
+                }
+            },
+            "traits": {
+                "s3s#minio": ""
+            }
+        },
+        "com.amazonaws.s3#DeleteReplicationStatus": {
+            "type": "enum",
+            "members": {
+                "Enabled": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Enabled"
+                    }
+                },
+                "Disabled": {
+                    "target": "smithy.api#Unit",
+                    "traits": {
+                        "smithy.api#enumValue": "Disabled"
+                    }
+                }
+            },
+            "traits": {
+                "s3s#minio": ""
+            }
         }
     }
 }

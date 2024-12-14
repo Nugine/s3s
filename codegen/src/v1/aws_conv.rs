@@ -38,7 +38,11 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
             rust::Type::Timestamp(_) => continue,
             rust::Type::List(_) => continue,
             rust::Type::Map(_) => continue,
-            rust::Type::StrEnum(_) => {}
+            rust::Type::StrEnum(ty) => {
+                if ty.is_custom_extension {
+                    continue;
+                }
+            }
             rust::Type::Struct(ty) => {
                 if ty.is_custom_extension {
                     continue;

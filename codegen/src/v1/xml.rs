@@ -427,6 +427,7 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
             if field.option_type {
                 g!("{},", field.name);
             } else {
+                // g!("{0}: {0}.ok_or_else(||dbg!(DeError::MissingField))?,", field.name);
                 g!("{0}: {0}.ok_or(DeError::MissingField)?,", field.name);
             }
         }
