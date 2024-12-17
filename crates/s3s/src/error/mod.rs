@@ -245,7 +245,8 @@ impl S3ErrorCode {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    // not needed since the macro is globally in scope
+    // use super::*;
 
     #[test]
     fn s3_error_fmt() {
