@@ -57,7 +57,7 @@ impl S3Error {
         let msg = if let Some(msg) = args.as_str() {
             Cow::Borrowed(msg)
         } else {
-            Cow::Owned(args.to_string())
+            Cow::Owned(fmt::format(args))
         };
 
         Self::with_message(code, msg)
