@@ -288,3 +288,5 @@ pub const X_AMZ_TRANSITION_DEFAULT_MINIMUM_OBJECT_SIZE: HeaderName =
 pub const X_AMZ_VERSION_ID: HeaderName = HeaderName::from_static("x-amz-version-id");
 
 pub const X_AMZ_WEBSITE_REDIRECT_LOCATION: HeaderName = HeaderName::from_static("x-amz-website-redirect-location");
+
+pub const X_MINIO_FORCE_DELETE: HeaderName = HeaderName::from_static("x-minio-force-delete");

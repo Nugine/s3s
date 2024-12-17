@@ -1388,6 +1388,7 @@ impl AwsConversion for s3s::dto::DeleteBucketInput {
         Ok(Self {
             bucket: unwrap_from_aws(x.bucket, "bucket")?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+            force_delete: None,
         })
     }
 
@@ -7418,6 +7419,7 @@ impl AwsConversion for s3s::dto::ReplicationRule {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             delete_marker_replication: try_from_aws(x.delete_marker_replication)?,
+            delete_replication: None,
             destination: unwrap_from_aws(x.destination, "destination")?,
             existing_object_replication: try_from_aws(x.existing_object_replication)?,
             filter: try_from_aws(x.filter)?,
@@ -8625,6 +8627,8 @@ impl AwsConversion for s3s::dto::VersioningConfiguration {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
+            exclude_folders: None,
+            excluded_prefixes: None,
             mfa_delete: try_from_aws(x.mfa_delete)?,
             status: try_from_aws(x.status)?,
         })
