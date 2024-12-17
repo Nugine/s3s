@@ -47,7 +47,7 @@ impl From<ListObjectsInput> for ListObjectsV2Input {
 
         Self {
             bucket,
-            continuation_token: None,
+            continuation_token: marker,
             delimiter,
             encoding_type,
             expected_bucket_owner,
@@ -55,7 +55,7 @@ impl From<ListObjectsInput> for ListObjectsV2Input {
             max_keys,
             prefix,
             request_payer,
-            start_after: marker,
+            start_after: None,
             optional_object_attributes,
         }
     }
