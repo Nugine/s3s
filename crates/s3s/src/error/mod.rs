@@ -52,6 +52,17 @@ impl S3Error {
         this
     }
 
+    #[doc(hidden)]
+    pub fn with_message_fmt(code: S3ErrorCode, args: fmt::Arguments<'_>) -> Self {
+        let msg = if let Some(msg) = args.as_str() {
+            Cow::Borrowed(msg)
+        } else {
+            Cow::Owned(args.to_string())
+        };
+
+        Self::with_message(code, msg)
+    }
+
     #[must_use]
     pub fn with_source(code: S3ErrorCode, source: StdError) -> Self {
         let mut this = Self::new(code);
@@ -207,11 +218,8 @@ macro_rules! s3_error {
     ($code:ident) => {
         $crate::S3Error::new($crate::S3ErrorCode::$code)
     };
-    ($code:ident, $msg:literal) => {
-        $crate::S3Error::with_message($crate::S3ErrorCode::$code, $msg)
-    };
-    ($code:ident, $fmt:literal, $($arg:tt)+) => {
-        $crate::S3Error::with_message($crate::S3ErrorCode::$code, format!($fmt, $($arg)+))
+    ($code:ident, $($arg:tt)+) => {
+        $crate::S3Error::with_message_fmt($crate::S3ErrorCode::$code, format_args!($($arg)+))
     };
 }
 
@@ -232,5 +240,18 @@ impl S3ErrorCode {
             return s;
         }
         unreachable!()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn s3_error_fmt() {
+        let bucket = "my_bucket";
+        let e = s3_error!(AccessDenied, "access denied for bucket {bucket}");
+
+        assert_eq!(e.message(), Some("access denied for bucket my_bucket"));
     }
 }
