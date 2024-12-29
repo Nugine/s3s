@@ -40,11 +40,16 @@ def cargo_install(
     *,
     features: list[str] | None = None,
     bin: str | None = None,
+    force: bool = True,
 ):
     opt_offline = "--offline" if args.offline else ""
     opt_features = f"--features {','.join(features)}" if features else ""
     opt_bin = f"--bin {bin}" if bin else ""
-    sh(f"cargo install --path crates/{package} {opt_offline} {opt_features} {opt_bin}")
+    opt_force = "--force" if force else ""
+    sh(
+        f"cargo install --path crates/{package} "  #
+        f"{opt_offline} {opt_features} {opt_bin} {opt_force}"
+    )
 
 
 @installer("s3s-fs")
