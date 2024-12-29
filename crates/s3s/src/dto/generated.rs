@@ -3690,6 +3690,7 @@ pub struct DeleteBucketInput {
     /// <code>501 Not Implemented</code>.</p>
     /// </note>
     pub expected_bucket_owner: Option<AccountId>,
+    pub force_delete: Option<ForceDelete>,
 }
 
 impl fmt::Debug for DeleteBucketInput {
@@ -3698,6 +3699,9 @@ impl fmt::Debug for DeleteBucketInput {
         d.field("bucket", &self.bucket);
         if let Some(ref val) = self.expected_bucket_owner {
             d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.force_delete {
+            d.field("force_delete", val);
         }
         d.finish_non_exhaustive()
     }
@@ -4515,6 +4519,57 @@ impl fmt::Debug for DeletePublicAccessBlockOutput {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("DeletePublicAccessBlockOutput");
         d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Clone, PartialEq)]
+pub struct DeleteReplication {
+    pub status: DeleteReplicationStatus,
+}
+
+impl fmt::Debug for DeleteReplication {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteReplication");
+        d.field("status", &self.status);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DeleteReplicationStatus(Cow<'static, str>);
+
+impl DeleteReplicationStatus {
+    pub const DISABLED: &'static str = "Disabled";
+
+    pub const ENABLED: &'static str = "Enabled";
+
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+
+    #[must_use]
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for DeleteReplicationStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<DeleteReplicationStatus> for Cow<'static, str> {
+    fn from(s: DeleteReplicationStatus) -> Self {
+        s.0
+    }
+}
+
+impl FromStr for DeleteReplicationStatus {
+    type Err = Infallible;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -6707,6 +6762,25 @@ impl fmt::Debug for EventBridgeConfiguration {
 
 pub type EventList = List<Event>;
 
+pub type ExcludeFolders = bool;
+
+#[derive(Clone, Default, PartialEq)]
+pub struct ExcludedPrefix {
+    pub prefix: Option<Prefix>,
+}
+
+impl fmt::Debug for ExcludedPrefix {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ExcludedPrefix");
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+pub type ExcludedPrefixes = List<ExcludedPrefix>;
+
 /// <p>Optional configuration to replicate existing source bucket objects.
 /// </p>
 /// <note>
@@ -6962,6 +7036,8 @@ impl FromStr for FilterRuleName {
 }
 
 pub type FilterRuleValue = String;
+
+pub type ForceDelete = bool;
 
 #[derive(Clone, PartialEq)]
 pub struct GetBucketAccelerateConfigurationInput {
@@ -16730,6 +16806,7 @@ impl fmt::Debug for ReplicationConfiguration {
 #[derive(Clone, PartialEq)]
 pub struct ReplicationRule {
     pub delete_marker_replication: Option<DeleteMarkerReplication>,
+    pub delete_replication: Option<DeleteReplication>,
     /// <p>A container for information about the replication destination and its configurations
     /// including enabling the S3 Replication Time Control (S3 RTC).</p>
     pub destination: Destination,
@@ -16774,6 +16851,9 @@ impl fmt::Debug for ReplicationRule {
         let mut d = f.debug_struct("ReplicationRule");
         if let Some(ref val) = self.delete_marker_replication {
             d.field("delete_marker_replication", val);
+        }
+        if let Some(ref val) = self.delete_replication {
+            d.field("delete_replication", val);
         }
         d.field("destination", &self.destination);
         if let Some(ref val) = self.existing_object_replication {
@@ -19304,6 +19384,8 @@ pub type VersionIdMarker = String;
 /// Bucket versioning</a> in the <i>Amazon S3 API Reference</i>.</p>
 #[derive(Clone, Default, PartialEq)]
 pub struct VersioningConfiguration {
+    pub exclude_folders: Option<ExcludeFolders>,
+    pub excluded_prefixes: Option<ExcludedPrefixes>,
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This
     /// element is only returned if the bucket has been configured with MFA delete. If the bucket
     /// has never been so configured, this element is not returned.</p>
@@ -19315,6 +19397,12 @@ pub struct VersioningConfiguration {
 impl fmt::Debug for VersioningConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("VersioningConfiguration");
+        if let Some(ref val) = self.exclude_folders {
+            d.field("exclude_folders", val);
+        }
+        if let Some(ref val) = self.excluded_prefixes {
+            d.field("excluded_prefixes", val);
+        }
         if let Some(ref val) = self.mfa_delete {
             d.field("mfa_delete", val);
         }
@@ -21392,6 +21480,8 @@ pub mod builders {
         bucket: Option<BucketName>,
 
         expected_bucket_owner: Option<AccountId>,
+
+        force_delete: Option<ForceDelete>,
     }
 
     impl DeleteBucketInputBuilder {
@@ -21402,6 +21492,11 @@ pub mod builders {
 
         pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        pub fn set_force_delete(&mut self, field: Option<ForceDelete>) -> &mut Self {
+            self.force_delete = field;
             self
         }
 
@@ -21417,12 +21512,20 @@ pub mod builders {
             self
         }
 
+        #[must_use]
+        pub fn force_delete(mut self, field: Option<ForceDelete>) -> Self {
+            self.force_delete = field;
+            self
+        }
+
         pub fn build(self) -> Result<DeleteBucketInput, BuildError> {
             let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
             let expected_bucket_owner = self.expected_bucket_owner;
+            let force_delete = self.force_delete;
             Ok(DeleteBucketInput {
                 bucket,
                 expected_bucket_owner,
+                force_delete,
             })
         }
     }
