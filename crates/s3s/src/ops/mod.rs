@@ -207,9 +207,16 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
         }
         Prepare::CustomRoute => {
             let body = mem::take(&mut req.body);
-            let s3_req = build_s3_request(body, req);
+            let mut s3_req = build_s3_request(body, req);
             let route = ccx.route.unwrap();
-            match route.call(s3_req).await {
+
+            let result = async {
+                route.check_access(&mut s3_req).await?;
+                route.call(s3_req).await
+            }
+            .await;
+
+            match result {
                 Ok(s3_resp) => Ok(Response {
                     status: s3_resp.output.0,
                     headers: s3_resp.headers,
@@ -374,7 +381,7 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
 
     debug!(op = %op.name(), ?s3_path, "resolved route");
 
-    {
+    if ccx.auth.is_some() {
         let mut acx = S3AccessContext {
             credentials: req.s3ext.credentials.as_ref(),
             s3_path,

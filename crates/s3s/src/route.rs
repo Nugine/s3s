@@ -13,6 +13,13 @@ use hyper::Uri;
 pub trait S3Route: Send + Sync + 'static {
     fn is_match(&self, method: &Method, uri: &Uri, headers: &HeaderMap, extensions: &mut Extensions) -> bool;
 
+    async fn check_access(&self, req: &mut S3Request<Body>) -> S3Result<()> {
+        match req.credentials {
+            Some(_) => Ok(()),
+            None => Err(s3_error!(AccessDenied, "Signature is required")),
+        }
+    }
+
     async fn call(&self, req: S3Request<Body>) -> S3Result<S3Response<(StatusCode, Body)>>;
 }
 
