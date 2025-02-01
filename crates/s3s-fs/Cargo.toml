@@ -38,7 +38,7 @@ hyper-util = { version = "0.1.9", optional = true, features = [
 md-5 = "0.10.6"
 mime = "0.3.17"
 std-next = "0.1.1"
-numeric_cast = "0.2.1"
+numeric_cast = "0.3.0"
 path-absolutize = "3.1.1"
 s3s = { version = "0.11.0-dev", path = "../s3s" }
 serde_json = "1.0.128"
