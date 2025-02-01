@@ -97,7 +97,7 @@ fn parse_host_header<'a>(base_domain: &'a str, host: &'a str) -> Option<VirtualH
 
     if let Some(bucket) = host.strip_suffix(base_domain).and_then(|h| h.strip_suffix('.')) {
         return Some(VirtualHost::with_bucket(base_domain, bucket));
-    };
+    }
 
     None
 }
