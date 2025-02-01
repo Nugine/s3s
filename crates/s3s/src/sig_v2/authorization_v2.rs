@@ -17,36 +17,14 @@ pub struct ParseAuthorizationV2Error {
 }
 
 impl<'a> AuthorizationV2<'a> {
-    pub fn parse(input: &'a str) -> Result<Self, ParseAuthorizationV2Error> {
-        match parser::parse_authorization(input) {
-            Ok(("", ans)) => Ok(ans),
-            Ok(_) | Err(_) => Err(ParseAuthorizationV2Error { _priv: () }),
-        }
-    }
-}
+    pub fn parse(mut input: &'a str) -> Result<Self, ParseAuthorizationV2Error> {
+        let err = || ParseAuthorizationV2Error { _priv: () };
 
-mod parser {
-    use super::AuthorizationV2;
+        input = input.strip_prefix("AWS ").ok_or_else(err)?;
 
-    use crate::utils::parser::consume;
+        let (access_key, signature) = input.split_once(':').ok_or_else(err)?;
 
-    use nom::bytes::complete::{tag, take, take_till};
-    use nom::combinator::rest;
-    use nom::sequence::terminated;
-    use nom::IResult;
-
-    pub fn parse_authorization(mut input: &str) -> IResult<&str, AuthorizationV2<'_>> {
-        let s = &mut input;
-
-        consume(s, tag("AWS "))?;
-        let access_key = consume(s, until_colon0)?;
-        let signature = consume(s, rest)?;
-
-        Ok((input, AuthorizationV2 { access_key, signature }))
-    }
-
-    fn until_colon0(input: &str) -> IResult<&str, &str> {
-        terminated(take_till(|c| c == ':'), take(1_usize))(input)
+        Ok(Self { access_key, signature })
     }
 }
 
