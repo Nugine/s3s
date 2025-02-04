@@ -46,7 +46,6 @@ It is up to the user to implement security enhancements such as **HTTP body leng
 ## Contributing
 
 + [Development Guide](./CONTRIBUTING.md)
-+ [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ## Sponsor
 
