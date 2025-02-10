@@ -1023,9 +1023,12 @@ impl DeleteBucket {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
+        let force_delete: Option<ForceDelete> = http::parse_opt_header(req, &X_MINIO_FORCE_DELETE)?;
+
         Ok(DeleteBucketInput {
             bucket,
             expected_bucket_owner,
+            force_delete,
         })
     }
 
