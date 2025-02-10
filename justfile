@@ -1,6 +1,7 @@
 dev:
     just fetch
     just fmt
+    just codegen
     just lint
     just test
 

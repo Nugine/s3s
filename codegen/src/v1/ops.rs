@@ -8,6 +8,7 @@ use crate::declare_codegen;
 
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet, HashMap};
+use std::fmt::Write as _;
 use std::format as f;
 use std::ops::Not;
 
@@ -990,13 +991,14 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
                                 if cond.is_empty().not() {
                                     cond.push_str(" && ");
                                 }
-                                cond.push_str(&f!("qs.has(\"{q}\")"));
+                                //cond.push_str(&f!("qs.has(\"{q}\")"));
+                                write!(cond, "qs.has(\"{q}\")").unwrap();
                             }
                             for h in hs {
                                 if cond.is_empty().not() {
                                     cond.push_str(" && ");
                                 }
-                                cond.push_str(&f!("req.headers.contains_key(\"{h}\")"));
+                                write!(cond, "req.headers.contains_key(\"{h}\")").unwrap();
                             }
 
                             if qs.is_empty().not() {
