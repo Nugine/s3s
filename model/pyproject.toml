@@ -1,8 +1,0 @@
-[project]
-name = "s3s-model"
-version = "0.0.0"
-requires-python = ">=3.13"
-dependencies = [
-    "requests>=2.32.3",
-    "typer>=0.12.5",
-]
