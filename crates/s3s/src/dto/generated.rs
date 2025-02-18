@@ -30001,3 +30001,3944 @@ pub mod builders {
         }
     }
 }
+pub trait DtoExt {
+    /// Modifies all empty string fields from `Some("")` to `None`
+    fn ignore_empty_strings(&mut self);
+}
+impl DtoExt for AbortIncompleteMultipartUpload {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for AbortMultipartUploadInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+    }
+}
+impl DtoExt for AbortMultipartUploadOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for AccelerateConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.status {
+            if val.as_str() == "" {
+                self.status = None;
+            }
+        }
+    }
+}
+impl DtoExt for AccessControlPolicy {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for AccessControlTranslation {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for AnalyticsAndOperator {
+    fn ignore_empty_strings(&mut self) {
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for AnalyticsConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        self.storage_class_analysis.ignore_empty_strings();
+    }
+}
+impl DtoExt for AnalyticsExportDestination {
+    fn ignore_empty_strings(&mut self) {
+        self.s3_bucket_destination.ignore_empty_strings();
+    }
+}
+impl DtoExt for AnalyticsS3BucketDestination {
+    fn ignore_empty_strings(&mut self) {
+        if self.bucket_account_id.as_deref() == Some("") {
+            self.bucket_account_id = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for AssumeRoleOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.assumed_role_user {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.credentials {
+            val.ignore_empty_strings();
+        }
+        if self.source_identity.as_deref() == Some("") {
+            self.source_identity = None;
+        }
+    }
+}
+impl DtoExt for AssumedRoleUser {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for Bucket {
+    fn ignore_empty_strings(&mut self) {
+        if self.name.as_deref() == Some("") {
+            self.name = None;
+        }
+    }
+}
+impl DtoExt for BucketInfo {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.data_redundancy {
+            if val.as_str() == "" {
+                self.data_redundancy = None;
+            }
+        }
+        if let Some(ref val) = self.type_ {
+            if val.as_str() == "" {
+                self.type_ = None;
+            }
+        }
+    }
+}
+impl DtoExt for BucketLifecycleConfiguration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for BucketLoggingStatus {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.logging_enabled {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for CORSConfiguration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for CORSRule {
+    fn ignore_empty_strings(&mut self) {
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+    }
+}
+impl DtoExt for CSVInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.comments.as_deref() == Some("") {
+            self.comments = None;
+        }
+        if self.field_delimiter.as_deref() == Some("") {
+            self.field_delimiter = None;
+        }
+        if let Some(ref val) = self.file_header_info {
+            if val.as_str() == "" {
+                self.file_header_info = None;
+            }
+        }
+        if self.quote_character.as_deref() == Some("") {
+            self.quote_character = None;
+        }
+        if self.quote_escape_character.as_deref() == Some("") {
+            self.quote_escape_character = None;
+        }
+        if self.record_delimiter.as_deref() == Some("") {
+            self.record_delimiter = None;
+        }
+    }
+}
+impl DtoExt for CSVOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.field_delimiter.as_deref() == Some("") {
+            self.field_delimiter = None;
+        }
+        if self.quote_character.as_deref() == Some("") {
+            self.quote_character = None;
+        }
+        if self.quote_escape_character.as_deref() == Some("") {
+            self.quote_escape_character = None;
+        }
+        if let Some(ref val) = self.quote_fields {
+            if val.as_str() == "" {
+                self.quote_fields = None;
+            }
+        }
+        if self.record_delimiter.as_deref() == Some("") {
+            self.record_delimiter = None;
+        }
+    }
+}
+impl DtoExt for Checksum {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+    }
+}
+impl DtoExt for CommonPrefix {
+    fn ignore_empty_strings(&mut self) {
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for CompleteMultipartUploadInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.if_none_match.as_deref() == Some("") {
+            self.if_none_match = None;
+        }
+        if let Some(ref mut val) = self.multipart_upload {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+    }
+}
+impl DtoExt for CompleteMultipartUploadOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.bucket.as_deref() == Some("") {
+            self.bucket = None;
+        }
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if self.expiration.as_deref() == Some("") {
+            self.expiration = None;
+        }
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if self.location.as_deref() == Some("") {
+            self.location = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for CompletedMultipartUpload {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for CompletedPart {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+    }
+}
+impl DtoExt for Condition {
+    fn ignore_empty_strings(&mut self) {
+        if self.http_error_code_returned_equals.as_deref() == Some("") {
+            self.http_error_code_returned_equals = None;
+        }
+        if self.key_prefix_equals.as_deref() == Some("") {
+            self.key_prefix_equals = None;
+        }
+    }
+}
+impl DtoExt for CopyObjectInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.acl {
+            if val.as_str() == "" {
+                self.acl = None;
+            }
+        }
+        if self.cache_control.as_deref() == Some("") {
+            self.cache_control = None;
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_disposition.as_deref() == Some("") {
+            self.content_disposition = None;
+        }
+        if self.content_encoding.as_deref() == Some("") {
+            self.content_encoding = None;
+        }
+        if self.content_language.as_deref() == Some("") {
+            self.content_language = None;
+        }
+        if self.copy_source_if_match.as_deref() == Some("") {
+            self.copy_source_if_match = None;
+        }
+        if self.copy_source_if_none_match.as_deref() == Some("") {
+            self.copy_source_if_none_match = None;
+        }
+        if self.copy_source_sse_customer_algorithm.as_deref() == Some("") {
+            self.copy_source_sse_customer_algorithm = None;
+        }
+        if self.copy_source_sse_customer_key.as_deref() == Some("") {
+            self.copy_source_sse_customer_key = None;
+        }
+        if self.copy_source_sse_customer_key_md5.as_deref() == Some("") {
+            self.copy_source_sse_customer_key_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.expected_source_bucket_owner.as_deref() == Some("") {
+            self.expected_source_bucket_owner = None;
+        }
+        if self.grant_full_control.as_deref() == Some("") {
+            self.grant_full_control = None;
+        }
+        if self.grant_read.as_deref() == Some("") {
+            self.grant_read = None;
+        }
+        if self.grant_read_acp.as_deref() == Some("") {
+            self.grant_read_acp = None;
+        }
+        if self.grant_write_acp.as_deref() == Some("") {
+            self.grant_write_acp = None;
+        }
+        if let Some(ref val) = self.metadata_directive {
+            if val.as_str() == "" {
+                self.metadata_directive = None;
+            }
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            if val.as_str() == "" {
+                self.object_lock_legal_hold_status = None;
+            }
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            if val.as_str() == "" {
+                self.object_lock_mode = None;
+            }
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_encryption_context.as_deref() == Some("") {
+            self.ssekms_encryption_context = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.tagging.as_deref() == Some("") {
+            self.tagging = None;
+        }
+        if let Some(ref val) = self.tagging_directive {
+            if val.as_str() == "" {
+                self.tagging_directive = None;
+            }
+        }
+        if self.website_redirect_location.as_deref() == Some("") {
+            self.website_redirect_location = None;
+        }
+    }
+}
+impl DtoExt for CopyObjectOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.copy_object_result {
+            val.ignore_empty_strings();
+        }
+        if self.copy_source_version_id.as_deref() == Some("") {
+            self.copy_source_version_id = None;
+        }
+        if self.expiration.as_deref() == Some("") {
+            self.expiration = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_encryption_context.as_deref() == Some("") {
+            self.ssekms_encryption_context = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for CopyObjectResult {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+    }
+}
+impl DtoExt for CopyPartResult {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+    }
+}
+impl DtoExt for CreateBucketConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.bucket {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.location {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.location_constraint {
+            if val.as_str() == "" {
+                self.location_constraint = None;
+            }
+        }
+    }
+}
+impl DtoExt for CreateBucketInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.acl {
+            if val.as_str() == "" {
+                self.acl = None;
+            }
+        }
+        if let Some(ref mut val) = self.create_bucket_configuration {
+            val.ignore_empty_strings();
+        }
+        if self.grant_full_control.as_deref() == Some("") {
+            self.grant_full_control = None;
+        }
+        if self.grant_read.as_deref() == Some("") {
+            self.grant_read = None;
+        }
+        if self.grant_read_acp.as_deref() == Some("") {
+            self.grant_read_acp = None;
+        }
+        if self.grant_write.as_deref() == Some("") {
+            self.grant_write = None;
+        }
+        if self.grant_write_acp.as_deref() == Some("") {
+            self.grant_write_acp = None;
+        }
+        if let Some(ref val) = self.object_ownership {
+            if val.as_str() == "" {
+                self.object_ownership = None;
+            }
+        }
+    }
+}
+impl DtoExt for CreateBucketOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.location.as_deref() == Some("") {
+            self.location = None;
+        }
+    }
+}
+impl DtoExt for CreateMultipartUploadInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.acl {
+            if val.as_str() == "" {
+                self.acl = None;
+            }
+        }
+        if self.cache_control.as_deref() == Some("") {
+            self.cache_control = None;
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_disposition.as_deref() == Some("") {
+            self.content_disposition = None;
+        }
+        if self.content_encoding.as_deref() == Some("") {
+            self.content_encoding = None;
+        }
+        if self.content_language.as_deref() == Some("") {
+            self.content_language = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.grant_full_control.as_deref() == Some("") {
+            self.grant_full_control = None;
+        }
+        if self.grant_read.as_deref() == Some("") {
+            self.grant_read = None;
+        }
+        if self.grant_read_acp.as_deref() == Some("") {
+            self.grant_read_acp = None;
+        }
+        if self.grant_write_acp.as_deref() == Some("") {
+            self.grant_write_acp = None;
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            if val.as_str() == "" {
+                self.object_lock_legal_hold_status = None;
+            }
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            if val.as_str() == "" {
+                self.object_lock_mode = None;
+            }
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_encryption_context.as_deref() == Some("") {
+            self.ssekms_encryption_context = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.tagging.as_deref() == Some("") {
+            self.tagging = None;
+        }
+        if self.website_redirect_location.as_deref() == Some("") {
+            self.website_redirect_location = None;
+        }
+    }
+}
+impl DtoExt for CreateMultipartUploadOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.abort_rule_id.as_deref() == Some("") {
+            self.abort_rule_id = None;
+        }
+        if self.bucket.as_deref() == Some("") {
+            self.bucket = None;
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_encryption_context.as_deref() == Some("") {
+            self.ssekms_encryption_context = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if self.upload_id.as_deref() == Some("") {
+            self.upload_id = None;
+        }
+    }
+}
+impl DtoExt for Credentials {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for DefaultRetention {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.mode {
+            if val.as_str() == "" {
+                self.mode = None;
+            }
+        }
+    }
+}
+impl DtoExt for Delete {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for DeleteBucketAnalyticsConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketCorsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketEncryptionInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketIntelligentTieringConfigurationInput {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for DeleteBucketInventoryConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketLifecycleInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketMetricsConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketOwnershipControlsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketPolicyInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketReplicationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketTaggingInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteBucketWebsiteInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeleteMarkerEntry {
+    fn ignore_empty_strings(&mut self) {
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for DeleteMarkerReplication {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.status {
+            if val.as_str() == "" {
+                self.status = None;
+            }
+        }
+    }
+}
+impl DtoExt for DeleteObjectInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.mfa.as_deref() == Some("") {
+            self.mfa = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for DeleteObjectOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for DeleteObjectTaggingInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for DeleteObjectTaggingOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for DeleteObjectsInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        self.delete.ignore_empty_strings();
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.mfa.as_deref() == Some("") {
+            self.mfa = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+    }
+}
+impl DtoExt for DeleteObjectsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for DeletePublicAccessBlockInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for DeletedObject {
+    fn ignore_empty_strings(&mut self) {
+        if self.delete_marker_version_id.as_deref() == Some("") {
+            self.delete_marker_version_id = None;
+        }
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for Destination {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.access_control_translation {
+            val.ignore_empty_strings();
+        }
+        if self.account.as_deref() == Some("") {
+            self.account = None;
+        }
+        if let Some(ref mut val) = self.encryption_configuration {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.metrics {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.replication_time {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+    }
+}
+impl DtoExt for Encryption {
+    fn ignore_empty_strings(&mut self) {
+        if self.kms_context.as_deref() == Some("") {
+            self.kms_context = None;
+        }
+        if self.kms_key_id.as_deref() == Some("") {
+            self.kms_key_id = None;
+        }
+    }
+}
+impl DtoExt for EncryptionConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if self.replica_kms_key_id.as_deref() == Some("") {
+            self.replica_kms_key_id = None;
+        }
+    }
+}
+impl DtoExt for Error {
+    fn ignore_empty_strings(&mut self) {
+        if self.code.as_deref() == Some("") {
+            self.code = None;
+        }
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if self.message.as_deref() == Some("") {
+            self.message = None;
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for ErrorDocument {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for ExistingObjectReplication {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for FilterRule {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.name {
+            if val.as_str() == "" {
+                self.name = None;
+            }
+        }
+        if self.value.as_deref() == Some("") {
+            self.value = None;
+        }
+    }
+}
+impl DtoExt for GetBucketAccelerateConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetBucketAccelerateConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if let Some(ref val) = self.status {
+            if val.as_str() == "" {
+                self.status = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetBucketAclInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketAclOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketAnalyticsConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketAnalyticsConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.analytics_configuration {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketCorsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketCorsOutput {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for GetBucketEncryptionInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketEncryptionOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.server_side_encryption_configuration {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketIntelligentTieringConfigurationInput {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for GetBucketIntelligentTieringConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.intelligent_tiering_configuration {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketInventoryConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketInventoryConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.inventory_configuration {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketLifecycleConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketLifecycleConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            if val.as_str() == "" {
+                self.transition_default_minimum_object_size = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetBucketLocationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketLocationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.location_constraint {
+            if val.as_str() == "" {
+                self.location_constraint = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetBucketLoggingInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketLoggingOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.logging_enabled {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketMetricsConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketMetricsConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.metrics_configuration {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketNotificationConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketNotificationConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for GetBucketOwnershipControlsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketOwnershipControlsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.ownership_controls {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketPolicyInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketPolicyOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.policy.as_deref() == Some("") {
+            self.policy = None;
+        }
+    }
+}
+impl DtoExt for GetBucketPolicyStatusInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketPolicyStatusOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.policy_status {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketReplicationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketReplicationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.replication_configuration {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetBucketRequestPaymentInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketRequestPaymentOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.payer {
+            if val.as_str() == "" {
+                self.payer = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetBucketTaggingInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketTaggingOutput {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for GetBucketVersioningInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketVersioningOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.mfa_delete {
+            if val.as_str() == "" {
+                self.mfa_delete = None;
+            }
+        }
+        if let Some(ref val) = self.status {
+            if val.as_str() == "" {
+                self.status = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetBucketWebsiteInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetBucketWebsiteOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.error_document {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.index_document {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.redirect_all_requests_to {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetObjectAclInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for GetObjectAclOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetObjectAttributesInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.part_number_marker.as_deref() == Some("") {
+            self.part_number_marker = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for GetObjectAttributesOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.checksum {
+            val.ignore_empty_strings();
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if let Some(ref mut val) = self.object_parts {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for GetObjectAttributesParts {
+    fn ignore_empty_strings(&mut self) {
+        if self.next_part_number_marker.as_deref() == Some("") {
+            self.next_part_number_marker = None;
+        }
+        if self.part_number_marker.as_deref() == Some("") {
+            self.part_number_marker = None;
+        }
+    }
+}
+impl DtoExt for GetObjectInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_mode {
+            if val.as_str() == "" {
+                self.checksum_mode = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.if_match.as_deref() == Some("") {
+            self.if_match = None;
+        }
+        if self.if_none_match.as_deref() == Some("") {
+            self.if_none_match = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.response_cache_control.as_deref() == Some("") {
+            self.response_cache_control = None;
+        }
+        if self.response_content_disposition.as_deref() == Some("") {
+            self.response_content_disposition = None;
+        }
+        if self.response_content_encoding.as_deref() == Some("") {
+            self.response_content_encoding = None;
+        }
+        if self.response_content_language.as_deref() == Some("") {
+            self.response_content_language = None;
+        }
+        if self.response_content_type.as_deref() == Some("") {
+            self.response_content_type = None;
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for GetObjectLegalHoldInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for GetObjectLegalHoldOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.legal_hold {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetObjectLockConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetObjectLockConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.object_lock_configuration {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetObjectOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.accept_ranges.as_deref() == Some("") {
+            self.accept_ranges = None;
+        }
+        if self.cache_control.as_deref() == Some("") {
+            self.cache_control = None;
+        }
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.content_disposition.as_deref() == Some("") {
+            self.content_disposition = None;
+        }
+        if self.content_encoding.as_deref() == Some("") {
+            self.content_encoding = None;
+        }
+        if self.content_language.as_deref() == Some("") {
+            self.content_language = None;
+        }
+        if self.content_range.as_deref() == Some("") {
+            self.content_range = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if self.expiration.as_deref() == Some("") {
+            self.expiration = None;
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            if val.as_str() == "" {
+                self.object_lock_legal_hold_status = None;
+            }
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            if val.as_str() == "" {
+                self.object_lock_mode = None;
+            }
+        }
+        if let Some(ref val) = self.replication_status {
+            if val.as_str() == "" {
+                self.replication_status = None;
+            }
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.restore.as_deref() == Some("") {
+            self.restore = None;
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+        if self.website_redirect_location.as_deref() == Some("") {
+            self.website_redirect_location = None;
+        }
+    }
+}
+impl DtoExt for GetObjectRetentionInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for GetObjectRetentionOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.retention {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GetObjectTaggingInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for GetObjectTaggingOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for GetObjectTorrentInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetObjectTorrentOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for GetPublicAccessBlockInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for GetPublicAccessBlockOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.public_access_block_configuration {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for GlacierJobParameters {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for Grant {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.grantee {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.permission {
+            if val.as_str() == "" {
+                self.permission = None;
+            }
+        }
+    }
+}
+impl DtoExt for Grantee {
+    fn ignore_empty_strings(&mut self) {
+        if self.display_name.as_deref() == Some("") {
+            self.display_name = None;
+        }
+        if self.email_address.as_deref() == Some("") {
+            self.email_address = None;
+        }
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+        if self.uri.as_deref() == Some("") {
+            self.uri = None;
+        }
+    }
+}
+impl DtoExt for HeadBucketInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for HeadBucketOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.bucket_location_name.as_deref() == Some("") {
+            self.bucket_location_name = None;
+        }
+        if let Some(ref val) = self.bucket_location_type {
+            if val.as_str() == "" {
+                self.bucket_location_type = None;
+            }
+        }
+        if self.bucket_region.as_deref() == Some("") {
+            self.bucket_region = None;
+        }
+    }
+}
+impl DtoExt for HeadObjectInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_mode {
+            if val.as_str() == "" {
+                self.checksum_mode = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.if_match.as_deref() == Some("") {
+            self.if_match = None;
+        }
+        if self.if_none_match.as_deref() == Some("") {
+            self.if_none_match = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.response_cache_control.as_deref() == Some("") {
+            self.response_cache_control = None;
+        }
+        if self.response_content_disposition.as_deref() == Some("") {
+            self.response_content_disposition = None;
+        }
+        if self.response_content_encoding.as_deref() == Some("") {
+            self.response_content_encoding = None;
+        }
+        if self.response_content_language.as_deref() == Some("") {
+            self.response_content_language = None;
+        }
+        if self.response_content_type.as_deref() == Some("") {
+            self.response_content_type = None;
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for HeadObjectOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.accept_ranges.as_deref() == Some("") {
+            self.accept_ranges = None;
+        }
+        if let Some(ref val) = self.archive_status {
+            if val.as_str() == "" {
+                self.archive_status = None;
+            }
+        }
+        if self.cache_control.as_deref() == Some("") {
+            self.cache_control = None;
+        }
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.content_disposition.as_deref() == Some("") {
+            self.content_disposition = None;
+        }
+        if self.content_encoding.as_deref() == Some("") {
+            self.content_encoding = None;
+        }
+        if self.content_language.as_deref() == Some("") {
+            self.content_language = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if self.expiration.as_deref() == Some("") {
+            self.expiration = None;
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            if val.as_str() == "" {
+                self.object_lock_legal_hold_status = None;
+            }
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            if val.as_str() == "" {
+                self.object_lock_mode = None;
+            }
+        }
+        if let Some(ref val) = self.replication_status {
+            if val.as_str() == "" {
+                self.replication_status = None;
+            }
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.restore.as_deref() == Some("") {
+            self.restore = None;
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+        if self.website_redirect_location.as_deref() == Some("") {
+            self.website_redirect_location = None;
+        }
+    }
+}
+impl DtoExt for IndexDocument {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for Initiator {
+    fn ignore_empty_strings(&mut self) {
+        if self.display_name.as_deref() == Some("") {
+            self.display_name = None;
+        }
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+    }
+}
+impl DtoExt for InputSerialization {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.csv {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.compression_type {
+            if val.as_str() == "" {
+                self.compression_type = None;
+            }
+        }
+        if let Some(ref mut val) = self.json {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for IntelligentTieringAndOperator {
+    fn ignore_empty_strings(&mut self) {
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for IntelligentTieringConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.filter {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for IntelligentTieringFilter {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.and {
+            val.ignore_empty_strings();
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref mut val) = self.tag {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for InvalidObjectState {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.access_tier {
+            if val.as_str() == "" {
+                self.access_tier = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+    }
+}
+impl DtoExt for InventoryConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        self.destination.ignore_empty_strings();
+        if let Some(ref mut val) = self.filter {
+            val.ignore_empty_strings();
+        }
+        self.schedule.ignore_empty_strings();
+    }
+}
+impl DtoExt for InventoryDestination {
+    fn ignore_empty_strings(&mut self) {
+        self.s3_bucket_destination.ignore_empty_strings();
+    }
+}
+impl DtoExt for InventoryEncryption {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.ssekms {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for InventoryFilter {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for InventoryS3BucketDestination {
+    fn ignore_empty_strings(&mut self) {
+        if self.account_id.as_deref() == Some("") {
+            self.account_id = None;
+        }
+        if let Some(ref mut val) = self.encryption {
+            val.ignore_empty_strings();
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for InventorySchedule {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for JSONInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.type_ {
+            if val.as_str() == "" {
+                self.type_ = None;
+            }
+        }
+    }
+}
+impl DtoExt for JSONOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.record_delimiter.as_deref() == Some("") {
+            self.record_delimiter = None;
+        }
+    }
+}
+impl DtoExt for LambdaFunctionConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.filter {
+            val.ignore_empty_strings();
+        }
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+    }
+}
+impl DtoExt for LifecycleExpiration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for LifecycleRule {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.abort_incomplete_multipart_upload {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.expiration {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.filter {
+            val.ignore_empty_strings();
+        }
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+        if let Some(ref mut val) = self.noncurrent_version_expiration {
+            val.ignore_empty_strings();
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for LifecycleRuleAndOperator {
+    fn ignore_empty_strings(&mut self) {
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for LifecycleRuleFilter {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.and {
+            val.ignore_empty_strings();
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref mut val) = self.tag {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for ListBucketAnalyticsConfigurationsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for ListBucketAnalyticsConfigurationsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.next_continuation_token.as_deref() == Some("") {
+            self.next_continuation_token = None;
+        }
+    }
+}
+impl DtoExt for ListBucketIntelligentTieringConfigurationsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+    }
+}
+impl DtoExt for ListBucketIntelligentTieringConfigurationsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.next_continuation_token.as_deref() == Some("") {
+            self.next_continuation_token = None;
+        }
+    }
+}
+impl DtoExt for ListBucketInventoryConfigurationsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for ListBucketInventoryConfigurationsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.next_continuation_token.as_deref() == Some("") {
+            self.next_continuation_token = None;
+        }
+    }
+}
+impl DtoExt for ListBucketMetricsConfigurationsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for ListBucketMetricsConfigurationsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.next_continuation_token.as_deref() == Some("") {
+            self.next_continuation_token = None;
+        }
+    }
+}
+impl DtoExt for ListBucketsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+    }
+}
+impl DtoExt for ListBucketsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for ListMultipartUploadsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.delimiter.as_deref() == Some("") {
+            self.delimiter = None;
+        }
+        if let Some(ref val) = self.encoding_type {
+            if val.as_str() == "" {
+                self.encoding_type = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.key_marker.as_deref() == Some("") {
+            self.key_marker = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.upload_id_marker.as_deref() == Some("") {
+            self.upload_id_marker = None;
+        }
+    }
+}
+impl DtoExt for ListMultipartUploadsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.bucket.as_deref() == Some("") {
+            self.bucket = None;
+        }
+        if self.delimiter.as_deref() == Some("") {
+            self.delimiter = None;
+        }
+        if let Some(ref val) = self.encoding_type {
+            if val.as_str() == "" {
+                self.encoding_type = None;
+            }
+        }
+        if self.key_marker.as_deref() == Some("") {
+            self.key_marker = None;
+        }
+        if self.next_key_marker.as_deref() == Some("") {
+            self.next_key_marker = None;
+        }
+        if self.next_upload_id_marker.as_deref() == Some("") {
+            self.next_upload_id_marker = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.upload_id_marker.as_deref() == Some("") {
+            self.upload_id_marker = None;
+        }
+    }
+}
+impl DtoExt for ListObjectVersionsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.delimiter.as_deref() == Some("") {
+            self.delimiter = None;
+        }
+        if let Some(ref val) = self.encoding_type {
+            if val.as_str() == "" {
+                self.encoding_type = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.key_marker.as_deref() == Some("") {
+            self.key_marker = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.version_id_marker.as_deref() == Some("") {
+            self.version_id_marker = None;
+        }
+    }
+}
+impl DtoExt for ListObjectVersionsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.delimiter.as_deref() == Some("") {
+            self.delimiter = None;
+        }
+        if let Some(ref val) = self.encoding_type {
+            if val.as_str() == "" {
+                self.encoding_type = None;
+            }
+        }
+        if self.key_marker.as_deref() == Some("") {
+            self.key_marker = None;
+        }
+        if self.name.as_deref() == Some("") {
+            self.name = None;
+        }
+        if self.next_key_marker.as_deref() == Some("") {
+            self.next_key_marker = None;
+        }
+        if self.next_version_id_marker.as_deref() == Some("") {
+            self.next_version_id_marker = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.version_id_marker.as_deref() == Some("") {
+            self.version_id_marker = None;
+        }
+    }
+}
+impl DtoExt for ListObjectsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.delimiter.as_deref() == Some("") {
+            self.delimiter = None;
+        }
+        if let Some(ref val) = self.encoding_type {
+            if val.as_str() == "" {
+                self.encoding_type = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.marker.as_deref() == Some("") {
+            self.marker = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+    }
+}
+impl DtoExt for ListObjectsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.delimiter.as_deref() == Some("") {
+            self.delimiter = None;
+        }
+        if let Some(ref val) = self.encoding_type {
+            if val.as_str() == "" {
+                self.encoding_type = None;
+            }
+        }
+        if self.marker.as_deref() == Some("") {
+            self.marker = None;
+        }
+        if self.name.as_deref() == Some("") {
+            self.name = None;
+        }
+        if self.next_marker.as_deref() == Some("") {
+            self.next_marker = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for ListObjectsV2Input {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.delimiter.as_deref() == Some("") {
+            self.delimiter = None;
+        }
+        if let Some(ref val) = self.encoding_type {
+            if val.as_str() == "" {
+                self.encoding_type = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.start_after.as_deref() == Some("") {
+            self.start_after = None;
+        }
+    }
+}
+impl DtoExt for ListObjectsV2Output {
+    fn ignore_empty_strings(&mut self) {
+        if self.continuation_token.as_deref() == Some("") {
+            self.continuation_token = None;
+        }
+        if self.delimiter.as_deref() == Some("") {
+            self.delimiter = None;
+        }
+        if let Some(ref val) = self.encoding_type {
+            if val.as_str() == "" {
+                self.encoding_type = None;
+            }
+        }
+        if self.name.as_deref() == Some("") {
+            self.name = None;
+        }
+        if self.next_continuation_token.as_deref() == Some("") {
+            self.next_continuation_token = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.start_after.as_deref() == Some("") {
+            self.start_after = None;
+        }
+    }
+}
+impl DtoExt for ListPartsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.part_number_marker.as_deref() == Some("") {
+            self.part_number_marker = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+    }
+}
+impl DtoExt for ListPartsOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.abort_rule_id.as_deref() == Some("") {
+            self.abort_rule_id = None;
+        }
+        if self.bucket.as_deref() == Some("") {
+            self.bucket = None;
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if let Some(ref mut val) = self.initiator {
+            val.ignore_empty_strings();
+        }
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if self.next_part_number_marker.as_deref() == Some("") {
+            self.next_part_number_marker = None;
+        }
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+        if self.part_number_marker.as_deref() == Some("") {
+            self.part_number_marker = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.upload_id.as_deref() == Some("") {
+            self.upload_id = None;
+        }
+    }
+}
+impl DtoExt for LocationInfo {
+    fn ignore_empty_strings(&mut self) {
+        if self.name.as_deref() == Some("") {
+            self.name = None;
+        }
+        if let Some(ref val) = self.type_ {
+            if val.as_str() == "" {
+                self.type_ = None;
+            }
+        }
+    }
+}
+impl DtoExt for LoggingEnabled {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.target_object_key_format {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for MetadataEntry {
+    fn ignore_empty_strings(&mut self) {
+        if self.name.as_deref() == Some("") {
+            self.name = None;
+        }
+        if self.value.as_deref() == Some("") {
+            self.value = None;
+        }
+    }
+}
+impl DtoExt for Metrics {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.event_threshold {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for MetricsAndOperator {
+    fn ignore_empty_strings(&mut self) {
+        if self.access_point_arn.as_deref() == Some("") {
+            self.access_point_arn = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for MetricsConfiguration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for MultipartUpload {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if let Some(ref mut val) = self.initiator {
+            val.ignore_empty_strings();
+        }
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.upload_id.as_deref() == Some("") {
+            self.upload_id = None;
+        }
+    }
+}
+impl DtoExt for NoncurrentVersionExpiration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for NoncurrentVersionTransition {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+    }
+}
+impl DtoExt for NotificationConfiguration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for NotificationConfigurationFilter {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.key {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for Object {
+    fn ignore_empty_strings(&mut self) {
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.restore_status {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+    }
+}
+impl DtoExt for ObjectIdentifier {
+    fn ignore_empty_strings(&mut self) {
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for ObjectLockConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.object_lock_enabled {
+            if val.as_str() == "" {
+                self.object_lock_enabled = None;
+            }
+        }
+        if let Some(ref mut val) = self.rule {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for ObjectLockLegalHold {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.status {
+            if val.as_str() == "" {
+                self.status = None;
+            }
+        }
+    }
+}
+impl DtoExt for ObjectLockRetention {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.mode {
+            if val.as_str() == "" {
+                self.mode = None;
+            }
+        }
+    }
+}
+impl DtoExt for ObjectLockRule {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.default_retention {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for ObjectPart {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+    }
+}
+impl DtoExt for ObjectVersion {
+    fn ignore_empty_strings(&mut self) {
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if let Some(ref mut val) = self.owner {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.restore_status {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for OutputLocation {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.s3 {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for OutputSerialization {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.csv {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.json {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for Owner {
+    fn ignore_empty_strings(&mut self) {
+        if self.display_name.as_deref() == Some("") {
+            self.display_name = None;
+        }
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+    }
+}
+impl DtoExt for OwnershipControls {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for OwnershipControlsRule {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for Part {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+    }
+}
+impl DtoExt for PartitionedPrefix {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.partition_date_source {
+            if val.as_str() == "" {
+                self.partition_date_source = None;
+            }
+        }
+    }
+}
+impl DtoExt for PolicyStatus {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for Progress {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for ProgressEvent {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.details {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for PublicAccessBlockConfiguration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for PutBucketAccelerateConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        self.accelerate_configuration.ignore_empty_strings();
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for PutBucketAclInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.acl {
+            if val.as_str() == "" {
+                self.acl = None;
+            }
+        }
+        if let Some(ref mut val) = self.access_control_policy {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.grant_full_control.as_deref() == Some("") {
+            self.grant_full_control = None;
+        }
+        if self.grant_read.as_deref() == Some("") {
+            self.grant_read = None;
+        }
+        if self.grant_read_acp.as_deref() == Some("") {
+            self.grant_read_acp = None;
+        }
+        if self.grant_write.as_deref() == Some("") {
+            self.grant_write = None;
+        }
+        if self.grant_write_acp.as_deref() == Some("") {
+            self.grant_write_acp = None;
+        }
+    }
+}
+impl DtoExt for PutBucketAnalyticsConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        self.analytics_configuration.ignore_empty_strings();
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for PutBucketCorsInput {
+    fn ignore_empty_strings(&mut self) {
+        self.cors_configuration.ignore_empty_strings();
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for PutBucketEncryptionInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.server_side_encryption_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketIntelligentTieringConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        self.intelligent_tiering_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketInventoryConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.inventory_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketLifecycleConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref mut val) = self.lifecycle_configuration {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            if val.as_str() == "" {
+                self.transition_default_minimum_object_size = None;
+            }
+        }
+    }
+}
+impl DtoExt for PutBucketLifecycleConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.transition_default_minimum_object_size {
+            if val.as_str() == "" {
+                self.transition_default_minimum_object_size = None;
+            }
+        }
+    }
+}
+impl DtoExt for PutBucketLoggingInput {
+    fn ignore_empty_strings(&mut self) {
+        self.bucket_logging_status.ignore_empty_strings();
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for PutBucketMetricsConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.metrics_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketNotificationConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.notification_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketOwnershipControlsInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.ownership_controls.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketPolicyInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+    }
+}
+impl DtoExt for PutBucketReplicationInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.replication_configuration.ignore_empty_strings();
+        if self.token.as_deref() == Some("") {
+            self.token = None;
+        }
+    }
+}
+impl DtoExt for PutBucketRequestPaymentInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.request_payment_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketTaggingInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.tagging.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketVersioningInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.mfa.as_deref() == Some("") {
+            self.mfa = None;
+        }
+        self.versioning_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutBucketWebsiteInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.website_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for PutObjectAclInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.acl {
+            if val.as_str() == "" {
+                self.acl = None;
+            }
+        }
+        if let Some(ref mut val) = self.access_control_policy {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.grant_full_control.as_deref() == Some("") {
+            self.grant_full_control = None;
+        }
+        if self.grant_read.as_deref() == Some("") {
+            self.grant_read = None;
+        }
+        if self.grant_read_acp.as_deref() == Some("") {
+            self.grant_read_acp = None;
+        }
+        if self.grant_write.as_deref() == Some("") {
+            self.grant_write = None;
+        }
+        if self.grant_write_acp.as_deref() == Some("") {
+            self.grant_write_acp = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for PutObjectAclOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for PutObjectInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.acl {
+            if val.as_str() == "" {
+                self.acl = None;
+            }
+        }
+        if self.cache_control.as_deref() == Some("") {
+            self.cache_control = None;
+        }
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.content_disposition.as_deref() == Some("") {
+            self.content_disposition = None;
+        }
+        if self.content_encoding.as_deref() == Some("") {
+            self.content_encoding = None;
+        }
+        if self.content_language.as_deref() == Some("") {
+            self.content_language = None;
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.grant_full_control.as_deref() == Some("") {
+            self.grant_full_control = None;
+        }
+        if self.grant_read.as_deref() == Some("") {
+            self.grant_read = None;
+        }
+        if self.grant_read_acp.as_deref() == Some("") {
+            self.grant_read_acp = None;
+        }
+        if self.grant_write_acp.as_deref() == Some("") {
+            self.grant_write_acp = None;
+        }
+        if self.if_none_match.as_deref() == Some("") {
+            self.if_none_match = None;
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            if val.as_str() == "" {
+                self.object_lock_legal_hold_status = None;
+            }
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            if val.as_str() == "" {
+                self.object_lock_mode = None;
+            }
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_encryption_context.as_deref() == Some("") {
+            self.ssekms_encryption_context = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.tagging.as_deref() == Some("") {
+            self.tagging = None;
+        }
+        if self.website_redirect_location.as_deref() == Some("") {
+            self.website_redirect_location = None;
+        }
+    }
+}
+impl DtoExt for PutObjectLegalHoldInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref mut val) = self.legal_hold {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for PutObjectLegalHoldOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for PutObjectLockConfigurationInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref mut val) = self.object_lock_configuration {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.token.as_deref() == Some("") {
+            self.token = None;
+        }
+    }
+}
+impl DtoExt for PutObjectLockConfigurationOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for PutObjectOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if self.expiration.as_deref() == Some("") {
+            self.expiration = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_encryption_context.as_deref() == Some("") {
+            self.ssekms_encryption_context = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for PutObjectRetentionInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if let Some(ref mut val) = self.retention {
+            val.ignore_empty_strings();
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for PutObjectRetentionOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+    }
+}
+impl DtoExt for PutObjectTaggingInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        self.tagging.ignore_empty_strings();
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for PutObjectTaggingOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for PutPublicAccessBlockInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        self.public_access_block_configuration.ignore_empty_strings();
+    }
+}
+impl DtoExt for QueueConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.filter {
+            val.ignore_empty_strings();
+        }
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+    }
+}
+impl DtoExt for RecordsEvent {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for Redirect {
+    fn ignore_empty_strings(&mut self) {
+        if self.host_name.as_deref() == Some("") {
+            self.host_name = None;
+        }
+        if self.http_redirect_code.as_deref() == Some("") {
+            self.http_redirect_code = None;
+        }
+        if let Some(ref val) = self.protocol {
+            if val.as_str() == "" {
+                self.protocol = None;
+            }
+        }
+        if self.replace_key_prefix_with.as_deref() == Some("") {
+            self.replace_key_prefix_with = None;
+        }
+        if self.replace_key_with.as_deref() == Some("") {
+            self.replace_key_with = None;
+        }
+    }
+}
+impl DtoExt for RedirectAllRequestsTo {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.protocol {
+            if val.as_str() == "" {
+                self.protocol = None;
+            }
+        }
+    }
+}
+impl DtoExt for ReplicaModifications {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for ReplicationConfiguration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for ReplicationRule {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.delete_marker_replication {
+            val.ignore_empty_strings();
+        }
+        self.destination.ignore_empty_strings();
+        if let Some(ref mut val) = self.existing_object_replication {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.filter {
+            val.ignore_empty_strings();
+        }
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref mut val) = self.source_selection_criteria {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for ReplicationRuleAndOperator {
+    fn ignore_empty_strings(&mut self) {
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
+}
+impl DtoExt for ReplicationRuleFilter {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.and {
+            val.ignore_empty_strings();
+        }
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+        if let Some(ref mut val) = self.tag {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for ReplicationTime {
+    fn ignore_empty_strings(&mut self) {
+        self.time.ignore_empty_strings();
+    }
+}
+impl DtoExt for ReplicationTimeValue {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for RequestPaymentConfiguration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for RequestProgress {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for RestoreObjectInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if let Some(ref mut val) = self.restore_request {
+            val.ignore_empty_strings();
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}
+impl DtoExt for RestoreObjectOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.restore_output_path.as_deref() == Some("") {
+            self.restore_output_path = None;
+        }
+    }
+}
+impl DtoExt for RestoreRequest {
+    fn ignore_empty_strings(&mut self) {
+        if self.description.as_deref() == Some("") {
+            self.description = None;
+        }
+        if let Some(ref mut val) = self.glacier_job_parameters {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.output_location {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.select_parameters {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.tier {
+            if val.as_str() == "" {
+                self.tier = None;
+            }
+        }
+        if let Some(ref val) = self.type_ {
+            if val.as_str() == "" {
+                self.type_ = None;
+            }
+        }
+    }
+}
+impl DtoExt for RestoreStatus {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for RoutingRule {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.condition {
+            val.ignore_empty_strings();
+        }
+        self.redirect.ignore_empty_strings();
+    }
+}
+impl DtoExt for S3KeyFilter {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for S3Location {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.canned_acl {
+            if val.as_str() == "" {
+                self.canned_acl = None;
+            }
+        }
+        if let Some(ref mut val) = self.encryption {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if let Some(ref mut val) = self.tagging {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for SSEKMS {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for ScanRange {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for SelectObjectContentInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        self.request.ignore_empty_strings();
+    }
+}
+impl DtoExt for SelectObjectContentOutput {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for SelectObjectContentRequest {
+    fn ignore_empty_strings(&mut self) {
+        self.input_serialization.ignore_empty_strings();
+        self.output_serialization.ignore_empty_strings();
+        if let Some(ref mut val) = self.request_progress {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.scan_range {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for SelectParameters {
+    fn ignore_empty_strings(&mut self) {
+        self.input_serialization.ignore_empty_strings();
+        self.output_serialization.ignore_empty_strings();
+    }
+}
+impl DtoExt for ServerSideEncryptionByDefault {
+    fn ignore_empty_strings(&mut self) {
+        if self.kms_master_key_id.as_deref() == Some("") {
+            self.kms_master_key_id = None;
+        }
+    }
+}
+impl DtoExt for ServerSideEncryptionConfiguration {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for ServerSideEncryptionRule {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.apply_server_side_encryption_by_default {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for SessionCredentials {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for SourceSelectionCriteria {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.replica_modifications {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.sse_kms_encrypted_objects {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for SseKmsEncryptedObjects {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for Stats {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for StatsEvent {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.details {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for StorageClassAnalysis {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.data_export {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for StorageClassAnalysisDataExport {
+    fn ignore_empty_strings(&mut self) {
+        self.destination.ignore_empty_strings();
+    }
+}
+impl DtoExt for Tag {
+    fn ignore_empty_strings(&mut self) {
+        if self.key.as_deref() == Some("") {
+            self.key = None;
+        }
+        if self.value.as_deref() == Some("") {
+            self.value = None;
+        }
+    }
+}
+impl DtoExt for Tagging {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for TargetGrant {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.grantee {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref val) = self.permission {
+            if val.as_str() == "" {
+                self.permission = None;
+            }
+        }
+    }
+}
+impl DtoExt for TargetObjectKeyFormat {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.partitioned_prefix {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for Tiering {
+    fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for TopicConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.filter {
+            val.ignore_empty_strings();
+        }
+        if self.id.as_deref() == Some("") {
+            self.id = None;
+        }
+    }
+}
+impl DtoExt for Transition {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+    }
+}
+impl DtoExt for UploadPartCopyInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.copy_source_if_match.as_deref() == Some("") {
+            self.copy_source_if_match = None;
+        }
+        if self.copy_source_if_none_match.as_deref() == Some("") {
+            self.copy_source_if_none_match = None;
+        }
+        if self.copy_source_range.as_deref() == Some("") {
+            self.copy_source_range = None;
+        }
+        if self.copy_source_sse_customer_algorithm.as_deref() == Some("") {
+            self.copy_source_sse_customer_algorithm = None;
+        }
+        if self.copy_source_sse_customer_key.as_deref() == Some("") {
+            self.copy_source_sse_customer_key = None;
+        }
+        if self.copy_source_sse_customer_key_md5.as_deref() == Some("") {
+            self.copy_source_sse_customer_key_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if self.expected_source_bucket_owner.as_deref() == Some("") {
+            self.expected_source_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+    }
+}
+impl DtoExt for UploadPartCopyOutput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.copy_part_result {
+            val.ignore_empty_strings();
+        }
+        if self.copy_source_version_id.as_deref() == Some("") {
+            self.copy_source_version_id = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+    }
+}
+impl DtoExt for UploadPartInput {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.checksum_algorithm {
+            if val.as_str() == "" {
+                self.checksum_algorithm = None;
+            }
+        }
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.content_md5.as_deref() == Some("") {
+            self.content_md5 = None;
+        }
+        if self.expected_bucket_owner.as_deref() == Some("") {
+            self.expected_bucket_owner = None;
+        }
+        if let Some(ref val) = self.request_payer {
+            if val.as_str() == "" {
+                self.request_payer = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key.as_deref() == Some("") {
+            self.sse_customer_key = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+    }
+}
+impl DtoExt for UploadPartOutput {
+    fn ignore_empty_strings(&mut self) {
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+    }
+}
+impl DtoExt for VersioningConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref val) = self.mfa_delete {
+            if val.as_str() == "" {
+                self.mfa_delete = None;
+            }
+        }
+        if let Some(ref val) = self.status {
+            if val.as_str() == "" {
+                self.status = None;
+            }
+        }
+    }
+}
+impl DtoExt for WebsiteConfiguration {
+    fn ignore_empty_strings(&mut self) {
+        if let Some(ref mut val) = self.error_document {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.index_document {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.redirect_all_requests_to {
+            val.ignore_empty_strings();
+        }
+    }
+}
+impl DtoExt for WriteGetObjectResponseInput {
+    fn ignore_empty_strings(&mut self) {
+        if self.accept_ranges.as_deref() == Some("") {
+            self.accept_ranges = None;
+        }
+        if self.cache_control.as_deref() == Some("") {
+            self.cache_control = None;
+        }
+        if self.checksum_crc32.as_deref() == Some("") {
+            self.checksum_crc32 = None;
+        }
+        if self.checksum_crc32c.as_deref() == Some("") {
+            self.checksum_crc32c = None;
+        }
+        if self.checksum_sha1.as_deref() == Some("") {
+            self.checksum_sha1 = None;
+        }
+        if self.checksum_sha256.as_deref() == Some("") {
+            self.checksum_sha256 = None;
+        }
+        if self.content_disposition.as_deref() == Some("") {
+            self.content_disposition = None;
+        }
+        if self.content_encoding.as_deref() == Some("") {
+            self.content_encoding = None;
+        }
+        if self.content_language.as_deref() == Some("") {
+            self.content_language = None;
+        }
+        if self.content_range.as_deref() == Some("") {
+            self.content_range = None;
+        }
+        if self.e_tag.as_deref() == Some("") {
+            self.e_tag = None;
+        }
+        if self.error_code.as_deref() == Some("") {
+            self.error_code = None;
+        }
+        if self.error_message.as_deref() == Some("") {
+            self.error_message = None;
+        }
+        if self.expiration.as_deref() == Some("") {
+            self.expiration = None;
+        }
+        if let Some(ref val) = self.object_lock_legal_hold_status {
+            if val.as_str() == "" {
+                self.object_lock_legal_hold_status = None;
+            }
+        }
+        if let Some(ref val) = self.object_lock_mode {
+            if val.as_str() == "" {
+                self.object_lock_mode = None;
+            }
+        }
+        if let Some(ref val) = self.replication_status {
+            if val.as_str() == "" {
+                self.replication_status = None;
+            }
+        }
+        if let Some(ref val) = self.request_charged {
+            if val.as_str() == "" {
+                self.request_charged = None;
+            }
+        }
+        if self.restore.as_deref() == Some("") {
+            self.restore = None;
+        }
+        if self.sse_customer_algorithm.as_deref() == Some("") {
+            self.sse_customer_algorithm = None;
+        }
+        if self.sse_customer_key_md5.as_deref() == Some("") {
+            self.sse_customer_key_md5 = None;
+        }
+        if self.ssekms_key_id.as_deref() == Some("") {
+            self.ssekms_key_id = None;
+        }
+        if let Some(ref val) = self.server_side_encryption {
+            if val.as_str() == "" {
+                self.server_side_encryption = None;
+            }
+        }
+        if let Some(ref val) = self.storage_class {
+            if val.as_str() == "" {
+                self.storage_class = None;
+            }
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
+    }
+}

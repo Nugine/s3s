@@ -417,6 +417,8 @@ pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
 
     codegen_tests(ops);
     codegen_builders(rust_types, ops);
+
+    codegen_dto_ext(rust_types);
 }
 
 fn codegen_struct(ty: &rust::Struct, rust_types: &RustTypes, ops: &Operations) {
@@ -754,4 +756,59 @@ fn codegen_struct_builder(ty: &rust::Struct, rust_types: &RustTypes) {
 
     g!("}}");
     g!();
+}
+
+fn codegen_dto_ext(rust_types: &RustTypes) {
+    g!("pub trait DtoExt {{");
+    g!("    /// Modifies all empty string fields from `Some(\"\")` to `None`");
+    g!("    fn ignore_empty_strings(&mut self);");
+    g!("}}");
+
+    for ty in rust_types.values() {
+        let rust::Type::Struct(ty) = ty else { continue };
+
+        if ty.fields.is_empty() {
+            continue;
+        }
+
+        g!("impl DtoExt for {} {{", ty.name);
+        g!("    fn ignore_empty_strings(&mut self) {{");
+        for field in &ty.fields {
+            let Some(field_ty) = rust_types.get(&field.type_) else { continue };
+
+            match field_ty {
+                rust::Type::Alias(field_ty) => {
+                    if field.option_type && field_ty.type_ == "String" {
+                        g!("if self.{}.as_deref() == Some(\"\") {{", field.name);
+                        g!("    self.{} = None;", field.name);
+                        g!("}}");
+                    }
+                }
+                rust::Type::StrEnum(_) => {
+                    if field.option_type {
+                        g!("if let Some(ref val) = self.{} {{", field.name);
+                        g!("    if val.as_str() == \"\" {{");
+                        g!("        self.{} = None;", field.name);
+                        g!("    }}");
+                        g!("}}");
+                    }
+                }
+                rust::Type::Struct(field_ty) => {
+                    if field_ty.fields.is_empty() {
+                        continue;
+                    }
+                    if field.option_type {
+                        g!("if let Some(ref mut val) = self.{} {{", field.name);
+                        g!("val.ignore_empty_strings();");
+                        g!("}}");
+                    } else {
+                        g!("self.{}.ignore_empty_strings();", field.name);
+                    }
+                }
+                _ => {}
+            }
+        }
+        g!("}}");
+        g!("}}");
+    }
 }
