@@ -258,4 +258,8 @@ impl Traits {
     pub fn minio(&self) -> bool {
         self.get("s3s#minio").is_some()
     }
+
+    pub fn sealed(&self) -> bool {
+        self.get("s3s#sealed").is_some()
+    }
 }

@@ -17,6 +17,7 @@ aws-smithy-types = { version = "1.2.7", features = ["http-body-1-x"] }
 aws-smithy-types-convert = { version = "0.60.8", features = ["convert-time"] }
 hyper = "1.4.1"
 s3s = { version = "0.11.0-dev", path = "../s3s" }
+std-next = "0.1.1"
 sync_wrapper = "1.0.1"
 tracing = "0.1.40"
 transform-stream = "0.3.0"

@@ -41,6 +41,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
             "Range",         //
             "ContentType",   //
             "Event",         //
+            "CachedTags",    //
         ];
 
         if provided_types.contains(&rs_shape_name.as_str()) {
@@ -181,6 +182,10 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                         if field_type == "Metadata" {
                             assert_eq!(field.traits.http_prefix_headers(), Some("x-amz-meta-"));
                             position = "metadata";
+                        }
+
+                        if field.traits.sealed() {
+                            position = "sealed";
                         }
 
                         o(position)
@@ -419,6 +424,8 @@ pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
     codegen_builders(rust_types, ops);
 
     codegen_dto_ext(rust_types);
+
+    super::minio::codegen_in_dto();
 }
 
 fn codegen_struct(ty: &rust::Struct, rust_types: &RustTypes, ops: &Operations) {
@@ -461,6 +468,37 @@ fn codegen_struct(ty: &rust::Struct, rust_types: &RustTypes, ops: &Operations) {
     g!("}}");
     g!("}}");
     g!();
+
+    if ty.fields.iter().any(|field| field.position == "sealed") {
+        g!("#[allow(clippy::clone_on_copy)]");
+        g!("impl Clone for {} {{", ty.name);
+        g!("fn clone(&self) -> Self {{");
+        g!("Self {{");
+        for field in &ty.fields {
+            if field.position == "sealed" {
+                g!("{}: default(),", field.name);
+            } else {
+                g!("{}: self.{}.clone(),", field.name, field.name);
+            }
+        }
+        g!("}}");
+        g!("}}");
+        g!("}}");
+
+        g!("impl PartialEq for {} {{", ty.name);
+        g!("fn eq(&self, other: &Self) -> bool {{");
+        for field in &ty.fields {
+            if field.position == "sealed" {
+                continue;
+            }
+            g!("if self.{} != other.{} {{", field.name, field.name);
+            g!("return false;");
+            g!("}}");
+        }
+        g!("true");
+        g!("}}");
+        g!("}}");
+    }
 
     if is_op_input(&ty.name, ops) {
         g!("impl {} {{", ty.name);
@@ -581,6 +619,9 @@ fn struct_derives(ty: &rust::Struct, rust_types: &RustTypes) -> Vec<&'static str
 
 fn can_derive_clone(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
     ty.fields.iter().all(|field| {
+        if field.position == "sealed" {
+            return false;
+        }
         if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
             return false;
         }
@@ -590,6 +631,9 @@ fn can_derive_clone(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
 
 fn can_derive_partial_eq(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
     ty.fields.iter().all(|field| {
+        if field.position == "sealed" {
+            return false;
+        }
         if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
             return false;
         }
@@ -598,7 +642,24 @@ fn can_derive_partial_eq(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
 }
 
 fn can_derive_default(ty: &rust::Struct, rust_types: &RustTypes) -> bool {
-    ty.fields.iter().all(|field| is_default_field(field, rust_types))
+    ty.fields.iter().all(|field| {
+        if field.option_type {
+            return true;
+        }
+
+        match &rust_types[&field.type_] {
+            rust::Type::Provided(ty) => {
+                if ty.name == "CachedTags" {
+                    return true;
+                }
+            }
+            rust::Type::List(_) => return true,
+            rust::Type::Map(_) => return true,
+            _ => {}
+        }
+
+        field.default_value.as_ref().is_some_and(is_rust_default)
+    })
 }
 
 fn is_rust_default(v: &Value) -> bool {
@@ -608,18 +669,6 @@ fn is_rust_default(v: &Value) -> bool {
         Value::String(x) => x.is_empty(),
         _ => unimplemented!("{v:#?}"),
     }
-}
-
-fn is_default_field(field: &rust::StructField, rust_types: &RustTypes) -> bool {
-    if field.option_type {
-        return true;
-    }
-
-    if matches!(&rust_types[&field.type_], rust::Type::List(_)) {
-        return true;
-    }
-
-    field.default_value.as_ref().is_some_and(is_rust_default)
 }
 
 fn codegen_builders(rust_types: &RustTypes, ops: &Operations) {

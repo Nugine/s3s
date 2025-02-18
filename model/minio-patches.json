@@ -99,6 +99,44 @@
             "traits": {
                 "s3s#minio": ""
             }
+        },
+        "com.amazonaws.s3#ReplicationRuleFilter": {
+            "type": "structure",
+            "members": {
+                "CachedTags": {
+                    "target": "com.amazonaws.s3#CachedTags",
+                    "traits": {
+                        "s3s#minio": "",
+                        "s3s#sealed": "",
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.amazonaws.s3#LifecycleRuleFilter": {
+            "type": "structure",
+            "members": {
+                "CachedTags": {
+                    "target": "com.amazonaws.s3#CachedTags",
+                    "traits": {
+                        "s3s#minio": "",
+                        "s3s#sealed": "",
+                        "smithy.api#required": {}
+                    }
+                }
+            }
+        },
+        "com.amazonaws.s3#CachedTags": {
+            "type": "map",
+            "key": {
+                "target": "com.amazonaws.s3#ObjectKey"
+            },
+            "value": {
+                "target": "com.amazonaws.s3#Value"
+            },
+            "traits": {
+                "s3s#minio": ""
+            }
         }
     }
 }

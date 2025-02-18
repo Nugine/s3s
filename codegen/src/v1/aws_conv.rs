@@ -79,7 +79,11 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     };
 
                     if field.is_custom_extension {
-                        g!("{s3s_field_name}: None,");
+                        if field.position == "sealed" {
+                            g!("{s3s_field_name}: s3s::dto::{}::default(),", field.type_);
+                        } else {
+                            g!("{s3s_field_name}: None,");
+                        }
                         continue;
                     }
 
@@ -192,7 +196,9 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
 
                 if has_unconditional_builder(&ty.name) {
                     g!("Ok(y.build())");
-                } else if is_op_input(&ty.name, ops) || ty.fields.iter().any(|field| field.is_required) {
+                } else if is_op_input(&ty.name, ops)
+                    || ty.fields.iter().any(|field| field.is_required && field.position != "sealed")
+                {
                     g!("y.build().map_err(S3Error::internal_error)");
                 } else {
                     g!("Ok(y.build())");

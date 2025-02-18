@@ -376,12 +376,19 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
         );
 
         for field in &ty.fields {
+            if field.position == "sealed" {
+                continue;
+            }
             g!("let mut {}: Option<{}> = None;", field.name, field.type_);
         }
 
         if ty.fields.is_empty().not() {
             g!("d.for_each_element(|d, x| match x {{");
             for field in &ty.fields {
+                if field.position == "sealed" {
+                    continue;
+                }
+
                 let xml_name = field.xml_name.as_ref().unwrap_or(&field.camel_name);
                 let field_name = field.name.as_str();
                 let field_type = &rust_types[field.type_.as_str()];
@@ -424,7 +431,9 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                 continue;
             }
 
-            if field.option_type {
+            if field.position == "sealed" {
+                g!("{}: {}::default(),", field.name, field.type_);
+            } else if field.option_type {
                 g!("{},", field.name);
             } else {
                 // g!("{0}: {0}.ok_or_else(||dbg!(DeError::MissingField))?,", field.name);
