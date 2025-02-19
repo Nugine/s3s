@@ -413,41 +413,7 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes) {
                             assert_eq!(field.name, "key");
                         }
                         "query" => {
-                            let query = field.http_query.as_deref().unwrap();
-
-                            let field_type = &rust_types[&field.type_];
-
-                            if let rust::Type::List(_) = field_type {
-                                panic!()
-                            } else if let rust::Type::Timestamp(ts_ty) = field_type {
-                                assert!(field.option_type);
-                                let fmt = ts_ty.format.as_deref().unwrap_or("DateTime");
-                                g!(
-                                    "let {}: Option<{}> = http::parse_opt_query_timestamp(req, \"{}\", TimestampFormat::{})?;",
-                                    field.name,
-                                    field.type_,
-                                    query,
-                                    fmt
-                                );
-                            } else if field.option_type {
-                                g!(
-                                    "let {}: Option<{}> = http::parse_opt_query(req, \"{}\")?;",
-                                    field.name,
-                                    field.type_,
-                                    query
-                                );
-                            } else if let Some(ref default_value) = field.default_value {
-                                let literal = default_value_literal(default_value);
-                                g!(
-                                    "let {}: {} = http::parse_opt_query(req, \"{}\")?.unwrap_or({});",
-                                    field.name,
-                                    field.type_,
-                                    query,
-                                    literal,
-                                );
-                            } else {
-                                g!("let {}: {} = http::parse_query(req, \"{}\")?;", field.name, field.type_, query,);
-                            }
+                            codegen_field_de_query(field, rust_types);
                         }
                         "header" => {
                             let header = headers::to_constant_name(field.http_header.as_deref().unwrap());
@@ -541,6 +507,44 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes) {
     g!();
 }
 
+fn codegen_field_de_query(field: &rust::StructField, rust_types: &RustTypes) {
+    let query = field.http_query.as_deref().unwrap();
+
+    let field_type = &rust_types[&field.type_];
+
+    if let rust::Type::List(_) = field_type {
+        panic!()
+    } else if let rust::Type::Timestamp(ts_ty) = field_type {
+        assert!(field.option_type);
+        let fmt = ts_ty.format.as_deref().unwrap_or("DateTime");
+        g!(
+            "let {}: Option<{}> = http::parse_opt_query_timestamp(req, \"{}\", TimestampFormat::{})?;",
+            field.name,
+            field.type_,
+            query,
+            fmt
+        );
+    } else if field.option_type {
+        g!(
+            "let {}: Option<{}> = http::parse_opt_query(req, \"{}\")?;",
+            field.name,
+            field.type_,
+            query
+        );
+    } else if let Some(ref default_value) = field.default_value {
+        let literal = default_value_literal(default_value);
+        g!(
+            "let {}: {} = http::parse_opt_query(req, \"{}\")?.unwrap_or({});",
+            field.name,
+            field.type_,
+            query,
+            literal,
+        );
+    } else {
+        g!("let {}: {} = http::parse_query(req, \"{}\")?;", field.name, field.type_, query,);
+    }
+}
+
 fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes) {
     assert_eq!(op.name, "PutObject");
 
@@ -567,6 +571,9 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes) {
     for field in &ty.fields {
         match field.position.as_str() {
             "bucket" | "key" | "payload" => {}
+            "query" => {
+                codegen_field_de_query(field, rust_types);
+            }
             "header" => {
                 let header = field.http_header.as_deref().unwrap();
                 assert!(header.as_bytes().iter().all(|&x| x == b'-' || x.is_ascii_alphanumeric()));

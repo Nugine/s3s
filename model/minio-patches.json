@@ -137,6 +137,42 @@
             "traits": {
                 "s3s#minio": ""
             }
+        },
+        "com.amazonaws.s3#PutObjectRequest": {
+            "type": "structure",
+            "members": {
+                "VersionId": {
+                    "target": "com.amazonaws.s3#ObjectVersionId",
+                    "traits": {
+                        "smithy.api#httpQuery": "versionId",
+                        "s3s#minio": ""
+                    }
+                }
+            }
+        },
+        "com.amazonaws.s3#CopyObjectRequest": {
+            "type": "structure",
+            "members": {
+                "VersionId": {
+                    "target": "com.amazonaws.s3#ObjectVersionId",
+                    "traits": {
+                        "smithy.api#httpQuery": "versionId",
+                        "s3s#minio": ""
+                    }
+                }
+            }
+        },
+        "com.amazonaws.s3#CreateMultipartUploadRequest": {
+            "type": "structure",
+            "members": {
+                "VersionId": {
+                    "target": "com.amazonaws.s3#ObjectVersionId",
+                    "traits": {
+                        "smithy.api#httpQuery": "versionId",
+                        "s3s#minio": ""
+                    }
+                }
+            }
         }
     }
 }
