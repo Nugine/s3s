@@ -46,7 +46,7 @@ impl<'a> OrderedHeaders<'a> {
         Ok(Self { headers })
     }
 
-    fn get_all_pairs(&self, name: &str) -> impl Iterator<Item = (&'a str, &'a str)> + '_ {
+    fn get_all_pairs(&self, name: &str) -> impl Iterator<Item = (&'a str, &'a str)> + '_ + use<'a, '_> {
         let slice = self.headers.as_slice();
 
         let lower_bound = slice.partition_point(|x| x.0 < name);

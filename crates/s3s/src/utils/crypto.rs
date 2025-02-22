@@ -42,7 +42,7 @@ fn hex_bytes32<R>(src: impl AsRef<[u8]>, f: impl FnOnce(&str) -> R) -> R {
 }
 
 #[cfg(not(all(feature = "openssl", not(windows))))]
-fn sha256(data: &[u8]) -> impl AsRef<[u8; 32]> {
+fn sha256(data: &[u8]) -> impl AsRef<[u8; 32]> + use<> {
     use sha2::{Digest, Sha256};
     <Sha256 as Digest>::digest(data)
 }
@@ -56,7 +56,7 @@ fn sha256(data: &[u8]) -> impl AsRef<[u8]> {
 }
 
 #[cfg(not(all(feature = "openssl", not(windows))))]
-fn sha256_chunk(chunk: &[Bytes]) -> impl AsRef<[u8; 32]> {
+fn sha256_chunk(chunk: &[Bytes]) -> impl AsRef<[u8; 32]> + use<> {
     use sha2::{Digest, Sha256};
     let mut h = <Sha256 as Digest>::new();
     chunk.iter().for_each(|data| h.update(data));

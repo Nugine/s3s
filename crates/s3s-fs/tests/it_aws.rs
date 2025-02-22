@@ -39,9 +39,10 @@ const REGION: &str = "us-west-2";
 fn setup_tracing() {
     use tracing_subscriber::EnvFilter;
 
-    if env::var("RUST_LOG").is_err() {
-        env::set_var("RUST_LOG", "it_aws=debug,s3s_fs=debug,s3s=debug");
-    }
+    // if env::var("RUST_LOG").is_err() {
+    //     // TODO: Audit that the environment access only happens in single-threaded code.
+    //     unsafe { env::set_var("RUST_LOG", "it_aws=debug,s3s_fs=debug,s3s=debug") };
+    // }
 
     tracing_subscriber::fmt()
         .pretty()

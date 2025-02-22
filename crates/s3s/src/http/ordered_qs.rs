@@ -45,7 +45,7 @@ impl OrderedQs {
     }
 
     /// Gets query values by name. Time `O(logn)`
-    pub fn get_all(&self, name: &str) -> impl Iterator<Item = &str> {
+    pub fn get_all(&self, name: &str) -> impl Iterator<Item = &str> + use<'_> {
         let qs = self.qs.as_slice();
 
         let lower_bound = qs.partition_point(|x| x.0.as_str() < name);

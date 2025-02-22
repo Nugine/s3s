@@ -172,10 +172,10 @@ pub fn codegen(model: &smithy::Model) {
             let desc = &err.description[0];
             let status = &err.status[0];
 
-            if let Some(ref desc) = desc {
+            if let Some(desc) = desc {
                 g!("/// {desc}");
             }
-            if let Some(ref status) = status {
+            if let Some(status) = status {
                 if desc.is_some() {
                     g!("///");
                 }
