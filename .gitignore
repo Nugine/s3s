@@ -1,6 +1,4 @@
 /target
-/Cargo.lock
-.vscode
 
-/codegen/s3.json
-.env
+.vscode
+.idea
