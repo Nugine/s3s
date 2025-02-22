@@ -1,0 +1,29 @@
+name: Audit
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+    paths:
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+  pull_request:
+    branches:
+      - main
+      - 'feat/**'
+    paths:
+      - '**/Cargo.toml'
+      - '**/Cargo.lock'
+  schedule:
+    - cron: '0 0 * * 0' # at midnight of each sunday
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: taiki-e/install-action@cargo-audit
+      - run: cargo audit -D warnings
