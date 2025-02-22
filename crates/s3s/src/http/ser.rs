@@ -1,6 +1,7 @@
 use super::Body;
 use super::Response;
 
+use crate::StdError;
 use crate::dto::SelectObjectContentEventStream;
 use crate::dto::{Metadata, StreamingBlob, Timestamp, TimestampFormat};
 use crate::error::{S3Error, S3Result};
@@ -8,7 +9,6 @@ use crate::http::KeepAliveBody;
 use crate::http::{HeaderName, HeaderValue};
 use crate::utils::format::fmt_timestamp;
 use crate::xml;
-use crate::StdError;
 
 use std::convert::Infallible;
 use std::fmt::Write as _;

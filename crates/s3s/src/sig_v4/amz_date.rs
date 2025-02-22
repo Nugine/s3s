@@ -65,7 +65,7 @@ impl AmzDate {
 mod parser {
     use super::*;
 
-    use crate::utils::parser::{digit2, digit4, Error};
+    use crate::utils::parser::{Error, digit2, digit4};
 
     macro_rules! ensure {
         ($cond:expr) => {

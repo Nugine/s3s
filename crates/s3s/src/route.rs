@@ -3,11 +3,11 @@ use crate::S3Request;
 use crate::S3Response;
 use crate::S3Result;
 
-use hyper::http::Extensions;
 use hyper::HeaderMap;
 use hyper::Method;
 use hyper::StatusCode;
 use hyper::Uri;
+use hyper::http::Extensions;
 
 #[async_trait::async_trait]
 pub trait S3Route: Send + Sync + 'static {

@@ -5313,11 +5313,7 @@ impl PutObject {
                     metadata.insert(key.to_owned(), value.clone());
                 }
             }
-            if metadata.is_empty() {
-                None
-            } else {
-                Some(metadata)
-            }
+            if metadata.is_empty() { None } else { Some(metadata) }
         };
 
         let object_lock_legal_hold_status: Option<ObjectLockLegalHoldStatus> =

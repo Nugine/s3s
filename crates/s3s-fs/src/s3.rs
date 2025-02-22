@@ -2,10 +2,10 @@ use crate::fs::FileSystem;
 use crate::fs::InternalInfo;
 use crate::utils::*;
 
+use s3s::S3;
+use s3s::S3Result;
 use s3s::dto::*;
 use s3s::s3_error;
-use s3s::S3Result;
-use s3s::S3;
 use s3s::{S3Request, S3Response};
 
 use std::collections::VecDeque;

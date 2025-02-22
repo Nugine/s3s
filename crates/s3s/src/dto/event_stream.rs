@@ -1,12 +1,12 @@
 use super::SelectObjectContentEvent;
 use super::{ContinuationEvent, EndEvent, ProgressEvent, RecordsEvent, StatsEvent};
 
-use crate::stream::ByteStream;
-use crate::stream::DynByteStream;
 use crate::S3Error;
 use crate::S3Result;
 use crate::StdError;
-use crate::{xml, S3ErrorCode};
+use crate::stream::ByteStream;
+use crate::stream::DynByteStream;
+use crate::{S3ErrorCode, xml};
 
 use std::fmt;
 use std::num::TryFromIntError;

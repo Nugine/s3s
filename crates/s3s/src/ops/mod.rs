@@ -22,8 +22,8 @@ use crate::path::{ParseS3PathError, S3Path};
 use crate::request::S3Request;
 use crate::route::S3Route;
 use crate::s3_trait::S3;
-use crate::stream::aggregate_unlimited;
 use crate::stream::VecByteStream;
+use crate::stream::aggregate_unlimited;
 
 use std::mem;
 use std::net::{IpAddr, SocketAddr};
@@ -31,11 +31,11 @@ use std::ops::Not;
 use std::sync::Arc;
 
 use bytes::Bytes;
-use hyper::http::HeaderValue;
 use hyper::HeaderMap;
 use hyper::Method;
 use hyper::StatusCode;
 use hyper::Uri;
+use hyper::http::HeaderValue;
 use mime::Mime;
 use tracing::debug;
 

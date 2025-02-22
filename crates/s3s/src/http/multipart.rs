@@ -626,34 +626,16 @@ mod tests {
         let ans = transform_multipart(body_stream, boundary.as_bytes()).await.unwrap();
 
         let fields = [
-            (
-                "x-amz-signature",
-                "a71d6dfaaa5aa018dc8e3945f2cec30ea1939ff7ed2f2dd65a6d49320c8fa1e6",
-            ),
-            (
-                "bucket",
-                "mc-test-bucket-32569",
-            ),
+            ("x-amz-signature", "a71d6dfaaa5aa018dc8e3945f2cec30ea1939ff7ed2f2dd65a6d49320c8fa1e6"),
+            ("bucket", "mc-test-bucket-32569"),
             (
                 "policy",
                 "eyJleHBpcmF0aW9uIjoiMjAyMC0xMC0wM1QxMzoyNTo0Ny4yMThaIiwiY29uZGl0aW9ucyI6W1siZXEiLCIkYnVja2V0IiwibWMtdGVzdC1idWNrZXQtMzI1NjkiXSxbImVxIiwiJGtleSIsIm1jLXRlc3Qtb2JqZWN0LTc2NTgiXSxbImVxIiwiJHgtYW16LWRhdGUiLCIyMDIwMDkyNlQxMzI1NDdaIl0sWyJlcSIsIiR4LWFtei1hbGdvcml0aG0iLCJBV1M0LUhNQUMtU0hBMjU2Il0sWyJlcSIsIiR4LWFtei1jcmVkZW50aWFsIiwiQUtJQUlPU0ZPRE5ON0VYQU1QTEUvMjAyMDA5MjYvdXMtZWFzdC0xL3MzL2F3czRfcmVxdWVzdCJdXX0=",
             ),
-            (
-                "x-amz-algorithm",
-                "AWS4-HMAC-SHA256",
-            ),
-            (
-                "x-amz-credential",
-                "AKIAIOSFODNN7EXAMPLE/20200926/us-east-1/s3/aws4_request",
-            ),
-            (
-                "x-amz-date",
-                "20200926T132547Z",
-            ),
-            (
-                "key",
-                "mc-test-object-7658",
-            ),
+            ("x-amz-algorithm", "AWS4-HMAC-SHA256"),
+            ("x-amz-credential", "AKIAIOSFODNN7EXAMPLE/20200926/us-east-1/s3/aws4_request"),
+            ("x-amz-date", "20200926T132547Z"),
+            ("key", "mc-test-object-7658"),
         ];
         let file_name = "datafile-1-MB";
         let content_type = "application/octet-stream";

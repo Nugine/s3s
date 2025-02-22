@@ -1,6 +1,6 @@
+use hyper::HeaderMap;
 use hyper::http::Extensions;
 use hyper::http::HeaderValue;
-use hyper::HeaderMap;
 
 #[non_exhaustive]
 pub struct S3Response<T> {

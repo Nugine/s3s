@@ -3,7 +3,7 @@ members = ["crates/*", "codegen"]
 resolver = "2"
 
 [workspace.package]
-edition = "2021"
+edition = "2024"
 repository = "https://github.com/Nugine/s3s"
 license = "Apache-2.0"
 

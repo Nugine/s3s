@@ -1,8 +1,8 @@
 //! HTTP Range header
 
-use crate::http;
 use crate::S3Error;
 use crate::S3ErrorCode;
+use crate::http;
 
 use std::ops;
 

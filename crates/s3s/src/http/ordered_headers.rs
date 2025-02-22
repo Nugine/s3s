@@ -1,8 +1,8 @@
 //! Ordered headers
 
+use hyper::HeaderMap;
 use hyper::header::ToStrError;
 use hyper::http::HeaderValue;
-use hyper::HeaderMap;
 
 use crate::utils::stable_sort_by_first;
 

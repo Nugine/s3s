@@ -1,4 +1,4 @@
-use crate::{http::Response, StdError};
+use crate::{StdError, http::Response};
 
 use std::future::Future;
 use std::pin::Pin;
@@ -86,7 +86,7 @@ where
 #[cfg(test)]
 mod tests {
     use http_body_util::BodyExt;
-    use hyper::{header::HeaderValue, StatusCode};
+    use hyper::{StatusCode, header::HeaderValue};
 
     use super::*;
 

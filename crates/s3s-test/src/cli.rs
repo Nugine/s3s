@@ -2,7 +2,6 @@ use std::ops::Not;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::ExitCode;
-use std::process::Termination;
 
 use crate::report::FnResult;
 use crate::report::Report;
@@ -45,11 +44,7 @@ pub fn setup() {
 }
 
 fn status(passed: bool) -> ColoredString {
-    if passed {
-        "PASSED".green()
-    } else {
-        "FAILED".red()
-    }
+    if passed { "PASSED".green() } else { "FAILED".red() }
 }
 
 fn write_report(json_path: &Path, report: &Report) -> Result<(), StdError> {
@@ -151,7 +146,7 @@ async fn async_main(reg: impl FnOnce(&mut TestContext), opt: &Options) -> ExitCo
 
 #[doc(hidden)]
 #[must_use]
-pub fn main(reg: impl FnOnce(&mut TestContext), opt: &Options) -> impl Termination {
+pub fn main(reg: impl FnOnce(&mut TestContext), opt: &Options) -> ExitCode {
     setup();
     async_main(reg, opt)
 }

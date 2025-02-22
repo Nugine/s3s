@@ -8,9 +8,9 @@ use std::sync::Arc;
 use std::time::Instant;
 
 use tokio::spawn;
+use tracing::Instrument;
 use tracing::info;
 use tracing::instrument;
-use tracing::Instrument;
 
 macro_rules! run_fn {
     ($call:expr) => {{

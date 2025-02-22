@@ -3,10 +3,10 @@ use crate::utils::*;
 
 use std::sync::Arc;
 
-use s3s_test::tcx::TestContext;
 use s3s_test::Result;
 use s3s_test::TestFixture;
 use s3s_test::TestSuite;
+use s3s_test::tcx::TestContext;
 
 use aws_sdk_s3::primitives::ByteStream;
 

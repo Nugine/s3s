@@ -8,7 +8,7 @@ use crate::s3_trait::S3;
 
 use std::convert::Infallible;
 use std::fmt;
-use std::future::{ready, Ready};
+use std::future::{Ready, ready};
 use std::sync::Arc;
 
 use futures::future::BoxFuture;

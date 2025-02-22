@@ -79,14 +79,14 @@ impl<'a> AuthorizationV4<'a> {
 mod parser {
     use super::*;
 
-    use crate::utils::parser::{consume, digit2, digit4, Error};
+    use crate::utils::parser::{Error, consume, digit2, digit4};
 
+    use nom::IResult;
     use nom::bytes::complete::{tag, take, take_till, take_till1};
     use nom::character::complete::{multispace0, multispace1};
     use nom::combinator::verify;
     use nom::multi::separated_list1;
     use nom::sequence::{delimited, preceded, terminated};
-    use nom::IResult;
 
     pub fn parse_authorization(mut input: &str) -> IResult<&str, AuthorizationV4<'_>> {
         let s = &mut input;

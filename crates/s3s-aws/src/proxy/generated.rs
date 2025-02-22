@@ -4,8 +4,8 @@ use super::*;
 
 use crate::conv::{try_from_aws, try_into_aws};
 
-use s3s::S3Result;
 use s3s::S3;
+use s3s::S3Result;
 use s3s::{S3Request, S3Response};
 
 use tracing::debug;

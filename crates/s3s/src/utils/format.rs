@@ -3,11 +3,7 @@ use crate::dto::{Timestamp, TimestampFormat};
 use arrayvec::ArrayVec;
 
 pub const fn fmt_boolean(val: bool) -> &'static str {
-    if val {
-        "true"
-    } else {
-        "false"
-    }
+    if val { "true" } else { "false" }
 }
 
 pub fn fmt_integer<T>(val: i32, f: impl FnOnce(&str) -> T) -> T {

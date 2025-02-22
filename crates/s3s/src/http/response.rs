@@ -1,9 +1,9 @@
 use super::Body;
 
-use hyper::http::Extensions;
-use hyper::http::HeaderValue;
 use hyper::HeaderMap;
 use hyper::StatusCode;
+use hyper::http::Extensions;
+use hyper::http::HeaderValue;
 
 #[derive(Default)]
 pub struct Response {

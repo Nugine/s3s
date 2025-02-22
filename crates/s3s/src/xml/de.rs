@@ -7,8 +7,8 @@ use crate::dto::{self, List, Timestamp, TimestampFormat};
 
 use std::fmt;
 
-use quick_xml::events::{BytesEnd, BytesStart, BytesText, Event};
 use quick_xml::Reader;
+use quick_xml::events::{BytesEnd, BytesStart, BytesText, Event};
 use stdx::str::StrExt;
 
 /// A data type that can be deserialized with AWS restXml deserializer

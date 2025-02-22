@@ -6,11 +6,11 @@ use crate::auth::Credentials;
 use crate::path::S3Path;
 use crate::stream::VecByteStream;
 
-use hyper::http::Extensions;
-use hyper::http::HeaderValue;
 use hyper::HeaderMap;
 use hyper::Method;
 use hyper::Uri;
+use hyper::http::Extensions;
+use hyper::http::HeaderValue;
 
 pub struct Request {
     pub method: Method,

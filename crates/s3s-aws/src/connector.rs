@@ -1,7 +1,7 @@
 use crate::body::{s3s_body_into_sdk_body, sdk_body_into_s3s_body};
 
-use s3s::service::SharedS3Service;
 use s3s::S3Result;
+use s3s::service::SharedS3Service;
 
 use std::ops::Not;
 

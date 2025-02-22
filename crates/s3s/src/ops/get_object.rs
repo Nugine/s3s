@@ -1,17 +1,17 @@
+use crate::S3Request;
+use crate::S3Result;
 use crate::dto::GetObjectInput;
 use crate::dto::Timestamp;
 use crate::dto::TimestampFormat;
 use crate::header;
 use crate::http::Response;
 use crate::utils::format::fmt_timestamp;
-use crate::S3Request;
-use crate::S3Result;
 
+use hyper::HeaderMap;
 use hyper::header::CONTENT_LENGTH;
 use hyper::header::TRANSFER_ENCODING;
 use hyper::http::HeaderName;
 use hyper::http::HeaderValue;
-use hyper::HeaderMap;
 
 use stdx::default::default;
 

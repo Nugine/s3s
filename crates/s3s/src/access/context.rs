@@ -1,11 +1,11 @@
+use crate::S3Operation;
 use crate::auth::Credentials;
 use crate::path::S3Path;
-use crate::S3Operation;
 
-use hyper::http::Extensions;
 use hyper::HeaderMap;
 use hyper::Method;
 use hyper::Uri;
+use hyper::http::Extensions;
 
 pub struct S3AccessContext<'a> {
     pub(crate) credentials: Option<&'a Credentials>,

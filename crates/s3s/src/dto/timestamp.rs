@@ -4,8 +4,8 @@ use std::io;
 use std::num::ParseIntError;
 use std::time::SystemTime;
 
-use time::format_description::well_known::Rfc3339;
 use time::format_description::FormatItem;
+use time::format_description::well_known::Rfc3339;
 use time::macros::format_description;
 
 #[derive(Debug, Clone, PartialEq)]

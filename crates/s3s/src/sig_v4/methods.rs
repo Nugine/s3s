@@ -7,8 +7,8 @@ use crate::http::OrderedHeaders;
 use crate::utils::crypto::{hex, hex_sha256, hex_sha256_chunk, hmac_sha256};
 use crate::utils::stable_sort_by_first;
 
-use hyper::body::Bytes;
 use hyper::Method;
+use hyper::body::Bytes;
 use smallvec::SmallVec;
 use stdx::str::StrExt;
 use zeroize::Zeroize;
@@ -767,15 +767,18 @@ mod tests {
 
         let canonical_request = create_presigned_canonical_request(&method, uri.path(), query_strings, &headers);
 
-        assert_eq!(canonical_request,concat!(
-            "GET\n",
-            "/test.txt\n",
-            "X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host\n",
-            "host:examplebucket.s3.amazonaws.com\n",
-            "\n",
-            "host\n",
-            "UNSIGNED-PAYLOAD",
-        ));
+        assert_eq!(
+            canonical_request,
+            concat!(
+                "GET\n",
+                "/test.txt\n",
+                "X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIOSFODNN7EXAMPLE%2F20130524%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20130524T000000Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host\n",
+                "host:examplebucket.s3.amazonaws.com\n",
+                "\n",
+                "host\n",
+                "UNSIGNED-PAYLOAD",
+            )
+        );
 
         let string_to_sign = create_string_to_sign(
             &canonical_request,
@@ -812,7 +815,9 @@ mod tests {
         let mut req = hyper::Request::<hyper::body::Bytes>::default();
 
         *req.method_mut() = Method::GET;
-        *req.uri_mut() = hyper::Uri::from_static("http://localhost:8014/minio-java-test-1gqr1v4?prefix=prefix&suffix=suffix&events=s3%3AObjectCreated%3A%2A&events=s3%3AObjectAccessed%3A%2A");
+        *req.uri_mut() = hyper::Uri::from_static(
+            "http://localhost:8014/minio-java-test-1gqr1v4?prefix=prefix&suffix=suffix&events=s3%3AObjectCreated%3A%2A&events=s3%3AObjectAccessed%3A%2A",
+        );
 
         let x_amz_date = "20230204T155111Z";
         let headers = [
