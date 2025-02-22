@@ -251,7 +251,7 @@ impl FileStream {
         S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
     {
         /// internal async generator
-        async fn gen<S>(
+        async fn generate<S>(
             mut y: Yielder<Result<Bytes, FileStreamError>>,
             mut body: Pin<Box<S>>,
             crlf_pat: Box<[u8]>,
@@ -339,7 +339,7 @@ impl FileStream {
 
         Self {
             inner: AsyncTryStream::new(|y| -> SyncBoxFuture<'static, Result<(), FileStreamError>> {
-                Box::pin(gen(y, body, crlf_pat, prev_bytes))
+                Box::pin(generate(y, body, crlf_pat, prev_bytes))
             }),
         }
     }
