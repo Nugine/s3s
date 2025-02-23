@@ -2124,6 +2124,7 @@ dependencies = [
  "nugine-rust-utils",
  "numeric_cast",
  "regex",
+ "s3s-model",
  "serde",
  "serde_json",
  "serde_urlencoded",
@@ -2177,6 +2178,16 @@ dependencies = [
  "tracing-subscriber",
  "transform-stream",
  "uuid",
+]
+
+[[package]]
+name = "s3s-model"
+version = "0.11.0-dev"
+dependencies = [
+ "anyhow",
+ "numeric_cast",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
