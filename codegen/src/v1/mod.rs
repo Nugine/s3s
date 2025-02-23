@@ -1,7 +1,6 @@
-use crate::v2::smithy;
-use crate::v2::utils::o;
-
 mod rust;
+mod smithy;
+mod utils;
 
 mod access;
 mod dto;
@@ -15,6 +14,8 @@ mod xml;
 
 mod aws_conv;
 mod aws_proxy;
+
+use self::utils::o;
 
 use codegen_writer::Codegen;
 

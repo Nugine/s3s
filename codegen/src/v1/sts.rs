@@ -1,5 +1,5 @@
-use crate::v2::smithy;
-use crate::v2::utils::o;
+use super::smithy;
+use super::utils::o;
 
 use std::mem;
 use std::ops::Not;
