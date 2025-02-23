@@ -7,5 +7,20 @@ edition = "2024"
 repository = "https://github.com/Nugine/s3s"
 license = "Apache-2.0"
 
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+# deny
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+cargo = { level = "deny", priority = -1 }
+self_named_module_files = "deny"
+# warn
+dbg_macro = "warn"
+# allow
+module_name_repetitions = "allow"
+multiple_crate_versions = "allow"
+
 [profile.release]
 debug = "line-tables-only"

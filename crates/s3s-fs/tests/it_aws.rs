@@ -1,9 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(
-    clippy::all, //
-    clippy::must_use_candidate, //
-)]
-
 use s3s::auth::SimpleAuth;
 use s3s::host::SingleDomain;
 use s3s::service::S3ServiceBuilder;
@@ -26,7 +20,6 @@ use aws_sdk_s3::types::CompletedPart;
 use aws_sdk_s3::types::CreateBucketConfiguration;
 
 use anyhow::Result;
-use once_cell::sync::Lazy;
 use tokio::sync::Mutex;
 use tokio::sync::MutexGuard;
 use tracing::{debug, error};
@@ -48,11 +41,12 @@ fn setup_tracing() {
         .pretty()
         .with_env_filter(EnvFilter::from_default_env())
         .with_test_writer()
-        .init()
+        .init();
 }
 
 fn config() -> &'static SdkConfig {
-    static CONFIG: Lazy<SdkConfig> = Lazy::new(|| {
+    use std::sync::LazyLock;
+    static CONFIG: LazyLock<SdkConfig> = LazyLock::new(|| {
         setup_tracing();
 
         // Fake credentials
@@ -85,7 +79,8 @@ fn config() -> &'static SdkConfig {
 }
 
 async fn serial() -> MutexGuard<'static, ()> {
-    static LOCK: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
+    use std::sync::LazyLock;
+    static LOCK: LazyLock<Mutex<()>> = LazyLock::new(|| Mutex::new(()));
     LOCK.lock().await
 }
 
@@ -391,7 +386,7 @@ async fn test_upload_part_copy() -> Result<()> {
         assert_eq!(content_length, src_content.len());
         assert_eq!(body.as_ref(), src_content.as_bytes());
     }
-    println!("{} CK3", key);
+    println!("{key} CK3");
     {
         delete_object(&c, bucket, key).await?;
         delete_bucket(&c, bucket).await?;

@@ -1,9 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(
-    clippy::all, //
-    clippy::cargo, //
-    clippy::pedantic, //
-)]
 #![allow(
     clippy::module_name_repetitions,//
     clippy::match_same_arms, //

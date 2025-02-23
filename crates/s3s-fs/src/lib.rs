@@ -1,9 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(
-    clippy::all, //
-    clippy::cargo, //
-    clippy::pedantic, //
-)]
 #![allow(
     clippy::wildcard_imports,
     clippy::missing_errors_doc, // TODO: docs

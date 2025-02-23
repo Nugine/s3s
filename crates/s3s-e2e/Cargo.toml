@@ -9,6 +9,9 @@ edition.workspace = true
 repository.workspace = true
 license.workspace = true
 
+[lints]
+workspace = true
+
 [dependencies]
 s3s-test = { version = "0.11.0-dev", path = "../s3s-test" }
 tracing = "0.1.40"

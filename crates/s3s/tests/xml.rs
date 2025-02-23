@@ -297,7 +297,7 @@ fn minio_versioning_configuration() {
         return;
     }
 
-    let xml = r#"
+    let xml = r"
 <VersioningConfiguration>
     <Status>Enabled</Status>
     <ExcludedPrefixes>
@@ -308,7 +308,7 @@ fn minio_versioning_configuration() {
     </ExcludedPrefixes>
     <ExcludeFolders>true</ExcludeFolders>
 </VersioningConfiguration>
-    "#;
+    ";
     let val = deserialize::<s3s::dto::VersioningConfiguration>(xml.as_bytes()).unwrap();
     test_serde(&val);
 }
@@ -319,7 +319,7 @@ fn minio_delete_replication() {
         return;
     }
 
-    let xml = r#"
+    let xml = r"
 <ReplicationConfiguration>
     <Rule>
         <ID>cte4oalu3vqltovlh28g</ID>
@@ -351,7 +351,7 @@ fn minio_delete_replication() {
     <Role>
     </Role>
 </ReplicationConfiguration>
-    "#;
+    ";
     let val = deserialize::<s3s::dto::ReplicationConfiguration>(xml.as_bytes()).unwrap();
     test_serde(&val);
 }

@@ -1,7 +1,3 @@
-#![forbid(unsafe_code)]
-#![deny(clippy::all, clippy::pedantic)]
-#![allow(clippy::needless_return)]
-
 use s3s_fs::FileSystem;
 use s3s_fs::Result;
 

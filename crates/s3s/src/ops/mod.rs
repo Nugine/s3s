@@ -201,7 +201,7 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
                 }
                 Err(err) => {
                     debug!(op = %op.name(), ?err, "op returns error");
-                    return serialize_error(err, false);
+                    serialize_error(err, false)
                 }
             }
         }
@@ -225,7 +225,7 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
                 }),
                 Err(err) => {
                     debug!(?err, "custom route returns error");
-                    return serialize_error(err, false);
+                    serialize_error(err, false)
                 }
             }
         }

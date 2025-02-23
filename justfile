@@ -15,7 +15,7 @@ fmt:
 
 lint:
     uvx ruff check
-    cargo clippy --all-features --all-targets
+    cargo clippy --all-features --all-targets --tests --benches
 
 test:
     cargo test --all-features

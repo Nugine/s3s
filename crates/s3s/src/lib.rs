@@ -1,14 +1,4 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
-#![forbid(unsafe_code)]
-#![deny(
-    clippy::all, //
-    clippy::cargo, //
-    clippy::pedantic, //
-    clippy::self_named_module_files, //
-)]
-#![warn(
-    clippy::dbg_macro, //
-)]
 #![allow(
     clippy::bool_assert_comparison,  // I don't like `assert!(!expression)`. It's very misleading.
     clippy::multiple_crate_versions, // Sometimes not fixable
@@ -19,7 +9,6 @@
     clippy::inline_always,
     clippy::needless_continue,
 )]
-#![allow(clippy::needless_return)]
 
 #[macro_use]
 mod utils;
