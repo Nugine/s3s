@@ -27,7 +27,7 @@ just dev
 ### Run the codegen
 
 ```bash
-just model
+just crawl
 just codegen
 ```
 

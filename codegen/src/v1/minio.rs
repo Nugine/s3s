@@ -22,7 +22,7 @@ pub fn patch(model: &mut smithy::Model) {
         return;
     }
 
-    let patches = smithy::Model::load_json("model/minio-patches.json").unwrap();
+    let patches = smithy::Model::load_json("data/minio-patches.json").unwrap();
 
     for (shape_name, patch) in patches.shapes {
         match model.shapes.get_mut(&shape_name) {

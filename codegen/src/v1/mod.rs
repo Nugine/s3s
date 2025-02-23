@@ -21,8 +21,8 @@ use codegen_writer::Codegen;
 
 pub fn run() {
     let model = {
-        let mut s3_model = smithy::Model::load_json("model/s3.json").unwrap();
-        let mut sts_model = smithy::Model::load_json("model/sts.json").unwrap();
+        let mut s3_model = smithy::Model::load_json("data/s3.json").unwrap();
+        let mut sts_model = smithy::Model::load_json("data/sts.json").unwrap();
         sts::reduce(&mut sts_model);
         s3_model.shapes.append(&mut sts_model.shapes);
         minio::patch(&mut s3_model);

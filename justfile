@@ -23,8 +23,8 @@ test:
 doc:
     RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc --open --no-deps --all-features
 
-model:
-    uv run model/main.py update
+crawl:
+    uv run data/crawl.py update
 
 codegen:
     cargo run -p s3s-codegen
@@ -71,5 +71,5 @@ ci-test:
 ci-python:
     uvx ruff format --check
     uvx ruff check
-    just model
+    just crawl
     just assert_unchanged
