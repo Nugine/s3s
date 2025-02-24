@@ -8,19 +8,16 @@ use crate::declare_codegen;
 use std::format as f;
 use std::ops::Not;
 
-use codegen_writer::g;
-use codegen_writer::glines;
 use heck::ToSnakeCase;
 use heck::ToUpperCamelCase;
+use scoped_writer::g;
 
 #[allow(clippy::too_many_lines)]
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     declare_codegen!();
 
-    glines![
-        "use super::*;"
-        ""
-    ];
+    g!("use super::*;");
+    g!();
 
     for (name, rust_type) in rust_types {
         match name.as_str() {

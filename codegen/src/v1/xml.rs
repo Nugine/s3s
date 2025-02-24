@@ -8,21 +8,20 @@ use crate::declare_codegen;
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::ops::Not;
 
-use codegen_writer::g;
-use codegen_writer::glines;
+use scoped_writer::g;
 use stdx::default::default;
 
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     declare_codegen!();
 
-    glines![
-        "use super::*;"
-        ""
-        "use crate::dto::*;"
-        ""
-        "use std::io::Write;"
-        ""
-    ];
+    g([
+        "use super::*;",
+        "",
+        "use crate::dto::*;",
+        "",
+        "use std::io::Write;",
+        "", //
+    ]);
 
     let (root_type_names, field_type_names) = collect_xml_types(ops, rust_types);
 

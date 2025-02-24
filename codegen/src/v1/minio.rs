@@ -1,4 +1,4 @@
-use codegen_writer::g;
+use scoped_writer::g;
 
 use super::smithy;
 

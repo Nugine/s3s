@@ -10,9 +10,8 @@ use std::borrow::Cow;
 use std::collections::BTreeMap;
 use std::ops::Not;
 
-use codegen_writer::g;
-use codegen_writer::glines;
 use heck::{ToShoutySnakeCase, ToSnakeCase};
+use scoped_writer::g;
 use serde_json::Value;
 use stdx::default::default;
 
@@ -375,19 +374,19 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
 pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
     declare_codegen!();
 
-    glines![
-        "#![allow(clippy::empty_structs_with_brackets)]"
-        "#![allow(clippy::too_many_lines)]"
-        ""
-        "use super::*;"
-        ""
-        "use std::borrow::Cow;"
-        "use std::convert::Infallible;"
-        "use std::fmt;"
-        "use std::str::FromStr;"
-        ""
-        "use stdx::default::default;"
-    ];
+    g([
+        "#![allow(clippy::empty_structs_with_brackets)]",
+        "#![allow(clippy::too_many_lines)]",
+        "",
+        "use super::*;",
+        "",
+        "use std::borrow::Cow;",
+        "use std::convert::Infallible;",
+        "use std::fmt;",
+        "use std::str::FromStr;",
+        "",
+        "use stdx::default::default;",
+    ]);
 
     for rust_type in rust_types.values() {
         match rust_type {
@@ -527,21 +526,21 @@ fn codegen_str_enum(ty: &rust::StrEnum, _rust_types: &RustTypes) {
             g!();
         }
 
-        glines![
-            "#[must_use]"
-            "pub fn as_str(&self) -> &str {"
-            "&self.0"
-            "}"
-            ""
-        ];
+        g([
+            "#[must_use]",
+            "pub fn as_str(&self) -> &str {",
+            "&self.0",
+            "}",
+            "", //
+        ]);
 
-        glines![
-            "#[must_use]"
-            "pub fn from_static(s: &'static str) -> Self {"
-            "Self(Cow::from(s))"
-            "}"
-            ""
-        ];
+        g([
+            "#[must_use]",
+            "pub fn from_static(s: &'static str) -> Self {",
+            "Self(Cow::from(s))",
+            "}",
+            "",
+        ]);
     }
     g!("}}");
     g!();
@@ -583,14 +582,14 @@ fn codegen_struct_enum(ty: &rust::StructEnum, _rust_types: &RustTypes) {
 }
 
 fn codegen_tests(ops: &Operations) {
-    glines!(
-        "#[cfg(test)]"
-        "mod tests {"
-        "use super::*;"
-        ""
-        "fn require_default<T: Default>() {}"
-        ""
-    );
+    g([
+        "#[cfg(test)]",
+        "mod tests {",
+        "use super::*;",
+        "",
+        "fn require_default<T: Default>() {}",
+        "",
+    ]);
 
     {
         g!("#[test]");
@@ -673,14 +672,14 @@ fn is_rust_default(v: &Value) -> bool {
 }
 
 fn codegen_builders(rust_types: &RustTypes, ops: &Operations) {
-    glines!(
-        "pub mod builders {" //
-        "#![allow(clippy::missing_errors_doc)]"
-        ""
-        "use super::*;"
-        "pub use super::build_error::BuildError;"
-        ""
-    );
+    g([
+        "pub mod builders {", //
+        "#![allow(clippy::missing_errors_doc)]",
+        "",
+        "use super::*;",
+        "pub use super::build_error::BuildError;",
+        "",
+    ]);
 
     for op in ops.values() {
         let rust::Type::Struct(ty) = &rust_types[&op.input] else { continue };

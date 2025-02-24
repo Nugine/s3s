@@ -6,10 +6,9 @@ use crate::declare_codegen;
 use std::collections::BTreeMap;
 use std::ops::Not;
 
-use codegen_writer::g;
-use codegen_writer::glines;
 use heck::ToShoutySnakeCase;
 use regex::Regex;
+use scoped_writer::g;
 use stdx::default::default;
 
 struct Error {
@@ -146,13 +145,13 @@ pub fn codegen(model: &smithy::Model) {
 
     declare_codegen!();
 
-    glines![
-        "#![allow(clippy::doc_markdown)]"
-        ""
-        "use bytestring::ByteString;"
-        "use hyper::StatusCode;"
-        ""
-    ];
+    g([
+        "#![allow(clippy::doc_markdown)]",
+        "",
+        "use bytestring::ByteString;",
+        "use hyper::StatusCode;",
+        "",
+    ]);
 
     g!("#[derive(Debug, Clone, PartialEq, Eq)]");
     g!("#[non_exhaustive]");
@@ -214,11 +213,11 @@ pub fn codegen(model: &smithy::Model) {
         g!("}}");
         g!();
 
-        glines![
-            "pub(crate) fn as_static_str(&self) -> Option<&'static str> {"
-            "    Self::STATIC_CODE_LIST.get(self.as_enum_tag()).copied()"
-            "}"
-        ];
+        g([
+            "pub(crate) fn as_static_str(&self) -> Option<&'static str> {",
+            "    Self::STATIC_CODE_LIST.get(self.as_enum_tag()).copied()",
+            "}",
+        ]);
         g!();
     }
 

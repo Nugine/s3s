@@ -4,8 +4,8 @@ use crate::declare_codegen;
 
 use std::collections::BTreeSet;
 
-use codegen_writer::{g, glines};
 use heck::ToShoutySnakeCase;
+use scoped_writer::g;
 use stdx::default::default;
 
 pub fn codegen(model: &smithy::Model) {
@@ -35,12 +35,12 @@ pub fn codegen(model: &smithy::Model) {
 
     declare_codegen!();
 
-    glines![
-        "#![allow(clippy::declare_interior_mutable_const)]"
-        ""
-        "use hyper::header::HeaderName;"
-        ""
-    ];
+    g([
+        "#![allow(clippy::declare_interior_mutable_const)]",
+        "",
+        "use hyper::header::HeaderName;",
+        "",
+    ]);
 
     for header in headers {
         let name = to_constant_name(header);

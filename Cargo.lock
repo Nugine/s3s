@@ -646,12 +646,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
 
 [[package]]
-name = "codegen-writer"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58651fe83afe19791cbdb8932117e770ad34766d649f4e332b1b6cb00aa3a597"
-
-[[package]]
 name = "colorchoice"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2119,12 +2113,12 @@ dependencies = [
 name = "s3s-codegen"
 version = "0.0.0"
 dependencies = [
- "codegen-writer",
  "heck",
  "nugine-rust-utils",
  "numeric_cast",
  "regex",
  "s3s-model",
+ "scoped-writer",
  "serde",
  "serde_json",
  "serde_urlencoded",
@@ -2243,6 +2237,12 @@ checksum = "1f29ebaa345f945cec9fbbc532eb307f0fdad8161f281b6369539c8d84876b3d"
 dependencies = [
  "windows-sys 0.59.0",
 ]
+
+[[package]]
+name = "scoped-writer"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "95c04ad05b0a8087c941e1218d50414ae3a86d6dcd6eb9b1d4e42260c6f30b3f"
 
 [[package]]
 name = "scopeguard"

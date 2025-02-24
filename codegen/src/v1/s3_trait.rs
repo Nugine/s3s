@@ -3,24 +3,23 @@ use super::rust::codegen_doc;
 
 use crate::declare_codegen;
 
-use codegen_writer::g;
-use codegen_writer::glines;
 use heck::ToSnakeCase;
+use scoped_writer::g;
 
 pub fn codegen(ops: &Operations) {
     declare_codegen!();
 
-    glines![
-        "use crate::dto::*;"
-        "use crate::error::S3Result;"
-        "use crate::request::S3Request;"
-        "use crate::response::S3Response;"
-        ""
-        "/// An async trait which represents the S3 API"
-        "#[async_trait::async_trait]"
-        "pub trait S3: Send + Sync + 'static {"
-        ""
-    ];
+    g([
+        "use crate::dto::*;",
+        "use crate::error::S3Result;",
+        "use crate::request::S3Request;",
+        "use crate::response::S3Response;",
+        "",
+        "/// An async trait which represents the S3 API",
+        "#[async_trait::async_trait]",
+        "pub trait S3: Send + Sync + 'static {",
+        "",
+    ]);
 
     for op in ops.values() {
         let method_name = op.name.to_snake_case();

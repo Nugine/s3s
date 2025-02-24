@@ -2,44 +2,43 @@ use super::ops::Operations;
 
 use crate::declare_codegen;
 
-use codegen_writer::g;
-use codegen_writer::glines;
 use heck::ToSnakeCase;
+use scoped_writer::g;
 
 pub fn codegen(ops: &Operations) {
     declare_codegen!();
 
-    glines![
-        "use super::S3AccessContext;"
-        ""
-        "use crate::dto::*;"
-        "use crate::error::S3Result;"
-        "use crate::request::S3Request;"
-        ""
-        "#[async_trait::async_trait]"
-        "pub trait S3Access: Send + Sync + 'static {"
-        ""
-    ];
+    g([
+        "use super::S3AccessContext;",
+        "",
+        "use crate::dto::*;",
+        "use crate::error::S3Result;",
+        "use crate::request::S3Request;",
+        "",
+        "#[async_trait::async_trait]",
+        "pub trait S3Access: Send + Sync + 'static {",
+        "",
+    ]);
 
-    glines![
-        "/// Checks whether the current request has accesses to the resources."
-        "///"
-        "/// This method is called before deserializing the operation input."
-        "///"
-        "/// By default, this method rejects all anonymous requests"
-        "/// and returns [`AccessDenied`](crate::S3ErrorCode::AccessDenied) error."
-        "///"
-        "/// An access control provider can override this method to implement custom logic."
-        "///"
-        "/// Common fields in the context:"
-        "/// + [`cx.credentials()`](S3AccessContext::credentials)"
-        "/// + [`cx.s3_path()`](S3AccessContext::s3_path)"
-        "/// + [`cx.s3_op().name()`](crate::S3Operation::name)"
-        "/// + [`cx.extensions_mut()`](S3AccessContext::extensions_mut)"
-        "async fn check(&self, cx: &mut S3AccessContext<'_>) -> S3Result<()> {"
-        "    super::default_check(cx)"
-        "}"
-    ];
+    g([
+        "/// Checks whether the current request has accesses to the resources.",
+        "///",
+        "/// This method is called before deserializing the operation input.",
+        "///",
+        "/// By default, this method rejects all anonymous requests",
+        "/// and returns [`AccessDenied`](crate::S3ErrorCode::AccessDenied) error.",
+        "///",
+        "/// An access control provider can override this method to implement custom logic.",
+        "///",
+        "/// Common fields in the context:",
+        "/// + [`cx.credentials()`](S3AccessContext::credentials)",
+        "/// + [`cx.s3_path()`](S3AccessContext::s3_path)",
+        "/// + [`cx.s3_op().name()`](crate::S3Operation::name)",
+        "/// + [`cx.extensions_mut()`](S3AccessContext::extensions_mut)",
+        "async fn check(&self, cx: &mut S3AccessContext<'_>) -> S3Result<()> {",
+        "    super::default_check(cx)",
+        "}",
+    ]);
 
     for op in ops.values() {
         let method_name = op.name.to_snake_case();

@@ -15,9 +15,15 @@ mod xml;
 mod aws_conv;
 mod aws_proxy;
 
-use self::utils::o;
+use std::fs::File;
+use std::io::BufWriter;
 
-use codegen_writer::Codegen;
+pub use self::utils::o;
+
+fn write_file(path: &str, f: impl FnOnce()) {
+    let mut writer = BufWriter::new(File::create(path).unwrap());
+    scoped_writer::scoped(&mut writer, f);
+}
 
 pub fn run() {
     let model = {
@@ -34,55 +40,46 @@ pub fn run() {
 
     {
         let path = "crates/s3s/src/dto/generated.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || dto::codegen(&rust_types, &ops));
+        write_file(path, || dto::codegen(&rust_types, &ops));
     }
 
     {
         let path = "crates/s3s/src/header/generated.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || headers::codegen(&model));
+        write_file(path, || headers::codegen(&model));
     }
 
     {
         let path = "crates/s3s/src/error/generated.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || error::codegen(&model));
+        write_file(path, || error::codegen(&model));
     }
 
     {
         let path = "crates/s3s/src/xml/generated.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || xml::codegen(&ops, &rust_types));
+        write_file(path, || xml::codegen(&ops, &rust_types));
     }
 
     {
         let path = "crates/s3s/src/s3_trait.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || s3_trait::codegen(&ops));
+        write_file(path, || s3_trait::codegen(&ops));
     }
 
     {
         let path = "crates/s3s/src/ops/generated.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || ops::codegen(&ops, &rust_types));
+        write_file(path, || ops::codegen(&ops, &rust_types));
     }
 
     {
         let path = "crates/s3s/src/access/generated.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || access::codegen(&ops));
+        write_file(path, || access::codegen(&ops));
     }
 
     {
         let path = "crates/s3s-aws/src/conv/generated.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || aws_conv::codegen(&ops, &rust_types));
+        write_file(path, || aws_conv::codegen(&ops, &rust_types));
     }
 
     {
         let path = "crates/s3s-aws/src/proxy/generated.rs";
-        let cg = Codegen::create_file(path).unwrap();
-        codegen_writer::scoped(cg, || aws_proxy::codegen(&ops, &rust_types));
+        write_file(path, || aws_proxy::codegen(&ops, &rust_types));
     }
 }

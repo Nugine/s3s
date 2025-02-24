@@ -6,25 +6,24 @@ use crate::declare_codegen;
 
 use std::format as f;
 
-use codegen_writer::g;
-use codegen_writer::glines;
 use heck::ToSnakeCase;
+use scoped_writer::g;
 
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     declare_codegen!();
 
-    glines![
-        "use super::*;"
-        ""
-        "use crate::conv::{try_from_aws, try_into_aws};"
-        ""
-        "use s3s::S3;"
-        "use s3s::{S3Request, S3Response};"
-        "use s3s::S3Result;"
-        ""
-        "use tracing::debug;"
-        ""
-    ];
+    g([
+        "use super::*;",
+        "",
+        "use crate::conv::{try_from_aws, try_into_aws};",
+        "",
+        "use s3s::S3;",
+        "use s3s::{S3Request, S3Response};",
+        "use s3s::S3Result;",
+        "",
+        "use tracing::debug;",
+        "",
+    ]);
 
     g!("#[async_trait::async_trait]");
     g!("impl S3 for Proxy {{");
@@ -90,17 +89,17 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
             g!("let result = b.send().await;");
         }
 
-        glines![
-            "match result {"
-            "    Ok(output) => {"
-            "        let headers = super::meta::build_headers(&output)?;"
-            "        let output = try_from_aws(output)?;"
-            "        debug!(?output);"
-            "        Ok(S3Response::with_headers(output, headers))"
-            "    },"
-            "    Err(e) => Err(wrap_sdk_error!(e)),"
-            "}"
-        ];
+        g([
+            "match result {",
+            "    Ok(output) => {",
+            "        let headers = super::meta::build_headers(&output)?;",
+            "        let output = try_from_aws(output)?;",
+            "        debug!(?output);",
+            "        Ok(S3Response::with_headers(output, headers))",
+            "    },",
+            "    Err(e) => Err(wrap_sdk_error!(e)),",
+            "}",
+        ]);
 
         g!("}}");
         g!();

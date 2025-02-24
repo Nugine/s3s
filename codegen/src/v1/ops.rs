@@ -12,9 +12,8 @@ use std::fmt::Write as _;
 use std::format as f;
 use std::ops::Not;
 
-use codegen_writer::g;
-use codegen_writer::glines;
 use heck::ToSnakeCase;
+use scoped_writer::g;
 use stdx::default::default;
 
 #[derive(Debug)]
@@ -130,23 +129,23 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     }
     g!();
 
-    glines![
-        "#![allow(clippy::declare_interior_mutable_const)]"
-        "#![allow(clippy::borrow_interior_mutable_const)]"
-        "#![allow(clippy::needless_pass_by_value)]"
-        "#![allow(clippy::too_many_lines)]"
-        "#![allow(clippy::unnecessary_wraps)]"
-        ""
-        "use crate::dto::*;"
-        "use crate::header::*;"
-        "use crate::http;"
-        "use crate::error::*;"
-        "use crate::path::S3Path;"
-        "use crate::ops::CallContext;"
-        ""
-        "use std::borrow::Cow;"
-        ""
-    ];
+    g([
+        "#![allow(clippy::declare_interior_mutable_const)]",
+        "#![allow(clippy::borrow_interior_mutable_const)]",
+        "#![allow(clippy::needless_pass_by_value)]",
+        "#![allow(clippy::too_many_lines)]",
+        "#![allow(clippy::unnecessary_wraps)]",
+        "",
+        "use crate::dto::*;",
+        "use crate::header::*;",
+        "use crate::http;",
+        "use crate::error::*;",
+        "use crate::path::S3Path;",
+        "use crate::ops::CallContext;",
+        "",
+        "use std::borrow::Cow;",
+        "",
+    ]);
 
     codegen_http(ops, rust_types);
     codegen_router(ops, rust_types);
@@ -553,18 +552,18 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes) {
         op.input
     );
 
-    glines![
-        "let bucket = http::unwrap_bucket(req);"
-        "let key = http::parse_field_value(&m, \"key\")?.ok_or_else(|| invalid_request!(\"missing key\"))?;"
-        ""
-        "let vec_stream = req.s3ext.vec_stream.take().expect(\"missing vec stream\");"
-        ""
-        "let content_length = i64::try_from(vec_stream.exact_remaining_length()).map_err(|e|s3_error!(e, InvalidArgument, \"content-length overflow\"))?;"
-        "let content_length = (content_length != 0).then_some(content_length);"
-        ""
-        "let body: Option<StreamingBlob> = Some(StreamingBlob::new(vec_stream));"
-        ""
-    ];
+    g([
+        "let bucket = http::unwrap_bucket(req);",
+        "let key = http::parse_field_value(&m, \"key\")?.ok_or_else(|| invalid_request!(\"missing key\"))?;",
+        "",
+        "let vec_stream = req.s3ext.vec_stream.take().expect(\"missing vec stream\");",
+        "",
+        "let content_length = i64::try_from(vec_stream.exact_remaining_length()).map_err(|e|s3_error!(e, InvalidArgument, \"content-length overflow\"))?;",
+        "let content_length = (content_length != 0).then_some(content_length);",
+        "",
+        "let body: Option<StreamingBlob> = Some(StreamingBlob::new(vec_stream));",
+        "",
+    ]);
 
     let rust::Type::Struct(ty) = &rust_types[op.input.as_str()] else { panic!() };
 
@@ -618,16 +617,16 @@ fn codegen_op_http_de_multipart(op: &Operation, rust_types: &RustTypes) {
                 assert!(field.option_type);
                 g!("let {}: Option<{}> = {{", field.name, field.type_);
                 g!("    let mut metadata = {}::default();", field.type_);
-                glines![
-                    "    for (name, value) in m.fields() {"
-                    "        if let Some(key) = name.strip_prefix(\"x-amz-meta-\") {"
-                    "            if key.is_empty() { continue; }"
-                    "            metadata.insert(key.to_owned(), value.clone());"
-                    "        }"
-                    "    }"
-                    "    if metadata.is_empty() { None } else { Some(metadata) }"
-                    "};"
-                ];
+                g([
+                    "    for (name, value) in m.fields() {",
+                    "        if let Some(key) = name.strip_prefix(\"x-amz-meta-\") {",
+                    "            if key.is_empty() { continue; }",
+                    "            metadata.insert(key.to_owned(), value.clone());",
+                    "        }",
+                    "    }",
+                    "    if metadata.is_empty() { None } else { Some(metadata) }",
+                    "};",
+                ]);
             }
             _ => unimplemented!(),
         }
@@ -672,13 +671,11 @@ fn codegen_op_http_call(op: &Operation) {
         g!("let fut = async move {{");
         g!("let result = s3.{method}(s3_req).await;");
         g!("match result {{");
-        glines![
-            "Ok(s3_resp) => {
+        g(["Ok(s3_resp) => {
                 let mut resp = Self::serialize_http(s3_resp.output)?;
                 resp.headers.extend(s3_resp.headers);
                 Ok(resp)
-            }"
-        ];
+            }"]);
         g!("Err(err) => super::serialize_error(err, true).map_err(Into::into),");
         g!("}}");
         g!("}};");
@@ -688,12 +685,12 @@ fn codegen_op_http_call(op: &Operation) {
     } else {
         g!("let result = s3.{method}(s3_req).await;");
 
-        glines![
-            "let s3_resp = match result {"
-            "    Ok(val) => val,"
-            "    Err(err) => return super::serialize_error(err, false),"
-            "};"
-        ];
+        g([
+            "let s3_resp = match result {",
+            "    Ok(val) => val,",
+            "    Err(err) => return super::serialize_error(err, false),",
+            "};",
+        ]);
 
         g!("let mut resp = Self::serialize_http(s3_resp.output)?;");
 
