@@ -153,6 +153,11 @@ pub fn codegen(model: &smithy::Model) {
         "",
     ]);
 
+    for err in errors.values() {
+        g!("// {}", err.code);
+    }
+    g!();
+
     g!("#[derive(Debug, Clone, PartialEq, Eq)]");
     g!("#[non_exhaustive]");
     g!("pub enum S3ErrorCode {{");
