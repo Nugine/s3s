@@ -22,6 +22,7 @@ impl S3 for Proxy {
         let mut b = self.0.abort_multipart_upload();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
+        b = b.set_if_match_initiated_time(try_into_aws(input.if_match_initiated_time)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_upload_id(Some(try_into_aws(input.upload_id)?));
@@ -48,11 +49,15 @@ impl S3 for Proxy {
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);
         b = b.set_checksum_crc32_c(try_into_aws(input.checksum_crc32c)?);
+        b = b.set_checksum_crc64_nvme(try_into_aws(input.checksum_crc64nvme)?);
         b = b.set_checksum_sha1(try_into_aws(input.checksum_sha1)?);
         b = b.set_checksum_sha256(try_into_aws(input.checksum_sha256)?);
+        b = b.set_checksum_type(try_into_aws(input.checksum_type)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
+        b = b.set_if_match(try_into_aws(input.if_match)?);
         b = b.set_if_none_match(try_into_aws(input.if_none_match)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
+        b = b.set_mpu_object_size(try_into_aws(input.mpu_object_size)?);
         b = b.set_multipart_upload(try_into_aws(input.multipart_upload)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_sse_customer_algorithm(try_into_aws(input.sse_customer_algorithm)?);
@@ -160,6 +165,31 @@ impl S3 for Proxy {
     }
 
     #[tracing::instrument(skip(self, req))]
+    async fn create_bucket_metadata_table_configuration(
+        &self,
+        req: S3Request<s3s::dto::CreateBucketMetadataTableConfigurationInput>,
+    ) -> S3Result<S3Response<s3s::dto::CreateBucketMetadataTableConfigurationOutput>> {
+        let input = req.input;
+        debug!(?input);
+        let mut b = self.0.create_bucket_metadata_table_configuration();
+        b = b.set_bucket(Some(try_into_aws(input.bucket)?));
+        b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
+        b = b.set_content_md5(try_into_aws(input.content_md5)?);
+        b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
+        b = b.set_metadata_table_configuration(Some(try_into_aws(input.metadata_table_configuration)?));
+        let result = b.send().await;
+        match result {
+            Ok(output) => {
+                let headers = super::meta::build_headers(&output)?;
+                let output = try_from_aws(output)?;
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
+            }
+            Err(e) => Err(wrap_sdk_error!(e)),
+        }
+    }
+
+    #[tracing::instrument(skip(self, req))]
     async fn create_multipart_upload(
         &self,
         req: S3Request<s3s::dto::CreateMultipartUploadInput>,
@@ -172,6 +202,7 @@ impl S3 for Proxy {
         b = b.set_bucket_key_enabled(try_into_aws(input.bucket_key_enabled)?);
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
+        b = b.set_checksum_type(try_into_aws(input.checksum_type)?);
         b = b.set_content_disposition(try_into_aws(input.content_disposition)?);
         b = b.set_content_encoding(try_into_aws(input.content_encoding)?);
         b = b.set_content_language(try_into_aws(input.content_language)?);
@@ -366,6 +397,28 @@ impl S3 for Proxy {
     }
 
     #[tracing::instrument(skip(self, req))]
+    async fn delete_bucket_metadata_table_configuration(
+        &self,
+        req: S3Request<s3s::dto::DeleteBucketMetadataTableConfigurationInput>,
+    ) -> S3Result<S3Response<s3s::dto::DeleteBucketMetadataTableConfigurationOutput>> {
+        let input = req.input;
+        debug!(?input);
+        let mut b = self.0.delete_bucket_metadata_table_configuration();
+        b = b.set_bucket(Some(try_into_aws(input.bucket)?));
+        b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
+        let result = b.send().await;
+        match result {
+            Ok(output) => {
+                let headers = super::meta::build_headers(&output)?;
+                let output = try_from_aws(output)?;
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
+            }
+            Err(e) => Err(wrap_sdk_error!(e)),
+        }
+    }
+
+    #[tracing::instrument(skip(self, req))]
     async fn delete_bucket_metrics_configuration(
         &self,
         req: S3Request<s3s::dto::DeleteBucketMetricsConfigurationInput>,
@@ -509,6 +562,9 @@ impl S3 for Proxy {
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_bypass_governance_retention(try_into_aws(input.bypass_governance_retention)?);
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
+        b = b.set_if_match(try_into_aws(input.if_match)?);
+        b = b.set_if_match_last_modified_time(try_into_aws(input.if_match_last_modified_time)?);
+        b = b.set_if_match_size(try_into_aws(input.if_match_size)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
         b = b.set_mfa(try_into_aws(input.mfa)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
@@ -807,6 +863,28 @@ impl S3 for Proxy {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.get_bucket_logging();
+        b = b.set_bucket(Some(try_into_aws(input.bucket)?));
+        b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
+        let result = b.send().await;
+        match result {
+            Ok(output) => {
+                let headers = super::meta::build_headers(&output)?;
+                let output = try_from_aws(output)?;
+                debug!(?output);
+                Ok(S3Response::with_headers(output, headers))
+            }
+            Err(e) => Err(wrap_sdk_error!(e)),
+        }
+    }
+
+    #[tracing::instrument(skip(self, req))]
+    async fn get_bucket_metadata_table_configuration(
+        &self,
+        req: S3Request<s3s::dto::GetBucketMetadataTableConfigurationInput>,
+    ) -> S3Result<S3Response<s3s::dto::GetBucketMetadataTableConfigurationOutput>> {
+        let input = req.input;
+        debug!(?input);
+        let mut b = self.0.get_bucket_metadata_table_configuration();
         b = b.set_bucket(Some(try_into_aws(input.bucket)?));
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         let result = b.send().await;
@@ -1435,8 +1513,10 @@ impl S3 for Proxy {
         let input = req.input;
         debug!(?input);
         let mut b = self.0.list_buckets();
+        b = b.set_bucket_region(try_into_aws(input.bucket_region)?);
         b = b.set_continuation_token(try_into_aws(input.continuation_token)?);
         b = b.set_max_buckets(try_into_aws(input.max_buckets)?);
+        b = b.set_prefix(try_into_aws(input.prefix)?);
         let result = b.send().await;
         match result {
             Ok(output) => {
@@ -2059,6 +2139,7 @@ impl S3 for Proxy {
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);
         b = b.set_checksum_crc32_c(try_into_aws(input.checksum_crc32c)?);
+        b = b.set_checksum_crc64_nvme(try_into_aws(input.checksum_crc64nvme)?);
         b = b.set_checksum_sha1(try_into_aws(input.checksum_sha1)?);
         b = b.set_checksum_sha256(try_into_aws(input.checksum_sha256)?);
         b = b.set_content_disposition(try_into_aws(input.content_disposition)?);
@@ -2073,6 +2154,7 @@ impl S3 for Proxy {
         b = b.set_grant_read(try_into_aws(input.grant_read)?);
         b = b.set_grant_read_acp(try_into_aws(input.grant_read_acp)?);
         b = b.set_grant_write_acp(try_into_aws(input.grant_write_acp)?);
+        b = b.set_if_match(try_into_aws(input.if_match)?);
         b = b.set_if_none_match(try_into_aws(input.if_none_match)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
         b = b.set_metadata(try_into_aws(input.metadata)?);
@@ -2089,6 +2171,7 @@ impl S3 for Proxy {
         b = b.set_storage_class(try_into_aws(input.storage_class)?);
         b = b.set_tagging(try_into_aws(input.tagging)?);
         b = b.set_website_redirect_location(try_into_aws(input.website_redirect_location)?);
+        b = b.set_write_offset_bytes(try_into_aws(input.write_offset_bytes)?);
         let result = b.send().await;
         match result {
             Ok(output) => {
@@ -2341,6 +2424,7 @@ impl S3 for Proxy {
         b = b.set_checksum_algorithm(try_into_aws(input.checksum_algorithm)?);
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);
         b = b.set_checksum_crc32_c(try_into_aws(input.checksum_crc32c)?);
+        b = b.set_checksum_crc64_nvme(try_into_aws(input.checksum_crc64nvme)?);
         b = b.set_checksum_sha1(try_into_aws(input.checksum_sha1)?);
         b = b.set_checksum_sha256(try_into_aws(input.checksum_sha256)?);
         b = b.set_content_length(try_into_aws(input.content_length)?);
@@ -2418,6 +2502,7 @@ impl S3 for Proxy {
         b = b.set_cache_control(try_into_aws(input.cache_control)?);
         b = b.set_checksum_crc32(try_into_aws(input.checksum_crc32)?);
         b = b.set_checksum_crc32_c(try_into_aws(input.checksum_crc32c)?);
+        b = b.set_checksum_crc64_nvme(try_into_aws(input.checksum_crc64nvme)?);
         b = b.set_checksum_sha1(try_into_aws(input.checksum_sha1)?);
         b = b.set_checksum_sha256(try_into_aws(input.checksum_sha256)?);
         b = b.set_content_disposition(try_into_aws(input.content_disposition)?);

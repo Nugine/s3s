@@ -323,6 +323,7 @@ impl S3 for FileSystem {
             let bucket = Bucket {
                 creation_date: Some(created_or_modified_date),
                 name: Some(name.to_owned()),
+                bucket_region: None,
             };
             buckets.push(bucket);
         }

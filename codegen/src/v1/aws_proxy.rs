@@ -66,6 +66,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     "SelectObjectContentInput" => field.name.as_str(),
                     _ => match s3s_field_name.as_str() {
                         "checksum_crc32c" => "checksum_crc32_c",
+                        "checksum_crc64nvme" => "checksum_crc64_nvme",
                         "type_" => "type",
                         s => s,
                     },

@@ -15,6 +15,8 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     declare_codegen!();
 
     g([
+        "#![allow(clippy::too_many_lines)]",
+        "",
         "use super::*;",
         "",
         "use crate::dto::*;",

@@ -53,6 +53,16 @@ pub trait S3Access: Send + Sync + 'static {
         Ok(())
     }
 
+    /// Checks whether the CreateBucketMetadataTableConfiguration request has accesses to the resources.
+    ///
+    /// This method returns `Ok(())` by default.
+    async fn create_bucket_metadata_table_configuration(
+        &self,
+        _req: &mut S3Request<CreateBucketMetadataTableConfigurationInput>,
+    ) -> S3Result<()> {
+        Ok(())
+    }
+
     /// Checks whether the CreateMultipartUpload request has accesses to the resources.
     ///
     /// This method returns `Ok(())` by default.
@@ -115,6 +125,16 @@ pub trait S3Access: Send + Sync + 'static {
     ///
     /// This method returns `Ok(())` by default.
     async fn delete_bucket_lifecycle(&self, _req: &mut S3Request<DeleteBucketLifecycleInput>) -> S3Result<()> {
+        Ok(())
+    }
+
+    /// Checks whether the DeleteBucketMetadataTableConfiguration request has accesses to the resources.
+    ///
+    /// This method returns `Ok(())` by default.
+    async fn delete_bucket_metadata_table_configuration(
+        &self,
+        _req: &mut S3Request<DeleteBucketMetadataTableConfigurationInput>,
+    ) -> S3Result<()> {
         Ok(())
     }
 
@@ -273,6 +293,16 @@ pub trait S3Access: Send + Sync + 'static {
     ///
     /// This method returns `Ok(())` by default.
     async fn get_bucket_logging(&self, _req: &mut S3Request<GetBucketLoggingInput>) -> S3Result<()> {
+        Ok(())
+    }
+
+    /// Checks whether the GetBucketMetadataTableConfiguration request has accesses to the resources.
+    ///
+    /// This method returns `Ok(())` by default.
+    async fn get_bucket_metadata_table_configuration(
+        &self,
+        _req: &mut S3Request<GetBucketMetadataTableConfigurationInput>,
+    ) -> S3Result<()> {
         Ok(())
     }
 

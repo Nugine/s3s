@@ -72,11 +72,15 @@ pub const X_AMZ_CHECKSUM_CRC32: HeaderName = HeaderName::from_static("x-amz-chec
 
 pub const X_AMZ_CHECKSUM_CRC32C: HeaderName = HeaderName::from_static("x-amz-checksum-crc32c");
 
+pub const X_AMZ_CHECKSUM_CRC64NVME: HeaderName = HeaderName::from_static("x-amz-checksum-crc64nvme");
+
 pub const X_AMZ_CHECKSUM_MODE: HeaderName = HeaderName::from_static("x-amz-checksum-mode");
 
 pub const X_AMZ_CHECKSUM_SHA1: HeaderName = HeaderName::from_static("x-amz-checksum-sha1");
 
 pub const X_AMZ_CHECKSUM_SHA256: HeaderName = HeaderName::from_static("x-amz-checksum-sha256");
+
+pub const X_AMZ_CHECKSUM_TYPE: HeaderName = HeaderName::from_static("x-amz-checksum-type");
 
 pub const X_AMZ_CONFIRM_REMOVE_SELF_BUCKET_ACCESS: HeaderName =
     HeaderName::from_static("x-amz-confirm-remove-self-bucket-access");
@@ -146,6 +150,9 @@ pub const X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_CRC32: HeaderName = HeaderName::from_s
 
 pub const X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_CRC32C: HeaderName = HeaderName::from_static("x-amz-fwd-header-x-amz-checksum-crc32c");
 
+pub const X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_CRC64NVME: HeaderName =
+    HeaderName::from_static("x-amz-fwd-header-x-amz-checksum-crc64nvme");
+
 pub const X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_SHA1: HeaderName = HeaderName::from_static("x-amz-fwd-header-x-amz-checksum-sha1");
 
 pub const X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_SHA256: HeaderName = HeaderName::from_static("x-amz-fwd-header-x-amz-checksum-sha256");
@@ -209,6 +216,12 @@ pub const X_AMZ_GRANT_WRITE_ACP: HeaderName = HeaderName::from_static("x-amz-gra
 
 pub const X_AMZ_ID_2: HeaderName = HeaderName::from_static("x-amz-id-2");
 
+pub const X_AMZ_IF_MATCH_INITIATED_TIME: HeaderName = HeaderName::from_static("x-amz-if-match-initiated-time");
+
+pub const X_AMZ_IF_MATCH_LAST_MODIFIED_TIME: HeaderName = HeaderName::from_static("x-amz-if-match-last-modified-time");
+
+pub const X_AMZ_IF_MATCH_SIZE: HeaderName = HeaderName::from_static("x-amz-if-match-size");
+
 pub const X_AMZ_MAX_PARTS: HeaderName = HeaderName::from_static("x-amz-max-parts");
 
 pub const X_AMZ_METADATA_DIRECTIVE: HeaderName = HeaderName::from_static("x-amz-metadata-directive");
@@ -216,6 +229,8 @@ pub const X_AMZ_METADATA_DIRECTIVE: HeaderName = HeaderName::from_static("x-amz-
 pub const X_AMZ_MFA: HeaderName = HeaderName::from_static("x-amz-mfa");
 
 pub const X_AMZ_MISSING_META: HeaderName = HeaderName::from_static("x-amz-missing-meta");
+
+pub const X_AMZ_MP_OBJECT_SIZE: HeaderName = HeaderName::from_static("x-amz-mp-object-size");
 
 pub const X_AMZ_MP_PARTS_COUNT: HeaderName = HeaderName::from_static("x-amz-mp-parts-count");
 
@@ -228,6 +243,8 @@ pub const X_AMZ_OBJECT_LOCK_MODE: HeaderName = HeaderName::from_static("x-amz-ob
 pub const X_AMZ_OBJECT_LOCK_RETAIN_UNTIL_DATE: HeaderName = HeaderName::from_static("x-amz-object-lock-retain-until-date");
 
 pub const X_AMZ_OBJECT_OWNERSHIP: HeaderName = HeaderName::from_static("x-amz-object-ownership");
+
+pub const X_AMZ_OBJECT_SIZE: HeaderName = HeaderName::from_static("x-amz-object-size");
 
 pub const X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES: HeaderName = HeaderName::from_static("x-amz-optional-object-attributes");
 
@@ -288,3 +305,5 @@ pub const X_AMZ_TRANSITION_DEFAULT_MINIMUM_OBJECT_SIZE: HeaderName =
 pub const X_AMZ_VERSION_ID: HeaderName = HeaderName::from_static("x-amz-version-id");
 
 pub const X_AMZ_WEBSITE_REDIRECT_LOCATION: HeaderName = HeaderName::from_static("x-amz-website-redirect-location");
+
+pub const X_AMZ_WRITE_OFFSET_BYTES: HeaderName = HeaderName::from_static("x-amz-write-offset-bytes");

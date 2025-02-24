@@ -27,6 +27,7 @@ impl AwsConversion for s3s::dto::AbortMultipartUploadInput {
         Ok(Self {
             bucket: unwrap_from_aws(x.bucket, "bucket")?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+            if_match_initiated_time: try_from_aws(x.if_match_initiated_time)?,
             key: unwrap_from_aws(x.key, "key")?,
             request_payer: try_from_aws(x.request_payer)?,
             upload_id: unwrap_from_aws(x.upload_id, "upload_id")?,
@@ -37,6 +38,7 @@ impl AwsConversion for s3s::dto::AbortMultipartUploadInput {
         let mut y = Self::Target::builder();
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
+        y = y.set_if_match_initiated_time(try_into_aws(x.if_match_initiated_time)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_upload_id(Some(try_into_aws(x.upload_id)?));
@@ -256,6 +258,7 @@ impl AwsConversion for s3s::dto::Bucket {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
+            bucket_region: try_from_aws(x.bucket_region)?,
             creation_date: try_from_aws(x.creation_date)?,
             name: try_from_aws(x.name)?,
         })
@@ -263,6 +266,7 @@ impl AwsConversion for s3s::dto::Bucket {
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
+        y = y.set_bucket_region(try_into_aws(x.bucket_region)?);
         y = y.set_creation_date(try_into_aws(x.creation_date)?);
         y = y.set_name(try_into_aws(x.name)?);
         Ok(y.build())
@@ -390,16 +394,21 @@ impl AwsConversion for s3s::dto::BucketLocationConstraint {
             aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast1 => Self::from_static(Self::AP_SOUTHEAST_1),
             aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast2 => Self::from_static(Self::AP_SOUTHEAST_2),
             aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast3 => Self::from_static(Self::AP_SOUTHEAST_3),
+            aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast4 => Self::from_static(Self::AP_SOUTHEAST_4),
+            aws_sdk_s3::types::BucketLocationConstraint::ApSoutheast5 => Self::from_static(Self::AP_SOUTHEAST_5),
             aws_sdk_s3::types::BucketLocationConstraint::CaCentral1 => Self::from_static(Self::CA_CENTRAL_1),
             aws_sdk_s3::types::BucketLocationConstraint::CnNorth1 => Self::from_static(Self::CN_NORTH_1),
             aws_sdk_s3::types::BucketLocationConstraint::CnNorthwest1 => Self::from_static(Self::CN_NORTHWEST_1),
             aws_sdk_s3::types::BucketLocationConstraint::EuCentral1 => Self::from_static(Self::EU_CENTRAL_1),
+            aws_sdk_s3::types::BucketLocationConstraint::EuCentral2 => Self::from_static(Self::EU_CENTRAL_2),
             aws_sdk_s3::types::BucketLocationConstraint::EuNorth1 => Self::from_static(Self::EU_NORTH_1),
             aws_sdk_s3::types::BucketLocationConstraint::EuSouth1 => Self::from_static(Self::EU_SOUTH_1),
             aws_sdk_s3::types::BucketLocationConstraint::EuSouth2 => Self::from_static(Self::EU_SOUTH_2),
             aws_sdk_s3::types::BucketLocationConstraint::EuWest1 => Self::from_static(Self::EU_WEST_1),
             aws_sdk_s3::types::BucketLocationConstraint::EuWest2 => Self::from_static(Self::EU_WEST_2),
             aws_sdk_s3::types::BucketLocationConstraint::EuWest3 => Self::from_static(Self::EU_WEST_3),
+            aws_sdk_s3::types::BucketLocationConstraint::IlCentral1 => Self::from_static(Self::IL_CENTRAL_1),
+            aws_sdk_s3::types::BucketLocationConstraint::MeCentral1 => Self::from_static(Self::ME_CENTRAL_1),
             aws_sdk_s3::types::BucketLocationConstraint::MeSouth1 => Self::from_static(Self::ME_SOUTH_1),
             aws_sdk_s3::types::BucketLocationConstraint::SaEast1 => Self::from_static(Self::SA_EAST_1),
             aws_sdk_s3::types::BucketLocationConstraint::UsEast2 => Self::from_static(Self::US_EAST_2),
@@ -590,8 +599,10 @@ impl AwsConversion for s3s::dto::Checksum {
         Ok(Self {
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
         })
     }
 
@@ -599,8 +610,10 @@ impl AwsConversion for s3s::dto::Checksum {
         let mut y = Self::Target::builder();
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         Ok(y.build())
     }
 }
@@ -613,6 +626,7 @@ impl AwsConversion for s3s::dto::ChecksumAlgorithm {
         Ok(match x {
             aws_sdk_s3::types::ChecksumAlgorithm::Crc32 => Self::from_static(Self::CRC32),
             aws_sdk_s3::types::ChecksumAlgorithm::Crc32C => Self::from_static(Self::CRC32C),
+            aws_sdk_s3::types::ChecksumAlgorithm::Crc64Nvme => Self::from_static(Self::CRC64NVME),
             aws_sdk_s3::types::ChecksumAlgorithm::Sha1 => Self::from_static(Self::SHA1),
             aws_sdk_s3::types::ChecksumAlgorithm::Sha256 => Self::from_static(Self::SHA256),
             _ => Self::from(x.as_str().to_owned()),
@@ -637,6 +651,23 @@ impl AwsConversion for s3s::dto::ChecksumMode {
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         Ok(aws_sdk_s3::types::ChecksumMode::from(x.as_str()))
+    }
+}
+
+impl AwsConversion for s3s::dto::ChecksumType {
+    type Target = aws_sdk_s3::types::ChecksumType;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(match x {
+            aws_sdk_s3::types::ChecksumType::Composite => Self::from_static(Self::COMPOSITE),
+            aws_sdk_s3::types::ChecksumType::FullObject => Self::from_static(Self::FULL_OBJECT),
+            _ => Self::from(x.as_str().to_owned()),
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        Ok(aws_sdk_s3::types::ChecksumType::from(x.as_str()))
     }
 }
 
@@ -666,11 +697,15 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
             bucket: unwrap_from_aws(x.bucket, "bucket")?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+            if_match: try_from_aws(x.if_match)?,
             if_none_match: try_from_aws(x.if_none_match)?,
             key: unwrap_from_aws(x.key, "key")?,
+            mpu_object_size: try_from_aws(x.mpu_object_size)?,
             multipart_upload: try_from_aws(x.multipart_upload)?,
             request_payer: try_from_aws(x.request_payer)?,
             sse_customer_algorithm: try_from_aws(x.sse_customer_algorithm)?,
@@ -685,11 +720,15 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
+        y = y.set_if_match(try_into_aws(x.if_match)?);
         y = y.set_if_none_match(try_into_aws(x.if_none_match)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
+        y = y.set_mpu_object_size(try_into_aws(x.mpu_object_size)?);
         y = y.set_multipart_upload(try_into_aws(x.multipart_upload)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_sse_customer_algorithm(try_into_aws(x.sse_customer_algorithm)?);
@@ -710,8 +749,10 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadOutput {
             bucket_key_enabled: try_from_aws(x.bucket_key_enabled)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             e_tag: try_from_aws(x.e_tag)?,
             expiration: try_from_aws(x.expiration)?,
             key: try_from_aws(x.key)?,
@@ -729,8 +770,10 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadOutput {
         y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
         y = y.set_expiration(try_into_aws(x.expiration)?);
         y = y.set_key(try_into_aws(x.key)?);
@@ -768,6 +811,7 @@ impl AwsConversion for s3s::dto::CompletedPart {
         Ok(Self {
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             e_tag: try_from_aws(x.e_tag)?,
@@ -779,6 +823,7 @@ impl AwsConversion for s3s::dto::CompletedPart {
         let mut y = Self::Target::builder();
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
@@ -982,8 +1027,10 @@ impl AwsConversion for s3s::dto::CopyObjectResult {
         Ok(Self {
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             e_tag: try_from_aws(x.e_tag)?,
             last_modified: try_from_aws(x.last_modified)?,
         })
@@ -993,8 +1040,10 @@ impl AwsConversion for s3s::dto::CopyObjectResult {
         let mut y = Self::Target::builder();
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
         y = y.set_last_modified(try_into_aws(x.last_modified)?);
         Ok(y.build())
@@ -1009,6 +1058,7 @@ impl AwsConversion for s3s::dto::CopyPartResult {
         Ok(Self {
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             e_tag: try_from_aws(x.e_tag)?,
@@ -1020,6 +1070,7 @@ impl AwsConversion for s3s::dto::CopyPartResult {
         let mut y = Self::Target::builder();
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
@@ -1084,6 +1135,47 @@ impl AwsConversion for s3s::dto::CreateBucketInput {
     }
 }
 
+impl AwsConversion for s3s::dto::CreateBucketMetadataTableConfigurationInput {
+    type Target = aws_sdk_s3::operation::create_bucket_metadata_table_configuration::CreateBucketMetadataTableConfigurationInput;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            bucket: unwrap_from_aws(x.bucket, "bucket")?,
+            checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
+            content_md5: try_from_aws(x.content_md5)?,
+            expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+            metadata_table_configuration: unwrap_from_aws(x.metadata_table_configuration, "metadata_table_configuration")?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_bucket(Some(try_into_aws(x.bucket)?));
+        y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
+        y = y.set_content_md5(try_into_aws(x.content_md5)?);
+        y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
+        y = y.set_metadata_table_configuration(Some(try_into_aws(x.metadata_table_configuration)?));
+        y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::CreateBucketMetadataTableConfigurationOutput {
+    type Target = aws_sdk_s3::operation::create_bucket_metadata_table_configuration::CreateBucketMetadataTableConfigurationOutput;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::CreateBucketOutput {
     type Target = aws_sdk_s3::operation::create_bucket::CreateBucketOutput;
     type Error = S3Error;
@@ -1112,6 +1204,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
             bucket_key_enabled: try_from_aws(x.bucket_key_enabled)?,
             cache_control: try_from_aws(x.cache_control)?,
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             content_disposition: try_from_aws(x.content_disposition)?,
             content_encoding: try_from_aws(x.content_encoding)?,
             content_language: try_from_aws(x.content_language)?,
@@ -1147,6 +1240,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
         y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_cache_control(try_into_aws(x.cache_control)?);
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);
         y = y.set_content_encoding(try_into_aws(x.content_encoding)?);
         y = y.set_content_language(try_into_aws(x.content_language)?);
@@ -1187,6 +1281,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadOutput {
             bucket: try_from_aws(x.bucket)?,
             bucket_key_enabled: try_from_aws(x.bucket_key_enabled)?,
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             key: try_from_aws(x.key)?,
             request_charged: try_from_aws(x.request_charged)?,
             sse_customer_algorithm: try_from_aws(x.sse_customer_algorithm)?,
@@ -1205,6 +1300,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadOutput {
         y = y.set_bucket(try_into_aws(x.bucket)?);
         y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_key(try_into_aws(x.key)?);
         y = y.set_request_charged(try_into_aws(x.request_charged)?);
         y = y.set_sse_customer_algorithm(try_into_aws(x.sse_customer_algorithm)?);
@@ -1224,6 +1320,7 @@ impl AwsConversion for s3s::dto::DataRedundancy {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::DataRedundancy::SingleAvailabilityZone => Self::from_static(Self::SINGLE_AVAILABILITY_ZONE),
+            aws_sdk_s3::types::DataRedundancy::SingleLocalZone => Self::from_static(Self::SINGLE_LOCAL_ZONE),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -1494,6 +1591,41 @@ impl AwsConversion for s3s::dto::DeleteBucketLifecycleInput {
 
 impl AwsConversion for s3s::dto::DeleteBucketLifecycleOutput {
     type Target = aws_sdk_s3::operation::delete_bucket_lifecycle::DeleteBucketLifecycleOutput;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::DeleteBucketMetadataTableConfigurationInput {
+    type Target = aws_sdk_s3::operation::delete_bucket_metadata_table_configuration::DeleteBucketMetadataTableConfigurationInput;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            bucket: unwrap_from_aws(x.bucket, "bucket")?,
+            expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_bucket(Some(try_into_aws(x.bucket)?));
+        y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
+        y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::DeleteBucketMetadataTableConfigurationOutput {
+    type Target = aws_sdk_s3::operation::delete_bucket_metadata_table_configuration::DeleteBucketMetadataTableConfigurationOutput;
     type Error = S3Error;
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
@@ -1804,6 +1936,9 @@ impl AwsConversion for s3s::dto::DeleteObjectInput {
             bucket: unwrap_from_aws(x.bucket, "bucket")?,
             bypass_governance_retention: try_from_aws(x.bypass_governance_retention)?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+            if_match: try_from_aws(x.if_match)?,
+            if_match_last_modified_time: try_from_aws(x.if_match_last_modified_time)?,
+            if_match_size: try_from_aws(x.if_match_size)?,
             key: unwrap_from_aws(x.key, "key")?,
             mfa: try_from_aws(x.mfa)?,
             request_payer: try_from_aws(x.request_payer)?,
@@ -1816,6 +1951,9 @@ impl AwsConversion for s3s::dto::DeleteObjectInput {
         y = y.set_bucket(Some(try_into_aws(x.bucket)?));
         y = y.set_bypass_governance_retention(try_into_aws(x.bypass_governance_retention)?);
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
+        y = y.set_if_match(try_into_aws(x.if_match)?);
+        y = y.set_if_match_last_modified_time(try_into_aws(x.if_match_last_modified_time)?);
+        y = y.set_if_match_size(try_into_aws(x.if_match_size)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
         y = y.set_mfa(try_into_aws(x.mfa)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
@@ -2076,6 +2214,22 @@ impl AwsConversion for s3s::dto::EncryptionConfiguration {
     }
 }
 
+impl AwsConversion for s3s::dto::EncryptionTypeMismatch {
+    type Target = aws_sdk_s3::types::error::EncryptionTypeMismatch;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::EndEvent {
     type Target = aws_sdk_s3::types::EndEvent;
     type Error = S3Error;
@@ -2111,6 +2265,25 @@ impl AwsConversion for s3s::dto::Error {
         y = y.set_key(try_into_aws(x.key)?);
         y = y.set_message(try_into_aws(x.message)?);
         y = y.set_version_id(try_into_aws(x.version_id)?);
+        Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::ErrorDetails {
+    type Target = aws_sdk_s3::types::ErrorDetails;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            error_code: try_from_aws(x.error_code)?,
+            error_message: try_from_aws(x.error_message)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_error_code(try_into_aws(x.error_code)?);
+        y = y.set_error_message(try_into_aws(x.error_message)?);
         Ok(y.build())
     }
 }
@@ -2640,6 +2813,66 @@ impl AwsConversion for s3s::dto::GetBucketLoggingOutput {
         let mut y = Self::Target::builder();
         y = y.set_logging_enabled(try_into_aws(x.logging_enabled)?);
         Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::GetBucketMetadataTableConfigurationInput {
+    type Target = aws_sdk_s3::operation::get_bucket_metadata_table_configuration::GetBucketMetadataTableConfigurationInput;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            bucket: unwrap_from_aws(x.bucket, "bucket")?,
+            expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_bucket(Some(try_into_aws(x.bucket)?));
+        y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
+        y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::GetBucketMetadataTableConfigurationOutput {
+    type Target = aws_sdk_s3::operation::get_bucket_metadata_table_configuration::GetBucketMetadataTableConfigurationOutput;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            get_bucket_metadata_table_configuration_result: try_from_aws(x.get_bucket_metadata_table_configuration_result)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_get_bucket_metadata_table_configuration_result(try_into_aws(x.get_bucket_metadata_table_configuration_result)?);
+        Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::GetBucketMetadataTableConfigurationResult {
+    type Target = aws_sdk_s3::types::GetBucketMetadataTableConfigurationResult;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            error: try_from_aws(x.error)?,
+            metadata_table_configuration_result: unwrap_from_aws(
+                x.metadata_table_configuration_result,
+                "metadata_table_configuration_result",
+            )?,
+            status: try_from_aws(x.status)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_error(try_into_aws(x.error)?);
+        y = y.set_metadata_table_configuration_result(Some(try_into_aws(x.metadata_table_configuration_result)?));
+        y = y.set_status(Some(try_into_aws(x.status)?));
+        y.build().map_err(S3Error::internal_error)
     }
 }
 
@@ -3310,8 +3543,10 @@ impl AwsConversion for s3s::dto::GetObjectOutput {
             cache_control: try_from_aws(x.cache_control)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             content_disposition: try_from_aws(x.content_disposition)?,
             content_encoding: try_from_aws(x.content_encoding)?,
             content_language: try_from_aws(x.content_language)?,
@@ -3352,8 +3587,10 @@ impl AwsConversion for s3s::dto::GetObjectOutput {
         y = y.set_cache_control(try_into_aws(x.cache_control)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);
         y = y.set_content_encoding(try_into_aws(x.content_encoding)?);
         y = y.set_content_language(try_into_aws(x.content_language)?);
@@ -3723,12 +3960,15 @@ impl AwsConversion for s3s::dto::HeadObjectOutput {
             cache_control: try_from_aws(x.cache_control)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             content_disposition: try_from_aws(x.content_disposition)?,
             content_encoding: try_from_aws(x.content_encoding)?,
             content_language: try_from_aws(x.content_language)?,
             content_length: try_from_aws(x.content_length)?,
+            content_range: try_from_aws(x.content_range)?,
             content_type: try_from_aws(x.content_type)?,
             delete_marker: try_from_aws(x.delete_marker)?,
             e_tag: try_from_aws(x.e_tag)?,
@@ -3763,12 +4003,15 @@ impl AwsConversion for s3s::dto::HeadObjectOutput {
         y = y.set_cache_control(try_into_aws(x.cache_control)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);
         y = y.set_content_encoding(try_into_aws(x.content_encoding)?);
         y = y.set_content_language(try_into_aws(x.content_language)?);
         y = y.set_content_length(try_into_aws(x.content_length)?);
+        y = y.set_content_range(try_into_aws(x.content_range)?);
         y = y.set_content_type(try_into_aws(x.content_type)?);
         y = y.set_delete_marker(try_into_aws(x.delete_marker)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
@@ -3966,6 +4209,38 @@ impl AwsConversion for s3s::dto::InvalidObjectState {
         let mut y = Self::Target::builder();
         y = y.set_access_tier(try_into_aws(x.access_tier)?);
         y = y.set_storage_class(try_into_aws(x.storage_class)?);
+        Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::InvalidRequest {
+    type Target = aws_sdk_s3::types::error::InvalidRequest;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::InvalidWriteOffset {
+    type Target = aws_sdk_s3::types::error::InvalidWriteOffset;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
         Ok(y.build())
     }
 }
@@ -4544,15 +4819,19 @@ impl AwsConversion for s3s::dto::ListBucketsInput {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
+            bucket_region: try_from_aws(x.bucket_region)?,
             continuation_token: try_from_aws(x.continuation_token)?,
             max_buckets: try_from_aws(x.max_buckets)?,
+            prefix: try_from_aws(x.prefix)?,
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
+        y = y.set_bucket_region(try_into_aws(x.bucket_region)?);
         y = y.set_continuation_token(try_into_aws(x.continuation_token)?);
         y = y.set_max_buckets(try_into_aws(x.max_buckets)?);
+        y = y.set_prefix(try_into_aws(x.prefix)?);
         y.build().map_err(S3Error::internal_error)
     }
 }
@@ -4566,6 +4845,7 @@ impl AwsConversion for s3s::dto::ListBucketsOutput {
             buckets: try_from_aws(x.buckets)?,
             continuation_token: try_from_aws(x.continuation_token)?,
             owner: try_from_aws(x.owner)?,
+            prefix: try_from_aws(x.prefix)?,
         })
     }
 
@@ -4574,6 +4854,7 @@ impl AwsConversion for s3s::dto::ListBucketsOutput {
         y = y.set_buckets(try_into_aws(x.buckets)?);
         y = y.set_continuation_token(try_into_aws(x.continuation_token)?);
         y = y.set_owner(try_into_aws(x.owner)?);
+        y = y.set_prefix(try_into_aws(x.prefix)?);
         Ok(y.build())
     }
 }
@@ -4923,6 +5204,7 @@ impl AwsConversion for s3s::dto::ListPartsOutput {
             abort_rule_id: try_from_aws(x.abort_rule_id)?,
             bucket: try_from_aws(x.bucket)?,
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             initiator: try_from_aws(x.initiator)?,
             is_truncated: try_from_aws(x.is_truncated)?,
             key: try_from_aws(x.key)?,
@@ -4943,6 +5225,7 @@ impl AwsConversion for s3s::dto::ListPartsOutput {
         y = y.set_abort_rule_id(try_into_aws(x.abort_rule_id)?);
         y = y.set_bucket(try_into_aws(x.bucket)?);
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_initiator(try_into_aws(x.initiator)?);
         y = y.set_is_truncated(try_into_aws(x.is_truncated)?);
         y = y.set_key(try_into_aws(x.key)?);
@@ -4984,6 +5267,7 @@ impl AwsConversion for s3s::dto::LocationType {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(match x {
             aws_sdk_s3::types::LocationType::AvailabilityZone => Self::from_static(Self::AVAILABILITY_ZONE),
+            aws_sdk_s3::types::LocationType::LocalZone => Self::from_static(Self::LOCAL_ZONE),
             _ => Self::from(x.as_str().to_owned()),
         })
     }
@@ -5082,6 +5366,40 @@ impl AwsConversion for s3s::dto::MetadataEntry {
         let mut y = Self::Target::builder();
         y = y.set_name(try_into_aws(x.name)?);
         y = y.set_value(try_into_aws(x.value)?);
+        Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::MetadataTableConfiguration {
+    type Target = aws_sdk_s3::types::MetadataTableConfiguration;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            s3_tables_destination: unwrap_from_aws(x.s3_tables_destination, "s3_tables_destination")?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_s3_tables_destination(Some(try_into_aws(x.s3_tables_destination)?));
+        Ok(y.build())
+    }
+}
+
+impl AwsConversion for s3s::dto::MetadataTableConfigurationResult {
+    type Target = aws_sdk_s3::types::MetadataTableConfigurationResult;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            s3_tables_destination_result: unwrap_from_aws(x.s3_tables_destination_result, "s3_tables_destination_result")?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_s3_tables_destination_result(Some(try_into_aws(x.s3_tables_destination_result)?));
         Ok(y.build())
     }
 }
@@ -5194,6 +5512,7 @@ impl AwsConversion for s3s::dto::MultipartUpload {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             initiated: try_from_aws(x.initiated)?,
             initiator: try_from_aws(x.initiator)?,
             key: try_from_aws(x.key)?,
@@ -5206,6 +5525,7 @@ impl AwsConversion for s3s::dto::MultipartUpload {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_initiated(try_into_aws(x.initiated)?);
         y = y.set_initiator(try_into_aws(x.initiator)?);
         y = y.set_key(try_into_aws(x.key)?);
@@ -5367,6 +5687,7 @@ impl AwsConversion for s3s::dto::Object {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             e_tag: try_from_aws(x.e_tag)?,
             key: try_from_aws(x.key)?,
             last_modified: try_from_aws(x.last_modified)?,
@@ -5380,6 +5701,7 @@ impl AwsConversion for s3s::dto::Object {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
         y = y.set_key(try_into_aws(x.key)?);
         y = y.set_last_modified(try_into_aws(x.last_modified)?);
@@ -5455,14 +5777,20 @@ impl AwsConversion for s3s::dto::ObjectIdentifier {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
+            e_tag: try_from_aws(x.e_tag)?,
             key: try_from_aws(x.key)?,
+            last_modified_time: try_from_aws(x.last_modified_time)?,
+            size: try_from_aws(x.size)?,
             version_id: try_from_aws(x.version_id)?,
         })
     }
 
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
+        y = y.set_e_tag(try_into_aws(x.e_tag)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
+        y = y.set_last_modified_time(try_into_aws(x.last_modified_time)?);
+        y = y.set_size(try_into_aws(x.size)?);
         y = y.set_version_id(try_into_aws(x.version_id)?);
         y.build().map_err(S3Error::internal_error)
     }
@@ -5649,6 +5977,7 @@ impl AwsConversion for s3s::dto::ObjectPart {
         Ok(Self {
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             part_number: try_from_aws(x.part_number)?,
@@ -5660,6 +5989,7 @@ impl AwsConversion for s3s::dto::ObjectPart {
         let mut y = Self::Target::builder();
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_part_number(try_into_aws(x.part_number)?);
@@ -5701,6 +6031,7 @@ impl AwsConversion for s3s::dto::ObjectVersion {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             e_tag: try_from_aws(x.e_tag)?,
             is_latest: try_from_aws(x.is_latest)?,
             key: try_from_aws(x.key)?,
@@ -5716,6 +6047,7 @@ impl AwsConversion for s3s::dto::ObjectVersion {
     fn try_into_aws(x: Self) -> S3Result<Self::Target> {
         let mut y = Self::Target::builder();
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
         y = y.set_is_latest(try_into_aws(x.is_latest)?);
         y = y.set_key(try_into_aws(x.key)?);
@@ -5888,6 +6220,7 @@ impl AwsConversion for s3s::dto::Part {
         Ok(Self {
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             e_tag: try_from_aws(x.e_tag)?,
@@ -5901,6 +6234,7 @@ impl AwsConversion for s3s::dto::Part {
         let mut y = Self::Target::builder();
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
@@ -6900,6 +7234,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             content_disposition: try_from_aws(x.content_disposition)?,
@@ -6914,6 +7249,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
             grant_read: try_from_aws(x.grant_read)?,
             grant_read_acp: try_from_aws(x.grant_read_acp)?,
             grant_write_acp: try_from_aws(x.grant_write_acp)?,
+            if_match: try_from_aws(x.if_match)?,
             if_none_match: try_from_aws(x.if_none_match)?,
             key: unwrap_from_aws(x.key, "key")?,
             metadata: try_from_aws(x.metadata)?,
@@ -6930,6 +7266,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
             storage_class: try_from_aws(x.storage_class)?,
             tagging: try_from_aws(x.tagging)?,
             website_redirect_location: try_from_aws(x.website_redirect_location)?,
+            write_offset_bytes: try_from_aws(x.write_offset_bytes)?,
         })
     }
 
@@ -6943,6 +7280,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);
@@ -6957,6 +7295,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
         y = y.set_grant_read(try_into_aws(x.grant_read)?);
         y = y.set_grant_read_acp(try_into_aws(x.grant_read_acp)?);
         y = y.set_grant_write_acp(try_into_aws(x.grant_write_acp)?);
+        y = y.set_if_match(try_into_aws(x.if_match)?);
         y = y.set_if_none_match(try_into_aws(x.if_none_match)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
         y = y.set_metadata(try_into_aws(x.metadata)?);
@@ -6973,6 +7312,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
         y = y.set_storage_class(try_into_aws(x.storage_class)?);
         y = y.set_tagging(try_into_aws(x.tagging)?);
         y = y.set_website_redirect_location(try_into_aws(x.website_redirect_location)?);
+        y = y.set_write_offset_bytes(try_into_aws(x.write_offset_bytes)?);
         y.build().map_err(S3Error::internal_error)
     }
 }
@@ -7080,8 +7420,10 @@ impl AwsConversion for s3s::dto::PutObjectOutput {
             bucket_key_enabled: try_from_aws(x.bucket_key_enabled)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
+            checksum_type: try_from_aws(x.checksum_type)?,
             e_tag: try_from_aws(x.e_tag)?,
             expiration: try_from_aws(x.expiration)?,
             request_charged: try_from_aws(x.request_charged)?,
@@ -7090,6 +7432,7 @@ impl AwsConversion for s3s::dto::PutObjectOutput {
             ssekms_encryption_context: try_from_aws(x.ssekms_encryption_context)?,
             ssekms_key_id: try_from_aws(x.ssekms_key_id)?,
             server_side_encryption: try_from_aws(x.server_side_encryption)?,
+            size: try_from_aws(x.size)?,
             version_id: try_from_aws(x.version_id)?,
         })
     }
@@ -7099,8 +7442,10 @@ impl AwsConversion for s3s::dto::PutObjectOutput {
         y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
+        y = y.set_checksum_type(try_into_aws(x.checksum_type)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
         y = y.set_expiration(try_into_aws(x.expiration)?);
         y = y.set_request_charged(try_into_aws(x.request_charged)?);
@@ -7109,6 +7454,7 @@ impl AwsConversion for s3s::dto::PutObjectOutput {
         y = y.set_ssekms_encryption_context(try_into_aws(x.ssekms_encryption_context)?);
         y = y.set_ssekms_key_id(try_into_aws(x.ssekms_key_id)?);
         y = y.set_server_side_encryption(try_into_aws(x.server_side_encryption)?);
+        y = y.set_size(try_into_aws(x.size)?);
         y = y.set_version_id(try_into_aws(x.version_id)?);
         Ok(y.build())
     }
@@ -7820,6 +8166,48 @@ impl AwsConversion for s3s::dto::S3Location {
     }
 }
 
+impl AwsConversion for s3s::dto::S3TablesDestination {
+    type Target = aws_sdk_s3::types::S3TablesDestination;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            table_bucket_arn: try_from_aws(x.table_bucket_arn)?,
+            table_name: try_from_aws(x.table_name)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_table_bucket_arn(Some(try_into_aws(x.table_bucket_arn)?));
+        y = y.set_table_name(Some(try_into_aws(x.table_name)?));
+        y.build().map_err(S3Error::internal_error)
+    }
+}
+
+impl AwsConversion for s3s::dto::S3TablesDestinationResult {
+    type Target = aws_sdk_s3::types::S3TablesDestinationResult;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Ok(Self {
+            table_arn: try_from_aws(x.table_arn)?,
+            table_bucket_arn: try_from_aws(x.table_bucket_arn)?,
+            table_name: try_from_aws(x.table_name)?,
+            table_namespace: try_from_aws(x.table_namespace)?,
+        })
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let mut y = Self::Target::builder();
+        y = y.set_table_arn(Some(try_into_aws(x.table_arn)?));
+        y = y.set_table_bucket_arn(Some(try_into_aws(x.table_bucket_arn)?));
+        y = y.set_table_name(Some(try_into_aws(x.table_name)?));
+        y = y.set_table_namespace(Some(try_into_aws(x.table_namespace)?));
+        y.build().map_err(S3Error::internal_error)
+    }
+}
+
 impl AwsConversion for s3s::dto::SSEKMS {
     type Target = aws_sdk_s3::types::Ssekms;
     type Error = S3Error;
@@ -8345,6 +8733,22 @@ impl AwsConversion for s3s::dto::Tiering {
     }
 }
 
+impl AwsConversion for s3s::dto::TooManyParts {
+    type Target = aws_sdk_s3::types::error::TooManyParts;
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        let _ = x;
+        Ok(Self {})
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        let _ = x;
+        let y = Self::Target::builder();
+        Ok(y.build())
+    }
+}
+
 impl AwsConversion for s3s::dto::TopicConfiguration {
     type Target = aws_sdk_s3::types::TopicConfiguration;
     type Error = S3Error;
@@ -8544,6 +8948,7 @@ impl AwsConversion for s3s::dto::UploadPartInput {
             checksum_algorithm: try_from_aws(x.checksum_algorithm)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             content_length: try_from_aws(x.content_length)?,
@@ -8566,6 +8971,7 @@ impl AwsConversion for s3s::dto::UploadPartInput {
         y = y.set_checksum_algorithm(try_into_aws(x.checksum_algorithm)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_content_length(try_into_aws(x.content_length)?);
@@ -8591,6 +8997,7 @@ impl AwsConversion for s3s::dto::UploadPartOutput {
             bucket_key_enabled: try_from_aws(x.bucket_key_enabled)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             e_tag: try_from_aws(x.e_tag)?,
@@ -8607,6 +9014,7 @@ impl AwsConversion for s3s::dto::UploadPartOutput {
         y = y.set_bucket_key_enabled(try_into_aws(x.bucket_key_enabled)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_e_tag(try_into_aws(x.e_tag)?);
@@ -8673,6 +9081,7 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
             cache_control: try_from_aws(x.cache_control)?,
             checksum_crc32: try_from_aws(x.checksum_crc32)?,
             checksum_crc32c: try_from_aws(x.checksum_crc32_c)?,
+            checksum_crc64nvme: try_from_aws(x.checksum_crc64_nvme)?,
             checksum_sha1: try_from_aws(x.checksum_sha1)?,
             checksum_sha256: try_from_aws(x.checksum_sha256)?,
             content_disposition: try_from_aws(x.content_disposition)?,
@@ -8718,6 +9127,7 @@ impl AwsConversion for s3s::dto::WriteGetObjectResponseInput {
         y = y.set_cache_control(try_into_aws(x.cache_control)?);
         y = y.set_checksum_crc32(try_into_aws(x.checksum_crc32)?);
         y = y.set_checksum_crc32_c(try_into_aws(x.checksum_crc32c)?);
+        y = y.set_checksum_crc64_nvme(try_into_aws(x.checksum_crc64nvme)?);
         y = y.set_checksum_sha1(try_into_aws(x.checksum_sha1)?);
         y = y.set_checksum_sha256(try_into_aws(x.checksum_sha256)?);
         y = y.set_content_disposition(try_into_aws(x.content_disposition)?);

@@ -4,6 +4,7 @@
 // CompleteMultipartUpload
 // CopyObject
 // CreateBucket
+// CreateBucketMetadataTableConfiguration
 // CreateMultipartUpload
 // DeleteBucket
 // DeleteBucketAnalyticsConfiguration
@@ -12,6 +13,7 @@
 // DeleteBucketIntelligentTieringConfiguration
 // DeleteBucketInventoryConfiguration
 // DeleteBucketLifecycle
+// DeleteBucketMetadataTableConfiguration
 // DeleteBucketMetricsConfiguration
 // DeleteBucketOwnershipControls
 // DeleteBucketPolicy
@@ -32,6 +34,7 @@
 // GetBucketLifecycleConfiguration
 // GetBucketLocation
 // GetBucketLogging
+// GetBucketMetadataTableConfiguration
 // GetBucketMetricsConfiguration
 // GetBucketNotificationConfiguration
 // GetBucketOwnershipControls
@@ -140,6 +143,16 @@ impl http::TryIntoHeaderValue for ChecksumAlgorithm {
 }
 
 impl http::TryIntoHeaderValue for ChecksumMode {
+    type Error = http::InvalidHeaderValue;
+    fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
+        match Cow::from(self) {
+            Cow::Borrowed(s) => http::HeaderValue::try_from(s),
+            Cow::Owned(s) => http::HeaderValue::try_from(s),
+        }
+    }
+}
+
+impl http::TryIntoHeaderValue for ChecksumType {
     type Error = http::InvalidHeaderValue;
     fn try_into_header_value(self) -> Result<http::HeaderValue, Self::Error> {
         match Cow::from(self) {
@@ -331,6 +344,14 @@ impl http::TryFromHeaderValue for ChecksumMode {
     }
 }
 
+impl http::TryFromHeaderValue for ChecksumType {
+    type Error = http::ParseHeaderError;
+    fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
+        let val = val.to_str().map_err(|_| http::ParseHeaderError::Enum)?;
+        Ok(Self::from(val.to_owned()))
+    }
+}
+
 impl http::TryFromHeaderValue for LocationType {
     type Error = http::ParseHeaderError;
     fn try_from_header_value(val: &http::HeaderValue) -> Result<Self, Self::Error> {
@@ -459,6 +480,9 @@ impl AbortMultipartUpload {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
+        let if_match_initiated_time: Option<IfMatchInitiatedTime> =
+            http::parse_opt_header_timestamp(req, &X_AMZ_IF_MATCH_INITIATED_TIME, TimestampFormat::HttpDate)?;
+
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
 
         let upload_id: MultipartUploadId = http::parse_query(req, "uploadId")?;
@@ -466,6 +490,7 @@ impl AbortMultipartUpload {
         Ok(AbortMultipartUploadInput {
             bucket,
             expected_bucket_owner,
+            if_match_initiated_time,
             key,
             request_payer,
             upload_id,
@@ -514,13 +539,21 @@ impl CompleteMultipartUpload {
 
         let checksum_crc32c: Option<ChecksumCRC32C> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC32C)?;
 
+        let checksum_crc64nvme: Option<ChecksumCRC64NVME> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC64NVME)?;
+
         let checksum_sha1: Option<ChecksumSHA1> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_SHA1)?;
 
         let checksum_sha256: Option<ChecksumSHA256> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_SHA256)?;
 
+        let checksum_type: Option<ChecksumType> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_TYPE)?;
+
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
+        let if_match: Option<IfMatch> = http::parse_opt_header(req, &IF_MATCH)?;
+
         let if_none_match: Option<IfNoneMatch> = http::parse_opt_header(req, &IF_NONE_MATCH)?;
+
+        let mpu_object_size: Option<MpuObjectSize> = http::parse_opt_header(req, &X_AMZ_MP_OBJECT_SIZE)?;
 
         let multipart_upload: Option<CompletedMultipartUpload> = http::take_opt_xml_body(req)?;
 
@@ -540,11 +573,15 @@ impl CompleteMultipartUpload {
             bucket,
             checksum_crc32,
             checksum_crc32c,
+            checksum_crc64nvme,
             checksum_sha1,
             checksum_sha256,
+            checksum_type,
             expected_bucket_owner,
+            if_match,
             if_none_match,
             key,
+            mpu_object_size,
             multipart_upload,
             request_payer,
             sse_customer_algorithm,
@@ -870,6 +907,59 @@ impl super::Operation for CreateBucket {
     }
 }
 
+pub struct CreateBucketMetadataTableConfiguration;
+
+impl CreateBucketMetadataTableConfiguration {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<CreateBucketMetadataTableConfigurationInput> {
+        let bucket = http::unwrap_bucket(req);
+
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+
+        let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
+
+        let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
+
+        let metadata_table_configuration: MetadataTableConfiguration = http::take_xml_body(req)?;
+
+        Ok(CreateBucketMetadataTableConfigurationInput {
+            bucket,
+            checksum_algorithm,
+            content_md5,
+            expected_bucket_owner,
+            metadata_table_configuration,
+        })
+    }
+
+    pub fn serialize_http(_: CreateBucketMetadataTableConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::with_status(http::StatusCode::OK))
+    }
+}
+
+#[async_trait::async_trait]
+impl super::Operation for CreateBucketMetadataTableConfiguration {
+    fn name(&self) -> &'static str {
+        "CreateBucketMetadataTableConfiguration"
+    }
+
+    async fn call(&self, ccx: &CallContext<'_>, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let mut s3_req = super::build_s3_request(input, req);
+        let s3 = ccx.s3;
+        if let Some(access) = ccx.access {
+            access.create_bucket_metadata_table_configuration(&mut s3_req).await?;
+        }
+        let result = s3.create_bucket_metadata_table_configuration(s3_req).await;
+        let s3_resp = match result {
+            Ok(val) => val,
+            Err(err) => return super::serialize_error(err, false),
+        };
+        let mut resp = Self::serialize_http(s3_resp.output)?;
+        resp.headers.extend(s3_resp.headers);
+        resp.extensions.extend(s3_resp.extensions);
+        Ok(resp)
+    }
+}
+
 pub struct CreateMultipartUpload;
 
 impl CreateMultipartUpload {
@@ -884,6 +974,8 @@ impl CreateMultipartUpload {
         let cache_control: Option<CacheControl> = http::parse_opt_header(req, &CACHE_CONTROL)?;
 
         let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_ALGORITHM)?;
+
+        let checksum_type: Option<ChecksumType> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_TYPE)?;
 
         let content_disposition: Option<ContentDisposition> = http::parse_opt_header(req, &CONTENT_DISPOSITION)?;
 
@@ -945,6 +1037,7 @@ impl CreateMultipartUpload {
             bucket_key_enabled,
             cache_control,
             checksum_algorithm,
+            checksum_type,
             content_disposition,
             content_encoding,
             content_language,
@@ -980,6 +1073,7 @@ impl CreateMultipartUpload {
         http::add_opt_header(&mut res, X_AMZ_ABORT_RULE_ID, x.abort_rule_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_ALGORITHM, x.checksum_algorithm)?;
+        http::add_opt_header(&mut res, X_AMZ_CHECKSUM_TYPE, x.checksum_type)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_ALGORITHM, x.sse_customer_algorithm)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CUSTOMER_KEY_MD5, x.sse_customer_key_md5)?;
@@ -1326,6 +1420,50 @@ impl super::Operation for DeleteBucketLifecycle {
     }
 }
 
+pub struct DeleteBucketMetadataTableConfiguration;
+
+impl DeleteBucketMetadataTableConfiguration {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<DeleteBucketMetadataTableConfigurationInput> {
+        let bucket = http::unwrap_bucket(req);
+
+        let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
+
+        Ok(DeleteBucketMetadataTableConfigurationInput {
+            bucket,
+            expected_bucket_owner,
+        })
+    }
+
+    pub fn serialize_http(_: DeleteBucketMetadataTableConfigurationOutput) -> S3Result<http::Response> {
+        Ok(http::Response::with_status(http::StatusCode::NO_CONTENT))
+    }
+}
+
+#[async_trait::async_trait]
+impl super::Operation for DeleteBucketMetadataTableConfiguration {
+    fn name(&self) -> &'static str {
+        "DeleteBucketMetadataTableConfiguration"
+    }
+
+    async fn call(&self, ccx: &CallContext<'_>, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let mut s3_req = super::build_s3_request(input, req);
+        let s3 = ccx.s3;
+        if let Some(access) = ccx.access {
+            access.delete_bucket_metadata_table_configuration(&mut s3_req).await?;
+        }
+        let result = s3.delete_bucket_metadata_table_configuration(s3_req).await;
+        let s3_resp = match result {
+            Ok(val) => val,
+            Err(err) => return super::serialize_error(err, false),
+        };
+        let mut resp = Self::serialize_http(s3_resp.output)?;
+        resp.headers.extend(s3_resp.headers);
+        resp.extensions.extend(s3_resp.extensions);
+        Ok(resp)
+    }
+}
+
 pub struct DeleteBucketMetricsConfiguration;
 
 impl DeleteBucketMetricsConfiguration {
@@ -1604,6 +1742,13 @@ impl DeleteObject {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
+        let if_match: Option<IfMatch> = http::parse_opt_header(req, &IF_MATCH)?;
+
+        let if_match_last_modified_time: Option<IfMatchLastModifiedTime> =
+            http::parse_opt_header_timestamp(req, &X_AMZ_IF_MATCH_LAST_MODIFIED_TIME, TimestampFormat::HttpDate)?;
+
+        let if_match_size: Option<IfMatchSize> = http::parse_opt_header(req, &X_AMZ_IF_MATCH_SIZE)?;
+
         let mfa: Option<MFA> = http::parse_opt_header(req, &X_AMZ_MFA)?;
 
         let request_payer: Option<RequestPayer> = http::parse_opt_header(req, &X_AMZ_REQUEST_PAYER)?;
@@ -1614,6 +1759,9 @@ impl DeleteObject {
             bucket,
             bypass_governance_retention,
             expected_bucket_owner,
+            if_match,
+            if_match_last_modified_time,
+            if_match_size,
             key,
             mfa,
             request_payer,
@@ -2292,6 +2440,54 @@ impl super::Operation for GetBucketLogging {
     }
 }
 
+pub struct GetBucketMetadataTableConfiguration;
+
+impl GetBucketMetadataTableConfiguration {
+    pub fn deserialize_http(req: &mut http::Request) -> S3Result<GetBucketMetadataTableConfigurationInput> {
+        let bucket = http::unwrap_bucket(req);
+
+        let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
+
+        Ok(GetBucketMetadataTableConfigurationInput {
+            bucket,
+            expected_bucket_owner,
+        })
+    }
+
+    pub fn serialize_http(x: GetBucketMetadataTableConfigurationOutput) -> S3Result<http::Response> {
+        let mut res = http::Response::with_status(http::StatusCode::OK);
+        if let Some(ref val) = x.get_bucket_metadata_table_configuration_result {
+            http::set_xml_body(&mut res, val)?;
+        }
+        Ok(res)
+    }
+}
+
+#[async_trait::async_trait]
+impl super::Operation for GetBucketMetadataTableConfiguration {
+    fn name(&self) -> &'static str {
+        "GetBucketMetadataTableConfiguration"
+    }
+
+    async fn call(&self, ccx: &CallContext<'_>, req: &mut http::Request) -> S3Result<http::Response> {
+        let input = Self::deserialize_http(req)?;
+        let mut s3_req = super::build_s3_request(input, req);
+        let s3 = ccx.s3;
+        if let Some(access) = ccx.access {
+            access.get_bucket_metadata_table_configuration(&mut s3_req).await?;
+        }
+        let result = s3.get_bucket_metadata_table_configuration(s3_req).await;
+        let s3_resp = match result {
+            Ok(val) => val,
+            Err(err) => return super::serialize_error(err, false),
+        };
+        let mut resp = Self::serialize_http(s3_resp.output)?;
+        resp.headers.extend(s3_resp.headers);
+        resp.extensions.extend(s3_resp.extensions);
+        Ok(resp)
+    }
+}
+
 pub struct GetBucketMetricsConfiguration;
 
 impl GetBucketMetricsConfiguration {
@@ -2853,8 +3049,10 @@ impl GetObject {
         http::add_opt_header(&mut res, CACHE_CONTROL, x.cache_control)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
+        http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC64NVME, x.checksum_crc64nvme)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA1, x.checksum_sha1)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA256, x.checksum_sha256)?;
+        http::add_opt_header(&mut res, X_AMZ_CHECKSUM_TYPE, x.checksum_type)?;
         http::add_opt_header(&mut res, CONTENT_DISPOSITION, x.content_disposition)?;
         http::add_opt_header(&mut res, CONTENT_ENCODING, x.content_encoding)?;
         http::add_opt_header(&mut res, CONTENT_LANGUAGE, x.content_language)?;
@@ -3495,12 +3693,15 @@ impl HeadObject {
         http::add_opt_header(&mut res, CACHE_CONTROL, x.cache_control)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
+        http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC64NVME, x.checksum_crc64nvme)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA1, x.checksum_sha1)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA256, x.checksum_sha256)?;
+        http::add_opt_header(&mut res, X_AMZ_CHECKSUM_TYPE, x.checksum_type)?;
         http::add_opt_header(&mut res, CONTENT_DISPOSITION, x.content_disposition)?;
         http::add_opt_header(&mut res, CONTENT_ENCODING, x.content_encoding)?;
         http::add_opt_header(&mut res, CONTENT_LANGUAGE, x.content_language)?;
         http::add_opt_header(&mut res, CONTENT_LENGTH, x.content_length)?;
+        http::add_opt_header(&mut res, CONTENT_RANGE, x.content_range)?;
         http::add_opt_header(&mut res, CONTENT_TYPE, x.content_type)?;
         http::add_opt_header(&mut res, X_AMZ_DELETE_MARKER, x.delete_marker)?;
         http::add_opt_header(&mut res, ETAG, x.e_tag)?;
@@ -3754,13 +3955,19 @@ pub struct ListBuckets;
 
 impl ListBuckets {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<ListBucketsInput> {
+        let bucket_region: Option<BucketRegion> = http::parse_opt_query(req, "bucket-region")?;
+
         let continuation_token: Option<Token> = http::parse_opt_query(req, "continuation-token")?;
 
         let max_buckets: Option<MaxBuckets> = http::parse_opt_query(req, "max-buckets")?;
 
+        let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
+
         Ok(ListBucketsInput {
+            bucket_region,
             continuation_token,
             max_buckets,
+            prefix,
         })
     }
 
@@ -5144,6 +5351,8 @@ impl PutObject {
 
         let checksum_crc32c: Option<ChecksumCRC32C> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC32C)?;
 
+        let checksum_crc64nvme: Option<ChecksumCRC64NVME> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC64NVME)?;
+
         let checksum_sha1: Option<ChecksumSHA1> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_SHA1)?;
 
         let checksum_sha256: Option<ChecksumSHA256> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_SHA256)?;
@@ -5171,6 +5380,8 @@ impl PutObject {
         let grant_read_acp: Option<GrantReadACP> = http::parse_opt_header(req, &X_AMZ_GRANT_READ_ACP)?;
 
         let grant_write_acp: Option<GrantWriteACP> = http::parse_opt_header(req, &X_AMZ_GRANT_WRITE_ACP)?;
+
+        let if_match: Option<IfMatch> = http::parse_opt_header(req, &IF_MATCH)?;
 
         let if_none_match: Option<IfNoneMatch> = http::parse_opt_header(req, &IF_NONE_MATCH)?;
 
@@ -5208,6 +5419,8 @@ impl PutObject {
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_opt_header(req, &X_AMZ_WEBSITE_REDIRECT_LOCATION)?;
 
+        let write_offset_bytes: Option<WriteOffsetBytes> = http::parse_opt_header(req, &X_AMZ_WRITE_OFFSET_BYTES)?;
+
         Ok(PutObjectInput {
             acl,
             body,
@@ -5217,6 +5430,7 @@ impl PutObject {
             checksum_algorithm,
             checksum_crc32,
             checksum_crc32c,
+            checksum_crc64nvme,
             checksum_sha1,
             checksum_sha256,
             content_disposition,
@@ -5231,6 +5445,7 @@ impl PutObject {
             grant_read,
             grant_read_acp,
             grant_write_acp,
+            if_match,
             if_none_match,
             key,
             metadata,
@@ -5247,6 +5462,7 @@ impl PutObject {
             storage_class,
             tagging,
             website_redirect_location,
+            write_offset_bytes,
         })
     }
 
@@ -5275,6 +5491,8 @@ impl PutObject {
 
         let checksum_crc32c: Option<ChecksumCRC32C> = http::parse_field_value(&m, "x-amz-checksum-crc32c")?;
 
+        let checksum_crc64nvme: Option<ChecksumCRC64NVME> = http::parse_field_value(&m, "x-amz-checksum-crc64nvme")?;
+
         let checksum_sha1: Option<ChecksumSHA1> = http::parse_field_value(&m, "x-amz-checksum-sha1")?;
 
         let checksum_sha256: Option<ChecksumSHA256> = http::parse_field_value(&m, "x-amz-checksum-sha256")?;
@@ -5300,6 +5518,8 @@ impl PutObject {
         let grant_read_acp: Option<GrantReadACP> = http::parse_field_value(&m, "x-amz-grant-read-acp")?;
 
         let grant_write_acp: Option<GrantWriteACP> = http::parse_field_value(&m, "x-amz-grant-write-acp")?;
+
+        let if_match: Option<IfMatch> = http::parse_field_value(&m, "if-match")?;
 
         let if_none_match: Option<IfNoneMatch> = http::parse_field_value(&m, "if-none-match")?;
 
@@ -5348,6 +5568,8 @@ impl PutObject {
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_field_value(&m, "x-amz-website-redirect-location")?;
 
+        let write_offset_bytes: Option<WriteOffsetBytes> = http::parse_field_value(&m, "x-amz-write-offset-bytes")?;
+
         Ok(PutObjectInput {
             acl,
             body,
@@ -5357,6 +5579,7 @@ impl PutObject {
             checksum_algorithm,
             checksum_crc32,
             checksum_crc32c,
+            checksum_crc64nvme,
             checksum_sha1,
             checksum_sha256,
             content_disposition,
@@ -5371,6 +5594,7 @@ impl PutObject {
             grant_read,
             grant_read_acp,
             grant_write_acp,
+            if_match,
             if_none_match,
             key,
             metadata,
@@ -5387,6 +5611,7 @@ impl PutObject {
             storage_class,
             tagging,
             website_redirect_location,
+            write_offset_bytes,
         })
     }
 
@@ -5395,8 +5620,10 @@ impl PutObject {
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
+        http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC64NVME, x.checksum_crc64nvme)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA1, x.checksum_sha1)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA256, x.checksum_sha256)?;
+        http::add_opt_header(&mut res, X_AMZ_CHECKSUM_TYPE, x.checksum_type)?;
         http::add_opt_header(&mut res, ETAG, x.e_tag)?;
         http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
         http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
@@ -5405,6 +5632,7 @@ impl PutObject {
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_CONTEXT, x.ssekms_encryption_context)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
+        http::add_opt_header(&mut res, X_AMZ_OBJECT_SIZE, x.size)?;
         http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
         Ok(res)
     }
@@ -5956,6 +6184,8 @@ impl UploadPart {
 
         let checksum_crc32c: Option<ChecksumCRC32C> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC32C)?;
 
+        let checksum_crc64nvme: Option<ChecksumCRC64NVME> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC64NVME)?;
+
         let checksum_sha1: Option<ChecksumSHA1> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_SHA1)?;
 
         let checksum_sha256: Option<ChecksumSHA256> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_SHA256)?;
@@ -5986,6 +6216,7 @@ impl UploadPart {
             checksum_algorithm,
             checksum_crc32,
             checksum_crc32c,
+            checksum_crc64nvme,
             checksum_sha1,
             checksum_sha256,
             content_length,
@@ -6006,6 +6237,7 @@ impl UploadPart {
         http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32, x.checksum_crc32)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC32C, x.checksum_crc32c)?;
+        http::add_opt_header(&mut res, X_AMZ_CHECKSUM_CRC64NVME, x.checksum_crc64nvme)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA1, x.checksum_sha1)?;
         http::add_opt_header(&mut res, X_AMZ_CHECKSUM_SHA256, x.checksum_sha256)?;
         http::add_opt_header(&mut res, ETAG, x.e_tag)?;
@@ -6172,6 +6404,9 @@ impl WriteGetObjectResponse {
 
         let checksum_crc32c: Option<ChecksumCRC32C> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_CRC32C)?;
 
+        let checksum_crc64nvme: Option<ChecksumCRC64NVME> =
+            http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_CRC64NVME)?;
+
         let checksum_sha1: Option<ChecksumSHA1> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_SHA1)?;
 
         let checksum_sha256: Option<ChecksumSHA256> = http::parse_opt_header(req, &X_AMZ_FWD_HEADER_X_AMZ_CHECKSUM_SHA256)?;
@@ -6259,6 +6494,7 @@ impl WriteGetObjectResponse {
             cache_control,
             checksum_crc32,
             checksum_crc32c,
+            checksum_crc64nvme,
             checksum_sha1,
             checksum_sha256,
             content_disposition,
@@ -6374,6 +6610,9 @@ pub fn resolve_route(
                     if qs.has("logging") {
                         return Ok((&GetBucketLogging as &'static dyn super::Operation, false));
                     }
+                    if qs.has("metadataTable") {
+                        return Ok((&GetBucketMetadataTableConfiguration as &'static dyn super::Operation, false));
+                    }
                     if qs.has("notification") {
                         return Ok((&GetBucketNotificationConfiguration as &'static dyn super::Operation, false));
                     }
@@ -6464,6 +6703,9 @@ pub fn resolve_route(
             S3Path::Root => Err(super::unknown_operation()),
             S3Path::Bucket { .. } => {
                 if let Some(qs) = qs {
+                    if qs.has("metadataTable") {
+                        return Ok((&CreateBucketMetadataTableConfiguration as &'static dyn super::Operation, true));
+                    }
                     if qs.has("delete") {
                         return Ok((&DeleteObjects as &'static dyn super::Operation, true));
                     }
@@ -6615,6 +6857,9 @@ pub fn resolve_route(
                     }
                     if qs.has("lifecycle") {
                         return Ok((&DeleteBucketLifecycle as &'static dyn super::Operation, false));
+                    }
+                    if qs.has("metadataTable") {
+                        return Ok((&DeleteBucketMetadataTableConfiguration as &'static dyn super::Operation, false));
                     }
                     if qs.has("ownershipControls") {
                         return Ok((&DeleteBucketOwnershipControls as &'static dyn super::Operation, false));

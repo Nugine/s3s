@@ -71,6 +71,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     let s3s_field_name = field.name.as_str();
                     let aws_field_name = match s3s_field_name {
                         "checksum_crc32c" => "checksum_crc32_c",
+                        "checksum_crc64nvme" => "checksum_crc64_nvme",
                         "type_" => "r#type",
                         s => s,
                     };
@@ -134,6 +135,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     let s3s_variant_name = variant.name.as_str();
                     let aws_variant_name = match s3s_variant_name {
                         "CRC32C" => "Crc32C".to_owned(),
+                        "CRC64NVME" => "Crc64Nvme".to_owned(),
                         "ALL_STORAGE_CLASSES_128K" => "AllStorageClasses128K".to_owned(),
                         _ => s3s_variant_name.to_upper_camel_case(),
                     };
@@ -180,6 +182,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     let s3s_field_name = field.name.as_str();
                     let aws_field_name = match s3s_field_name {
                         "checksum_crc32c" => "checksum_crc32_c",
+                        "checksum_crc64nvme" => "checksum_crc64_nvme",
                         "type_" => "type",
                         s => s,
                     };
@@ -266,5 +269,12 @@ fn contains_deprecated_field(name: &str) -> bool {
 }
 
 fn has_unconditional_builder(name: &str) -> bool {
-    matches!(name, "AnalyticsExportDestination" | "InventoryDestination" | "RoutingRule")
+    matches!(
+        name,
+        "AnalyticsExportDestination"
+            | "InventoryDestination"
+            | "RoutingRule"
+            | "MetadataTableConfiguration"
+            | "MetadataTableConfigurationResult"
+    )
 }
