@@ -2058,6 +2058,7 @@ dependencies = [
  "chrono",
  "crc32c",
  "crc32fast",
+ "crc64fast-nvme",
  "digest 0.11.0-pre.9",
  "futures",
  "hex-simd",

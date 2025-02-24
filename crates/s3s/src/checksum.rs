@@ -12,6 +12,7 @@ pub struct ChecksumHasher {
     pub crc32c: Option<crc32c::Crc32cHasher>,
     pub sha1: Option<sha1::Sha1>,
     pub sha256: Option<sha2::Sha256>,
+    pub crc64nvme: Option<crc64fast_nvme::Digest>,
 }
 
 impl ChecksumHasher {
@@ -27,6 +28,9 @@ impl ChecksumHasher {
         }
         if let Some(sha256) = &mut self.sha256 {
             sha256.update(data);
+        }
+        if let Some(crc64nvme) = &mut self.crc64nvme {
+            crc64nvme.write(data);
         }
     }
 
@@ -48,6 +52,10 @@ impl ChecksumHasher {
         if let Some(sha256) = self.sha256 {
             let sum = sha256.finalize();
             ans.checksum_sha256 = Some(Self::base64(sum.as_ref()));
+        }
+        if let Some(crc64nvme) = self.crc64nvme {
+            let sum = crc64nvme.sum64().to_be_bytes();
+            ans.checksum_crc64nvme = Some(Self::base64(&sum));
         }
         ans
     }
