@@ -1,14 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
-      - minio
   pull_request:
     branches:
       - main
-      - minio
       - 'feat/**'
   schedule:
     - cron: '0 0 * * 0' # at midnight of each sunday
