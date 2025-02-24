@@ -1,557 +1,1253 @@
 {
-    "SelectObjectContent": [
+    "S3": [
         {
-            "error_code": "AmbiguousFieldName",
-            "description": "The field name matches to multiple fields in the file. Check the SQL expression and the file, and try again.",
-            "http_status_code": 400
-        },
-        {
-            "error_code": "Busy",
-            "description": "The service is unavailable. Try again later.",
+            "code": "503 SlowDown",
+            "description": "Slow Down",
             "http_status_code": 503
         },
         {
-            "error_code": "CastFailed",
-            "description": "An attempt to convert from one data type to another using CAST failed in the SQL expression.",
+            "code": "AccessControlListNotSupported",
+            "description": "The bucket does not allow ACLs.",
             "http_status_code": 400
         },
         {
-            "error_code": "ColumnTooLong",
-            "description": "The length of a column in the result is greater than maxCharsPerColumn of 1 MB.",
+            "code": "AccessDenied",
+            "description": "Access Denied",
+            "http_status_code": 403
+        },
+        {
+            "code": "AccessPointAlreadyOwnedByYou",
+            "description": "An access point with an identical name already exists in your account.",
+            "http_status_code": 409
+        },
+        {
+            "code": "AccountProblem",
+            "description": "There is a problem with your AWS account that prevents the operation from completing successfully. For further assistance, see Contact Us.",
+            "http_status_code": 403
+        },
+        {
+            "code": "AllAccessDisabled",
+            "description": "All access to this Amazon S3 resource has been disabled. For further assistance, see Contact Us.",
+            "http_status_code": 403
+        },
+        {
+            "code": "AmbiguousGrantByEmailAddress",
+            "description": "The email address that you provided is associated with more than one account.",
             "http_status_code": 400
         },
         {
-            "error_code": "CSVEscapingRecordDelimiter",
-            "description": "A quoted record delimiter was found in the file. To allow quoted record delimiters, set AllowQuotedRecordDelimiter to 'TRUE'.",
+            "code": "AuthorizationHeaderMalformed",
+            "description": "The authorization header that you provided is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "CSVParsingError",
-            "description": "An error occurred while parsing the CSV file. Check the file and try again.",
+            "code": "AuthorizationQueryParametersError",
+            "description": "The authorization query parameters that you provided are not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "CSVUnescapedQuote",
-            "description": "An unescaped quote was found while parsing the CSV file. To allow quoted record delimiters, set AllowQuotedRecordDelimiter to 'TRUE'.",
+            "code": "BadDigest",
+            "description": "The Content-MD5 or checksum value that you specified did not match what the server received.",
             "http_status_code": 400
         },
         {
-            "error_code": "EmptyRequestBody",
-            "description": "The request body cannot be empty.",
+            "code": "BucketAlreadyExists",
+            "description": "The requested bucket name is not available. The bucket namespace is shared by all users of the system. Specify a different name and try again.",
+            "http_status_code": 409
+        },
+        {
+            "code": "BucketAlreadyOwnedByYou",
+            "description": "The bucket that you tried to create already exists, and you own it. Amazon S3 returns this error in all AWS Regions except in the US East (N. Virginia) Region (us-east-1). For legacy compatibility, if you re-create an existing bucket that you already own in us-east-1, Amazon S3 returns 200 OK and resets the bucket access control lists (ACLs). For Amazon S3 on Outposts, the bucket that you tried to create already exists in your Outpost and you own it.",
+            "http_status_code": 409
+        },
+        {
+            "code": "BucketHasAccessPointsAttached",
+            "description": "The bucket you tried to delete has access points attached. Delete your access points before deleting your bucket.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorBindingDoesNotExist",
-            "description": "A column name or a path provided does not exist in the SQL expression.",
+            "code": "BucketNotEmpty",
+            "description": "The bucket that you tried to delete is not empty.",
+            "http_status_code": 409
+        },
+        {
+            "code": "ClientTokenConflict",
+            "description": "Your Multi-Region Access Point idempotency token was already used for a different request.",
+            "http_status_code": 409
+        },
+        {
+            "code": "ConditionalRequestConflict",
+            "description": "A conflicting operation occurred. If using PutObject you can retry the request. If using multipart upload you should initiate another CreateMultipartUpload request and re-upload each part.",
+            "http_status_code": 409
+        },
+        {
+            "code": "ConnectionClosedByRequester",
+            "description": "Returned to the original caller when an error is encountered while reading the WriteGetObjectResponse body.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorInvalidArguments",
-            "description": "There is an incorrect number of arguments in the function call in the SQL expression.",
+            "code": "CredentialsNotSupported",
+            "description": "This request does not support credentials.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorInvalidTimestampFormatPattern",
-            "description": "The timestamp format string in the SQL expression is not valid.",
+            "code": "CrossLocationLoggingProhibited",
+            "description": "Cross-Region logging is not allowed. Buckets in one AWS Region cannot log information to a bucket in another Region.",
+            "http_status_code": 403
+        },
+        {
+            "code": "DeviceNotActiveError",
+            "description": "The device is not currently active.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorInvalidTimestampFormatPatternSymbol",
-            "description": "The timestamp format pattern contains a symbol in the SQL expression that is not valid.",
+            "code": "EndpointNotFound",
+            "description": "Direct requests to the correct endpoint.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorInvalidTimestampFormatPatternSymbolForParsing",
-            "description": "The timestamp format pattern contains a valid format symbol that cannot be applied to timestamp parsing in the SQL expression.",
+            "code": "EntityTooLarge",
+            "description": "Your proposed upload exceeds the maximum allowed object size. For more information, see Amazon Simple Storage Service endpoints and quotas in the AWS General Reference.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorInvalidTimestampFormatPatternToken",
-            "description": "The timestamp format pattern contains a token in the SQL expression that is not valid.",
+            "code": "EntityTooSmall",
+            "description": "Your proposed upload is smaller than the minimum allowed object size.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorLikePatternInvalidEscapeSequence",
-            "description": "An argument given to the LIKE expression was not valid.",
+            "code": "ExpiredToken",
+            "description": "The provided token has expired.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorNegativeLimit",
-            "description": "LIMIT must not be negative.",
+            "code": "IllegalLocationConstraintException",
+            "description": "This error might occur for the following reasons:\n\n\nYou are trying to access a bucket from a different Region than where the bucket exists.\n\nYou attempt to create a bucket with a location constraint that corresponds to a different region than the regional endpoint the request was sent to.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorTimestampFormatPatternDuplicateFields",
-            "description": "The timestamp format pattern contains multiple format specifiers representing the timestamp field in the SQL expression.",
+            "code": "IllegalVersioningConfigurationException",
+            "description": "The versioning configuration specified in the request is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorTimestampFormatPatternHourClockAmPmMismatch",
-            "description": "The timestamp format pattern contains a 12-hour hour of day format symbol but doesn't also contain an AM/PM field, or it contains a 24-hour hour of day format specifier and contains an AM/PM field in the SQL expression.",
+            "code": "IncompleteBody",
+            "description": "You did not provide the number of bytes specified by the Content-Length HTTP header.",
             "http_status_code": 400
         },
         {
-            "error_code": "EvaluatorUnterminatedTimestampFormatPatternToken",
-            "description": "The timestamp format pattern contains an unterminated token in the SQL expression.",
+            "code": "IncorrectEndpoint",
+            "description": "The specified bucket exists in another Region. Direct requests to the correct endpoint.",
             "http_status_code": 400
         },
         {
-            "error_code": "ExpressionTooLong",
-            "description": "The SQL expression is too long. The maximum byte-length for an SQL expression is 256 KB.",
+            "code": "IncorrectNumberOfFilesInPostRequest",
+            "description": "POST requires exactly one file upload per request.",
             "http_status_code": 400
         },
         {
-            "error_code": "ExternalEvalException",
-            "description": "The query cannot be evaluated. Check the file and try again.",
+            "code": "InlineDataTooLarge",
+            "description": "The inline data exceeds the maximum allowed size.",
             "http_status_code": 400
         },
         {
-            "error_code": "IllegalSqlFunctionArgument",
-            "description": "An illegal argument was used in the SQL function.",
-            "http_status_code": 400
-        },
-        {
-            "error_code": "IncorrectSqlFunctionArgumentType",
-            "description": "An incorrect argument type was specified in a function call in the SQL expression.",
-            "http_status_code": 400
-        },
-        {
-            "error_code": "IntegerOverflow",
-            "description": "An integer overflow or underflow occurred in the SQL expression.",
-            "http_status_code": 400
-        },
-        {
-            "error_code": "InternalError",
-            "description": "An internal error occurred.",
+            "code": "InternalError",
+            "description": "An internal error occurred. Try again.",
             "http_status_code": 500
         },
         {
-            "error_code": "InvalidCast",
-            "description": "An attempt to convert from one data type to another using CAST failed in the SQL expression.",
+            "code": "InvalidAccessKeyId",
+            "description": "The AWS access key ID that you provided does not exist in our records.",
+            "http_status_code": 403
+        },
+        {
+            "code": "InvalidAccessPoint",
+            "description": "The specified access point name or account is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidColumnIndex",
-            "description": "The column index in the SQL expression is not valid.",
+            "code": "InvalidAccessPointAliasError",
+            "description": "The specified access point alias name is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidCompressionFormat",
-            "description": "The file is not in a supported compression format. Only GZIP and BZIP2 are supported.",
+            "code": "InvalidAddressingHeader",
+            "description": "You must specify the Anonymous role.",
+            "http_status_code": null
+        },
+        {
+            "code": "InvalidArgument",
+            "description": "This error might occur for the following reasons:\n\n\nA ListBuckets request is made to a Regional endpoint that is different from the Region specified in the bucket-region parameter.\n\nThe specified argument was not valid.\n\nThe request was missing a required header.\n\nThe specified argument was incomplete or in the wrong format.\n\nThe specified argument must have a length greater than or equal to 3.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidDataSource",
-            "description": "The data source type is not valid. Only CSV, JSON, and Parquet are supported.",
+            "code": "InvalidBucketAclWithObjectOwnership",
+            "description": "Bucket cannot have ACLs set with ObjectOwnership's BucketOwnerEnforced setting.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidDataType",
-            "description": "The SQL expression contains a data type that is not valid.",
+            "code": "InvalidBucketName",
+            "description": "The specified bucket is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidExpressionType",
-            "description": "The ExpressionType value is not valid. Only SQL expressions are supported.",
+            "code": "InvalidBucketOwnerAWSAccountID",
+            "description": "The value of the expected bucket owner parameter must be an AWS account ID.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidFileHeaderInfo",
-            "description": "The FileHeaderInfo value is not valid. Only NONE, USE, and IGNORE are supported.",
+            "code": "InvalidBucketState",
+            "description": "The request is not valid for the current state of the bucket.",
+            "http_status_code": 409
+        },
+        {
+            "code": "InvalidDigest",
+            "description": "The Content-MD5 or checksum value that you specified is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidJsonType",
-            "description": "The JsonType value is not valid. Only DOCUMENT and LINES are supported.",
+            "code": "InvalidEncryptionAlgorithmError",
+            "description": "The encryption request that you specified is not valid. The valid value is AES256.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidKeyPath",
-            "description": "The key path in the SQL expression is not valid.",
+            "code": "InvalidHostHeader",
+            "description": "The host headers provided in the request used the incorrect style addressing.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidQuoteFields",
-            "description": "The QuoteFields value is not valid. Only ALWAYS and ASNEEDED are supported.",
+            "code": "InvalidHttpMethod",
+            "description": "The request is made using an unexpected HTTP method.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidRequestParameter",
-            "description": "The value of a parameter in the SelectRequest element is not valid. Check the service API documentation and try again.",
+            "code": "InvalidLocationConstraint",
+            "description": "The specified location (Region) constraint is not valid. For more information about selecting a Region for your buckets, see Buckets overview.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidScanRange",
-            "description": "The provided scan range is not valid.",
+            "code": "InvalidObjectState",
+            "description": "The operation is not valid for the current state of the object.",
+            "http_status_code": 403
+        },
+        {
+            "code": "InvalidPart",
+            "description": "One or more of the specified parts could not be found. The part might not have been uploaded, or the specified entity tag might not have matched the part's entity tag.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidTableAlias",
-            "description": "The SQL expression contains a table alias that is not valid.",
+            "code": "InvalidPartOrder",
+            "description": "The list of parts was not in ascending order. The parts list must be specified in order by part number.",
             "http_status_code": 400
         },
         {
-            "error_code": "InvalidTextEncoding",
-            "description": "The encoding type is not valid. Only UTF-8 encoding is supported.",
+            "code": "InvalidPayer",
+            "description": "All access to this object has been disabled. For further assistance, see Contact Us.",
+            "http_status_code": 403
+        },
+        {
+            "code": "InvalidPolicyDocument",
+            "description": "The content of the form does not meet the conditions specified in the policy document.",
             "http_status_code": 400
         },
         {
-            "error_code": "JSONParsingError",
-            "description": "An error occurred while parsing the JSON file. Check the file and try again.",
+            "code": "InvalidRange",
+            "description": "The requested range is not valid for the request. Try another range.",
+            "http_status_code": 416
+        },
+        {
+            "code": "InvalidRequest",
+            "description": "This error might occur for the following reasons:\n\n\nAn unpaginated ListBuckets request is made from an account that has an approved general purpose bucket quota higher than 10,000. You must make paginated requests to list the buckets in an account with more than 10,000 buckets.\n\nThe request is using the wrong signature version. Use AWS4-HMAC-SHA256 (Signature Version 4).\n\nAn access point can be created only for an existing bucket.\n\nThe access point is not in a state where it can be deleted.\n\nAn access point can be listed only for an existing bucket.\n\nThe next token is not valid.\n\nAt least one action must be specified in a lifecycle rule.\n\nAt least one lifecycle rule must be specified.\n\nThe number of lifecycle rules must not exceed the allowed limit of 1000 rules.\n\nThe range for the MaxResults parameter is not valid.\n\nSOAP requests must be made over an HTTPS connection.\n\nAmazon S3 Transfer Acceleration is not supported for buckets with non-DNS compliant names.\n\nAmazon S3 Transfer Acceleration is not supported for buckets with periods (.) in their names.\n\nThe Amazon S3 Transfer Acceleration endpoint supports only virtual style requests.\n\nAmazon S3 Transfer Acceleration is not configured on this bucket.\n\nAmazon S3 Transfer Acceleration is disabled on this bucket.\n\nAmazon S3 Transfer Acceleration is not supported on this bucket. For assistance, contact Support.\n\nAmazon S3 Transfer Acceleration cannot be enabled on this bucket. For assistance, contact Support.\n\n Conflicting values provided in HTTP headers and query parameters. \n\n Conflicting values provided in HTTP headers and POST form fields. \n\nCopyObject request made on objects larger than 5GB in size.",
             "http_status_code": 400
         },
         {
-            "error_code": "LexerInvalidChar",
-            "description": "The SQL expression contains a character that is not valid.",
+            "code": "InvalidSOAPRequest",
+            "description": "The SOAP request body is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "LexerInvalidIONLiteral",
-            "description": "The SQL expression contains an operator that is not valid.",
+            "code": "InvalidSecurity",
+            "description": "The provided security credentials are not valid.",
+            "http_status_code": 403
+        },
+        {
+            "code": "InvalidSessionException",
+            "description": "Returned if the session doesn't exist anymore because it timed out or expired.",
             "http_status_code": 400
         },
         {
-            "error_code": "LexerInvalidLiteral",
-            "description": "The SQL expression contains an operator that is not valid.",
+            "code": "InvalidSignature",
+            "description": "The request signature that the server calculated does not match the signature that you provided. Check your AWS secret access key and signing method. For more information, see Signing and authenticating REST requests.",
             "http_status_code": 400
         },
         {
-            "error_code": "LexerInvalidOperator",
-            "description": "The SQL expression contains a literal that is not valid.",
+            "code": "InvalidStorageClass",
+            "description": "The storage class that you specified is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "LikeInvalidInputs",
-            "description": "The argument given to the LIKE clause in the SQL expression is not valid.",
+            "code": "InvalidTag",
+            "description": "Your request contains tag input that is not valid. For example, your request might contain duplicate keys, keys or values that are too long, or system tags.",
             "http_status_code": 400
         },
         {
-            "error_code": "MalformedXML",
-            "description": "The XML provided was not well formed or did not validate against our published schema. Check the service documentation and try again.",
+            "code": "InvalidTargetBucketForLogging",
+            "description": "The target bucket for logging either does not exist, is not owned by you, or does not have the appropriate grants for the log-delivery group.",
             "http_status_code": 400
         },
         {
-            "error_code": "MaxOperatorsExceeded",
-            "description": "Failed to parse SQL expression, try reducing complexity. For example, reduce number of operators used.",
+            "code": "InvalidToken",
+            "description": "The provided token is malformed or otherwise not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "MethodNotAllowed",
+            "code": "InvalidURI",
+            "description": "The specified URI couldn't be parsed.",
+            "http_status_code": 400
+        },
+        {
+            "code": "KMS.DisabledException",
+            "description": "The request was rejected because the specified KMS key is not enabled.",
+            "http_status_code": 400
+        },
+        {
+            "code": "KMS.InvalidKeyUsageException",
+            "description": "The request was rejected for one of the following reasons:  \nThe KeyUsage value of the KMS key is incompatible with the API operation. The encryption algorithm or signing algorithm specified for the operation is incompatible with the type of key material in the KMS key (KeySpec). \nFor encrypting, decrypting, re-encrypting, and generating data keys, the KeyUsage must be ENCRYPT_DECRYPT. For signing and verifying messages, the KeyUsage must be SIGN_VERIFY. For generating and verifying message authentication codes (MACs), the KeyUsage must be GENERATE_VERIFY_MAC. For deriving key agreement secrets, the KeyUsage must be KEY_AGREEMENT. To find the KeyUsage of a KMS key, use the DescribeKey operation.  To find the encryption or signing algorithms supported for a particular KMS key, use the DescribeKey operation.",
+            "http_status_code": 400
+        },
+        {
+            "code": "KMS.KMSInvalidStateException",
+            "description": "The request was rejected because the state of the specified resource is not valid for this request.  This exception means one of the following:  \nThe key state of the KMS key is not compatible with the operation.To find the key state, use the DescribeKey operation. For more information about which key states are compatible with each KMS operation, see Key states of AWS KMS keys in the AWS Key Management Service Developer Guide. For cryptographic operations on KMS keys in custom key stores, this exception represents a general failure with many possible causes. To identify the cause, see the error message that accompanies the exception.",
+            "http_status_code": 400
+        },
+        {
+            "code": "KMS.NotFoundException",
+            "description": "The request was rejected because the specified entity or resource could not be found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "KeyTooLongError",
+            "description": "Your key is too long.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MalformedACLError",
+            "description": "The ACL that you provided was not well formed or did not validate against our published schema.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MalformedPOSTRequest",
+            "description": "The body of your POST request is not well-formed multipart/form-data.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MalformedPolicy",
+            "description": "Your policy contains a principal that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MalformedXML",
+            "description": "The XML that you provided was not well formed or did not validate against our published schema.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MaxMessageLengthExceeded",
+            "description": "Your request was too large.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MaxPostPreDataLengthExceededError",
+            "description": "Your POST request fields preceding the upload file were too large.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MetadataTooLarge",
+            "description": "Your metadata headers exceed the maximum allowed metadata size.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MethodNotAllowed",
             "description": "The specified method is not allowed against this resource.",
             "http_status_code": 405
         },
         {
-            "error_code": "MissingRequiredParameter",
-            "description": "The SelectRequest entity is missing a required parameter. Check the service documentation and try again.",
+            "code": "MissingAttachment",
+            "description": "A SOAP attachment was expected, but none was found.",
             "http_status_code": 400
         },
         {
-            "error_code": "MultipleDataSourcesUnsupported",
-            "description": "Multiple data sources are not supported.",
+            "code": "MissingAuthenticationToken",
+            "description": "The request was not signed.\u00c2",
+            "http_status_code": 403
+        },
+        {
+            "code": "MissingContentLength",
+            "description": "You must provide the Content-Length HTTP header.",
+            "http_status_code": 411
+        },
+        {
+            "code": "MissingRequestBodyError",
+            "description": "You sent an empty XML document as a request.",
             "http_status_code": 400
         },
         {
-            "error_code": "NumberFormatError",
-            "description": "An error occurred while parsing a number. This error can be caused by underflow or overflow of integers.",
+            "code": "MissingSecurityElement",
+            "description": "The SOAP 1.1 request is missing a security element.",
             "http_status_code": 400
         },
         {
-            "error_code": "ObjectSerializationConflict",
-            "description": "InputSerialization specifies more than one format (CSV, JSON, or Parquet), or OutputSerialization specifies more than one format (CSV or JSON). For InputSerialization and OutputSerialization, you can specify only one format for each.",
+            "code": "MissingSecurityHeader",
+            "description": "Your request is missing a required header.",
             "http_status_code": 400
         },
         {
-            "error_code": "OverMaxColumn",
-            "description": "The number of columns in the result is greater than the maximum allowable number of columns.",
+            "code": "NoLoggingStatusForKey",
+            "description": "There is no such thing as a logging status subresource for a key.",
             "http_status_code": 400
         },
         {
-            "error_code": "OverMaxParquetBlockSize",
-            "description": "The Parquet file is above the max row group size.",
+            "code": "NoSuchAccessPoint",
+            "description": "The specified access point does not exist.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchAsyncRequest",
+            "description": "The specified request was not found.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchBucket",
+            "description": "The specified bucket does not exist.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchBucketPolicy",
+            "description": "The specified bucket does not have a bucket policy.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchCORSConfiguration",
+            "description": "The specified bucket does not have a CORS configuration.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchKey",
+            "description": "The specified key does not exist.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchLifecycleConfiguration",
+            "description": "The specified lifecycle configuration does not exist.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchMultiRegionAccessPoint",
+            "description": "The specified Multi-Region Access Point does not exist.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchObjectLockConfiguration",
+            "description": "The specified object does not have an ObjectLock configuration.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchTagSet",
+            "description": "The specified tag does not exist.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchUpload",
+            "description": "The specified multipart upload does not exist. The upload ID might not be valid, or the multipart upload might have been aborted or completed.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchVersion",
+            "description": "The version ID specified in the request does not match an existing version.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoSuchWebsiteConfiguration",
+            "description": "The specified bucket does not have a website configuration.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NoTransformationDefined",
+            "description": "No transformation found for this Object Lambda Access Point.",
+            "http_status_code": 404
+        },
+        {
+            "code": "NotDeviceOwnerError",
+            "description": "The device that generated the token is not owned by the authenticated user.",
             "http_status_code": 400
         },
         {
-            "error_code": "OverMaxRecordSize",
-            "description": "The length of a record in the input or result is greater than the maxCharsPerRecord limit of 1 MB.",
+            "code": "NotImplemented",
+            "description": "A header that you provided implies functionality that is not implemented.",
+            "http_status_code": 501
+        },
+        {
+            "code": "NotModified",
+            "description": "The resource was not changed.",
+            "http_status_code": 304
+        },
+        {
+            "code": "NotSignedUp",
+            "description": "Your account is not signed up for the Amazon S3 service. You must sign up before you can use Amazon S3. You can sign up at the following URL: https://aws.amazon.com/s3",
+            "http_status_code": 403
+        },
+        {
+            "code": "ObjectLockConfigurationNotFoundError",
+            "description": "The Object Lock configuration does not exist for this bucket.",
+            "http_status_code": 404
+        },
+        {
+            "code": "OperationAborted",
+            "description": "A conflicting conditional operation is currently in progress against this resource. Try again.",
+            "http_status_code": 409
+        },
+        {
+            "code": "OwnershipControlsNotFoundError",
+            "description": "The bucket ownership controls were not found.",
+            "http_status_code": 404
+        },
+        {
+            "code": "PermanentRedirect",
+            "description": "The bucket that you are attempting to access must be addressed using the specified endpoint. Send all future requests to this endpoint.",
+            "http_status_code": 301
+        },
+        {
+            "code": "PermanentRedirectControlError",
+            "description": "The API operation you are attempting to access must be addressed using the specified endpoint. Send all future requests to this endpoint.",
+            "http_status_code": 301
+        },
+        {
+            "code": "PreconditionFailed",
+            "description": "At least one of the preconditions that you specified did not hold.",
+            "http_status_code": 412
+        },
+        {
+            "code": "Redirect",
+            "description": "Temporary redirect. You are being redirected to the bucket while the Domain Name System (DNS) server is being updated.",
+            "http_status_code": 307
+        },
+        {
+            "code": "RequestHeaderSectionTooLarge",
+            "description": "The request header and query parameters used to make the request exceed the maximum allowed size.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParquetParsingError",
-            "description": "An error occurred while parsing the Parquet file. Check the file and try again.",
+            "code": "RequestIsNotMultiPartContent",
+            "description": "A bucket POST request must be of the enclosure-type multipart/form-data.",
+            "http_status_code": 412
+        },
+        {
+            "code": "RequestTimeTooSkewed",
+            "description": "The difference between the request time and the server's time is too large.",
+            "http_status_code": 403
+        },
+        {
+            "code": "RequestTimeout",
+            "description": "Your socket connection to the server was not read from or written to within the timeout period.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParquetUnsupportedCompressionCodec",
-            "description": "The specified Parquet compression codec is not supported.",
+            "code": "RequestTorrentOfBucketError",
+            "description": "Requesting the torrent file of a bucket is not permitted.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseAsteriskIsNotAloneInSelectList",
-            "description": "Other expressions are not allowed in the SELECT list when * is used without dot notation in the SQL expression.",
+            "code": "ResponseInterrupted",
+            "description": "Returned to the original caller when an error is encountered while reading the WriteGetObjectResponse body.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseCannotMixSqbAndWildcardInSelectList",
-            "description": "Cannot mix [] and * in the same expression in a SELECT list in the SQL expression.",
+            "code": "RestoreAlreadyInProgress",
+            "description": "The object restore is already in progress.",
+            "http_status_code": 409
+        },
+        {
+            "code": "ServerSideEncryptionConfigurationNotFoundError",
+            "description": "The server-side encryption configuration was not found.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseCastArity",
-            "description": "The SQL expression CAST has incorrect arity.",
+            "code": "ServiceUnavailable",
+            "description": "Service is unable to handle request.",
+            "http_status_code": 503
+        },
+        {
+            "code": "SignatureDoesNotMatch",
+            "description": "The request signature that the server calculated does not match the signature that you provided. Check your AWS secret access key and signing method. For more information, see REST Authentication and SOAP Authentication.",
+            "http_status_code": 403
+        },
+        {
+            "code": "SlowDown",
+            "description": "Please reduce your request rate.",
+            "http_status_code": 503
+        },
+        {
+            "code": "TemporaryRedirect",
+            "description": "You are being redirected to the bucket while the Domain Name System (DNS) server is being updated.",
+            "http_status_code": 307
+        },
+        {
+            "code": "TokenCodeInvalidError",
+            "description": "The serial number and/or token code you provided is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseEmptySelect",
-            "description": "The SQL expression contains an empty SELECT clause.",
+            "code": "TokenRefreshRequired",
+            "description": "The provided token must be refreshed.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpected2TokenTypes",
-            "description": "The expected token in the SQL expression was not found.",
+            "code": "TooManyAccessPoints",
+            "description": "You have attempted to create more access points than are allowed for an account. For more information, see Amazon Simple Storage Service endpoints and quotas in the AWS General Reference.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedArgumentDelimiter",
-            "description": "The expected argument delimiter in the SQL expression was not found.",
+            "code": "TooManyBuckets",
+            "description": "You have attempted to create more buckets than are allowed for an account. For more information, see Amazon Simple Storage Service endpoints and quotas in the AWS General Reference.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedDatePart",
-            "description": "The expected date part in the SQL expression was not found.",
+            "code": "TooManyMultiRegionAccessPointregionsError",
+            "description": "You have attempted to create a Multi-Region Access Point with more Regions than are allowed for an account. For more information, see Amazon Simple Storage Service endpoints and quotas in the AWS General Reference.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedExpression",
-            "description": "The expected SQL expression was not found.",
+            "code": "TooManyMultiRegionAccessPoints",
+            "description": "You have attempted to create more Multi-Region Access Points than are allowed for an account. For more information, see Amazon Simple Storage Service endpoints and quotas in the AWS General Reference.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedIdentForAlias",
-            "description": "The expected identifier for the alias in the SQL expression was not found.",
+            "code": "UnauthorizedAccessError",
+            "description": "Applicable in China Regions only. Returned when a request is made to a bucket that doesn't have an ICP license. For more information, see ICP Recordal.",
+            "http_status_code": 403
+        },
+        {
+            "code": "UnexpectedContent",
+            "description": "This request contains unsupported content.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedIdentForAt",
-            "description": "The expected identifier for AT name in the SQL expression was not found.",
+            "code": "UnexpectedIPError",
+            "description": "Applicable in China Regions only. This request was rejected because the IP was unexpected.",
+            "http_status_code": 403
+        },
+        {
+            "code": "UnresolvableGrantByEmailAddress",
+            "description": "The email address that you provided does not match any account on record.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedIdentForGroupName",
-            "description": "GROUP is not supported in the SQL expression.",
+            "code": "UnsupportedArgument",
+            "description": "The request contained an unsupported argument.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedKeyword",
-            "description": "The expected keyword in the SQL expression was not found.",
+            "code": "UnsupportedSignature",
+            "description": "The provided request is signed with an unsupported STS Token version or the signature version is not supported.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedLeftParenAfterCast",
-            "description": "The expected left parenthesis after CAST in the SQL expression was not found.",
+            "code": "UserKeyMustBeSpecified",
+            "description": "The bucket POST request must contain the specified field name. If it is specified, check the order of the fields.",
+            "http_status_code": 400
+        }
+    ],
+    "Replication": [
+        {
+            "code": "InvalidArgument",
+            "description": "This error might occur for the following reasons:\n\n\nThe <Account> element is empty. It must contain a valid account ID.\n\nThe AWS account specified in the <Account> element must match the destination bucket owner.\n\nReplicationTime-Status must contain a value.\n\nReplicationTime-ReplicationTimeValue must contain a value.\n\nReplication-ReplicationTimeValue-Minutes value must be 15.\n\nReplicationMetrics must contain a Status.\n\nReplicationMetrics must contain an EventThreshold.\n\nEventThreshold-ReplicationTimeValue-Minutes value must be 15.\n\nRule ID must not contain non-ASCII characters.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedLeftParenBuiltinFunctionCall",
-            "description": "The expected left parenthesis in the SQL expression was not found.",
+            "code": "InvalidRequest",
+            "description": "This error might occur for the following reasons:\n\n\nThe <Owner> in <AccessControlTranslation> has a value, so the <Account> element must be specified. \n\nThe <Account> element is empty. It must contain a valid account ID.\n\nThe replication destination must contain both ReplicationTime and Metrics, or neither.\n\nReplicationTime and ReplicationMetrics must have the same status.\n\nS3 Replication Time Control (S3 RTC) is not supported in this AWS Region.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedLeftParenValueConstructor",
-            "description": "The expected left parenthesis in the SQL expression was not found.",
+            "code": "ReplicationConfigurationNotFoundError",
+            "description": "There is no replication configuration for this bucket.",
+            "http_status_code": 404
+        }
+    ],
+    "Tagging": [
+        {
+            "code": "InvalidRequest",
+            "description": "The AWS Region in the resource ARN doesn't match the Region that's specified in this request. The AWS account in the resource ARN doesn't match the account ID that's specified in this request. The AWS partition in the resourceArn is invalid.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedMember",
-            "description": "The SQL expression contains an unsupported use of MEMBER.",
+            "code": "InvalidTag",
+            "description": "This request contains a tag key or value that isn't valid. Valid characters include the following: [a-zA-Z+-=._:/]. Tag keys can contain up to 128 characters. Tag values can contain up to 256 characters. There are duplicate tag keys in your request. User-defined tag keys can't start with aws:.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedNumber",
-            "description": "The expected number in the SQL expression was not found.",
+            "code": "NoSuchResource",
+            "description": "The specified resource doesn't exist.",
+            "http_status_code": 404
+        },
+        {
+            "code": "TooManyTags",
+            "description": "The number of tags exceeds the limit of 50 tags.",
+            "http_status_code": 400
+        }
+    ],
+    "SelectObjectContent": [
+        {
+            "code": "AmbiguousFieldName",
+            "description": "The field name matches to multiple fields in the file. Check the SQL expression and the file, and try again.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedRightParenBuiltinFunctionCall",
-            "description": "The expected right parenthesis character in the SQL expression was not found.",
+            "code": "Busy",
+            "description": "The service is unavailable. Try again later.",
+            "http_status_code": 503
+        },
+        {
+            "code": "CSVEscapingRecordDelimiter",
+            "description": "A quoted record delimiter was found in the file. To allow quoted record delimiters, set AllowQuotedRecordDelimiter to 'TRUE'.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedTokenType",
-            "description": "The expected token in the SQL expression was not found.",
+            "code": "CSVParsingError",
+            "description": "An error occurred while parsing the CSV file. Check the file and try again.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedTypeName",
-            "description": "The expected type name in the SQL expression was not found.",
+            "code": "CSVUnescapedQuote",
+            "description": "An unescaped quote was found while parsing the CSV file. To allow quoted record delimiters, set AllowQuotedRecordDelimiter to 'TRUE'.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseExpectedWhenClause",
-            "description": "The expected WHEN clause in the SQL expression was not found. CASE is not supported.",
+            "code": "CastFailed",
+            "description": "An attempt to convert from one data type to another using CAST failed in the SQL expression.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseInvalidContextForWildcardInSelectList",
-            "description": "The use of * in the SELECT list in the SQL expression is not valid.",
+            "code": "ColumnTooLong",
+            "description": "The length of a column in the result is greater than maxCharsPerColumn of 1 MB.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseInvalidPathComponent",
-            "description": "The SQL expression contains a path component that is not valid.",
+            "code": "EmptyRequestBody",
+            "description": "The request body cannot be empty.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseInvalidTypeParam",
-            "description": "The SQL expression contains a parameter value that is not valid.",
+            "code": "EvaluatorBindingDoesNotExist",
+            "description": "A column name or a path provided does not exist in the SQL expression.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseMalformedJoin",
-            "description": "JOIN is not supported in the SQL expression.",
+            "code": "EvaluatorInvalidArguments",
+            "description": "There is an incorrect number of arguments in the function call in the SQL expression.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseMissingIdentAfterAt",
-            "description": "The expected identifier after the @ symbol in the SQL expression was not found.",
+            "code": "EvaluatorInvalidTimestampFormatPattern",
+            "description": "The timestamp format string in the SQL expression is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseNonUnaryAgregateFunctionCall",
-            "description": "Only one argument is supported for aggregate functions in the SQL expression.",
+            "code": "EvaluatorInvalidTimestampFormatPatternSymbol",
+            "description": "The timestamp format pattern contains a symbol in the SQL expression that is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseSelectMissingFrom",
-            "description": "The SQL expression contains a missing FROM after the SELECT list.",
+            "code": "EvaluatorInvalidTimestampFormatPatternSymbolForParsing",
+            "description": "The timestamp format pattern contains a valid format symbol that cannot be applied to timestamp parsing in the SQL expression.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnExpectedKeyword",
-            "description": "The SQL expression contains an unexpected keyword.",
+            "code": "EvaluatorInvalidTimestampFormatPatternToken",
+            "description": "The timestamp format pattern contains a token in the SQL expression that is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnexpectedOperator",
-            "description": "The SQL expression contains an unexpected operator.",
+            "code": "EvaluatorLikePatternInvalidEscapeSequence",
+            "description": "An argument given to the LIKE expression was not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnexpectedTerm",
-            "description": "The SQL expression contains an unexpected term.",
+            "code": "EvaluatorNegativeLimit",
+            "description": "LIMIT must not be negative.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnexpectedToken",
-            "description": "The SQL expression contains an unexpected token.",
+            "code": "EvaluatorTimestampFormatPatternDuplicateFields",
+            "description": "The timestamp format pattern contains multiple format specifiers representing the timestamp field in the SQL expression.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnknownOperator",
+            "code": "EvaluatorTimestampFormatPatternHourClockAmPmMismatch",
+            "description": "The timestamp format pattern contains a 12-hour hour of day format symbol but doesn't also contain an AM/PM field, or it contains a 24-hour hour of day format specifier and contains an AM/PM field in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "EvaluatorUnterminatedTimestampFormatPatternToken",
+            "description": "The timestamp format pattern contains an unterminated token in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ExpressionTooLong",
+            "description": "The SQL expression is too long. The maximum byte-length for an SQL expression is 256 KB.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ExternalEvalException",
+            "description": "The query cannot be evaluated. Check the file and try again.",
+            "http_status_code": 400
+        },
+        {
+            "code": "IllegalSqlFunctionArgument",
+            "description": "An illegal argument was used in the SQL function.",
+            "http_status_code": 400
+        },
+        {
+            "code": "IncorrectSqlFunctionArgumentType",
+            "description": "An incorrect argument type was specified in a function call in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "IntegerOverflow",
+            "description": "An integer overflow or underflow occurred in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InternalError",
+            "description": "An internal error occurred.",
+            "http_status_code": 500
+        },
+        {
+            "code": "InvalidCast",
+            "description": "An attempt to convert from one data type to another using CAST failed in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidColumnIndex",
+            "description": "The column index in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidCompressionFormat",
+            "description": "The file is not in a supported compression format. Only GZIP and BZIP2 are supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidDataSource",
+            "description": "The data source type is not valid. Only CSV, JSON, and Parquet are supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidDataType",
+            "description": "The SQL expression contains a data type that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidExpressionType",
+            "description": "The ExpressionType value is not valid. Only SQL expressions are supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidFileHeaderInfo",
+            "description": "The FileHeaderInfo value is not valid. Only NONE, USE, and IGNORE are supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidJsonType",
+            "description": "The JsonType value is not valid. Only DOCUMENT and LINES are supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidKeyPath",
+            "description": "The key path in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidQuoteFields",
+            "description": "The QuoteFields value is not valid. Only ALWAYS and ASNEEDED are supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidRequestParameter",
+            "description": "The value of a parameter in the SelectRequest element is not valid. Check the service API documentation and try again.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidScanRange",
+            "description": "The provided scan range is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidTableAlias",
+            "description": "The SQL expression contains a table alias that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "InvalidTextEncoding",
+            "description": "The encoding type is not valid. Only UTF-8 encoding is supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "JSONParsingError",
+            "description": "An error occurred while parsing the JSON file. Check the file and try again.",
+            "http_status_code": 400
+        },
+        {
+            "code": "LexerInvalidChar",
+            "description": "The SQL expression contains a character that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "LexerInvalidIONLiteral",
             "description": "The SQL expression contains an operator that is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnsupportedAlias",
+            "code": "LexerInvalidLiteral",
+            "description": "The SQL expression contains an operator that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "LexerInvalidOperator",
+            "description": "The SQL expression contains a literal that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "LikeInvalidInputs",
+            "description": "The argument given to the LIKE clause in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MalformedXML",
+            "description": "The XML provided was not well formed or did not validate against our published schema. Check the service documentation and try again.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MaxOperatorsExceeded",
+            "description": "Failed to parse SQL expression, try reducing complexity. For example, reduce number of operators used.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MethodNotAllowed",
+            "description": "The specified method is not allowed against this resource.",
+            "http_status_code": 405
+        },
+        {
+            "code": "MissingRequiredParameter",
+            "description": "The SelectRequest entity is missing a required parameter. Check the service documentation and try again.",
+            "http_status_code": 400
+        },
+        {
+            "code": "MultipleDataSourcesUnsupported",
+            "description": "Multiple data sources are not supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "NumberFormatError",
+            "description": "An error occurred while parsing a number. This error can be caused by underflow or overflow of integers.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ObjectSerializationConflict",
+            "description": "InputSerialization specifies more than one format (CSV, JSON, or Parquet), or OutputSerialization specifies more than one format (CSV or JSON). For InputSerialization and OutputSerialization, you can specify only one format for each.",
+            "http_status_code": 400
+        },
+        {
+            "code": "OverMaxColumn",
+            "description": "The number of columns in the result is greater than the maximum allowable number of columns.",
+            "http_status_code": 400
+        },
+        {
+            "code": "OverMaxParquetBlockSize",
+            "description": "The Parquet file is above the max row group size.",
+            "http_status_code": 400
+        },
+        {
+            "code": "OverMaxRecordSize",
+            "description": "The length of a record in the input or result is greater than the maxCharsPerRecord limit of 1 MB.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParquetParsingError",
+            "description": "An error occurred while parsing the Parquet file. Check the file and try again.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParquetUnsupportedCompressionCodec",
+            "description": "The specified Parquet compression codec is not supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseAsteriskIsNotAloneInSelectList",
+            "description": "Other expressions are not allowed in the SELECT list when * is used without dot notation in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseCannotMixSqbAndWildcardInSelectList",
+            "description": "Cannot mix [] and * in the same expression in a SELECT list in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseCastArity",
+            "description": "The SQL expression CAST has incorrect arity.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseEmptySelect",
+            "description": "The SQL expression contains an empty SELECT clause.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpected2TokenTypes",
+            "description": "The expected token in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedArgumentDelimiter",
+            "description": "The expected argument delimiter in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedDatePart",
+            "description": "The expected date part in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedExpression",
+            "description": "The expected SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedIdentForAlias",
+            "description": "The expected identifier for the alias in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedIdentForAt",
+            "description": "The expected identifier for AT name in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedIdentForGroupName",
+            "description": "GROUP is not supported in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedKeyword",
+            "description": "The expected keyword in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedLeftParenAfterCast",
+            "description": "The expected left parenthesis after CAST in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedLeftParenBuiltinFunctionCall",
+            "description": "The expected left parenthesis in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedLeftParenValueConstructor",
+            "description": "The expected left parenthesis in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedMember",
+            "description": "The SQL expression contains an unsupported use of MEMBER.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedNumber",
+            "description": "The expected number in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedRightParenBuiltinFunctionCall",
+            "description": "The expected right parenthesis character in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedTokenType",
+            "description": "The expected token in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedTypeName",
+            "description": "The expected type name in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseExpectedWhenClause",
+            "description": "The expected WHEN clause in the SQL expression was not found. CASE is not supported.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseInvalidContextForWildcardInSelectList",
+            "description": "The use of * in the SELECT list in the SQL expression is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseInvalidPathComponent",
+            "description": "The SQL expression contains a path component that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseInvalidTypeParam",
+            "description": "The SQL expression contains a parameter value that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseMalformedJoin",
+            "description": "JOIN is not supported in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseMissingIdentAfterAt",
+            "description": "The expected identifier after the @ symbol in the SQL expression was not found.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseNonUnaryAgregateFunctionCall",
+            "description": "Only one argument is supported for aggregate functions in the SQL expression.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseSelectMissingFrom",
+            "description": "The SQL expression contains a missing FROM after the SELECT list.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseUnExpectedKeyword",
+            "description": "The SQL expression contains an unexpected keyword.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseUnexpectedOperator",
+            "description": "The SQL expression contains an unexpected operator.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseUnexpectedTerm",
+            "description": "The SQL expression contains an unexpected term.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseUnexpectedToken",
+            "description": "The SQL expression contains an unexpected token.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseUnknownOperator",
+            "description": "The SQL expression contains an operator that is not valid.",
+            "http_status_code": 400
+        },
+        {
+            "code": "ParseUnsupportedAlias",
             "description": "The SQL expression contains an unsupported use of ALIAS.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnsupportedCallWithStar",
+            "code": "ParseUnsupportedCallWithStar",
             "description": "Only COUNT with (*) as a parameter is supported in the SQL expression.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnsupportedCase",
+            "code": "ParseUnsupportedCase",
             "description": "The SQL expression contains an unsupported use of CASE.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnsupportedCaseClause",
+            "code": "ParseUnsupportedCaseClause",
             "description": "The SQL expression contains an unsupported use of CASE.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnsupportedLiteralsGroupBy",
+            "code": "ParseUnsupportedLiteralsGroupBy",
             "description": "The SQL expression contains an unsupported use of GROUP BY.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnsupportedSelect",
+            "code": "ParseUnsupportedSelect",
             "description": "The SQL expression contains an unsupported use of SELECT.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnsupportedSyntax",
+            "code": "ParseUnsupportedSyntax",
             "description": "The SQL expression contains unsupported syntax.",
             "http_status_code": 400
         },
         {
-            "error_code": "ParseUnsupportedToken",
+            "code": "ParseUnsupportedToken",
             "description": "The SQL expression contains an unsupported token.",
             "http_status_code": 400
         },
         {
-            "error_code": "TruncatedInput",
+            "code": "TruncatedInput",
             "description": "Object decompression failed. Check that the object is properly compressed using the format specified in the request.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnauthorizedAccess",
+            "code": "UnauthorizedAccess",
             "description": "You are not authorized to perform this operation.",
             "http_status_code": 401
         },
         {
-            "error_code": "UnrecognizedFormatException",
+            "code": "UnrecognizedFormatException",
             "description": "We encountered a record type that is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedFunction",
+            "code": "UnsupportedFunction",
             "description": "We encountered an unsupported SQL function.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedParquetType",
+            "code": "UnsupportedParquetType",
             "description": "The specified Parquet type is not supported.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedRangeHeader",
+            "code": "UnsupportedRangeHeader",
             "description": "A range header is not supported for this operation.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedScanRangeInput",
+            "code": "UnsupportedScanRangeInput",
             "description": "Scan range queries are not supported on this type of object.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedSqlOperation",
+            "code": "UnsupportedSqlOperation",
             "description": "We encountered an unsupported SQL operation.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedSqlStructure",
+            "code": "UnsupportedSqlStructure",
             "description": "We encountered an unsupported SQL structure. Check the SQL Reference.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedStorageClass",
+            "code": "UnsupportedStorageClass",
             "description": "We encountered a storage class that is not supported. Only STANDARD, STANDARD_IA, and ONEZONE_IA storage classes are supported.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedSyntax",
+            "code": "UnsupportedSyntax",
             "description": "We encountered syntax that is not valid.",
             "http_status_code": 400
         },
         {
-            "error_code": "UnsupportedTypeForQuerying",
+            "code": "UnsupportedTypeForQuerying",
             "description": "Your query contains an unsupported type for comparison (e.g. verifying that a Parquet INT96 column type is greater than 0).",
             "http_status_code": 400
         },
         {
-            "error_code": "ValueParseFailure",
+            "code": "ValueParseFailure",
             "description": "A timestamp parse failure occurred in the SQL expression.",
             "http_status_code": 400
         }

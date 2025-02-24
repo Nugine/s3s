@@ -18,3 +18,4 @@ serde = { version = "1.0.210", features = ["derive"] }
 serde_json = { version = "1.0.128", features = ["preserve_order"] }
 serde_urlencoded = "0.7.1"
 s3s-model = { version = "0.11.0-dev", path = "../crates/s3s-model" }
+http = "1.2.0"

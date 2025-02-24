@@ -2114,6 +2114,7 @@ name = "s3s-codegen"
 version = "0.0.0"
 dependencies = [
  "heck",
+ "http 1.2.0",
  "nugine-rust-utils",
  "numeric_cast",
  "regex",

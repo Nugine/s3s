@@ -4,13 +4,17 @@ use super::smithy;
 use crate::declare_codegen;
 
 use std::collections::BTreeMap;
+use std::fs;
 use std::ops::Not;
 
 use heck::ToShoutySnakeCase;
 use regex::Regex;
 use scoped_writer::g;
+use serde::Deserialize;
+use serde::Serialize;
 use stdx::default::default;
 
+#[derive(Debug)]
 struct Error {
     code: String,
     description: Vec<Option<String>>,
@@ -36,7 +40,7 @@ fn collect_errors(model: &smithy::Model) -> Errors {
             let Some(cap) = pattern.captures(line) else { continue };
             let tag = cap.get(1).unwrap().as_str();
             assert_eq!(tag, "Code:");
-            o(code_pattern.captures(line).unwrap().get(2).unwrap().as_str())
+            o(code_pattern.captures(line).unwrap().get(2).unwrap().as_str().trim())
         };
 
         let description = loop {
@@ -121,21 +125,60 @@ fn collect_errors(model: &smithy::Model) -> Errors {
     errors
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct ErrorCode {
+    code: String,
+    description: String,
+    http_status_code: Option<u16>,
+}
+
 // https://github.com/Nugine/s3s/issues/224
 fn patch_extra_errors(errors: &mut Errors) {
-    // https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ReplicationErrorCodeList
+    // // https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ReplicationErrorCodeList
+    // {
+    //     let code = "ReplicationConfigurationNotFoundError";
+    //     let desc = "There is no replication configuration for this bucket.";
+    //     let status = "404 Not Found";
+    //     errors.insert(
+    //         code.to_owned(),
+    //         Error {
+    //             code: code.to_owned(),
+    //             description: vec![Some(desc.to_owned())],
+    //             status: vec![Some(status.to_owned())],
+    //         },
+    //     );
+    // }
+
     {
-        let code = "ReplicationConfigurationNotFoundError";
-        let desc = "There is no replication configuration for this bucket.";
-        let status = "404 Not Found";
-        errors.insert(
-            code.to_owned(),
-            Error {
-                code: code.to_owned(),
-                description: vec![Some(desc.to_owned())],
-                status: vec![Some(status.to_owned())],
-            },
-        );
+        let extra: BTreeMap<String, Vec<ErrorCode>> =
+            serde_json::from_str(fs::read_to_string("data/s3_error_codes.json").unwrap().as_str()).unwrap();
+
+        for group in extra.values() {
+            for ec in group {
+                if errors.contains_key(&ec.code) {
+                    continue;
+                }
+                if ec.code == "503 SlowDown" {
+                    continue;
+                }
+                if ec.code.contains('.') {
+                    continue;
+                }
+
+                errors.insert(
+                    ec.code.clone(),
+                    Error {
+                        code: ec.code.clone(),
+                        description: vec![Some(ec.description.clone())],
+                        status: vec![ec.http_status_code.map(|s| {
+                            let status = http::StatusCode::from_u16(s).unwrap();
+                            let reason = status.canonical_reason().unwrap();
+                            format!("{s} {reason}")
+                        })],
+                    },
+                );
+            }
+        }
     }
 }
 
@@ -147,6 +190,7 @@ pub fn codegen(model: &smithy::Model) {
 
     g([
         "#![allow(clippy::doc_markdown)]",
+        "#![allow(clippy::too_many_lines)]",
         "",
         "use bytestring::ByteString;",
         "use hyper::StatusCode;",
@@ -177,7 +221,9 @@ pub fn codegen(model: &smithy::Model) {
             let status = &err.status[0];
 
             if let Some(desc) = desc {
-                g!("/// {desc}");
+                for line in desc.lines() {
+                    g!("/// {}", line);
+                }
             }
             if let Some(status) = status {
                 if desc.is_some() {
