@@ -2396,6 +2396,7 @@ pub struct CopyObjectInput {
     /// </ul>
     /// </note>
     pub tagging_directive: Option<TaggingDirective>,
+    pub version_id: Option<ObjectVersionId>,
     /// <p>If the destination bucket is configured as a website, redirects requests for this object
     /// copy to another object in the same bucket or to an external URL. Amazon S3 stores the value of
     /// this header in the object metadata. This value is unique to each object and is not copied
@@ -2524,6 +2525,9 @@ impl fmt::Debug for CopyObjectInput {
         }
         if let Some(ref val) = self.tagging_directive {
             d.field("tagging_directive", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
         }
         if let Some(ref val) = self.website_redirect_location {
             d.field("website_redirect_location", val);
@@ -3461,6 +3465,7 @@ pub struct CreateMultipartUploadInput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub tagging: Option<TaggingHeader>,
+    pub version_id: Option<ObjectVersionId>,
     /// <p>If the bucket is configured as a website, redirects requests for this object to another
     /// object in the same bucket or to an external URL. Amazon S3 stores the value of this header in
     /// the object metadata.</p>
@@ -3558,6 +3563,9 @@ impl fmt::Debug for CreateMultipartUploadInput {
         }
         if let Some(ref val) = self.tagging {
             d.field("tagging", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
         }
         if let Some(ref val) = self.website_redirect_location {
             d.field("website_redirect_location", val);
@@ -3969,6 +3977,7 @@ pub struct DeleteBucketInput {
     /// <code>501 Not Implemented</code>.</p>
     /// </note>
     pub expected_bucket_owner: Option<AccountId>,
+    pub force_delete: Option<ForceDelete>,
 }
 
 impl fmt::Debug for DeleteBucketInput {
@@ -3977,6 +3986,9 @@ impl fmt::Debug for DeleteBucketInput {
         d.field("bucket", &self.bucket);
         if let Some(ref val) = self.expected_bucket_owner {
             d.field("expected_bucket_owner", val);
+        }
+        if let Some(ref val) = self.force_delete {
+            d.field("force_delete", val);
         }
         d.finish_non_exhaustive()
     }
@@ -4885,6 +4897,57 @@ impl fmt::Debug for DeletePublicAccessBlockOutput {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("DeletePublicAccessBlockOutput");
         d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Clone, PartialEq)]
+pub struct DeleteReplication {
+    pub status: DeleteReplicationStatus,
+}
+
+impl fmt::Debug for DeleteReplication {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("DeleteReplication");
+        d.field("status", &self.status);
+        d.finish_non_exhaustive()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DeleteReplicationStatus(Cow<'static, str>);
+
+impl DeleteReplicationStatus {
+    pub const DISABLED: &'static str = "Disabled";
+
+    pub const ENABLED: &'static str = "Enabled";
+
+    #[must_use]
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+
+    #[must_use]
+    pub fn from_static(s: &'static str) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<String> for DeleteReplicationStatus {
+    fn from(s: String) -> Self {
+        Self(Cow::from(s))
+    }
+}
+
+impl From<DeleteReplicationStatus> for Cow<'static, str> {
+    fn from(s: DeleteReplicationStatus) -> Self {
+        s.0
+    }
+}
+
+impl FromStr for DeleteReplicationStatus {
+    type Err = Infallible;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self::from(s.to_owned()))
     }
 }
 
@@ -7216,6 +7279,25 @@ impl fmt::Debug for EventBridgeConfiguration {
 
 pub type EventList = List<Event>;
 
+pub type ExcludeFolders = bool;
+
+#[derive(Clone, Default, PartialEq)]
+pub struct ExcludedPrefix {
+    pub prefix: Option<Prefix>,
+}
+
+impl fmt::Debug for ExcludedPrefix {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut d = f.debug_struct("ExcludedPrefix");
+        if let Some(ref val) = self.prefix {
+            d.field("prefix", val);
+        }
+        d.finish_non_exhaustive()
+    }
+}
+
+pub type ExcludedPrefixes = List<ExcludedPrefix>;
+
 /// <p>Optional configuration to replicate existing source bucket objects. </p>
 /// <note>
 /// <p>This parameter is no longer supported. To replicate existing objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-batch-replication-batch.html">Replicating existing objects with S3 Batch Replication</a> in the
@@ -7478,6 +7560,8 @@ impl FromStr for FilterRuleName {
 }
 
 pub type FilterRuleValue = String;
+
+pub type ForceDelete = bool;
 
 #[derive(Clone, PartialEq)]
 pub struct GetBucketAccelerateConfigurationInput {
@@ -11520,9 +11604,10 @@ impl fmt::Debug for LifecycleRuleAndOperator {
 /// <code>ObjectSizeGreaterThan</code>, <code>ObjectSizeLessThan</code>, or <code>And</code>
 /// specified. If the <code>Filter</code> element is left empty, the Lifecycle Rule applies to
 /// all objects in the bucket.</p>
-#[derive(Clone, Default, PartialEq)]
+#[derive(Default)]
 pub struct LifecycleRuleFilter {
     pub and: Option<LifecycleRuleAndOperator>,
+    pub cached_tags: CachedTags,
     /// <p>Minimum object size to which the rule applies.</p>
     pub object_size_greater_than: Option<ObjectSizeGreaterThanBytes>,
     /// <p>Maximum object size to which the rule applies.</p>
@@ -11548,6 +11633,7 @@ impl fmt::Debug for LifecycleRuleFilter {
         if let Some(ref val) = self.and {
             d.field("and", val);
         }
+        d.field("cached_tags", &self.cached_tags);
         if let Some(ref val) = self.object_size_greater_than {
             d.field("object_size_greater_than", val);
         }
@@ -11561,6 +11647,40 @@ impl fmt::Debug for LifecycleRuleFilter {
             d.field("tag", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+#[allow(clippy::clone_on_copy)]
+impl Clone for LifecycleRuleFilter {
+    fn clone(&self) -> Self {
+        Self {
+            and: self.and.clone(),
+            cached_tags: default(),
+            object_size_greater_than: self.object_size_greater_than.clone(),
+            object_size_less_than: self.object_size_less_than.clone(),
+            prefix: self.prefix.clone(),
+            tag: self.tag.clone(),
+        }
+    }
+}
+impl PartialEq for LifecycleRuleFilter {
+    fn eq(&self, other: &Self) -> bool {
+        if self.and != other.and {
+            return false;
+        }
+        if self.object_size_greater_than != other.object_size_greater_than {
+            return false;
+        }
+        if self.object_size_less_than != other.object_size_less_than {
+            return false;
+        }
+        if self.prefix != other.prefix {
+            return false;
+        }
+        if self.tag != other.tag {
+            return false;
+        }
+        true
     }
 }
 
@@ -16820,6 +16940,7 @@ pub struct PutObjectInput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub tagging: Option<TaggingHeader>,
+    pub version_id: Option<ObjectVersionId>,
     /// <p>If the bucket is configured as a website, redirects requests for this object to another
     /// object in the same bucket or to an external URL. Amazon S3 stores the value of this header in
     /// the object metadata. For information about object metadata, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html">Object Key and Metadata</a> in the
@@ -16967,6 +17088,9 @@ impl fmt::Debug for PutObjectInput {
         }
         if let Some(ref val) = self.tagging {
             d.field("tagging", val);
+        }
+        if let Some(ref val) = self.version_id {
+            d.field("version_id", val);
         }
         if let Some(ref val) = self.website_redirect_location {
             d.field("website_redirect_location", val);
@@ -17792,6 +17916,7 @@ impl fmt::Debug for ReplicationConfiguration {
 #[derive(Clone, PartialEq)]
 pub struct ReplicationRule {
     pub delete_marker_replication: Option<DeleteMarkerReplication>,
+    pub delete_replication: Option<DeleteReplication>,
     /// <p>A container for information about the replication destination and its configurations
     /// including enabling the S3 Replication Time Control (S3 RTC).</p>
     pub destination: Destination,
@@ -17836,6 +17961,9 @@ impl fmt::Debug for ReplicationRule {
         let mut d = f.debug_struct("ReplicationRule");
         if let Some(ref val) = self.delete_marker_replication {
             d.field("delete_marker_replication", val);
+        }
+        if let Some(ref val) = self.delete_replication {
+            d.field("delete_replication", val);
         }
         d.field("destination", &self.destination);
         if let Some(ref val) = self.existing_object_replication {
@@ -17899,7 +18027,7 @@ impl fmt::Debug for ReplicationRuleAndOperator {
 /// <p>A filter that identifies the subset of objects to which the replication rule applies. A
 /// <code>Filter</code> must specify exactly one <code>Prefix</code>, <code>Tag</code>, or
 /// an <code>And</code> child element.</p>
-#[derive(Clone, Default, PartialEq)]
+#[derive(Default)]
 pub struct ReplicationRuleFilter {
     /// <p>A container for specifying rule filters. The filters determine the subset of objects to
     /// which the rule applies. This element is required only if you specify more than one filter.
@@ -17915,6 +18043,7 @@ pub struct ReplicationRuleFilter {
     /// </li>
     /// </ul>
     pub and: Option<ReplicationRuleAndOperator>,
+    pub cached_tags: CachedTags,
     /// <p>An object key name prefix that identifies the subset of objects to which the rule
     /// applies.</p>
     /// <important>
@@ -17934,6 +18063,7 @@ impl fmt::Debug for ReplicationRuleFilter {
         if let Some(ref val) = self.and {
             d.field("and", val);
         }
+        d.field("cached_tags", &self.cached_tags);
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
@@ -17941,6 +18071,32 @@ impl fmt::Debug for ReplicationRuleFilter {
             d.field("tag", val);
         }
         d.finish_non_exhaustive()
+    }
+}
+
+#[allow(clippy::clone_on_copy)]
+impl Clone for ReplicationRuleFilter {
+    fn clone(&self) -> Self {
+        Self {
+            and: self.and.clone(),
+            cached_tags: default(),
+            prefix: self.prefix.clone(),
+            tag: self.tag.clone(),
+        }
+    }
+}
+impl PartialEq for ReplicationRuleFilter {
+    fn eq(&self, other: &Self) -> bool {
+        if self.and != other.and {
+            return false;
+        }
+        if self.prefix != other.prefix {
+            return false;
+        }
+        if self.tag != other.tag {
+            return false;
+        }
+        true
     }
 }
 
@@ -20513,6 +20669,8 @@ pub type VersionIdMarker = String;
 /// Bucket versioning</a> in the <i>Amazon S3 API Reference</i>.</p>
 #[derive(Clone, Default, PartialEq)]
 pub struct VersioningConfiguration {
+    pub exclude_folders: Option<ExcludeFolders>,
+    pub excluded_prefixes: Option<ExcludedPrefixes>,
     /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This
     /// element is only returned if the bucket has been configured with MFA delete. If the bucket
     /// has never been so configured, this element is not returned.</p>
@@ -20524,6 +20682,12 @@ pub struct VersioningConfiguration {
 impl fmt::Debug for VersioningConfiguration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut d = f.debug_struct("VersioningConfiguration");
+        if let Some(ref val) = self.exclude_folders {
+            d.field("exclude_folders", val);
+        }
+        if let Some(ref val) = self.excluded_prefixes {
+            d.field("excluded_prefixes", val);
+        }
         if let Some(ref val) = self.mfa_delete {
             d.field("mfa_delete", val);
         }
@@ -21518,6 +21682,8 @@ pub mod builders {
 
         tagging_directive: Option<TaggingDirective>,
 
+        version_id: Option<ObjectVersionId>,
+
         website_redirect_location: Option<WebsiteRedirectLocation>,
     }
 
@@ -21719,6 +21885,11 @@ pub mod builders {
 
         pub fn set_tagging_directive(&mut self, field: Option<TaggingDirective>) -> &mut Self {
             self.tagging_directive = field;
+            self
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
+            self.version_id = field;
             self
         }
 
@@ -21968,6 +22139,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
+        }
+
+        #[must_use]
         pub fn website_redirect_location(mut self, field: Option<WebsiteRedirectLocation>) -> Self {
             self.website_redirect_location = field;
             self
@@ -22014,6 +22191,7 @@ pub mod builders {
             let storage_class = self.storage_class;
             let tagging = self.tagging;
             let tagging_directive = self.tagging_directive;
+            let version_id = self.version_id;
             let website_redirect_location = self.website_redirect_location;
             Ok(CopyObjectInput {
                 acl,
@@ -22056,6 +22234,7 @@ pub mod builders {
                 storage_class,
                 tagging,
                 tagging_directive,
+                version_id,
                 website_redirect_location,
             })
         }
@@ -22373,6 +22552,8 @@ pub mod builders {
 
         tagging: Option<TaggingHeader>,
 
+        version_id: Option<ObjectVersionId>,
+
         website_redirect_location: Option<WebsiteRedirectLocation>,
     }
 
@@ -22524,6 +22705,11 @@ pub mod builders {
 
         pub fn set_tagging(&mut self, field: Option<TaggingHeader>) -> &mut Self {
             self.tagging = field;
+            self
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
+            self.version_id = field;
             self
         }
 
@@ -22713,6 +22899,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
+        }
+
+        #[must_use]
         pub fn website_redirect_location(mut self, field: Option<WebsiteRedirectLocation>) -> Self {
             self.website_redirect_location = field;
             self
@@ -22749,6 +22941,7 @@ pub mod builders {
             let server_side_encryption = self.server_side_encryption;
             let storage_class = self.storage_class;
             let tagging = self.tagging;
+            let version_id = self.version_id;
             let website_redirect_location = self.website_redirect_location;
             Ok(CreateMultipartUploadInput {
                 acl,
@@ -22781,6 +22974,7 @@ pub mod builders {
                 server_side_encryption,
                 storage_class,
                 tagging,
+                version_id,
                 website_redirect_location,
             })
         }
@@ -22792,6 +22986,8 @@ pub mod builders {
         bucket: Option<BucketName>,
 
         expected_bucket_owner: Option<AccountId>,
+
+        force_delete: Option<ForceDelete>,
     }
 
     impl DeleteBucketInputBuilder {
@@ -22802,6 +22998,11 @@ pub mod builders {
 
         pub fn set_expected_bucket_owner(&mut self, field: Option<AccountId>) -> &mut Self {
             self.expected_bucket_owner = field;
+            self
+        }
+
+        pub fn set_force_delete(&mut self, field: Option<ForceDelete>) -> &mut Self {
+            self.force_delete = field;
             self
         }
 
@@ -22817,12 +23018,20 @@ pub mod builders {
             self
         }
 
+        #[must_use]
+        pub fn force_delete(mut self, field: Option<ForceDelete>) -> Self {
+            self.force_delete = field;
+            self
+        }
+
         pub fn build(self) -> Result<DeleteBucketInput, BuildError> {
             let bucket = self.bucket.ok_or_else(|| BuildError::missing_field("bucket"))?;
             let expected_bucket_owner = self.expected_bucket_owner;
+            let force_delete = self.force_delete;
             Ok(DeleteBucketInput {
                 bucket,
                 expected_bucket_owner,
+                force_delete,
             })
         }
     }
@@ -28820,6 +29029,8 @@ pub mod builders {
 
         tagging: Option<TaggingHeader>,
 
+        version_id: Option<ObjectVersionId>,
+
         website_redirect_location: Option<WebsiteRedirectLocation>,
 
         write_offset_bytes: Option<WriteOffsetBytes>,
@@ -29018,6 +29229,11 @@ pub mod builders {
 
         pub fn set_tagging(&mut self, field: Option<TaggingHeader>) -> &mut Self {
             self.tagging = field;
+            self
+        }
+
+        pub fn set_version_id(&mut self, field: Option<ObjectVersionId>) -> &mut Self {
+            self.version_id = field;
             self
         }
 
@@ -29266,6 +29482,12 @@ pub mod builders {
         }
 
         #[must_use]
+        pub fn version_id(mut self, field: Option<ObjectVersionId>) -> Self {
+            self.version_id = field;
+            self
+        }
+
+        #[must_use]
         pub fn website_redirect_location(mut self, field: Option<WebsiteRedirectLocation>) -> Self {
             self.website_redirect_location = field;
             self
@@ -29317,6 +29539,7 @@ pub mod builders {
             let server_side_encryption = self.server_side_encryption;
             let storage_class = self.storage_class;
             let tagging = self.tagging;
+            let version_id = self.version_id;
             let website_redirect_location = self.website_redirect_location;
             let write_offset_bytes = self.write_offset_bytes;
             Ok(PutObjectInput {
@@ -29359,6 +29582,7 @@ pub mod builders {
                 server_side_encryption,
                 storage_class,
                 tagging,
+                version_id,
                 website_redirect_location,
                 write_offset_bytes,
             })
@@ -32093,6 +32317,9 @@ impl DtoExt for CopyObjectInput {
                 self.tagging_directive = None;
             }
         }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
         if self.website_redirect_location.as_deref() == Some("") {
             self.website_redirect_location = None;
         }
@@ -32341,6 +32568,9 @@ impl DtoExt for CreateMultipartUploadInput {
         }
         if self.tagging.as_deref() == Some("") {
             self.tagging = None;
+        }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
         }
         if self.website_redirect_location.as_deref() == Some("") {
             self.website_redirect_location = None;
@@ -32613,6 +32843,9 @@ impl DtoExt for DeletePublicAccessBlockInput {
         }
     }
 }
+impl DtoExt for DeleteReplication {
+    fn ignore_empty_strings(&mut self) {}
+}
 impl DtoExt for DeletedObject {
     fn ignore_empty_strings(&mut self) {
         if self.delete_marker_version_id.as_deref() == Some("") {
@@ -32695,6 +32928,13 @@ impl DtoExt for ErrorDetails {
 }
 impl DtoExt for ErrorDocument {
     fn ignore_empty_strings(&mut self) {}
+}
+impl DtoExt for ExcludedPrefix {
+    fn ignore_empty_strings(&mut self) {
+        if self.prefix.as_deref() == Some("") {
+            self.prefix = None;
+        }
+    }
 }
 impl DtoExt for ExistingObjectReplication {
     fn ignore_empty_strings(&mut self) {}
@@ -34933,6 +35173,9 @@ impl DtoExt for PutObjectInput {
         if self.tagging.as_deref() == Some("") {
             self.tagging = None;
         }
+        if self.version_id.as_deref() == Some("") {
+            self.version_id = None;
+        }
         if self.website_redirect_location.as_deref() == Some("") {
             self.website_redirect_location = None;
         }
@@ -35197,6 +35440,9 @@ impl DtoExt for ReplicationConfiguration {
 impl DtoExt for ReplicationRule {
     fn ignore_empty_strings(&mut self) {
         if let Some(ref mut val) = self.delete_marker_replication {
+            val.ignore_empty_strings();
+        }
+        if let Some(ref mut val) = self.delete_replication {
             val.ignore_empty_strings();
         }
         self.destination.ignore_empty_strings();
@@ -35780,5 +36026,133 @@ impl DtoExt for WriteGetObjectResponseInput {
         if self.version_id.as_deref() == Some("") {
             self.version_id = None;
         }
+    }
+}
+
+#[derive(Debug, Default)]
+pub struct CachedTags(std::sync::OnceLock<Map<ObjectKey, Value>>);
+
+impl CachedTags {
+    pub fn reset(&mut self) {
+        self.0.take();
+    }
+
+    fn test<'a>(
+        &self,
+        get_and_tags: impl FnOnce() -> Option<&'a [Tag]>,
+        get_tag: impl FnOnce() -> Option<&'a Tag>,
+        object_tags: &Map<String, String>,
+    ) -> bool {
+        let cached_tags = self.0.get_or_init(|| {
+            let mut map = Map::new();
+
+            if let Some(tags) = get_and_tags() {
+                for tag in tags {
+                    let (Some(k), Some(v)) = (&tag.key, &tag.value) else { continue };
+                    if !k.is_empty() {
+                        map.insert(k.clone(), v.clone());
+                    }
+                }
+            }
+
+            if let Some(tag) = get_tag() {
+                let (Some(k), Some(v)) = (&tag.key, &tag.value) else { return map };
+                if !k.is_empty() {
+                    map.insert(k.clone(), v.clone());
+                }
+            }
+
+            map
+        });
+
+        if cached_tags.is_empty() {
+            return true;
+        }
+
+        if object_tags.is_empty() {
+            return false;
+        }
+
+        let (mut lhs, mut rhs) = (cached_tags, object_tags);
+        if lhs.len() > rhs.len() {
+            std::mem::swap(&mut lhs, &mut rhs);
+        }
+
+        for (k, v) in lhs {
+            if rhs.get(k) == Some(v) {
+                return true;
+            }
+        }
+
+        false
+    }
+}
+
+impl super::LifecycleRuleFilter {
+    pub fn test_tags(&self, object_tags: &Map<String, String>) -> bool {
+        self.cached_tags.test(
+            || self.and.as_ref().and_then(|and| and.tags.as_deref()),
+            || self.tag.as_ref(),
+            object_tags,
+        )
+    }
+}
+
+impl super::ReplicationRuleFilter {
+    pub fn test_tags(&self, object_tags: &Map<String, String>) -> bool {
+        self.cached_tags.test(
+            || self.and.as_ref().and_then(|and| and.tags.as_deref()),
+            || self.tag.as_ref(),
+            object_tags,
+        )
+    }
+}
+
+#[cfg(test)]
+mod minio_tests {
+    use super::*;
+
+    use std::ops::Not;
+
+    #[test]
+    fn cached_tags() {
+        let filter = ReplicationRuleFilter {
+            and: Some(ReplicationRuleAndOperator {
+                tags: Some(vec![
+                    Tag {
+                        key: Some("key1".to_owned()),
+                        value: Some("value1".to_owned()),
+                    },
+                    Tag {
+                        key: Some("key2".to_owned()),
+                        value: Some("value2".to_owned()),
+                    },
+                ]),
+                ..default()
+            }),
+            tag: Some(Tag {
+                key: Some("key3".to_owned()),
+                value: Some("value3".to_owned()),
+            }),
+            ..default()
+        };
+
+        let object_tags = Map::from_iter(vec![
+            ("key1".to_owned(), "value1".to_owned()),
+            ("key4".to_owned(), "value4".to_owned()),
+            ("key5".to_owned(), "value5".to_owned()),
+        ]);
+
+        assert!(filter.test_tags(&object_tags));
+        assert!(filter.test_tags(&object_tags));
+        assert!(filter.test_tags(&object_tags));
+
+        let object_tags = Map::from_iter(vec![
+            ("key4".to_owned(), "value4".to_owned()),
+            ("key5".to_owned(), "value5".to_owned()),
+        ]);
+        assert!(filter.test_tags(&object_tags).not());
+        assert!(filter.test_tags(&object_tags).not());
+        assert!(filter.test_tags(&object_tags).not());
     }
 }
