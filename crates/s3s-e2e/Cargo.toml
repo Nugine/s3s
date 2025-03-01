@@ -16,11 +16,11 @@ workspace = true
 s3s-test = { version = "0.11.0-dev", path = "../s3s-test" }
 tracing = "0.1.40"
 aws-credential-types = "1.2.1"
-aws-sdk-s3 = "1.56.0"
-aws-sdk-sts = { version = "1.46.0", features = ["behavior-version-latest"] }
+aws-sdk-s3 = "1.77.0"
+aws-sdk-sts = { version = "1.61.0", features = ["behavior-version-latest"] }
 
 [dependencies.aws-config]
-version = "1.5.8"
+version = "1.5.17"
 default-features = false
 features = ["behavior-version-latest"]
 
