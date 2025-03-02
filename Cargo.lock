@@ -2053,6 +2053,7 @@ dependencies = [
  "async-trait",
  "atoi",
  "base64-simd",
+ "block-buffer 0.11.0-rc.3",
  "bytes",
  "bytestring",
  "chrono",
