@@ -15,6 +15,7 @@ macro_rules! case {
     }};
 }
 
+#[allow(clippy::result_large_err)]
 pub fn check<T, E>(result: Result<T, SdkError<E>>, allowed_codes: &[&str]) -> Result<Option<T>, SdkError<E>>
 where
     E: fmt::Debug + ProvideErrorMetadata,
