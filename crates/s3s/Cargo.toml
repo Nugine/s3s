@@ -70,3 +70,4 @@ crc64fast-nvme = "1.2.0"
 
 [dev-dependencies]
 tokio = { version = "1.40.0", features = ["full"] }
+tokio-util = { version = "0.7.13", features = ["io"] }
