@@ -9,6 +9,8 @@ use hyper::StatusCode;
 use hyper::Uri;
 use hyper::http::Extensions;
 
+// TODO: Refactor S3Request and S3Response to support custom route better
+
 #[async_trait::async_trait]
 pub trait S3Route: Send + Sync + 'static {
     fn is_match(&self, method: &Method, uri: &Uri, headers: &HeaderMap, extensions: &mut Extensions) -> bool;
