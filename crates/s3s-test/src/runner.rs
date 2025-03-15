@@ -44,7 +44,7 @@ macro_rules! run_fn {
     }};
 }
 
-fn count(iter: impl IntoIterator<Item = bool>) -> CountSummary {
+fn count(total: u64, iter: impl IntoIterator<Item = bool>) -> CountSummary {
     let mut passed = 0;
     let mut failed = 0;
     for p in iter {
@@ -54,11 +54,7 @@ fn count(iter: impl IntoIterator<Item = bool>) -> CountSummary {
             failed += 1;
         }
     }
-    CountSummary {
-        total: passed + failed,
-        passed,
-        failed,
-    }
+    CountSummary { total, passed, failed }
 }
 
 pub async fn run(tcx: &mut TestContext) -> Report {
@@ -75,7 +71,7 @@ pub async fn run(tcx: &mut TestContext) -> Report {
     }
 
     let duration_ns = t0.elapsed().as_nanos() as u64;
-    let suite_count = count(suites.iter().map(|r| r.fixture_count.all_passed()));
+    let suite_count = count(total_suites as u64, suites.iter().map(|r| r.fixture_count.all_passed()));
 
     info!(duration_ns, ?suite_count, "Test end");
 
@@ -113,7 +109,7 @@ async fn run_suite(suite: &SuiteInfo) -> SuiteReport {
     }
 
     let duration_ns = t0.elapsed().as_nanos() as u64;
-    let fixture_count = count(fixtures.iter().map(|r| r.case_count.all_passed()));
+    let fixture_count = count(total_fixtures as u64, fixtures.iter().map(|r| r.case_count.all_passed()));
 
     info!(duration_ns, ?fixture_count, "Test suite end");
 
@@ -156,7 +152,7 @@ async fn run_fixture(fixture: &FixtureInfo, suite_data: &ArcAny) -> FixtureRepor
     }
 
     let duration_ns = t0.elapsed().as_nanos() as u64;
-    let case_count = count(cases.iter().map(|r| r.passed));
+    let case_count = count(total_cases as u64, cases.iter().map(|r| r.passed));
 
     info!(duration_ns, ?case_count, "Test fixture end");
 

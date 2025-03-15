@@ -22,6 +22,7 @@ struct Basic {
 }
 
 impl TestSuite for Basic {
+    #[tracing::instrument(skip_all)]
     async fn setup() -> Result<Self> {
         let sdk_conf = aws_config::from_env().load().await;
 
@@ -170,6 +171,7 @@ struct Put {
 }
 
 impl TestFixture<Basic> for Put {
+    #[tracing::instrument(skip_all)]
     async fn setup(suite: Arc<Basic>) -> Result<Self> {
         let s3 = &suite.s3;
         let bucket = "test-put";
@@ -187,6 +189,7 @@ impl TestFixture<Basic> for Put {
         })
     }
 
+    #[tracing::instrument(skip_all)]
     async fn teardown(self) -> Result {
         let Self { s3, bucket, key } = &self;
 
