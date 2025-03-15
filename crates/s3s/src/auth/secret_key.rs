@@ -1,5 +1,7 @@
 use std::fmt;
 
+use serde::Deserialize;
+use serde::Serialize;
 use zeroize::Zeroize;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -52,9 +54,28 @@ impl From<&str> for SecretKey {
     }
 }
 
+const PLACEHOLDER: &str = "[SENSITIVE-SECRET-KEY]";
+
 impl fmt::Debug for SecretKey {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let inner = "[SECRET-KEY]";
-        f.debug_tuple("SecretKey").field(&inner).finish()
+        f.debug_tuple("SecretKey").field(&PLACEHOLDER).finish()
+    }
+}
+
+impl<'de> Deserialize<'de> for SecretKey {
+    fn deserialize<D>(deserializer: D) -> Result<SecretKey, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        <String as Deserialize>::deserialize(deserializer).map(SecretKey::from)
+    }
+}
+
+impl Serialize for SecretKey {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        <str as Serialize>::serialize(PLACEHOLDER, serializer)
     }
 }
