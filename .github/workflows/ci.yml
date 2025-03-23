@@ -75,7 +75,7 @@ jobs:
       - uses: taiki-e/install-action@just
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - run: just ci-test
+      - run: just test
 
   mint-proxy-minio:
     name: e2e (mint, s3s-proxy, minio)

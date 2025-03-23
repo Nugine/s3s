@@ -15,10 +15,10 @@ fmt:
 
 lint:
     uvx ruff check
-    cargo clippy --all-features --all-targets --tests --benches
+    cargo clippy --workspace --all-features --all-targets
 
 test:
-    cargo test --all-features
+    cargo test --workspace --all-features --all-targets
 
 doc:
     RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc --open --no-deps --all-features
@@ -61,12 +61,9 @@ assert_unchanged:
 ci-rust:
     cargo fmt --all --check
     cargo clippy --all-features --all-targets -- -D warnings
-    just ci-test
+    just test
     just codegen
     just assert_unchanged
-
-ci-test:
-    cargo test --all-features
 
 ci-python:
     uvx ruff format --check

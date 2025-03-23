@@ -74,3 +74,4 @@ axum = "0.8.1"
 serde_json = "1.0.140"
 tokio = { version = "1.40.0", features = ["full"] }
 tokio-util = { version = "0.7.13", features = ["io"] }
+tower = "0.5.1"
