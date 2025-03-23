@@ -11,19 +11,16 @@ mod generated;
 mod manually {
     use super::*;
 
-    use quick_xml::events::BytesEnd;
-    use quick_xml::events::BytesStart;
-    use quick_xml::events::Event;
-
     use crate::dto::BucketLocationConstraint;
     use crate::dto::GetBucketLocationOutput;
 
     impl Serialize for GetBucketLocationOutput {
         fn serialize<W: std::io::Write>(&self, s: &mut Serializer<W>) -> SerResult {
+            let xmlns = "http://s3.amazonaws.com/doc/2006-03-01/";
             if let Some(location_constraint) = &self.location_constraint {
-                s.content("LocationConstraint", location_constraint)?;
+                s.content_with_ns("LocationConstraint", xmlns, location_constraint)?;
             } else {
-                s.content("LocationConstraint", "")?;
+                s.content_with_ns("LocationConstraint", xmlns, "")?;
             }
             Ok(())
         }
@@ -53,9 +50,10 @@ mod manually {
 
     impl Serialize for AssumeRoleOutput {
         fn serialize<W: std::io::Write>(&self, s: &mut Serializer<W>) -> SerResult {
-            s.event(start_with_ns("AssumeRoleResponse", "https://sts.amazonaws.com/doc/2011-06-15/"))?;
-            s.content("AssumeRoleResult", self)?;
-            s.event(end("AssumeRoleResponse"))?;
+            let xmlns = "https://sts.amazonaws.com/doc/2011-06-15/";
+            s.element_with_ns("AssumeRoleResponse", xmlns, |s| {
+                s.content("AssumeRoleResult", self) //
+            })?;
             Ok(())
         }
     }
@@ -66,15 +64,5 @@ mod manually {
                 d.named_element("AssumeRoleResult", Self::deserialize_content) //
             })
         }
-    }
-
-    fn start_with_ns<'a>(name: &'a str, ns: &'a str) -> Event<'a> {
-        let mut e = BytesStart::new(name);
-        e.push_attribute(("xmlns", ns));
-        Event::Start(e)
-    }
-
-    fn end(name: &str) -> Event<'_> {
-        Event::End(BytesEnd::new(name))
     }
 }

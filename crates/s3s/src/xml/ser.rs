@@ -66,12 +66,22 @@ impl<W: Write> Serializer<W> {
         self.event(end(name))
     }
 
+    pub fn element_with_ns(&mut self, name: &str, xmlns: &str, f: impl FnOnce(&mut Self) -> SerResult) -> SerResult {
+        self.event(start_with_ns(name, xmlns))?;
+        f(self)?;
+        self.event(end(name))
+    }
+
     /// Serializes a type
     ///
     /// # Errors
     /// Returns an error if the underlying writer returns an error
     pub fn content<T: SerializeContent + ?Sized>(&mut self, name: &str, val: &T) -> SerResult {
         self.element(name, |s| val.serialize_content(s))
+    }
+
+    pub fn content_with_ns<T: SerializeContent + ?Sized>(&mut self, name: &str, xmlns: &str, val: &T) -> SerResult {
+        self.element_with_ns(name, xmlns, |s| val.serialize_content(s))
     }
 
     /// Serializes a flattened `list`
@@ -172,6 +182,12 @@ impl SerializeContent for dto::Event {
 /// start event
 fn start(name: &str) -> Event<'_> {
     Event::Start(BytesStart::new(name))
+}
+
+fn start_with_ns<'a>(name: &'a str, xmlns: &'a str) -> Event<'a> {
+    let mut e = BytesStart::new(name);
+    e.push_attribute(("xmlns", xmlns));
+    Event::Start(e)
 }
 
 /// end event

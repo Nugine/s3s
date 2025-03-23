@@ -214,7 +214,7 @@ fn get_bucket_location_output() {
         };
 
         let ans = serialize(&val).unwrap();
-        let expected = "<LocationConstraint>us-west-2</LocationConstraint>";
+        let expected = "<LocationConstraint xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">us-west-2</LocationConstraint>";
 
         assert_eq!(ans, expected);
 
@@ -226,7 +226,7 @@ fn get_bucket_location_output() {
         };
 
         let ans = serialize(&val).unwrap();
-        let expected = "<LocationConstraint></LocationConstraint>";
+        let expected = "<LocationConstraint xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\"></LocationConstraint>";
 
         assert_eq!(ans, expected);
 

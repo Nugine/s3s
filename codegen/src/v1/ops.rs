@@ -121,6 +121,10 @@ pub fn is_op_input(name: &str, ops: &Operations) -> bool {
     name.strip_suffix("Input").is_some_and(|x| ops.contains_key(x))
 }
 
+pub fn is_op_output(name: &str, ops: &Operations) -> bool {
+    name.strip_suffix("Output").is_some_and(|x| ops.contains_key(x))
+}
+
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     declare_codegen!();
 

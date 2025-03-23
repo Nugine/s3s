@@ -4,6 +4,7 @@ use super::rust;
 use super::rust::default_value_literal;
 
 use crate::declare_codegen;
+use crate::v1::ops::is_op_output;
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::ops::Not;
@@ -56,6 +57,9 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
             g!("// DeserializeContent: {ty_name}");
         }
     }
+    g!();
+
+    g!("const XMLNS_S3: &str = \"http://s3.amazonaws.com/doc/2006-03-01/\";");
     g!();
 
     codegen_xml_serde(ops, rust_types, &root_type_names);
@@ -223,7 +227,11 @@ fn codegen_xml_serde(ops: &Operations, rust_types: &RustTypes, root_type_names: 
             g!("impl Serialize for {} {{", ty.name);
             g!("fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {{");
 
-            g!("s.content(\"{xml_name}\", self)");
+            if is_op_output(&ty.name, ops) {
+                g!("s.content_with_ns(\"{xml_name}\", XMLNS_S3, self)");
+            } else {
+                g!("s.content(\"{xml_name}\", self)");
+            }
 
             g!("}}");
             g!("}}");

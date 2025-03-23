@@ -806,6 +806,8 @@ use std::io::Write;
 //   SerializeContent: Years
 // DeserializeContent: Years
 
+const XMLNS_S3: &str = "http://s3.amazonaws.com/doc/2006-03-01/";
+
 impl Serialize for AccelerateConfiguration {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         s.content("AccelerateConfiguration", self)
@@ -880,7 +882,7 @@ impl<'xml> Deserialize<'xml> for CORSConfiguration {
 
 impl Serialize for CompleteMultipartUploadOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("CompleteMultipartUploadResult", self)
+        s.content_with_ns("CompleteMultipartUploadResult", XMLNS_S3, self)
     }
 }
 
@@ -934,7 +936,7 @@ impl<'xml> Deserialize<'xml> for CreateBucketConfiguration {
 
 impl Serialize for CreateMultipartUploadOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("InitiateMultipartUploadResult", self)
+        s.content_with_ns("InitiateMultipartUploadResult", XMLNS_S3, self)
     }
 }
 
@@ -952,19 +954,19 @@ impl<'xml> Deserialize<'xml> for Delete {
 
 impl Serialize for DeleteObjectsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("DeleteResult", self)
+        s.content_with_ns("DeleteResult", XMLNS_S3, self)
     }
 }
 
 impl Serialize for GetBucketAccelerateConfigurationOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("AccelerateConfiguration", self)
+        s.content_with_ns("AccelerateConfiguration", XMLNS_S3, self)
     }
 }
 
 impl Serialize for GetBucketAclOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("AccessControlPolicy", self)
+        s.content_with_ns("AccessControlPolicy", XMLNS_S3, self)
     }
 }
 
@@ -976,7 +978,7 @@ impl<'xml> Deserialize<'xml> for GetBucketAclOutput {
 
 impl Serialize for GetBucketCorsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("CORSConfiguration", self)
+        s.content_with_ns("CORSConfiguration", XMLNS_S3, self)
     }
 }
 
@@ -988,13 +990,13 @@ impl<'xml> Deserialize<'xml> for GetBucketCorsOutput {
 
 impl Serialize for GetBucketLifecycleConfigurationOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("LifecycleConfiguration", self)
+        s.content_with_ns("LifecycleConfiguration", XMLNS_S3, self)
     }
 }
 
 impl Serialize for GetBucketLoggingOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("BucketLoggingStatus", self)
+        s.content_with_ns("BucketLoggingStatus", XMLNS_S3, self)
     }
 }
 
@@ -1018,7 +1020,7 @@ impl<'xml> Deserialize<'xml> for GetBucketMetadataTableConfigurationResult {
 
 impl Serialize for GetBucketNotificationConfigurationOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("NotificationConfiguration", self)
+        s.content_with_ns("NotificationConfiguration", XMLNS_S3, self)
     }
 }
 
@@ -1030,7 +1032,7 @@ impl<'xml> Deserialize<'xml> for GetBucketNotificationConfigurationOutput {
 
 impl Serialize for GetBucketRequestPaymentOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("RequestPaymentConfiguration", self)
+        s.content_with_ns("RequestPaymentConfiguration", XMLNS_S3, self)
     }
 }
 
@@ -1042,7 +1044,7 @@ impl<'xml> Deserialize<'xml> for GetBucketRequestPaymentOutput {
 
 impl Serialize for GetBucketTaggingOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("Tagging", self)
+        s.content_with_ns("Tagging", XMLNS_S3, self)
     }
 }
 
@@ -1054,7 +1056,7 @@ impl<'xml> Deserialize<'xml> for GetBucketTaggingOutput {
 
 impl Serialize for GetBucketVersioningOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("VersioningConfiguration", self)
+        s.content_with_ns("VersioningConfiguration", XMLNS_S3, self)
     }
 }
 
@@ -1066,7 +1068,7 @@ impl<'xml> Deserialize<'xml> for GetBucketVersioningOutput {
 
 impl Serialize for GetBucketWebsiteOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("WebsiteConfiguration", self)
+        s.content_with_ns("WebsiteConfiguration", XMLNS_S3, self)
     }
 }
 
@@ -1078,19 +1080,19 @@ impl<'xml> Deserialize<'xml> for GetBucketWebsiteOutput {
 
 impl Serialize for GetObjectAclOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("AccessControlPolicy", self)
+        s.content_with_ns("AccessControlPolicy", XMLNS_S3, self)
     }
 }
 
 impl Serialize for GetObjectAttributesOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("GetObjectAttributesResponse", self)
+        s.content_with_ns("GetObjectAttributesResponse", XMLNS_S3, self)
     }
 }
 
 impl Serialize for GetObjectTaggingOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("Tagging", self)
+        s.content_with_ns("Tagging", XMLNS_S3, self)
     }
 }
 
@@ -1120,7 +1122,7 @@ impl<'xml> Deserialize<'xml> for InventoryConfiguration {
 
 impl Serialize for ListBucketAnalyticsConfigurationsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListBucketAnalyticsConfigurationResult", self)
+        s.content_with_ns("ListBucketAnalyticsConfigurationResult", XMLNS_S3, self)
     }
 }
 
@@ -1132,7 +1134,7 @@ impl<'xml> Deserialize<'xml> for ListBucketAnalyticsConfigurationsOutput {
 
 impl Serialize for ListBucketIntelligentTieringConfigurationsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListBucketIntelligentTieringConfigurationsOutput", self)
+        s.content_with_ns("ListBucketIntelligentTieringConfigurationsOutput", XMLNS_S3, self)
     }
 }
 
@@ -1144,7 +1146,7 @@ impl<'xml> Deserialize<'xml> for ListBucketIntelligentTieringConfigurationsOutpu
 
 impl Serialize for ListBucketInventoryConfigurationsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListInventoryConfigurationsResult", self)
+        s.content_with_ns("ListInventoryConfigurationsResult", XMLNS_S3, self)
     }
 }
 
@@ -1156,7 +1158,7 @@ impl<'xml> Deserialize<'xml> for ListBucketInventoryConfigurationsOutput {
 
 impl Serialize for ListBucketMetricsConfigurationsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListMetricsConfigurationsResult", self)
+        s.content_with_ns("ListMetricsConfigurationsResult", XMLNS_S3, self)
     }
 }
 
@@ -1168,7 +1170,7 @@ impl<'xml> Deserialize<'xml> for ListBucketMetricsConfigurationsOutput {
 
 impl Serialize for ListBucketsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListAllMyBucketsResult", self)
+        s.content_with_ns("ListAllMyBucketsResult", XMLNS_S3, self)
     }
 }
 
@@ -1180,31 +1182,31 @@ impl<'xml> Deserialize<'xml> for ListBucketsOutput {
 
 impl Serialize for ListMultipartUploadsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListMultipartUploadsResult", self)
+        s.content_with_ns("ListMultipartUploadsResult", XMLNS_S3, self)
     }
 }
 
 impl Serialize for ListObjectVersionsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListVersionsResult", self)
+        s.content_with_ns("ListVersionsResult", XMLNS_S3, self)
     }
 }
 
 impl Serialize for ListObjectsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListBucketResult", self)
+        s.content_with_ns("ListBucketResult", XMLNS_S3, self)
     }
 }
 
 impl Serialize for ListObjectsV2Output {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListBucketResult", self)
+        s.content_with_ns("ListBucketResult", XMLNS_S3, self)
     }
 }
 
 impl Serialize for ListPartsOutput {
     fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
-        s.content("ListPartsResult", self)
+        s.content_with_ns("ListPartsResult", XMLNS_S3, self)
     }
 }
 
