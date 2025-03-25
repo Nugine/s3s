@@ -80,6 +80,8 @@ impl S3Service {
     pub async fn call(&self, req: hyper::Request<Body>) -> S3Result<hyper::Response<Body>> {
         debug!(?req);
 
+        let t0 = std::time::Instant::now();
+
         let mut req = Request::from(req);
 
         let ccx = crate::ops::CallContext {
@@ -91,9 +93,11 @@ impl S3Service {
         };
         let result = crate::ops::call(&mut req, &ccx).await.map(Into::into);
 
+        let duration = t0.elapsed();
+
         match result {
-            Ok(ref res) => debug!(?res),
-            Err(ref err) => error!(?err),
+            Ok(ref res) => debug!(?duration, ?res),
+            Err(ref err) => error!(?duration, ?err),
         }
 
         result
