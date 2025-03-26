@@ -13,16 +13,16 @@ license.workspace = true
 workspace = true
 
 [dependencies]
-serde = { version = "1.0.210", features = ["derive"] }
-tokio = { version = "1.40.0", features = ["full"] }
-tracing = "0.1.40"
-tracing-subscriber = { version = "0.3.18", features = ["env-filter", "time"] }
-clap = { version = "4.5.31", features = ["derive"] }
+serde = { version = "1.0.219", features = ["derive"] }
+tokio = { version = "1.44.1", features = ["full"] }
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.19", features = ["env-filter", "time"] }
+clap = { version = "4.5.32", features = ["derive"] }
 dotenvy = "0.15.7"
-serde_json = "1.0.128"
-indexmap = "2.6.0"
+serde_json = "1.0.140"
+indexmap = "2.8.0"
 colored = "3.0.0"
-regex = "1.11.0"
+regex = "1.11.1"
 nugine-rust-utils = "0.3.1"
 backtrace = "0.3.74"
-const-str = { version = "0.6.1", features = ["std", "proc"] }
+const-str = { version = "0.6.2", features = ["std", "proc"] }
