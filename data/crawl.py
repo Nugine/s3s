@@ -35,7 +35,7 @@ def download_s3_model():
 @cli.command()
 def download_sts_model():
     # https://github.com/awslabs/aws-sdk-rust/commits/main/aws-models/sts.json
-    download_aws_sdk("sts", commit="dd960806f609eb4508faa690b16db6f5f03a612c")
+    download_aws_sdk("sts", commit="13eb310a6cbb4912f0a44db2fb2fca0b2bfee5d1")
 
 
 @cli.command()
