@@ -1,7 +1,6 @@
 [package]
 name = "s3s-proxy"
-version = "0.0.0"
-publish = false
+version = "0.11.0-dev"
 edition.workspace = true
 repository.workspace = true
 license.workspace = true

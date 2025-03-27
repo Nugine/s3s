@@ -38,19 +38,13 @@ install name *ARGS:
 
 sync-version:
     cargo set-version -p s3s            0.11.0-dev
-    cargo set-version -p s3s-policy     0.11.0-dev
     cargo set-version -p s3s-aws        0.11.0-dev
-    cargo set-version -p s3s-fs         0.11.0-dev
+    cargo set-version -p s3s-model      0.11.0-dev
+    cargo set-version -p s3s-policy     0.11.0-dev
     cargo set-version -p s3s-test       0.11.0-dev
+    cargo set-version -p s3s-proxy      0.11.0-dev
+    cargo set-version -p s3s-fs         0.11.0-dev
     cargo set-version -p s3s-e2e        0.11.0-dev
-
-publish:
-    cargo publish -p s3s
-    cargo publish -p s3s-policy
-    cargo publish -p s3s-aws
-    cargo publish -p s3s-fs
-    cargo publish -p s3s-test
-    cargo publish -p s3s-e2e
 
 # ------------------------------------------------
 
