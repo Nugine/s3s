@@ -9,13 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/Nugine/s3s/compare/v0.10.1...HEAD
 
-MSRV of current minor version: 1.85.0
+Tracking in [#267](https://github.com/Nugine/s3s/issues/267).
+
+MSRV of this minor version: 1.85.0
 
 ### s3s
 
-**BREAKING**: Following the latest model defintions in [aws-sdk-rust](https://github.com/awslabs/aws-sdk-rust), `s3s::dto` is updated.
+**BREAKING**: Following the latest model definitions in [aws-sdk-rust](https://github.com/awslabs/aws-sdk-rust), `s3s::dto` is updated.
 + You may come across some type changes reported by rustc.
 + The migration is not hard but requires some time.
+
+**BREAKING**: More request parameters are accepted via upgrading model definitions.
++ S3 preconditions ([#241](https://github.com/Nugine/s3s/issues/241))
++ PutObject write_offset_bytes ([#249](https://github.com/Nugine/s3s/issues/249))
 
 **BREAKING**: Policy-based access control is supported in `s3s::access` ([#161](https://github.com/Nugine/s3s/issues/161))
 + Add `S3Access` trait for access control.
@@ -24,7 +30,7 @@ MSRV of current minor version: 1.85.0
 
 **BREAKING**: Multi-domain is supported in `s3s::host`. ([#175](https://github.com/Nugine/s3s/issues/175))
 + Add `S3Host` trait for parsing host header.
-+ Change `S3ServiveBuilder::set_base_domain` to `S3ServiceBuilder::set_host`.
++ Change `S3ServiceBuilder::set_base_domain` to `S3ServiceBuilder::set_host`.
 + Add `SingleDomain` parser.
 + Add `MultiDomain` parser.
 
