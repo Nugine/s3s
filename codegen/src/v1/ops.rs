@@ -667,7 +667,7 @@ fn codegen_op_http_call(op: &Operation) {
     g!("}}");
 
     if op.name == "GetObject" {
-        g!("let overrided_headers = super::get_object::extract_overrided_response_headers(&s3_req)?;");
+        g!("let overridden_headers = super::get_object::extract_overridden_response_headers(&s3_req)?;");
     }
 
     if op.name == "CompleteMultipartUpload" {
@@ -699,7 +699,7 @@ fn codegen_op_http_call(op: &Operation) {
         g!("let mut resp = Self::serialize_http(s3_resp.output)?;");
 
         if op.name == "GetObject" {
-            g!("resp.headers.extend(overrided_headers);");
+            g!("resp.headers.extend(overridden_headers);");
             g!("super::get_object::merge_custom_headers(&mut resp, s3_resp.headers);");
         } else {
             g!("resp.headers.extend(s3_resp.headers);");

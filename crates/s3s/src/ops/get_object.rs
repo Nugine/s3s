@@ -15,7 +15,7 @@ use hyper::http::HeaderValue;
 
 use stdx::default::default;
 
-pub fn extract_overrided_response_headers(req: &S3Request<GetObjectInput>) -> S3Result<HeaderMap<HeaderValue>> {
+pub fn extract_overridden_response_headers(req: &S3Request<GetObjectInput>) -> S3Result<HeaderMap<HeaderValue>> {
     let mut map: HeaderMap<HeaderValue> = default();
 
     add(&mut map, header::CONTENT_TYPE, req.input.response_content_type.as_deref())?;
@@ -29,7 +29,7 @@ pub fn extract_overrided_response_headers(req: &S3Request<GetObjectInput>) -> S3
 }
 
 fn add(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&str>) -> S3Result<()> {
-    let error = |e| invalid_request!(e, "invalid overrided header: {name}: {value:?}");
+    let error = |e| invalid_request!(e, "invalid overridden header: {name}: {value:?}");
     if let Some(value) = value {
         let value = value.parse().map_err(error)?;
         map.insert(name, value);
@@ -38,7 +38,7 @@ fn add(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&str>) 
 }
 
 fn add_ts(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&Timestamp>) -> S3Result<()> {
-    let error = |e| invalid_request!(e, "invalid overrided header: {name}: {value:?}");
+    let error = |e| invalid_request!(e, "invalid overridden header: {name}: {value:?}");
     if let Some(value) = value {
         let value = fmt_timestamp(value, TimestampFormat::HttpDate, HeaderValue::from_bytes).map_err(error)?;
         map.insert(name, value);

@@ -3103,14 +3103,14 @@ impl super::Operation for GetObject {
         if let Some(access) = ccx.access {
             access.get_object(&mut s3_req).await?;
         }
-        let overrided_headers = super::get_object::extract_overrided_response_headers(&s3_req)?;
+        let overridden_headers = super::get_object::extract_overridden_response_headers(&s3_req)?;
         let result = s3.get_object(s3_req).await;
         let s3_resp = match result {
             Ok(val) => val,
             Err(err) => return super::serialize_error(err, false),
         };
         let mut resp = Self::serialize_http(s3_resp.output)?;
-        resp.headers.extend(overrided_headers);
+        resp.headers.extend(overridden_headers);
         super::get_object::merge_custom_headers(&mut resp, s3_resp.headers);
         resp.extensions.extend(s3_resp.extensions);
         Ok(resp)

@@ -51,7 +51,7 @@ pub fn create_string_to_sign(
     uri_path: &str,
     qs: Option<&OrderedQs>,
     headers: &OrderedHeaders<'_>,
-    virual_host_bucket: Option<&str>,
+    virtual_host_bucket: Option<&str>,
 ) -> String {
     let mut ans = String::with_capacity(256);
 
@@ -128,7 +128,7 @@ pub fn create_string_to_sign(
     {
         // {CanonicalizedResource}
 
-        if let Some(bucket) = virual_host_bucket {
+        if let Some(bucket) = virtual_host_bucket {
             ans.push('/');
             ans.push_str(bucket);
         }

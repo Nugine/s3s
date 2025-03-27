@@ -3,7 +3,7 @@
 //! A path in the S3 storage.
 //!
 //! + [Request styles](https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAPI.html#virtual-hosted-path-style-requests)
-//! + [Bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
+//! + [Bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
 
 use std::net::IpAddr;
 
@@ -107,7 +107,7 @@ impl S3Path {
     }
 }
 
-/// See [bucket nameing rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
+/// See [bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
 #[must_use]
 pub fn check_bucket_name(name: &str) -> bool {
     if !(3_usize..64).contains(&name.len()) {
