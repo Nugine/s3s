@@ -1,5 +1,5 @@
 use super::o;
-use super::ops::{is_op_input, Operations, SKIPPED_OPS};
+use super::ops::{Operations, SKIPPED_OPS, is_op_input};
 use super::rust::codegen_doc;
 use super::smithy::SmithyTraitsExt;
 use super::{rust, smithy};

@@ -345,7 +345,9 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
                         if let rust::Type::Timestamp(ts_ty) = field_type {
                             assert!(field.option_type);
                             let fmt = ts_ty.format.as_deref().unwrap_or("HttpDate");
-                            g!("http::add_opt_header_timestamp(&mut res, {header_name}, x.{field_name}, TimestampFormat::{fmt})?;");
+                            g!(
+                                "http::add_opt_header_timestamp(&mut res, {header_name}, x.{field_name}, TimestampFormat::{fmt})?;"
+                            );
                         } else if field.option_type {
                             g!("http::add_opt_header(&mut res, {header_name}, x.{field_name})?;");
                         } else {
@@ -684,8 +686,12 @@ fn codegen_op_http_call(op: &Operation) {
         g!("}}");
         g!("}};");
         g!("let mut resp = http::Response::with_status(http::StatusCode::OK);");
-        g!("http::set_keep_alive_xml_body(&mut resp, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;");
-        g!("http::add_opt_header(&mut resp, \"trailer\", Some([X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED.as_str(), X_AMZ_EXPIRATION.as_str(), X_AMZ_REQUEST_CHARGED.as_str(), X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID.as_str(), X_AMZ_SERVER_SIDE_ENCRYPTION.as_str(), X_AMZ_VERSION_ID.as_str()].join(\",\")))?;");
+        g!(
+            "http::set_keep_alive_xml_body(&mut resp, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;"
+        );
+        g!(
+            "http::add_opt_header(&mut resp, \"trailer\", Some([X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED.as_str(), X_AMZ_EXPIRATION.as_str(), X_AMZ_REQUEST_CHARGED.as_str(), X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID.as_str(), X_AMZ_SERVER_SIDE_ENCRYPTION.as_str(), X_AMZ_VERSION_ID.as_str()].join(\",\")))?;"
+        );
     } else {
         g!("let result = s3.{method}(s3_req).await;");
 
