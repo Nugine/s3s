@@ -2,8 +2,8 @@ use crate::dto::Checksum;
 
 use std::hash::Hasher;
 
-use digest::Digest;
 use numeric_cast::TruncatingCast;
+use sha1::Digest as _;
 use stdx::default::default;
 
 #[derive(Default)]

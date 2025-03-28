@@ -38,7 +38,7 @@ hyper-util = { version = "0.1.10", optional = true, features = [
     "http2",
     "tokio",
 ] }
-md-5 = "0.10.6"
+md-5.workspace = true
 mime = "0.3.17"
 std-next = "0.1.8"
 numeric_cast = "0.3.0"
