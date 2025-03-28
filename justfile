@@ -54,7 +54,7 @@ assert_unchanged:
 
 ci-rust:
     cargo fmt --all --check
-    cargo clippy --all-features --all-targets -- -D warnings
+    cargo clippy --workspace --all-features --all-targets -- -D warnings
     just test
     just codegen
     just assert_unchanged
