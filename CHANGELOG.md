@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/Nugine/s3s/compare/v0.10.1...HEAD
+[Unreleased]: https://github.com/Nugine/s3s/compare/v0.11.0...HEAD
+
+## [v0.11.0] - 2025-03-28
+
+[v0.11.0]: https://github.com/Nugine/s3s/compare/v0.10.1...v0.11.0
 
 Tracking in [#267](https://github.com/Nugine/s3s/issues/267).
 
