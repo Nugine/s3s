@@ -4,6 +4,8 @@ use crate::utils::*;
 
 use s3s::S3;
 use s3s::S3Result;
+use s3s::crypto::Checksum;
+use s3s::crypto::Md5;
 use s3s::dto::*;
 use s3s::s3_error;
 use s3s::{S3Request, S3Response};
@@ -20,7 +22,6 @@ use tokio::io::AsyncSeekExt;
 use tokio_util::io::ReaderStream;
 
 use futures::TryStreamExt;
-use md5::{Digest, Md5};
 use numeric_cast::NumericCast;
 use stdx::default::default;
 use tracing::debug;
@@ -484,7 +485,7 @@ impl S3 for FileSystem {
         let object_path = self.get_object_path(&bucket, &key)?;
         let mut file_writer = self.prepare_file_write(&object_path).await?;
 
-        let mut md5_hash = <Md5 as Digest>::new();
+        let mut md5_hash = Md5::new();
         let stream = body.inspect_ok(|bytes| {
             md5_hash.update(bytes.as_ref());
             checksum.update(bytes.as_ref());
@@ -573,7 +574,7 @@ impl S3 for FileSystem {
 
         let file_path = self.resolve_upload_part_path(upload_id, part_number)?;
 
-        let mut md5_hash = <Md5 as Digest>::new();
+        let mut md5_hash = Md5::new();
         let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
 
         let mut file_writer = self.prepare_file_write(&file_path).await?;
@@ -637,7 +638,7 @@ impl S3 for FileSystem {
         let _ = try_!(src_file.seek(io::SeekFrom::Start(start)).await);
         let body = StreamingBlob::wrap(bytes_stream(ReaderStream::with_capacity(src_file, 4096), content_length_usize));
 
-        let mut md5_hash = <Md5 as Digest>::new();
+        let mut md5_hash = Md5::new();
         let stream = body.inspect_ok(|bytes| md5_hash.update(bytes.as_ref()));
 
         let mut file_writer = self.prepare_file_write(&dst_path).await?;

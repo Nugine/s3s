@@ -2,7 +2,10 @@ use crate::error::*;
 use crate::utils::hex;
 
 use s3s::auth::Credentials;
+use s3s::crypto::Checksum;
+use s3s::crypto::Md5;
 use s3s::dto;
+use s3s::dto::PartNumber;
 
 use std::env;
 use std::ops::Not;
@@ -13,9 +16,7 @@ use tokio::fs;
 use tokio::fs::File;
 use tokio::io::{AsyncReadExt, BufWriter};
 
-use md5::{Digest, Md5};
 use path_absolutize::Absolutize;
-use s3s::dto::PartNumber;
 use uuid::Uuid;
 
 #[derive(Debug)]
