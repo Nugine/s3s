@@ -21,7 +21,7 @@ openssl = ["dep:openssl"]
 tower = ["dep:tower"]
 
 [target.'cfg(not(windows))'.dependencies]
-openssl = { version = "0.10.71", optional = true }
+openssl = { version = "0.10.72", optional = true }
 
 [dependencies]
 arrayvec = "0.7.6"
