@@ -19,7 +19,7 @@ use crate::http::Body;
 use crate::http::{OrderedHeaders, OrderedQs};
 use crate::http::{Request, Response};
 use crate::path::{ParseS3PathError, S3Path};
-use crate::request::S3Request;
+use crate::protocol::S3Request;
 use crate::route::S3Route;
 use crate::s3_trait::S3;
 use crate::stream::VecByteStream;
@@ -64,10 +64,10 @@ fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
     let service = req.s3ext.service.take();
 
     S3Request {
+        input,
         method,
         uri,
         headers,
-        input,
         extensions,
         credentials,
         region,

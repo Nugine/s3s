@@ -18,8 +18,7 @@ mod error;
 
 mod http;
 mod ops;
-mod request;
-mod response;
+mod protocol;
 mod s3_op;
 mod s3_trait;
 mod sig_v2;
@@ -40,7 +39,8 @@ pub mod xml;
 
 pub use self::error::*;
 pub use self::http::Body;
-pub use self::request::S3Request;
-pub use self::response::S3Response;
 pub use self::s3_op::S3Operation;
 pub use self::s3_trait::S3;
+
+pub use self::protocol::S3Request;
+pub use self::protocol::S3Response;

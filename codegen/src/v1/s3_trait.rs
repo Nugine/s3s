@@ -12,8 +12,8 @@ pub fn codegen(ops: &Operations) {
     g([
         "use crate::dto::*;",
         "use crate::error::S3Result;",
-        "use crate::request::S3Request;",
-        "use crate::response::S3Response;",
+        "use crate::protocol::S3Request;",
+        "use crate::protocol::S3Response;",
         "",
         "/// An async trait which represents the S3 API",
         "#[async_trait::async_trait]",
