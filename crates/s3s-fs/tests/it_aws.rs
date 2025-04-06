@@ -65,7 +65,7 @@ fn config() -> &'static SdkConfig {
         };
 
         // Convert to aws http client
-        let client = s3s_aws::Client::from(service.into_shared());
+        let client = s3s_aws::Client::from(service);
 
         // Setup aws sdk config
         SdkConfig::builder()

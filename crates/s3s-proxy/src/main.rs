@@ -73,8 +73,6 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
     // Run server
     let listener = TcpListener::bind((opt.host.as_str(), opt.port)).await?;
 
-    let hyper_service = service.into_shared();
-
     let http_server = ConnBuilder::new(TokioExecutor::new());
     let graceful = hyper_util::server::graceful::GracefulShutdown::new();
 
@@ -99,7 +97,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync + 'static>> {
             }
         };
 
-        let conn = http_server.serve_connection(TokioIo::new(socket), hyper_service.clone());
+        let conn = http_server.serve_connection(TokioIo::new(socket), service.clone());
         let conn = graceful.watch(conn.into_owned());
         tokio::spawn(async move {
             let _ = conn.await;

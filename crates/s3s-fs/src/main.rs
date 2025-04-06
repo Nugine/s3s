@@ -113,8 +113,6 @@ async fn run(opt: Opt) -> Result {
     let listener = TcpListener::bind((opt.host.as_str(), opt.port)).await?;
     let local_addr = listener.local_addr()?;
 
-    let hyper_service = service.into_shared();
-
     let http_server = ConnBuilder::new(TokioExecutor::new());
     let graceful = hyper_util::server::graceful::GracefulShutdown::new();
 
@@ -138,7 +136,7 @@ async fn run(opt: Opt) -> Result {
             }
         };
 
-        let conn = http_server.serve_connection(TokioIo::new(socket), hyper_service.clone());
+        let conn = http_server.serve_connection(TokioIo::new(socket), service.clone());
         let conn = graceful.watch(conn.into_owned());
         tokio::spawn(async move {
             let _ = conn.await;

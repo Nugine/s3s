@@ -1,7 +1,7 @@
 use crate::body::{s3s_body_into_sdk_body, sdk_body_into_s3s_body};
 
 use s3s::S3Result;
-use s3s::service::SharedS3Service;
+use s3s::service::S3Service;
 
 use std::ops::Not;
 
@@ -17,7 +17,7 @@ use hyper::http;
 use hyper::{Request, Response};
 
 #[derive(Debug)]
-pub struct Client(SharedS3Service);
+pub struct Client(S3Service);
 
 impl HttpClient for Client {
     fn http_connector(&self, _: &HttpConnectorSettings, _: &RuntimeComponents) -> SharedHttpConnector {
@@ -25,17 +25,17 @@ impl HttpClient for Client {
     }
 }
 
-impl From<SharedS3Service> for Client {
-    fn from(val: SharedS3Service) -> Self {
+impl From<S3Service> for Client {
+    fn from(val: S3Service) -> Self {
         Self(val)
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct Connector(SharedS3Service);
+pub struct Connector(S3Service);
 
-impl From<SharedS3Service> for Connector {
-    fn from(val: SharedS3Service) -> Self {
+impl From<S3Service> for Connector {
+    fn from(val: S3Service) -> Self {
         Self(val)
     }
 }
@@ -51,7 +51,7 @@ where
 impl HttpConnector for Connector {
     fn call(&self, req: AwsHttpRequest) -> HttpConnectorFuture {
         let service = self.0.clone();
-        HttpConnectorFuture::new_boxed(Box::pin(async move { convert_output(service.as_ref().call(convert_input(req)?).await) }))
+        HttpConnectorFuture::new_boxed(Box::pin(async move { convert_output(service.call(convert_input(req)?).await) }))
     }
 }
 
