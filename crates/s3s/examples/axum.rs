@@ -2,7 +2,7 @@ use s3s::route::S3Route;
 use s3s::{Body, S3Request, S3Response, S3Result};
 
 use axum::http;
-use http::{Extensions, HeaderMap, Method, StatusCode, Uri};
+use http::{Extensions, HeaderMap, Method, Uri};
 use tower::Service;
 
 pub struct CustomRoute {
@@ -39,9 +39,10 @@ fn convert_request(req: S3Request<Body>) -> http::Request<Body> {
     http::Request::from_parts(parts, req.input)
 }
 
-fn convert_response(resp: http::Response<axum::body::Body>) -> S3Response<(StatusCode, Body)> {
+fn convert_response(resp: http::Response<axum::body::Body>) -> S3Response<Body> {
     let (parts, body) = resp.into_parts();
-    let mut s3_resp = S3Response::new((parts.status, Body::http_body_unsync(body)));
+    let mut s3_resp = S3Response::new(Body::http_body_unsync(body));
+    s3_resp.status = Some(parts.status);
     s3_resp.headers = parts.headers;
     s3_resp.extensions = parts.extensions;
     s3_resp
@@ -62,7 +63,7 @@ impl S3Route for CustomRoute {
         Ok(()) // allow all requests
     }
 
-    async fn call(&self, req: S3Request<Body>) -> S3Result<S3Response<(StatusCode, Body)>> {
+    async fn call(&self, req: S3Request<Body>) -> S3Result<S3Response<Body>> {
         let mut service = self.router.clone().into_service::<Body>();
         let req = convert_request(req);
         let result = service.call(req).await;

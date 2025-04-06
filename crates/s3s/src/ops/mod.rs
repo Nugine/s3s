@@ -218,9 +218,9 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
 
             match result {
                 Ok(s3_resp) => Ok(Response {
-                    status: s3_resp.output.0,
+                    status: s3_resp.status.unwrap_or_default(),
                     headers: s3_resp.headers,
-                    body: s3_resp.output.1,
+                    body: s3_resp.output,
                     extensions: s3_resp.extensions,
                 }),
                 Err(err) => {

@@ -5,11 +5,8 @@ use crate::S3Result;
 
 use hyper::HeaderMap;
 use hyper::Method;
-use hyper::StatusCode;
 use hyper::Uri;
 use hyper::http::Extensions;
-
-// TODO: Refactor S3Request and S3Response to support custom route better
 
 #[async_trait::async_trait]
 pub trait S3Route: Send + Sync + 'static {
@@ -22,7 +19,7 @@ pub trait S3Route: Send + Sync + 'static {
         }
     }
 
-    async fn call(&self, req: S3Request<Body>) -> S3Result<S3Response<(StatusCode, Body)>>;
+    async fn call(&self, req: S3Request<Body>) -> S3Result<S3Response<Body>>;
 }
 
 #[cfg(test)]
@@ -46,7 +43,7 @@ mod tests {
             false
         }
 
-        async fn call(&self, _: S3Request<Body>) -> S3Result<S3Response<(StatusCode, Body)>> {
+        async fn call(&self, _: S3Request<Body>) -> S3Result<S3Response<Body>> {
             tracing::debug!("call AssumeRole");
             return Err(s3_error!(NotImplemented));
         }
