@@ -1,7 +1,7 @@
 mod generated;
 pub use self::generated::*;
 
-use crate::http;
+use crate::HttpResponse;
 use crate::ops;
 use crate::xml;
 use std::borrow::Cow;
@@ -144,7 +144,7 @@ impl S3Error {
     /// # Errors
     ///
     /// Returns [`S3Error`] if it was not possible to serialize the error into XML.
-    pub fn to_hyper_response(self) -> S3Result<hyper::Response<http::Body>> {
+    pub fn to_http_response(self) -> S3Result<HttpResponse> {
         ops::serialize_error(self, false).map(Into::into)
     }
 }

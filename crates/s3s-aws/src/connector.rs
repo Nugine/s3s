@@ -1,6 +1,5 @@
 use crate::body::{s3s_body_into_sdk_body, sdk_body_into_s3s_body};
 
-use s3s::S3Result;
 use s3s::service::S3Service;
 
 use std::ops::Not;
@@ -14,7 +13,6 @@ use aws_smithy_runtime_api::client::result::ConnectorError;
 
 use hyper::header::HOST;
 use hyper::http;
-use hyper::{Request, Response};
 
 #[derive(Debug)]
 pub struct Client(S3Service);
@@ -55,7 +53,7 @@ impl HttpConnector for Connector {
     }
 }
 
-fn convert_input(req: AwsHttpRequest) -> Result<Request<s3s::Body>, ConnectorError> {
+fn convert_input(req: AwsHttpRequest) -> Result<s3s::HttpRequest, ConnectorError> {
     let mut req = req.try_into_http1x().map_err(on_err)?;
 
     if req.headers().contains_key(HOST).not() {
@@ -66,10 +64,13 @@ fn convert_input(req: AwsHttpRequest) -> Result<Request<s3s::Body>, ConnectorErr
     Ok(req.map(sdk_body_into_s3s_body))
 }
 
-fn convert_output(result: S3Result<Response<s3s::Body>>) -> Result<AwsHttpResponse, ConnectorError> {
+fn convert_output(result: Result<s3s::HttpResponse, s3s::HttpError>) -> Result<AwsHttpResponse, ConnectorError> {
     match result {
         Ok(res) => res.map(s3s_body_into_sdk_body).try_into().map_err(on_err),
-        Err(e) => Err(on_err(e)),
+        Err(e) => {
+            let kind = aws_smithy_runtime_api::client::retries::ErrorKind::ServerError;
+            Err(ConnectorError::other(e.into(), Some(kind)))
+        }
     }
 }
 

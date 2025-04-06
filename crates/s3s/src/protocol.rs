@@ -1,3 +1,5 @@
+use crate::Body;
+use crate::StdError;
 use crate::auth::Credentials;
 
 use http::Extensions;
@@ -7,6 +9,27 @@ use http::StatusCode;
 use http::Uri;
 
 use stdx::default::default;
+
+pub type HttpRequest<B = Body> = http::Request<B>;
+pub type HttpResponse<B = Body> = http::Response<B>;
+
+/// An error that indicates a failure of an HTTP request.
+/// Passing this error to `hyper` will cause it to abort the connection.
+#[derive(Debug)]
+pub struct HttpError(StdError);
+
+impl HttpError {
+    #[must_use]
+    pub fn new(err: StdError) -> Self {
+        Self(err)
+    }
+}
+
+impl From<HttpError> for StdError {
+    fn from(val: HttpError) -> Self {
+        val.0
+    }
+}
 
 /// S3 request
 #[derive(Debug, Clone)]

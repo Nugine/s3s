@@ -1,3 +1,5 @@
+use crate::HttpResponse;
+
 use super::Body;
 
 use hyper::HeaderMap;
@@ -13,9 +15,9 @@ pub struct Response {
     pub extensions: Extensions,
 }
 
-impl From<Response> for hyper::Response<Body> {
+impl From<Response> for HttpResponse {
     fn from(res: Response) -> Self {
-        let mut ans = hyper::Response::default();
+        let mut ans = HttpResponse::default();
         *ans.status_mut() = res.status;
         *ans.headers_mut() = res.headers;
         *ans.body_mut() = res.body;

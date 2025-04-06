@@ -812,7 +812,7 @@ mod tests {
         use hyper::header::HeaderName;
         use hyper::header::HeaderValue;
 
-        let mut req = hyper::Request::<hyper::body::Bytes>::default();
+        let mut req = http::Request::<hyper::body::Bytes>::default();
 
         *req.method_mut() = Method::GET;
         *req.uri_mut() = hyper::Uri::from_static(

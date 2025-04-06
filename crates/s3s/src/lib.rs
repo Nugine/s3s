@@ -42,5 +42,8 @@ pub use self::http::Body;
 pub use self::s3_op::S3Operation;
 pub use self::s3_trait::S3;
 
+pub use self::protocol::HttpError;
+pub use self::protocol::HttpRequest;
+pub use self::protocol::HttpResponse;
 pub use self::protocol::S3Request;
 pub use self::protocol::S3Response;
