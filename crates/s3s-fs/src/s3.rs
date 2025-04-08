@@ -565,6 +565,13 @@ impl S3 for FileSystem {
             ..
         } = req.input;
 
+        if part_number > 10_000 {
+            return Err(s3_error!(
+                InvalidArgument,
+                "Part number must be an integer between 1 and 10000, inclusive"
+            ));
+        }
+
         let body = body.ok_or_else(|| s3_error!(IncompleteBody))?;
 
         let upload_id = Uuid::parse_str(&upload_id).map_err(|_| s3_error!(InvalidRequest))?;
@@ -738,6 +745,12 @@ impl S3 for FileSystem {
         let mut file_writer = self.prepare_file_write(&object_path).await?;
 
         let mut cnt: i32 = 0;
+        let total_parts_cnt = multipart_upload
+            .parts
+            .as_ref()
+            .map(|parts| i32::try_from(parts.len()).expect("total number of parts must be <= 10000."))
+            .unwrap_or_default();
+
         for part in multipart_upload.parts.into_iter().flatten() {
             let part_number = part
                 .part_number
@@ -751,6 +764,10 @@ impl S3 for FileSystem {
 
             let mut reader = try_!(fs::File::open(&part_path).await);
             let size = try_!(tokio::io::copy(&mut reader, &mut file_writer.writer()).await);
+
+            if part_number != total_parts_cnt && size < 5 * 1024 * 1024 {
+                return Err(s3_error!(EntityTooSmall));
+            }
 
             debug!(from = %part_path.display(), tmp = %file_writer.tmp_path().display(), to = %file_writer.dest_path().display(), ?size, "write file");
             try_!(fs::remove_file(&part_path).await);
