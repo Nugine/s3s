@@ -386,6 +386,8 @@ pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
         "use std::str::FromStr;",
         "",
         "use stdx::default::default;",
+        "use serde::{Serialize, Deserialize};",
+        "",
     ]);
 
     for rust_type in rust_types.values() {
@@ -613,6 +615,11 @@ fn struct_derives(ty: &rust::Struct, rust_types: &RustTypes) -> Vec<&'static str
     }
     if can_derive_partial_eq(ty, rust_types) {
         derives.push("PartialEq");
+    }
+    // What to do with other types?
+    if ty.name == "Tagging" || ty.name == "Tag" {
+        derives.push("Serialize");
+        derives.push("Deserialize");
     }
     derives
 }
