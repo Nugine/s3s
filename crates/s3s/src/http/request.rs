@@ -14,6 +14,7 @@ use hyper::http::Extensions;
 use hyper::http::HeaderValue;
 
 pub struct Request {
+    pub version: http::Version,
     pub method: Method,
     pub uri: Uri,
     pub headers: HeaderMap<HeaderValue>,
@@ -39,6 +40,7 @@ impl From<HttpRequest> for Request {
     fn from(req: HttpRequest) -> Self {
         let (parts, body) = req.into_parts();
         Self {
+            version: parts.version,
             method: parts.method,
             uri: parts.uri,
             headers: parts.headers,

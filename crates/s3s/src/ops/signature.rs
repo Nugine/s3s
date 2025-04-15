@@ -54,6 +54,7 @@ fn extract_amz_date(hs: &'_ OrderedHeaders<'_>) -> S3Result<Option<AmzDate>> {
 pub struct SignatureContext<'a> {
     pub auth: Option<&'a dyn S3Auth>,
 
+    pub req_version: ::http::Version,
     pub req_method: &'a Method,
     pub req_uri: &'a Uri,
     pub req_body: &'a mut Body,
@@ -299,8 +300,21 @@ impl SignatureContext<'_> {
             let uri_path = &self.decoded_uri_path;
             let query_strings: &[(String, String)] = self.qs.as_ref().map_or(&[], AsRef::as_ref);
 
+            // FIXME: throw error if any signed header is not in the request
+            // `host` header need to be special handled
+
             // here requires that `auth.signed_headers` is sorted
-            let headers = self.hs.find_multiple(&authorization.signed_headers);
+            let headers = self.hs.find_multiple_with_on_missing(&authorization.signed_headers, |name| {
+                // HTTP/2 replaces `host` header with `:authority`
+                // but `:authority` is not in the request headers
+                // so we need to add it back if `host` is in the signed headers
+                if name == "host" && self.req_version == ::http::Version::HTTP_2 {
+                    if let Some(authority) = self.req_uri.authority() {
+                        return Some(authority.as_str());
+                    }
+                }
+                None
+            });
 
             let canonical_request = if is_stream {
                 let payload = sig_v4::Payload::MultipleChunks;

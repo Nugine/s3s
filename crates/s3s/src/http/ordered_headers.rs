@@ -91,6 +91,29 @@ impl<'a> OrderedHeaders<'a> {
         }
         Self { headers }
     }
+
+    /// Finds headers by names. Time `O(mlogn)`
+    #[must_use]
+    pub fn find_multiple_with_on_missing(
+        &self,
+        names: &'a [impl AsRef<str>],
+        on_missing: impl Fn(&'a str) -> Option<&'a str>,
+    ) -> Self {
+        let mut headers: Vec<(&'a str, &'a str)> = Vec::new();
+        for name in names {
+            let mut has_value = false;
+            for pair in self.get_all_pairs(name.as_ref()) {
+                headers.push(pair);
+                has_value = true;
+            }
+            if !has_value {
+                if let Some(value) = on_missing(name.as_ref()) {
+                    headers.push((name.as_ref(), value));
+                }
+            }
+        }
+        Self { headers }
+    }
 }
 
 impl<'a> AsRef<[(&'a str, &'a str)]> for OrderedHeaders<'a> {

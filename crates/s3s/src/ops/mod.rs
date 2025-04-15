@@ -238,6 +238,7 @@ enum Prepare {
 }
 
 #[allow(clippy::too_many_lines)]
+#[tracing::instrument(level = "debug", skip_all, err)]
 async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> {
     let s3_path;
     let mut content_length;
@@ -285,6 +286,7 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
             let mut scx = SignatureContext {
                 auth: ccx.auth,
 
+                req_version: req.version,
                 req_method: &req.method,
                 req_uri: &req.uri,
                 req_body: &mut req.body,
