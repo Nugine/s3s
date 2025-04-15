@@ -857,4 +857,73 @@ mod tests {
             assert_eq!(signature, "96ad058ca27352e0fc2bd4efd8973792077570667bdaf749655f42e204bc649c");
         }
     }
+
+    #[test]
+    fn special_20250414() {
+        use hyper::header::HeaderName;
+        use hyper::header::HeaderValue;
+
+        let mut req = http::Request::<hyper::body::Bytes>::default();
+
+        *req.method_mut() = Method::POST;
+        *req.uri_mut() = hyper::Uri::from_static("https://play.rustfs.com:7000/");
+
+        let x_amz_date = "20250414T022518Z";
+        let headers = [
+            ("amz-sdk-invocation-id", "8c875471-a10a-45ad-b37e-e67e82de17d6"),
+            ("amz-sdk-request", "attempt=1; max=3"),
+            ("content-length", "130"),
+            ("content-type", "application/x-www-form-urlencoded"),
+            ("x-amz-content-sha256", "8e333076fe36da6633c89f2e38100cecb8e7587a1e0d6ce31838b6f68262b949"),
+            ("x-amz-date", x_amz_date),
+            (
+                "x-amz-user-agent",
+                "aws-sdk-js/3.777.0 ua/2.1 os/macOS#10.15.7 lang/js md/browser#Chrome_135.0.0.0 api/sts#3.777.0 m/N,E,e",
+            ),
+        ];
+        for (name, value) in &headers {
+            req.headers_mut()
+                .insert(HeaderName::from_static(name), HeaderValue::from_static(value));
+        }
+
+        {
+            let authorithy = HeaderValue::from_str(req.uri().authority().unwrap().as_str()).unwrap();
+            req.headers_mut().insert(HeaderName::from_static("host"), authorithy);
+        }
+
+        let signed_header_names = &[
+            "amz-sdk-invocation-id",
+            "amz-sdk-request",
+            "content-length",
+            "content-type",
+            "host",
+            "x-amz-content-sha256",
+            "x-amz-date",
+            "x-amz-user-agent",
+        ];
+
+        let payload = Payload::SingleChunk(b"RoleArn=arn%3Aaws%3Aiam%3A%3A%2A%3Arole%2FAdmin&RoleSessionName=console&DurationSeconds=43200&Action=AssumeRole&Version=2011-06-15");
+        let date = AmzDate::parse(x_amz_date).unwrap();
+        let region = "cn-east-1";
+        let service = "sts";
+
+        let secret_access_key = SecretKey::from("rustfsadmin");
+
+        {
+            let uri_path = req.uri().path();
+            let qs = req.uri().query().map(|q| OrderedQs::parse(q).unwrap());
+            let query_strings: &[_] = qs.as_ref().map_or(&[], |x| x.as_ref());
+
+            let signed_headers = OrderedHeaders::from_headers(req.headers())
+                .unwrap()
+                .find_multiple_with_on_missing(signed_header_names, |_| panic!());
+
+            let canonical_request = create_canonical_request(req.method(), uri_path, query_strings, &signed_headers, payload);
+
+            let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
+
+            let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
+            assert_eq!(signature, "7ed3ea6c69ed841068bbdd3cc1eb92a9ae5a4b1b0635267066bd676f6edc0189");
+        }
+    }
 }
