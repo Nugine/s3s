@@ -239,7 +239,18 @@ impl SignatureContext<'_> {
         let service = presigned_url.credential.aws_service;
 
         let signature = {
-            let headers = self.hs.find_multiple(&presigned_url.signed_headers);
+            let headers = self.hs.find_multiple_with_on_missing(&presigned_url.signed_headers, |name| {
+                // HTTP/2 replaces `host` header with `:authority`
+                // but `:authority` is not in the request headers
+                // so we need to add it back if `host` is in the signed headers
+                if name == "host" && self.req_version == ::http::Version::HTTP_2 {
+                    if let Some(authority) = self.req_uri.authority() {
+                        return Some(authority.as_str());
+                    }
+                }
+                None
+            });
+
             let method = &self.req_method;
             let uri_path = &self.decoded_uri_path;
 

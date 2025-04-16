@@ -847,7 +847,7 @@ mod tests {
 
             let signed_headers = OrderedHeaders::from_headers(req.headers())
                 .unwrap()
-                .find_multiple(signed_header_names);
+                .find_multiple_with_on_missing(signed_header_names, |_| None);
 
             let canonical_request = create_canonical_request(req.method(), uri_path, query_strings, &signed_headers, payload);
 

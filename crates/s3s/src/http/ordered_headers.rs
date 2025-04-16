@@ -80,17 +80,17 @@ impl<'a> OrderedHeaders<'a> {
         self.get_unique_pair(name.as_ref()).map(|(_, v)| v)
     }
 
-    /// Finds headers by names. Time `O(mlogn)`
-    #[must_use]
-    pub fn find_multiple(&self, names: &[impl AsRef<str>]) -> Self {
-        let mut headers: Vec<(&'a str, &'a str)> = Vec::new();
-        for name in names {
-            for pair in self.get_all_pairs(name.as_ref()) {
-                headers.push(pair);
-            }
-        }
-        Self { headers }
-    }
+    // /// Finds headers by names. Time `O(mlogn)`
+    // #[must_use]
+    // pub fn find_multiple(&self, names: &[impl AsRef<str>]) -> Self {
+    //     let mut headers: Vec<(&'a str, &'a str)> = Vec::new();
+    //     for name in names {
+    //         for pair in self.get_all_pairs(name.as_ref()) {
+    //             headers.push(pair);
+    //         }
+    //     }
+    //     Self { headers }
+    // }
 
     /// Finds headers by names. Time `O(mlogn)`
     #[must_use]
