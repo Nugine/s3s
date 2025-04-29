@@ -103,7 +103,13 @@ impl S3Service {
         let duration = t0.elapsed();
 
         match result {
-            Ok(ref res) => debug!(?duration, ?res),
+            Ok(ref res) => {
+                if res.status().is_server_error() {
+                    error!(?duration, ?res);
+                } else {
+                    debug!(?duration, ?res);
+                }
+            }
             Err(ref err) => error!(?duration, ?err),
         }
 
