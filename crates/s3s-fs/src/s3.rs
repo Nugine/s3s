@@ -239,8 +239,10 @@ impl S3 for FileSystem {
 
         let info = self.load_internal_info(&input.bucket, &input.key).await?;
         let checksum = match &info {
-            Some(info) => crate::checksum::from_internal_info(info),
-            None => default(),
+            // S3 skips returning the checksum if a range is specified that is
+            // less than the whole file
+            Some(info) if content_length == file_len => crate::checksum::from_internal_info(info),
+            _ => default(),
         };
 
         let output = GetObjectOutput {
