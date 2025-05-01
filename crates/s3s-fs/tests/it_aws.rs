@@ -399,3 +399,76 @@ async fn test_upload_part_copy() -> Result<()> {
 
     Ok(())
 }
+
+#[tokio::test]
+#[tracing::instrument]
+async fn test_single_object_get_range() -> Result<()> {
+    let _guard = serial().await;
+
+    let c = Client::new(config());
+    let bucket = format!("test-single-object-{}", Uuid::new_v4());
+    let bucket = bucket.as_str();
+    let key = "sample.txt";
+    let content = "hello world\n你好世界\n";
+    let crc32c = base64_simd::STANDARD.encode_to_string(crc32c::crc32c(content.as_bytes()).to_be_bytes());
+
+    create_bucket(&c, bucket).await?;
+
+    {
+        let body = ByteStream::from_static(content.as_bytes());
+        c.put_object()
+            .bucket(bucket)
+            .key(key)
+            .body(body)
+            .checksum_crc32_c(crc32c.as_str())
+            .send()
+            .await?;
+    }
+
+    {
+        let ans = c
+            .get_object()
+            .bucket(bucket)
+            .key(key)
+            .range("bytes=0-4")
+            .checksum_mode(ChecksumMode::Enabled)
+            .send()
+            .await?;
+
+        // S3 doesn't return checksums when a range is specified
+        assert!(ans.checksum_crc32().is_none());
+        assert!(ans.checksum_crc32_c().is_none());
+
+        let content_length: usize = ans.content_length().unwrap().try_into().unwrap();
+        let body = ans.body.collect().await?.into_bytes();
+
+        assert_eq!(content_length, 5);
+        assert_eq!(body.as_ref(), &content.as_bytes()[0..=4]);
+    }
+
+    {
+        let ans = c
+            .get_object()
+            .bucket(bucket)
+            .key(key)
+            .range("bytes=0-1000")
+            .checksum_mode(ChecksumMode::Enabled)
+            .send()
+            .await?;
+
+        let content_length: usize = ans.content_length().unwrap().try_into().unwrap();
+        let checksum_crc32c = ans.checksum_crc32_c.unwrap();
+        let body = ans.body.collect().await?.into_bytes();
+
+        assert_eq!(content_length, content.len());
+        assert_eq!(checksum_crc32c, crc32c);
+        assert_eq!(body.as_ref(), content.as_bytes());
+    }
+
+    {
+        delete_object(&c, bucket, key).await?;
+        delete_bucket(&c, bucket).await?;
+    }
+
+    Ok(())
+}
