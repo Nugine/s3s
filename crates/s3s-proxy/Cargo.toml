@@ -13,12 +13,12 @@ license.workspace = true
 workspace = true
 
 [dependencies]
-aws-config = { version = "1.6.1", default-features = false, features = [
+aws-config = { version = "1.6.2", default-features = false, features = [
     "behavior-version-latest",
 ] }
 aws-credential-types = "1.2.2"
-aws-sdk-s3 = "1.82.0"
-clap = { version = "4.5.35", features = ["derive"] }
+aws-sdk-s3 = "1.83.0"
+clap = { version = "4.5.37", features = ["derive"] }
 hyper-util = { version = "0.1.11", features = [
     "server-auto",
     "server-graceful",
