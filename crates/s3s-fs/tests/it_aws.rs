@@ -436,8 +436,8 @@ async fn test_single_object_get_range() -> Result<()> {
             .await?;
 
         // S3 doesn't return checksums when a range is specified
-        assert!(&ans.checksum_crc32().is_none());
-        assert!(&ans.checksum_crc32_c().is_none());
+        assert!(ans.checksum_crc32().is_none());
+        assert!(ans.checksum_crc32_c().is_none());
 
         let content_length: usize = ans.content_length().unwrap().try_into().unwrap();
         let body = ans.body.collect().await?.into_bytes();
