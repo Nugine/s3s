@@ -12,6 +12,7 @@ pub enum AmzContentSha256<'a> {
     /// single chunk
     SingleChunk {
         /// the checksum of single chunk payload
+        #[allow(dead_code)]
         payload_checksum: &'a str,
     },
     /// `UNSIGNED-PAYLOAD`

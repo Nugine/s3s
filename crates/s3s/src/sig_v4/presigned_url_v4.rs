@@ -12,6 +12,7 @@ use smallvec::SmallVec;
 #[derive(Debug)]
 pub struct PresignedUrlV4<'a> {
     /// algorithm
+    #[allow(dead_code)]
     pub algorithm: &'a str,
     /// credential
     pub credential: CredentialV4<'a>,

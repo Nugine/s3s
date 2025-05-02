@@ -20,8 +20,10 @@ use transform_stream::{AsyncTryStream, Yielder};
 #[derive(Debug)]
 pub struct File {
     /// name
+    #[allow(dead_code)]
     pub name: String,
     /// content type
+    #[allow(dead_code)]
     pub content_type: String,
     /// stream
     pub stream: Option<FileStream>,

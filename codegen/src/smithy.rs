@@ -18,6 +18,7 @@ pub enum Shape {
     Long(LongShape),
     String(StringShape),
     Timestamp(TimestampShape),
+    #[allow(dead_code)]
     Blob(BlobShape),
     List(ListShape),
     Map(MapShape),
@@ -25,6 +26,7 @@ pub enum Shape {
     Union(UnionShape),
     Structure(StructureShape),
     Operation(OperationShape),
+    #[allow(dead_code)]
     Service(ServiceShape),
 }
 
@@ -58,6 +60,7 @@ pub struct StructureMember {
 pub struct OperationShape {
     pub input: OperationInput,
     pub output: OperationOutput,
+    #[allow(dead_code)]
     pub errors: Option<Vec<OperationError>>,
     pub traits: Traits,
 }
@@ -74,6 +77,7 @@ pub struct OperationOutput {
 
 #[derive(Debug, Deserialize)]
 pub struct OperationError {
+    #[allow(dead_code)]
     pub target: String,
 }
 
@@ -94,12 +98,14 @@ pub struct ListMember {
     pub traits: Traits,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct ServiceShape {
     pub version: String,
     pub operations: Vec<ServiceOperation>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct ServiceOperation {
     pub target: String,
@@ -123,12 +129,14 @@ pub struct EnumShape {
     pub traits: Traits,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct EnumMember {
     pub target: String,
     pub traits: Traits,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct BlobShape {
     pub traits: Traits,
@@ -154,12 +162,14 @@ pub struct MapShape {
 #[derive(Debug, Deserialize)]
 pub struct MapKey {
     pub target: String,
+    #[allow(dead_code)]
     pub traits: Traits,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MapValue {
     pub target: String,
+    #[allow(dead_code)]
     pub traits: Traits,
 }
 
