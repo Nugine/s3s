@@ -93,7 +93,7 @@ if __name__ == "__main__":
         "aws-sdk-ruby",
         "awscli",
         "minio-go",
-        "minio-py",
+        # "minio-py",
         "s3cmd",
     ]
 
