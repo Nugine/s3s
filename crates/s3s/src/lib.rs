@@ -17,6 +17,7 @@
     clippy::wildcard_imports,
     clippy::let_underscore_untyped,
     clippy::inline_always,
+    clippy::needless_continue,
 )]
 
 #[macro_use]

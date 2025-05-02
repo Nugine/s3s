@@ -139,7 +139,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                     let default_value = field.traits.default_value().map(o);
                     let is_required = field.traits.required();
 
-                    let is_op_input = rs_shape_name.strip_suffix("Request").map_or(false, |op| ops.contains_key(op));
+                    let is_op_input = rs_shape_name.strip_suffix("Request").is_some_and(|op| ops.contains_key(op));
 
                     let option_type = 'optional: {
                         if field_type == "StreamingBlob" && default_value.as_ref().unwrap() == "" {
@@ -550,7 +550,7 @@ fn is_default_field(field: &rust::StructField, rust_types: &RustTypes) -> bool {
         return true;
     }
 
-    field.default_value.as_ref().map_or(false, is_rust_default)
+    field.default_value.as_ref().is_some_and(is_rust_default)
 }
 
 fn codegen_builders(rust_types: &RustTypes, ops: &Operations) {

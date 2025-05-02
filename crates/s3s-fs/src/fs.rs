@@ -235,7 +235,7 @@ impl<'a> FileWriter<'a> {
     }
 }
 
-impl<'a> Drop for FileWriter<'a> {
+impl Drop for FileWriter<'_> {
     fn drop(&mut self) {
         if self.clean_tmp {
             let _ = std::fs::remove_file(&self.tmp_path);

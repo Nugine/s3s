@@ -6,6 +6,7 @@ use crate::{headers, o};
 
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BTreeSet, HashMap};
+use std::fmt::Write as _;
 use std::format as f;
 use std::ops::Not;
 
@@ -116,7 +117,7 @@ pub fn collect_operations(model: &smithy::Model) -> Operations {
 }
 
 pub fn is_op_input(name: &str, ops: &Operations) -> bool {
-    name.strip_suffix("Input").map_or(false, |x| ops.contains_key(x))
+    name.strip_suffix("Input").is_some_and(|x| ops.contains_key(x))
 }
 
 pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
@@ -963,13 +964,13 @@ fn codegen_router(ops: &Operations, rust_types: &RustTypes) {
                                 if cond.is_empty().not() {
                                     cond.push_str(" && ");
                                 }
-                                cond.push_str(&f!("qs.has(\"{q}\")"));
+                                write!(&mut cond, "qs.has(\"{q}\")").unwrap();
                             }
                             for h in hs {
                                 if cond.is_empty().not() {
                                     cond.push_str(" && ");
                                 }
-                                cond.push_str(&f!("req.headers.contains_key(\"{h}\")"));
+                                write!(&mut cond, "req.headers.contains_key(\"{h}\")").unwrap();
                             }
 
                             if qs.is_empty().not() {

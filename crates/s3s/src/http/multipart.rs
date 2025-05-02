@@ -95,7 +95,7 @@ where
             None => return Err(MultipartError::InvalidFormat),
             Some(Err(e)) => return Err(MultipartError::Underlying(e)),
             Some(Ok(bytes)) => buf.extend_from_slice(&bytes),
-        };
+        }
 
         // try to parse
         match try_parse(body, pat, &buf, &mut fields, boundary) {
@@ -137,7 +137,7 @@ where
                 Some(line) => {
                     if line != pat_without_crlf {
                         return Ok(Err(MultipartError::InvalidFormat));
-                    };
+                    }
                 }
             }
         }
@@ -146,7 +146,7 @@ where
                 return Ok(Err(MultipartError::InvalidFormat));
             }
         }
-    };
+    }
 
     let mut headers = [httparse::EMPTY_HEADER; 2];
     loop {
@@ -278,7 +278,7 @@ impl FileStream {
                             None => return Err(FileStreamError::Incomplete),
                             Some(Err(e)) => return Err(FileStreamError::Underlying(e)),
                             Some(Ok(b)) => bytes = b,
-                        };
+                        }
                         state = 2;
                         continue 'dfa;
                     }
@@ -316,7 +316,7 @@ impl FileStream {
                             None => return Err(FileStreamError::Incomplete),
                             Some(Err(e)) => return Err(FileStreamError::Underlying(e)),
                             Some(Ok(b)) => buf.extend_from_slice(&b),
-                        };
+                        }
                         bytes = Bytes::from(mem::take(&mut buf));
                         state = 2;
                         continue 'dfa;

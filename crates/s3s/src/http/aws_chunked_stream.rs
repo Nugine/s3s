@@ -132,7 +132,7 @@ impl AwsChunkedStream {
                             None => break,
                             Some(Err(e)) => return Err(AwsChunkedStreamError::Underlying(e)),
                             Some(Ok(remaining_bytes)) => prev_bytes = remaining_bytes,
-                        };
+                        }
                         if let Ok((_, meta)) = parse_chunk_meta(&buf) {
                             meta
                         } else {
