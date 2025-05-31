@@ -8,6 +8,7 @@ categories = ["web-programming", "web-programming::http-server"]
 edition.workspace = true
 repository.workspace = true
 license.workspace = true
+rust-version.workspace = true
 
 [lints]
 workspace = true
