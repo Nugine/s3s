@@ -28,6 +28,7 @@ mod tests {
 
     use crate::header;
 
+    #[allow(dead_code)]
     pub struct AssumeRole {}
 
     #[async_trait::async_trait]

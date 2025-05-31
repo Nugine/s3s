@@ -9,6 +9,8 @@ pub fn codegen(ops: &Operations) {
     declare_codegen!();
 
     g([
+        "#![allow(clippy::doc_markdown)]",
+        "",
         "use super::S3AccessContext;",
         "",
         "use crate::dto::*;",
