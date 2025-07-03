@@ -14,7 +14,7 @@ workspace = true
 scoped-writer = "0.3.0"
 heck = "0.5.0"
 nugine-rust-utils = "0.3.1"
-std-next = "0.1.8"
+std-next = "0.1.9"
 numeric_cast = "0.3.0"
 regex = "1.11.1"
 serde = { version = "1.0.219", features = ["derive"] }
