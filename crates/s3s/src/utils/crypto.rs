@@ -67,7 +67,9 @@ fn sha256_chunk(chunk: &[Bytes]) -> impl AsRef<[u8; 32]> + use<> {
 fn sha256_chunk(chunk: &[Bytes]) -> impl AsRef<[u8]> {
     use openssl::hash::{Hasher, MessageDigest};
     let mut h = Hasher::new(MessageDigest::sha256()).unwrap();
-    chunk.iter().for_each(|data| h.update(data).unwrap());
+    for data in chunk {
+        h.update(data).unwrap();
+    }
     h.finish().unwrap()
 }
 

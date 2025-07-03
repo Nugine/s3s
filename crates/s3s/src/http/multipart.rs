@@ -212,7 +212,9 @@ where
                 };
 
                 let mut fields = mem::take(fields);
-                fields.iter_mut().for_each(|x| x.0.make_ascii_lowercase());
+                for x in &mut fields {
+                    x.0.make_ascii_lowercase();
+                }
                 fields.sort_by(|lhs, rhs| lhs.0.as_str().cmp(rhs.0.as_str()));
 
                 return Ok(Ok(Multipart { fields, file }));
