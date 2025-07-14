@@ -59,7 +59,9 @@ fn sha256(data: &[u8]) -> impl AsRef<[u8]> {
 fn sha256_chunk(chunk: &[Bytes]) -> impl AsRef<[u8; 32]> + use<> {
     use sha2::{Digest, Sha256};
     let mut h = <Sha256 as Digest>::new();
-    chunk.iter().for_each(|data| h.update(data));
+    for data in chunk {
+        h.update(data);
+    }
     h.finalize()
 }
 
