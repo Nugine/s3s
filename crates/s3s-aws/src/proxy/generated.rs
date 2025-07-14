@@ -2,6 +2,7 @@
 
 use super::*;
 
+use crate::conv::string_from_integer;
 use crate::conv::{try_from_aws, try_into_aws};
 
 use s3s::S3;
@@ -1196,7 +1197,7 @@ impl S3 for Proxy {
         b = b.set_key(Some(try_into_aws(input.key)?));
         b = b.set_max_parts(try_into_aws(input.max_parts)?);
         b = b.set_object_attributes(Some(try_into_aws(input.object_attributes)?));
-        b = b.set_part_number_marker(try_into_aws(input.part_number_marker)?);
+        b = b.set_part_number_marker(input.part_number_marker.map(string_from_integer));
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_sse_customer_algorithm(try_into_aws(input.sse_customer_algorithm)?);
         b = b.set_sse_customer_key(try_into_aws(input.sse_customer_key)?);
@@ -1657,7 +1658,7 @@ impl S3 for Proxy {
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_key(Some(try_into_aws(input.key)?));
         b = b.set_max_parts(try_into_aws(input.max_parts)?);
-        b = b.set_part_number_marker(try_into_aws(input.part_number_marker)?);
+        b = b.set_part_number_marker(input.part_number_marker.map(string_from_integer));
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_sse_customer_algorithm(try_into_aws(input.sse_customer_algorithm)?);
         b = b.set_sse_customer_key(try_into_aws(input.sse_customer_key)?);
