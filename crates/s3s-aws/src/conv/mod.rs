@@ -30,3 +30,12 @@ where
         None => Err(s3_error!(InternalError, "missing field: {}", field_name)),
     }
 }
+
+#[must_use]
+pub fn string_from_integer(x: i32) -> String {
+    x.to_string()
+}
+
+pub fn integer_from_string(x: &str) -> S3Result<i32> {
+    x.parse::<i32>().map_err(S3Error::internal_error)
+}

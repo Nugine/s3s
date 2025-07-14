@@ -252,6 +252,18 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
 }
 
 fn patch_types(space: &mut RustTypes) {
+    // patch PartNumberMarker
+    // FIXME: https://github.com/awslabs/aws-sdk-rust/issues/1318
+    {
+        let Some(rust::Type::Alias(ty)) = space.get_mut("PartNumberMarker") else { panic!() };
+        assert_eq!(ty.type_, "String");
+        "i32".clone_into(&mut ty.type_);
+
+        let Some(rust::Type::Alias(ty)) = space.get_mut("NextPartNumberMarker") else { panic!() };
+        assert_eq!(ty.type_, "String");
+        "i32".clone_into(&mut ty.type_);
+    }
+
     // patch Tag
     {
         let Some(rust::Type::Struct(ty)) = space.get_mut("Tag") else { panic!() };

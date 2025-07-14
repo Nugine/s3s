@@ -3309,7 +3309,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesInput {
             key: unwrap_from_aws(x.key, "key")?,
             max_parts: try_from_aws(x.max_parts)?,
             object_attributes: unwrap_from_aws(x.object_attributes, "object_attributes")?,
-            part_number_marker: try_from_aws(x.part_number_marker)?,
+            part_number_marker: x.part_number_marker.as_deref().map(integer_from_string).transpose()?,
             request_payer: try_from_aws(x.request_payer)?,
             sse_customer_algorithm: try_from_aws(x.sse_customer_algorithm)?,
             sse_customer_key: try_from_aws(x.sse_customer_key)?,
@@ -3325,7 +3325,7 @@ impl AwsConversion for s3s::dto::GetObjectAttributesInput {
         y = y.set_key(Some(try_into_aws(x.key)?));
         y = y.set_max_parts(try_into_aws(x.max_parts)?);
         y = y.set_object_attributes(Some(try_into_aws(x.object_attributes)?));
-        y = y.set_part_number_marker(try_into_aws(x.part_number_marker)?);
+        y = y.set_part_number_marker(x.part_number_marker.map(string_from_integer));
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_sse_customer_algorithm(try_into_aws(x.sse_customer_algorithm)?);
         y = y.set_sse_customer_key(try_into_aws(x.sse_customer_key)?);
@@ -3376,8 +3376,8 @@ impl AwsConversion for s3s::dto::GetObjectAttributesParts {
         Ok(Self {
             is_truncated: try_from_aws(x.is_truncated)?,
             max_parts: try_from_aws(x.max_parts)?,
-            next_part_number_marker: try_from_aws(x.next_part_number_marker)?,
-            part_number_marker: try_from_aws(x.part_number_marker)?,
+            next_part_number_marker: x.next_part_number_marker.as_deref().map(integer_from_string).transpose()?,
+            part_number_marker: x.part_number_marker.as_deref().map(integer_from_string).transpose()?,
             parts: try_from_aws(x.parts)?,
             total_parts_count: try_from_aws(x.total_parts_count)?,
         })
@@ -3387,8 +3387,8 @@ impl AwsConversion for s3s::dto::GetObjectAttributesParts {
         let mut y = Self::Target::builder();
         y = y.set_is_truncated(try_into_aws(x.is_truncated)?);
         y = y.set_max_parts(try_into_aws(x.max_parts)?);
-        y = y.set_next_part_number_marker(try_into_aws(x.next_part_number_marker)?);
-        y = y.set_part_number_marker(try_into_aws(x.part_number_marker)?);
+        y = y.set_next_part_number_marker(x.next_part_number_marker.map(string_from_integer));
+        y = y.set_part_number_marker(x.part_number_marker.map(string_from_integer));
         y = y.set_parts(try_into_aws(x.parts)?);
         y = y.set_total_parts_count(try_into_aws(x.total_parts_count)?);
         Ok(y.build())
@@ -5169,7 +5169,7 @@ impl AwsConversion for s3s::dto::ListPartsInput {
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             key: unwrap_from_aws(x.key, "key")?,
             max_parts: try_from_aws(x.max_parts)?,
-            part_number_marker: try_from_aws(x.part_number_marker)?,
+            part_number_marker: x.part_number_marker.as_deref().map(integer_from_string).transpose()?,
             request_payer: try_from_aws(x.request_payer)?,
             sse_customer_algorithm: try_from_aws(x.sse_customer_algorithm)?,
             sse_customer_key: try_from_aws(x.sse_customer_key)?,
@@ -5184,7 +5184,7 @@ impl AwsConversion for s3s::dto::ListPartsInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key(Some(try_into_aws(x.key)?));
         y = y.set_max_parts(try_into_aws(x.max_parts)?);
-        y = y.set_part_number_marker(try_into_aws(x.part_number_marker)?);
+        y = y.set_part_number_marker(x.part_number_marker.map(string_from_integer));
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_sse_customer_algorithm(try_into_aws(x.sse_customer_algorithm)?);
         y = y.set_sse_customer_key(try_into_aws(x.sse_customer_key)?);
@@ -5209,9 +5209,9 @@ impl AwsConversion for s3s::dto::ListPartsOutput {
             is_truncated: try_from_aws(x.is_truncated)?,
             key: try_from_aws(x.key)?,
             max_parts: try_from_aws(x.max_parts)?,
-            next_part_number_marker: try_from_aws(x.next_part_number_marker)?,
+            next_part_number_marker: x.next_part_number_marker.as_deref().map(integer_from_string).transpose()?,
             owner: try_from_aws(x.owner)?,
-            part_number_marker: try_from_aws(x.part_number_marker)?,
+            part_number_marker: x.part_number_marker.as_deref().map(integer_from_string).transpose()?,
             parts: try_from_aws(x.parts)?,
             request_charged: try_from_aws(x.request_charged)?,
             storage_class: try_from_aws(x.storage_class)?,
@@ -5230,9 +5230,9 @@ impl AwsConversion for s3s::dto::ListPartsOutput {
         y = y.set_is_truncated(try_into_aws(x.is_truncated)?);
         y = y.set_key(try_into_aws(x.key)?);
         y = y.set_max_parts(try_into_aws(x.max_parts)?);
-        y = y.set_next_part_number_marker(try_into_aws(x.next_part_number_marker)?);
+        y = y.set_next_part_number_marker(x.next_part_number_marker.map(string_from_integer));
         y = y.set_owner(try_into_aws(x.owner)?);
-        y = y.set_part_number_marker(try_into_aws(x.part_number_marker)?);
+        y = y.set_part_number_marker(x.part_number_marker.map(string_from_integer));
         y = y.set_parts(try_into_aws(x.parts)?);
         y = y.set_request_charged(try_into_aws(x.request_charged)?);
         y = y.set_storage_class(try_into_aws(x.storage_class)?);

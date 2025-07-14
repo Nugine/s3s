@@ -16,6 +16,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
         "use super::*;",
         "",
         "use crate::conv::{try_from_aws, try_into_aws};",
+        "use crate::conv::string_from_integer;",
         "",
         "use s3s::S3;",
         "use s3s::{S3Request, S3Response};",
@@ -80,6 +81,11 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                 //     g!("b = b.set_{aws_field_name}({val});");
                 //     continue;
                 // }
+
+                if field.type_ == "PartNumberMarker" || field.type_ == "NextPartNumberMarker" {
+                    g!("b = b.set_{aws_field_name}(input.{s3s_field_name}.map(string_from_integer));");
+                    continue;
+                }
 
                 if field.option_type {
                     g!("b = b.set_{aws_field_name}(try_into_aws(input.{s3s_field_name})?);");

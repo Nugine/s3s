@@ -13596,7 +13596,7 @@ pub type NextKeyMarker = String;
 
 pub type NextMarker = String;
 
-pub type NextPartNumberMarker = String;
+pub type NextPartNumberMarker = i32;
 
 pub type NextToken = String;
 
@@ -14883,7 +14883,7 @@ impl fmt::Debug for Part {
 
 pub type PartNumber = i32;
 
-pub type PartNumberMarker = String;
+pub type PartNumberMarker = i32;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PartitionDateSource(Cow<'static, str>);
@@ -33062,9 +33062,6 @@ impl DtoExt for GetObjectAttributesInput {
         if self.expected_bucket_owner.as_deref() == Some("") {
             self.expected_bucket_owner = None;
         }
-        if self.part_number_marker.as_deref() == Some("") {
-            self.part_number_marker = None;
-        }
         if let Some(ref val) = self.request_payer {
             if val.as_str() == "" {
                 self.request_payer = None;
@@ -33111,14 +33108,7 @@ impl DtoExt for GetObjectAttributesOutput {
     }
 }
 impl DtoExt for GetObjectAttributesParts {
-    fn ignore_empty_strings(&mut self) {
-        if self.next_part_number_marker.as_deref() == Some("") {
-            self.next_part_number_marker = None;
-        }
-        if self.part_number_marker.as_deref() == Some("") {
-            self.part_number_marker = None;
-        }
-    }
+    fn ignore_empty_strings(&mut self) {}
 }
 impl DtoExt for GetObjectInput {
     fn ignore_empty_strings(&mut self) {
@@ -34117,9 +34107,6 @@ impl DtoExt for ListPartsInput {
         if self.expected_bucket_owner.as_deref() == Some("") {
             self.expected_bucket_owner = None;
         }
-        if self.part_number_marker.as_deref() == Some("") {
-            self.part_number_marker = None;
-        }
         if let Some(ref val) = self.request_payer {
             if val.as_str() == "" {
                 self.request_payer = None;
@@ -34160,14 +34147,8 @@ impl DtoExt for ListPartsOutput {
         if self.key.as_deref() == Some("") {
             self.key = None;
         }
-        if self.next_part_number_marker.as_deref() == Some("") {
-            self.next_part_number_marker = None;
-        }
         if let Some(ref mut val) = self.owner {
             val.ignore_empty_strings();
-        }
-        if self.part_number_marker.as_deref() == Some("") {
-            self.part_number_marker = None;
         }
         if let Some(ref val) = self.request_charged {
             if val.as_str() == "" {
