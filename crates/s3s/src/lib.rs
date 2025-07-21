@@ -47,3 +47,9 @@ pub use self::protocol::HttpRequest;
 pub use self::protocol::HttpResponse;
 pub use self::protocol::S3Request;
 pub use self::protocol::S3Response;
+
+// Expose duplicate handling policy functions for testing and external use
+pub mod duplicate_policy {
+    //! Functions for determining duplicate header and query parameter handling policies
+    pub use crate::http::{header_allows_duplicates, query_allows_duplicates};
+}
