@@ -76,7 +76,12 @@ def crawl_error_codes():
 
         ans = []
         for td_list in tr_list:
-            t0 = td_list[0].css.select("code")[0].text.strip()
+            td0_code = td_list[0].css.select("code")
+            if td0_code:
+                t0 = td0_code[0].text.strip()
+            else:
+                t0 = td_list[0].text.strip()
+
             t1 = td_list[1].text.strip()
             t2 = td_list[2].text.strip()
 

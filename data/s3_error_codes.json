@@ -252,8 +252,13 @@
         },
         {
             "code": "InvalidRange",
-            "description": "The requested range is not valid for the request. Try another range.",
+            "description": "The requested range cannot be satisfied.",
             "http_status_code": 416
+        },
+        {
+            "code": "InvalidRegion",
+            "description": "You've attempted to create a Multi-Region Access Point in a Region that you haven't opted in to.",
+            "http_status_code": 403
         },
         {
             "code": "InvalidRequest",
