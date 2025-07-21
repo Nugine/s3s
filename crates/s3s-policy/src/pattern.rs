@@ -50,6 +50,7 @@ impl PatternSet {
     }
 
     /// <https://leetcode.com/problems/wildcard-matching/>
+    #[allow(clippy::indexing_slicing)] // bounds are checked before indexing
     fn match_pattern(pattern: &[u8], input: &[u8]) -> bool {
         let mut p_idx = 0;
         let mut s_idx = 0;
@@ -96,6 +97,12 @@ impl PatternSet {
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use super::*;
 

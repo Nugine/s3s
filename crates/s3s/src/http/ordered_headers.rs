@@ -52,6 +52,7 @@ impl<'a> OrderedHeaders<'a> {
         let lower_bound = slice.partition_point(|x| x.0 < name);
         let upper_bound = slice.partition_point(|x| x.0 <= name);
 
+        #[allow(clippy::indexing_slicing)] // Bounds are guaranteed by partition_point
         slice[lower_bound..upper_bound].iter().copied()
     }
 
@@ -63,6 +64,7 @@ impl<'a> OrderedHeaders<'a> {
         let slice = self.headers.as_slice();
         let lower_bound = slice.partition_point(|x| x.0 < name);
 
+        #[allow(clippy::indexing_slicing)] // Bounds are guaranteed by partition_point
         let mut iter = slice[lower_bound..].iter().copied();
         let pair = iter.next()?;
 

@@ -54,6 +54,7 @@ impl Multipart {
         if upper_bound == 0 {
             return None;
         }
+        #[allow(clippy::indexing_slicing)] // Bounds are checked above
         let pair = &self.fields[upper_bound - 1];
         if pair.0.as_str() != name {
             return None;

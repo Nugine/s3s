@@ -227,6 +227,8 @@ impl FromStr for S3ErrorCode {
     type Err = Infallible;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
+        // Generated code expects all S3 error code strings to be valid
+        #[allow(clippy::unwrap_used)] // API design assumes all strings are valid S3 error codes
         Ok(Self::from_bytes(s.as_bytes()).unwrap())
     }
 }

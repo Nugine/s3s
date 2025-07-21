@@ -2,6 +2,11 @@
     clippy::missing_errors_doc, // TODO
     clippy::missing_panics_doc, // TODO
     clippy::wildcard_imports,
+    // E2E tests are allowed to use panic operations
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing,
 )]
 
 mod utils;

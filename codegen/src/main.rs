@@ -3,6 +3,11 @@
     clippy::wildcard_imports,
     clippy::match_same_arms,
     clippy::let_underscore_untyped,
+    // Codegen is build-time only, panics are acceptable for simplicity
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing,
 )]
 
 mod v1;

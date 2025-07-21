@@ -51,6 +51,7 @@ impl OrderedQs {
         let lower_bound = qs.partition_point(|x| x.0.as_str() < name);
         let upper_bound = qs.partition_point(|x| x.0.as_str() <= name);
 
+        #[allow(clippy::indexing_slicing)] // Bounds are guaranteed by partition_point
         qs[lower_bound..upper_bound].iter().map(|x| x.1.as_str())
     }
 
@@ -58,6 +59,7 @@ impl OrderedQs {
         let qs = self.qs.as_slice();
         let lower_bound = qs.partition_point(|x| x.0.as_str() < name);
 
+        #[allow(clippy::indexing_slicing)] // Bounds are guaranteed by partition_point
         let mut iter = qs[lower_bound..].iter();
         let pair = iter.next()?;
 
@@ -78,6 +80,12 @@ impl AsRef<[(String, String)]> for OrderedQs {
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use super::*;
 

@@ -134,6 +134,7 @@ pub fn parse_opt_query_timestamp(req: &Request, name: &str, fmt: TimestampFormat
 }
 
 #[track_caller]
+#[allow(clippy::panic)] // Only called by generated code with correct preconditions
 pub fn unwrap_bucket(req: &mut Request) -> String {
     match req.s3ext.s3_path.take() {
         Some(S3Path::Bucket { bucket }) => bucket.into(),
@@ -142,6 +143,7 @@ pub fn unwrap_bucket(req: &mut Request) -> String {
 }
 
 #[track_caller]
+#[allow(clippy::panic)] // Only called by generated code with correct preconditions  
 pub fn unwrap_object(req: &mut Request) -> (String, String) {
     match req.s3ext.s3_path.take() {
         Some(S3Path::Object { bucket, key }) => (bucket.into(), key.into()),
@@ -167,6 +169,7 @@ pub fn take_xml_body<T>(req: &mut Request) -> S3Result<T>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
+    #[allow(clippy::expect_used)] // Body should be pre-loaded by middleware
     let bytes = req.body.take_bytes().expect("full body not found");
     if bytes.is_empty() {
         return Err(S3ErrorCode::MissingRequestBodyError.into());
@@ -182,6 +185,7 @@ pub fn take_opt_xml_body<T>(req: &mut Request) -> S3Result<Option<T>>
 where
     T: for<'xml> xml::Deserialize<'xml>,
 {
+    #[allow(clippy::expect_used)] // Body should be pre-loaded by middleware
     let bytes = req.body.take_bytes().expect("full body not found");
     if bytes.is_empty() {
         return Ok(None);
@@ -194,6 +198,7 @@ where
 }
 
 pub fn take_string_body(req: &mut Request) -> S3Result<String> {
+    #[allow(clippy::expect_used)] // Body should be pre-loaded by middleware
     let bytes = req.body.take_bytes().expect("full body not found");
     match String::from_utf8_simd(bytes.into()) {
         Ok(s) => Ok(s),
@@ -217,6 +222,7 @@ pub fn parse_opt_metadata(req: &Request) -> S3Result<Option<Metadata>> {
             continue;
         }
         let mut iter = map.get_all(name).into_iter();
+        #[allow(clippy::unwrap_used)] // Header must exist since we're iterating over keys
         let val = iter.next().unwrap();
         let None = iter.next() else { return Err(duplicate_header(name)) };
 
