@@ -4273,6 +4273,7 @@ impl SerializeContent for Grantee {
         if let Some(ref val) = self.id {
             s.content("ID", val)?;
         }
+        s.content("xmlns", "http://www.w3.org/2001/XMLSchema-instance")?;
         s.content("xsi:type", &self.type_)?;
         if let Some(ref val) = self.uri {
             s.content("URI", val)?;
@@ -4315,6 +4316,10 @@ impl<'xml> DeserializeContent<'xml> for Grantee {
                     return Err(DeError::DuplicateField);
                 }
                 type_ = Some(d.content()?);
+                Ok(())
+            }
+            b"xmlns" => {
+                // This is a namespace declaration, we can ignore it.
                 Ok(())
             }
             b"URI" => {
