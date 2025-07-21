@@ -99,6 +99,7 @@ pub struct StructField {
     pub xml_flattened: bool,
 
     pub is_custom_extension: bool,
+    pub is_xml_attr: bool,
 }
 
 #[derive(Debug, Clone)]

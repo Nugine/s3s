@@ -355,6 +355,10 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                 g!("s.content(\"{xml_name}\", val)?;");
                 g!("}}");
             } else {
+                if field.is_xml_attr {
+                    g!("s.content(\"xmlns:xsi\", \"http://www.w3.org/2001/XMLSchema-instance\")?;");
+                }
+
                 let default_is_zero = match field.default_value.as_ref() {
                     Some(v) => v.as_u64() == Some(0),
                     None => false,
@@ -396,6 +400,11 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
             for field in &ty.fields {
                 if field.position == "sealed" {
                     continue;
+                }
+                if field.is_xml_attr {
+                    g!("b\"xmlns:xsi\" => {{");
+                    g!("Ok(())");
+                    g!("}}");
                 }
 
                 let xml_name = field.xml_name.as_ref().unwrap_or(&field.camel_name);
