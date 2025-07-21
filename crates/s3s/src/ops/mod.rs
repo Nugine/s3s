@@ -37,7 +37,7 @@ use hyper::StatusCode;
 use hyper::Uri;
 use hyper::http::HeaderValue;
 use mime::Mime;
-use tracing::debug;
+use tracing::{debug, warn};
 
 #[async_trait::async_trait]
 pub trait Operation: Send + Sync + 'static {
@@ -103,6 +103,12 @@ fn extract_host(req: &Request) -> S3Result<Option<String>> {
 
 fn is_socket_addr_or_ip_addr(host: &str) -> bool {
     host.parse::<SocketAddr>().is_ok() || host.parse::<IpAddr>().is_ok()
+}
+
+fn looks_like_virtual_hosted_style(host: &str) -> bool {
+    // Check if host contains a dot (subdomain) and is not an IP address
+    // This suggests it might be a virtual-hosted-style request like "bucket.example.com"
+    host.contains('.') && !is_socket_addr_or_ip_addr(host)
 }
 
 fn convert_parse_s3_path_error(err: &ParseS3PathError) -> S3Error {
@@ -261,6 +267,17 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
 
                         vh_bucket = vh.bucket();
                         break 'parse crate::path::parse_virtual_hosted_style(vh_bucket, &decoded_uri_path);
+                    }
+                }
+
+                // Check if this looks like a virtual-hosted-style request but parsing is not enabled
+                if let Some(host_header) = host_header.as_deref() {
+                    if looks_like_virtual_hosted_style(host_header) {
+                        warn!(
+                            ?host_header, ?decoded_uri_path, 
+                            "Received what appears to be a virtual-hosted-style request, but virtual-hosted-style parsing is not enabled. \
+                            Consider configuring an S3Host implementation (e.g., SingleDomain or MultiDomain) to handle virtual-hosted-style requests like 'bucket.example.com'"
+                        );
                     }
                 }
 
