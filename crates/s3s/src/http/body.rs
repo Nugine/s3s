@@ -164,6 +164,7 @@ impl http_body::Body for Body {
                 //
             }
             KindProj::UnsyncBoxBody { inner } => {
+                #[allow(clippy::unwrap_used)] // Mutex should not be poisoned
                 let mut inner = inner.lock().unwrap();
                 http_body::Body::poll_frame(Pin::new(&mut *inner), cx)
                 //
@@ -181,7 +182,10 @@ impl http_body::Body for Body {
             Kind::Once { inner } => inner.is_empty(),
             Kind::Hyper { inner } => http_body::Body::is_end_stream(inner),
             Kind::BoxBody { inner } => http_body::Body::is_end_stream(inner),
-            Kind::UnsyncBoxBody { inner } => inner.lock().unwrap().is_end_stream(),
+            Kind::UnsyncBoxBody { inner } => {
+                #[allow(clippy::unwrap_used)] // Mutex should not be poisoned
+                inner.lock().unwrap().is_end_stream()
+            }
             Kind::DynStream { inner } => inner.remaining_length().exact() == Some(0),
         }
     }
@@ -192,7 +196,10 @@ impl http_body::Body for Body {
             Kind::Once { inner } => http_body::SizeHint::with_exact(inner.len() as u64),
             Kind::Hyper { inner } => http_body::Body::size_hint(inner),
             Kind::BoxBody { inner } => http_body::Body::size_hint(inner),
-            Kind::UnsyncBoxBody { inner } => inner.lock().unwrap().size_hint(),
+            Kind::UnsyncBoxBody { inner } => {
+                #[allow(clippy::unwrap_used)] // Mutex should not be poisoned
+                inner.lock().unwrap().size_hint()
+            }
             Kind::DynStream { inner } => inner.remaining_length().into(),
         }
     }
@@ -221,7 +228,10 @@ impl ByteStream for Body {
             Kind::Once { inner } => RemainingLength::new_exact(inner.len()),
             Kind::Hyper { inner } => http_body::Body::size_hint(inner).into(),
             Kind::BoxBody { inner } => http_body::Body::size_hint(inner).into(),
-            Kind::UnsyncBoxBody { inner } => http_body::Body::size_hint(&*inner.lock().unwrap()).into(),
+            Kind::UnsyncBoxBody { inner } => {
+                #[allow(clippy::unwrap_used)] // Mutex should not be poisoned
+                http_body::Body::size_hint(&*inner.lock().unwrap()).into()
+            }
             Kind::DynStream { inner } => inner.remaining_length(),
         }
     }
@@ -244,6 +254,7 @@ impl fmt::Debug for Body {
             }
             Kind::UnsyncBoxBody { inner } => {
                 d.field("body", &"{..}");
+                #[allow(clippy::unwrap_used)] // Mutex should not be poisoned
                 d.field("remaining_length", &http_body::Body::size_hint(&*inner.lock().unwrap()));
             }
             Kind::DynStream { inner } => {

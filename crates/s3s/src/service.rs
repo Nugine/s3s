@@ -160,6 +160,12 @@ impl tower::Service<http::Request<hyper::body::Incoming>> for S3Service {
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use super::*;
 

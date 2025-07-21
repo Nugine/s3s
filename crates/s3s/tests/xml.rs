@@ -1,3 +1,10 @@
+#![allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
+
 use s3s::xml;
 
 use std::fmt;

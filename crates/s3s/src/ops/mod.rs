@@ -7,6 +7,12 @@ use self::signature::SignatureContext;
 mod get_object;
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests;
 
 use crate::access::{S3Access, S3AccessContext};
@@ -178,6 +184,7 @@ async fn extract_full_body(content_length: Option<u64>, body: &mut Body) -> S3Re
 fn fmt_content_length(len: usize) -> http::HeaderValue {
     const ZERO: http::HeaderValue = http::HeaderValue::from_static("0");
     if len > 0 {
+        #[allow(clippy::unwrap_used)] // usize strings are always valid header values
         crate::utils::format::fmt_usize(len, |s| http::HeaderValue::try_from(s).unwrap())
     } else {
         ZERO
@@ -208,6 +215,7 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
         Prepare::CustomRoute => {
             let body = mem::take(&mut req.body);
             let mut s3_req = build_s3_request(body, req);
+            #[allow(clippy::unwrap_used)] // Route should be set for custom route preparation
             let route = ccx.route.unwrap();
 
             let result = async {
@@ -270,7 +278,11 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
             };
 
             req.s3ext.s3_path = Some(result.map_err(|err| convert_parse_s3_path_error(&err))?);
-            s3_path = req.s3ext.s3_path.as_ref().unwrap();
+            // S3 path was just set above
+            #[allow(clippy::unwrap_used)]
+            {
+                s3_path = req.s3ext.s3_path.as_ref().unwrap();
+            }
         }
 
         req.s3ext.qs = extract_qs(&req.uri)?;
@@ -358,6 +370,7 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
                     S3Path::Bucket { .. } => {
                         // POST object
                         debug!(?multipart);
+                        #[allow(clippy::expect_used)] // File stream should be present in multipart POST
                         let file_stream = multipart.take_file_stream().expect("missing file stream");
                         let vec_bytes = aggregate_unlimited(file_stream).await.map_err(S3Error::internal_error)?;
                         let vec_stream = VecByteStream::new(vec_bytes);

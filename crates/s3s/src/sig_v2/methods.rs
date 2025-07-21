@@ -113,6 +113,7 @@ pub fn create_string_to_sign(
             ans.push(':');
 
             let mut iter = headers.get_all(name);
+            #[allow(clippy::unwrap_used)] // Header must have at least one value since we're iterating over names
             let first = iter.next().unwrap();
             ans.push_str(first.trim());
 
@@ -159,6 +160,12 @@ pub fn create_string_to_sign(
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use super::*;
 

@@ -132,6 +132,8 @@ impl SignatureContext<'_> {
         let auth = require_auth(self.auth)?;
 
         let multipart = {
+            // TODO: Return proper error instead of panic for security
+            #[allow(clippy::unwrap_used)] // Current API assumes multipart
             let mime = self.mime.as_ref().unwrap(); // assume: multipart
 
             let boundary = mime
@@ -190,6 +192,8 @@ impl SignatureContext<'_> {
     }
 
     pub async fn v4_check_presigned_url(&mut self) -> S3Result<CredentialsExt> {
+        // TODO: Return proper error instead of panic for security
+        #[allow(clippy::unwrap_used)] // Current API assumes query string with signature
         let qs = self.qs.unwrap(); // assume: qs has "X-Amz-Signature"
 
         let presigned_url = PresignedUrlV4::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v4 fields"))?;
@@ -280,6 +284,8 @@ impl SignatureContext<'_> {
     pub async fn v4_check_header_auth(&mut self) -> S3Result<CredentialsExt> {
         let authorization: AuthorizationV4<'_> = {
             // assume: headers has "authorization"
+            // TODO: Return proper error instead of panic for security
+            #[allow(clippy::unwrap_used)] // Current API assumes authorization header exists
             let mut a = extract_authorization_v4(&self.hs)?.unwrap();
             a.signed_headers.sort_unstable();
             a
@@ -455,6 +461,8 @@ impl SignatureContext<'_> {
     }
 
     pub async fn v2_check_presigned_url(&mut self) -> S3Result<CredentialsExt> {
+        // TODO: Return proper error instead of panic for security
+        #[allow(clippy::unwrap_used)] // Current API assumes query string with signature
         let qs = self.qs.unwrap(); // assume: qs has "Signature"
         let presigned_url = PresignedUrlV2::parse(qs).map_err(|err| invalid_request!(err, "missing presigned url v2 fields"))?;
 

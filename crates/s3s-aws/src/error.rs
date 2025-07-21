@@ -48,5 +48,7 @@ impl<E> SetStatusCode<'_, '_, E, aws_smithy_types::event_stream::RawMessage> {
 }
 
 fn hyper_status_code_from_aws(status_code: aws_smithy_runtime_api::http::StatusCode) -> hyper::StatusCode {
+    // AWS SDK status codes are always valid HTTP status codes
+    #[allow(clippy::unwrap_used)]
     hyper::StatusCode::from_u16(status_code.as_u16()).unwrap()
 }

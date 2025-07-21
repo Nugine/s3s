@@ -165,12 +165,19 @@ fn parse_u64_full(s: &[u8]) -> Option<u64> {
 
 fn parse_u64_once(s: &[u8]) -> Option<(u64, &[u8])> {
     match u64::from_radix_10_checked(s) {
+        #[allow(clippy::indexing_slicing)] // pos is guaranteed valid by from_radix_10_checked
         (Some(x), pos) if pos > 0 => Some((x, &s[pos..])),
         _ => None,
     }
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use super::*;
 

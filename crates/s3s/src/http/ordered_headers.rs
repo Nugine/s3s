@@ -19,6 +19,12 @@ impl<'a> OrderedHeaders<'a> {
     /// + header names must be lowercase
     /// + header values must be valid
     #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
     #[must_use]
     pub fn from_slice_unchecked(slice: &[(&'a str, &'a str)]) -> Self {
         for (name, _) in slice {
@@ -52,6 +58,7 @@ impl<'a> OrderedHeaders<'a> {
         let lower_bound = slice.partition_point(|x| x.0 < name);
         let upper_bound = slice.partition_point(|x| x.0 <= name);
 
+        #[allow(clippy::indexing_slicing)] // Bounds are guaranteed by partition_point
         slice[lower_bound..upper_bound].iter().copied()
     }
 
@@ -63,6 +70,7 @@ impl<'a> OrderedHeaders<'a> {
         let slice = self.headers.as_slice();
         let lower_bound = slice.partition_point(|x| x.0 < name);
 
+        #[allow(clippy::indexing_slicing)] // Bounds are guaranteed by partition_point
         let mut iter = slice[lower_bound..].iter().copied();
         let pair = iter.next()?;
 

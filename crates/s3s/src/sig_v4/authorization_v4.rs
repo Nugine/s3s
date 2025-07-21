@@ -156,8 +156,11 @@ mod parser {
             return Err(Error);
         }
 
+        #[allow(clippy::indexing_slicing)] // Length is checked above
         let yyyy = digit4([x[0], x[1], x[2], x[3]])?.into();
+        #[allow(clippy::indexing_slicing)] // Length is checked above
         let mm = digit2([x[4], x[5]])?.into();
+        #[allow(clippy::indexing_slicing)] // Length is checked above
         let dd = digit2([x[6], x[7]])?.into();
 
         match chrono::NaiveDate::from_ymd_opt(yyyy, mm, dd) {
@@ -168,6 +171,12 @@ mod parser {
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use super::*;
 

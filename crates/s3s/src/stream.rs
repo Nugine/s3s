@@ -152,6 +152,7 @@ pub(crate) struct VecByteStream {
 
 impl VecByteStream {
     pub fn new(v: Vec<Bytes>) -> Self {
+        #[allow(clippy::expect_used)] // Length overflow should be extremely rare in practice
         let total = v
             .iter()
             .map(Bytes::len)

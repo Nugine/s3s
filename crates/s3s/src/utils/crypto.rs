@@ -15,7 +15,11 @@ pub fn hmac_sha1(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> [u8; 20] {
     use hmac::{Hmac, KeyInit, Mac};
     use sha1::Sha1;
 
-    let mut m = <Hmac<Sha1>>::new_from_slice(key.as_ref()).unwrap();
+    // HMAC can accept any key length, new_from_slice only fails if key is empty
+    // which should not happen in AWS signature contexts
+    #[allow(clippy::expect_used)] // Cryptographic operations that should never fail
+    let mut m = <Hmac<Sha1>>::new_from_slice(key.as_ref())
+        .expect("HMAC key should not be empty");
     m.update(data.as_ref());
     m.finalize().into_bytes().into()
 }
@@ -25,7 +29,11 @@ pub fn hmac_sha256(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> [u8; 32] {
     use hmac::{Hmac, KeyInit, Mac};
     use sha2::Sha256;
 
-    let mut m = <Hmac<Sha256>>::new_from_slice(key.as_ref()).unwrap();
+    // HMAC can accept any key length, new_from_slice only fails if key is empty
+    // which should not happen in AWS signature contexts
+    #[allow(clippy::expect_used)] // Cryptographic operations that should never fail
+    let mut m = <Hmac<Sha256>>::new_from_slice(key.as_ref())
+        .expect("HMAC key should not be empty");
     m.update(data.as_ref());
     m.finalize().into_bytes().into()
 }
@@ -48,11 +56,12 @@ fn sha256(data: &[u8]) -> impl AsRef<[u8; 32]> + use<> {
 }
 
 #[cfg(all(feature = "openssl", not(windows)))]
+#[allow(clippy::expect_used)] // Cryptographic operations that should never fail
 fn sha256(data: &[u8]) -> impl AsRef<[u8]> {
     use openssl::hash::{Hasher, MessageDigest};
-    let mut h = Hasher::new(MessageDigest::sha256()).unwrap();
-    h.update(data).unwrap();
-    h.finish().unwrap()
+    let mut h = Hasher::new(MessageDigest::sha256()).expect("SHA256 should be available");
+    h.update(data).expect("SHA256 update should not fail");
+    h.finish().expect("SHA256 finish should not fail")
 }
 
 #[cfg(not(all(feature = "openssl", not(windows))))]
@@ -66,13 +75,14 @@ fn sha256_chunk(chunk: &[Bytes]) -> impl AsRef<[u8; 32]> + use<> {
 }
 
 #[cfg(all(feature = "openssl", not(windows)))]
+#[allow(clippy::expect_used)] // Cryptographic operations that should never fail
 fn sha256_chunk(chunk: &[Bytes]) -> impl AsRef<[u8]> {
     use openssl::hash::{Hasher, MessageDigest};
-    let mut h = Hasher::new(MessageDigest::sha256()).unwrap();
+    let mut h = Hasher::new(MessageDigest::sha256()).expect("SHA256 should be available");
     for data in chunk {
-        h.update(data).unwrap();
+        h.update(data).expect("SHA256 update should not fail");
     }
-    h.finish().unwrap()
+    h.finish().expect("SHA256 finish should not fail")
 }
 
 /// `f(hex(sha256(data)))`

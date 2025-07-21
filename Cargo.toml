@@ -17,6 +17,11 @@ all = { level = "deny", priority = -1 }
 pedantic = { level = "deny", priority = -1 }
 cargo = { level = "deny", priority = -1 }
 self_named_module_files = "deny"
+# deny panic-related operations for security (DoS prevention)
+panic = "deny"
+unwrap_used = "deny"
+expect_used = "deny"
+indexing_slicing = "deny"
 # warn
 dbg_macro = "warn"
 # allow

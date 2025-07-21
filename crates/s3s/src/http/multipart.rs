@@ -54,6 +54,7 @@ impl Multipart {
         if upper_bound == 0 {
             return None;
         }
+        #[allow(clippy::indexing_slicing)] // Bounds are checked above
         let pair = &self.fields[upper_bound - 1];
         if pair.0.as_str() != name {
             return None;
@@ -456,6 +457,12 @@ fn parse_content_disposition(input: &[u8]) -> nom::IResult<&[u8], ContentDisposi
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use super::*;
 

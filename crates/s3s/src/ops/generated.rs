@@ -5470,6 +5470,7 @@ impl PutObject {
         let bucket = http::unwrap_bucket(req);
         let key = http::parse_field_value(&m, "key")?.ok_or_else(|| invalid_request!("missing key"))?;
 
+        #[allow(clippy::expect_used)] // Generated code expects vec_stream to be set
         let vec_stream = req.s3ext.vec_stream.take().expect("missing vec stream");
 
         let content_length = i64::try_from(vec_stream.exact_remaining_length())
