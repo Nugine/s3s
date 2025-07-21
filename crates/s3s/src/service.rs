@@ -32,6 +32,24 @@ impl S3ServiceBuilder {
         }
     }
 
+    /// Set the host configuration for virtual-hosted-style requests.
+    ///
+    /// When not configured, all requests are treated as path-style requests.
+    /// If virtual-hosted-style requests are received without this configuration,
+    /// a warning will be logged to help identify the misconfiguration.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use s3s::host::SingleDomain;
+    /// use s3s::service::S3ServiceBuilder;
+    /// # use s3s::S3;
+    /// # struct MockS3;
+    /// # impl S3 for MockS3 {}
+    /// 
+    /// let mut builder = S3ServiceBuilder::new(MockS3);
+    /// builder.set_host(SingleDomain::new("s3.example.com").unwrap());
+    /// ```
     pub fn set_host(&mut self, host: impl S3Host) {
         self.host = Some(Box::new(host));
     }
