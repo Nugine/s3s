@@ -84,6 +84,12 @@ where
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use http_body_util::BodyExt;
     use hyper::{StatusCode, header::HeaderValue};

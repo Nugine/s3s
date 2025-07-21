@@ -127,6 +127,7 @@ impl<W: Write> Serializer<W> {
 
     #[allow(clippy::missing_panics_doc)]
     pub fn timestamp(&mut self, name: &str, val: &Timestamp, fmt: TimestampFormat) -> SerResult {
+        #[allow(clippy::unwrap_used)] // Timestamp formatting produces valid ASCII
         fmt_timestamp(val, fmt, |b| self.content(name, str::from_ascii_simd(b).unwrap()))
     }
 }

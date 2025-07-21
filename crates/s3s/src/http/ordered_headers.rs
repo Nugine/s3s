@@ -19,6 +19,12 @@ impl<'a> OrderedHeaders<'a> {
     /// + header names must be lowercase
     /// + header values must be valid
     #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
     #[must_use]
     pub fn from_slice_unchecked(slice: &[(&'a str, &'a str)]) -> Self {
         for (name, _) in slice {

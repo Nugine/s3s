@@ -76,7 +76,10 @@ fn convert_output(result: Result<s3s::HttpResponse, s3s::HttpError>) -> Result<A
 
 // From <https://docs.rs/hyper/0.14.23/src/hyper/client/client.rs.html#253-260>
 fn auto_host_header(uri: &http::Uri) -> http::HeaderValue {
+    // Based on hyper's implementation - authority implies host
+    #[allow(clippy::expect_used)]
     let hostname = uri.host().expect("authority implies host");
+    #[allow(clippy::expect_used)] // URI host should be valid header value
     match get_non_default_port(uri) {
         Some(port) => http::HeaderValue::try_from(format!("{hostname}:{port}")),
         None => http::HeaderValue::from_str(hostname),

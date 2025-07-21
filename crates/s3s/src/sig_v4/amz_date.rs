@@ -75,6 +75,7 @@ mod parser {
         };
     }
 
+    #[allow(clippy::indexing_slicing)] // Length is checked at function start
     pub fn parse(input: &str) -> Result<AmzDate, Error> {
         let x = input.as_bytes();
         ensure!(x.len() == 16);

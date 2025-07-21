@@ -211,6 +211,12 @@ pub fn parse_virtual_hosted_style(vh_bucket: Option<&str>, uri_path: &str) -> Re
 }
 
 #[cfg(test)]
+#[allow(
+    clippy::panic,
+    clippy::unwrap_used,
+    clippy::expect_used,
+    clippy::indexing_slicing
+)]
 mod tests {
     use super::*;
 

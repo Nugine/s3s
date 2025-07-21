@@ -251,6 +251,7 @@ fn xml_payload<T: xml::Serialize>(val: &T) -> Bytes {
     let mut buf = Vec::with_capacity(256);
     {
         let mut ser = xml::Serializer::new(&mut buf);
+        #[allow(clippy::expect_used)] // XML serialization to Vec should be infallible
         ser.decl()
             .and_then(|()| val.serialize(&mut ser))
             .expect("infallible serialization");
