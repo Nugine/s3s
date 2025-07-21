@@ -230,6 +230,11 @@ impl Traits {
     }
 
     #[must_use]
+    pub fn xml_attr(&self) -> bool {
+        self.get("smithy.api#xmlAttribute").is_some()
+    }
+
+    #[must_use]
     pub fn xml_flattened(&self) -> bool {
         self.get("smithy.api#xmlFlattened").is_some()
     }

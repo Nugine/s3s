@@ -4273,6 +4273,7 @@ impl SerializeContent for Grantee {
         if let Some(ref val) = self.id {
             s.content("ID", val)?;
         }
+        s.content("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")?;
         s.content("xsi:type", &self.type_)?;
         if let Some(ref val) = self.uri {
             s.content("URI", val)?;
@@ -4310,6 +4311,7 @@ impl<'xml> DeserializeContent<'xml> for Grantee {
                 id = Some(d.content()?);
                 Ok(())
             }
+            b"xmlns:xsi" => Ok(()),
             b"xsi:type" => {
                 if type_.is_some() {
                     return Err(DeError::DuplicateField);
