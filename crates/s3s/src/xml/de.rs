@@ -231,10 +231,8 @@ impl<'xml> Deserializer<'xml> {
 
                     // Save attributes for the current element
                     let mut attrs = Vec::new();
-                    for attr_result in start.attributes().with_checks(false) {
-                        if let Ok(attr) = attr_result {
-                            attrs.push((attr.key.as_ref().to_vec(), attr.value.to_vec()));
-                        }
+                    for attr in start.attributes().with_checks(false).flatten() {
+                        attrs.push((attr.key.as_ref().to_vec(), attr.value.to_vec()));
                     }
                     self.current_attributes = Some(attrs);
 
@@ -318,6 +316,7 @@ impl<'xml> Deserializer<'xml> {
     }
 
     /// Gets an attribute value from the current element
+    #[must_use]
     pub fn get_attribute(&self, name: &[u8]) -> Option<String> {
         if let Some(ref attrs) = self.current_attributes {
             for (key, value) in attrs {
@@ -329,12 +328,22 @@ impl<'xml> Deserializer<'xml> {
         None
     }
 
-    /// Consumes the peeked event (make peek_event and consume_peeked public)
+    /// Consumes the peeked event (make `peek_event` and `consume_peeked` public)
     pub fn consume_peeked(&mut self) {
         self.peeked = None;
     }
 
-    /// Peeks the next event (make peek_event public)
+    /// Peeks the next event (make `peek_event` public)
+    ///
+    /// # Panics
+    ///
+    /// Panics if the next event cannot be read (should not happen in normal use).
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let event = deserializer.peek_event();
+    /// ```
     pub fn peek_event(&mut self) -> DeResult<DeEvent<'xml>> {
         if self.peeked.is_none() {
             self.peeked = Some(self.read_event()?);
