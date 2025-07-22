@@ -353,11 +353,12 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                 }
             } else if field.option_type {
                 // Check if field has xml_namespace trait (needs attributes)
-                if let Some((uri, prefix)) = &field.xml_namespace {
+                if let (Some(uri), Some(prefix)) = (&field.xml_namespace_uri, &field.xml_namespace_prefix) {
+                    assert_eq!(prefix, "xsi");
                     g!("if let Some(ref val) = self.{} {{", field.name);
                     g!("let attrs = [");
                     g!("(\"xmlns:{}\", \"{}\"),", prefix, uri);
-                    g!("(\"{0}:type\", val.type_.as_str()),", prefix);
+                    g!("(\"{}:type\", val.type_.as_str()),", prefix);
                     g!("];");
                     g!("s.content_with_attrs(\"{}\", &attrs, val)?;", xml_name);
                     g!("}}");
@@ -378,19 +379,10 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                     g!("s.content(\"{}\", &self.{})?;", xml_name, field.name);
                     g!("}}");
                 } else {
-                    // Check if field has xml_namespace trait (needs attributes)
-                    if let Some((uri, prefix)) = &field.xml_namespace {
-                        g!("let attrs = [");
-                        g!("(\"xmlns:{}\", \"{}\"),", prefix, uri);
-                        g!("(\"{0}:type\", self.{1}.type_.as_str()),", prefix, field.name);
-                        g!("];");
-                        g!("s.content_with_attrs(\"{}\", &attrs, &self.{})?;", xml_name, field.name);
-                    } else {
-                        if field.is_xml_attr {
-                            continue;
-                        }
-                        g!("s.content(\"{}\", &self.{})?;", xml_name, field.name);
+                    if field.is_xml_attr {
+                        continue; // skip xml attribute fields
                     }
+                    g!("s.content(\"{}\", &self.{})?;", xml_name, field.name);
                 }
             }
         }

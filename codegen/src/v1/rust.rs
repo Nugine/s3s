@@ -97,10 +97,12 @@ pub struct StructField {
 
     pub xml_name: Option<String>,
     pub xml_flattened: bool,
-    pub xml_namespace: Option<(String, String)>, // (uri, prefix)
+
+    pub is_xml_attr: bool,
+    pub xml_namespace_uri: Option<String>,
+    pub xml_namespace_prefix: Option<String>,
 
     pub is_custom_extension: bool,
-    pub is_xml_attr: bool,
 }
 
 #[derive(Debug, Clone)]

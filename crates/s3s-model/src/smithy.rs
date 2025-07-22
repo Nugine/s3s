@@ -240,8 +240,18 @@ impl Traits {
     }
 
     #[must_use]
-    pub fn xml_namespace(&self) -> Option<&Map<String, Value>> {
+    fn xml_namespace(&self) -> Option<&Map<String, Value>> {
         self.get("smithy.api#xmlNamespace")?.as_object()
+    }
+
+    #[must_use]
+    pub fn xml_namespace_uri(&self) -> Option<&str> {
+        self.xml_namespace()?.get("uri")?.as_str()
+    }
+
+    #[must_use]
+    pub fn xml_namespace_prefix(&self) -> Option<&str> {
+        self.xml_namespace()?.get("prefix")?.as_str()
     }
 
     #[must_use]
