@@ -4229,7 +4229,11 @@ impl<'xml> DeserializeContent<'xml> for GlacierJobParameters {
 impl SerializeContent for Grant {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         if let Some(ref val) = self.grantee {
-            s.content("Grantee", val)?;
+            let attrs = [
+                ("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance"),
+                ("xsi:type", val.type_.as_str()),
+            ];
+            s.content_with_attrs("Grantee", &attrs, val)?;
         }
         if let Some(ref val) = self.permission {
             s.content("Permission", val)?;
@@ -4273,8 +4277,6 @@ impl SerializeContent for Grantee {
         if let Some(ref val) = self.id {
             s.content("ID", val)?;
         }
-        s.content("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")?;
-        s.content("xsi:type", &self.type_)?;
         if let Some(ref val) = self.uri {
             s.content("URI", val)?;
         }
@@ -4289,6 +4291,9 @@ impl<'xml> DeserializeContent<'xml> for Grantee {
         let mut id: Option<ID> = None;
         let mut type_: Option<Type> = None;
         let mut uri: Option<URI> = None;
+        if let Some(type_value) = d.get_attribute(b"xsi:type") {
+            type_ = Some(Type::from(type_value));
+        }
         d.for_each_element(|d, x| match x {
             b"DisplayName" => {
                 if display_name.is_some() {
@@ -4309,14 +4314,6 @@ impl<'xml> DeserializeContent<'xml> for Grantee {
                     return Err(DeError::DuplicateField);
                 }
                 id = Some(d.content()?);
-                Ok(())
-            }
-            b"xmlns:xsi" => Ok(()),
-            b"xsi:type" => {
-                if type_.is_some() {
-                    return Err(DeError::DuplicateField);
-                }
-                type_ = Some(d.content()?);
                 Ok(())
             }
             b"URI" => {
@@ -9238,7 +9235,11 @@ impl<'xml> DeserializeContent<'xml> for Tagging {
 impl SerializeContent for TargetGrant {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         if let Some(ref val) = self.grantee {
-            s.content("Grantee", val)?;
+            let attrs = [
+                ("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance"),
+                ("xsi:type", val.type_.as_str()),
+            ];
+            s.content_with_attrs("Grantee", &attrs, val)?;
         }
         if let Some(ref val) = self.permission {
             s.content("Permission", val)?;

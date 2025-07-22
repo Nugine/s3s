@@ -5,6 +5,7 @@ use super::rust::default_value_literal;
 
 use crate::declare_codegen;
 use crate::v1::ops::is_op_output;
+use crate::v1::rust::StructField;
 
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 use std::ops::Not;
@@ -351,14 +352,21 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                     g!("s.timestamp(\"{}\", &self.{}, TimestampFormat::{})?;", xml_name, field.name, fmt);
                 }
             } else if field.option_type {
-                g!("if let Some(ref val) = self.{} {{", field.name);
-                g!("s.content(\"{xml_name}\", val)?;");
-                g!("}}");
-            } else {
-                if field.is_xml_attr {
-                    g!("s.content(\"xmlns:xsi\", \"http://www.w3.org/2001/XMLSchema-instance\")?;");
+                // Check if field has xml_namespace trait (needs attributes)
+                if let Some((uri, prefix)) = &field.xml_namespace {
+                    g!("if let Some(ref val) = self.{} {{", field.name);
+                    g!("let attrs = [");
+                    g!("(\"xmlns:{}\", \"{}\"),", prefix, uri);
+                    g!("(\"{0}:type\", val.type_.as_str()),", prefix);
+                    g!("];");
+                    g!("s.content_with_attrs(\"{}\", &attrs, val)?;", xml_name);
+                    g!("}}");
+                } else {
+                    g!("if let Some(ref val) = self.{} {{", field.name);
+                    g!("s.content(\"{xml_name}\", val)?;");
+                    g!("}}");
                 }
-
+            } else {
                 let default_is_zero = match field.default_value.as_ref() {
                     Some(v) => v.as_u64() == Some(0),
                     None => false,
@@ -370,7 +378,19 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                     g!("s.content(\"{}\", &self.{})?;", xml_name, field.name);
                     g!("}}");
                 } else {
-                    g!("s.content(\"{}\", &self.{})?;", xml_name, field.name);
+                    // Check if field has xml_namespace trait (needs attributes)
+                    if let Some((uri, prefix)) = &field.xml_namespace {
+                        g!("let attrs = [");
+                        g!("(\"xmlns:{}\", \"{}\"),", prefix, uri);
+                        g!("(\"{0}:type\", self.{1}.type_.as_str()),", prefix, field.name);
+                        g!("];");
+                        g!("s.content_with_attrs(\"{}\", &attrs, &self.{})?;", xml_name, field.name);
+                    } else {
+                        if field.is_xml_attr {
+                            continue;
+                        }
+                        g!("s.content(\"{}\", &self.{})?;", xml_name, field.name);
+                    }
                 }
             }
         }
@@ -388,11 +408,28 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
             if ty.fields.is_empty() { "_" } else { "d" },
         );
 
+        let mut xml_atrr: Option<StructField> = None;
+
         for field in &ty.fields {
+            if field.is_xml_attr {
+                xml_atrr = Some(field.clone());
+            }
             if field.position == "sealed" {
                 continue;
             }
             g!("let mut {}: Option<{}> = None;", field.name, field.type_);
+        }
+
+        if xml_atrr.is_some() {
+            if let Some(field) = xml_atrr {
+                if let Some(attr) = &field.xml_name {
+                    g!("if let Some(type_value) = d.get_attribute(b\"{}\") {{", attr);
+                } else {
+                    g!("if let Some(type_value) = d.get_attribute(b\"{}\") {{", field.camel_name);
+                }
+                g!("    {} = Some({}::from(type_value));", field.name, field.type_);
+                g!("}} ");
+            }
         }
 
         if ty.fields.is_empty().not() {
@@ -402,9 +439,7 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                     continue;
                 }
                 if field.is_xml_attr {
-                    g!("b\"xmlns:xsi\" => {{");
-                    g!("Ok(())");
-                    g!("}}");
+                    continue;
                 }
 
                 let xml_name = field.xml_name.as_ref().unwrap_or(&field.camel_name);

@@ -39,6 +39,9 @@ pub struct Deserializer<'xml> {
 
     /// store an extra event
     next_slot: Option<DeEvent<'xml>>,
+
+    /// current element attributes
+    current_attributes: Option<Vec<(Vec<u8>, Vec<u8>)>>,
 }
 
 /// XML deserialization result
@@ -82,7 +85,7 @@ pub enum DeError {
 
 /// XML deserialization event
 #[derive(Clone)]
-enum DeEvent<'xml> {
+pub enum DeEvent<'xml> {
     /// start
     Start(BytesStart<'xml>),
     /// end
@@ -101,6 +104,7 @@ impl<'xml> Deserializer<'xml> {
             inner: Reader::from_reader(xml),
             peeked: None,
             next_slot: None,
+            current_attributes: None,
         }
     }
 
@@ -136,20 +140,6 @@ impl<'xml> Deserializer<'xml> {
             return Ok(ev);
         }
         self.read_event()
-    }
-
-    /// Peeks the next event
-    #[allow(clippy::unwrap_used, clippy::unwrap_in_result)]
-    fn peek_event(&mut self) -> DeResult<DeEvent<'xml>> {
-        if self.peeked.is_none() {
-            self.peeked = Some(self.read_event()?);
-        }
-        Ok(self.peeked.clone().unwrap())
-    }
-
-    /// Consumes the peeked event
-    fn consume_peeked(&mut self) {
-        self.peeked = None;
     }
 
     /// Expects a start event
@@ -239,9 +229,21 @@ impl<'xml> Deserializer<'xml> {
                 DeEvent::Start(start) => {
                     self.consume_peeked();
 
+                    // Save attributes for the current element
+                    let mut attrs = Vec::new();
+                    for attr_result in start.attributes().with_checks(false) {
+                        if let Ok(attr) = attr_result {
+                            attrs.push((attr.key.as_ref().to_vec(), attr.value.to_vec()));
+                        }
+                    }
+                    self.current_attributes = Some(attrs);
+
                     let name = start.name();
                     f(self, name.as_ref())?;
                     self.expect_end(name.as_ref())?;
+
+                    // Clear attributes after processing the element
+                    self.current_attributes = None;
 
                     continue;
                 }
@@ -305,6 +307,39 @@ impl<'xml> Deserializer<'xml> {
             let string = str::from_ascii_simd(t.as_ref()).map_err(|_| DeError::InvalidContent)?;
             Timestamp::parse(fmt, string).map_err(|_| DeError::InvalidContent)
         })
+    }
+
+    /// Gets the start element for attribute processing
+    pub fn get_start_element(&mut self) -> DeResult<quick_xml::events::BytesStart<'xml>> {
+        match self.peek_event()? {
+            DeEvent::Start(start) => Ok(start),
+            _ => Err(DeError::UnexpectedStart),
+        }
+    }
+
+    /// Gets an attribute value from the current element
+    pub fn get_attribute(&self, name: &[u8]) -> Option<String> {
+        if let Some(ref attrs) = self.current_attributes {
+            for (key, value) in attrs {
+                if key == name {
+                    return Some(String::from_utf8_lossy(value).to_string());
+                }
+            }
+        }
+        None
+    }
+
+    /// Consumes the peeked event (make peek_event and consume_peeked public)
+    pub fn consume_peeked(&mut self) {
+        self.peeked = None;
+    }
+
+    /// Peeks the next event (make peek_event public)
+    pub fn peek_event(&mut self) -> DeResult<DeEvent<'xml>> {
+        if self.peeked.is_none() {
+            self.peeked = Some(self.read_event()?);
+        }
+        Ok(self.peeked.clone().unwrap())
     }
 }
 
