@@ -72,6 +72,22 @@ impl<W: Write> Serializer<W> {
         self.event(end(name))
     }
 
+    /// Writes an element with attributes
+    pub fn element_with_attrs(
+        &mut self,
+        name: &str,
+        attrs: &[(&str, &str)],
+        f: impl FnOnce(&mut Self) -> SerResult,
+    ) -> SerResult {
+        let mut start = BytesStart::new(name);
+        for (key, value) in attrs {
+            start.push_attribute((*key, *value));
+        }
+        self.event(Event::Start(start))?;
+        f(self)?;
+        self.event(end(name))
+    }
+
     /// Serializes a type
     ///
     /// # Errors
@@ -82,6 +98,10 @@ impl<W: Write> Serializer<W> {
 
     pub fn content_with_ns<T: SerializeContent + ?Sized>(&mut self, name: &str, xmlns: &str, val: &T) -> SerResult {
         self.element_with_ns(name, xmlns, |s| val.serialize_content(s))
+    }
+
+    pub fn content_with_attrs<T: SerializeContent + ?Sized>(&mut self, name: &str, attrs: &[(&str, &str)], val: &T) -> SerResult {
+        self.element_with_attrs(name, attrs, |s| val.serialize_content(s))
     }
 
     /// Serializes a flattened `list`

@@ -240,6 +240,11 @@ impl Traits {
     }
 
     #[must_use]
+    pub fn xml_namespace(&self) -> Option<&Map<String, Value>> {
+        self.get("smithy.api#xmlNamespace")?.as_object()
+    }
+
+    #[must_use]
     pub fn s3_unwrapped_xml_output(&self) -> bool {
         self.get("aws.customizations#s3UnwrappedXmlOutput").is_some()
     }
