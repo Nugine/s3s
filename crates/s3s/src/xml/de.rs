@@ -82,7 +82,7 @@ pub enum DeError {
 
 /// XML deserialization event
 #[derive(Clone)]
-pub enum DeEvent<'xml> {
+enum DeEvent<'xml> {
     /// start
     Start(BytesStart<'xml>),
     /// end
@@ -349,7 +349,7 @@ impl<'xml> Deserializer<'xml> {
     /// ```
     /// let event = deserializer.peek_event();
     /// ```
-    pub fn peek_event(&mut self) -> DeResult<DeEvent<'xml>> {
+    fn peek_event(&mut self) -> DeResult<DeEvent<'xml>> {
         if self.peeked.is_none() {
             self.peeked = Some(self.read_event()?);
         }
