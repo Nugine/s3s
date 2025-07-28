@@ -366,19 +366,14 @@ impl S3 for FileSystem {
 
         let delimiter = input.delimiter.as_ref().map(|d| d.as_str());
         let prefix = input.prefix.as_deref().unwrap_or("").trim_start_matches('/');
-        
+
         let mut objects: Vec<Object> = default();
         let mut common_prefixes = std::collections::BTreeSet::new();
 
         if delimiter.is_some() {
             // When delimiter is provided, only list immediate contents (non-recursive)
-            self.list_objects_with_delimiter(
-                &path,
-                prefix,
-                delimiter.unwrap(),
-                &mut objects,
-                &mut common_prefixes,
-            ).await?;
+            self.list_objects_with_delimiter(&path, prefix, delimiter.unwrap(), &mut objects, &mut common_prefixes)
+                .await?;
         } else {
             // When no delimiter, do recursive listing (current behavior)
             let mut dir_queue: VecDeque<PathBuf> = default();
@@ -436,10 +431,8 @@ impl S3 for FileSystem {
             Some(
                 common_prefixes
                     .into_iter()
-                    .map(|prefix| CommonPrefix { 
-                        prefix: Some(prefix)
-                    })
-                    .collect()
+                    .map(|prefix| CommonPrefix { prefix: Some(prefix) })
+                    .collect(),
             )
         } else {
             None
@@ -870,11 +863,11 @@ impl FileSystem {
 
         while let Some(dir) = dir_queue.pop_front() {
             let mut iter = try_!(fs::read_dir(dir).await);
-            
+
             while let Some(entry) = try_!(iter.next_entry().await) {
                 let file_type = try_!(entry.file_type().await);
                 let entry_path = entry.path();
-                
+
                 // Calculate the key relative to the bucket root
                 let key = try_!(entry_path.strip_prefix(bucket_root));
                 let Some(key_str) = normalize_path(key, "/") else {
@@ -898,7 +891,7 @@ impl FileSystem {
                 } else {
                     // For files, determine if they should be listed directly or as common prefixes
                     let remaining = &key_str[prefix.len()..];
-                    
+
                     if remaining.contains(delimiter) {
                         // File is in a subdirectory, add the subdirectory as common prefix
                         if let Some(delimiter_pos) = remaining.find(delimiter) {
@@ -922,7 +915,7 @@ impl FileSystem {
                 }
             }
         }
-        
+
         Ok(())
     }
 }

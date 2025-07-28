@@ -199,12 +199,12 @@ async fn test_list_objects_v2_with_prefixes() -> Result<()> {
     // Create files in nested directory structure
     let content = "hello world\n";
     let files = [
-        "README.md",                        // Root level file
-        "test/subdirectory/README.md",      // Nested file
-        "test/file.txt",                   // File in test/ directory
-        "other/dir/file.txt",              // File in other/dir/ directory
+        "README.md",                   // Root level file
+        "test/subdirectory/README.md", // Nested file
+        "test/file.txt",               // File in test/ directory
+        "other/dir/file.txt",          // File in other/dir/ directory
     ];
-    
+
     for key in &files {
         c.put_object()
             .bucket(bucket_str)
@@ -215,14 +215,11 @@ async fn test_list_objects_v2_with_prefixes() -> Result<()> {
     }
 
     // List without delimiter - should return all files recursively
-    let result = c.list_objects_v2()
-        .bucket(bucket_str)
-        .send()
-        .await;
+    let result = c.list_objects_v2().bucket(bucket_str).send().await;
 
     let response = log_and_unwrap!(result);
     let contents: Vec<_> = response.contents().iter().filter_map(|obj| obj.key()).collect();
-    
+
     debug!("List without delimiter - objects: {:?}", contents);
     assert_eq!(contents.len(), 4);
     for key in &files {
@@ -230,32 +227,26 @@ async fn test_list_objects_v2_with_prefixes() -> Result<()> {
     }
 
     // List with delimiter "/" - should return root files and common prefixes
-    let result = c.list_objects_v2()
-        .bucket(bucket_str)
-        .delimiter("/")
-        .send()
-        .await;
+    let result = c.list_objects_v2().bucket(bucket_str).delimiter("/").send().await;
 
     let response = log_and_unwrap!(result);
-    
+
     // Should have one file at root level
     let contents: Vec<_> = response.contents().iter().filter_map(|obj| obj.key()).collect();
     debug!("List with delimiter - objects: {:?}", contents);
     assert_eq!(contents.len(), 1);
     assert!(contents.contains(&"README.md"));
-    
+
     // Should have two common prefixes: "test/" and "other/"
-    let prefixes: Vec<_> = response.common_prefixes()
-        .iter()
-        .filter_map(|cp| cp.prefix())
-        .collect();
+    let prefixes: Vec<_> = response.common_prefixes().iter().filter_map(|cp| cp.prefix()).collect();
     debug!("List with delimiter - prefixes: {:?}", prefixes);
     assert_eq!(prefixes.len(), 2);
     assert!(prefixes.contains(&"test/"));
     assert!(prefixes.contains(&"other/"));
 
     // List with prefix "test/" and delimiter "/" - should return files in test/ and subdirectories
-    let result = c.list_objects_v2()
+    let result = c
+        .list_objects_v2()
         .bucket(bucket_str)
         .prefix("test/")
         .delimiter("/")
@@ -263,18 +254,15 @@ async fn test_list_objects_v2_with_prefixes() -> Result<()> {
         .await;
 
     let response = log_and_unwrap!(result);
-    
+
     // Should have one file in test/ directory
     let contents: Vec<_> = response.contents().iter().filter_map(|obj| obj.key()).collect();
     debug!("List with prefix test/ - objects: {:?}", contents);
     assert_eq!(contents.len(), 1);
     assert!(contents.contains(&"test/file.txt"));
-    
+
     // Should have one common prefix: "test/subdirectory/"
-    let prefixes: Vec<_> = response.common_prefixes()
-        .iter()
-        .filter_map(|cp| cp.prefix())
-        .collect();
+    let prefixes: Vec<_> = response.common_prefixes().iter().filter_map(|cp| cp.prefix()).collect();
     debug!("List with prefix test/ - prefixes: {:?}", prefixes);
     assert_eq!(prefixes.len(), 1);
     assert!(prefixes.contains(&"test/subdirectory/"));
@@ -293,7 +281,7 @@ async fn test_list_objects_v1_with_prefixes() -> Result<()> {
     // Create a simple structure
     let content = "hello world\n";
     let files = ["README.md", "dir/file.txt"];
-    
+
     for key in &files {
         c.put_object()
             .bucket(bucket_str)
@@ -304,25 +292,18 @@ async fn test_list_objects_v1_with_prefixes() -> Result<()> {
     }
 
     // Test list_objects (v1) with delimiter
-    let result = c.list_objects()
-        .bucket(bucket_str)
-        .delimiter("/")
-        .send()
-        .await;
+    let result = c.list_objects().bucket(bucket_str).delimiter("/").send().await;
 
     let response = log_and_unwrap!(result);
-    
+
     // Should have one file at root level
     let contents: Vec<_> = response.contents().iter().filter_map(|obj| obj.key()).collect();
     debug!("ListObjects v1 with delimiter - objects: {:?}", contents);
     assert_eq!(contents.len(), 1);
     assert!(contents.contains(&"README.md"));
-    
+
     // Should have one common prefix: "dir/"
-    let prefixes: Vec<_> = response.common_prefixes()
-        .iter()
-        .filter_map(|cp| cp.prefix())
-        .collect();
+    let prefixes: Vec<_> = response.common_prefixes().iter().filter_map(|cp| cp.prefix()).collect();
     debug!("ListObjects v1 with delimiter - prefixes: {:?}", prefixes);
     assert_eq!(prefixes.len(), 1);
     assert!(prefixes.contains(&"dir/"));
