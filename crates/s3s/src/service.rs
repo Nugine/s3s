@@ -46,7 +46,7 @@ impl S3ServiceBuilder {
     /// # use s3s::S3;
     /// # struct MockS3;
     /// # impl S3 for MockS3 {}
-    /// 
+    ///
     /// let mut builder = S3ServiceBuilder::new(MockS3);
     /// builder.set_host(SingleDomain::new("s3.example.com").unwrap());
     /// ```

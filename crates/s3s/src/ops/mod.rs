@@ -274,7 +274,8 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
                 if let Some(host_header) = host_header.as_deref() {
                     if looks_like_virtual_hosted_style(host_header) {
                         warn!(
-                            ?host_header, ?decoded_uri_path, 
+                            ?host_header,
+                            ?decoded_uri_path,
                             "Received what appears to be a virtual-hosted-style request, but virtual-hosted-style parsing is not enabled. \
                             Consider configuring an S3Host implementation (e.g., SingleDomain or MultiDomain) to handle virtual-hosted-style requests like 'bucket.example.com'"
                         );

@@ -71,13 +71,13 @@ fn test_looks_like_virtual_hosted_style() {
     assert!(looks_like_virtual_hosted_style("bucket.example.com"));
     assert!(looks_like_virtual_hosted_style("my-bucket.s3.amazonaws.com"));
     assert!(looks_like_virtual_hosted_style("test.localhost"));
-    
+
     // Should not detect path-style hosts
     assert!(!looks_like_virtual_hosted_style("localhost"));
     assert!(!looks_like_virtual_hosted_style("127.0.0.1"));
     assert!(!looks_like_virtual_hosted_style("192.168.1.1:8080"));
     assert!(!looks_like_virtual_hosted_style("s3"));
-    
+
     // Edge cases
     assert!(!looks_like_virtual_hosted_style("::1"));
     assert!(!looks_like_virtual_hosted_style("[::1]:8080"));
