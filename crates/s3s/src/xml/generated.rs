@@ -4246,10 +4246,20 @@ impl<'xml> DeserializeContent<'xml> for Grant {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         let mut grantee: Option<Grantee> = None;
         let mut permission: Option<Permission> = None;
-        d.for_each_element(|d, x| match x {
+        d.for_each_element_with_attrs(|d, x, attrs| match x {
             b"Grantee" => {
                 if grantee.is_some() {
                     return Err(DeError::DuplicateField);
+                }
+                let mut g = d.content::<Grantee>()?;
+                for attr in attrs.attributes() {
+                    if let Ok(attr) = attr {
+                        if attr.key.as_ref() == b"xsi:type" {
+                            let val = String::from_utf8_lossy(attr.value.as_ref());
+                            g.type_ = Type::from(val.to_string());
+                            break;
+                        }
+                    }
                 }
                 grantee = Some(d.content()?);
                 Ok(())
@@ -4289,11 +4299,8 @@ impl<'xml> DeserializeContent<'xml> for Grantee {
         let mut display_name: Option<DisplayName> = None;
         let mut email_address: Option<EmailAddress> = None;
         let mut id: Option<ID> = None;
-        let mut type_: Option<Type> = None;
         let mut uri: Option<URI> = None;
-        if let Some(type_value) = d.get_attribute(b"xsi:type") {
-            type_ = Some(Type::from(type_value));
-        }
+        let type_ = Some(Type::from("AmazonCustomerByEmail".to_string()));
         d.for_each_element(|d, x| match x {
             b"DisplayName" => {
                 if display_name.is_some() {
@@ -9252,10 +9259,20 @@ impl<'xml> DeserializeContent<'xml> for TargetGrant {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         let mut grantee: Option<Grantee> = None;
         let mut permission: Option<BucketLogsPermission> = None;
-        d.for_each_element(|d, x| match x {
+        d.for_each_element_with_attrs(|d, x, attrs| match x {
             b"Grantee" => {
                 if grantee.is_some() {
                     return Err(DeError::DuplicateField);
+                }
+                let mut g = d.content::<Grantee>()?;
+                for attr in attrs.attributes() {
+                    if let Ok(attr) = attr {
+                        if attr.key.as_ref() == b"xsi:type" {
+                            let val = String::from_utf8_lossy(attr.value.as_ref());
+                            g.type_ = Type::from(val.to_string());
+                            break;
+                        }
+                    }
                 }
                 grantee = Some(d.content()?);
                 Ok(())
