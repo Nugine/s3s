@@ -7,12 +7,7 @@ use self::signature::SignatureContext;
 mod get_object;
 
 #[cfg(test)]
-#[allow(
-    clippy::panic,
-    clippy::unwrap_used,
-    clippy::expect_used,
-    clippy::indexing_slicing
-)]
+#[allow(clippy::panic, clippy::unwrap_used, clippy::expect_used, clippy::indexing_slicing)]
 mod tests;
 
 use crate::access::{S3Access, S3AccessContext};

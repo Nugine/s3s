@@ -20944,12 +20944,7 @@ pub type WriteOffsetBytes = i64;
 pub type Years = i32;
 
 #[cfg(test)]
-#[allow(
-    clippy::panic,
-    clippy::unwrap_used,
-    clippy::expect_used,
-    clippy::indexing_slicing
-)]
+#[allow(clippy::panic, clippy::unwrap_used, clippy::expect_used, clippy::indexing_slicing)]
 mod tests {
     use super::*;
 

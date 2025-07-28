@@ -18,8 +18,7 @@ pub fn hmac_sha1(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> [u8; 20] {
     // HMAC can accept any key length, new_from_slice only fails if key is empty
     // which should not happen in AWS signature contexts
     #[allow(clippy::expect_used)] // Cryptographic operations that should never fail
-    let mut m = <Hmac<Sha1>>::new_from_slice(key.as_ref())
-        .expect("HMAC key should not be empty");
+    let mut m = <Hmac<Sha1>>::new_from_slice(key.as_ref()).expect("HMAC key should not be empty");
     m.update(data.as_ref());
     m.finalize().into_bytes().into()
 }
@@ -32,8 +31,7 @@ pub fn hmac_sha256(key: impl AsRef<[u8]>, data: impl AsRef<[u8]>) -> [u8; 32] {
     // HMAC can accept any key length, new_from_slice only fails if key is empty
     // which should not happen in AWS signature contexts
     #[allow(clippy::expect_used)] // Cryptographic operations that should never fail
-    let mut m = <Hmac<Sha256>>::new_from_slice(key.as_ref())
-        .expect("HMAC key should not be empty");
+    let mut m = <Hmac<Sha256>>::new_from_slice(key.as_ref()).expect("HMAC key should not be empty");
     m.update(data.as_ref());
     m.finalize().into_bytes().into()
 }
