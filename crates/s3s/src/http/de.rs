@@ -21,37 +21,38 @@ fn duplicate_header(name: &HeaderName) -> S3Error {
 }
 
 /// Check if a header should allow duplicates according to HTTP standards
-/// 
+///
 /// Some headers can safely have multiple values and should be combined
 /// according to HTTP/1.1 specification (RFC 7230).
-/// 
+///
 /// Security-critical headers always reject duplicates for safety.
 pub fn header_allows_duplicates(name: &HeaderName) -> bool {
     let name_str = name.as_str();
-    
+
     // Security-critical headers must never allow duplicates
     match name_str {
         // AWS authentication/signature headers
-        "authorization" | "x-amz-date" | "x-amz-content-sha256" | 
-        "x-amz-security-token" | "x-amz-signature" | "host" => false,
-        
+        "authorization" | "x-amz-date" | "x-amz-content-sha256" | "x-amz-security-token" | "x-amz-signature" | "host" => false,
+
         // AWS checksum headers (only one checksum type should be specified)
         name if name.starts_with("x-amz-checksum-") => false,
-        
-        // AWS server-side encryption headers 
-        "x-amz-server-side-encryption" | "x-amz-server-side-encryption-aws-kms-key-id" |
-        "x-amz-server-side-encryption-context" | "x-amz-server-side-encryption-bucket-key-enabled" => false,
-        
+
+        // AWS server-side encryption headers
+        "x-amz-server-side-encryption"
+        | "x-amz-server-side-encryption-aws-kms-key-id"
+        | "x-amz-server-side-encryption-context"
+        | "x-amz-server-side-encryption-bucket-key-enabled" => false,
+
         // Standard HTTP headers that can safely have multiple values
-        "accept" | "accept-encoding" | "accept-language" | "cache-control" | "connection" |
-        "pragma" | "trailer" | "transfer-encoding" | "upgrade" | "via" | "warning" => true,
-        
-        // Custom metadata headers can have multiple values 
+        "accept" | "accept-encoding" | "accept-language" | "cache-control" | "connection" | "pragma" | "trailer"
+        | "transfer-encoding" | "upgrade" | "via" | "warning" => true,
+
+        // Custom metadata headers can have multiple values
         name if name.starts_with("x-amz-meta-") => true,
-        
+
         // For AWS headers not explicitly listed, be conservative and reject duplicates
         name if name.starts_with("x-amz-") => false,
-        
+
         // For other standard headers, be conservative and reject duplicates by default
         // This maintains the current strict behavior while allowing specific safe cases
         _ => false,
@@ -78,7 +79,7 @@ where
 }
 
 /// Parse header with support for HTTP-standard duplicate handling
-/// 
+///
 /// This function allows certain headers to have multiple values, combining them
 /// with comma separators according to HTTP/1.1 standards. Security-critical
 /// headers still reject duplicates.
@@ -89,36 +90,35 @@ where
 {
     let mut iter = req.headers.get_all(name).into_iter();
     let Some(first_val) = iter.next() else { return Err(missing_header(name)) };
-    
+
     // Check if this header allows duplicates
     if !header_allows_duplicates(name) {
         // Use strict duplicate checking for security-critical headers
         let None = iter.next() else { return Err(duplicate_header(name)) };
         return T::try_from_header_value(first_val).map_err(|err| invalid_header(err, name, first_val));
     }
-    
+
     // For headers that allow duplicates, combine values with comma separator
     let Some(next_val) = iter.next() else {
         // Only one value, use it directly
         return T::try_from_header_value(first_val).map_err(|err| invalid_header(err, name, first_val));
     };
-    
+
     // Multiple values - combine them according to HTTP standards
     let mut combined = String::new();
     combined.push_str(first_val.to_str().map_err(|err| invalid_header(err, name, first_val))?);
     combined.push_str(", ");
     combined.push_str(next_val.to_str().map_err(|err| invalid_header(err, name, next_val))?);
-    
+
     // Add any additional values
     for val in iter {
         combined.push_str(", ");
         combined.push_str(val.to_str().map_err(|err| invalid_header(err, name, val))?);
     }
-    
+
     // Create a new HeaderValue with the combined string
-    let combined_value = HeaderValue::try_from(combined)
-        .map_err(|err| invalid_header(err, name, first_val))?;
-    
+    let combined_value = HeaderValue::try_from(combined).map_err(|err| invalid_header(err, name, first_val))?;
+
     T::try_from_header_value(&combined_value).map_err(|err| invalid_header(err, name, &combined_value))
 }
 
@@ -145,7 +145,7 @@ where
 {
     let mut iter = req.headers.get_all(name).into_iter();
     let Some(first_val) = iter.next() else { return Ok(None) };
-    
+
     // Check if this header allows duplicates
     if !header_allows_duplicates(name) {
         // Use strict duplicate checking for security-critical headers
@@ -155,7 +155,7 @@ where
             Err(err) => Err(invalid_header(err, name, first_val)),
         };
     }
-    
+
     // For headers that allow duplicates, combine values with comma separator
     let Some(next_val) = iter.next() else {
         // Only one value, use it directly
@@ -164,23 +164,22 @@ where
             Err(err) => Err(invalid_header(err, name, first_val)),
         };
     };
-    
+
     // Multiple values - combine them according to HTTP standards
     let mut combined = String::new();
     combined.push_str(first_val.to_str().map_err(|err| invalid_header(err, name, first_val))?);
     combined.push_str(", ");
     combined.push_str(next_val.to_str().map_err(|err| invalid_header(err, name, next_val))?);
-    
+
     // Add any additional values
     for val in iter {
         combined.push_str(", ");
         combined.push_str(val.to_str().map_err(|err| invalid_header(err, name, val))?);
     }
-    
+
     // Create a new HeaderValue with the combined string
-    let combined_value = HeaderValue::try_from(combined)
-        .map_err(|err| invalid_header(err, name, first_val))?;
-    
+    let combined_value = HeaderValue::try_from(combined).map_err(|err| invalid_header(err, name, first_val))?;
+
     match T::try_from_header_value(&combined_value) {
         Ok(ans) => Ok(Some(ans)),
         Err(err) => Err(invalid_header(err, name, &combined_value)),
@@ -224,29 +223,35 @@ fn duplicate_query(name: &str) -> S3Error {
 }
 
 /// Check if a query parameter should allow duplicates
-/// 
+///
 /// Some query parameters can safely have multiple values.
 /// Security-critical parameters used in signatures should never allow duplicates.
 pub fn query_allows_duplicates(name: &str) -> bool {
     match name {
         // Security-critical parameters used in AWS signatures must never allow duplicates
-        "AWSAccessKeyId" | "Signature" | "Expires" | "x-amz-signature" | 
-        "x-amz-credential" | "x-amz-date" | "x-amz-expires" | "x-amz-signedheaders" => false,
-        
+        "AWSAccessKeyId"
+        | "Signature"
+        | "Expires"
+        | "x-amz-signature"
+        | "x-amz-credential"
+        | "x-amz-date"
+        | "x-amz-expires"
+        | "x-amz-signedheaders" => false,
+
         // Upload/multipart specific parameters should be unique
         "uploadId" | "partNumber" => false,
-        
+
         // Operation identifiers should be unique
         "x-id" => false,
-        
+
         // Most AWS-specific query parameters should be unique by default
         // This is conservative but safe
         name if name.starts_with("x-amz-") => false,
-        
+
         // Standard pagination and filtering parameters might allow multiple values
         // but for S3 API compatibility, keep them unique for now
         "prefix" | "delimiter" | "marker" | "max-keys" => false,
-        
+
         // For non-AWS parameters, be conservative and require uniqueness by default
         _ => false,
     }
@@ -378,25 +383,28 @@ pub fn parse_opt_metadata(req: &Request) -> S3Result<Option<Metadata>> {
         if key.is_empty() {
             continue;
         }
-        
+
         // For metadata headers, allow duplicates and combine them with comma separator
         // according to HTTP standards. This improves compatibility while maintaining
         // the same API surface.
         let mut iter = map.get_all(name).into_iter();
         let first_val = iter.next().unwrap(); // Safe because we got the name from map.keys()
-        
+
         let combined_value = match iter.next() {
             None => {
                 // Single value case - use directly
-                first_val.to_str().map_err(|err| invalid_header(err, name, first_val))?.to_owned()
-            },
+                first_val
+                    .to_str()
+                    .map_err(|err| invalid_header(err, name, first_val))?
+                    .to_owned()
+            }
             Some(second_val) => {
                 // Multiple values case - combine with HTTP standard comma separator
                 let mut combined = String::new();
                 combined.push_str(first_val.to_str().map_err(|err| invalid_header(err, name, first_val))?);
                 combined.push_str(", ");
                 combined.push_str(second_val.to_str().map_err(|err| invalid_header(err, name, second_val))?);
-                
+
                 // Add any additional values
                 for val in iter {
                     combined.push_str(", ");
@@ -405,7 +413,7 @@ pub fn parse_opt_metadata(req: &Request) -> S3Result<Option<Metadata>> {
                 combined
             }
         };
-        
+
         metadata.insert(key.into(), combined_value);
     }
     if metadata.is_empty() {
@@ -499,8 +507,8 @@ pub fn parse_field_value_timestamp(m: &Multipart, name: &str, fmt: TimestampForm
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::http::ordered_qs::OrderedQs;
     use crate::http::ordered_headers::OrderedHeaders;
+    use crate::http::ordered_qs::OrderedQs;
     use hyper::http::{HeaderMap, HeaderValue};
 
     #[test]
@@ -508,146 +516,146 @@ mod tests {
         // Test that OrderedQs can parse duplicate query parameters
         let query_with_duplicates = "prefix=a&prefix=b&marker=x";
         let qs = OrderedQs::parse(query_with_duplicates).unwrap();
-        
+
         // Should be able to get all values
         let prefixes: Vec<&str> = qs.get_all("prefix").collect();
         assert_eq!(prefixes, vec!["a", "b"]);
-        
+
         // get_unique should return None for duplicates
         assert_eq!(qs.get_unique("prefix"), None);
-        
+
         // Single values should work normally
         assert_eq!(qs.get_unique("marker"), Some("x"));
     }
-    
-    #[test] 
+
+    #[test]
     fn test_duplicate_header_parsing() {
         let mut headers = HeaderMap::new();
-        headers.append("content-type", HeaderValue::from_static("text/plain"));  
+        headers.append("content-type", HeaderValue::from_static("text/plain"));
         headers.append("content-type", HeaderValue::from_static("application/json"));
         headers.insert("x-single", HeaderValue::from_static("value"));
-        
+
         let ordered = OrderedHeaders::from_headers(&headers).unwrap();
-        
+
         // Should be able to get all values
         let content_types: Vec<&str> = ordered.get_all("content-type").collect();
         assert_eq!(content_types, vec!["text/plain", "application/json"]);
-        
-        // get_unique should return None for duplicates  
+
+        // get_unique should return None for duplicates
         assert_eq!(ordered.get_unique("content-type"), None);
-        
+
         // Single values should work normally
         assert_eq!(ordered.get_unique("x-single"), Some("value"));
     }
-    
+
     #[test]
     fn test_current_strict_behavior_documentation() {
         // This test documents the current behavior of rejecting ALL duplicates
-        
+
         // The current parse_header and parse_query functions should reject
         // any header or query parameter that has multiple values.
-        
+
         // This is intentionally strict for security reasons, but may need
         // to be relaxed for certain non-security-critical headers to improve
         // HTTP standards compliance and compatibility.
-        
+
         // Security-critical headers that SHOULD continue rejecting duplicates:
         let security_critical_headers = vec![
             "authorization",
-            "x-amz-date", 
+            "x-amz-date",
             "x-amz-content-sha256",
             "x-amz-security-token",
             "host",
         ];
-        
+
         for header in security_critical_headers {
             println!("Security-critical header: {} should reject duplicates", header);
         }
-        
+
         // Headers that might safely allow duplicates per HTTP standards:
         let potentially_safe_headers = vec![
-            "cache-control",  // Can have multiple directives  
-            "accept",         // Can have multiple media types
-            // "x-amz-meta-*",   // Custom metadata (pattern match)
+            "cache-control", // Can have multiple directives
+            "accept",        // Can have multiple media types
+                             // "x-amz-meta-*",   // Custom metadata (pattern match)
         ];
-        
+
         for header in potentially_safe_headers {
             println!("Potentially safe header: {} might allow duplicates", header);
         }
     }
-    
+
     #[test]
     fn test_header_duplicate_policy() {
         use crate::http::de::header_allows_duplicates;
         use hyper::http::HeaderName;
-        
+
         // Security-critical headers should never allow duplicates
         assert!(!header_allows_duplicates(&HeaderName::from_static("authorization")));
         assert!(!header_allows_duplicates(&HeaderName::from_static("x-amz-date")));
         assert!(!header_allows_duplicates(&HeaderName::from_static("x-amz-content-sha256")));
         assert!(!header_allows_duplicates(&HeaderName::from_static("x-amz-security-token")));
         assert!(!header_allows_duplicates(&HeaderName::from_static("host")));
-        
+
         // Checksum headers should be unique (only one checksum type)
         assert!(!header_allows_duplicates(&HeaderName::from_static("x-amz-checksum-crc32")));
         assert!(!header_allows_duplicates(&HeaderName::from_static("x-amz-checksum-sha256")));
-        
+
         // Standard HTTP headers that can safely have multiple values
         assert!(header_allows_duplicates(&HeaderName::from_static("accept")));
         assert!(header_allows_duplicates(&HeaderName::from_static("cache-control")));
         assert!(header_allows_duplicates(&HeaderName::from_static("accept-encoding")));
-        
+
         // Custom metadata headers can have multiple values
         assert!(header_allows_duplicates(&HeaderName::from_static("x-amz-meta-tags")));
         assert!(header_allows_duplicates(&HeaderName::from_static("x-amz-meta-category")));
-        
+
         // Other AWS headers should be conservative (unique by default)
         assert!(!header_allows_duplicates(&HeaderName::from_static("x-amz-server-side-encryption")));
         assert!(!header_allows_duplicates(&HeaderName::from_static("x-amz-request-payer")));
     }
-    
-    #[test] 
+
+    #[test]
     fn test_query_duplicate_policy() {
         use crate::http::de::query_allows_duplicates;
-        
+
         // Security-critical query parameters should never allow duplicates
         assert!(!query_allows_duplicates("AWSAccessKeyId"));
         assert!(!query_allows_duplicates("Signature"));
         assert!(!query_allows_duplicates("x-amz-signature"));
         assert!(!query_allows_duplicates("x-amz-credential"));
         assert!(!query_allows_duplicates("x-amz-date"));
-        
+
         // Upload/multipart specific parameters should be unique
         assert!(!query_allows_duplicates("uploadId"));
         assert!(!query_allows_duplicates("partNumber"));
         assert!(!query_allows_duplicates("x-id"));
-        
+
         // S3 API parameters should be unique for compatibility
         assert!(!query_allows_duplicates("prefix"));
         assert!(!query_allows_duplicates("delimiter"));
         assert!(!query_allows_duplicates("marker"));
         assert!(!query_allows_duplicates("max-keys"));
     }
-    
+
     #[test]
     fn test_metadata_duplicate_handling() {
         // This test would ideally test the parse_opt_metadata function directly,
         // but it requires a full Request object which is complex to construct in tests.
         // Instead, we document the expected behavior:
-        
+
         // When parse_opt_metadata encounters duplicate x-amz-meta-* headers,
         // it should now combine them with ", " separator instead of returning an error.
-        
+
         // Example:
         // x-amz-meta-tags: tag1
-        // x-amz-meta-tags: tag2  
+        // x-amz-meta-tags: tag2
         // Should result in metadata["tags"] = "tag1, tag2"
-        
+
         // This follows HTTP/1.1 standards for combining duplicate headers
         // while maintaining security for non-metadata headers.
-        
+
         println!("Metadata duplicate handling: combines multiple x-amz-meta-* headers with comma separator");
-        
+
         // Test our helper functions work correctly
         use hyper::http::HeaderName;
         assert!(header_allows_duplicates(&HeaderName::from_static("x-amz-meta-tags")));
