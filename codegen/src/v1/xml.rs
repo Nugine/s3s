@@ -457,9 +457,7 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                 } else {
                     g!("if {field_name}.is_some() {{ return Err(DeError::DuplicateField); }}");
 
-                    if let Some(xml_ns_field) = xml_ns_field
-                        && xml_ns_field.name == field.name
-                    {
+                    if let Some(xml_ns_field) = xml_ns_field.filter(|x| x.name == field.name) {
                         let rust::Type::Struct(xml_ns_ty) = &rust_types[xml_ns_field.type_.as_str()] else { panic!() };
                         let mut xml_attr_field: Option<&StructField> = None;
                         for field in &xml_ns_ty.fields {
