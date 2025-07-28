@@ -66,7 +66,7 @@ The project uses code generation from AWS Smithy models:
 - **Rust**: Uses clippy with strict lints (all, pedantic, cargo = deny)
 - **Python**: Uses ruff for formatting and linting
 - **Safety**: `unsafe` code is forbidden
-- **Conventions**: Follow Conventional Commits for commit messages
+- **Commit Messages**: Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification
 
 ### Important Files
 - `justfile` - Task definitions and development commands
