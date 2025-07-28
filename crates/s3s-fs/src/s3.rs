@@ -378,6 +378,7 @@ impl S3 for FileSystem {
             // When no delimiter, do recursive listing (current behavior)
             let mut dir_queue: VecDeque<PathBuf> = default();
             dir_queue.push_back(path.clone());
+            let prefix_is_empty = prefix.is_empty();
 
             while let Some(dir) = dir_queue.pop_front() {
                 let mut iter = try_!(fs::read_dir(dir).await);
@@ -392,7 +393,7 @@ impl S3 for FileSystem {
                             continue;
                         };
 
-                        if !prefix.is_empty() && !key_str.starts_with(prefix) {
+                        if !prefix_is_empty && !key_str.starts_with(prefix) {
                             continue;
                         }
 
@@ -860,6 +861,7 @@ impl FileSystem {
         // but group them according to the delimiter rules
         let mut dir_queue: VecDeque<PathBuf> = default();
         dir_queue.push_back(bucket_root.to_owned());
+        let prefix_is_empty = prefix.is_empty();
 
         while let Some(dir) = dir_queue.pop_front() {
             let mut iter = try_!(fs::read_dir(dir).await);
@@ -875,7 +877,7 @@ impl FileSystem {
                 };
 
                 // Skip if doesn't match prefix
-                if !prefix.is_empty() && !key_str.starts_with(prefix) {
+                if !prefix_is_empty && !key_str.starts_with(prefix) {
                     // For directories, also skip if they don't have potential to contain matching files
                     if file_type.is_dir() && !prefix.starts_with(&key_str) && !key_str.starts_with(prefix) {
                         continue;
