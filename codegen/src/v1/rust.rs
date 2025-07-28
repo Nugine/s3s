@@ -195,7 +195,6 @@ pub fn default_value_literal(v: &Value) -> &dyn fmt::Display {
     match v {
         Value::Bool(x) => x,
         Value::Number(x) => x,
-        Value::String(x) => x,
         _ => unimplemented!(),
     }
 }
