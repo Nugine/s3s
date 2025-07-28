@@ -223,7 +223,7 @@ async fn test_list_objects_v2_with_prefixes() -> Result<()> {
     debug!("List without delimiter - objects: {:?}", contents);
     assert_eq!(contents.len(), 4);
     for key in &files {
-        assert!(contents.contains(key), "Missing key: {}", key);
+        assert!(contents.contains(key), "Missing key: {key}");
     }
 
     // List with delimiter "/" - should return root files and common prefixes

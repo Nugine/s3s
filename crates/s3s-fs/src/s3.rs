@@ -364,7 +364,7 @@ impl S3 for FileSystem {
             return Err(s3_error!(NoSuchBucket));
         }
 
-        let delimiter = input.delimiter.as_ref().map(|d| d.as_str());
+        let delimiter = input.delimiter.as_deref();
         let prefix = input.prefix.as_deref().unwrap_or("").trim_start_matches('/');
 
         let mut objects: Vec<Object> = default();
@@ -427,15 +427,15 @@ impl S3 for FileSystem {
             objects
         };
 
-        let common_prefixes_list = if !common_prefixes.is_empty() {
+        let common_prefixes_list = if common_prefixes.is_empty() {
+            None
+        } else {
             Some(
                 common_prefixes
                     .into_iter()
                     .map(|prefix| CommonPrefix { prefix: Some(prefix) })
                     .collect(),
             )
-        } else {
-            None
         };
 
         let key_count = try_!(i32::try_from(objects.len()));
@@ -895,7 +895,7 @@ impl FileSystem {
                     if remaining.contains(delimiter) {
                         // File is in a subdirectory, add the subdirectory as common prefix
                         if let Some(delimiter_pos) = remaining.find(delimiter) {
-                            let next_prefix = format!("{}{}", prefix, &remaining[..delimiter_pos + 1]);
+                            let next_prefix = format!("{}{}", prefix, &remaining[..=delimiter_pos]);
                             common_prefixes.insert(next_prefix);
                         }
                     } else {
