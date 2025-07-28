@@ -1,14 +1,11 @@
 //! AWS restXml deserializer
 //!
 //! See <https://smithy.io/2.0/aws/protocols/aws-restxml-protocol.html#xml-shape-serialization>
-//!
 
 use crate::dto::{self, List, Timestamp, TimestampFormat};
-
-use std::fmt;
-
-use quick_xml::Reader;
+use quick_xml::NsReader;
 use quick_xml::events::{BytesEnd, BytesStart, BytesText, Event};
+use std::fmt;
 use stdx::str::StrExt;
 
 /// A data type that can be deserialized with AWS restXml deserializer
@@ -32,16 +29,13 @@ pub trait DeserializeContent<'xml>: Sized {
 /// AWS restXml deserializer
 pub struct Deserializer<'xml> {
     /// xml reader
-    inner: Reader<&'xml [u8]>,
+    inner: NsReader<&'xml [u8]>,
 
     /// peeked event
     peeked: Option<DeEvent<'xml>>,
 
     /// store an extra event
     next_slot: Option<DeEvent<'xml>>,
-
-    /// current element attributes
-    current_attributes: Option<Vec<(Vec<u8>, Vec<u8>)>>,
 }
 
 /// XML deserialization result
@@ -69,6 +63,9 @@ pub enum DeError {
     /// Unexpected tag name
     #[error("unexpected tag name")]
     UnexpectedTagName,
+
+    #[error("unexpected attribute name")]
+    UnexpectedAttributeName,
 
     /// Invalid content
     #[error("invalid content")]
@@ -100,11 +97,20 @@ impl<'xml> Deserializer<'xml> {
     /// Creates a new deserializer
     #[must_use]
     pub fn new(xml: &'xml [u8]) -> Self {
+        let reader = NsReader::from_reader(xml);
         Self {
-            inner: Reader::from_reader(xml),
+            inner: reader,
             peeked: None,
             next_slot: None,
-            current_attributes: None,
+        }
+    }
+
+    pub fn resolve_namespace<'a>(&self, qname: &'a [u8]) -> Option<(&'a [u8], &'a [u8])> {
+        if let Some(pos) = qname.iter().position(|&b| b == b':') {
+            let (prefix, local) = qname.split_at(pos);
+            Some((prefix, &local[1..]))
+        } else {
+            None
         }
     }
 
@@ -229,19 +235,39 @@ impl<'xml> Deserializer<'xml> {
                 DeEvent::Start(start) => {
                     self.consume_peeked();
 
-                    // Save attributes for the current element
-                    let mut attrs = Vec::new();
-                    for attr in start.attributes().with_checks(false).flatten() {
-                        attrs.push((attr.key.as_ref().to_vec(), attr.value.to_vec()));
-                    }
-                    self.current_attributes = Some(attrs);
-
                     let name = start.name();
                     f(self, name.as_ref())?;
                     self.expect_end(name.as_ref())?;
 
-                    // Clear attributes after processing the element
-                    self.current_attributes = None;
+                    continue;
+                }
+                DeEvent::Text(_) => {
+                    self.consume_peeked();
+                    continue;
+                }
+                DeEvent::End(_) | DeEvent::Eof => {
+                    return Ok(());
+                }
+            }
+        }
+    }
+
+    /// Deserializes each element with access to attributes
+    ///
+    /// # Errors
+    /// Returns an error if the deserialization fails.
+    pub fn for_each_element_with_attrs(
+        &mut self,
+        mut f: impl FnMut(&mut Self, &[u8], &BytesStart<'xml>) -> DeResult,
+    ) -> DeResult {
+        loop {
+            match self.peek_event()? {
+                DeEvent::Start(start) => {
+                    self.consume_peeked();
+
+                    let name = start.name();
+                    f(self, name.as_ref(), &start)?;
+                    self.expect_end(name.as_ref())?;
 
                     continue;
                 }
@@ -305,27 +331,6 @@ impl<'xml> Deserializer<'xml> {
             let string = str::from_ascii_simd(t.as_ref()).map_err(|_| DeError::InvalidContent)?;
             Timestamp::parse(fmt, string).map_err(|_| DeError::InvalidContent)
         })
-    }
-
-    /// Gets the start element for attribute processing
-    pub fn get_start_element(&mut self) -> DeResult<quick_xml::events::BytesStart<'xml>> {
-        match self.peek_event()? {
-            DeEvent::Start(start) => Ok(start),
-            _ => Err(DeError::UnexpectedStart),
-        }
-    }
-
-    /// Gets an attribute value from the current element
-    #[must_use]
-    pub fn get_attribute(&self, name: &[u8]) -> Option<String> {
-        if let Some(ref attrs) = self.current_attributes {
-            for (key, value) in attrs {
-                if key == name {
-                    return Some(String::from_utf8_lossy(value).to_string());
-                }
-            }
-        }
-        None
     }
 
     /// Consumes the peeked event (make `peek_event` and `consume_peeked` public)

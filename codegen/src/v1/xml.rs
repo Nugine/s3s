@@ -401,10 +401,15 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
         );
 
         let mut xml_atrr: Option<StructField> = None;
+        let mut _has_ns: bool = false;
 
         for field in &ty.fields {
+            if field.xml_namespace.is_some() {
+                _has_ns = true;
+            }
             if field.is_xml_attr {
                 xml_atrr = Some(field.clone());
+                continue;
             }
             if field.position == "sealed" {
                 continue;
@@ -414,18 +419,27 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
 
         if xml_atrr.is_some() {
             if let Some(field) = xml_atrr {
-                if let Some(attr) = &field.xml_name {
-                    g!("if let Some(type_value) = d.get_attribute(b\"{}\") {{", attr);
-                } else {
-                    g!("if let Some(type_value) = d.get_attribute(b\"{}\") {{", field.camel_name);
+                if let Some(field_type) = rust_types.get(field.type_.as_str()) {
+                    if let rust::Type::StrEnum(ty) = field_type {
+                        if let Some(one) = ty.variants.first() {
+                            g!(
+                                "let {} = Some({}::from(\"{}\".to_string()));",
+                                field.name,
+                                field.type_,
+                                one.value.as_str()
+                            );
+                        }
+                    }
                 }
-                g!("    {} = Some({}::from(type_value));", field.name, field.type_);
-                g!("}} ");
             }
         }
 
         if ty.fields.is_empty().not() {
-            g!("d.for_each_element(|d, x| match x {{");
+            if _has_ns {
+                g!("d.for_each_element_with_attrs(|d, x, attrs| match x {{");
+            } else {
+                g!("d.for_each_element(|d, x| match x {{");
+            }
             for field in &ty.fields {
                 if field.position == "sealed" {
                     continue;
@@ -458,6 +472,22 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                     g!("{field_name} = Some(d.timestamp(TimestampFormat::{fmt})?);");
                 } else {
                     g!("if {field_name}.is_some() {{ return Err(DeError::DuplicateField); }}");
+
+                    if _has_ns && field.xml_namespace.is_some() {
+                        if let Some(child_field) = find_child_type(field.type_.as_str(), rust_types) {
+                            let xml_name = child_field.xml_name.as_deref().unwrap_or(&field.camel_name);
+                            g!("let mut g = d.content::<{}>()?;", field.type_);
+                            g!("for attr in attrs.attributes() {{");
+                            g!("if let Ok(attr) = attr {{");
+                            g!("if attr.key.as_ref() == b\"{}\" {{", xml_name);
+                            g!("let val = String::from_utf8_lossy(attr.value.as_ref());");
+                            g!("g.{} = {}::from(val.to_string());", child_field.name, child_field.type_);
+                            g!("break;");
+                            g!("}}");
+                            g!("}}");
+                            g!("}}");
+                        }
+                    }
                     g!("{field_name} = Some(d.content()?);");
                 }
 
@@ -490,4 +520,15 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
         g!("}}");
         g!("}}");
     }
+}
+
+// Find the child type in the field_type_names set
+// If the child type is found, return the corresponding StructField
+fn find_child_type<'a>(child_type: &str, rust_types: &'a RustTypes) -> Option<&'a StructField> {
+    if let Some(field_type) = rust_types.get(child_type) {
+        if let rust::Type::Struct(ty) = field_type {
+            return ty.fields.iter().find(|field| field.is_xml_attr);
+        }
+    }
+    None
 }

@@ -1,5 +1,4 @@
-use std::fmt;
-use std::format as f;
+use std::{fmt, format as f};
 
 use scoped_writer::g;
 use serde_json::Value;
@@ -195,6 +194,8 @@ pub fn default_value_literal(v: &Value) -> &dyn fmt::Display {
     match v {
         Value::Bool(x) => x,
         Value::Number(x) => x,
-        _ => unimplemented!(),
+        Value::String(x) => x,
+        Value::Null => unimplemented!("Null default values not supported"),
+        _ => unimplemented!("Array default values not supported"),
     }
 }
