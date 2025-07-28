@@ -7,7 +7,7 @@ use crate::dto::{self, List, Timestamp, TimestampFormat};
 
 use std::fmt;
 
-use quick_xml::NsReader;
+use quick_xml::Reader;
 use quick_xml::events::{BytesEnd, BytesStart, BytesText, Event};
 use stdx::str::StrExt;
 
@@ -32,7 +32,7 @@ pub trait DeserializeContent<'xml>: Sized {
 /// AWS restXml deserializer
 pub struct Deserializer<'xml> {
     /// xml reader
-    inner: NsReader<&'xml [u8]>,
+    inner: Reader<&'xml [u8]>,
 
     /// peeked event
     peeked: Option<DeEvent<'xml>>,
@@ -67,6 +67,9 @@ pub enum DeError {
     #[error("unexpected tag name")]
     UnexpectedTagName,
 
+    #[error("invalid attribute")]
+    InvalidAttribute,
+
     #[error("unexpected attribute name")]
     UnexpectedAttributeName,
 
@@ -100,20 +103,10 @@ impl<'xml> Deserializer<'xml> {
     /// Creates a new deserializer
     #[must_use]
     pub fn new(xml: &'xml [u8]) -> Self {
-        let reader = NsReader::from_reader(xml);
         Self {
-            inner: reader,
+            inner: Reader::from_reader(xml),
             peeked: None,
             next_slot: None,
-        }
-    }
-
-    pub fn resolve_namespace<'a>(&self, qname: &'a [u8]) -> Option<(&'a [u8], &'a [u8])> {
-        if let Some(pos) = qname.iter().position(|&b| b == b':') {
-            let (prefix, local) = qname.split_at(pos);
-            Some((prefix, &local[1..]))
-        } else {
-            None
         }
     }
 
@@ -149,6 +142,20 @@ impl<'xml> Deserializer<'xml> {
             return Ok(ev);
         }
         self.read_event()
+    }
+
+    /// Peeks the next event
+    #[allow(clippy::unwrap_used, clippy::unwrap_in_result)]
+    fn peek_event(&mut self) -> DeResult<DeEvent<'xml>> {
+        if self.peeked.is_none() {
+            self.peeked = Some(self.read_event()?);
+        }
+        Ok(self.peeked.clone().unwrap())
+    }
+
+    /// Consumes the peeked event
+    fn consume_peeked(&mut self) {
+        self.peeked = None;
     }
 
     /// Expects a start event
@@ -239,8 +246,9 @@ impl<'xml> Deserializer<'xml> {
                     self.consume_peeked();
 
                     let name = start.name();
-                    f(self, name.as_ref())?;
-                    self.expect_end(name.as_ref())?;
+                    let name = name.as_ref();
+                    f(self, name)?;
+                    self.expect_end(name)?;
 
                     continue;
                 }
@@ -255,22 +263,16 @@ impl<'xml> Deserializer<'xml> {
         }
     }
 
-    /// Deserializes each element with access to attributes
-    ///
-    /// # Errors
-    /// Returns an error if the deserialization fails.
-    pub fn for_each_element_with_attrs(
-        &mut self,
-        mut f: impl FnMut(&mut Self, &[u8], &BytesStart<'xml>) -> DeResult,
-    ) -> DeResult {
+    pub fn for_each_element_with_start(&mut self, mut f: impl FnMut(&mut Self, &[u8], &BytesStart<'_>) -> DeResult) -> DeResult {
         loop {
             match self.peek_event()? {
                 DeEvent::Start(start) => {
                     self.consume_peeked();
 
                     let name = start.name();
-                    f(self, name.as_ref(), &start)?;
-                    self.expect_end(name.as_ref())?;
+                    let name = name.as_ref();
+                    f(self, name, &start)?;
+                    self.expect_end(name)?;
 
                     continue;
                 }
@@ -334,29 +336,6 @@ impl<'xml> Deserializer<'xml> {
             let string = str::from_ascii_simd(t.as_ref()).map_err(|_| DeError::InvalidContent)?;
             Timestamp::parse(fmt, string).map_err(|_| DeError::InvalidContent)
         })
-    }
-
-    /// Consumes the peeked event (make `peek_event` and `consume_peeked` public)
-    pub fn consume_peeked(&mut self) {
-        self.peeked = None;
-    }
-
-    /// Peeks the next event (make `peek_event` public)
-    ///
-    /// # Panics
-    ///
-    /// Panics if the next event cannot be read (should not happen in normal use).
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// let event = deserializer.peek_event();
-    /// ```
-    fn peek_event(&mut self) -> DeResult<DeEvent<'xml>> {
-        if self.peeked.is_none() {
-            self.peeked = Some(self.read_event()?);
-        }
-        Ok(self.peeked.clone().unwrap())
     }
 }
 

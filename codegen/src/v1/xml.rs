@@ -32,7 +32,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     for (&ty_name, &xml_name) in &root_type_names {
         match xml_name {
             Some(xml_name) if xml_name != ty_name => {
-                if can_impl_serialize(ty_name) {
+                if can_impl_serialize(rust_types, ty_name) {
                     g!("//   Serialize: {ty_name} {xml_name:?}");
                 }
                 if can_impl_deserialize(rust_types, ty_name) {
@@ -40,7 +40,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                 }
             }
             _ => {
-                if can_impl_serialize(ty_name) {
+                if can_impl_serialize(rust_types, ty_name) {
                     g!("//   Serialize: {ty_name}");
                 }
                 if can_impl_deserialize(rust_types, ty_name) {
@@ -51,7 +51,7 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
     }
     g!();
     for ty_name in &field_type_names {
-        if can_impl_serialize_content(ty_name) {
+        if can_impl_serialize_content(rust_types, ty_name) {
             g!("//   SerializeContent: {ty_name}");
         }
         if can_impl_deserialize_content(rust_types, ty_name) {
@@ -167,14 +167,14 @@ fn collect_xml_types<'a>(
 
 const SPECIAL_TYPES: &[&str] = &["AssumeRoleOutput"];
 
-fn can_impl_serialize(ty_name: &str) -> bool {
+fn can_impl_serialize(rust_types: &RustTypes, ty_name: &str) -> bool {
     if SPECIAL_TYPES.contains(&ty_name) {
         return false;
     }
-    can_impl_serialize_content(ty_name)
+    can_impl_serialize_content(rust_types, ty_name)
 }
 
-fn can_impl_serialize_content(_ty_name: &str) -> bool {
+fn can_impl_serialize_content(_rust_types: &RustTypes, _ty_name: &str) -> bool {
     true
 }
 
@@ -192,6 +192,9 @@ fn can_impl_deserialize_content(rust_types: &RustTypes, ty_name: &str) -> bool {
         rust::Type::Struct(ty) => {
             for field in &ty.fields {
                 if matches!(field.position.as_str(), "header" | "query" | "metadata") {
+                    return false;
+                }
+                if field.is_xml_attr {
                     return false;
                 }
             }
@@ -224,7 +227,7 @@ fn codegen_xml_serde(ops: &Operations, rust_types: &RustTypes, root_type_names: 
         // https://github.com/Nugine/s3s/issues/2
         let xml_name = xml_name.or(ty.xml_name.as_deref()).unwrap_or(&ty.name);
 
-        if can_impl_serialize(&ty.name) {
+        if can_impl_serialize(rust_types, &ty.name) {
             g!("impl Serialize for {} {{", ty.name);
             g!("fn serialize<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {{");
 
@@ -317,7 +320,7 @@ fn codegen_xml_serde_content(ops: &Operations, rust_types: &RustTypes, field_typ
 
 #[allow(clippy::too_many_lines)]
 fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, ty: &rust::Struct) {
-    if can_impl_serialize_content(&ty.name) {
+    if can_impl_serialize_content(rust_types, &ty.name) {
         g!("impl SerializeContent for {} {{", ty.name);
         g!(
             "fn serialize_content<W: Write>(&self, {}: &mut Serializer<W>) -> SerResult {{",
@@ -400,43 +403,24 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
             if ty.fields.is_empty() { "_" } else { "d" },
         );
 
-        let mut xml_atrr: Option<StructField> = None;
-        let mut _has_ns: bool = false;
+        let mut xml_ns_field: Option<&StructField> = None;
+        for field in &ty.fields {
+            if field.xml_namespace_prefix.is_some() {
+                assert!(xml_ns_field.is_none());
+                xml_ns_field = Some(field);
+            }
+        }
 
         for field in &ty.fields {
-            if field.xml_namespace.is_some() {
-                _has_ns = true;
-            }
-            if field.is_xml_attr {
-                xml_atrr = Some(field.clone());
-                continue;
-            }
             if field.position == "sealed" {
                 continue;
             }
             g!("let mut {}: Option<{}> = None;", field.name, field.type_);
         }
 
-        if xml_atrr.is_some() {
-            if let Some(field) = xml_atrr {
-                if let Some(field_type) = rust_types.get(field.type_.as_str()) {
-                    if let rust::Type::StrEnum(ty) = field_type {
-                        if let Some(one) = ty.variants.first() {
-                            g!(
-                                "let {} = Some({}::from(\"{}\".to_string()));",
-                                field.name,
-                                field.type_,
-                                one.value.as_str()
-                            );
-                        }
-                    }
-                }
-            }
-        }
-
         if ty.fields.is_empty().not() {
-            if _has_ns {
-                g!("d.for_each_element_with_attrs(|d, x, attrs| match x {{");
+            if xml_ns_field.is_some() {
+                g!("d.for_each_element_with_start(|d, x, start| match x {{");
             } else {
                 g!("d.for_each_element(|d, x| match x {{");
             }
@@ -473,22 +457,64 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
                 } else {
                     g!("if {field_name}.is_some() {{ return Err(DeError::DuplicateField); }}");
 
-                    if _has_ns && field.xml_namespace.is_some() {
-                        if let Some(child_field) = find_child_type(field.type_.as_str(), rust_types) {
-                            let xml_name = child_field.xml_name.as_deref().unwrap_or(&field.camel_name);
-                            g!("let mut g = d.content::<{}>()?;", field.type_);
-                            g!("for attr in attrs.attributes() {{");
-                            g!("if let Ok(attr) = attr {{");
-                            g!("if attr.key.as_ref() == b\"{}\" {{", xml_name);
-                            g!("let val = String::from_utf8_lossy(attr.value.as_ref());");
-                            g!("g.{} = {}::from(val.to_string());", child_field.name, child_field.type_);
-                            g!("break;");
-                            g!("}}");
-                            g!("}}");
+                    if let Some(xml_ns_field) = xml_ns_field
+                        && xml_ns_field.name == field.name
+                    {
+                        let rust::Type::Struct(xml_ns_ty) = &rust_types[xml_ns_field.type_.as_str()] else { panic!() };
+                        let mut xml_attr_field: Option<&StructField> = None;
+                        for field in &xml_ns_ty.fields {
+                            if field.is_xml_attr {
+                                assert!(xml_attr_field.is_none());
+                                xml_attr_field = Some(field);
+                            }
+                        }
+                        let xml_attr_field = xml_attr_field.unwrap();
+
+                        let xml_attr_name = &xml_attr_field.name;
+
+                        g!("let mut {}: Option<{}> = None;", xml_attr_name, xml_attr_field.type_);
+                        g!("for attr in start.attributes() {{");
+                        g!("  let Ok(attr) = attr else {{ return Err(DeError::InvalidAttribute) }};");
+                        g!("  if attr.key.as_ref() == b\"{}\" {{", xml_attr_field.xml_name.as_deref().unwrap());
+                        g!(
+                            "  {} = Some(attr.unescape_value().map_err(DeError::InvalidXml)?.into_owned().into());",
+                            xml_attr_name
+                        );
+                        g!("  }}");
+                        g!("}}");
+
+                        for field in &xml_ns_ty.fields {
+                            if field.is_xml_attr {
+                                continue;
+                            }
+                            g!("let mut {}: Option<{}> = None;", field.name, field.type_);
+                        }
+
+                        g!("d.for_each_element(|d, x| match x {{");
+                        for field in &xml_ns_ty.fields {
+                            let xml_name = field.xml_name.as_ref().unwrap_or(&field.camel_name);
+                            g!("b\"{xml_name}\" => {{");
+                            let field_name = field.name.as_str();
+                            g!("    if {field_name}.is_some() {{ return Err(DeError::DuplicateField); }}");
+                            g!("        {field_name} = Some(d.content()?);");
+                            g!("    Ok(())");
                             g!("}}");
                         }
+                        g!("_ => Err(DeError::UnexpectedTagName),");
+                        g!("}})?;");
+
+                        g!("{field_name} = Some({} {{", field.type_);
+                        for field in &xml_ns_ty.fields {
+                            if field.is_xml_attr {
+                                g!("{0}: {0}.ok_or(DeError::MissingField)?,", field.name);
+                                continue;
+                            }
+                            g!("{},", field.name);
+                        }
+                        g!("}});");
+                    } else {
+                        g!("{field_name} = Some(d.content()?);");
                     }
-                    g!("{field_name} = Some(d.content()?);");
                 }
 
                 g!("Ok(())");
@@ -520,15 +546,4 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
         g!("}}");
         g!("}}");
     }
-}
-
-// Find the child type in the field_type_names set
-// If the child type is found, return the corresponding StructField
-fn find_child_type<'a>(child_type: &str, rust_types: &'a RustTypes) -> Option<&'a StructField> {
-    if let Some(field_type) = rust_types.get(child_type) {
-        if let rust::Type::Struct(ty) = field_type {
-            return ty.fields.iter().find(|field| field.is_xml_attr);
-        }
-    }
-    None
 }
