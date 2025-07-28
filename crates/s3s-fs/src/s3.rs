@@ -895,7 +895,9 @@ impl FileSystem {
                     if remaining.contains(delimiter) {
                         // File is in a subdirectory, add the subdirectory as common prefix
                         if let Some(delimiter_pos) = remaining.find(delimiter) {
-                            let next_prefix = format!("{}{}", prefix, &remaining[..=delimiter_pos]);
+                            let mut next_prefix = String::with_capacity(prefix.len() + delimiter_pos + 1);
+                            next_prefix.push_str(prefix);
+                            next_prefix.push_str(&remaining[..=delimiter_pos]);
                             common_prefixes.insert(next_prefix);
                         }
                     } else {
