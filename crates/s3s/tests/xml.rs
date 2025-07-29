@@ -355,3 +355,89 @@ fn minio_delete_replication() {
     let val = deserialize::<s3s::dto::ReplicationConfiguration>(xml.as_bytes()).unwrap();
     test_serde(&val);
 }
+
+#[test]
+fn xmlns_xsi() {
+    let xml = r#"
+<AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+  <Owner>
+    <ID>852b113e7a2f25102679df27bb0ae12b3f85be6BucketOwnerCanonicalUserID</ID>
+    <DisplayName>OwnerDisplayName</DisplayName>
+  </Owner>
+  <AccessControlList>
+    <Grant>
+      <Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser">
+        <ID>852b113e7a2f25102679df27bb0ae12b3f85be6BucketOwnerCanonicalUserID</ID>
+        <DisplayName>OwnerDisplayName</DisplayName>
+      </Grantee>
+      <Permission>FULL_CONTROL</Permission>
+    </Grant>
+    <Grant>
+      <Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Group">
+        <URI xmlns="">http://acs.amazonaws.com/groups/global/AllUsers</URI>
+      </Grantee>
+      <Permission xmlns="">READ</Permission>
+    </Grant>
+    <Grant>
+      <Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Group">
+        <URI xmlns="">http://acs.amazonaws.com/groups/s3/LogDelivery</URI>
+      </Grantee>
+      <Permission xmlns="">WRITE</Permission>
+    </Grant>
+    <Grant>
+      <Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="AmazonCustomerByEmail">
+        <EmailAddress xmlns="">xyz@amazon.com</EmailAddress>
+      </Grantee>
+      <Permission xmlns="">WRITE_ACP</Permission>
+    </Grant>
+    <Grant>
+      <Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser">
+        <ID xmlns="">f30716ab7115dcb44a5ef76e9d74b8e20567f63TestAccountCanonicalUserID</ID>
+      </Grantee>
+      <Permission xmlns="">READ_ACP</Permission>
+    </Grant>
+  </AccessControlList>
+</AccessControlPolicy>
+    "#;
+    let val = deserialize::<s3s::dto::AccessControlPolicy>(xml.as_bytes()).unwrap();
+    test_serde(&val);
+
+    assert_eq!(
+        val.owner.unwrap().id.as_deref(),
+        Some("852b113e7a2f25102679df27bb0ae12b3f85be6BucketOwnerCanonicalUserID")
+    );
+
+    let grants = val.grants.as_deref().unwrap();
+    assert_eq!(grants.len(), 5);
+
+    assert_eq!(grants[0].permission.as_ref().unwrap().as_str(), "FULL_CONTROL");
+    assert_eq!(grants[1].permission.as_ref().unwrap().as_str(), "READ");
+    assert_eq!(grants[2].permission.as_ref().unwrap().as_str(), "WRITE");
+    assert_eq!(grants[3].permission.as_ref().unwrap().as_str(), "WRITE_ACP");
+    assert_eq!(grants[4].permission.as_ref().unwrap().as_str(), "READ_ACP");
+
+    assert_eq!(
+        grants[0].grantee.as_ref().unwrap().id.as_deref(),
+        Some("852b113e7a2f25102679df27bb0ae12b3f85be6BucketOwnerCanonicalUserID")
+    );
+    assert_eq!(
+        grants[0].grantee.as_ref().unwrap().display_name.as_deref(), //
+        Some("OwnerDisplayName")
+    );
+    assert_eq!(
+        grants[1].grantee.as_ref().unwrap().uri.as_deref(),
+        Some("http://acs.amazonaws.com/groups/global/AllUsers")
+    );
+    assert_eq!(
+        grants[2].grantee.as_ref().unwrap().uri.as_deref(),
+        Some("http://acs.amazonaws.com/groups/s3/LogDelivery")
+    );
+    assert_eq!(
+        grants[3].grantee.as_ref().unwrap().email_address.as_deref(), //
+        Some("xyz@amazon.com"),
+    );
+    assert_eq!(
+        grants[4].grantee.as_ref().unwrap().id.as_deref(),
+        Some("f30716ab7115dcb44a5ef76e9d74b8e20567f63TestAccountCanonicalUserID")
+    );
+}

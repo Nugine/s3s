@@ -208,6 +208,11 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                         http_query: field.traits.http_query().map(o),
                         xml_name: field.traits.xml_name().map(o),
                         xml_flattened: field.traits.xml_flattened(),
+
+                        is_xml_attr: field.traits.xml_attr(),
+                        xml_namespace_uri: field.traits.xml_namespace_uri().map(o),
+                        xml_namespace_prefix: field.traits.xml_namespace_prefix().map(o),
+
                         is_custom_extension: field.traits.minio(),
                     };
                     fields.push(field);
@@ -317,6 +322,9 @@ fn patch_types(space: &mut RustTypes) {
             http_query: None,
             xml_name: Some(request.name.clone()),
             xml_flattened: false,
+            is_xml_attr: false,
+            xml_namespace_uri: None,
+            xml_namespace_prefix: None,
             is_custom_extension: false,
         });
         ty.name = o("SelectObjectContentInput");

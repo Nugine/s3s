@@ -67,6 +67,12 @@ pub enum DeError {
     #[error("unexpected tag name")]
     UnexpectedTagName,
 
+    #[error("invalid attribute")]
+    InvalidAttribute,
+
+    #[error("unexpected attribute name")]
+    UnexpectedAttributeName,
+
     /// Invalid content
     #[error("invalid content")]
     InvalidContent,
@@ -240,8 +246,33 @@ impl<'xml> Deserializer<'xml> {
                     self.consume_peeked();
 
                     let name = start.name();
-                    f(self, name.as_ref())?;
-                    self.expect_end(name.as_ref())?;
+                    let name = name.as_ref();
+                    f(self, name)?;
+                    self.expect_end(name)?;
+
+                    continue;
+                }
+                DeEvent::Text(_) => {
+                    self.consume_peeked();
+                    continue;
+                }
+                DeEvent::End(_) | DeEvent::Eof => {
+                    return Ok(());
+                }
+            }
+        }
+    }
+
+    pub fn for_each_element_with_start(&mut self, mut f: impl FnMut(&mut Self, &[u8], &BytesStart<'_>) -> DeResult) -> DeResult {
+        loop {
+            match self.peek_event()? {
+                DeEvent::Start(start) => {
+                    self.consume_peeked();
+
+                    let name = start.name();
+                    let name = name.as_ref();
+                    f(self, name, &start)?;
+                    self.expect_end(name)?;
 
                     continue;
                 }
