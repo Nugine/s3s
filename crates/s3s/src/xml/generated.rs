@@ -4283,13 +4283,6 @@ impl<'xml> DeserializeContent<'xml> for Grant {
                         id = Some(d.content()?);
                         Ok(())
                     }
-                    b"xsi:type" => {
-                        if type_.is_some() {
-                            return Err(DeError::DuplicateField);
-                        }
-                        type_ = Some(d.content()?);
-                        Ok(())
-                    }
                     b"URI" => {
                         if uri.is_some() {
                             return Err(DeError::DuplicateField);
@@ -9292,13 +9285,6 @@ impl<'xml> DeserializeContent<'xml> for TargetGrant {
                             return Err(DeError::DuplicateField);
                         }
                         id = Some(d.content()?);
-                        Ok(())
-                    }
-                    b"xsi:type" => {
-                        if type_.is_some() {
-                            return Err(DeError::DuplicateField);
-                        }
-                        type_ = Some(d.content()?);
                         Ok(())
                     }
                     b"URI" => {

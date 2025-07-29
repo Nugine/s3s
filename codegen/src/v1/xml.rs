@@ -490,6 +490,9 @@ fn codegen_xml_serde_content_struct(_ops: &Operations, rust_types: &RustTypes, t
 
                         g!("d.for_each_element(|d, x| match x {{");
                         for field in &xml_ns_ty.fields {
+                            if field.is_xml_attr {
+                                continue;
+                            }
                             let xml_name = field.xml_name.as_ref().unwrap_or(&field.camel_name);
                             g!("b\"{xml_name}\" => {{");
                             let field_name = field.name.as_str();
