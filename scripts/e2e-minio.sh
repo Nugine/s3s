@@ -11,7 +11,7 @@ docker run \
     -v /tmp/minio:/data \
     minio/minio:latest server /data --console-address ":9001" &
 
-sleep 1s
+sleep 3s
 
 export AWS_ACCESS_KEY_ID=minioadmin
 export AWS_SECRET_ACCESS_KEY=minioadmin
