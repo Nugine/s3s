@@ -77,6 +77,24 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: just test
 
+  wasm-test:
+    needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - wasm32-unknown-unknown
+          - wasm32-wasip1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build -p s3s --target ${{ matrix.target }}
+
   mint-proxy-minio:
     name: e2e (mint, s3s-proxy, minio)
     needs: skip-check
@@ -110,24 +128,6 @@ jobs:
         with:
           name: e2e-fs.logs
           path: ./target/s3s-fs.log
-
-  wasm-test:
-    needs: skip-check
-    if: needs.skip-check.outputs.should_skip != 'true'
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target:
-          - wasm32-unknown-unknown
-          - wasm32-wasip1
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
-      - uses: Swatinem/rust-cache@v2
-      - run: cargo check -p s3s --target ${{ matrix.target }}
 
   e2e-minio:
     name: e2e (s3s-e2e, minio)
