@@ -345,6 +345,7 @@ impl S3 for FileSystem {
 
         Ok(v2_resp.map_output(|v2| ListObjectsOutput {
             contents: v2.contents,
+            common_prefixes: v2.common_prefixes,
             delimiter: v2.delimiter,
             encoding_type: v2.encoding_type,
             name: v2.name,
@@ -363,46 +364,51 @@ impl S3 for FileSystem {
             return Err(s3_error!(NoSuchBucket));
         }
 
+        let delimiter = input.delimiter.as_deref();
+        let prefix = input.prefix.as_deref().unwrap_or("").trim_start_matches('/');
+
         let mut objects: Vec<Object> = default();
-        let mut dir_queue: VecDeque<PathBuf> = default();
-        dir_queue.push_back(path.clone());
+        let mut common_prefixes = std::collections::BTreeSet::new();
 
-        while let Some(dir) = dir_queue.pop_front() {
-            let mut iter = try_!(fs::read_dir(dir).await);
-            while let Some(entry) = try_!(iter.next_entry().await) {
-                let file_type = try_!(entry.file_type().await);
-                if file_type.is_dir() {
-                    dir_queue.push_back(entry.path());
-                } else {
-                    let file_path = entry.path();
-                    let key = try_!(file_path.strip_prefix(&path));
-                    let delimiter = input.delimiter.as_ref().map_or("/", |d| d.as_str());
-                    let Some(key_str) = normalize_path(key, delimiter) else {
-                        continue;
-                    };
+        if delimiter.is_some() {
+            // When delimiter is provided, only list immediate contents (non-recursive)
+            self.list_objects_with_delimiter(&path, prefix, delimiter.unwrap(), &mut objects, &mut common_prefixes)
+                .await?;
+        } else {
+            // When no delimiter, do recursive listing (current behavior)
+            let mut dir_queue: VecDeque<PathBuf> = default();
+            dir_queue.push_back(path.clone());
+            let prefix_is_empty = prefix.is_empty();
 
-                    if let Some(ref prefix) = input.prefix {
-                        let prefix_path: PathBuf = prefix.split(delimiter).collect();
+            while let Some(dir) = dir_queue.pop_front() {
+                let mut iter = try_!(fs::read_dir(dir).await);
+                while let Some(entry) = try_!(iter.next_entry().await) {
+                    let file_type = try_!(entry.file_type().await);
+                    if file_type.is_dir() {
+                        dir_queue.push_back(entry.path());
+                    } else {
+                        let file_path = entry.path();
+                        let key = try_!(file_path.strip_prefix(&path));
+                        let Some(key_str) = normalize_path(key, "/") else {
+                            continue;
+                        };
 
-                        let key_s = format!("{}", key.display());
-                        let prefix_path_s = format!("{}", prefix_path.display());
-
-                        if !key_s.starts_with(&prefix_path_s) {
+                        if !prefix_is_empty && !key_str.starts_with(prefix) {
                             continue;
                         }
+
+                        let metadata = try_!(entry.metadata().await);
+                        let last_modified = Timestamp::from(try_!(metadata.modified()));
+                        let size = metadata.len();
+
+                        let object = Object {
+                            key: Some(key_str),
+                            last_modified: Some(last_modified),
+                            size: Some(try_!(i64::try_from(size))),
+                            ..Default::default()
+                        };
+                        objects.push(object);
                     }
-
-                    let metadata = try_!(entry.metadata().await);
-                    let last_modified = Timestamp::from(try_!(metadata.modified()));
-                    let size = metadata.len();
-
-                    let object = Object {
-                        key: Some(key_str),
-                        last_modified: Some(last_modified),
-                        size: Some(try_!(i64::try_from(size))),
-                        ..Default::default()
-                    };
-                    objects.push(object);
                 }
             }
         }
@@ -422,12 +428,24 @@ impl S3 for FileSystem {
             objects
         };
 
+        let common_prefixes_list = if common_prefixes.is_empty() {
+            None
+        } else {
+            Some(
+                common_prefixes
+                    .into_iter()
+                    .map(|prefix| CommonPrefix { prefix: Some(prefix) })
+                    .collect(),
+            )
+        };
+
         let key_count = try_!(i32::try_from(objects.len()));
 
         let output = ListObjectsV2Output {
             key_count: Some(key_count),
             max_keys: Some(key_count),
             contents: Some(objects),
+            common_prefixes: common_prefixes_list,
             delimiter: input.delimiter,
             encoding_type: input.encoding_type,
             name: Some(input.bucket),
@@ -827,5 +845,81 @@ impl S3 for FileSystem {
         debug!(bucket = %bucket, key = %key, upload_id = %upload_id, "multipart upload aborted");
 
         Ok(S3Response::new(AbortMultipartUploadOutput { ..Default::default() }))
+    }
+}
+
+impl FileSystem {
+    async fn list_objects_with_delimiter(
+        &self,
+        bucket_root: &Path,
+        prefix: &str,
+        delimiter: &str,
+        objects: &mut Vec<Object>,
+        common_prefixes: &mut std::collections::BTreeSet<String>,
+    ) -> S3Result<()> {
+        // For delimiter-based listing, we need to recursively scan all files
+        // but group them according to the delimiter rules
+        let mut dir_queue: VecDeque<PathBuf> = default();
+        dir_queue.push_back(bucket_root.to_owned());
+        let prefix_is_empty = prefix.is_empty();
+
+        while let Some(dir) = dir_queue.pop_front() {
+            let mut iter = try_!(fs::read_dir(dir).await);
+
+            while let Some(entry) = try_!(iter.next_entry().await) {
+                let file_type = try_!(entry.file_type().await);
+                let entry_path = entry.path();
+
+                // Calculate the key relative to the bucket root
+                let key = try_!(entry_path.strip_prefix(bucket_root));
+                let Some(key_str) = normalize_path(key, "/") else {
+                    continue;
+                };
+
+                // Skip if doesn't match prefix
+                if !prefix_is_empty && !key_str.starts_with(prefix) {
+                    // For directories, also skip if they don't have potential to contain matching files
+                    if file_type.is_dir() && !prefix.starts_with(&key_str) && !key_str.starts_with(prefix) {
+                        continue;
+                    }
+                    if file_type.is_file() {
+                        continue;
+                    }
+                }
+
+                if file_type.is_dir() {
+                    // Continue scanning this directory
+                    dir_queue.push_back(entry_path);
+                } else {
+                    // For files, determine if they should be listed directly or as common prefixes
+                    let remaining = &key_str[prefix.len()..];
+
+                    if remaining.contains(delimiter) {
+                        // File is in a subdirectory, add the subdirectory as common prefix
+                        if let Some(delimiter_pos) = remaining.find(delimiter) {
+                            let mut next_prefix = String::with_capacity(prefix.len() + delimiter_pos + 1);
+                            next_prefix.push_str(prefix);
+                            next_prefix.push_str(&remaining[..=delimiter_pos]);
+                            common_prefixes.insert(next_prefix);
+                        }
+                    } else {
+                        // File is at the current level, include it in objects
+                        let metadata = try_!(entry.metadata().await);
+                        let last_modified = Timestamp::from(try_!(metadata.modified()));
+                        let size = metadata.len();
+
+                        let object = Object {
+                            key: Some(key_str),
+                            last_modified: Some(last_modified),
+                            size: Some(try_!(i64::try_from(size))),
+                            ..Default::default()
+                        };
+                        objects.push(object);
+                    }
+                }
+            }
+        }
+
+        Ok(())
     }
 }
