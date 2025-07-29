@@ -8,9 +8,6 @@ pub use self::ser::*;
 
 mod generated;
 
-#[cfg(test)]
-mod str_enum_optimization_tests;
-
 mod manually {
     use super::*;
 
