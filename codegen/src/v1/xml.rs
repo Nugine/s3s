@@ -277,7 +277,13 @@ fn codegen_xml_serde_content(ops: &Operations, rust_types: &RustTypes, field_typ
                 {
                     g!("impl<'xml> DeserializeContent<'xml> for {} {{", ty.name);
                     g!("fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {{");
-                    g!("String::deserialize_content(d).map(Self::from)");
+                    g!("let s = String::deserialize_content(d)?;");
+                    g!("match s.as_str() {{");
+                    for variant in &ty.variants {
+                        g!("{0}::{1} => Ok(Self::from_static({0}::{1})),", ty.name, variant.name);
+                    }
+                    g!("_ => Ok(Self::from(s)),");
+                    g!("}}");
                     g!("}}");
                     g!("}}");
                 }
