@@ -152,6 +152,10 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                         }
                         if is_op_input && is_required.not() {
                             if field_type.ends_with("List") {
+                                // Exception: OptionalObjectAttributesList should be optional
+                                if field_type == "OptionalObjectAttributesList" {
+                                    break 'optional true;
+                                }
                                 break 'optional false;
                             }
                             break 'optional true;

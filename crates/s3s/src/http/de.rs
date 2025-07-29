@@ -82,6 +82,23 @@ where
     Ok(list)
 }
 
+pub fn parse_opt_list_header<T>(req: &Request, name: &HeaderName) -> S3Result<Option<List<T>>>
+where
+    T: TryFromHeaderValue,
+    T::Error: std::error::Error + Send + Sync + 'static,
+{
+    let mut list = List::new();
+    for val in req.headers.get_all(name) {
+        let ans = T::try_from_header_value(val).map_err(|err| invalid_header(err, name, val))?;
+        list.push(ans);
+    }
+    if list.is_empty() {
+        Ok(None)
+    } else {
+        Ok(Some(list))
+    }
+}
+
 fn missing_query(name: &str) -> S3Error {
     invalid_request!("missing query: {}", name)
 }

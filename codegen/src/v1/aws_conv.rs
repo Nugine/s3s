@@ -103,9 +103,6 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                     let field_ty = &rust_types[field.type_.as_str()];
 
                     let needs_unwrap = 'unwrap: {
-                        if field.type_ == "OptionalObjectAttributesList" {
-                            break 'unwrap true;
-                        }
                         if is_op_input(&ty.name, ops) && field.option_type.not() && field.is_required {
                             break 'unwrap true;
                         }
