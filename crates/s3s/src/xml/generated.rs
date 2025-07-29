@@ -361,7 +361,6 @@ use std::io::Write;
 //   SerializeContent: Grant
 // DeserializeContent: Grant
 //   SerializeContent: Grantee
-// DeserializeContent: Grantee
 //   SerializeContent: HostName
 // DeserializeContent: HostName
 //   SerializeContent: HttpErrorCodeReturnedEquals
@@ -4229,7 +4228,11 @@ impl<'xml> DeserializeContent<'xml> for GlacierJobParameters {
 impl SerializeContent for Grant {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         if let Some(ref val) = self.grantee {
-            s.content("Grantee", val)?;
+            let attrs = [
+                ("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance"),
+                ("xsi:type", val.type_.as_str()),
+            ];
+            s.content_with_attrs("Grantee", &attrs, val)?;
         }
         if let Some(ref val) = self.permission {
             s.content("Permission", val)?;
@@ -4242,12 +4245,60 @@ impl<'xml> DeserializeContent<'xml> for Grant {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         let mut grantee: Option<Grantee> = None;
         let mut permission: Option<Permission> = None;
-        d.for_each_element(|d, x| match x {
+        d.for_each_element_with_start(|d, x, start| match x {
             b"Grantee" => {
                 if grantee.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                grantee = Some(d.content()?);
+                let mut type_: Option<Type> = None;
+                for attr in start.attributes() {
+                    let Ok(attr) = attr else { return Err(DeError::InvalidAttribute) };
+                    if attr.key.as_ref() == b"xsi:type" {
+                        type_ = Some(attr.unescape_value().map_err(DeError::InvalidXml)?.into_owned().into());
+                    }
+                }
+                let mut display_name: Option<DisplayName> = None;
+                let mut email_address: Option<EmailAddress> = None;
+                let mut id: Option<ID> = None;
+                let mut uri: Option<URI> = None;
+                d.for_each_element(|d, x| match x {
+                    b"DisplayName" => {
+                        if display_name.is_some() {
+                            return Err(DeError::DuplicateField);
+                        }
+                        display_name = Some(d.content()?);
+                        Ok(())
+                    }
+                    b"EmailAddress" => {
+                        if email_address.is_some() {
+                            return Err(DeError::DuplicateField);
+                        }
+                        email_address = Some(d.content()?);
+                        Ok(())
+                    }
+                    b"ID" => {
+                        if id.is_some() {
+                            return Err(DeError::DuplicateField);
+                        }
+                        id = Some(d.content()?);
+                        Ok(())
+                    }
+                    b"URI" => {
+                        if uri.is_some() {
+                            return Err(DeError::DuplicateField);
+                        }
+                        uri = Some(d.content()?);
+                        Ok(())
+                    }
+                    _ => Err(DeError::UnexpectedTagName),
+                })?;
+                grantee = Some(Grantee {
+                    display_name,
+                    email_address,
+                    id,
+                    type_: type_.ok_or(DeError::MissingField)?,
+                    uri,
+                });
                 Ok(())
             }
             b"Permission" => {
@@ -4273,7 +4324,6 @@ impl SerializeContent for Grantee {
         if let Some(ref val) = self.id {
             s.content("ID", val)?;
         }
-        s.content("xsi:type", &self.type_)?;
         if let Some(ref val) = self.uri {
             s.content("URI", val)?;
         }
@@ -4281,60 +4331,6 @@ impl SerializeContent for Grantee {
     }
 }
 
-impl<'xml> DeserializeContent<'xml> for Grantee {
-    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
-        let mut display_name: Option<DisplayName> = None;
-        let mut email_address: Option<EmailAddress> = None;
-        let mut id: Option<ID> = None;
-        let mut type_: Option<Type> = None;
-        let mut uri: Option<URI> = None;
-        d.for_each_element(|d, x| match x {
-            b"DisplayName" => {
-                if display_name.is_some() {
-                    return Err(DeError::DuplicateField);
-                }
-                display_name = Some(d.content()?);
-                Ok(())
-            }
-            b"EmailAddress" => {
-                if email_address.is_some() {
-                    return Err(DeError::DuplicateField);
-                }
-                email_address = Some(d.content()?);
-                Ok(())
-            }
-            b"ID" => {
-                if id.is_some() {
-                    return Err(DeError::DuplicateField);
-                }
-                id = Some(d.content()?);
-                Ok(())
-            }
-            b"xsi:type" => {
-                if type_.is_some() {
-                    return Err(DeError::DuplicateField);
-                }
-                type_ = Some(d.content()?);
-                Ok(())
-            }
-            b"URI" => {
-                if uri.is_some() {
-                    return Err(DeError::DuplicateField);
-                }
-                uri = Some(d.content()?);
-                Ok(())
-            }
-            _ => Err(DeError::UnexpectedTagName),
-        })?;
-        Ok(Self {
-            display_name,
-            email_address,
-            id,
-            type_: type_.ok_or(DeError::MissingField)?,
-            uri,
-        })
-    }
-}
 impl SerializeContent for IndexDocument {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         s.content("Suffix", &self.suffix)?;
@@ -9236,7 +9232,11 @@ impl<'xml> DeserializeContent<'xml> for Tagging {
 impl SerializeContent for TargetGrant {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         if let Some(ref val) = self.grantee {
-            s.content("Grantee", val)?;
+            let attrs = [
+                ("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance"),
+                ("xsi:type", val.type_.as_str()),
+            ];
+            s.content_with_attrs("Grantee", &attrs, val)?;
         }
         if let Some(ref val) = self.permission {
             s.content("Permission", val)?;
@@ -9249,12 +9249,60 @@ impl<'xml> DeserializeContent<'xml> for TargetGrant {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         let mut grantee: Option<Grantee> = None;
         let mut permission: Option<BucketLogsPermission> = None;
-        d.for_each_element(|d, x| match x {
+        d.for_each_element_with_start(|d, x, start| match x {
             b"Grantee" => {
                 if grantee.is_some() {
                     return Err(DeError::DuplicateField);
                 }
-                grantee = Some(d.content()?);
+                let mut type_: Option<Type> = None;
+                for attr in start.attributes() {
+                    let Ok(attr) = attr else { return Err(DeError::InvalidAttribute) };
+                    if attr.key.as_ref() == b"xsi:type" {
+                        type_ = Some(attr.unescape_value().map_err(DeError::InvalidXml)?.into_owned().into());
+                    }
+                }
+                let mut display_name: Option<DisplayName> = None;
+                let mut email_address: Option<EmailAddress> = None;
+                let mut id: Option<ID> = None;
+                let mut uri: Option<URI> = None;
+                d.for_each_element(|d, x| match x {
+                    b"DisplayName" => {
+                        if display_name.is_some() {
+                            return Err(DeError::DuplicateField);
+                        }
+                        display_name = Some(d.content()?);
+                        Ok(())
+                    }
+                    b"EmailAddress" => {
+                        if email_address.is_some() {
+                            return Err(DeError::DuplicateField);
+                        }
+                        email_address = Some(d.content()?);
+                        Ok(())
+                    }
+                    b"ID" => {
+                        if id.is_some() {
+                            return Err(DeError::DuplicateField);
+                        }
+                        id = Some(d.content()?);
+                        Ok(())
+                    }
+                    b"URI" => {
+                        if uri.is_some() {
+                            return Err(DeError::DuplicateField);
+                        }
+                        uri = Some(d.content()?);
+                        Ok(())
+                    }
+                    _ => Err(DeError::UnexpectedTagName),
+                })?;
+                grantee = Some(Grantee {
+                    display_name,
+                    email_address,
+                    id,
+                    type_: type_.ok_or(DeError::MissingField)?,
+                    uri,
+                });
                 Ok(())
             }
             b"Permission" => {
