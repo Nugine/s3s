@@ -105,10 +105,31 @@ fn is_socket_addr_or_ip_addr(host: &str) -> bool {
     host.parse::<SocketAddr>().is_ok() || host.parse::<IpAddr>().is_ok()
 }
 
-fn looks_like_virtual_hosted_style(host: &str) -> bool {
+fn looks_like_virtual_hosted_style(host: &str, uri_path: &str) -> bool {
     // Check if host contains a dot (subdomain) and is not an IP address
-    // This suggests it might be a virtual-hosted-style request like "bucket.example.com"
-    host.contains('.') && !is_socket_addr_or_ip_addr(host)
+    if !host.contains('.') || is_socket_addr_or_ip_addr(host) {
+        return false;
+    }
+
+    // Check if the path pattern suggests virtual-hosted-style
+    // Virtual-hosted-style typically has paths like "/", "/object", "/path/to/object"
+    // Path-style typically has paths like "/bucket", "/bucket/", "/bucket/object"
+
+    // If path is just "/" or starts with "/" followed by something that doesn't look like a bucket name,
+    // it's more likely to be virtual-hosted-style
+    let path_without_prefix = uri_path.strip_prefix('/').unwrap_or(uri_path);
+
+    if path_without_prefix.is_empty() {
+        // Path is just "/" - could be either, but lean towards virtual-hosted if host has subdomain
+        return true;
+    }
+
+    // Check if the first path segment looks like a valid bucket name
+    let first_segment = path_without_prefix.split('/').next().unwrap_or("");
+
+    // If the first segment doesn't look like a valid bucket name, it's likely virtual-hosted-style
+    // where the bucket name is in the host and this is the object key
+    !crate::path::check_bucket_name(first_segment)
 }
 
 fn convert_parse_s3_path_error(err: &ParseS3PathError) -> S3Error {
@@ -272,7 +293,7 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
 
                 // Check if this looks like a virtual-hosted-style request but parsing is not enabled
                 if let Some(host_header) = host_header.as_deref() {
-                    if looks_like_virtual_hosted_style(host_header) {
+                    if looks_like_virtual_hosted_style(host_header, &decoded_uri_path) {
                         warn!(
                             ?host_header,
                             ?decoded_uri_path,

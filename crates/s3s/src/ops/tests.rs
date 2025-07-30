@@ -67,18 +67,30 @@ fn error_custom_headers() {
 fn test_looks_like_virtual_hosted_style() {
     use super::looks_like_virtual_hosted_style;
 
-    // Should detect virtual-hosted-style hosts
-    assert!(looks_like_virtual_hosted_style("bucket.example.com"));
-    assert!(looks_like_virtual_hosted_style("my-bucket.s3.amazonaws.com"));
-    assert!(looks_like_virtual_hosted_style("test.localhost"));
+    // Should detect virtual-hosted-style hosts with paths that clearly indicate VH style
+    assert!(looks_like_virtual_hosted_style("bucket.example.com", "/"));
+    assert!(looks_like_virtual_hosted_style("test.localhost", "/"));
+    assert!(looks_like_virtual_hosted_style("bucket.example.com", "/Invalid_Bucket_Name")); // Invalid bucket name
+    assert!(looks_like_virtual_hosted_style("my-bucket.s3.amazonaws.com", "/has_underscores"));
+    assert!(looks_like_virtual_hosted_style("my-bucket.s3.amazonaws.com", "/Has-Capitals"));
 
-    // Should not detect path-style hosts
-    assert!(!looks_like_virtual_hosted_style("localhost"));
-    assert!(!looks_like_virtual_hosted_style("127.0.0.1"));
-    assert!(!looks_like_virtual_hosted_style("192.168.1.1:8080"));
-    assert!(!looks_like_virtual_hosted_style("s3"));
+    // Should NOT warn for ambiguous cases (valid bucket names in path - could be path-style)
+    assert!(!looks_like_virtual_hosted_style("bucket.example.com", "/object.txt"));
+    assert!(!looks_like_virtual_hosted_style("my-bucket.s3.amazonaws.com", "/path/to/object"));
+
+    // Should not detect path-style hosts (no dots or IP addresses)
+    assert!(!looks_like_virtual_hosted_style("localhost", "/bucket/object"));
+    assert!(!looks_like_virtual_hosted_style("127.0.0.1", "/bucket/object"));
+    assert!(!looks_like_virtual_hosted_style("192.168.1.1:8080", "/bucket/object"));
+    assert!(!looks_like_virtual_hosted_style("s3", "/bucket/object"));
 
     // Edge cases
-    assert!(!looks_like_virtual_hosted_style("::1"));
-    assert!(!looks_like_virtual_hosted_style("[::1]:8080"));
+    assert!(!looks_like_virtual_hosted_style("::1", "/bucket/object"));
+    assert!(!looks_like_virtual_hosted_style("[::1]:8080", "/bucket/object"));
+
+    // MAIN FIX: Should not warn for legitimate path-style requests on domain names
+    assert!(!looks_like_virtual_hosted_style("s3.example.com", "/bucket/object"));
+    assert!(!looks_like_virtual_hosted_style("api.example.com", "/my-bucket/file.txt"));
+    assert!(!looks_like_virtual_hosted_style("minio.company.com", "/test-bucket/"));
+    assert!(!looks_like_virtual_hosted_style("s3.amazonaws.com", "/valid-bucket-name/key"));
 }
