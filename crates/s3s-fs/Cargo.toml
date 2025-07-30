@@ -1,6 +1,6 @@
 [package]
 name = "s3s-fs"
-version = "0.12.0-minio-preview.2"
+version = "0.12.0-minio-preview.3"
 description = "An experimental S3 server based on file system"
 readme = "../../README.md"
 keywords = ["s3"]
@@ -43,7 +43,7 @@ mime = "0.3.17"
 std-next = "0.1.9"
 numeric_cast = "0.3.0"
 path-absolutize = "3.1.1"
-s3s = { version = "0.12.0-minio-preview.2", path = "../s3s" }
+s3s = { version = "0.12.0-minio-preview.3", path = "../s3s" }
 serde_json = "1.0.140"
 thiserror = "2.0.12"
 time = "0.3.41"
@@ -64,6 +64,6 @@ aws-config = { version = "1.6.3", default-features = false }
 aws-credential-types = { version = "1.2.2", features = ["test-util"] }
 aws-sdk-s3 = { version = "1.85.0", features = ["behavior-version-latest"] }
 once_cell = "1.21.3"
-s3s-aws = { version = "0.12.0-minio-preview.2", path = "../s3s-aws" }
+s3s-aws = { version = "0.12.0-minio-preview.3", path = "../s3s-aws" }
 tokio = { version = "1.46.0", features = ["full"] }
 tracing-subscriber = { version = "0.3.19", features = ["env-filter", "time"] }
