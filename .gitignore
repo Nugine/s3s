@@ -2,3 +2,6 @@
 
 .vscode
 .idea
+
+# Downloaded tools and artifacts
+wasmtime-v*/
