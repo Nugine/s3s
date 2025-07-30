@@ -92,11 +92,7 @@ where
         let ans = T::try_from_header_value(val).map_err(|err| invalid_header(err, name, val))?;
         list.push(ans);
     }
-    if list.is_empty() {
-        Ok(None)
-    } else {
-        Ok(Some(list))
-    }
+    if list.is_empty() { Ok(None) } else { Ok(Some(list)) }
 }
 
 fn missing_query(name: &str) -> S3Error {
