@@ -25,64 +25,75 @@ const REGION: &str = "us-west-2";
 const ACCESS_KEY: &str = "AKIAIOSFODNN7EXAMPLE";
 const SECRET_KEY: &str = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
 
-use std::sync::atomic::{AtomicBool, Ordering};
+async fn ensure_server_ready() {
+    use std::sync::LazyLock;
+    static INIT: Once = Once::new();
+    static SERVER_INIT: LazyLock<tokio::sync::Mutex<bool>> = LazyLock::new(|| tokio::sync::Mutex::new(false));
 
-static INIT: Once = Once::new();
-static SERVER_STARTED: AtomicBool = AtomicBool::new(false);
-
-fn setup_tracing() {
-    use tracing_subscriber::EnvFilter;
-
-    INIT.call_once(|| {
-        tracing_subscriber::fmt()
-            .pretty()
-            .with_env_filter(EnvFilter::from_default_env())
-            .with_test_writer()
-            .init();
-    });
-}
-
-async fn start_server() {
-    if SERVER_STARTED.swap(true, Ordering::SeqCst) {
-        // Server already started, just wait a bit
-        tokio::time::sleep(std::time::Duration::from_millis(50)).await;
-        return;
+    let mut server_started = SERVER_INIT.lock().await;
+    if *server_started {
+        // Server already running, just verify it's accessible
+        if tokio::net::TcpStream::connect(DOMAIN_NAME).await.is_ok() {
+            return;
+        }
+        // If we can't connect, we'll restart the server
+        *server_started = false;
     }
 
-    setup_tracing();
+    if !*server_started {
+        INIT.call_once(|| {
+            use tracing_subscriber::EnvFilter;
+            tracing_subscriber::fmt()
+                .pretty()
+                .with_env_filter(EnvFilter::from_default_env())
+                .with_test_writer()
+                .init();
+        });
 
-    // Setup S3 provider
-    fs::create_dir_all(FS_ROOT).unwrap();
-    let fs = FileSystem::new(FS_ROOT).unwrap();
+        // Setup S3 provider
+        fs::create_dir_all(FS_ROOT).unwrap();
+        let fs = FileSystem::new(FS_ROOT).unwrap();
 
-    // Setup S3 service
-    let service = {
-        let mut b = S3ServiceBuilder::new(fs);
-        b.set_auth(SimpleAuth::from_single(ACCESS_KEY, SECRET_KEY));
-        b.set_host(SingleDomain::new(DOMAIN_NAME).unwrap());
-        b.build()
-    };
+        // Setup S3 service
+        let service = {
+            let mut b = S3ServiceBuilder::new(fs);
+            b.set_auth(SimpleAuth::from_single(ACCESS_KEY, SECRET_KEY));
+            b.set_host(SingleDomain::new(DOMAIN_NAME).unwrap());
+            b.build()
+        };
 
-    // Start HTTP server
-    let listener = TcpListener::bind(DOMAIN_NAME).await.unwrap();
-    debug!("Server listening on {}", DOMAIN_NAME);
+        // Start HTTP server
+        let listener = TcpListener::bind(DOMAIN_NAME).await.unwrap();
+        debug!("Server listening on {}", DOMAIN_NAME);
 
-    tokio::spawn(async move {
-        loop {
-            let (socket, _) = listener.accept().await.unwrap();
-            let service_clone = service.clone();
+        tokio::spawn(async move {
+            loop {
+                let (socket, _) = listener.accept().await.unwrap();
+                let service_clone = service.clone();
 
-            // Create a new http_server instance for each connection
-            let http_server = ConnBuilder::new(TokioExecutor::new());
-            let conn = http_server.serve_connection(TokioIo::new(socket), service_clone).into_owned();
-            tokio::spawn(async move {
-                let _ = conn.await;
-            });
+                // Create a new http_server instance for each connection
+                let http_server = ConnBuilder::new(TokioExecutor::new());
+                let conn = http_server.serve_connection(TokioIo::new(socket), service_clone).into_owned();
+                tokio::spawn(async move {
+                    let _ = conn.await;
+                });
+            }
+        });
+
+        *server_started = true;
+    }
+
+    // Wait for server to be ready by attempting to connect
+    let mut attempts = 0;
+    while attempts < 50 {
+        if tokio::net::TcpStream::connect(DOMAIN_NAME).await.is_ok() {
+            debug!("Server is ready after {} attempts", attempts);
+            return;
         }
-    });
-
-    // Give the server a moment to start
-    tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+        attempts += 1;
+        tokio::time::sleep(std::time::Duration::from_millis(50)).await;
+    }
+    panic!("Server failed to start after 50 attempts (2.5 seconds)");
 }
 
 fn create_operator() -> Operator {
@@ -118,7 +129,7 @@ macro_rules! log_and_unwrap {
 #[tracing::instrument]
 async fn test_operator_info() -> Result<()> {
     let _guard = serial().await;
-    start_server().await;
+    ensure_server_ready().await;
 
     let op = create_operator();
     let info = op.info();
@@ -136,7 +147,7 @@ async fn test_operator_info() -> Result<()> {
 #[tracing::instrument]
 async fn test_write_and_read() -> Result<()> {
     let _guard = serial().await;
-    start_server().await;
+    ensure_server_ready().await;
 
     let op = create_operator();
     let key = format!("test-write-read-{}", Uuid::new_v4());
@@ -165,7 +176,7 @@ async fn test_write_and_read() -> Result<()> {
 #[tracing::instrument]
 async fn test_stat() -> Result<()> {
     let _guard = serial().await;
-    start_server().await;
+    ensure_server_ready().await;
 
     let op = create_operator();
     let key = format!("test-stat-{}", Uuid::new_v4());
@@ -191,7 +202,7 @@ async fn test_stat() -> Result<()> {
 #[tracing::instrument]
 async fn test_list() -> Result<()> {
     let _guard = serial().await;
-    start_server().await;
+    ensure_server_ready().await;
 
     let op = create_operator();
     let prefix = format!("test-list-{}/", Uuid::new_v4());
@@ -240,7 +251,7 @@ async fn test_list() -> Result<()> {
 #[tracing::instrument]
 async fn test_delete_non_existent() -> Result<()> {
     let _guard = serial().await;
-    start_server().await;
+    ensure_server_ready().await;
 
     let op = create_operator();
     let key = format!("non-existent-{}", Uuid::new_v4());
@@ -256,7 +267,7 @@ async fn test_delete_non_existent() -> Result<()> {
 #[tracing::instrument]
 async fn test_range_read() -> Result<()> {
     let _guard = serial().await;
-    start_server().await;
+    ensure_server_ready().await;
 
     let op = create_operator();
     let key = format!("test-range-{}", Uuid::new_v4());
