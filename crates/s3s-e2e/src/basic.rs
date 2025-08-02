@@ -337,12 +337,12 @@ impl Put {
         // Check metadata using head_object (more reliable for metadata)
         // Note: s3s-fs may not fully support all metadata features, so we'll check gracefully
         let head_resp = s3.head_object().bucket(bucket).key(key).send().await?;
-        
+
         // Check content type if supported
         if let Some(content_type) = head_resp.content_type() {
             assert_eq!(content_type, "text/plain");
         }
-        
+
         // Check custom metadata if supported (some implementations may not store custom metadata)
         if let Some(metadata) = head_resp.metadata() {
             if let Some(value) = metadata.get(metadata_key) {
@@ -411,7 +411,12 @@ impl TestFixture<Basic> for Copy {
 
     #[tracing::instrument(skip_all)]
     async fn teardown(self) -> Result {
-        let Self { s3, bucket, source_key, dest_key } = &self;
+        let Self {
+            s3,
+            bucket,
+            source_key,
+            dest_key,
+        } = &self;
 
         delete_object_loose(s3, bucket, source_key).await?;
         delete_object_loose(s3, bucket, dest_key).await?;
