@@ -13,9 +13,8 @@ use tracing::debug;
 
 pub fn register(tcx: &mut TestContext) {
     case!(tcx, Advanced, STS, test_assume_role);
-    // Note: Some advanced features may not be supported by all S3 implementations
-    // case!(tcx, Advanced, Multipart, test_multipart_upload);
-    // case!(tcx, Advanced, Tagging, test_object_tagging);
+    case!(tcx, Advanced, Multipart, test_multipart_upload);
+    case!(tcx, Advanced, Tagging, test_object_tagging);
     case!(tcx, Advanced, ListPagination, test_list_objects_with_pagination);
 }
 
@@ -172,7 +171,7 @@ impl Multipart {
         let body = resp.body.collect().await?;
         let body = String::from_utf8(body.to_vec())?;
 
-        let expected_content = format!("{}{}", part1_content, part2_content);
+        let expected_content = format!("{part1_content}{part2_content}");
         assert_eq!(body, expected_content);
 
         Ok(())
@@ -254,11 +253,11 @@ impl Tagging {
         // Get object tagging
         let resp = s3.get_object_tagging().bucket(bucket).key(key).send().await?;
 
-        let tags = resp.tag_set();
-        assert_eq!(tags.len(), 2);
+        let tag_set = resp.tag_set();
+        assert_eq!(tag_set.len(), 2);
 
         // Verify tags
-        let tag_map: std::collections::HashMap<&str, &str> = tags.iter().map(|tag| (tag.key(), tag.value())).collect();
+        let tag_map: std::collections::HashMap<&str, &str> = tag_set.iter().map(|tag| (tag.key(), tag.value())).collect();
 
         assert_eq!(tag_map.get("Environment"), Some(&"Test"));
         assert_eq!(tag_map.get("Project"), Some(&"S3S"));
@@ -282,7 +281,7 @@ impl TestFixture<Advanced> for ListPagination {
 
         // Clean up any existing objects
         for i in 0..10 {
-            delete_object_loose(s3, bucket, &format!("file-{:02}", i)).await?;
+            delete_object_loose(s3, bucket, &format!("file-{i:02}")).await?;
         }
         delete_bucket_loose(s3, bucket).await?;
 
@@ -292,7 +291,7 @@ impl TestFixture<Advanced> for ListPagination {
         for i in 0..10 {
             s3.put_object()
                 .bucket(bucket)
-                .key(format!("file-{:02}", i))
+                .key(format!("file-{i:02}"))
                 .body(ByteStream::from_static(b"test content"))
                 .send()
                 .await?;
@@ -311,7 +310,7 @@ impl TestFixture<Advanced> for ListPagination {
 
         // Clean up all objects
         for i in 0..10 {
-            delete_object_loose(s3, bucket, &format!("file-{:02}", i)).await?;
+            delete_object_loose(s3, bucket, &format!("file-{i:02}")).await?;
         }
         delete_bucket_loose(s3, bucket).await?;
         Ok(())

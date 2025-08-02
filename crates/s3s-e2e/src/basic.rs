@@ -17,6 +17,7 @@ pub fn register(tcx: &mut TestContext) {
     case!(tcx, Basic, Essential, test_delete_object);
     case!(tcx, Basic, Essential, test_head_operations);
     case!(tcx, Basic, Put, test_put_object_tiny);
+    case!(tcx, Basic, Put, test_put_object_with_metadata);
     case!(tcx, Basic, Put, test_put_object_larger);
     case!(tcx, Basic, Copy, test_copy_object);
 }
@@ -237,7 +238,7 @@ impl Essential {
 
             // Test HeadObject
             let head_object_resp = s3.head_object().bucket(bucket).key(key).send().await?;
-            assert_eq!(head_object_resp.content_length().unwrap_or(0), content.len() as i64);
+            assert_eq!(head_object_resp.content_length().unwrap_or(0), i64::try_from(content.len())?);
         }
 
         {
