@@ -2809,6 +2809,7 @@ dependencies = [
  "sha2 0.11.0-pre.5",
  "smallvec",
  "std-next",
+ "subtle",
  "sync_wrapper",
  "thiserror",
  "time",

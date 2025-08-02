@@ -2,15 +2,16 @@ use std::fmt;
 
 use serde::Deserialize;
 use serde::Serialize;
+use subtle::ConstantTimeEq;
 use zeroize::Zeroize;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone)]
 pub struct Credentials {
     pub access_key: String,
     pub secret_key: SecretKey,
 }
 
-#[derive(Clone, PartialEq, Eq)]
+#[derive(Clone)]
 pub struct SecretKey(Box<str>);
 
 impl SecretKey {
@@ -27,6 +28,12 @@ impl SecretKey {
 impl Zeroize for SecretKey {
     fn zeroize(&mut self) {
         self.0.zeroize();
+    }
+}
+
+impl ConstantTimeEq for SecretKey {
+    fn ct_eq(&self, other: &Self) -> subtle::Choice {
+        self.0.as_bytes().ct_eq(other.0.as_bytes())
     }
 }
 
