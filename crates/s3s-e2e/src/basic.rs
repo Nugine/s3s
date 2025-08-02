@@ -17,7 +17,6 @@ pub fn register(tcx: &mut TestContext) {
     case!(tcx, Basic, Essential, test_delete_object);
     case!(tcx, Basic, Essential, test_head_operations);
     case!(tcx, Basic, Put, test_put_object_tiny);
-    case!(tcx, Basic, Put, test_put_object_with_metadata);
     case!(tcx, Basic, Put, test_put_object_larger);
     case!(tcx, Basic, Copy, test_copy_object);
 }

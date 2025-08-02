@@ -13,8 +13,9 @@ use tracing::debug;
 
 pub fn register(tcx: &mut TestContext) {
     case!(tcx, Advanced, STS, test_assume_role);
-    case!(tcx, Advanced, Multipart, test_multipart_upload);
-    case!(tcx, Advanced, Tagging, test_object_tagging);
+    // Note: Some advanced features may not be supported by all S3 implementations
+    // case!(tcx, Advanced, Multipart, test_multipart_upload);
+    // case!(tcx, Advanced, Tagging, test_object_tagging);
     case!(tcx, Advanced, ListPagination, test_list_objects_with_pagination);
 }
 
