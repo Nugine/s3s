@@ -216,6 +216,7 @@ use hyper::StatusCode;
 // ServiceUnavailable
 // SignatureDoesNotMatch
 // SlowDown
+// TagPolicyException
 // TemporaryRedirect
 // TokenCodeInvalidError
 // TokenRefreshRequired
@@ -1516,6 +1517,12 @@ pub enum S3ErrorCode {
     ///
     SlowDown,
 
+    /// The tag policy does not allow the specified value for the following tag key.
+    ///
+    /// HTTP Status Code: 400 Bad Request
+    ///
+    TagPolicyException,
+
     /// You are being redirected to the bucket while DNS updates.
     ///
     /// HTTP Status Code: 307 Moved Temporarily
@@ -1899,6 +1906,7 @@ impl S3ErrorCode {
         "ServiceUnavailable",
         "SignatureDoesNotMatch",
         "SlowDown",
+        "TagPolicyException",
         "TemporaryRedirect",
         "TokenCodeInvalidError",
         "TokenRefreshRequired",
@@ -2142,34 +2150,35 @@ impl S3ErrorCode {
             Self::ServiceUnavailable => 207,
             Self::SignatureDoesNotMatch => 208,
             Self::SlowDown => 209,
-            Self::TemporaryRedirect => 210,
-            Self::TokenCodeInvalidError => 211,
-            Self::TokenRefreshRequired => 212,
-            Self::TooManyAccessPoints => 213,
-            Self::TooManyBuckets => 214,
-            Self::TooManyMultiRegionAccessPointregionsError => 215,
-            Self::TooManyMultiRegionAccessPoints => 216,
-            Self::TooManyTags => 217,
-            Self::TruncatedInput => 218,
-            Self::UnauthorizedAccess => 219,
-            Self::UnauthorizedAccessError => 220,
-            Self::UnexpectedContent => 221,
-            Self::UnexpectedIPError => 222,
-            Self::UnrecognizedFormatException => 223,
-            Self::UnresolvableGrantByEmailAddress => 224,
-            Self::UnsupportedArgument => 225,
-            Self::UnsupportedFunction => 226,
-            Self::UnsupportedParquetType => 227,
-            Self::UnsupportedRangeHeader => 228,
-            Self::UnsupportedScanRangeInput => 229,
-            Self::UnsupportedSignature => 230,
-            Self::UnsupportedSqlOperation => 231,
-            Self::UnsupportedSqlStructure => 232,
-            Self::UnsupportedStorageClass => 233,
-            Self::UnsupportedSyntax => 234,
-            Self::UnsupportedTypeForQuerying => 235,
-            Self::UserKeyMustBeSpecified => 236,
-            Self::ValueParseFailure => 237,
+            Self::TagPolicyException => 210,
+            Self::TemporaryRedirect => 211,
+            Self::TokenCodeInvalidError => 212,
+            Self::TokenRefreshRequired => 213,
+            Self::TooManyAccessPoints => 214,
+            Self::TooManyBuckets => 215,
+            Self::TooManyMultiRegionAccessPointregionsError => 216,
+            Self::TooManyMultiRegionAccessPoints => 217,
+            Self::TooManyTags => 218,
+            Self::TruncatedInput => 219,
+            Self::UnauthorizedAccess => 220,
+            Self::UnauthorizedAccessError => 221,
+            Self::UnexpectedContent => 222,
+            Self::UnexpectedIPError => 223,
+            Self::UnrecognizedFormatException => 224,
+            Self::UnresolvableGrantByEmailAddress => 225,
+            Self::UnsupportedArgument => 226,
+            Self::UnsupportedFunction => 227,
+            Self::UnsupportedParquetType => 228,
+            Self::UnsupportedRangeHeader => 229,
+            Self::UnsupportedScanRangeInput => 230,
+            Self::UnsupportedSignature => 231,
+            Self::UnsupportedSqlOperation => 232,
+            Self::UnsupportedSqlStructure => 233,
+            Self::UnsupportedStorageClass => 234,
+            Self::UnsupportedSyntax => 235,
+            Self::UnsupportedTypeForQuerying => 236,
+            Self::UserKeyMustBeSpecified => 237,
+            Self::ValueParseFailure => 238,
             Self::Custom(_) => usize::MAX,
         }
     }
@@ -2395,6 +2404,7 @@ impl S3ErrorCode {
             b"ServiceUnavailable" => Some(Self::ServiceUnavailable),
             b"SignatureDoesNotMatch" => Some(Self::SignatureDoesNotMatch),
             b"SlowDown" => Some(Self::SlowDown),
+            b"TagPolicyException" => Some(Self::TagPolicyException),
             b"TemporaryRedirect" => Some(Self::TemporaryRedirect),
             b"TokenCodeInvalidError" => Some(Self::TokenCodeInvalidError),
             b"TokenRefreshRequired" => Some(Self::TokenRefreshRequired),
@@ -2641,6 +2651,7 @@ impl S3ErrorCode {
             Self::ServiceUnavailable => Some(StatusCode::SERVICE_UNAVAILABLE),
             Self::SignatureDoesNotMatch => Some(StatusCode::FORBIDDEN),
             Self::SlowDown => Some(StatusCode::SERVICE_UNAVAILABLE),
+            Self::TagPolicyException => Some(StatusCode::BAD_REQUEST),
             Self::TemporaryRedirect => Some(StatusCode::TEMPORARY_REDIRECT),
             Self::TokenCodeInvalidError => Some(StatusCode::BAD_REQUEST),
             Self::TokenRefreshRequired => Some(StatusCode::BAD_REQUEST),

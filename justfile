@@ -62,5 +62,5 @@ ci-rust:
 ci-python:
     uvx ruff format --check
     uvx ruff check
-    just assert_unchanged
     just crawl
+    just assert_unchanged
