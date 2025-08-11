@@ -591,6 +591,11 @@
             "http_status_code": 503
         },
         {
+            "code": "TagPolicyException",
+            "description": "The tag policy does not allow the specified value for the following tag key.",
+            "http_status_code": 400
+        },
+        {
             "code": "TemporaryRedirect",
             "description": "You are being redirected to the bucket while the Domain Name System (DNS) server is being updated.",
             "http_status_code": 307
@@ -693,6 +698,11 @@
             "code": "NoSuchResource",
             "description": "The specified resource doesn't exist.",
             "http_status_code": 404
+        },
+        {
+            "code": "TagPolicyException",
+            "description": "The tag policy does not allow the specified value for the following tag key.",
+            "http_status_code": 400
         },
         {
             "code": "TooManyTags",
