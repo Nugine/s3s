@@ -25,7 +25,7 @@ openssl = { version = "0.10.73", optional = true }
 
 [dependencies]
 arrayvec = "0.7.6"
-async-trait = "0.1.88"
+async-trait = "0.1.89"
 atoi = { version = "2.0.0", default-features = false }
 base64-simd = "0.8.0"
 bytes = "1.10.1"
@@ -54,7 +54,7 @@ serde_urlencoded = "0.7.1"
 sha1 = "=0.11.0-pre.5"
 sha2 = "=0.11.0-pre.5"
 smallvec = "1.15.1"
-thiserror = "2.0.12"
+thiserror = "2.0.15"
 time = { version = "0.3.41", features = ["formatting", "parsing", "macros"] }
 tower = { version = "0.5.2", default-features = false }
 tracing = "0.1.41"
@@ -73,4 +73,4 @@ subtle = "2.6.1"
 axum = "0.8.4"
 serde_json = "1.0.142"
 tokio = { version = "1.47.1", features = ["full"] }
-tokio-util = { version = "0.7.15", features = ["io"] }
+tokio-util = { version = "0.7.16", features = ["io"] }
