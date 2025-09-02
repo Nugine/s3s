@@ -21,14 +21,14 @@ required-features = ["binary"]
 binary = ["tokio/full", "dep:clap", "dep:tracing-subscriber", "dep:hyper-util"]
 
 [dependencies]
-async-trait = "0.1.88"
+async-trait = "0.1.89"
 base64-simd = "0.8.0"
 bytes = "1.10.1"
 chrono = { version = "0.4.41", default-features = false, features = [
     "std",
     "clock",
 ] }
-clap = { version = "4.5.42", optional = true, features = ["derive"] }
+clap = { version = "4.5.46", optional = true, features = ["derive"] }
 crc32c = "0.6.8"
 futures = "0.3.31"
 hex-simd = "0.8.0"
@@ -44,11 +44,11 @@ std-next = "0.1.9"
 numeric_cast = "0.3.0"
 path-absolutize = "3.1.1"
 s3s = { version = "0.12.0-dev", path = "../s3s" }
-serde_json = "1.0.142"
-thiserror = "2.0.12"
-time = "0.3.41"
+serde_json = "1.0.143"
+thiserror = "2.0.16"
+time = "0.3.42"
 tokio = { version = "1.47.1", features = ["fs", "io-util"] }
-tokio-util = { version = "0.7.15", features = ["io"] }
+tokio-util = { version = "0.7.16", features = ["io"] }
 tracing = "0.1.41"
 tracing-error = "0.2.1"
 tracing-subscriber = { version = "0.3.20", optional = true, features = [
@@ -56,12 +56,12 @@ tracing-subscriber = { version = "0.3.20", optional = true, features = [
     "time",
 ] }
 transform-stream = "0.3.1"
-uuid = { version = "1.17.0", features = ["v4"] }
+uuid = { version = "1.18.0", features = ["v4"] }
 
 [dev-dependencies]
-anyhow = { version = "1.0.98", features = ["backtrace"] }
+anyhow = { version = "1.0.99", features = ["backtrace"] }
 aws-config = { version = "1.6.3", default-features = false }
-aws-credential-types = { version = "1.2.4", features = ["test-util"] }
+aws-credential-types = { version = "1.2.6", features = ["test-util"] }
 aws-sdk-s3 = { version = "1.85.0", features = ["behavior-version-latest"] }
 futures-util = "0.3.31"
 hyper-util = { version = "0.1.16", features = ["server-auto", "server-graceful", "http1", "http2", "tokio"] }
