@@ -1573,7 +1573,7 @@ impl S3 for Proxy {
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_key_marker(try_into_aws(input.key_marker)?);
         b = b.set_max_keys(try_into_aws(input.max_keys)?);
-        b = b.set_optional_object_attributes(Some(try_into_aws(input.optional_object_attributes)?));
+        b = b.set_optional_object_attributes(try_into_aws(input.optional_object_attributes)?);
         b = b.set_prefix(try_into_aws(input.prefix)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_version_id_marker(try_into_aws(input.version_id_marker)?);
@@ -1603,7 +1603,7 @@ impl S3 for Proxy {
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_marker(try_into_aws(input.marker)?);
         b = b.set_max_keys(try_into_aws(input.max_keys)?);
-        b = b.set_optional_object_attributes(Some(try_into_aws(input.optional_object_attributes)?));
+        b = b.set_optional_object_attributes(try_into_aws(input.optional_object_attributes)?);
         b = b.set_prefix(try_into_aws(input.prefix)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         let result = b.send().await;
@@ -1633,7 +1633,7 @@ impl S3 for Proxy {
         b = b.set_expected_bucket_owner(try_into_aws(input.expected_bucket_owner)?);
         b = b.set_fetch_owner(try_into_aws(input.fetch_owner)?);
         b = b.set_max_keys(try_into_aws(input.max_keys)?);
-        b = b.set_optional_object_attributes(Some(try_into_aws(input.optional_object_attributes)?));
+        b = b.set_optional_object_attributes(try_into_aws(input.optional_object_attributes)?);
         b = b.set_prefix(try_into_aws(input.prefix)?);
         b = b.set_request_payer(try_into_aws(input.request_payer)?);
         b = b.set_start_after(try_into_aws(input.start_after)?);
