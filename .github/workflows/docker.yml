@@ -100,7 +100,7 @@ jobs:
           echo "${{ steps.build.outputs.digest }}" > /tmp/digests/digest-${{ matrix.arch }}
       - uses: actions/upload-artifact@v4
         with:
-          name: digests
+          name: digest-${{ matrix.arch }}
           path: /tmp/digests/
 
   # This job runs after all architecture-specific builds are complete.
@@ -118,11 +118,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Download digests
+      - name: Download amd64 digest
         uses: actions/download-artifact@v4
         with:
-          name: digests
-          path: /tmp/digests
+          name: digest-amd64
+          path: /tmp/digest-amd64
+
+      - name: Download arm64 digest
+        uses: actions/download-artifact@v4
+        with:
+          name: digest-arm64
+          path: /tmp/digest-arm64
 
       - name: Extract metadata for Docker
         id: meta
@@ -136,8 +142,8 @@ jobs:
       - name: Create and push multi-platform manifest
         run: |
           # Read digests from the downloaded artifact files
-          DIGEST_AMD64=$(cat /tmp/digests/digest-amd64)
-          DIGEST_ARM64=$(cat /tmp/digests/digest-arm64)
+          DIGEST_AMD64=$(cat /tmp/digest-amd64/digest-amd64)
+          DIGEST_ARM64=$(cat /tmp/digest-arm64/digest-arm64)
           IMAGE_NAME="${{ vars.DOCKER_USERNAME }}/s3s"
 
           echo "Digests found: AMD64=${DIGEST_AMD64}, ARM64=${DIGEST_ARM64}"
@@ -150,3 +156,4 @@ jobs:
               "$IMAGE_NAME@$DIGEST_ARM64"
             docker manifest push "$tag"
           done
+
