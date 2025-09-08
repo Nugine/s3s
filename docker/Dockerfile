@@ -11,7 +11,7 @@ ENV CC=musl-gcc \
     CFLAGS="-D__isoc23_sscanf=sscanf -D__isoc23_strtol=strtol"
 
 # Copy source files first to better leverage Docker's layer caching
-COPY ../crates/s3s-fs/Cargo.toml ./Cargo.toml
+COPY ./Cargo.toml ./Cargo.toml
 COPY ./crates ./crates
 COPY ./codegen ./codegen
 
