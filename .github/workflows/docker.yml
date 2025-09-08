@@ -21,18 +21,6 @@ jobs:
           cancel_others: true
           paths_ignore: '["*.md"]'
 
-  python:
-    needs: skip-check
-    if: needs.skip-check.outputs.should_skip != 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: taiki-e/install-action@just
-      - uses: astral-sh/setup-uv@v3
-        with:
-          enable-cache: true
-      - run: just ci-python
-
   # This job builds and pushes a single-architecture image for each platform in the matrix.
   # It runs on native hardware for each architecture, avoiding emulation.
   build:
@@ -106,7 +94,7 @@ jobs:
   # This job runs after all architecture-specific builds are complete.
   # It creates and pushes a multi-platform manifest list pointing to the images built in the previous job.
   publish:
-    needs: [python, build]
+    needs: [build]
     if: needs.skip-check.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     permissions:
@@ -115,7 +103,7 @@ jobs:
     steps:
       - uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Download amd64 digest
