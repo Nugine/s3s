@@ -66,8 +66,8 @@ jobs:
         with:
           images: ${{ vars.DOCKER_USERNAME }}/s3s
           tags: |
-            type=sha,prefix=
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=sha,prefix=,suffix=-${{ matrix.arch }}
+            type=raw,value=latest-${{ matrix.arch }},enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Build and push single-architecture image
         id: build
@@ -78,18 +78,7 @@ jobs:
           push: true
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
-          # This pushes the image manifest by digest, not tag.
-          # The digest is captured as an output of this step.
-          outputs: type=image,name=${{ vars.DOCKER_USERNAME }}/s3s,push-by-digest=true,name-canonical=true
-
-      - name: Export digest to artifact
-        run: |
-          mkdir -p /tmp/digests
-          echo "${{ steps.build.outputs.digest }}" > /tmp/digests/digest-${{ matrix.arch }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: digest-${{ matrix.arch }}
-          path: /tmp/digests/
+          tags: ${{ steps.meta.outputs.tags }}
 
   # This job runs after all architecture-specific builds are complete.
   # It creates and pushes a multi-platform manifest list pointing to the images built in the previous job.
@@ -106,18 +95,6 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Download amd64 digest
-        uses: actions/download-artifact@v4
-        with:
-          name: digest-amd64
-          path: /tmp/digest-amd64
-
-      - name: Download arm64 digest
-        uses: actions/download-artifact@v4
-        with:
-          name: digest-arm64
-          path: /tmp/digest-arm64
-
       - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v5
@@ -129,24 +106,24 @@ jobs:
 
       - name: Create and push multi-platform manifest
         run: |
-          # Read digests from the downloaded artifact files
-          DIGEST_AMD64=$(cat /tmp/digest-amd64/digest-amd64)
-          DIGEST_ARM64=$(cat /tmp/digest-arm64/digest-arm64)
           IMAGE_NAME="${{ vars.DOCKER_USERNAME }}/s3s"
+          # The tags from the metadata action are the final tags we want to create (e.g., mvniekerk/s3s-fs:latest)
+          readarray -t FINAL_TAGS <<< "${{ steps.meta.outputs.tags }}"
 
-          echo "Digests found: AMD64=${DIGEST_AMD64}, ARM64=${DIGEST_ARM64}"
-
-          # Read tags into a bash array, splitting by newline
-          readarray -t TAGS <<< "${{ steps.meta.outputs.tags }}"
-
-          # Loop through the array of tags
-          for tag in "${TAGS[@]}"; do
-            # Skip empty lines that might result from the input string
+          # Loop through the array of final tags
+          for tag in "${FINAL_TAGS[@]}"; do
             if [ -z "$tag" ]; then continue; fi
-            echo "Creating and pushing manifest for tag: $tag"
+            # Get the tag part, e.g., "latest" or the sha "a12b949"
+            tag_part=$(echo "$tag" | cut -d':' -f2)
+
+            # Construct the source tags from the build job
+            source_tag_amd64="${IMAGE_NAME}:${tag_part}-amd64"
+            source_tag_arm64="${IMAGE_NAME}:${tag_part}-arm64"
+
+            echo "Creating manifest for $tag from $source_tag_amd64 and $source_tag_arm64"
             docker manifest create "$tag" \
-              "$IMAGE_NAME@$DIGEST_AMD64" \
-              "$IMAGE_NAME@$DIGEST_ARM64"
+              "$source_tag_amd64" \
+              "$source_tag_arm64"
             docker manifest push "$tag"
           done
 
