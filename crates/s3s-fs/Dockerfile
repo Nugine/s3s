@@ -39,9 +39,9 @@ RUN \
         musl-tools \
         ${GCC_PACKAGE} \
     && rustup target add ${RUST_TARGET} \
-    && cargo build --release --target ${RUST_TARGET} --features="binary" \
+    && cargo build --release --target ${RUST_TARGET} --features="binary" --bin s3s-fs --bin s3s-e2e --bin s3s-proxy \
     && rm -rf /var/lib/apt/lists/* \
-    && cp target/${RUST_TARGET}/release/s3s-fs target/s3s-fs
+    && cp target/${RUST_TARGET}/release/s3s-fs target/${RUST_TARGET}/release/s3s-e2e target/${RUST_TARGET}/release/s3s-proxy target/
 
 
 # Create and set permissions for the data directory
@@ -52,6 +52,8 @@ FROM scratch
 
 # Copy the statically compiled binary from a known location in the builder stage.
 COPY --from=builder /usr/src/app/target/s3s-fs .
+COPY --from=builder /usr/src/app/target/s3s-e2e .
+COPY --from=builder /usr/src/app/target/s3s-proxy .
 
 # Copy the data directory
 COPY --from=builder /usr/src/app/data /data
