@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  REGISTRY_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/s3s
+
 jobs:
   skip-check:
     permissions:
@@ -20,110 +23,101 @@ jobs:
         with:
           cancel_others: true
           paths_ignore: '["*.md"]'
-
-  # This job builds and pushes a single-architecture image for each platform in the matrix.
-  # It runs on native hardware for each architecture, avoiding emulation.
   build:
     needs: skip-check
     if: needs.skip-check.outputs.should_skip != 'true'
-    runs-on: ${{ matrix.runs-on }}
-    permissions:
-      contents: read
-      packages: write
-      actions: write # Required to upload artifacts
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - platform: linux/amd64
-            runs-on: ubuntu-24.04
-            arch: amd64
-          - platform: linux/arm64
-            runs-on: ubuntu-24.04-arm
-            arch: arm64
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
-      - uses: actions/checkout@v4
-      - uses: taiki-e/install-action@just
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: stable
-          components: rustfmt, clippy
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
 
-      - uses: Swatinem/rust-cache@v2
-      # Note: setup-qemu-action is removed as we are building on native runners.
-      - uses: docker/setup-buildx-action@v3
-        with:
-          config: .github/buildkitd.toml
-
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Extract metadata for Docker
+      - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ vars.DOCKER_USERNAME }}/s3s
-          tags: |
-            type=sha,prefix=,suffix=-${{ matrix.arch }}
-            type=raw,value=latest-${{ matrix.arch }},enable=${{ github.ref == 'refs/heads/main' }}
+          images: ${{ env.REGISTRY_IMAGE }}
 
-      - name: Build and push single-architecture image
-        id: build
-        uses: docker/build-push-action@v5
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          context: .
-          file: docker/Dockerfile
-          push: true
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY_IMAGE }}
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
 
-  # This job runs after all architecture-specific builds are complete.
-  # It creates and pushes a multi-platform manifest list pointing to the images built in the previous job.
-  publish:
-    needs: [build]
-    if: needs.skip-check.outputs.should_skip != 'true'
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    needs:
+      - build
     steps:
-      - uses: docker/login-action@v3
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Extract metadata for Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ vars.DOCKER_USERNAME }}/s3s
+          images: ${{ env.REGISTRY_IMAGE }}
           tags: |
-            type=sha,prefix=
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
 
-      - name: Create and push multi-platform manifest
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
         run: |
-          IMAGE_NAME="${{ vars.DOCKER_USERNAME }}/s3s"
-          # The tags from the metadata action are the final tags we want to create (e.g., mvniekerk/s3s-fs:latest)
-          readarray -t FINAL_TAGS <<< "${{ steps.meta.outputs.tags }}"
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
 
-          # Loop through the array of final tags
-          for tag in "${FINAL_TAGS[@]}"; do
-            if [ -z "$tag" ]; then continue; fi
-            # Get the tag part, e.g., "latest" or the sha "a12b949"
-            tag_part=$(echo "$tag" | cut -d':' -f2)
-
-            # Construct the source tags from the build job
-            source_tag_amd64="${IMAGE_NAME}:${tag_part}-amd64"
-            source_tag_arm64="${IMAGE_NAME}:${tag_part}-arm64"
-
-            echo "Creating manifest for $tag from $source_tag_amd64 and $source_tag_arm64"
-            docker manifest create "$tag" \
-              "$source_tag_amd64" \
-              "$source_tag_arm64"
-            docker manifest push "$tag"
-          done
-
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
