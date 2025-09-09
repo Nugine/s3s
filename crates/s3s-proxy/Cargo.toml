@@ -14,12 +14,12 @@ rust-version.workspace = true
 workspace = true
 
 [dependencies]
-aws-config = { version = "1.6.3", default-features = false, features = [
+aws-config = { version = "1.8.6", default-features = false, features = [
     "behavior-version-latest",
 ] }
-aws-credential-types = "1.2.4"
-aws-sdk-s3 = "1.85.0"
-clap = { version = "4.5.42", features = ["derive"] }
+aws-credential-types = "1.2.6"
+aws-sdk-s3 = "1.96.0"
+clap = { version = "4.5.47", features = ["derive"] }
 hyper-util = { version = "0.1.16", features = [
     "server-auto",
     "server-graceful",
