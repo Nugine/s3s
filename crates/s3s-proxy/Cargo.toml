@@ -18,7 +18,7 @@ aws-config = { version = "1.8.6", default-features = false, features = [
     "behavior-version-latest",
 ] }
 aws-credential-types = "1.2.6"
-aws-sdk-s3 = "1.96.0"
+aws-sdk-s3 = "1.105.0"
 clap = { version = "4.5.47", features = ["derive"] }
 hyper-util = { version = "0.1.16", features = [
     "server-auto",
