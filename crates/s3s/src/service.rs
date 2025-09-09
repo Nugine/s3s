@@ -76,6 +76,7 @@ struct Inner {
 }
 
 impl S3Service {
+    #[allow(clippy::missing_errors_doc)]
     #[tracing::instrument(
         level = "debug",
         skip(self, req),

@@ -177,14 +177,13 @@ async fn run_case(case: &CaseInfo, fixture_data: &ArcAny) -> CaseReport {
     info!(?summary, "Test case end");
 
     let duration_ns = t0.elapsed().as_nanos() as u64;
-    let duration_ms = duration_ns as f64 / 1e6;
     let passed = summary.result.is_ok();
 
     CaseReport {
         name: case.name.clone(),
         passed,
         duration_ns,
-        duration_ms,
+        duration_ms: duration_ns as f64 / 1e6,
         run: Some(summary),
     }
 }
