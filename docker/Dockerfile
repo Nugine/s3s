@@ -45,7 +45,7 @@ RUN \
 
 
 # Create and set permissions for the data directory
-RUN mkdir data && chmod -R 777 data
+RUN mkdir data && chmod -R 755 data
 
 #----------- FINAL STAGE -----------
 FROM scratch
