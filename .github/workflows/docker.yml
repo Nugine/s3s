@@ -31,13 +31,17 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - linux/amd64
-          - linux/arm64
+          - platform: linux/amd64
+            runs-on: ubuntu-24.04
+            arch: amd64
+          - platform: linux/arm64
+            runs-on: ubuntu-24.04-arm
+            arch: arm64
     steps:
       - uses: actions/checkout@v4
       - name: Prepare
         run: |
-          platform=${{ matrix.platform }}
+          platform=${{ matrix.platform.platform }}
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
 
       - name: Docker meta
@@ -64,7 +68,7 @@ jobs:
         with:
           context: .
           file: docker/Dockerfile
-          platforms: ${{ matrix.platform }}
+          platforms: ${{ matrix.platform.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           tags: ${{ env.REGISTRY_IMAGE }}
           outputs: type=image,push-by-digest=true,name-canonical=true,push=true
