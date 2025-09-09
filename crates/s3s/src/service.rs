@@ -97,18 +97,18 @@ impl S3Service {
             route: self.inner.route.as_deref(),
         };
         let result = match crate::ops::call(&mut req, &ccx).await {
-            Ok(res) => Ok(HttpResponse::from(res)),
+            Ok(resp) => Ok(HttpResponse::from(resp)),
             Err(err) => Err(HttpError::new(Box::new(err))),
         };
 
         let duration = t0.elapsed();
 
         match result {
-            Ok(ref res) => {
-                if res.status().is_server_error() {
-                    error!(?duration, ?res);
+            Ok(ref resp) => {
+                if resp.status().is_server_error() {
+                    error!(?duration, ?resp);
                 } else {
-                    debug!(?duration, ?res);
+                    debug!(?duration, ?resp);
                 }
             }
             Err(ref err) => error!(?duration, ?err),
