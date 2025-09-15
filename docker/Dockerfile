@@ -4,7 +4,7 @@ FROM rust:1.89 AS builder
 # It's automatically available in RUN commands.
 ARG TARGETARCH
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Set musl-gcc flags for aws-lc compatibility
 ENV CC=musl-gcc \
@@ -51,12 +51,12 @@ RUN mkdir data && chmod -R 755 data
 FROM scratch
 
 # Copy the statically compiled binary from a known location in the builder stage.
-COPY --from=builder /usr/src/app/target/s3s-fs .
-COPY --from=builder /usr/src/app/target/s3s-e2e .
-COPY --from=builder /usr/src/app/target/s3s-proxy .
+COPY --from=builder /app/target/s3s-fs .
+COPY --from=builder /app/target/s3s-e2e .
+COPY --from=builder /app/target/s3s-proxy .
 
 # Copy the data directory
-COPY --from=builder /usr/src/app/data /data
+COPY --from=builder /app/data /data
 
 # Set the command to run the application
-CMD ["./s3s-fs", "/data"]
+CMD ["./s3s-fs", "--help"]
