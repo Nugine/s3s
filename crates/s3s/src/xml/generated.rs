@@ -267,6 +267,10 @@ use std::io::Write;
 //   SerializeContent: DeleteMarkerVersionId
 // DeserializeContent: DeleteMarkerVersionId
 //   SerializeContent: DeleteObjectsOutput
+//   SerializeContent: DeleteReplication
+// DeserializeContent: DeleteReplication
+//   SerializeContent: DeleteReplicationStatus
+// DeserializeContent: DeleteReplicationStatus
 //   SerializeContent: DeletedObject
 // DeserializeContent: DeletedObject
 //   SerializeContent: Delimiter
@@ -305,6 +309,10 @@ use std::io::Write;
 // DeserializeContent: Event
 //   SerializeContent: EventBridgeConfiguration
 // DeserializeContent: EventBridgeConfiguration
+//   SerializeContent: ExcludeFolders
+// DeserializeContent: ExcludeFolders
+//   SerializeContent: ExcludedPrefix
+// DeserializeContent: ExcludedPrefix
 //   SerializeContent: ExistingObjectReplication
 // DeserializeContent: ExistingObjectReplication
 //   SerializeContent: ExistingObjectReplicationStatus
@@ -3307,6 +3315,48 @@ impl SerializeContent for DeleteObjectsOutput {
     }
 }
 
+impl SerializeContent for DeleteReplication {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        s.content("Status", &self.status)?;
+        Ok(())
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for DeleteReplication {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut status: Option<DeleteReplicationStatus> = None;
+        d.for_each_element(|d, x| match x {
+            b"Status" => {
+                if status.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                status = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self {
+            status: status.ok_or(DeError::MissingField)?,
+        })
+    }
+}
+impl SerializeContent for DeleteReplicationStatus {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        self.as_str().serialize_content(s)
+    }
+}
+impl<'xml> DeserializeContent<'xml> for DeleteReplicationStatus {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        d.text(|t| {
+            let b: &[u8] = &t;
+            match b {
+                b"Disabled" => Ok(Self::from_static(DeleteReplicationStatus::DISABLED)),
+                b"Enabled" => Ok(Self::from_static(DeleteReplicationStatus::ENABLED)),
+                _ => Ok(Self::from(t.unescape().map_err(DeError::InvalidXml)?.into_owned())),
+            }
+        })
+    }
+}
 impl SerializeContent for DeletedObject {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
         if let Some(ref val) = self.delete_marker {
@@ -3693,6 +3743,31 @@ impl SerializeContent for EventBridgeConfiguration {
 impl<'xml> DeserializeContent<'xml> for EventBridgeConfiguration {
     fn deserialize_content(_: &mut Deserializer<'xml>) -> DeResult<Self> {
         Ok(Self {})
+    }
+}
+impl SerializeContent for ExcludedPrefix {
+    fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        if let Some(ref val) = self.prefix {
+            s.content("Prefix", val)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'xml> DeserializeContent<'xml> for ExcludedPrefix {
+    fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut prefix: Option<Prefix> = None;
+        d.for_each_element(|d, x| match x {
+            b"Prefix" => {
+                if prefix.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                prefix = Some(d.content()?);
+                Ok(())
+            }
+            _ => Err(DeError::UnexpectedTagName),
+        })?;
+        Ok(Self { prefix })
     }
 }
 impl SerializeContent for ExistingObjectReplication {
@@ -5557,6 +5632,7 @@ impl<'xml> DeserializeContent<'xml> for LifecycleRuleFilter {
         })?;
         Ok(Self {
             and,
+            cached_tags: CachedTags::default(),
             object_size_greater_than,
             object_size_less_than,
             prefix,
@@ -8257,6 +8333,9 @@ impl SerializeContent for ReplicationRule {
         if let Some(ref val) = self.delete_marker_replication {
             s.content("DeleteMarkerReplication", val)?;
         }
+        if let Some(ref val) = self.delete_replication {
+            s.content("DeleteReplication", val)?;
+        }
         s.content("Destination", &self.destination)?;
         if let Some(ref val) = self.existing_object_replication {
             s.content("ExistingObjectReplication", val)?;
@@ -8284,6 +8363,7 @@ impl SerializeContent for ReplicationRule {
 impl<'xml> DeserializeContent<'xml> for ReplicationRule {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
         let mut delete_marker_replication: Option<DeleteMarkerReplication> = None;
+        let mut delete_replication: Option<DeleteReplication> = None;
         let mut destination: Option<Destination> = None;
         let mut existing_object_replication: Option<ExistingObjectReplication> = None;
         let mut filter: Option<ReplicationRuleFilter> = None;
@@ -8298,6 +8378,13 @@ impl<'xml> DeserializeContent<'xml> for ReplicationRule {
                     return Err(DeError::DuplicateField);
                 }
                 delete_marker_replication = Some(d.content()?);
+                Ok(())
+            }
+            b"DeleteReplication" => {
+                if delete_replication.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                delete_replication = Some(d.content()?);
                 Ok(())
             }
             b"Destination" => {
@@ -8360,6 +8447,7 @@ impl<'xml> DeserializeContent<'xml> for ReplicationRule {
         })?;
         Ok(Self {
             delete_marker_replication,
+            delete_replication,
             destination: destination.ok_or(DeError::MissingField)?,
             existing_object_replication,
             filter,
@@ -8449,7 +8537,12 @@ impl<'xml> DeserializeContent<'xml> for ReplicationRuleFilter {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self { and, prefix, tag })
+        Ok(Self {
+            and,
+            cached_tags: CachedTags::default(),
+            prefix,
+            tag,
+        })
     }
 }
 impl SerializeContent for ReplicationRuleStatus {
@@ -9974,6 +10067,12 @@ impl<'xml> DeserializeContent<'xml> for Type {
 }
 impl SerializeContent for VersioningConfiguration {
     fn serialize_content<W: Write>(&self, s: &mut Serializer<W>) -> SerResult {
+        if let Some(ref val) = self.exclude_folders {
+            s.content("ExcludeFolders", val)?;
+        }
+        if let Some(iter) = &self.excluded_prefixes {
+            s.flattened_list("ExcludedPrefixes", iter)?;
+        }
         if let Some(ref val) = self.mfa_delete {
             s.content("MfaDelete", val)?;
         }
@@ -9986,9 +10085,23 @@ impl SerializeContent for VersioningConfiguration {
 
 impl<'xml> DeserializeContent<'xml> for VersioningConfiguration {
     fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+        let mut exclude_folders: Option<ExcludeFolders> = None;
+        let mut excluded_prefixes: Option<ExcludedPrefixes> = None;
         let mut mfa_delete: Option<MFADelete> = None;
         let mut status: Option<BucketVersioningStatus> = None;
         d.for_each_element(|d, x| match x {
+            b"ExcludeFolders" => {
+                if exclude_folders.is_some() {
+                    return Err(DeError::DuplicateField);
+                }
+                exclude_folders = Some(d.content()?);
+                Ok(())
+            }
+            b"ExcludedPrefixes" => {
+                let ans: ExcludedPrefix = d.content()?;
+                excluded_prefixes.get_or_insert_with(List::new).push(ans);
+                Ok(())
+            }
             b"MfaDelete" => {
                 if mfa_delete.is_some() {
                     return Err(DeError::DuplicateField);
@@ -10005,7 +10118,12 @@ impl<'xml> DeserializeContent<'xml> for VersioningConfiguration {
             }
             _ => Err(DeError::UnexpectedTagName),
         })?;
-        Ok(Self { mfa_delete, status })
+        Ok(Self {
+            exclude_folders,
+            excluded_prefixes,
+            mfa_delete,
+            status,
+        })
     }
 }
 impl SerializeContent for WebsiteConfiguration {

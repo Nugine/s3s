@@ -744,6 +744,8 @@ impl CopyObject {
 
         let tagging_directive: Option<TaggingDirective> = http::parse_opt_header(req, &X_AMZ_TAGGING_DIRECTIVE)?;
 
+        let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
+
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_opt_header(req, &X_AMZ_WEBSITE_REDIRECT_LOCATION)?;
 
@@ -788,6 +790,7 @@ impl CopyObject {
             storage_class,
             tagging,
             tagging_directive,
+            version_id,
             website_redirect_location,
         })
     }
@@ -1028,6 +1031,8 @@ impl CreateMultipartUpload {
 
         let tagging: Option<TaggingHeader> = http::parse_opt_header(req, &X_AMZ_TAGGING)?;
 
+        let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
+
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_opt_header(req, &X_AMZ_WEBSITE_REDIRECT_LOCATION)?;
 
@@ -1062,6 +1067,7 @@ impl CreateMultipartUpload {
             server_side_encryption,
             storage_class,
             tagging,
+            version_id,
             website_redirect_location,
         })
     }
@@ -1117,9 +1123,12 @@ impl DeleteBucket {
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
+        let force_delete: Option<ForceDelete> = http::parse_opt_header(req, &X_MINIO_FORCE_DELETE)?;
+
         Ok(DeleteBucketInput {
             bucket,
             expected_bucket_owner,
+            force_delete,
         })
     }
 
@@ -5416,6 +5425,8 @@ impl PutObject {
 
         let tagging: Option<TaggingHeader> = http::parse_opt_header(req, &X_AMZ_TAGGING)?;
 
+        let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
+
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_opt_header(req, &X_AMZ_WEBSITE_REDIRECT_LOCATION)?;
 
@@ -5461,6 +5472,7 @@ impl PutObject {
             server_side_encryption,
             storage_class,
             tagging,
+            version_id,
             website_redirect_location,
             write_offset_bytes,
         })
@@ -5565,6 +5577,8 @@ impl PutObject {
 
         let tagging: Option<TaggingHeader> = http::parse_field_value(&m, "x-amz-tagging")?;
 
+        let version_id: Option<ObjectVersionId> = http::parse_opt_query(req, "versionId")?;
+
         let website_redirect_location: Option<WebsiteRedirectLocation> =
             http::parse_field_value(&m, "x-amz-website-redirect-location")?;
 
@@ -5610,6 +5624,7 @@ impl PutObject {
             server_side_encryption,
             storage_class,
             tagging,
+            version_id,
             website_redirect_location,
             write_offset_bytes,
         })

@@ -931,6 +931,7 @@ impl AwsConversion for s3s::dto::CopyObjectInput {
             storage_class: try_from_aws(x.storage_class)?,
             tagging: try_from_aws(x.tagging)?,
             tagging_directive: try_from_aws(x.tagging_directive)?,
+            version_id: None,
             website_redirect_location: try_from_aws(x.website_redirect_location)?,
         })
     }
@@ -1229,6 +1230,7 @@ impl AwsConversion for s3s::dto::CreateMultipartUploadInput {
             server_side_encryption: try_from_aws(x.server_side_encryption)?,
             storage_class: try_from_aws(x.storage_class)?,
             tagging: try_from_aws(x.tagging)?,
+            version_id: None,
             website_redirect_location: try_from_aws(x.website_redirect_location)?,
         })
     }
@@ -1485,6 +1487,7 @@ impl AwsConversion for s3s::dto::DeleteBucketInput {
         Ok(Self {
             bucket: unwrap_from_aws(x.bucket, "bucket")?,
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
+            force_delete: None,
         })
     }
 
@@ -4619,6 +4622,7 @@ impl AwsConversion for s3s::dto::LifecycleRuleFilter {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             and: try_from_aws(x.and)?,
+            cached_tags: s3s::dto::CachedTags::default(),
             object_size_greater_than: try_from_aws(x.object_size_greater_than)?,
             object_size_less_than: try_from_aws(x.object_size_less_than)?,
             prefix: try_from_aws(x.prefix)?,
@@ -7265,6 +7269,7 @@ impl AwsConversion for s3s::dto::PutObjectInput {
             server_side_encryption: try_from_aws(x.server_side_encryption)?,
             storage_class: try_from_aws(x.storage_class)?,
             tagging: try_from_aws(x.tagging)?,
+            version_id: None,
             website_redirect_location: try_from_aws(x.website_redirect_location)?,
             write_offset_bytes: try_from_aws(x.write_offset_bytes)?,
         })
@@ -7764,6 +7769,7 @@ impl AwsConversion for s3s::dto::ReplicationRule {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             delete_marker_replication: try_from_aws(x.delete_marker_replication)?,
+            delete_replication: None,
             destination: unwrap_from_aws(x.destination, "destination")?,
             existing_object_replication: try_from_aws(x.existing_object_replication)?,
             filter: try_from_aws(x.filter)?,
@@ -7817,6 +7823,7 @@ impl AwsConversion for s3s::dto::ReplicationRuleFilter {
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
             and: try_from_aws(x.and)?,
+            cached_tags: s3s::dto::CachedTags::default(),
             prefix: try_from_aws(x.prefix)?,
             tag: try_from_aws(x.tag)?,
         })
@@ -9033,6 +9040,8 @@ impl AwsConversion for s3s::dto::VersioningConfiguration {
 
     fn try_from_aws(x: Self::Target) -> S3Result<Self> {
         Ok(Self {
+            exclude_folders: None,
+            excluded_prefixes: None,
             mfa_delete: try_from_aws(x.mfa_delete)?,
             status: try_from_aws(x.status)?,
         })
