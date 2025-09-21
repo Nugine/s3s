@@ -9,6 +9,11 @@ use s3s_test::TestSuite;
 use s3s_test::tcx::TestContext;
 
 use aws_sdk_s3::primitives::ByteStream;
+use aws_sdk_s3::primitives::SdkBody;
+
+use bytes::Bytes;
+use futures::StreamExt as _;
+use http_body_util::StreamBody;
 
 pub fn register(tcx: &mut TestContext) {
     case!(tcx, Basic, Essential, test_list_buckets);
@@ -19,6 +24,7 @@ pub fn register(tcx: &mut TestContext) {
     case!(tcx, Basic, Put, test_put_object_tiny);
     case!(tcx, Basic, Put, test_put_object_with_metadata);
     case!(tcx, Basic, Put, test_put_object_larger);
+    case!(tcx, Basic, Put, test_put_object_with_checksum_algorithm);
     case!(tcx, Basic, Copy, test_copy_object);
 }
 
@@ -374,6 +380,61 @@ impl Put {
 
         Ok(())
     }
+
+    async fn test_put_object_with_checksum_algorithm(self: Arc<Self>) -> Result {
+        use aws_sdk_s3::types::ChecksumAlgorithm;
+        use aws_sdk_s3::types::ChecksumMode;
+
+        let s3 = &self.s3;
+        let bucket = self.bucket.as_str();
+        let key = "with-checksum-trailer";
+
+        let body = {
+            let bytes = Bytes::from_static(&[b'a'; 1024]);
+
+            let stream = futures::stream::repeat_with(move || {
+                let frame = http_body::Frame::data(bytes.clone());
+                Ok::<_, std::io::Error>(frame)
+            });
+
+            let body = WithSizeHint::new(StreamBody::new(stream.take(70)), 70 * 1024);
+            ByteStream::new(SdkBody::from_body_1_x(body))
+        };
+
+        let put_resp = s3
+            .put_object()
+            .bucket(bucket)
+            .key(key)
+            .checksum_algorithm(ChecksumAlgorithm::Crc32)
+            .body(body)
+            .send()
+            .await?;
+
+        let put_crc32 = put_resp
+            .checksum_crc32()
+            .expect("PUT should return checksum when checksum_algorithm is used");
+
+        let resp = s3
+            .get_object()
+            .bucket(bucket)
+            .key(key)
+            .checksum_mode(ChecksumMode::Enabled)
+            .send()
+            .await?;
+
+        let get_crc32 = resp
+            .checksum_crc32()
+            .expect("GET should return checksum when checksum_mode is enabled and full object is returned")
+            .to_owned();
+
+        let body = resp.body.collect().await?;
+        let body = String::from_utf8(body.to_vec())?;
+        assert_eq!(body, "a".repeat(70 * 1024));
+
+        assert_eq!(get_crc32, put_crc32);
+
+        Ok(())
+    }
 }
 
 // Copy test fixture
@@ -461,5 +522,42 @@ impl Copy {
         assert_eq!(body, content);
 
         Ok(())
+    }
+}
+
+struct WithSizeHint<T> {
+    inner: T,
+    size_hint: usize,
+}
+
+impl<T> WithSizeHint<T> {
+    pub fn new(inner: T, size_hint: usize) -> Self {
+        Self { inner, size_hint }
+    }
+}
+
+impl<T> http_body::Body for WithSizeHint<T>
+where
+    T: http_body::Body + Unpin,
+{
+    type Data = T::Data;
+    type Error = T::Error;
+
+    fn poll_frame(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Option<std::result::Result<http_body::Frame<Self::Data>, Self::Error>>> {
+        let this = self.get_mut();
+        std::pin::Pin::new(&mut this.inner).poll_frame(cx)
+    }
+
+    fn is_end_stream(&self) -> bool {
+        self.inner.is_end_stream()
+    }
+
+    fn size_hint(&self) -> http_body::SizeHint {
+        let mut hint = self.inner.size_hint();
+        hint.set_exact(self.size_hint as u64);
+        hint
     }
 }
