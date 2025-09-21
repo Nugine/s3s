@@ -457,7 +457,7 @@ impl S3 for FileSystem {
 
     #[tracing::instrument]
     async fn put_object(&self, req: S3Request<PutObjectInput>) -> S3Result<S3Response<PutObjectOutput>> {
-        let input = req.input;
+        let mut input = req.input;
         if let Some(ref storage_class) = input.storage_class {
             let is_valid = ["STANDARD", "REDUCED_REDUNDANCY"].contains(&storage_class.as_str());
             if !is_valid {
@@ -489,6 +489,19 @@ impl S3 for FileSystem {
         if input.checksum_sha256.is_some() {
             checksum.sha256 = Some(default());
         }
+        if input.checksum_crc64nvme.is_some() {
+            checksum.crc64nvme = Some(default());
+        }
+        if let Some(alg) = input.checksum_algorithm {
+            match alg.as_str() {
+                ChecksumAlgorithm::CRC32 => checksum.crc32 = Some(default()),
+                ChecksumAlgorithm::CRC32C => checksum.crc32c = Some(default()),
+                ChecksumAlgorithm::SHA1 => checksum.sha1 = Some(default()),
+                ChecksumAlgorithm::SHA256 => checksum.sha256 = Some(default()),
+                ChecksumAlgorithm::CRC64NVME => checksum.crc64nvme = Some(default()),
+                _ => return Err(s3_error!(NotImplemented, "Unsupported checksum algorithm")),
+            }
+        }
 
         if key.ends_with('/') {
             if let Some(len) = content_length {
@@ -517,8 +530,34 @@ impl S3 for FileSystem {
         let md5_sum = hex(md5_hash.finalize());
 
         let checksum = checksum.finalize();
+
+        if let Some(trailers) = req.trailing_headers {
+            if let Some(trailers) = trailers.take() {
+                if let Some(crc32) = trailers.get("x-amz-checksum-crc32") {
+                    input.checksum_crc32 = Some(crc32.to_str().map_err(|_| s3_error!(InvalidArgument))?.to_owned());
+                }
+                if let Some(crc32c) = trailers.get("x-amz-checksum-crc32c") {
+                    input.checksum_crc32c = Some(crc32c.to_str().map_err(|_| s3_error!(InvalidArgument))?.to_owned());
+                }
+                if let Some(sha1) = trailers.get("x-amz-checksum-sha1") {
+                    input.checksum_sha1 = Some(sha1.to_str().map_err(|_| s3_error!(InvalidArgument))?.to_owned());
+                }
+                if let Some(sha256) = trailers.get("x-amz-checksum-sha256") {
+                    input.checksum_sha256 = Some(sha256.to_str().map_err(|_| s3_error!(InvalidArgument))?.to_owned());
+                }
+                if let Some(crc64nvme) = trailers.get("x-amz-checksum-crc64nvme") {
+                    input.checksum_crc64nvme = Some(crc64nvme.to_str().map_err(|_| s3_error!(InvalidArgument))?.to_owned());
+                }
+            }
+        }
+
         if checksum.checksum_crc32 != input.checksum_crc32 {
-            return Err(s3_error!(BadDigest, "checksum_crc32 mismatch"));
+            return Err(s3_error!(
+                BadDigest,
+                "checksum_crc32 mismatch: expected `{}`, got `{}`",
+                input.checksum_crc32.unwrap_or_default(),
+                checksum.checksum_crc32.unwrap_or_default()
+            ));
         }
         if checksum.checksum_crc32c != input.checksum_crc32c {
             return Err(s3_error!(BadDigest, "checksum_crc32c mismatch"));
@@ -528,6 +567,9 @@ impl S3 for FileSystem {
         }
         if checksum.checksum_sha256 != input.checksum_sha256 {
             return Err(s3_error!(BadDigest, "checksum_sha256 mismatch"));
+        }
+        if checksum.checksum_crc64nvme != input.checksum_crc64nvme {
+            return Err(s3_error!(BadDigest, "checksum_crc64nvme mismatch"));
         }
 
         debug!(path = %object_path.display(), ?size, %md5_sum, ?checksum, "write file");
