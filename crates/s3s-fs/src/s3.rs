@@ -370,9 +370,9 @@ impl S3 for FileSystem {
         let mut objects: Vec<Object> = default();
         let mut common_prefixes = std::collections::BTreeSet::new();
 
-        if delimiter.is_some() {
+        if let Some(delimiter) = delimiter {
             // When delimiter is provided, only list immediate contents (non-recursive)
-            self.list_objects_with_delimiter(&path, prefix, delimiter.unwrap(), &mut objects, &mut common_prefixes)
+            self.list_objects_with_delimiter(&path, prefix, delimiter, &mut objects, &mut common_prefixes)
                 .await?;
         } else {
             // When no delimiter, do recursive listing (current behavior)
