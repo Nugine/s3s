@@ -79,6 +79,10 @@ pub enum Payload<'a> {
     SingleChunk(&'a [u8]),
     /// multiple chunks
     MultipleChunks,
+    /// multiple chunks with trailing headers
+    MultipleChunksWithTrailer,
+    /// unsigned streaming with trailing headers
+    UnsignedMultipleChunksWithTrailer,
 }
 
 /// create canonical request
@@ -177,6 +181,8 @@ pub fn create_canonical_request(
             Payload::Empty => ans.push_str(EMPTY_STRING_SHA256_HASH),
             Payload::SingleChunk(data) => hex_sha256(data, |s| ans.push_str(s)),
             Payload::MultipleChunks => ans.push_str("STREAMING-AWS4-HMAC-SHA256-PAYLOAD"),
+            Payload::MultipleChunksWithTrailer => ans.push_str("STREAMING-AWS4-HMAC-SHA256-PAYLOAD-TRAILER"),
+            Payload::UnsignedMultipleChunksWithTrailer => ans.push_str("STREAMING-UNSIGNED-PAYLOAD-TRAILER"),
         }
     }
 
@@ -256,6 +262,43 @@ pub fn create_chunk_string_to_sign(
         } else {
             hex_sha256_chunk(chunk_data, |s| ans.push_str(s));
         }
+    }
+
+    ans
+}
+
+/// create `string_to_sign` of the final trailer block (0-chunk with trailing headers)
+pub fn create_trailer_string_to_sign(
+    amz_date: &AmzDate,
+    region: &str,
+    service: &str,
+    prev_signature: &str,
+    canonical_trailers: &[u8],
+) -> String {
+    let mut ans = String::with_capacity(256);
+
+    {
+        ans.push_str("AWS4-HMAC-SHA256-TRAILER\n");
+    }
+    {
+        ans.push_str(&amz_date.fmt_iso8601());
+        ans.push('\n');
+    }
+    {
+        ans.push_str(&amz_date.fmt_date());
+        ans.push('/');
+        ans.push_str(region);
+        ans.push('/');
+        ans.push_str(service);
+        ans.push_str("/aws4_request\n");
+    }
+    {
+        ans.push_str(prev_signature);
+        ans.push('\n');
+    }
+    {
+        // hash of canonicalized trailing headers
+        hex_sha256(canonical_trailers, |s| ans.push_str(s));
     }
 
     ans
@@ -624,6 +667,211 @@ mod tests {
 
         let chunk3_signature = calculate_signature(&chunk3_string_to_sign, &secret_access_key, &date, region, service);
         assert_eq!(chunk3_signature, "b6c6ea8a5354eaf15b3cb7646744f4275b71ea724fed81ceb9323e279d449df9");
+    }
+
+    #[test]
+    fn example_put_object_multiple_chunks_with_trailer_seed_signature() {
+        // Example from AWS docs: https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming-trailers.html
+        // let access_key_id = "AKIAIOSFODNN7EXAMPLE";
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+        let timestamp = "20130524T000000Z";
+        let region = "us-east-1";
+        let service = "s3";
+        let path = "/examplebucket/chunkObject.txt";
+
+        // Match canonical header order in the doc example
+        let headers = OrderedHeaders::from_slice_unchecked(&[
+            ("content-encoding", "aws-chunked"),
+            ("host", "s3.amazonaws.com"),
+            ("x-amz-content-sha256", "STREAMING-AWS4-HMAC-SHA256-PAYLOAD-TRAILER"),
+            ("x-amz-date", "20130524T000000Z"),
+            ("x-amz-decoded-content-length", "66560"),
+            ("x-amz-storage-class", "REDUCED_REDUNDANCY"),
+            ("x-amz-trailer", "x-amz-checksum-crc32c"),
+        ]);
+
+        let method = Method::PUT;
+        let qs: &[(String, String)] = &[];
+
+        let canonical_request = create_canonical_request(&method, path, qs, &headers, Payload::MultipleChunksWithTrailer);
+
+        assert_eq!(
+            canonical_request,
+            concat!(
+                "PUT\n",
+                "/examplebucket/chunkObject.txt\n",
+                "\n",
+                "content-encoding:aws-chunked\n",
+                "host:s3.amazonaws.com\n",
+                "x-amz-content-sha256:STREAMING-AWS4-HMAC-SHA256-PAYLOAD-TRAILER\n",
+                "x-amz-date:20130524T000000Z\n",
+                "x-amz-decoded-content-length:66560\n",
+                "x-amz-storage-class:REDUCED_REDUNDANCY\n",
+                "x-amz-trailer:x-amz-checksum-crc32c\n",
+                "\n",
+                "content-encoding;host;x-amz-content-sha256;x-amz-date;x-amz-decoded-content-length;x-amz-storage-class;x-amz-trailer\n",
+                "STREAMING-AWS4-HMAC-SHA256-PAYLOAD-TRAILER",
+            )
+        );
+
+        let date = AmzDate::parse(timestamp).unwrap();
+        let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
+        assert_eq!(
+            string_to_sign,
+            concat!(
+                "AWS4-HMAC-SHA256\n",
+                "20130524T000000Z\n",
+                "20130524/us-east-1/s3/aws4_request\n",
+                "44d48b8c2f70eae815a0198cc73d7a546a73a93359c070abbaa5e6c7de112559",
+            )
+        );
+
+        let signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
+        assert_eq!(signature, "106e2a8a18243abcf37539882f36619c00e2dfc72633413f02d3b74544bfeb8e");
+    }
+
+    #[test]
+    fn example_put_object_unsigned_multiple_chunks_with_trailer_seed_signature() {
+        // Hypothetical canonical request for STREAMING-UNSIGNED-PAYLOAD-TRAILER.
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+        let timestamp = "20130524T000000Z";
+        let region = "us-east-1";
+        let service = "s3";
+        let path = "/examplebucket/chunkObject.txt";
+
+        let headers = OrderedHeaders::from_slice_unchecked(&[
+            ("content-encoding", "aws-chunked"),
+            ("host", "s3.amazonaws.com"),
+            ("x-amz-content-sha256", "STREAMING-UNSIGNED-PAYLOAD-TRAILER"),
+            ("x-amz-date", "20130524T000000Z"),
+            ("x-amz-decoded-content-length", "66560"),
+            ("x-amz-storage-class", "REDUCED_REDUNDANCY"),
+            ("x-amz-trailer", "x-amz-checksum-crc32c"),
+        ]);
+
+        let method = Method::PUT;
+        let qs: &[(String, String)] = &[];
+
+        let canonical_request = create_canonical_request(&method, path, qs, &headers, Payload::UnsignedMultipleChunksWithTrailer);
+
+        assert_eq!(
+            canonical_request,
+            concat!(
+                "PUT\n",
+                "/examplebucket/chunkObject.txt\n",
+                "\n",
+                "content-encoding:aws-chunked\n",
+                "host:s3.amazonaws.com\n",
+                "x-amz-content-sha256:STREAMING-UNSIGNED-PAYLOAD-TRAILER\n",
+                "x-amz-date:20130524T000000Z\n",
+                "x-amz-decoded-content-length:66560\n",
+                "x-amz-storage-class:REDUCED_REDUNDANCY\n",
+                "x-amz-trailer:x-amz-checksum-crc32c\n",
+                "\n",
+                "content-encoding;host;x-amz-content-sha256;x-amz-date;x-amz-decoded-content-length;x-amz-storage-class;x-amz-trailer\n",
+                "STREAMING-UNSIGNED-PAYLOAD-TRAILER",
+            )
+        );
+
+        let date = AmzDate::parse(timestamp).unwrap();
+        let string_to_sign = create_string_to_sign(&canonical_request, &date, region, service);
+
+        // We don't assert the exact signature value here; just ensure it can be computed.
+        let _signature = calculate_signature(&string_to_sign, &secret_access_key, &date, region, service);
+    }
+
+    #[test]
+    fn example_put_object_multiple_chunks_with_trailer_chunk_signature() {
+        // Example from AWS docs: https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming-trailers.html
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+        let timestamp = "20130524T000000Z";
+        let region = "us-east-1";
+        let service = "s3";
+        let date = AmzDate::parse(timestamp).unwrap();
+
+        let seed_signature = "106e2a8a18243abcf37539882f36619c00e2dfc72633413f02d3b74544bfeb8e";
+
+        // Chunk 1: 65536 bytes of 'a'
+        let chunk1_string_to_sign =
+            create_chunk_string_to_sign(&date, region, service, seed_signature, &[Bytes::from(vec![b'a'; 64 * 1024])]);
+        assert_eq!(
+            chunk1_string_to_sign,
+            concat!(
+                "AWS4-HMAC-SHA256-PAYLOAD\n",
+                "20130524T000000Z\n",
+                "20130524/us-east-1/s3/aws4_request\n",
+                "106e2a8a18243abcf37539882f36619c00e2dfc72633413f02d3b74544bfeb8e\n",
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+                "bf718b6f653bebc184e1479f1935b8da974d701b893afcf49e701f3e2f9f9c5a",
+            )
+        );
+
+        let chunk1_signature = calculate_signature(&chunk1_string_to_sign, &secret_access_key, &date, region, service);
+        assert_eq!(chunk1_signature, "b474d8862b1487a5145d686f57f013e54db672cee1c953b3010fb58501ef5aa2");
+
+        // Chunk 2: 1024 bytes of 'a'
+        let chunk2_string_to_sign =
+            create_chunk_string_to_sign(&date, region, service, &chunk1_signature, &[Bytes::from(vec![b'a'; 1024])]);
+        assert_eq!(
+            chunk2_string_to_sign,
+            concat!(
+                "AWS4-HMAC-SHA256-PAYLOAD\n",
+                "20130524T000000Z\n",
+                "20130524/us-east-1/s3/aws4_request\n",
+                "b474d8862b1487a5145d686f57f013e54db672cee1c953b3010fb58501ef5aa2\n",
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+                "2edc986847e209b4016e141a6dc8716d3207350f416969382d431539bf292e4a",
+            )
+        );
+
+        let chunk2_signature = calculate_signature(&chunk2_string_to_sign, &secret_access_key, &date, region, service);
+        assert_eq!(chunk2_signature, "1c1344b170168f8e65b41376b44b20fe354e373826ccbbe2c1d40a8cae51e5c7");
+
+        // Chunk 3: 0 bytes
+        let chunk3_string_to_sign = create_chunk_string_to_sign(&date, region, service, &chunk2_signature, &[]);
+        assert_eq!(
+            chunk3_string_to_sign,
+            concat!(
+                "AWS4-HMAC-SHA256-PAYLOAD\n",
+                "20130524T000000Z\n",
+                "20130524/us-east-1/s3/aws4_request\n",
+                "1c1344b170168f8e65b41376b44b20fe354e373826ccbbe2c1d40a8cae51e5c7\n",
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            )
+        );
+
+        let chunk3_signature = calculate_signature(&chunk3_string_to_sign, &secret_access_key, &date, region, service);
+        assert_eq!(chunk3_signature, "2ca2aba2005185cf7159c6277faf83795951dd77a3a99e6e65d5c9f85863f992");
+    }
+
+    #[test]
+    fn example_put_object_multiple_chunks_with_trailer_trailer_signature() {
+        // Example from AWS docs: https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-streaming-trailers.html
+        let secret_access_key = SecretKey::from("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY");
+        let timestamp = "20130524T000000Z";
+        let region = "us-east-1";
+        let service = "s3";
+        let date = AmzDate::parse(timestamp).unwrap();
+
+        let prev_signature = "2ca2aba2005185cf7159c6277faf83795951dd77a3a99e6e65d5c9f85863f992"; // chunk3 signature
+        let canonical_trailers = b"x-amz-checksum-crc32c:sOO8/Q==\n";
+
+        let trailer_string_to_sign = create_trailer_string_to_sign(&date, region, service, prev_signature, canonical_trailers);
+
+        assert_eq!(
+            trailer_string_to_sign,
+            concat!(
+                "AWS4-HMAC-SHA256-TRAILER\n",
+                "20130524T000000Z\n",
+                "20130524/us-east-1/s3/aws4_request\n",
+                "2ca2aba2005185cf7159c6277faf83795951dd77a3a99e6e65d5c9f85863f992\n",
+                "1e376db7e1a34a8ef1c4bcee131a2d60a1cb62503747488624e10995f448d774",
+            )
+        );
+
+        let trailer_signature = calculate_signature(&trailer_string_to_sign, &secret_access_key, &date, region, service);
+        assert_eq!(trailer_signature, "d81f82fc3505edab99d459891051a732e8730629a2e4a59689829ca17fe2e435");
     }
 
     #[test]

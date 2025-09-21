@@ -47,3 +47,4 @@ pub use self::protocol::HttpRequest;
 pub use self::protocol::HttpResponse;
 pub use self::protocol::S3Request;
 pub use self::protocol::S3Response;
+pub use self::protocol::TrailingHeaders;

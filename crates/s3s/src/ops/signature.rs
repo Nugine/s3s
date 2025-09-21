@@ -4,6 +4,7 @@ use crate::error::*;
 use crate::http;
 use crate::http::{AwsChunkedStream, Body, Multipart};
 use crate::http::{OrderedHeaders, OrderedQs};
+use crate::protocol::TrailingHeaders;
 use crate::sig_v2;
 use crate::sig_v2::{AuthorizationV2, PresignedUrlV2};
 use crate::sig_v4;
@@ -71,6 +72,8 @@ pub struct SignatureContext<'a> {
 
     pub transformed_body: Option<Body>,
     pub multipart: Option<Multipart>,
+
+    pub trailing_headers: Option<TrailingHeaders>,
 }
 
 pub struct CredentialsExt {
@@ -277,6 +280,7 @@ impl SignatureContext<'_> {
     }
 
     #[tracing::instrument(skip(self))]
+    #[allow(clippy::too_many_lines)]
     pub async fn v4_check_header_auth(&mut self) -> S3Result<CredentialsExt> {
         let authorization: AuthorizationV4<'_> = {
             // assume: headers has "authorization"
@@ -304,7 +308,14 @@ impl SignatureContext<'_> {
 
         let amz_date = extract_amz_date(&self.hs)?.ok_or_else(|| invalid_request!("missing header: x-amz-date"))?;
 
-        let is_stream = matches!(amz_content_sha256, Some(AmzContentSha256::MultipleChunks));
+        let is_stream = matches!(
+            amz_content_sha256,
+            Some(
+                AmzContentSha256::MultipleChunks
+                    | AmzContentSha256::MultipleChunksWithTrailer
+                    | AmzContentSha256::UnsignedPayloadWithTrailer
+            )
+        );
 
         let signature = {
             let method = &self.req_method;
@@ -327,36 +338,58 @@ impl SignatureContext<'_> {
                 None
             });
 
-            let canonical_request = if is_stream {
-                let payload = sig_v4::Payload::MultipleChunks;
-                sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
-            } else if matches!(*self.req_method, Method::GET | Method::HEAD) {
-                let payload = if matches!(amz_content_sha256, Some(AmzContentSha256::UnsignedPayload)) {
-                    sig_v4::Payload::Unsigned
-                } else {
-                    sig_v4::Payload::Empty
-                };
-                sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, payload)
-            } else if matches!(amz_content_sha256, Some(AmzContentSha256::UnsignedPayload)) {
-                sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, sig_v4::Payload::Unsigned)
-            } else {
-                let bytes = super::extract_full_body(self.content_length, self.req_body).await?;
-                if bytes.len() < 1024 {
-                    debug!(len=?bytes.len(), body=?bytes, "extracted full body");
-                } else {
-                    debug!(len=?bytes.len(), "extracted full body");
+            let canonical_request = match amz_content_sha256 {
+                Some(AmzContentSha256::MultipleChunks) => {
+                    sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, sig_v4::Payload::MultipleChunks)
                 }
-
-                if bytes.is_empty() {
-                    sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, sig_v4::Payload::Empty)
-                } else {
-                    sig_v4::create_canonical_request(
-                        method,
-                        uri_path,
-                        query_strings,
-                        &headers,
-                        sig_v4::Payload::SingleChunk(&bytes),
-                    )
+                Some(AmzContentSha256::MultipleChunksWithTrailer) => sig_v4::create_canonical_request(
+                    method,
+                    uri_path,
+                    query_strings,
+                    &headers,
+                    sig_v4::Payload::MultipleChunksWithTrailer,
+                ),
+                Some(AmzContentSha256::UnsignedPayload) => {
+                    sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, sig_v4::Payload::Unsigned)
+                }
+                Some(AmzContentSha256::UnsignedPayloadWithTrailer) => sig_v4::create_canonical_request(
+                    method,
+                    uri_path,
+                    query_strings,
+                    &headers,
+                    sig_v4::Payload::UnsignedMultipleChunksWithTrailer,
+                ),
+                Some(AmzContentSha256::SingleChunk { .. }) => {
+                    let bytes = super::extract_full_body(self.content_length, self.req_body).await?;
+                    if bytes.is_empty() {
+                        sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, sig_v4::Payload::Empty)
+                    } else {
+                        sig_v4::create_canonical_request(
+                            method,
+                            uri_path,
+                            query_strings,
+                            &headers,
+                            sig_v4::Payload::SingleChunk(&bytes),
+                        )
+                    }
+                }
+                None => {
+                    if matches!(*self.req_method, Method::GET | Method::HEAD) {
+                        sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, sig_v4::Payload::Empty)
+                    } else {
+                        let bytes = super::extract_full_body(self.content_length, self.req_body).await?;
+                        if bytes.is_empty() {
+                            sig_v4::create_canonical_request(method, uri_path, query_strings, &headers, sig_v4::Payload::Empty)
+                        } else {
+                            sig_v4::create_canonical_request(
+                                method,
+                                uri_path,
+                                query_strings,
+                                &headers,
+                                sig_v4::Payload::SingleChunk(&bytes),
+                            )
+                        }
+                    }
                 }
             };
             let string_to_sign = sig_v4::create_string_to_sign(&canonical_request, &amz_date, region, service);
@@ -370,10 +403,19 @@ impl SignatureContext<'_> {
         }
 
         if is_stream {
+            // For streaming with trailers, AWS requires x-amz-trailer header present.
+            let has_trailer = matches!(
+                amz_content_sha256,
+                Some(AmzContentSha256::MultipleChunksWithTrailer | AmzContentSha256::UnsignedPayloadWithTrailer)
+            );
+            if has_trailer && self.hs.get_unique("x-amz-trailer").is_none() {
+                return Err(invalid_request!("missing header: x-amz-trailer"));
+            }
             let decoded_content_length = self
                 .decoded_content_length
                 .ok_or_else(|| s3_error!(MissingContentLength, "missing header: x-amz-decoded-content-length"))?;
 
+            let unsigned = matches!(amz_content_sha256, Some(AmzContentSha256::UnsignedPayloadWithTrailer));
             let stream = AwsChunkedStream::new(
                 mem::take(self.req_body),
                 signature.into(),
@@ -382,11 +424,16 @@ impl SignatureContext<'_> {
                 authorization.credential.aws_service.into(),
                 secret_key.clone(),
                 decoded_content_length,
+                unsigned,
             );
 
             debug!(len=?stream.exact_remaining_length(), "aws-chunked");
 
+            // Capture a handle to trailing headers so that it can be exposed to end users
+            // via S3Request after the stream is consumed.
+            let trailers = stream.trailing_headers_handle();
             self.transformed_body = Some(Body::from(stream.into_byte_stream()));
+            self.trailing_headers = Some(trailers);
         }
 
         Ok(CredentialsExt {

@@ -5,6 +5,7 @@ use super::OrderedQs;
 use crate::HttpRequest;
 use crate::auth::Credentials;
 use crate::path::S3Path;
+use crate::protocol::TrailingHeaders;
 use crate::stream::VecByteStream;
 
 use hyper::HeaderMap;
@@ -34,6 +35,7 @@ pub(crate) struct S3Extensions {
     pub credentials: Option<Credentials>,
     pub region: Option<String>,
     pub service: Option<String>,
+    pub trailing_headers: Option<TrailingHeaders>,
 }
 
 impl From<HttpRequest> for Request {

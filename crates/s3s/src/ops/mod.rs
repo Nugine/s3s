@@ -62,6 +62,7 @@ fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
     let credentials = req.s3ext.credentials.take();
     let region = req.s3ext.region.take();
     let service = req.s3ext.service.take();
+    let trailing_headers = req.s3ext.trailing_headers.take();
 
     S3Request {
         input,
@@ -72,6 +73,7 @@ fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
         credentials,
         region,
         service,
+        trailing_headers,
     }
 }
 
@@ -303,6 +305,7 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
 
                 multipart: None,
                 transformed_body: None,
+                trailing_headers: None,
             };
 
             let credentials = scx.check().await?;
@@ -311,6 +314,7 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
             transformed_body = scx.transformed_body;
 
             req.s3ext.multipart = scx.multipart;
+            req.s3ext.trailing_headers = scx.trailing_headers;
 
             match credentials {
                 Some(cred) => {

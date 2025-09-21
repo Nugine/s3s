@@ -9,6 +9,10 @@ use crate::utils::crypto::is_sha256_checksum;
 pub enum AmzContentSha256<'a> {
     /// `STREAMING-AWS4-HMAC-SHA256-PAYLOAD`
     MultipleChunks,
+    /// `STREAMING-AWS4-HMAC-SHA256-PAYLOAD-TRAILER`
+    MultipleChunksWithTrailer,
+    /// `STREAMING-UNSIGNED-PAYLOAD-TRAILER`
+    UnsignedPayloadWithTrailer,
     /// single chunk
     SingleChunk {
         /// the checksum of single chunk payload
@@ -36,6 +40,8 @@ impl<'a> AmzContentSha256<'a> {
         match header {
             "UNSIGNED-PAYLOAD" => Ok(Self::UnsignedPayload),
             "STREAMING-AWS4-HMAC-SHA256-PAYLOAD" => Ok(Self::MultipleChunks),
+            "STREAMING-AWS4-HMAC-SHA256-PAYLOAD-TRAILER" => Ok(Self::MultipleChunksWithTrailer),
+            "STREAMING-UNSIGNED-PAYLOAD-TRAILER" => Ok(Self::UnsignedPayloadWithTrailer),
             payload_checksum => {
                 if !is_sha256_checksum(payload_checksum) {
                     return Err(ParseAmzContentSha256Error::InvalidChecksum);

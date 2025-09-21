@@ -31,6 +31,44 @@ impl From<HttpError> for StdError {
     }
 }
 
+/// Trailing headers handle (newtype)
+///
+/// This handle lets you take verified streaming-trailer headers after the
+/// request body stream has been fully consumed and validated.
+/// It deliberately hides the internal synchronization and storage details.
+#[derive(Clone)]
+pub struct TrailingHeaders(std::sync::Arc<std::sync::Mutex<Option<HeaderMap<http::HeaderValue>>>>);
+
+impl core::fmt::Debug for TrailingHeaders {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        let ready = self.0.lock().ok().and_then(|g| g.as_ref().map(HeaderMap::len)).unwrap_or(0);
+        f.debug_struct("TrailingHeaders").field("count", &ready).finish()
+    }
+}
+
+impl TrailingHeaders {
+    /// Create from an internal shared state (for crate-internal wiring).
+    /// Not part of the public API surface.
+    #[doc(hidden)]
+    pub(crate) fn from_shared(inner: std::sync::Arc<std::sync::Mutex<Option<HeaderMap<http::HeaderValue>>>>) -> Self {
+        Self(inner)
+    }
+
+    /// Returns true if trailers have been produced by the stream.
+    #[must_use]
+    pub fn is_ready(&self) -> bool {
+        self.0.lock().map(|g| g.is_some()).unwrap_or(false)
+    }
+
+    /// Take the verified trailing headers if available.
+    ///
+    /// This is a one-shot operation; subsequent calls will return None.
+    #[must_use]
+    pub fn take(&self) -> Option<HeaderMap<http::HeaderValue>> {
+        self.0.lock().ok().and_then(|mut g| g.take())
+    }
+}
+
 /// S3 request
 #[derive(Debug, Clone)]
 pub struct S3Request<T> {
@@ -59,6 +97,12 @@ pub struct S3Request<T> {
 
     /// S3 requested service.
     pub service: Option<String>,
+
+    /// Streaming trailers handle.
+    /// When the request body uses AWS `SigV4` streaming with trailers, this
+    /// handle allows retrieving the verified trailing headers after the body
+    /// stream is fully read.
+    pub trailing_headers: Option<TrailingHeaders>,
 }
 
 impl<T> S3Request<T> {
@@ -73,6 +117,7 @@ impl<T> S3Request<T> {
             credentials: self.credentials,
             region: self.region,
             service: self.service,
+            trailing_headers: self.trailing_headers,
         }
     }
 }
