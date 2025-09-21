@@ -18,6 +18,8 @@ all-features = true
 rustdoc-args = ["--cfg", "docsrs"]
 
 [features]
+default = ["check-bucket-name"]
+check-bucket-name = []
 openssl = ["dep:openssl"]
 
 [target.'cfg(not(windows))'.dependencies]
