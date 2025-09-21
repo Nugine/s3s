@@ -663,7 +663,7 @@ impl CopyObject {
 
         let cache_control: Option<CacheControl> = http::parse_opt_header(req, &CACHE_CONTROL)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_disposition: Option<ContentDisposition> = http::parse_opt_header(req, &CONTENT_DISPOSITION)?;
 
@@ -913,7 +913,7 @@ impl CreateBucketMetadataTableConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<CreateBucketMetadataTableConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -973,7 +973,7 @@ impl CreateMultipartUpload {
 
         let cache_control: Option<CacheControl> = http::parse_opt_header(req, &CACHE_CONTROL)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let checksum_type: Option<ChecksumType> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_TYPE)?;
 
@@ -1862,7 +1862,7 @@ impl DeleteObjects {
         let bypass_governance_retention: Option<BypassGovernanceRetention> =
             http::parse_opt_header(req, &X_AMZ_BYPASS_GOVERNANCE_RETENTION)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let delete: Delete = http::take_xml_body(req)?;
 
@@ -4368,7 +4368,7 @@ impl PutBucketAccelerateConfiguration {
 
         let accelerate_configuration: AccelerateConfiguration = http::take_xml_body(req)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
@@ -4420,7 +4420,7 @@ impl PutBucketAcl {
 
         let access_control_policy: Option<AccessControlPolicy> = http::take_opt_xml_body(req)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -4539,7 +4539,7 @@ impl PutBucketCors {
 
         let cors_configuration: CORSConfiguration = http::take_xml_body(req)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -4590,7 +4590,7 @@ impl PutBucketEncryption {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketEncryptionInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -4740,7 +4740,7 @@ impl PutBucketLifecycleConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketLifecycleConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
@@ -4802,7 +4802,7 @@ impl PutBucketLogging {
 
         let bucket_logging_status: BucketLoggingStatus = http::take_xml_body(req)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5004,7 +5004,7 @@ impl PutBucketPolicy {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketPolicyInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let confirm_remove_self_bucket_access: Option<ConfirmRemoveSelfBucketAccess> =
             http::parse_opt_header(req, &X_AMZ_CONFIRM_REMOVE_SELF_BUCKET_ACCESS)?;
@@ -5061,7 +5061,7 @@ impl PutBucketReplication {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketReplicationInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5117,7 +5117,7 @@ impl PutBucketRequestPayment {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketRequestPaymentInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5170,7 +5170,7 @@ impl PutBucketTagging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketTaggingInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5223,7 +5223,7 @@ impl PutBucketVersioning {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketVersioningInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5279,7 +5279,7 @@ impl PutBucketWebsite {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutBucketWebsiteInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5345,7 +5345,7 @@ impl PutObject {
 
         let cache_control: Option<CacheControl> = http::parse_opt_header(req, &CACHE_CONTROL)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let checksum_crc32: Option<ChecksumCRC32> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC32)?;
 
@@ -5673,7 +5673,7 @@ impl PutObjectAcl {
 
         let access_control_policy: Option<AccessControlPolicy> = http::take_opt_xml_body(req)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5749,7 +5749,7 @@ impl PutObjectLegalHold {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectLegalHoldInput> {
         let (bucket, key) = http::unwrap_object(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5811,7 +5811,7 @@ impl PutObjectLockConfiguration {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectLockConfigurationInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5875,7 +5875,7 @@ impl PutObjectRetention {
         let bypass_governance_retention: Option<BypassGovernanceRetention> =
             http::parse_opt_header(req, &X_AMZ_BYPASS_GOVERNANCE_RETENTION)?;
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -5938,7 +5938,7 @@ impl PutObjectTagging {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutObjectTaggingInput> {
         let (bucket, key) = http::unwrap_object(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -6000,7 +6000,7 @@ impl PutPublicAccessBlock {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<PutPublicAccessBlockInput> {
         let bucket = http::unwrap_bucket(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let content_md5: Option<ContentMD5> = http::parse_opt_header(req, &CONTENT_MD5)?;
 
@@ -6053,7 +6053,7 @@ impl RestoreObject {
     pub fn deserialize_http(req: &mut http::Request) -> S3Result<RestoreObjectInput> {
         let (bucket, key) = http::unwrap_object(req);
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let expected_bucket_owner: Option<AccountId> = http::parse_opt_header(req, &X_AMZ_EXPECTED_BUCKET_OWNER)?;
 
@@ -6178,7 +6178,7 @@ impl UploadPart {
 
         let body: Option<StreamingBlob> = Some(http::take_stream_body(req));
 
-        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_opt_header(req, &X_AMZ_SDK_CHECKSUM_ALGORITHM)?;
+        let checksum_algorithm: Option<ChecksumAlgorithm> = http::parse_checksum_algorithm_header(req)?;
 
         let checksum_crc32: Option<ChecksumCRC32> = http::parse_opt_header(req, &X_AMZ_CHECKSUM_CRC32)?;
 

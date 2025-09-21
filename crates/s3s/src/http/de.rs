@@ -54,6 +54,36 @@ where
     }
 }
 
+pub fn parse_checksum_algorithm_header(req: &Request) -> S3Result<Option<crate::dto::ChecksumAlgorithm>> {
+    let ans: Option<crate::dto::ChecksumAlgorithm> = parse_opt_header(req, &crate::header::X_AMZ_CHECKSUM_ALGORITHM)?;
+
+    if ans.is_some() {
+        return Ok(ans);
+    }
+
+    let Some(trailer) = req.headers.get("x-amz-trailer") else {
+        return Ok(None);
+    };
+
+    let mapping = &const {
+        [
+            (crate::header::X_AMZ_CHECKSUM_CRC32, crate::dto::ChecksumAlgorithm::CRC32),
+            (crate::header::X_AMZ_CHECKSUM_CRC32C, crate::dto::ChecksumAlgorithm::CRC32C),
+            (crate::header::X_AMZ_CHECKSUM_SHA1, crate::dto::ChecksumAlgorithm::SHA1),
+            (crate::header::X_AMZ_CHECKSUM_SHA256, crate::dto::ChecksumAlgorithm::SHA256),
+            (crate::header::X_AMZ_CHECKSUM_CRC64NVME, crate::dto::ChecksumAlgorithm::CRC64NVME),
+        ]
+    };
+
+    for (h, v) in mapping {
+        if trailer.as_bytes() == h.as_str().as_bytes() {
+            return Ok(Some(crate::dto::ChecksumAlgorithm::from_static(v)));
+        }
+    }
+
+    Ok(None)
+}
+
 pub fn parse_opt_header_timestamp(req: &Request, name: &HeaderName, fmt: TimestampFormat) -> S3Result<Option<Timestamp>> {
     let mut iter = req.headers.get_all(name).into_iter();
     let Some(val) = iter.next() else { return Ok(None) };

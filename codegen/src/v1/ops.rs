@@ -443,7 +443,20 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes) {
                                     fmt
                                 );
                             } else if field.option_type {
-                                g!("let {}: Option<{}> = http::parse_opt_header(req, &{})?;", field.name, field.type_, header);
+                                if field.name == "checksum_algorithm" {
+                                    g!(
+                                        "let {}: Option<{}> = http::parse_checksum_algorithm_header(req)?;",
+                                        field.name,
+                                        field.type_,
+                                    );
+                                } else {
+                                    g!(
+                                        "let {}: Option<{}> = http::parse_opt_header(req, &{})?;",
+                                        field.name,
+                                        field.type_,
+                                        header
+                                    );
+                                }
                             } else if let Some(ref default_value) = field.default_value {
                                 // ASK: content length
                                 // In S3 smithy model, content-length has a default value (0).
