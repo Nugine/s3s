@@ -2,26 +2,8 @@ use scoped_writer::g;
 
 use super::smithy;
 
-fn git_branch() -> String {
-    let output = std::process::Command::new("git")
-        .args(["rev-parse", "--abbrev-ref", "HEAD"])
-        .output()
-        .unwrap();
-    let stdout = core::str::from_utf8(&output.stdout).unwrap();
-    stdout.trim().to_owned()
-}
-
-fn is_minio_branch() -> bool {
-    let branch_name = git_branch();
-    matches!(branch_name.as_str(), "minio" | "feat/minio")
-}
-
 /// <https://github.com/Nugine/s3s/issues/192>
 pub fn patch(model: &mut smithy::Model) {
-    if !is_minio_branch() {
-        return;
-    }
-
     let patches = smithy::Model::load_json("data/minio-patches.json").unwrap();
 
     for (shape_name, patch) in patches.shapes {
@@ -44,10 +26,6 @@ pub fn patch(model: &mut smithy::Model) {
 
 #[allow(clippy::too_many_lines)]
 pub fn codegen_in_dto() {
-    if !is_minio_branch() {
-        return;
-    }
-
     let code = r#"
 
 #[derive(Debug, Default)]

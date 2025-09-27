@@ -1,4 +1,9 @@
+#[cfg(feature = "minio")]
+mod generated_minio;
+
+#[cfg(not(feature = "minio"))]
 mod generated;
+
 mod meta;
 
 pub struct Proxy(aws_sdk_s3::Client);

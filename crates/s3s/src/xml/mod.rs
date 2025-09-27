@@ -6,6 +6,10 @@ pub use self::de::*;
 mod ser;
 pub use self::ser::*;
 
+#[cfg(feature = "minio")]
+mod generated_minio;
+
+#[cfg(not(feature = "minio"))]
 mod generated;
 
 mod manually {

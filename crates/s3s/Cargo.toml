@@ -21,6 +21,7 @@ rustdoc-args = ["--cfg", "docsrs"]
 default = ["check-bucket-name"]
 check-bucket-name = []
 openssl = ["dep:openssl"]
+minio = []
 
 [target.'cfg(not(windows))'.dependencies]
 openssl = { version = "0.10.73", optional = true }

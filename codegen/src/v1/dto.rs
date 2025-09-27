@@ -5,6 +5,7 @@ use super::smithy::SmithyTraitsExt;
 use super::{rust, smithy};
 
 use crate::declare_codegen;
+use crate::v1::Patch;
 
 use std::borrow::Cow;
 use std::collections::BTreeMap;
@@ -391,7 +392,7 @@ fn unify_operation_types(ops: &Operations, space: &mut RustTypes) {
     }
 }
 
-pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
+pub fn codegen(rust_types: &RustTypes, ops: &Operations, patch: Option<Patch>) {
     declare_codegen!();
 
     g([
@@ -447,7 +448,9 @@ pub fn codegen(rust_types: &RustTypes, ops: &Operations) {
 
     codegen_dto_ext(rust_types);
 
-    super::minio::codegen_in_dto();
+    if matches!(patch, Some(Patch::Minio)) {
+        super::minio::codegen_in_dto();
+    }
 }
 
 fn codegen_struct(ty: &rust::Struct, rust_types: &RustTypes, ops: &Operations) {
