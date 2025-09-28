@@ -154,4 +154,32 @@ mod tests {
 
         assert!(buf.as_ref() == ans1 || buf.as_ref() == ans2, "buf: {buf:?}");
     }
+
+    #[tokio::test]
+    async fn keep_alive_body_with_multiple_trailers() {
+        let body = KeepAliveBody::new(
+            async {
+                let mut res = Response::with_status(StatusCode::OK);
+                res.body = Bytes::from_static(b"<xml>content</xml>").into();
+                res.headers
+                    .insert("x-amz-server-side-encryption", HeaderValue::from_static("AES256"));
+                res.headers.insert("x-amz-version-id", HeaderValue::from_static("ver123"));
+                res.headers.insert("x-amz-expiration", HeaderValue::from_static("expiry=123"));
+                Ok(res)
+            },
+            Duration::from_secs(1),
+            Some(Bytes::from_static(b"<?xml version=\"1.0\" encoding=\"UTF-8\"?>")),
+        );
+
+        let aggregated = body.collect().await.unwrap();
+
+        // Check that trailers are present
+        let trailers = aggregated.trailers().unwrap();
+        assert_eq!(trailers.get("x-amz-server-side-encryption").unwrap(), "AES256");
+        assert_eq!(trailers.get("x-amz-version-id").unwrap(), "ver123");
+        assert_eq!(trailers.get("x-amz-expiration").unwrap(), "expiry=123");
+
+        let buf = aggregated.to_bytes();
+        assert_eq!(buf, b"<?xml version=\"1.0\" encoding=\"UTF-8\"?><xml>content</xml>".as_slice());
+    }
 }
