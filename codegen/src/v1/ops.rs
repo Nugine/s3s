@@ -259,6 +259,7 @@ fn codegen_op_http_ser_unit(op: &Operation) {
     g!("}}");
 }
 
+#[allow(clippy::too_many_lines)]
 fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
     let output = op.output.as_str();
     let rust_type = &rust_types[output];

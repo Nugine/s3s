@@ -69,11 +69,11 @@ fn complete_multipart_upload_serialize_http_excludes_trailer_headers() {
     // Verify that only the XML body is set (no headers except content-type)
     assert_eq!(resp.headers.len(), 1); // Only content-type header
     assert_eq!(resp.headers.get("content-type").unwrap(), "application/xml");
-    
+
     // Verify the XML body content is correct
     let body_bytes = resp.body.bytes().expect("Expected bytes body");
     let body_str = std::str::from_utf8(&body_bytes).unwrap();
-    
+
     // Should contain the key elements but no XML declaration (set_xml_body_no_decl)
     assert!(body_str.contains("<Location>http://example.com/bucket/key</Location>"));
     assert!(body_str.contains("<Bucket>test-bucket</Bucket>"));
