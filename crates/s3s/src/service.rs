@@ -4,6 +4,7 @@ use crate::host::S3Host;
 use crate::http::{Body, Request};
 use crate::route::S3Route;
 use crate::s3_trait::S3;
+use crate::validation::NameValidation;
 use crate::{HttpError, HttpRequest, HttpResponse};
 
 use std::fmt;
@@ -18,6 +19,7 @@ pub struct S3ServiceBuilder {
     auth: Option<Box<dyn S3Auth>>,
     access: Option<Box<dyn S3Access>>,
     route: Option<Box<dyn S3Route>>,
+    validation: Option<Box<dyn NameValidation>>,
 }
 
 impl S3ServiceBuilder {
@@ -29,6 +31,7 @@ impl S3ServiceBuilder {
             auth: None,
             access: None,
             route: None,
+            validation: None,
         }
     }
 
@@ -48,6 +51,10 @@ impl S3ServiceBuilder {
         self.route = Some(Box::new(route));
     }
 
+    pub fn set_validation(&mut self, validation: impl NameValidation + 'static) {
+        self.validation = Some(Box::new(validation));
+    }
+
     #[must_use]
     pub fn build(self) -> S3Service {
         S3Service {
@@ -57,6 +64,7 @@ impl S3ServiceBuilder {
                 auth: self.auth,
                 access: self.access,
                 route: self.route,
+                validation: self.validation,
             }),
         }
     }
@@ -73,6 +81,7 @@ struct Inner {
     auth: Option<Box<dyn S3Auth>>,
     access: Option<Box<dyn S3Access>>,
     route: Option<Box<dyn S3Route>>,
+    validation: Option<Box<dyn NameValidation>>,
 }
 
 impl S3Service {
@@ -95,6 +104,7 @@ impl S3Service {
             auth: self.inner.auth.as_deref(),
             access: self.inner.access.as_deref(),
             route: self.inner.route.as_deref(),
+            validation: self.inner.validation.as_deref(),
         };
         let result = match crate::ops::call(&mut req, &ccx).await {
             Ok(resp) => Ok(HttpResponse::from(resp)),
@@ -202,5 +212,40 @@ mod tests {
         assert!(output_size(&crate::ops::call) <= 1600);
         assert!(output_size(&S3Service::call) <= 2900);
         assert!(output_size(&S3Service::call_owned) <= 3200);
+    }
+
+    // Test validation functionality
+    use crate::validation::NameValidation;
+
+    // Mock S3 implementation for testing
+    struct MockS3;
+    impl S3 for MockS3 {}
+
+    // Test validation that allows any bucket name
+    struct RelaxedValidation;
+    impl NameValidation for RelaxedValidation {
+        fn validate_bucket_name(&self, _name: &str) -> bool {
+            true // Allow any bucket name
+        }
+    }
+
+    #[test]
+    fn test_service_builder_validation() {
+        let validation = RelaxedValidation;
+        let mut builder = S3ServiceBuilder::new(MockS3);
+        builder.set_validation(validation);
+        let service = builder.build();
+
+        // Verify validation was set
+        assert!(service.inner.validation.is_some());
+    }
+
+    #[test]
+    fn test_service_builder_default_validation() {
+        let builder = S3ServiceBuilder::new(MockS3);
+        let service = builder.build();
+
+        // Should have default validation when none is set
+        assert!(service.inner.validation.is_none()); // None means it will use DefaultNameValidation
     }
 }

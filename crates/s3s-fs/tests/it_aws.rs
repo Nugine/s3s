@@ -1,6 +1,7 @@
 use s3s::auth::SimpleAuth;
 use s3s::host::SingleDomain;
 use s3s::service::S3ServiceBuilder;
+use s3s::validation::NameValidation;
 use s3s_fs::FileSystem;
 
 use std::env;
@@ -82,6 +83,33 @@ async fn serial() -> MutexGuard<'static, ()> {
     use std::sync::LazyLock;
     static LOCK: LazyLock<Mutex<()>> = LazyLock::new(|| Mutex::new(()));
     LOCK.lock().await
+}
+
+fn create_client_with_validation(validation: impl NameValidation + 'static) -> Client {
+    // Setup with custom validation
+    let service = {
+        let fs = FileSystem::new(FS_ROOT).unwrap();
+        let mut b = S3ServiceBuilder::new(fs);
+        let cred = Credentials::for_tests();
+        b.set_auth(SimpleAuth::from_single(cred.access_key_id(), cred.secret_access_key()));
+        b.set_host(SingleDomain::new(DOMAIN_NAME).unwrap());
+        b.set_validation(validation);
+        b.build()
+    };
+
+    // Convert to aws http client
+    let client_inner = s3s_aws::Client::from(service);
+
+    // Setup aws sdk config
+    let cred = Credentials::for_tests();
+    let config = SdkConfig::builder()
+        .credentials_provider(SharedCredentialsProvider::new(cred))
+        .http_client(client_inner)
+        .region(Region::new(REGION))
+        .endpoint_url(format!("http://{DOMAIN_NAME}"))
+        .build();
+
+    Client::new(&config)
 }
 
 async fn create_bucket(c: &Client, bucket: &str) -> Result<()> {
@@ -588,6 +616,99 @@ async fn test_single_object_get_range() -> Result<()> {
     {
         delete_object(&c, bucket, key).await?;
         delete_bucket(&c, bucket).await?;
+    }
+
+    Ok(())
+}
+
+#[tokio::test]
+#[tracing::instrument]
+async fn test_relaxed_bucket_validation() -> Result<()> {
+    // Test implementation that allows any bucket name
+    struct RelaxedValidation;
+    impl NameValidation for RelaxedValidation {
+        fn validate_bucket_name(&self, _name: &str) -> bool {
+            true // Allow any bucket name
+        }
+    }
+
+    let _guard = serial().await;
+
+    let c = create_client_with_validation(RelaxedValidation);
+
+    // Test with bucket names that should pass with relaxed validation
+    let relaxed_bucket_names = [
+        "UPPERCASE-BUCKET",       // Uppercase not normally allowed
+        "bucket_with_underscore", // Underscores not allowed
+    ];
+
+    for bucket_name in relaxed_bucket_names {
+        let location = BucketLocationConstraint::from(REGION);
+        let cfg = CreateBucketConfiguration::builder().location_constraint(location).build();
+
+        let result = c
+            .create_bucket()
+            .create_bucket_configuration(cfg)
+            .bucket(bucket_name)
+            .send()
+            .await;
+
+        // Should not fail due to bucket name validation
+        match result {
+            Ok(_) => {
+                debug!("Successfully created bucket with relaxed validation: {bucket_name}");
+
+                // Verify the bucket was actually created by checking bucket existence
+                let head_result = c.head_bucket().bucket(bucket_name).send().await;
+                assert!(head_result.is_ok(), "Failed to head bucket {bucket_name} after creation");
+
+                // Clean up the bucket
+                let delete_result = delete_bucket(&c, bucket_name).await;
+                assert!(delete_result.is_ok(), "Failed to delete bucket {bucket_name}");
+            }
+            Err(e) => {
+                let error_str = format!("{:?}", e);
+                debug!("Bucket creation failed for other reasons (expected): {bucket_name} - {error_str}");
+                // Verify it's not a bucket name validation error
+                assert!(!error_str.contains("InvalidBucketName") && !error_str.contains("bucket name"));
+            }
+        }
+    }
+
+    Ok(())
+}
+
+#[tokio::test]
+#[tracing::instrument]
+async fn test_default_bucket_validation() -> Result<()> {
+    let _guard = serial().await;
+
+    let c = Client::new(config()); // Uses default validation
+
+    // Test with invalid bucket names that should be rejected by AWS rules
+    let invalid_bucket_names = [
+        "UPPERCASE-BUCKET",       // Uppercase not allowed
+        "bucket_with_underscore", // Underscores not allowed
+        "bucket..double.dots",    // Consecutive dots not allowed
+    ];
+
+    for bucket_name in invalid_bucket_names {
+        // Try to create bucket with invalid name - should fail with default validation
+        let location = BucketLocationConstraint::from(REGION);
+        let cfg = CreateBucketConfiguration::builder().location_constraint(location).build();
+
+        let result = c
+            .create_bucket()
+            .create_bucket_configuration(cfg)
+            .bucket(bucket_name)
+            .send()
+            .await;
+
+        // Should fail due to bucket name validation
+        assert!(result.is_err(), "Expected error for invalid bucket name: {bucket_name}");
+
+        let error_str = format!("{:?}", result.unwrap_err());
+        debug!("Default validation rejected bucket name {bucket_name}: {error_str}");
     }
 
     Ok(())
