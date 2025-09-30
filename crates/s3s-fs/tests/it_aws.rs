@@ -667,7 +667,7 @@ async fn test_relaxed_bucket_validation() -> Result<()> {
                 assert!(delete_result.is_ok(), "Failed to delete bucket {bucket_name}");
             }
             Err(e) => {
-                let error_str = format!("{:?}", e);
+                let error_str = format!("{e:?}");
                 debug!("Bucket creation failed for other reasons (expected): {bucket_name} - {error_str}");
                 // Verify it's not a bucket name validation error
                 assert!(!error_str.contains("InvalidBucketName") && !error_str.contains("bucket name"));

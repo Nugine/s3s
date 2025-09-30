@@ -1,6 +1,8 @@
 //! Validation API for S3 bucket names
 
 /// Trait for validating S3 names
+///
+/// Implementations should return `true` for valid names and `false` for invalid ones.
 pub trait NameValidation: Send + Sync {
     /// Validate a bucket name
     fn validate_bucket_name(&self, name: &str) -> bool;
@@ -9,6 +11,9 @@ pub trait NameValidation: Send + Sync {
 /// Default AWS-compliant name validation
 #[derive(Debug, Clone, Default)]
 pub struct DefaultNameValidation;
+
+/// Static instance of DefaultNameValidation to avoid allocations
+pub static DEFAULT_NAME_VALIDATION: DefaultNameValidation = DefaultNameValidation;
 
 impl NameValidation for DefaultNameValidation {
     fn validate_bucket_name(&self, name: &str) -> bool {
