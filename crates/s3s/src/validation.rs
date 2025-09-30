@@ -12,7 +12,7 @@ pub trait NameValidation: Send + Sync {
 #[derive(Debug, Clone, Default)]
 pub struct DefaultNameValidation;
 
-/// Static instance of DefaultNameValidation to avoid allocations
+/// Static instance of `DefaultNameValidation` to avoid allocations
 pub static DEFAULT_NAME_VALIDATION: DefaultNameValidation = DefaultNameValidation;
 
 impl NameValidation for DefaultNameValidation {

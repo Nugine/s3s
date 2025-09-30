@@ -32,7 +32,7 @@ use crate::route::S3Route;
 use crate::s3_trait::S3;
 use crate::stream::VecByteStream;
 use crate::stream::aggregate_unlimited;
-use crate::validation::{DEFAULT_NAME_VALIDATION, DefaultNameValidation, NameValidation};
+use crate::validation::{DEFAULT_NAME_VALIDATION, NameValidation};
 
 use std::mem;
 use std::net::{IpAddr, SocketAddr};
