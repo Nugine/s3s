@@ -14,15 +14,15 @@ rust-version.workspace = true
 workspace = true
 
 [dependencies]
-serde = { version = "1.0.219", features = ["derive"] }
+serde = { version = "1.0.228", features = ["derive"] }
 tokio = { version = "1.47.1", features = ["full"] }
 tracing = "0.1.41"
 tracing-subscriber = { version = "0.3.20", features = ["env-filter", "time"] }
-clap = { version = "4.5.47", features = ["derive"] }
+clap = { version = "4.5.48", features = ["derive"] }
 dotenvy = "0.15.7"
-serde_json = "1.0.143"
-indexmap = "2.11.1"
+serde_json = "1.0.145"
+indexmap = "2.11.4"
 colored = "3.0.0"
-regex = "1.11.2"
-backtrace = "0.3.75"
+regex = "1.11.3"
+backtrace = "0.3.76"
 const-str = { version = "0.7.0", features = ["std", "proc"] }
