@@ -8,14 +8,11 @@ pub trait NameValidation: Send + Sync {
     fn validate_bucket_name(&self, name: &str) -> bool;
 }
 
-/// Default AWS-compliant name validation
+/// AWS-compliant name validation
 #[derive(Debug, Clone, Default)]
-pub struct DefaultNameValidation;
+pub struct AwsNameValidation;
 
-/// Static instance of `DefaultNameValidation` to avoid allocations
-pub static DEFAULT_NAME_VALIDATION: DefaultNameValidation = DefaultNameValidation;
-
-impl NameValidation for DefaultNameValidation {
+impl NameValidation for AwsNameValidation {
     fn validate_bucket_name(&self, name: &str) -> bool {
         crate::path::check_bucket_name(name)
     }
@@ -36,7 +33,7 @@ mod tests {
 
     #[test]
     fn test_default_validation() {
-        let validator = DefaultNameValidation;
+        let validator = AwsNameValidation;
 
         // Valid bucket names should pass
         assert!(validator.validate_bucket_name("valid-bucket"));

@@ -5,7 +5,7 @@
 //! + [Request styles](https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAPI.html#virtual-hosted-path-style-requests)
 //! + [Bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
 
-use crate::validation::{DefaultNameValidation, NameValidation};
+use crate::validation::{AwsNameValidation, NameValidation};
 use std::net::IpAddr;
 use std::ops::Not as _;
 
@@ -165,7 +165,7 @@ pub const fn check_key(key: &str) -> bool {
 /// # Errors
 /// Returns an `Err` if the s3 path is invalid
 pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
-    parse_path_style_with_validation(uri_path, &DefaultNameValidation)
+    parse_path_style_with_validation(uri_path, &AwsNameValidation)
 }
 
 /// Parses a path-style request with custom validation
@@ -201,7 +201,7 @@ pub fn parse_path_style_with_validation(uri_path: &str, validation: &dyn NameVal
 /// # Errors
 /// Returns an `Err` if the s3 path is invalid
 pub fn parse_virtual_hosted_style(vh_bucket: Option<&str>, uri_path: &str) -> Result<S3Path, ParseS3PathError> {
-    parse_virtual_hosted_style_with_validation(vh_bucket, uri_path, &DefaultNameValidation)
+    parse_virtual_hosted_style_with_validation(vh_bucket, uri_path, &AwsNameValidation)
 }
 
 /// Parses a virtual-hosted-style request with custom validation
@@ -239,7 +239,7 @@ mod tests {
     use super::*;
 
     use crate::host::{S3Host, SingleDomain};
-    use crate::validation::DefaultNameValidation;
+    use crate::validation::AwsNameValidation;
 
     #[test]
     fn bucket_naming_rules() {
@@ -347,7 +347,7 @@ mod tests {
             let path = format!("/{bucket_name}/key");
 
             // Should fail with default validation
-            let result = parse_path_style_with_validation(&path, &DefaultNameValidation);
+            let result = parse_path_style_with_validation(&path, &AwsNameValidation);
             assert!(result.is_err(), "Expected error for bucket name: {bucket_name}");
 
             // Should pass with relaxed validation
@@ -372,7 +372,7 @@ mod tests {
 
         for bucket_name in invalid_names {
             // Should fail with default validation
-            let result = parse_virtual_hosted_style_with_validation(Some(bucket_name), "/key", &DefaultNameValidation);
+            let result = parse_virtual_hosted_style_with_validation(Some(bucket_name), "/key", &AwsNameValidation);
             assert!(result.is_err(), "Expected error for bucket name: {bucket_name}");
 
             // Should pass with relaxed validation
@@ -388,9 +388,9 @@ mod tests {
 
     #[test]
     fn test_path_style_validation_fallback() {
-        // Test that parse_path_style uses DefaultNameValidation
+        // Test that parse_path_style uses AwsNameValidation
         let result1 = parse_path_style("/UPPERCASE/key");
-        let result2 = parse_path_style_with_validation("/UPPERCASE/key", &DefaultNameValidation);
+        let result2 = parse_path_style_with_validation("/UPPERCASE/key", &AwsNameValidation);
 
         // Both should give the same result (error for invalid bucket name)
         assert_eq!(result1.is_err(), result2.is_err());
@@ -398,9 +398,9 @@ mod tests {
 
     #[test]
     fn test_virtual_hosted_style_validation_fallback() {
-        // Test that parse_virtual_hosted_style uses DefaultNameValidation
+        // Test that parse_virtual_hosted_style uses AwsNameValidation
         let result1 = parse_virtual_hosted_style(Some("UPPERCASE"), "/key");
-        let result2 = parse_virtual_hosted_style_with_validation(Some("UPPERCASE"), "/key", &DefaultNameValidation);
+        let result2 = parse_virtual_hosted_style_with_validation(Some("UPPERCASE"), "/key", &AwsNameValidation);
 
         // Both should give the same result (error for invalid bucket name)
         assert_eq!(result1.is_err(), result2.is_err());

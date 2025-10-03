@@ -32,7 +32,7 @@ use crate::route::S3Route;
 use crate::s3_trait::S3;
 use crate::stream::VecByteStream;
 use crate::stream::aggregate_unlimited;
-use crate::validation::{DEFAULT_NAME_VALIDATION, NameValidation};
+use crate::validation::{AwsNameValidation, NameValidation};
 
 use std::mem;
 use std::net::{IpAddr, SocketAddr};
@@ -263,6 +263,7 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
         let vh;
         let vh_bucket;
         {
+            let validation = ccx.validation.unwrap_or(&AwsNameValidation);
             let result = 'parse: {
                 if let (Some(host_header), Some(s3_host)) = (host_header.as_deref(), ccx.host) {
                     if !is_socket_addr_or_ip_addr(host_header) {
@@ -275,17 +276,14 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
                         break 'parse crate::path::parse_virtual_hosted_style_with_validation(
                             vh_bucket,
                             &decoded_uri_path,
-                            ccx.validation.unwrap_or(&DEFAULT_NAME_VALIDATION),
+                            validation,
                         );
                     }
                 }
 
                 debug!(?decoded_uri_path, "parsing path-style request");
                 vh_bucket = None;
-                crate::path::parse_path_style_with_validation(
-                    &decoded_uri_path,
-                    ccx.validation.unwrap_or(&DEFAULT_NAME_VALIDATION),
-                )
+                crate::path::parse_path_style_with_validation(&decoded_uri_path, validation)
             };
 
             req.s3ext.s3_path = Some(result.map_err(|err| convert_parse_s3_path_error(&err))?);

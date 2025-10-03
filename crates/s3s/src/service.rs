@@ -246,6 +246,6 @@ mod tests {
         let service = builder.build();
 
         // Should have default validation when none is set
-        assert!(service.inner.validation.is_none()); // None means it will use DefaultNameValidation
+        assert!(service.inner.validation.is_none()); // None means it will use AwsNameValidation
     }
 }
