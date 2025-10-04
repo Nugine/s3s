@@ -259,6 +259,7 @@ fn codegen_op_http_ser_unit(op: &Operation) {
     g!("}}");
 }
 
+#[allow(clippy::too_many_lines)]
 fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
     let output = op.output.as_str();
     let rust_type = &rust_types[output];
@@ -340,6 +341,21 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
                     if field.position == "header" {
                         let field_name = field.name.as_str();
                         let header_name = headers::to_constant_name(field.http_header.as_deref().unwrap());
+
+                        // For CompleteMultipartUpload, skip trailer headers since they should only be sent as trailers
+                        if op.name == "CompleteMultipartUpload" {
+                            let trailer_headers = [
+                                "X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED",
+                                "X_AMZ_EXPIRATION",
+                                "X_AMZ_REQUEST_CHARGED",
+                                "X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID",
+                                "X_AMZ_SERVER_SIDE_ENCRYPTION",
+                                "X_AMZ_VERSION_ID",
+                            ];
+                            if trailer_headers.contains(&header_name.as_str()) {
+                                continue;
+                            }
+                        }
 
                         let field_type = &rust_types[field.type_.as_str()];
                         if let rust::Type::Timestamp(ts_ty) = field_type {
