@@ -32,6 +32,7 @@ use crate::route::S3Route;
 use crate::s3_trait::S3;
 use crate::stream::VecByteStream;
 use crate::stream::aggregate_unlimited;
+use crate::validation::{AwsNameValidation, NameValidation};
 
 use std::mem;
 use std::net::{IpAddr, SocketAddr};
@@ -60,6 +61,7 @@ pub struct CallContext<'a> {
     pub auth: Option<&'a dyn S3Auth>,
     pub access: Option<&'a dyn S3Access>,
     pub route: Option<&'a dyn S3Route>,
+    pub validation: Option<&'a dyn NameValidation>,
 }
 
 fn build_s3_request<T>(input: T, req: &mut Request) -> S3Request<T> {
@@ -261,6 +263,9 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
         let vh;
         let vh_bucket;
         {
+            let default_validation = &const { AwsNameValidation::new() };
+            let validation = ccx.validation.unwrap_or(default_validation);
+
             let result = 'parse: {
                 if let (Some(host_header), Some(s3_host)) = (host_header.as_deref(), ccx.host) {
                     if !is_socket_addr_or_ip_addr(host_header) {
@@ -270,13 +275,17 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
                         debug!(?vh);
 
                         vh_bucket = vh.bucket();
-                        break 'parse crate::path::parse_virtual_hosted_style(vh_bucket, &decoded_uri_path);
+                        break 'parse crate::path::parse_virtual_hosted_style_with_validation(
+                            vh_bucket,
+                            &decoded_uri_path,
+                            validation,
+                        );
                     }
                 }
 
                 debug!(?decoded_uri_path, "parsing path-style request");
                 vh_bucket = None;
-                crate::path::parse_path_style(&decoded_uri_path)
+                crate::path::parse_path_style_with_validation(&decoded_uri_path, validation)
             };
 
             req.s3ext.s3_path = Some(result.map_err(|err| convert_parse_s3_path_error(&err))?);

@@ -5,6 +5,7 @@
 //! + [Request styles](https://docs.aws.amazon.com/AmazonS3/latest/dev/RESTAPI.html#virtual-hosted-path-style-requests)
 //! + [Bucket naming rules](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html)
 
+use crate::validation::{AwsNameValidation, NameValidation};
 use std::net::IpAddr;
 
 /// A path in the S3 storage
@@ -159,6 +160,13 @@ pub const fn check_key(key: &str) -> bool {
 /// # Errors
 /// Returns an `Err` if the s3 path is invalid
 pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
+    parse_path_style_with_validation(uri_path, &AwsNameValidation::new())
+}
+
+/// Parses a path-style request with custom validation
+/// # Errors
+/// Returns an `Err` if the s3 path is invalid
+pub fn parse_path_style_with_validation(uri_path: &str, validation: &dyn NameValidation) -> Result<S3Path, ParseS3PathError> {
     let Some(path) = uri_path.strip_prefix('/') else { return Err(ParseS3PathError::InvalidPath) };
 
     if path.is_empty() {
@@ -171,7 +179,7 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
         Some((bucket, key)) => (bucket, Some(key)),
     };
 
-    if !check_bucket_name(bucket) {
+    if !validation.validate_bucket_name(bucket) {
         return Err(ParseS3PathError::InvalidBucketName);
     }
 
@@ -188,11 +196,22 @@ pub fn parse_path_style(uri_path: &str) -> Result<S3Path, ParseS3PathError> {
 /// # Errors
 /// Returns an `Err` if the s3 path is invalid
 pub fn parse_virtual_hosted_style(vh_bucket: Option<&str>, uri_path: &str) -> Result<S3Path, ParseS3PathError> {
-    let Some(bucket) = vh_bucket else { return parse_path_style(uri_path) };
+    parse_virtual_hosted_style_with_validation(vh_bucket, uri_path, &AwsNameValidation::new())
+}
+
+/// Parses a virtual-hosted-style request with custom validation
+/// # Errors
+/// Returns an `Err` if the s3 path is invalid
+pub fn parse_virtual_hosted_style_with_validation(
+    vh_bucket: Option<&str>,
+    uri_path: &str,
+    validation: &dyn NameValidation,
+) -> Result<S3Path, ParseS3PathError> {
+    let Some(bucket) = vh_bucket else { return parse_path_style_with_validation(uri_path, validation) };
 
     let Some(key) = uri_path.strip_prefix('/') else { return Err(ParseS3PathError::InvalidPath) };
 
-    if !check_bucket_name(bucket) {
+    if !validation.validate_bucket_name(bucket) {
         return Err(ParseS3PathError::InvalidBucketName);
     }
 
@@ -215,6 +234,8 @@ mod tests {
     use super::*;
 
     use crate::host::{S3Host, SingleDomain};
+    use crate::validation::AwsNameValidation;
+    use crate::validation::tests::RelaxedNameValidation;
 
     #[test]
     fn bucket_naming_rules() {
@@ -296,5 +317,79 @@ mod tests {
             let expected = Ok(S3Path::object("example.com", "homepage.html"));
             assert_eq!(ans, expected);
         }
+    }
+
+    #[test]
+    fn test_path_style_with_custom_validation() {
+        // Test invalid bucket names that should pass with relaxed validation
+        let invalid_names = [
+            "UPPERCASE",              // uppercase not allowed in AWS
+            "bucket_with_underscore", // underscores not allowed
+            "bucket..double.dots",    // consecutive dots not allowed
+            "bucket-",                // ending with hyphen not allowed
+            "192.168.1.1",            // IP address format not allowed
+        ];
+
+        for bucket_name in invalid_names {
+            let path = format!("/{bucket_name}/key");
+
+            // Should fail with default validation
+            let result = parse_path_style_with_validation(&path, &AwsNameValidation::new());
+            assert!(result.is_err(), "Expected error for bucket name: {bucket_name}");
+
+            // Should pass with relaxed validation
+            let result = parse_path_style_with_validation(&path, &RelaxedNameValidation::new());
+            assert!(result.is_ok(), "Expected success for bucket name: {bucket_name}");
+
+            if let Ok(S3Path::Object { bucket, key }) = result {
+                assert_eq!(bucket.as_ref(), bucket_name);
+                assert_eq!(key.as_ref(), "key");
+            }
+        }
+
+        // Test that valid names still work
+        let result = parse_path_style_with_validation("/valid-bucket/key", &RelaxedNameValidation::new());
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_virtual_hosted_style_with_custom_validation() {
+        // Test invalid bucket names that should pass with relaxed validation
+        let invalid_names = ["UPPERCASE", "bucket_with_underscore", "bucket..double.dots"];
+
+        for bucket_name in invalid_names {
+            // Should fail with default validation
+            let result = parse_virtual_hosted_style_with_validation(Some(bucket_name), "/key", &AwsNameValidation::new());
+            assert!(result.is_err(), "Expected error for bucket name: {bucket_name}");
+
+            // Should pass with relaxed validation
+            let result = parse_virtual_hosted_style_with_validation(Some(bucket_name), "/key", &RelaxedNameValidation::new());
+            assert!(result.is_ok(), "Expected success for bucket name: {bucket_name}");
+
+            if let Ok(S3Path::Object { bucket, key }) = result {
+                assert_eq!(bucket.as_ref(), bucket_name);
+                assert_eq!(key.as_ref(), "key");
+            }
+        }
+    }
+
+    #[test]
+    fn test_path_style_validation_fallback() {
+        // Test that parse_path_style uses AwsNameValidation
+        let result1 = parse_path_style("/UPPERCASE/key");
+        let result2 = parse_path_style_with_validation("/UPPERCASE/key", &AwsNameValidation::new());
+
+        // Both should give the same result (error for invalid bucket name)
+        assert_eq!(result1.is_err(), result2.is_err());
+    }
+
+    #[test]
+    fn test_virtual_hosted_style_validation_fallback() {
+        // Test that parse_virtual_hosted_style uses AwsNameValidation
+        let result1 = parse_virtual_hosted_style(Some("UPPERCASE"), "/key");
+        let result2 = parse_virtual_hosted_style_with_validation(Some("UPPERCASE"), "/key", &AwsNameValidation::new());
+
+        // Both should give the same result (error for invalid bucket name)
+        assert_eq!(result1.is_err(), result2.is_err());
     }
 }

@@ -35,6 +35,7 @@ pub mod path;
 pub mod route;
 pub mod service;
 pub mod stream;
+pub mod validation;
 pub mod xml;
 
 pub use self::error::*;
