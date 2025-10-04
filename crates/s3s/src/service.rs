@@ -51,7 +51,7 @@ impl S3ServiceBuilder {
         self.route = Some(Box::new(route));
     }
 
-    pub fn set_validation(&mut self, validation: impl NameValidation + 'static) {
+    pub fn set_validation(&mut self, validation: impl NameValidation) {
         self.validation = Some(Box::new(validation));
     }
 

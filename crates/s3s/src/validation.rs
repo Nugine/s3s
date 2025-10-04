@@ -3,7 +3,7 @@
 /// Trait for validating S3 names
 ///
 /// Implementations should return `true` for valid names and `false` for invalid ones.
-pub trait NameValidation: Send + Sync {
+pub trait NameValidation: Send + Sync + 'static {
     /// Validate a bucket name
     fn validate_bucket_name(&self, name: &str) -> bool;
 }
