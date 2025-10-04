@@ -263,7 +263,9 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
         let vh;
         let vh_bucket;
         {
-            let validation = ccx.validation.unwrap_or(&AwsNameValidation);
+            let default_validation = &const { AwsNameValidation::new() };
+            let validation = ccx.validation.unwrap_or(default_validation);
+
             let result = 'parse: {
                 if let (Some(host_header), Some(s3_host)) = (host_header.as_deref(), ccx.host) {
                     if !is_socket_addr_or_ip_addr(host_header) {

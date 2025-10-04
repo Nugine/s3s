@@ -10,7 +10,16 @@ pub trait NameValidation: Send + Sync {
 
 /// AWS-compliant name validation
 #[derive(Debug, Clone, Default)]
-pub struct AwsNameValidation;
+pub struct AwsNameValidation {
+    _priv: (),
+}
+
+impl AwsNameValidation {
+    #[must_use]
+    pub const fn new() -> Self {
+        Self { _priv: () }
+    }
+}
 
 impl NameValidation for AwsNameValidation {
     fn validate_bucket_name(&self, name: &str) -> bool {
@@ -19,21 +28,32 @@ impl NameValidation for AwsNameValidation {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
 
-    /// Test implementation that allows all bucket names
-    struct RelaxedValidation;
+    /// A name validation that allows any non-empty bucket name.
+    /// This is for test only.
+    #[derive(Debug, Clone, Default)]
+    pub struct RelaxedNameValidation {
+        _priv: (),
+    }
 
-    impl NameValidation for RelaxedValidation {
-        fn validate_bucket_name(&self, _name: &str) -> bool {
-            true // Allow any bucket name
+    impl RelaxedNameValidation {
+        #[must_use]
+        pub const fn new() -> Self {
+            Self { _priv: () }
+        }
+    }
+
+    impl NameValidation for RelaxedNameValidation {
+        fn validate_bucket_name(&self, name: &str) -> bool {
+            !name.is_empty()
         }
     }
 
     #[test]
     fn test_default_validation() {
-        let validator = AwsNameValidation;
+        let validator = AwsNameValidation::new();
 
         // Valid bucket names should pass
         assert!(validator.validate_bucket_name("valid-bucket"));
@@ -43,11 +63,13 @@ mod tests {
         assert!(!validator.validate_bucket_name("InvalidBucket")); // Uppercase
         assert!(!validator.validate_bucket_name("invalid_bucket")); // Underscore
         assert!(!validator.validate_bucket_name("192.168.1.1")); // IP address
+
+        assert!(!validator.validate_bucket_name("")); // Empty name should fail
     }
 
     #[test]
     fn test_relaxed_validation() {
-        let validator = RelaxedValidation;
+        let validator = RelaxedNameValidation::new();
 
         // All bucket names should pass, even invalid ones
         assert!(validator.validate_bucket_name("valid-bucket"));
@@ -57,5 +79,7 @@ mod tests {
         assert!(validator.validate_bucket_name("xn--example")); // xn-- prefix - allowed
         assert!(validator.validate_bucket_name("ab")); // Too short - allowed
         assert!(validator.validate_bucket_name(&"a".repeat(100))); // Too long - allowed
+
+        assert!(!validator.validate_bucket_name("")); // Empty name should fail
     }
 }

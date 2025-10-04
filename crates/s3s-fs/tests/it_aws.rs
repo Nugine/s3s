@@ -624,17 +624,17 @@ async fn test_single_object_get_range() -> Result<()> {
 #[tokio::test]
 #[tracing::instrument]
 async fn test_relaxed_bucket_validation() -> Result<()> {
-    // Test implementation that allows any bucket name
-    struct RelaxedValidation;
-    impl NameValidation for RelaxedValidation {
-        fn validate_bucket_name(&self, _name: &str) -> bool {
-            true // Allow any bucket name
+    struct RelaxedNameValidation;
+
+    impl NameValidation for RelaxedNameValidation {
+        fn validate_bucket_name(&self, name: &str) -> bool {
+            !name.is_empty()
         }
     }
 
     let _guard = serial().await;
 
-    let c = create_client_with_validation(RelaxedValidation);
+    let c = create_client_with_validation(RelaxedNameValidation);
 
     // Test with bucket names that should pass with relaxed validation
     let relaxed_bucket_names = [
