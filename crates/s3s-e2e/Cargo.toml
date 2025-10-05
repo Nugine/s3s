@@ -1,6 +1,6 @@
 [package]
 name = "s3s-e2e"
-version = "0.11.0"
+version = "0.11.1"
 description = "s3s test suite"
 readme = "../../README.md"
 keywords = ["s3"]
@@ -13,7 +13,7 @@ license.workspace = true
 workspace = true
 
 [dependencies]
-s3s-test = { version = "0.11.0", path = "../s3s-test" }
+s3s-test = { version = "0.11.1", path = "../s3s-test" }
 tracing = "0.1.41"
 aws-credential-types = "1.2.2"
 aws-sdk-s3 = "1.80.0"
@@ -25,4 +25,4 @@ default-features = false
 features = ["behavior-version-latest"]
 
 [build-dependencies]
-s3s-test = { version = "0.11.0", path = "../s3s-test" }
+s3s-test = { version = "0.11.1", path = "../s3s-test" }
