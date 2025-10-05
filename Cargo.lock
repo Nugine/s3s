@@ -1884,15 +1884,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "nugine-rust-utils"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04dcd9cfa92246a9c7ca0671e00733c4e9d77ee1fa0ae08c9a181b7c8802aea2"
-dependencies = [
- "simdutf8",
-]
-
-[[package]]
 name = "num-conv"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2383,7 +2374,6 @@ dependencies = [
  "memchr",
  "mime",
  "nom",
- "nugine-rust-utils",
  "numeric_cast",
  "openssl",
  "pin-project-lite",
@@ -2430,7 +2420,6 @@ version = "0.0.0"
 dependencies = [
  "heck",
  "http 1.3.1",
- "nugine-rust-utils",
  "numeric_cast",
  "regex",
  "s3s-model",
@@ -2536,7 +2525,6 @@ dependencies = [
  "const-str",
  "dotenvy",
  "indexmap",
- "nugine-rust-utils",
  "regex",
  "serde",
  "serde_json",
