@@ -12328,7 +12328,7 @@ pub struct ListObjectVersionsInput {
     pub max_keys: Option<MaxKeys>,
     /// <p>Specifies the optional fields that you want returned in the response. Fields that you do
     /// not specify are not returned.</p>
-    pub optional_object_attributes: OptionalObjectAttributesList,
+    pub optional_object_attributes: Option<OptionalObjectAttributesList>,
     /// <p>Use this parameter to select only those keys that begin with the specified prefix. You
     /// can use prefixes to separate a bucket into different groupings of keys. (You can think of
     /// using <code>prefix</code> to make groups in the same way that you'd use a folder in a file
@@ -12359,7 +12359,9 @@ impl fmt::Debug for ListObjectVersionsInput {
         if let Some(ref val) = self.max_keys {
             d.field("max_keys", val);
         }
-        d.field("optional_object_attributes", &self.optional_object_attributes);
+        if let Some(ref val) = self.optional_object_attributes {
+            d.field("optional_object_attributes", val);
+        }
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
@@ -12515,7 +12517,7 @@ pub struct ListObjectsInput {
     pub max_keys: Option<MaxKeys>,
     /// <p>Specifies the optional fields that you want returned in the response. Fields that you do
     /// not specify are not returned.</p>
-    pub optional_object_attributes: OptionalObjectAttributesList,
+    pub optional_object_attributes: Option<OptionalObjectAttributesList>,
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<Prefix>,
     /// <p>Confirms that the requester knows that she or he will be charged for the list objects
@@ -12542,7 +12544,9 @@ impl fmt::Debug for ListObjectsInput {
         if let Some(ref val) = self.max_keys {
             d.field("max_keys", val);
         }
-        d.field("optional_object_attributes", &self.optional_object_attributes);
+        if let Some(ref val) = self.optional_object_attributes {
+            d.field("optional_object_attributes", val);
+        }
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
@@ -12746,7 +12750,7 @@ pub struct ListObjectsV2Input {
     /// <note>
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
-    pub optional_object_attributes: OptionalObjectAttributesList,
+    pub optional_object_attributes: Option<OptionalObjectAttributesList>,
     /// <p>Limits the response to keys that begin with the specified prefix.</p>
     /// <note>
     /// <p>
@@ -12790,7 +12794,9 @@ impl fmt::Debug for ListObjectsV2Input {
         if let Some(ref val) = self.max_keys {
             d.field("max_keys", val);
         }
-        d.field("optional_object_attributes", &self.optional_object_attributes);
+        if let Some(ref val) = self.optional_object_attributes {
+            d.field("optional_object_attributes", val);
+        }
         if let Some(ref val) = self.prefix {
             d.field("prefix", val);
         }
@@ -26727,7 +26733,7 @@ pub mod builders {
 
         max_keys: Option<MaxKeys>,
 
-        optional_object_attributes: OptionalObjectAttributesList,
+        optional_object_attributes: Option<OptionalObjectAttributesList>,
 
         prefix: Option<Prefix>,
 
@@ -26767,7 +26773,7 @@ pub mod builders {
             self
         }
 
-        pub fn set_optional_object_attributes(&mut self, field: OptionalObjectAttributesList) -> &mut Self {
+        pub fn set_optional_object_attributes(&mut self, field: Option<OptionalObjectAttributesList>) -> &mut Self {
             self.optional_object_attributes = field;
             self
         }
@@ -26824,7 +26830,7 @@ pub mod builders {
         }
 
         #[must_use]
-        pub fn optional_object_attributes(mut self, field: OptionalObjectAttributesList) -> Self {
+        pub fn optional_object_attributes(mut self, field: Option<OptionalObjectAttributesList>) -> Self {
             self.optional_object_attributes = field;
             self
         }
@@ -26888,7 +26894,7 @@ pub mod builders {
 
         max_keys: Option<MaxKeys>,
 
-        optional_object_attributes: OptionalObjectAttributesList,
+        optional_object_attributes: Option<OptionalObjectAttributesList>,
 
         prefix: Option<Prefix>,
 
@@ -26926,7 +26932,7 @@ pub mod builders {
             self
         }
 
-        pub fn set_optional_object_attributes(&mut self, field: OptionalObjectAttributesList) -> &mut Self {
+        pub fn set_optional_object_attributes(&mut self, field: Option<OptionalObjectAttributesList>) -> &mut Self {
             self.optional_object_attributes = field;
             self
         }
@@ -26978,7 +26984,7 @@ pub mod builders {
         }
 
         #[must_use]
-        pub fn optional_object_attributes(mut self, field: OptionalObjectAttributesList) -> Self {
+        pub fn optional_object_attributes(mut self, field: Option<OptionalObjectAttributesList>) -> Self {
             self.optional_object_attributes = field;
             self
         }
@@ -27036,7 +27042,7 @@ pub mod builders {
 
         max_keys: Option<MaxKeys>,
 
-        optional_object_attributes: OptionalObjectAttributesList,
+        optional_object_attributes: Option<OptionalObjectAttributesList>,
 
         prefix: Option<Prefix>,
 
@@ -27081,7 +27087,7 @@ pub mod builders {
             self
         }
 
-        pub fn set_optional_object_attributes(&mut self, field: OptionalObjectAttributesList) -> &mut Self {
+        pub fn set_optional_object_attributes(&mut self, field: Option<OptionalObjectAttributesList>) -> &mut Self {
             self.optional_object_attributes = field;
             self
         }
@@ -27144,7 +27150,7 @@ pub mod builders {
         }
 
         #[must_use]
-        pub fn optional_object_attributes(mut self, field: OptionalObjectAttributesList) -> Self {
+        pub fn optional_object_attributes(mut self, field: Option<OptionalObjectAttributesList>) -> Self {
             self.optional_object_attributes = field;
             self
         }

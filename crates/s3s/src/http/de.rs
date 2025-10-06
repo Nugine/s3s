@@ -96,7 +96,7 @@ pub fn parse_opt_header_timestamp(req: &Request, name: &HeaderName, fmt: Timesta
     }
 }
 
-pub fn parse_list_header<T>(req: &Request, name: &HeaderName, required: bool) -> S3Result<List<T>>
+pub fn parse_list_header<T>(req: &Request, name: &HeaderName) -> S3Result<List<T>>
 where
     T: TryFromHeaderValue,
     T::Error: std::error::Error + Send + Sync + 'static,
@@ -106,10 +106,26 @@ where
         let ans = T::try_from_header_value(val).map_err(|err| invalid_header(err, name, val))?;
         list.push(ans);
     }
-    if required && list.is_empty() {
+    if list.is_empty() {
         return Err(missing_header(name));
     }
     Ok(list)
+}
+
+pub fn parse_opt_list_header<T>(req: &Request, name: &HeaderName) -> S3Result<Option<List<T>>>
+where
+    T: TryFromHeaderValue,
+    T::Error: std::error::Error + Send + Sync + 'static,
+{
+    let mut list = List::new();
+    for val in req.headers.get_all(name) {
+        let ans = T::try_from_header_value(val).map_err(|err| invalid_header(err, name, val))?;
+        list.push(ans);
+    }
+    if list.is_empty() {
+        return Ok(None);
+    }
+    Ok(Some(list))
 }
 
 fn missing_query(name: &str) -> S3Error {

@@ -3181,7 +3181,7 @@ impl GetObjectAttributes {
 
         let max_parts: Option<MaxParts> = http::parse_opt_header(req, &X_AMZ_MAX_PARTS)?;
 
-        let object_attributes: ObjectAttributesList = http::parse_list_header(req, &X_AMZ_OBJECT_ATTRIBUTES, true)?;
+        let object_attributes: ObjectAttributesList = http::parse_list_header(req, &X_AMZ_OBJECT_ATTRIBUTES)?;
 
         let part_number_marker: Option<PartNumberMarker> = http::parse_opt_header(req, &X_AMZ_PART_NUMBER_MARKER)?;
 
@@ -4087,8 +4087,8 @@ impl ListObjectVersions {
 
         let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
-        let optional_object_attributes: OptionalObjectAttributesList =
-            http::parse_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES, false)?;
+        let optional_object_attributes: Option<OptionalObjectAttributesList> =
+            http::parse_opt_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES)?;
 
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
@@ -4159,8 +4159,8 @@ impl ListObjects {
 
         let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
-        let optional_object_attributes: OptionalObjectAttributesList =
-            http::parse_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES, false)?;
+        let optional_object_attributes: Option<OptionalObjectAttributesList> =
+            http::parse_opt_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES)?;
 
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 
@@ -4230,8 +4230,8 @@ impl ListObjectsV2 {
 
         let max_keys: Option<MaxKeys> = http::parse_opt_query(req, "max-keys")?;
 
-        let optional_object_attributes: OptionalObjectAttributesList =
-            http::parse_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES, false)?;
+        let optional_object_attributes: Option<OptionalObjectAttributesList> =
+            http::parse_opt_list_header(req, &X_AMZ_OPTIONAL_OBJECT_ATTRIBUTES)?;
 
         let prefix: Option<Prefix> = http::parse_opt_query(req, "prefix")?;
 

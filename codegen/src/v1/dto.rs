@@ -152,9 +152,6 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                             break 'optional true;
                         }
                         if is_op_input && is_required.not() {
-                            if field_type.ends_with("List") {
-                                break 'optional false;
-                            }
                             break 'optional true;
                         }
                         is_required.not() && default_value.is_none()
