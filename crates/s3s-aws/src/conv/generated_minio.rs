@@ -4949,7 +4949,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsInput {
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             key_marker: try_from_aws(x.key_marker)?,
             max_keys: try_from_aws(x.max_keys)?,
-            optional_object_attributes: unwrap_from_aws(x.optional_object_attributes, "optional_object_attributes")?,
+            optional_object_attributes: try_from_aws(x.optional_object_attributes)?,
             prefix: try_from_aws(x.prefix)?,
             request_payer: try_from_aws(x.request_payer)?,
             version_id_marker: try_from_aws(x.version_id_marker)?,
@@ -4964,7 +4964,7 @@ impl AwsConversion for s3s::dto::ListObjectVersionsInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_key_marker(try_into_aws(x.key_marker)?);
         y = y.set_max_keys(try_into_aws(x.max_keys)?);
-        y = y.set_optional_object_attributes(Some(try_into_aws(x.optional_object_attributes)?));
+        y = y.set_optional_object_attributes(try_into_aws(x.optional_object_attributes)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_version_id_marker(try_into_aws(x.version_id_marker)?);
@@ -5027,7 +5027,7 @@ impl AwsConversion for s3s::dto::ListObjectsInput {
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             marker: try_from_aws(x.marker)?,
             max_keys: try_from_aws(x.max_keys)?,
-            optional_object_attributes: unwrap_from_aws(x.optional_object_attributes, "optional_object_attributes")?,
+            optional_object_attributes: try_from_aws(x.optional_object_attributes)?,
             prefix: try_from_aws(x.prefix)?,
             request_payer: try_from_aws(x.request_payer)?,
         })
@@ -5041,7 +5041,7 @@ impl AwsConversion for s3s::dto::ListObjectsInput {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_marker(try_into_aws(x.marker)?);
         y = y.set_max_keys(try_into_aws(x.max_keys)?);
-        y = y.set_optional_object_attributes(Some(try_into_aws(x.optional_object_attributes)?));
+        y = y.set_optional_object_attributes(try_into_aws(x.optional_object_attributes)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y.build().map_err(S3Error::internal_error)
@@ -5098,7 +5098,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Input {
             expected_bucket_owner: try_from_aws(x.expected_bucket_owner)?,
             fetch_owner: try_from_aws(x.fetch_owner)?,
             max_keys: try_from_aws(x.max_keys)?,
-            optional_object_attributes: unwrap_from_aws(x.optional_object_attributes, "optional_object_attributes")?,
+            optional_object_attributes: try_from_aws(x.optional_object_attributes)?,
             prefix: try_from_aws(x.prefix)?,
             request_payer: try_from_aws(x.request_payer)?,
             start_after: try_from_aws(x.start_after)?,
@@ -5114,7 +5114,7 @@ impl AwsConversion for s3s::dto::ListObjectsV2Input {
         y = y.set_expected_bucket_owner(try_into_aws(x.expected_bucket_owner)?);
         y = y.set_fetch_owner(try_into_aws(x.fetch_owner)?);
         y = y.set_max_keys(try_into_aws(x.max_keys)?);
-        y = y.set_optional_object_attributes(Some(try_into_aws(x.optional_object_attributes)?));
+        y = y.set_optional_object_attributes(try_into_aws(x.optional_object_attributes)?);
         y = y.set_prefix(try_into_aws(x.prefix)?);
         y = y.set_request_payer(try_into_aws(x.request_payer)?);
         y = y.set_start_after(try_into_aws(x.start_after)?);

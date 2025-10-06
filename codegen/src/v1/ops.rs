@@ -425,13 +425,18 @@ fn codegen_op_http_de(op: &Operation, rust_types: &RustTypes) {
                             let field_type = &rust_types[&field.type_];
 
                             if let rust::Type::List(_) = field_type {
-                                assert!(field.option_type.not());
-                                g!(
-                                    "let {}: {} = http::parse_list_header(req, &{header}, {})?;",
-                                    field.name,
-                                    field.type_,
-                                    field.is_required
-                                );
+                                assert!(field.name == "object_attributes" || field.name == "optional_object_attributes");
+                                if field.is_required {
+                                    assert!(field.option_type.not());
+                                    g!("let {}: {} = http::parse_list_header(req, &{header})?;", field.name, field.type_,);
+                                } else {
+                                    assert!(field.option_type);
+                                    g!(
+                                        "let {}: Option<{}> = http::parse_opt_list_header(req, &{header})?;",
+                                        field.name,
+                                        field.type_,
+                                    );
+                                }
                             } else if let rust::Type::Timestamp(ts_ty) = field_type {
                                 assert!(field.option_type);
                                 let fmt = ts_ty.format.as_deref().unwrap_or("HttpDate");
