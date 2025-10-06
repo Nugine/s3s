@@ -11,7 +11,7 @@ fetch:
 
 fmt:
     uvx ruff format
-    cargo fmt
+    cargo fmt --all
 
 lint:
     uvx ruff check
@@ -28,7 +28,7 @@ crawl:
 
 codegen:
     cargo run -p s3s-codegen
-    cargo fmt
+    cargo fmt --all
     cargo check
 
 install name *ARGS:

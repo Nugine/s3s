@@ -1,11 +1,11 @@
-#[cfg(feature = "minio")]
-stdx::cfg_group! {
-    mod generated_minio;
-    use self::generated_minio as generated;
+cfg_if::cfg_if! {
+    if #[cfg(feature = "minio")] {
+        mod generated_minio;
+        use self::generated_minio as generated;
+    } else {
+        mod generated;
+    }
 }
-
-#[cfg(not(feature = "minio"))]
-mod generated;
 
 pub use self::generated::S3Access;
 
