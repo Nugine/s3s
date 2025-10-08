@@ -5017,8 +5017,6 @@ pub type DirectoryBucketToken = String;
 
 pub type DisplayName = String;
 
-pub type ETag = String;
-
 pub type EmailAddress = String;
 
 pub type EnableRequestProgress = bool;
@@ -31933,9 +31931,6 @@ impl DtoExt for CompleteMultipartUploadOutput {
                 self.checksum_type = None;
             }
         }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
-        }
         if self.expiration.as_deref() == Some("") {
             self.expiration = None;
         }
@@ -31982,9 +31977,6 @@ impl DtoExt for CompletedPart {
         }
         if self.checksum_sha256.as_deref() == Some("") {
             self.checksum_sha256 = None;
-        }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
         }
     }
 }
@@ -32173,9 +32165,6 @@ impl DtoExt for CopyObjectResult {
                 self.checksum_type = None;
             }
         }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
-        }
     }
 }
 impl DtoExt for CopyPartResult {
@@ -32194,9 +32183,6 @@ impl DtoExt for CopyPartResult {
         }
         if self.checksum_sha256.as_deref() == Some("") {
             self.checksum_sha256 = None;
-        }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
         }
     }
 }
@@ -33099,9 +33085,6 @@ impl DtoExt for GetObjectAttributesOutput {
         if let Some(ref mut val) = self.checksum {
             val.ignore_empty_strings();
         }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
-        }
         if let Some(ref mut val) = self.object_parts {
             val.ignore_empty_strings();
         }
@@ -33248,9 +33231,6 @@ impl DtoExt for GetObjectOutput {
         }
         if self.content_range.as_deref() == Some("") {
             self.content_range = None;
-        }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
         }
         if self.expiration.as_deref() == Some("") {
             self.expiration = None;
@@ -33531,9 +33511,6 @@ impl DtoExt for HeadObjectOutput {
         }
         if self.content_range.as_deref() == Some("") {
             self.content_range = None;
-        }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
         }
         if self.expiration.as_deref() == Some("") {
             self.expiration = None;
@@ -34297,9 +34274,6 @@ impl DtoExt for Object {
                 self.checksum_type = None;
             }
         }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
-        }
         if self.key.as_deref() == Some("") {
             self.key = None;
         }
@@ -34318,9 +34292,6 @@ impl DtoExt for Object {
 }
 impl DtoExt for ObjectIdentifier {
     fn ignore_empty_strings(&mut self) {
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
-        }
         if self.version_id.as_deref() == Some("") {
             self.version_id = None;
         }
@@ -34388,9 +34359,6 @@ impl DtoExt for ObjectVersion {
             if val.as_str() == "" {
                 self.checksum_type = None;
             }
-        }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
         }
         if self.key.as_deref() == Some("") {
             self.key = None;
@@ -34460,9 +34428,6 @@ impl DtoExt for Part {
         }
         if self.checksum_sha256.as_deref() == Some("") {
             self.checksum_sha256 = None;
-        }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
         }
     }
 }
@@ -35025,9 +34990,6 @@ impl DtoExt for PutObjectOutput {
             if val.as_str() == "" {
                 self.checksum_type = None;
             }
-        }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
         }
         if self.expiration.as_deref() == Some("") {
             self.expiration = None;
@@ -35633,9 +35595,6 @@ impl DtoExt for UploadPartOutput {
         if self.checksum_sha256.as_deref() == Some("") {
             self.checksum_sha256 = None;
         }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
-        }
         if let Some(ref val) = self.request_charged {
             if val.as_str() == "" {
                 self.request_charged = None;
@@ -35718,9 +35677,6 @@ impl DtoExt for WriteGetObjectResponseInput {
         }
         if self.content_range.as_deref() == Some("") {
             self.content_range = None;
-        }
-        if self.e_tag.as_deref() == Some("") {
-            self.e_tag = None;
         }
         if self.error_code.as_deref() == Some("") {
             self.error_code = None;

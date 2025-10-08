@@ -69,4 +69,39 @@ mod manually {
             })
         }
     }
+
+    use crate::dto::ETag;
+    use crate::dto::ParseETagError;
+
+    use stdx::default::default;
+
+    impl SerializeContent for ETag {
+        fn serialize_content<W: std::io::Write>(&self, s: &mut Serializer<W>) -> SerResult {
+            let val = self.value();
+            if val.len() <= 64 {
+                let mut buf: arrayvec::ArrayString<72> = default();
+                buf.push('"');
+                buf.push_str(val);
+                buf.push('"');
+                <str as SerializeContent>::serialize_content(&buf, s)
+            } else {
+                let buf = format!("\"{val}\"");
+                <str as SerializeContent>::serialize_content(&buf, s)
+            }
+        }
+    }
+
+    impl<'xml> DeserializeContent<'xml> for ETag {
+        fn deserialize_content(d: &mut Deserializer<'xml>) -> DeResult<Self> {
+            let val: String = d.content()?;
+
+            // try to parse as quoted ETag first
+            // fallback if the ETag is not quoted
+            match ETag::parse_http_header(val.as_bytes()) {
+                Ok(v) => Ok(v),
+                Err(ParseETagError::InvalidFormat) => Ok(ETag::Strong(val)),
+                Err(ParseETagError::InvalidChar) => Err(DeError::InvalidContent),
+            }
+        }
+    }
 }

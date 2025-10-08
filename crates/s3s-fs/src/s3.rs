@@ -109,7 +109,7 @@ impl S3 for FileSystem {
         let md5_sum = self.get_md5_sum(bucket, key).await?;
 
         let copy_object_result = CopyObjectResult {
-            e_tag: Some(format!("\"{md5_sum}\"")),
+            e_tag: Some(ETag::Strong(md5_sum)),
             last_modified: Some(last_modified),
             ..Default::default()
         };
@@ -235,7 +235,6 @@ impl S3 for FileSystem {
         let object_metadata = self.load_metadata(&input.bucket, &input.key, None).await?;
 
         let md5_sum = self.get_md5_sum(&input.bucket, &input.key).await?;
-        let e_tag = format!("\"{md5_sum}\"");
 
         let info = self.load_internal_info(&input.bucket, &input.key).await?;
         let checksum = match &info {
@@ -251,7 +250,7 @@ impl S3 for FileSystem {
             content_range,
             last_modified: Some(last_modified),
             metadata: object_metadata,
-            e_tag: Some(e_tag),
+            e_tag: Some(ETag::Strong(md5_sum)),
             checksum_crc32: checksum.checksum_crc32,
             checksum_crc32c: checksum.checksum_crc32c,
             checksum_sha1: checksum.checksum_sha1,
@@ -582,10 +581,8 @@ impl S3 for FileSystem {
         crate::checksum::modify_internal_info(&mut info, &checksum);
         self.save_internal_info(&bucket, &key, &info).await?;
 
-        let e_tag = format!("\"{md5_sum}\"");
-
         let output = PutObjectOutput {
-            e_tag: Some(e_tag),
+            e_tag: Some(ETag::Strong(md5_sum)),
             checksum_crc32: checksum.checksum_crc32,
             checksum_crc32c: checksum.checksum_crc32c,
             checksum_sha1: checksum.checksum_sha1,
@@ -655,7 +652,7 @@ impl S3 for FileSystem {
         debug!(path = %file_path.display(), ?size, %md5_sum, "write file");
 
         let output = UploadPartOutput {
-            e_tag: Some(format!("\"{md5_sum}\"")),
+            e_tag: Some(ETag::Strong(md5_sum)),
             ..Default::default()
         };
         Ok(S3Response::new(output))
@@ -720,7 +717,7 @@ impl S3 for FileSystem {
 
         let output = UploadPartCopyOutput {
             copy_part_result: Some(CopyPartResult {
-                e_tag: Some(format!("\"{md5_sum}\"")),
+                e_tag: Some(ETag::Strong(md5_sum)),
                 ..Default::default()
             }),
             ..Default::default()
@@ -847,7 +844,7 @@ impl S3 for FileSystem {
                 Ok(CompleteMultipartUploadOutput {
                     bucket: Some(bucket),
                     key: Some(key),
-                    e_tag: Some(format!("\"{md5_sum}\"")),
+                    e_tag: Some(ETag::Strong(md5_sum)),
                     ..Default::default()
                 })
             })),

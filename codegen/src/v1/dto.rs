@@ -43,6 +43,7 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
             "ContentType",   //
             "Event",         //
             "CachedTags",    //
+            "ETag",          //
         ];
 
         if provided_types.contains(&rs_shape_name.as_str()) {

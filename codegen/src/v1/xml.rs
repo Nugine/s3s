@@ -154,9 +154,15 @@ fn collect_xml_types<'a>(
                     q.push_back(variant.type_.as_str());
                 }
             }
-            rust::Type::Provided(ty) => {
-                assert!(matches!(ty.name.as_str(), "Body" | "Event"));
-            }
+            rust::Type::Provided(ty) => match ty.name.as_str() {
+                "Body" | "Event" => {
+                    // ignore
+                }
+                "ETag" => {
+                    field_type_names.insert(ty.name.as_str());
+                }
+                _ => panic!(),
+            },
             rust::Type::Map(_) => unimplemented!(),
             rust::Type::Timestamp(_) => {}
         }
