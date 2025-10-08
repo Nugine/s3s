@@ -100,6 +100,11 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
                         continue;
                     }
 
+                    if field.position == "s3s" {
+                        g!("{s3s_field_name}: None,");
+                        continue;
+                    }
+
                     let field_ty = &rust_types[field.type_.as_str()];
 
                     let needs_unwrap = 'unwrap: {
@@ -191,6 +196,10 @@ pub fn codegen(ops: &Operations, rust_types: &RustTypes) {
 
                     if field.type_ == "PartNumberMarker" || field.type_ == "NextPartNumberMarker" {
                         g!("y = y.set_{aws_field_name}(x.{s3s_field_name}.map(string_from_integer));");
+                        continue;
+                    }
+
+                    if field.position == "s3s" {
                         continue;
                     }
 

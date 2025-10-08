@@ -9,6 +9,8 @@ use bytes::Bytes;
 use http_body::{Body, Frame};
 use tokio::time::Interval;
 
+// TODO: we can simplify this body type if the client does not support trailers (?)
+
 // sends whitespace while the future is pending
 pin_project_lite::pin_project! {
 
@@ -19,17 +21,19 @@ pin_project_lite::pin_project! {
         response: Option<Response>,
         interval: Interval,
         done: bool,
+        allow_trailers: bool,
     }
 }
 
 impl<F> KeepAliveBody<F> {
-    pub fn new(inner: F, interval: Duration, initial_body: Option<Bytes>) -> Self {
+    pub fn new(inner: F, interval: Duration, initial_body: Option<Bytes>, allow_trailers: bool) -> Self {
         Self {
             inner,
             initial_body,
             response: None,
             interval: tokio::time::interval(interval),
             done: false,
+            allow_trailers,
         }
     }
 }
@@ -58,7 +62,12 @@ where
                     return Poll::Ready(Some(Ok(frame)));
                 }
                 *this.done = true;
-                return Poll::Ready(Some(Ok(Frame::trailers(std::mem::take(&mut response.headers)))));
+
+                if *this.allow_trailers {
+                    let trailers = Frame::trailers(std::mem::take(&mut response.headers));
+                    return Poll::Ready(Some(Ok(trailers)));
+                }
+                return Poll::Ready(None);
             }
             match this.inner.as_mut().poll(cx) {
                 Poll::Ready(response) => match response {
@@ -101,6 +110,7 @@ mod tests {
             },
             Duration::from_secs(1),
             Some(Bytes::from_static(b"hello")),
+            true,
         );
 
         let aggregated = body.collect().await.unwrap();
@@ -122,6 +132,7 @@ mod tests {
             },
             Duration::from_secs(1),
             None,
+            false,
         );
 
         let aggregated = body.collect().await.unwrap();
@@ -143,6 +154,7 @@ mod tests {
             },
             Duration::from_millis(100),
             None,
+            false,
         );
 
         let aggregated = body.collect().await.unwrap();

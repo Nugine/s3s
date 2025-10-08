@@ -590,18 +590,6 @@ impl CompleteMultipartUpload {
             upload_id,
         })
     }
-
-    pub fn serialize_http(x: CompleteMultipartUploadOutput) -> S3Result<http::Response> {
-        let mut res = http::Response::with_status(http::StatusCode::OK);
-        http::set_xml_body_no_decl(&mut res, &x)?;
-        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED, x.bucket_key_enabled)?;
-        http::add_opt_header(&mut res, X_AMZ_EXPIRATION, x.expiration)?;
-        http::add_opt_header(&mut res, X_AMZ_REQUEST_CHARGED, x.request_charged)?;
-        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID, x.ssekms_key_id)?;
-        http::add_opt_header(&mut res, X_AMZ_SERVER_SIDE_ENCRYPTION, x.server_side_encryption)?;
-        http::add_opt_header(&mut res, X_AMZ_VERSION_ID, x.version_id)?;
-        Ok(res)
-    }
 }
 
 #[async_trait::async_trait]
@@ -617,35 +605,14 @@ impl super::Operation for CompleteMultipartUpload {
         if let Some(access) = ccx.access {
             access.complete_multipart_upload(&mut s3_req).await?;
         }
-        let s3 = s3.clone();
-        let fut = async move {
-            let result = s3.complete_multipart_upload(s3_req).await;
-            match result {
-                Ok(s3_resp) => {
-                    let mut resp = Self::serialize_http(s3_resp.output)?;
-                    resp.headers.extend(s3_resp.headers);
-                    Ok(resp)
-                }
-                Err(err) => super::serialize_error(err, true).map_err(Into::into),
-            }
+        let result = s3.complete_multipart_upload(s3_req).await;
+        let s3_resp = match result {
+            Ok(val) => val,
+            Err(err) => return super::serialize_error(err, false),
         };
-        let mut resp = http::Response::with_status(http::StatusCode::OK);
-        http::set_keep_alive_xml_body(&mut resp, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;
-        http::add_opt_header(
-            &mut resp,
-            "trailer",
-            Some(
-                [
-                    X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED.as_str(),
-                    X_AMZ_EXPIRATION.as_str(),
-                    X_AMZ_REQUEST_CHARGED.as_str(),
-                    X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID.as_str(),
-                    X_AMZ_SERVER_SIDE_ENCRYPTION.as_str(),
-                    X_AMZ_VERSION_ID.as_str(),
-                ]
-                .join(","),
-            ),
-        )?;
+        let mut resp = Self::serialize_http(s3_resp.output)?;
+        resp.headers.extend(s3_resp.headers);
+        resp.extensions.extend(s3_resp.extensions);
         Ok(resp)
     }
 }
