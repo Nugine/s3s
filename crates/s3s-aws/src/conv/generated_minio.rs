@@ -761,6 +761,7 @@ impl AwsConversion for s3s::dto::CompleteMultipartUploadOutput {
             ssekms_key_id: try_from_aws(x.ssekms_key_id)?,
             server_side_encryption: try_from_aws(x.server_side_encryption)?,
             version_id: try_from_aws(x.version_id)?,
+            future: None,
         })
     }
 

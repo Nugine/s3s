@@ -78,7 +78,7 @@ pub struct Struct {
 }
 
 #[allow(clippy::struct_excessive_bools)]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct StructField {
     pub name: String,
     pub type_: String,
@@ -103,6 +103,8 @@ pub struct StructField {
     pub xml_namespace_prefix: Option<String>,
 
     pub is_custom_extension: bool,
+
+    pub custom_in_derive_debug: Option<String>,
 }
 
 #[derive(Debug, Clone)]

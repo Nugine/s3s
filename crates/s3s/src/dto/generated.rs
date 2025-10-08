@@ -4,12 +4,14 @@
 #![allow(clippy::too_many_lines)]
 
 use super::*;
+use crate::error::S3Result;
 
 use std::borrow::Cow;
 use std::convert::Infallible;
 use std::fmt;
 use std::str::FromStr;
 
+use futures::future::BoxFuture;
 use serde::{Deserialize, Serialize};
 use stdx::default::default;
 
@@ -1492,7 +1494,7 @@ impl CompleteMultipartUploadInput {
     }
 }
 
-#[derive(Clone, Default, PartialEq)]
+#[derive(Default)]
 pub struct CompleteMultipartUploadOutput {
     /// <p>The name of the bucket that contains the newly created object. Does not return the access point
     /// ARN or access point alias if used.</p>
@@ -1567,6 +1569,8 @@ pub struct CompleteMultipartUploadOutput {
     /// <p>This functionality is not supported for directory buckets.</p>
     /// </note>
     pub version_id: Option<ObjectVersionId>,
+    /// A future that resolves to the upload output or an error. This field is used to implement AWS-like keep-alive behavior.
+    pub future: Option<BoxFuture<'static, S3Result<CompleteMultipartUploadOutput>>>,
 }
 
 impl fmt::Debug for CompleteMultipartUploadOutput {
@@ -1619,6 +1623,9 @@ impl fmt::Debug for CompleteMultipartUploadOutput {
         }
         if let Some(ref val) = self.version_id {
             d.field("version_id", val);
+        }
+        if self.future.is_some() {
+            d.field("future", &"<BoxFuture<'static, S3Result<CompleteMultipartUploadOutput>>>");
         }
         d.finish_non_exhaustive()
     }

@@ -842,11 +842,20 @@ impl S3 for FileSystem {
         debug!(?md5_sum, path = %object_path.display(), size = ?file_size, "file md5 sum");
 
         let output = CompleteMultipartUploadOutput {
-            bucket: Some(bucket),
-            key: Some(key),
-            e_tag: Some(format!("\"{md5_sum}\"")),
+            // TODO: better example of AWS-like keep-alive behavior
+            future: Some(Box::pin(async move {
+                Ok(CompleteMultipartUploadOutput {
+                    bucket: Some(bucket),
+                    key: Some(key),
+                    e_tag: Some(format!("\"{md5_sum}\"")),
+                    ..Default::default()
+                })
+            })),
             ..Default::default()
         };
+
+        debug!(?output);
+
         Ok(S3Response::new(output))
     }
 

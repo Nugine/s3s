@@ -259,6 +259,7 @@ fn codegen_op_http_ser_unit(op: &Operation) {
     g!("}}");
 }
 
+#[allow(clippy::too_many_lines)]
 fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
     let output = op.output.as_str();
     let rust_type = &rust_types[output];
@@ -268,6 +269,10 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
             codegen_op_http_ser_unit(op);
         }
         rust::Type::Struct(ty) => {
+            if op.name == "CompleteMultipartUpload" {
+                return; // custom implementation
+            }
+
             if ty.fields.is_empty() {
                 g!("pub fn serialize_http(_: {output}) -> S3Result<http::Response> {{");
                 {
@@ -280,7 +285,7 @@ fn codegen_op_http_ser(op: &Operation, rust_types: &RustTypes) {
 
                 assert!(ty.fields.is_empty().not());
                 for field in &ty.fields {
-                    assert!(["header", "metadata", "xml", "payload"].contains(&field.position.as_str()),);
+                    assert!(["header", "metadata", "xml", "payload", "s3s"].contains(&field.position.as_str()),);
                 }
 
                 if op.name == "GetObject" {
@@ -690,47 +695,26 @@ fn codegen_op_http_call(op: &Operation) {
         g!("let overridden_headers = super::get_object::extract_overridden_response_headers(&s3_req)?;");
     }
 
-    if op.name == "CompleteMultipartUpload" {
-        g!("let s3 = s3.clone();");
-        g!("let fut = async move {{");
-        g!("let result = s3.{method}(s3_req).await;");
-        g!("match result {{");
-        g(["Ok(s3_resp) => {
-                let mut resp = Self::serialize_http(s3_resp.output)?;
-                resp.headers.extend(s3_resp.headers);
-                Ok(resp)
-            }"]);
-        g!("Err(err) => super::serialize_error(err, true).map_err(Into::into),");
-        g!("}}");
-        g!("}};");
-        g!("let mut resp = http::Response::with_status(http::StatusCode::OK);");
-        g!(
-            "http::set_keep_alive_xml_body(&mut resp, sync_wrapper::SyncFuture::new(fut), std::time::Duration::from_millis(100))?;"
-        );
-        g!(
-            "http::add_opt_header(&mut resp, \"trailer\", Some([X_AMZ_SERVER_SIDE_ENCRYPTION_BUCKET_KEY_ENABLED.as_str(), X_AMZ_EXPIRATION.as_str(), X_AMZ_REQUEST_CHARGED.as_str(), X_AMZ_SERVER_SIDE_ENCRYPTION_AWS_KMS_KEY_ID.as_str(), X_AMZ_SERVER_SIDE_ENCRYPTION.as_str(), X_AMZ_VERSION_ID.as_str()].join(\",\")))?;"
-        );
+    g!("let result = s3.{method}(s3_req).await;");
+
+    g([
+        "let s3_resp = match result {",
+        "    Ok(val) => val,",
+        "    Err(err) => return super::serialize_error(err, false),",
+        "};",
+    ]);
+
+    g!("let mut resp = Self::serialize_http(s3_resp.output)?;");
+
+    if op.name == "GetObject" {
+        g!("resp.headers.extend(overridden_headers);");
+        g!("super::get_object::merge_custom_headers(&mut resp, s3_resp.headers);");
     } else {
-        g!("let result = s3.{method}(s3_req).await;");
-
-        g([
-            "let s3_resp = match result {",
-            "    Ok(val) => val,",
-            "    Err(err) => return super::serialize_error(err, false),",
-            "};",
-        ]);
-
-        g!("let mut resp = Self::serialize_http(s3_resp.output)?;");
-
-        if op.name == "GetObject" {
-            g!("resp.headers.extend(overridden_headers);");
-            g!("super::get_object::merge_custom_headers(&mut resp, s3_resp.headers);");
-        } else {
-            g!("resp.headers.extend(s3_resp.headers);");
-        }
-
-        g!("resp.extensions.extend(s3_resp.extensions);");
+        g!("resp.headers.extend(s3_resp.headers);");
     }
+
+    g!("resp.extensions.extend(s3_resp.extensions);");
+
     g!("Ok(resp)");
 
     g!("}}");

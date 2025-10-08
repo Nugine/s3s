@@ -13,6 +13,7 @@ mod signature;
 use self::signature::SignatureContext;
 
 mod get_object;
+mod multipart;
 
 #[cfg(test)]
 mod tests;

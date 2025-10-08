@@ -212,6 +212,8 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
                         xml_namespace_prefix: field.traits.xml_namespace_prefix().map(o),
 
                         is_custom_extension: field.traits.minio(),
+
+                        custom_in_derive_debug: None,
                     };
                     fields.push(field);
                 }
@@ -255,6 +257,20 @@ pub fn collect_rust_types(model: &smithy::Model, ops: &Operations) -> RustTypes 
 }
 
 fn patch_types(space: &mut RustTypes) {
+    // patch CompleteMultipartUploadOutput
+    {
+        let Some(rust::Type::Struct(ty)) = space.get_mut("CompleteMultipartUploadOutput") else { panic!() };
+        ty.fields.push(rust::StructField {
+            name: o("future"),
+            type_: o("BoxFuture<'static, S3Result<CompleteMultipartUploadOutput>>"),
+            option_type: true,
+            position: o("s3s"),
+            doc: Some(o("A future that resolves to the upload output or an error. This field is used to implement AWS-like keep-alive behavior.")),
+            custom_in_derive_debug: Some(o("&\"<BoxFuture<'static, S3Result<CompleteMultipartUploadOutput>>>\"")),    
+            ..rust::StructField::default()
+        });
+    }
+
     // patch PartNumberMarker
     // FIXME: https://github.com/awslabs/aws-sdk-rust/issues/1318
     {
@@ -324,6 +340,7 @@ fn patch_types(space: &mut RustTypes) {
             xml_namespace_uri: None,
             xml_namespace_prefix: None,
             is_custom_extension: false,
+            custom_in_derive_debug: None,
         });
         ty.name = o("SelectObjectContentInput");
 
@@ -397,12 +414,14 @@ pub fn codegen(rust_types: &RustTypes, ops: &Operations, patch: Option<Patch>) {
         "#![allow(clippy::too_many_lines)]",
         "",
         "use super::*;",
+        "use crate::error::S3Result;",
         "",
         "use std::borrow::Cow;",
         "use std::convert::Infallible;",
         "use std::fmt;",
         "use std::str::FromStr;",
         "",
+        "use futures::future::BoxFuture;",
         "use stdx::default::default;",
         "use serde::{Serialize, Deserialize};",
         "",
@@ -478,7 +497,12 @@ fn codegen_struct(ty: &rust::Struct, rust_types: &RustTypes, ops: &Operations) {
     g!("fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {{");
     g!("let mut d = f.debug_struct(\"{}\");", ty.name);
     for field in &ty.fields {
-        if field.option_type {
+        if let Some(name) = &field.custom_in_derive_debug {
+            assert!(field.option_type);
+            g!("if self.{}.is_some() {{", field.name);
+            g!("d.field(\"{}\", {});", field.name, name);
+            g!("}}");
+        } else if field.option_type {
             g!("if let Some(ref val) = self.{} {{", field.name);
             g!("d.field(\"{}\", val);", field.name);
             g!("}}");
@@ -649,6 +673,9 @@ fn can_derive_clone(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
         if field.position == "sealed" {
             return false;
         }
+        if field.position == "s3s" {
+            return false;
+        }
         if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
             return false;
         }
@@ -659,6 +686,9 @@ fn can_derive_clone(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
 fn can_derive_partial_eq(ty: &rust::Struct, _rust_types: &RustTypes) -> bool {
     ty.fields.iter().all(|field| {
         if field.position == "sealed" {
+            return false;
+        }
+        if field.position == "s3s" {
             return false;
         }
         if matches!(field.type_.as_str(), "StreamingBlob" | "SelectObjectContentEventStream") {
