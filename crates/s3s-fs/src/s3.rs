@@ -351,6 +351,7 @@ impl S3 for FileSystem {
             name: v2.name,
             prefix: v2.prefix,
             max_keys: v2.max_keys,
+            is_truncated: v2.is_truncated,
             ..Default::default()
         }))
     }

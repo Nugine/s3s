@@ -256,10 +256,10 @@ async fn test_write_and_list_root() -> Result<()> {
     let op = create_operator();
     log_and_unwrap!(op.write("a", "test").await);
     log_and_unwrap!(op.list("/").await);
-    
+
     // Clean up
     log_and_unwrap!(op.delete("a").await);
-    
+
     Ok(())
 }
 
