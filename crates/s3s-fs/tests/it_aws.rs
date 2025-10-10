@@ -341,6 +341,50 @@ async fn test_list_objects_v1_with_prefixes() -> Result<()> {
 
 #[tokio::test]
 #[tracing::instrument]
+async fn test_list_objects_v2_max_keys() -> Result<()> {
+    let c = Client::new(config());
+    let bucket = format!("test-max-keys-{}", Uuid::new_v4());
+    let bucket_str = bucket.as_str();
+    create_bucket(&c, bucket_str).await?;
+
+    // Create 10 files
+    let content = "test";
+    for i in 0..10 {
+        let key = format!("file{:02}.txt", i);
+        c.put_object()
+            .bucket(bucket_str)
+            .key(key)
+            .body(ByteStream::from_static(content.as_bytes()))
+            .send()
+            .await?;
+    }
+
+    // Test max_keys=5
+    let result = c.list_objects_v2().bucket(bucket_str).max_keys(5).send().await;
+    let response = log_and_unwrap!(result);
+
+    // Should return exactly 5 objects
+    let contents: Vec<_> = response.contents().iter().filter_map(|obj| obj.key()).collect();
+    assert_eq!(contents.len(), 5, "Expected 5 objects, got {}", contents.len());
+    assert_eq!(response.key_count(), Some(5));
+    assert_eq!(response.max_keys(), Some(5));
+    assert_eq!(response.is_truncated(), Some(true), "Should be truncated");
+
+    // Test max_keys=20 (more than available)
+    let result = c.list_objects_v2().bucket(bucket_str).max_keys(20).send().await;
+    let response = log_and_unwrap!(result);
+
+    let contents: Vec<_> = response.contents().iter().filter_map(|obj| obj.key()).collect();
+    assert_eq!(contents.len(), 10, "Expected 10 objects, got {}", contents.len());
+    assert_eq!(response.key_count(), Some(10));
+    assert_eq!(response.max_keys(), Some(20));
+    assert_eq!(response.is_truncated(), Some(false), "Should not be truncated");
+
+    Ok(())
+}
+
+#[tokio::test]
+#[tracing::instrument]
 async fn test_single_object() -> Result<()> {
     let _guard = serial().await;
 

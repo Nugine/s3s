@@ -367,96 +367,92 @@ impl S3 for FileSystem {
 
         let delimiter = input.delimiter.as_deref();
         let prefix = input.prefix.as_deref().unwrap_or("").trim_start_matches('/');
+        let max_keys = input.max_keys.unwrap_or(1000);
 
+        // Collect all matching objects and common prefixes
         let mut objects: Vec<Object> = default();
         let mut common_prefixes = std::collections::BTreeSet::new();
 
         if let Some(delimiter) = delimiter {
-            // When delimiter is provided, only list immediate contents (non-recursive)
             self.list_objects_with_delimiter(&path, prefix, delimiter, &mut objects, &mut common_prefixes)
                 .await?;
         } else {
-            // When no delimiter, do recursive listing (current behavior)
-            let mut dir_queue: VecDeque<PathBuf> = default();
-            dir_queue.push_back(path.clone());
-            let prefix_is_empty = prefix.is_empty();
-
-            while let Some(dir) = dir_queue.pop_front() {
-                let mut iter = try_!(fs::read_dir(dir).await);
-                while let Some(entry) = try_!(iter.next_entry().await) {
-                    let file_type = try_!(entry.file_type().await);
-                    if file_type.is_dir() {
-                        dir_queue.push_back(entry.path());
-                    } else {
-                        let file_path = entry.path();
-                        let key = try_!(file_path.strip_prefix(&path));
-                        let Some(key_str) = normalize_path(key, "/") else {
-                            continue;
-                        };
-
-                        if !prefix_is_empty && !key_str.starts_with(prefix) {
-                            continue;
-                        }
-
-                        let metadata = try_!(entry.metadata().await);
-                        let last_modified = Timestamp::from(try_!(metadata.modified()));
-                        let size = metadata.len();
-
-                        let object = Object {
-                            key: Some(key_str),
-                            last_modified: Some(last_modified),
-                            size: Some(try_!(i64::try_from(size))),
-                            ..Default::default()
-                        };
-                        objects.push(object);
-                    }
-                }
-            }
+            self.list_objects_recursive(&path, prefix, &mut objects).await?;
         }
 
+        // Sort before filtering and limiting
         objects.sort_by(|lhs, rhs| {
             let lhs_key = lhs.key.as_deref().unwrap_or("");
             let rhs_key = rhs.key.as_deref().unwrap_or("");
             lhs_key.cmp(rhs_key)
         });
 
-        let objects = if let Some(marker) = &input.start_after {
-            objects
-                .into_iter()
-                .skip_while(|n| n.key.as_deref().unwrap_or("") <= marker.as_str())
-                .collect()
-        } else {
-            objects
-        };
+        // Apply start_after filter if provided
+        if let Some(marker) = &input.start_after {
+            objects.retain(|obj| obj.key.as_deref().unwrap_or("") > marker.as_str());
+        }
 
-        let common_prefixes_list: Option<List<CommonPrefix>> = if common_prefixes.is_empty() {
-            None
-        } else {
-            Some(
-                common_prefixes
-                    .into_iter()
-                    .map(|prefix| CommonPrefix { prefix: Some(prefix) })
-                    .collect(),
-            )
-        };
+        // Convert common_prefixes to sorted list
+        let common_prefixes_list: Vec<CommonPrefix> = common_prefixes
+            .into_iter()
+            .map(|prefix| CommonPrefix { prefix: Some(prefix) })
+            .collect();
 
-        // Calculate key_count as total of Contents + CommonPrefixes
-        let common_prefixes_count = if let Some(ref list) = common_prefixes_list {
-            list.len()
-        } else {
-            0
-        };
-        let key_count = try_!(i32::try_from(objects.len() + common_prefixes_count));
+        // Limit results to max_keys by interleaving objects and common_prefixes
+        let mut result_objects = Vec::new();
+        let mut result_prefixes = Vec::new();
+        let mut total_count = 0;
+        let max_keys_usize = usize::try_from(max_keys).unwrap_or(1000);
 
-        // max_keys should reflect the request parameter or AWS default (1000)
-        let max_keys = input.max_keys.unwrap_or(1000);
+        let mut obj_idx = 0;
+        let mut prefix_idx = 0;
+
+        while total_count < max_keys_usize {
+            let obj_key = objects.get(obj_idx).and_then(|o| o.key.as_deref());
+            let prefix_key = common_prefixes_list.get(prefix_idx).and_then(|p| p.prefix.as_deref());
+
+            match (obj_key, prefix_key) {
+                (Some(ok), Some(pk)) => {
+                    if ok < pk {
+                        result_objects.push(objects[obj_idx].clone());
+                        obj_idx += 1;
+                    } else {
+                        result_prefixes.push(common_prefixes_list[prefix_idx].clone());
+                        prefix_idx += 1;
+                    }
+                    total_count += 1;
+                }
+                (Some(_), None) => {
+                    result_objects.push(objects[obj_idx].clone());
+                    obj_idx += 1;
+                    total_count += 1;
+                }
+                (None, Some(_)) => {
+                    result_prefixes.push(common_prefixes_list[prefix_idx].clone());
+                    prefix_idx += 1;
+                    total_count += 1;
+                }
+                (None, None) => break,
+            }
+        }
+
+        let is_truncated = obj_idx < objects.len() || prefix_idx < common_prefixes_list.len();
+        let key_count = try_!(i32::try_from(total_count));
 
         let output = ListObjectsV2Output {
             key_count: Some(key_count),
             max_keys: Some(max_keys),
-            is_truncated: Some(false),
-            contents: Some(objects),
-            common_prefixes: common_prefixes_list,
+            is_truncated: Some(is_truncated),
+            contents: if result_objects.is_empty() {
+                None
+            } else {
+                Some(result_objects)
+            },
+            common_prefixes: if result_prefixes.is_empty() {
+                None
+            } else {
+                Some(result_prefixes)
+            },
             delimiter: input.delimiter,
             encoding_type: input.encoding_type,
             name: Some(input.bucket),
@@ -911,6 +907,46 @@ impl S3 for FileSystem {
 }
 
 impl FileSystem {
+    async fn list_objects_recursive(&self, bucket_root: &Path, prefix: &str, objects: &mut Vec<Object>) -> S3Result<()> {
+        let mut dir_queue: VecDeque<PathBuf> = default();
+        dir_queue.push_back(bucket_root.to_owned());
+        let prefix_is_empty = prefix.is_empty();
+
+        while let Some(dir) = dir_queue.pop_front() {
+            let mut iter = try_!(fs::read_dir(dir).await);
+            while let Some(entry) = try_!(iter.next_entry().await) {
+                let file_type = try_!(entry.file_type().await);
+                if file_type.is_dir() {
+                    dir_queue.push_back(entry.path());
+                } else {
+                    let file_path = entry.path();
+                    let key = try_!(file_path.strip_prefix(bucket_root));
+                    let Some(key_str) = normalize_path(key, "/") else {
+                        continue;
+                    };
+
+                    if !prefix_is_empty && !key_str.starts_with(prefix) {
+                        continue;
+                    }
+
+                    let metadata = try_!(entry.metadata().await);
+                    let last_modified = Timestamp::from(try_!(metadata.modified()));
+                    let size = metadata.len();
+
+                    let object = Object {
+                        key: Some(key_str),
+                        last_modified: Some(last_modified),
+                        size: Some(try_!(i64::try_from(size))),
+                        ..Default::default()
+                    };
+                    objects.push(object);
+                }
+            }
+        }
+
+        Ok(())
+    }
+
     async fn list_objects_with_delimiter(
         &self,
         bucket_root: &Path,
