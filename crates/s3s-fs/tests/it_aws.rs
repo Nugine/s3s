@@ -350,7 +350,7 @@ async fn test_list_objects_v2_max_keys() -> Result<()> {
     // Create 10 files
     let content = "test";
     for i in 0..10 {
-        let key = format!("file{:02}.txt", i);
+        let key = format!("file{i:02}.txt");
         c.put_object()
             .bucket(bucket_str)
             .key(key)
