@@ -428,7 +428,7 @@ impl S3 for FileSystem {
             objects
         };
 
-        let common_prefixes_list = if common_prefixes.is_empty() {
+        let common_prefixes_list: Option<List<CommonPrefix>> = if common_prefixes.is_empty() {
             None
         } else {
             Some(
@@ -439,11 +439,21 @@ impl S3 for FileSystem {
             )
         };
 
-        let key_count = try_!(i32::try_from(objects.len()));
+        // Calculate key_count as total of Contents + CommonPrefixes
+        let common_prefixes_count = if let Some(ref list) = common_prefixes_list {
+            list.len()
+        } else {
+            0
+        };
+        let key_count = try_!(i32::try_from(objects.len() + common_prefixes_count));
+
+        // max_keys should reflect the request parameter or AWS default (1000)
+        let max_keys = input.max_keys.unwrap_or(1000);
 
         let output = ListObjectsV2Output {
             key_count: Some(key_count),
-            max_keys: Some(key_count),
+            max_keys: Some(max_keys),
+            is_truncated: Some(false),
             contents: Some(objects),
             common_prefixes: common_prefixes_list,
             delimiter: input.delimiter,
