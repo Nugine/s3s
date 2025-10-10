@@ -439,20 +439,15 @@ impl S3 for FileSystem {
         let is_truncated = obj_idx < objects.len() || prefix_idx < common_prefixes_list.len();
         let key_count = try_!(i32::try_from(total_count));
 
+        let contents = result_objects.is_empty().not().then_some(result_objects);
+        let common_prefixes = result_prefixes.is_empty().not().then_some(result_prefixes);
+
         let output = ListObjectsV2Output {
             key_count: Some(key_count),
             max_keys: Some(max_keys),
             is_truncated: Some(is_truncated),
-            contents: if result_objects.is_empty() {
-                None
-            } else {
-                Some(result_objects)
-            },
-            common_prefixes: if result_prefixes.is_empty() {
-                None
-            } else {
-                Some(result_prefixes)
-            },
+            contents,
+            common_prefixes,
             delimiter: input.delimiter,
             encoding_type: input.encoding_type,
             name: Some(input.bucket),
