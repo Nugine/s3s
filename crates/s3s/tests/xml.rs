@@ -1,8 +1,6 @@
 use s3s::xml;
 
 use std::fmt;
-use std::ops::Not;
-use std::sync::LazyLock;
 
 use stdx::default::default;
 
@@ -92,13 +90,22 @@ fn completed_multipart_upload() {
     assert_eq!(parts.len(), 3);
 
     assert_eq!(parts[0].part_number, Some(1));
-    assert_eq!(parts[0].e_tag.as_deref(), Some("\"a54357aff0632cce46d942af68356b38\""));
+    assert_eq!(
+        parts[0].e_tag.as_ref().map(s3s::dto::ETag::value),
+        Some("a54357aff0632cce46d942af68356b38")
+    );
 
     assert_eq!(parts[1].part_number, Some(2));
-    assert_eq!(parts[1].e_tag.as_deref(), Some("\"0c78aef83f66abc1fa1e8477f296d394\""));
+    assert_eq!(
+        parts[1].e_tag.as_ref().map(s3s::dto::ETag::value),
+        Some("0c78aef83f66abc1fa1e8477f296d394")
+    );
 
     assert_eq!(parts[2].part_number, Some(3));
-    assert_eq!(parts[2].e_tag.as_deref(), Some("\"acbd18db4cc2f85cedef654fccc4a4d8\""));
+    assert_eq!(
+        parts[2].e_tag.as_ref().map(s3s::dto::ETag::value),
+        Some("acbd18db4cc2f85cedef654fccc4a4d8")
+    );
 
     test_serde(&ans);
 }
@@ -278,25 +285,9 @@ fn assume_role_output() {
     test_serde(&val);
 }
 
-fn git_branch() -> String {
-    let output = std::process::Command::new("git")
-        .args(["rev-parse", "--abbrev-ref", "HEAD"])
-        .output()
-        .unwrap();
-    let stdout = core::str::from_utf8(&output.stdout).unwrap();
-    stdout.trim().to_owned()
-}
-
-static IS_MINIO_BRANCH: LazyLock<bool> = LazyLock::new(|| {
-    matches!(git_branch().as_str(), "minio" | "feat/minio") //
-});
-
+#[cfg(feature = "minio")]
 #[test]
 fn minio_versioning_configuration() {
-    if IS_MINIO_BRANCH.not() {
-        return;
-    }
-
     let xml = r"
 <VersioningConfiguration>
     <Status>Enabled</Status>
@@ -313,12 +304,9 @@ fn minio_versioning_configuration() {
     test_serde(&val);
 }
 
+#[cfg(feature = "minio")]
 #[test]
 fn minio_delete_replication() {
-    if IS_MINIO_BRANCH.not() {
-        return;
-    }
-
     let xml = r"
 <ReplicationConfiguration>
     <Rule>

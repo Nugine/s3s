@@ -22,6 +22,8 @@ pub use self::body::*;
 mod keep_alive_body;
 pub use self::keep_alive_body::KeepAliveBody;
 
+mod etag;
+
 mod request;
 pub use self::request::Request;
 

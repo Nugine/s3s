@@ -211,3 +211,17 @@ impl AwsConversion for s3s::dto::Tag {
         y.build().map_err(S3Error::internal_error)
     }
 }
+
+impl AwsConversion for s3s::dto::ETag {
+    type Target = String;
+
+    type Error = S3Error;
+
+    fn try_from_aws(x: Self::Target) -> S3Result<Self> {
+        Self::parse_http_header(x.as_bytes()).map_err(S3Error::internal_error)
+    }
+
+    fn try_into_aws(x: Self) -> S3Result<Self::Target> {
+        Ok(format!("\"{}\"", x.value()))
+    }
+}
