@@ -249,6 +249,22 @@ async fn test_list() -> Result<()> {
 
 #[tokio::test]
 #[tracing::instrument]
+async fn test_write_and_list_root() -> Result<()> {
+    let _guard = serial().await;
+    ensure_server_ready().await;
+
+    let op = create_operator();
+    log_and_unwrap!(op.write("a", "test").await);
+    log_and_unwrap!(op.list("/").await);
+
+    // Clean up
+    log_and_unwrap!(op.delete("a").await);
+
+    Ok(())
+}
+
+#[tokio::test]
+#[tracing::instrument]
 async fn test_delete_non_existent() -> Result<()> {
     let _guard = serial().await;
     ensure_server_ready().await;
