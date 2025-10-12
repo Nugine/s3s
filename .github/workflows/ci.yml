@@ -77,6 +77,22 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: just test
 
+  wasm-test:
+    needs: skip-check
+    if: needs.skip-check.outputs.should_skip != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: taiki-e/install-action@just
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@wasm-pack
+      - uses: taiki-e/install-action@wasm-bindgen-cli
+      - name: wasm-pack test
+        run: |
+          cd crates/s3s-wasm
+          wasm-pack test --node
+
   mint-proxy-minio:
     name: e2e (mint, s3s-proxy, minio)
     needs: skip-check
