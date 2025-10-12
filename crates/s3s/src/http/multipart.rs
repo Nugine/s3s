@@ -24,7 +24,7 @@ pub struct File {
     pub name: String,
     /// content type
     #[allow(dead_code)] // FIXME: discard this field?
-    pub content_type: String,
+    pub content_type: Option<String>,
     /// stream
     pub stream: Option<FileStream>,
 }
@@ -195,9 +195,9 @@ where
             }
             Some(filename) => {
                 let content_type = match content_type_bytes.map(std::str::from_utf8) {
-                    None => return Err((body, pat)),
+                    None => None,
                     Some(Err(_)) => return Ok(Err(MultipartError::InvalidFormat)),
-                    Some(Ok(s)) => s,
+                    Some(Ok(s)) => Some(s),
                 };
                 let remaining_bytes = if lines.slice.is_empty() {
                     None
@@ -207,7 +207,7 @@ where
                 let file_stream = FileStream::new(body, boundary, remaining_bytes);
                 let file = File {
                     name: filename.to_owned(),
-                    content_type: content_type.to_owned(),
+                    content_type: content_type.map(str::to_owned),
                     stream: Some(file_stream),
                 };
 
@@ -586,7 +586,7 @@ mod tests {
         }
 
         assert_eq!(ans.file.name, filename);
-        assert_eq!(ans.file.content_type, content_type);
+        assert_eq!(ans.file.content_type.unwrap(), content_type);
 
         let file_bytes = aggregate_file_stream(ans.file.stream.unwrap()).await.unwrap();
 
@@ -648,7 +648,7 @@ mod tests {
         }
 
         assert_eq!(ans.file.name, file_name);
-        assert_eq!(ans.file.content_type, content_type);
+        assert_eq!(ans.file.content_type.unwrap(), content_type);
 
         let file_content = concat!(
             "NxjFYaL4HJsJsSy/d3V7F+s1DfU+AdMw9Ze0GbhIXYn9OCvtkz4/mRdf0/V2gdgc4vuXzWUlVHag",
