@@ -30,24 +30,6 @@ pub enum ParseETagError {
 }
 
 impl ETag {
-    /// Returns the value if this is a strong `ETag`; otherwise None.
-    #[must_use]
-    pub fn as_strong(&self) -> Option<&str> {
-        match self {
-            ETag::Strong(s) => Some(s),
-            ETag::Weak(_) => None,
-        }
-    }
-
-    /// Returns the value if this is a weak `ETag`; otherwise None.
-    #[must_use]
-    pub fn as_weak(&self) -> Option<&str> {
-        match self {
-            ETag::Weak(s) => Some(s),
-            ETag::Strong(_) => None,
-        }
-    }
-
     /// Returns the raw value without strength information.
     #[must_use]
     pub fn value(&self) -> &str {
@@ -56,6 +38,52 @@ impl ETag {
         }
     }
 
+    /// Converts this `ETag` into its strong value if present.
+    #[must_use]
+    pub fn into_strong(self) -> Option<String> {
+        match self {
+            ETag::Strong(s) => Some(s),
+            ETag::Weak(_) => None,
+        }
+    }
+
+    /// Returns the strong value if this is an [`ETag::Strong`]; otherwise `None`.
+    #[must_use]
+    pub fn as_strong(&self) -> Option<&str> {
+        match self {
+            ETag::Strong(s) => Some(s),
+            ETag::Weak(_) => None,
+        }
+    }
+
+    /// Returns the weak value if this is an [`ETag::Weak`]; otherwise `None`.
+    #[must_use]
+    pub fn as_weak(&self) -> Option<&str> {
+        match self {
+            ETag::Weak(s) => Some(s),
+            ETag::Strong(_) => None,
+        }
+    }
+
+    /// Consumes the `ETag`, discarding the strength and returning its raw value.
+    #[must_use]
+    pub fn into_value(self) -> String {
+        match self {
+            ETag::Strong(s) | ETag::Weak(s) => s,
+        }
+    }
+
+    /// Converts this `ETag` into its weak value if present.
+    #[must_use]
+    pub fn into_weak(self) -> Option<String> {
+        match self {
+            ETag::Weak(s) => Some(s),
+            ETag::Strong(_) => None,
+        }
+    }
+}
+
+impl ETag {
     fn check_header_value(s: &[u8]) -> bool {
         s.iter().all(|&b| b >= 32 && b != 127 || b == b'\t')
     }
