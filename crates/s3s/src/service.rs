@@ -89,12 +89,12 @@ impl S3Service {
     #[tracing::instrument(
         level = "debug",
         skip(self, req),
-        fields(start_time=?time::OffsetDateTime::now_utc())
+        fields(start_time=?crate::time::now_utc())
     )]
     pub async fn call(&self, req: HttpRequest) -> Result<HttpResponse, HttpError> {
         debug!(?req);
 
-        let t0 = std::time::Instant::now();
+        let t0 = crate::time::Instant::now();
 
         let mut req = Request::from(req);
 
