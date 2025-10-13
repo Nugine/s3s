@@ -9,5 +9,8 @@ pub use self::authorization_v2::*;
 mod presigned_url_v2;
 pub use self::presigned_url_v2::*;
 
+mod post_signature;
+pub use self::post_signature::*;
+
 mod methods;
 pub use self::methods::*;

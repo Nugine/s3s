@@ -6,7 +6,7 @@ use crate::http::{AwsChunkedStream, Body, Multipart};
 use crate::http::{OrderedHeaders, OrderedQs};
 use crate::protocol::TrailingHeaders;
 use crate::sig_v2;
-use crate::sig_v2::{AuthorizationV2, PresignedUrlV2};
+use crate::sig_v2::{AuthorizationV2, PostSignatureInfoV2, PresignedUrlV2};
 use crate::sig_v4;
 use crate::sig_v4::PostSignatureInfo;
 use crate::sig_v4::PresignedUrlV4;
@@ -446,6 +446,17 @@ impl SignatureContext<'_> {
 
     #[tracing::instrument(skip(self))]
     pub async fn v2_check(&mut self) -> Option<S3Result<CredentialsExt>> {
+        // POST auth
+        if self.req_method == Method::POST {
+            if let Some(ref mime) = self.mime {
+                if mime.type_() == mime::MULTIPART && mime.subtype() == mime::FORM_DATA {
+                    debug!("checking post signature");
+                    return Some(self.v2_check_post_signature().await);
+                }
+            }
+        }
+
+        // query auth
         if let Some(qs) = self.qs {
             if qs.has("Signature") {
                 debug!("checking presigned url");
@@ -453,6 +464,7 @@ impl SignatureContext<'_> {
             }
         }
 
+        // header auth
         if let Some(auth) = self.hs.get_unique(crate::header::AUTHORIZATION) {
             if let Ok(auth) = AuthorizationV2::parse(auth) {
                 debug!("checking header auth");
@@ -495,6 +507,51 @@ impl SignatureContext<'_> {
 
         Ok(CredentialsExt {
             access_key: access_key.into(),
+            secret_key,
+            region: None,
+            service: Some("s3".into()),
+        })
+    }
+
+    pub async fn v2_check_post_signature(&mut self) -> S3Result<CredentialsExt> {
+        let auth = require_auth(self.auth)?;
+
+        let multipart = {
+            let mime = self.mime.as_ref().unwrap(); // assume: multipart
+
+            let boundary = mime
+                .get_param(mime::BOUNDARY)
+                .ok_or_else(|| invalid_request!("missing boundary"))?;
+
+            let body = mem::take(self.req_body);
+            http::transform_multipart(body, boundary.as_str().as_bytes())
+                .await
+                .map_err(|e| s3_error!(e, MalformedPOSTRequest))?
+        };
+
+        let info =
+            PostSignatureInfoV2::extract(&multipart).ok_or_else(|| invalid_request!("missing required multipart fields"))?;
+
+        if is_base64_encoded(info.policy.as_bytes()).not() {
+            return Err(invalid_request!("invalid field: policy"));
+        }
+
+        let access_key = info.access_key_id.to_owned();
+        let secret_key = auth.get_secret_key(&access_key).await?;
+
+        // For v2 POST signature, the string to sign is the base64-encoded policy
+        let string_to_sign = info.policy;
+        let signature = sig_v2::calculate_signature(&secret_key, string_to_sign);
+
+        let expected_signature = info.signature;
+        if signature != expected_signature {
+            debug!(?signature, expected=?expected_signature, "signature mismatch");
+            return Err(s3_error!(SignatureDoesNotMatch));
+        }
+
+        self.multipart = Some(multipart);
+        Ok(CredentialsExt {
+            access_key,
             secret_key,
             region: None,
             service: Some("s3".into()),
