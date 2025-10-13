@@ -6,9 +6,9 @@ use crate::http::{AwsChunkedStream, Body, Multipart};
 use crate::http::{OrderedHeaders, OrderedQs};
 use crate::protocol::TrailingHeaders;
 use crate::sig_v2;
-use crate::sig_v2::{AuthorizationV2, PostSignatureInfoV2, PresignedUrlV2};
+use crate::sig_v2::{AuthorizationV2, PostSignatureV2, PresignedUrlV2};
 use crate::sig_v4;
-use crate::sig_v4::PostSignatureInfo;
+use crate::sig_v4::PostSignatureV4;
 use crate::sig_v4::PresignedUrlV4;
 use crate::sig_v4::{AmzContentSha256, AmzDate};
 use crate::sig_v4::{AuthorizationV4, CredentialV4};
@@ -89,6 +89,14 @@ fn require_auth(auth: Option<&dyn S3Auth>) -> S3Result<&dyn S3Auth> {
 
 impl SignatureContext<'_> {
     pub async fn check(&mut self) -> S3Result<Option<CredentialsExt>> {
+        if self.req_method == Method::POST {
+            if let Some(ref mime) = self.mime {
+                if mime.type_() == mime::MULTIPART && mime.subtype() == mime::FORM_DATA {
+                    return Ok(Some(self.check_post_signature().await?));
+                }
+            }
+        }
+
         if let Some(result) = self.v2_check().await {
             debug!("checked signature v2");
             return Ok(Some(result?));
@@ -103,17 +111,37 @@ impl SignatureContext<'_> {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn v4_check(&mut self) -> Option<S3Result<CredentialsExt>> {
-        // POST auth
-        if self.req_method == Method::POST {
-            if let Some(ref mime) = self.mime {
-                if mime.type_() == mime::MULTIPART && mime.subtype() == mime::FORM_DATA {
-                    debug!("checking post signature");
-                    return Some(self.v4_check_post_signature().await);
-                }
-            }
+    async fn check_post_signature(&mut self) -> S3Result<CredentialsExt> {
+        let multipart = {
+            let mime = self.mime.as_ref().unwrap(); // assume: multipart
+
+            let boundary = mime
+                .get_param(mime::BOUNDARY)
+                .ok_or_else(|| invalid_request!("missing boundary"))?;
+
+            let body = mem::take(self.req_body);
+            http::transform_multipart(body, boundary.as_str().as_bytes())
+                .await
+                .map_err(|e| s3_error!(e, MalformedPOSTRequest))?
+        };
+
+        debug!(?multipart);
+
+        if multipart.find_field_value("x-amz-signature").is_some() {
+            debug!("checking post signature v4");
+            return self.v4_check_post_signature(multipart).await;
         }
 
+        if multipart.find_field_value("signature").is_some() {
+            debug!("checking post signature v2");
+            return self.v2_check_post_signature(multipart).await;
+        }
+
+        Err(invalid_request!("unsupported post signature"))
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn v4_check(&mut self) -> Option<S3Result<CredentialsExt>> {
         // query auth
         if let Some(qs) = self.qs {
             if qs.has("X-Amz-Signature") {
@@ -131,23 +159,10 @@ impl SignatureContext<'_> {
         None
     }
 
-    pub async fn v4_check_post_signature(&mut self) -> S3Result<CredentialsExt> {
+    pub async fn v4_check_post_signature(&mut self, multipart: Multipart) -> S3Result<CredentialsExt> {
         let auth = require_auth(self.auth)?;
 
-        let multipart = {
-            let mime = self.mime.as_ref().unwrap(); // assume: multipart
-
-            let boundary = mime
-                .get_param(mime::BOUNDARY)
-                .ok_or_else(|| invalid_request!("missing boundary"))?;
-
-            let body = mem::take(self.req_body);
-            http::transform_multipart(body, boundary.as_str().as_bytes())
-                .await
-                .map_err(|e| s3_error!(e, MalformedPOSTRequest))?
-        };
-
-        let info = PostSignatureInfo::extract(&multipart).ok_or_else(|| invalid_request!("missing required multipart fields"))?;
+        let info = PostSignatureV4::extract(&multipart).ok_or_else(|| invalid_request!("missing required multipart fields"))?;
 
         if is_base64_encoded(info.policy.as_bytes()).not() {
             return Err(invalid_request!("invalid field: policy"));
@@ -446,16 +461,6 @@ impl SignatureContext<'_> {
 
     #[tracing::instrument(skip(self))]
     pub async fn v2_check(&mut self) -> Option<S3Result<CredentialsExt>> {
-        // POST auth
-        if self.req_method == Method::POST {
-            if let Some(ref mime) = self.mime {
-                if mime.type_() == mime::MULTIPART && mime.subtype() == mime::FORM_DATA {
-                    debug!("checking post signature");
-                    return Some(self.v2_check_post_signature().await);
-                }
-            }
-        }
-
         // query auth
         if let Some(qs) = self.qs {
             if qs.has("Signature") {
@@ -513,24 +518,10 @@ impl SignatureContext<'_> {
         })
     }
 
-    pub async fn v2_check_post_signature(&mut self) -> S3Result<CredentialsExt> {
+    pub async fn v2_check_post_signature(&mut self, multipart: Multipart) -> S3Result<CredentialsExt> {
         let auth = require_auth(self.auth)?;
 
-        let multipart = {
-            let mime = self.mime.as_ref().unwrap(); // assume: multipart
-
-            let boundary = mime
-                .get_param(mime::BOUNDARY)
-                .ok_or_else(|| invalid_request!("missing boundary"))?;
-
-            let body = mem::take(self.req_body);
-            http::transform_multipart(body, boundary.as_str().as_bytes())
-                .await
-                .map_err(|e| s3_error!(e, MalformedPOSTRequest))?
-        };
-
-        let info =
-            PostSignatureInfoV2::extract(&multipart).ok_or_else(|| invalid_request!("missing required multipart fields"))?;
+        let info = PostSignatureV2::extract(&multipart).ok_or_else(|| invalid_request!("missing required multipart fields"))?;
 
         if is_base64_encoded(info.policy.as_bytes()).not() {
             return Err(invalid_request!("invalid field: policy"));

@@ -17,8 +17,8 @@ pub use self::amz_content_sha256::*;
 mod amz_date;
 pub use self::amz_date::*;
 
-mod post_signature;
-pub use self::post_signature::*;
+mod post_signature_v4;
+pub use self::post_signature_v4::*;
 
 mod methods;
 pub use self::methods::*;
