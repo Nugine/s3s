@@ -1,6 +1,6 @@
 use crate::http::Multipart;
 
-pub struct PostSignatureInfo<'a> {
+pub struct PostSignatureV4<'a> {
     pub policy: &'a str,
     pub x_amz_algorithm: &'a str,
     pub x_amz_credential: &'a str,
@@ -8,7 +8,7 @@ pub struct PostSignatureInfo<'a> {
     pub x_amz_signature: &'a str,
 }
 
-impl<'a> PostSignatureInfo<'a> {
+impl<'a> PostSignatureV4<'a> {
     pub fn extract(m: &'a Multipart) -> Option<Self> {
         let policy = m.find_field_value("policy")?;
         let x_amz_algorithm = m.find_field_value("x-amz-algorithm")?;
