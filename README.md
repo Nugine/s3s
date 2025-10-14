@@ -17,6 +17,8 @@ S3 Service Adapter
 | [s3s-aws](./crates/s3s-aws/)       |    [![Crates.io](https://img.shields.io/crates/v/s3s-aws.svg)](https://crates.io/crates/s3s-aws)    |    [![Docs](https://docs.rs/s3s-aws/badge.svg)](https://docs.rs/s3s-aws/)    |
 | [s3s-fs](./crates/s3s-fs/) | [![Crates.io](https://img.shields.io/crates/v/s3s-fs.svg)](https://crates.io/crates/s3s-fs) | [![Docs](https://docs.rs/s3s-fs/badge.svg)](https://docs.rs/s3s-fs/) |
 
+📚 **[Development documentation](https://s3s-project.github.io/s3s/)** for the `main` branch is available on GitHub Pages.
+
 This experimental project intends to offer an ergonomic adapter for building S3-compatible services.
 
 `s3s` implements Amazon S3 REST API in the form of a generic [hyper](https://github.com/hyperium/hyper) service. S3-compatible services can focus on the S3 API itself and don't have to care about the HTTP layer.
