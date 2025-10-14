@@ -33,39 +33,43 @@ impl From<HttpError> for StdError {
 
 /// Trailing headers handle (newtype)
 ///
-/// This handle lets you take verified streaming-trailer headers after the
-/// request body stream has been fully consumed and validated.
-/// It deliberately hides the internal synchronization and storage details.
+/// This handle lets you take streaming-trailer headers after the
+/// request body stream has been fully consumed.
 #[derive(Clone)]
-pub struct TrailingHeaders(std::sync::Arc<std::sync::Mutex<Option<HeaderMap<http::HeaderValue>>>>);
+pub struct TrailingHeaders(pub(crate) std::sync::Arc<std::sync::Mutex<Option<HeaderMap>>>);
 
 impl core::fmt::Debug for TrailingHeaders {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        let ready = self.0.lock().ok().and_then(|g| g.as_ref().map(HeaderMap::len)).unwrap_or(0);
-        f.debug_struct("TrailingHeaders").field("count", &ready).finish()
+        let ready = self.is_ready();
+        f.debug_struct("TrailingHeaders")
+            .field("ready", &ready)
+            .finish_non_exhaustive()
     }
 }
 
 impl TrailingHeaders {
-    /// Create from an internal shared state (for crate-internal wiring).
-    /// Not part of the public API surface.
-    #[doc(hidden)]
-    pub(crate) fn from_shared(inner: std::sync::Arc<std::sync::Mutex<Option<HeaderMap<http::HeaderValue>>>>) -> Self {
-        Self(inner)
-    }
-
-    /// Returns true if trailers have been produced by the stream.
+    /// Returns true if trailers have been produced by the body stream.
     #[must_use]
     pub fn is_ready(&self) -> bool {
         self.0.lock().map(|g| g.is_some()).unwrap_or(false)
     }
 
-    /// Take the verified trailing headers if available.
+    /// Take the trailing headers if available.
     ///
     /// This is a one-shot operation; subsequent calls will return None.
     #[must_use]
-    pub fn take(&self) -> Option<HeaderMap<http::HeaderValue>> {
+    pub fn take(&self) -> Option<HeaderMap> {
         self.0.lock().ok().and_then(|mut g| g.take())
+    }
+
+    /// Read the trailing headers if available, without taking them.
+    pub fn read<R>(&self, f: impl FnOnce(&HeaderMap) -> R) -> Option<R> {
+        if let Ok(guard) = self.0.lock() {
+            if let Some(ref headers) = *guard {
+                return Some(f(headers));
+            }
+        }
+        None
     }
 }
 

@@ -492,7 +492,7 @@ impl AwsChunkedStream {
     /// This can be cloned and stored outside to retrieve trailers after the
     /// stream has been fully read.
     pub(crate) fn trailing_headers_handle(&self) -> TrailingHeaders {
-        TrailingHeaders::from_shared(Arc::clone(&self.trailers))
+        TrailingHeaders(Arc::clone(&self.trailers))
     }
 }
 
