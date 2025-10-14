@@ -26,6 +26,8 @@ jobs:
         run: RUSTDOCFLAGS="--cfg docsrs" cargo +nightly doc --no-deps --all-features
       - name: Add index redirect
         run: echo '<meta http-equiv="refresh" content="0; url=s3s">' > target/doc/index.html
+      - name: Add .nojekyll file
+        run: touch target/doc/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
