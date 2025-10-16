@@ -14,7 +14,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 
 use tokio::fs;
 use tokio::fs::File;
-use tokio::io::{AsyncReadExt, BufWriter};
+use tokio::io::{AsyncReadExt, AsyncWriteExt, BufWriter};
 
 use path_absolutize::Absolutize;
 use uuid::Uuid;
@@ -109,7 +109,10 @@ impl FileSystem {
     ) -> Result<()> {
         let path = self.get_metadata_path(bucket, key, upload_id)?;
         let content = serde_json::to_vec(metadata)?;
-        fs::write(&path, &content).await?;
+        let mut file_writer = self.prepare_file_write(&path).await?;
+        file_writer.writer().write_all(&content).await?;
+        file_writer.writer().flush().await?;
+        file_writer.done().await?;
         Ok(())
     }
 
@@ -133,7 +136,10 @@ impl FileSystem {
     pub(crate) async fn save_internal_info(&self, bucket: &str, key: &str, info: &InternalInfo) -> Result<()> {
         let path = self.get_internal_info_path(bucket, key)?;
         let content = serde_json::to_vec(info)?;
-        fs::write(&path, &content).await?;
+        let mut file_writer = self.prepare_file_write(&path).await?;
+        file_writer.writer().write_all(&content).await?;
+        file_writer.writer().flush().await?;
+        file_writer.done().await?;
         Ok(())
     }
 
@@ -164,7 +170,10 @@ impl FileSystem {
         let ak: Option<&str> = cred.map(|c| c.access_key.as_str());
 
         let content = serde_json::to_vec(&ak)?;
-        fs::write(&upload_info_path, &content).await?;
+        let mut file_writer = self.prepare_file_write(&upload_info_path).await?;
+        file_writer.writer().write_all(&content).await?;
+        file_writer.writer().flush().await?;
+        file_writer.done().await?;
 
         Ok(upload_id)
     }
