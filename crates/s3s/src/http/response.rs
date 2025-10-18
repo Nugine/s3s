@@ -5,12 +5,11 @@ use super::Body;
 use hyper::HeaderMap;
 use hyper::StatusCode;
 use hyper::http::Extensions;
-use hyper::http::HeaderValue;
 
 #[derive(Default)]
 pub struct Response {
     pub status: StatusCode,
-    pub headers: HeaderMap<HeaderValue>,
+    pub headers: HeaderMap,
     pub body: Body,
     pub extensions: Extensions,
 }

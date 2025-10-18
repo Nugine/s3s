@@ -45,7 +45,6 @@ use hyper::HeaderMap;
 use hyper::Method;
 use hyper::StatusCode;
 use hyper::Uri;
-use hyper::http::HeaderValue;
 use mime::Mime;
 use tracing::{debug, error};
 
@@ -141,7 +140,7 @@ fn check_query_pattern(qs: &OrderedQs, name: &str, val: &str) -> bool {
     }
 }
 
-fn extract_headers(headers: &HeaderMap<HeaderValue>) -> S3Result<OrderedHeaders<'_>> {
+fn extract_headers(headers: &HeaderMap) -> S3Result<OrderedHeaders<'_>> {
     OrderedHeaders::from_headers(headers).map_err(|source| invalid_request!(source, "invalid headers"))
 }
 

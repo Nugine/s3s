@@ -30,7 +30,7 @@ pub struct AwsChunkedStream {
     remaining_length: usize,
 
     // Parsed trailing headers (lower-cased names) if present and verified.
-    trailers: Arc<Mutex<Option<HeaderMap<HeaderValue>>>>,
+    trailers: Arc<Mutex<Option<HeaderMap>>>,
 }
 
 impl Debug for AwsChunkedStream {
@@ -139,7 +139,7 @@ impl AwsChunkedStream {
     where
         S: Stream<Item = Result<Bytes, StdError>> + Send + Sync + 'static,
     {
-        let trailers: Arc<Mutex<Option<HeaderMap<HeaderValue>>>> = Arc::new(Mutex::new(None));
+        let trailers: Arc<Mutex<Option<HeaderMap>>> = Arc::new(Mutex::new(None));
         let trailers_for_worker = Arc::clone(&trailers);
         let inner = AsyncTryStream::<_, _, SyncBoxFuture<'static, Result<(), AwsChunkedStreamError>>>::new(|mut y| {
             #[allow(clippy::shadow_same)] // necessary for `pin_mut!`
@@ -206,7 +206,7 @@ impl AwsChunkedStream {
                                 // However, if there are remaining bytes, we will just attempt to continue parsing
                                 // which will likely fail with FormatError.
                                 // Build HeaderMap from entries and store.
-                                let mut map: HeaderMap<HeaderValue> = HeaderMap::new();
+                                let mut map: HeaderMap = HeaderMap::new();
                                 for (name, value) in entries {
                                     // Names are already lower-cased ASCII
                                     let hn: HeaderName = match name.parse() {

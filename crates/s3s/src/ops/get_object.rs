@@ -15,8 +15,8 @@ use hyper::http::HeaderValue;
 
 use stdx::default::default;
 
-pub fn extract_overridden_response_headers(req: &S3Request<GetObjectInput>) -> S3Result<HeaderMap<HeaderValue>> {
-    let mut map: HeaderMap<HeaderValue> = default();
+pub fn extract_overridden_response_headers(req: &S3Request<GetObjectInput>) -> S3Result<HeaderMap> {
+    let mut map: HeaderMap = default();
 
     add(&mut map, header::CONTENT_TYPE, req.input.response_content_type.as_deref())?;
     add(&mut map, header::CONTENT_LANGUAGE, req.input.response_content_language.as_deref())?;
@@ -28,7 +28,7 @@ pub fn extract_overridden_response_headers(req: &S3Request<GetObjectInput>) -> S
     Ok(map)
 }
 
-fn add(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&str>) -> S3Result<()> {
+fn add(map: &mut HeaderMap, name: HeaderName, value: Option<&str>) -> S3Result<()> {
     let error = |e| invalid_request!(e, "invalid overridden header: {name}: {value:?}");
     if let Some(value) = value {
         let value = value.parse().map_err(error)?;
@@ -37,7 +37,7 @@ fn add(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&str>) 
     Ok(())
 }
 
-fn add_ts(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&Timestamp>) -> S3Result<()> {
+fn add_ts(map: &mut HeaderMap, name: HeaderName, value: Option<&Timestamp>) -> S3Result<()> {
     let error = |e| invalid_request!(e, "invalid overridden header: {name}: {value:?}");
     if let Some(value) = value {
         let value = fmt_timestamp(value, TimestampFormat::HttpDate, HeaderValue::from_bytes).map_err(error)?;
@@ -46,7 +46,7 @@ fn add_ts(map: &mut HeaderMap<HeaderValue>, name: HeaderName, value: Option<&Tim
     Ok(())
 }
 
-pub fn merge_custom_headers(resp: &mut Response, headers: HeaderMap<HeaderValue>) {
+pub fn merge_custom_headers(resp: &mut Response, headers: HeaderMap) {
     resp.headers.extend(headers);
 
     // special case for https://github.com/Nugine/s3s/issues/80

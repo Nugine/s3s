@@ -5,7 +5,7 @@ use aws_sdk_s3::operation::{RequestId, RequestIdExt};
 use hyper::HeaderMap;
 use hyper::header::HeaderValue;
 
-pub fn build_headers<T>(output: &T) -> S3Result<HeaderMap<HeaderValue>>
+pub fn build_headers<T>(output: &T) -> S3Result<HeaderMap>
 where
     T: RequestId + RequestIdExt,
 {

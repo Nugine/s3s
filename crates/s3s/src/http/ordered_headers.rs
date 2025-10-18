@@ -2,7 +2,6 @@
 
 use hyper::HeaderMap;
 use hyper::header::ToStrError;
-use hyper::http::HeaderValue;
 
 use crate::utils::stable_sort_by_first;
 
@@ -35,7 +34,7 @@ impl<'a> OrderedHeaders<'a> {
     ///
     /// # Errors
     /// Returns [`ToStrError`] if header value cannot be converted to string slice
-    pub fn from_headers(map: &'a HeaderMap<HeaderValue>) -> Result<Self, ToStrError> {
+    pub fn from_headers(map: &'a HeaderMap) -> Result<Self, ToStrError> {
         let mut headers: Vec<(&'a str, &'a str)> = Vec::with_capacity(map.len());
 
         for (name, value) in map {

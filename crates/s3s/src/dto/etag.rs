@@ -1,4 +1,3 @@
-use bytes::Bytes;
 use http::HeaderValue;
 use http::header::InvalidHeaderValue;
 use stdx::str::StrExt;
@@ -135,7 +134,7 @@ impl ETag {
                 buf
             }
         };
-        HeaderValue::from_maybe_shared(Bytes::from(buf))
+        HeaderValue::try_from(buf)
     }
 }
 

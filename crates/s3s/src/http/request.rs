@@ -12,13 +12,12 @@ use hyper::HeaderMap;
 use hyper::Method;
 use hyper::Uri;
 use hyper::http::Extensions;
-use hyper::http::HeaderValue;
 
 pub struct Request {
     pub version: http::Version,
     pub method: Method,
     pub uri: Uri,
-    pub headers: HeaderMap<HeaderValue>,
+    pub headers: HeaderMap,
     pub extensions: Extensions,
     pub body: Body,
     pub(crate) s3ext: S3Extensions,
