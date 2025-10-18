@@ -147,6 +147,12 @@ fn extract_headers(headers: &HeaderMap<HeaderValue>) -> S3Result<OrderedHeaders<
 
 fn extract_mime(hs: &OrderedHeaders<'_>) -> S3Result<Option<Mime>> {
     let Some(content_type) = hs.get_unique(crate::header::CONTENT_TYPE) else { return Ok(None) };
+
+    // https://github.com/s3s-project/s3s/issues/361
+    if content_type.is_empty() {
+        return Ok(None);
+    }
+
     match content_type.parse::<Mime>() {
         Ok(x) => Ok(Some(x)),
         Err(e) => Err(invalid_request!(e, "invalid content type")),
