@@ -47,7 +47,7 @@ use hyper::StatusCode;
 use hyper::Uri;
 use hyper::http::HeaderValue;
 use mime::Mime;
-use tracing::debug;
+use tracing::{debug, error};
 
 #[async_trait::async_trait]
 pub trait Operation: Send + Sync + 'static {
@@ -207,7 +207,7 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
     let prep = match prepare(req, ccx).await {
         Ok(op) => op,
         Err(err) => {
-            debug!(?err, "failed to prepare");
+            error!(?err, "failed to prepare");
             return serialize_error(err, false);
         }
     };
@@ -219,7 +219,7 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
                     Ok(resp) //
                 }
                 Err(err) => {
-                    debug!(op = %op.name(), ?err, "op returns error");
+                    error!(op = %op.name(), ?err, "op returns error");
                     serialize_error(err, false)
                 }
             }
@@ -243,7 +243,7 @@ pub async fn call(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Response
                     extensions: s3_resp.extensions,
                 }),
                 Err(err) => {
-                    debug!(?err, "custom route returns error");
+                    error!(?err, "custom route returns error");
                     serialize_error(err, false)
                 }
             }

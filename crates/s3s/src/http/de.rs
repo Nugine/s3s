@@ -10,7 +10,7 @@ use std::fmt;
 use std::str::FromStr;
 
 use stdx::string::StringExt;
-use tracing::debug;
+use tracing::{debug, error};
 
 fn missing_header(name: &HeaderName) -> S3Error {
     invalid_request!("missing header: {}", name.as_str())
@@ -219,7 +219,7 @@ where
     }
     let result = deserialize_xml(&bytes);
     if result.is_err() {
-        debug!(?bytes, "malformed xml body");
+        error!(?bytes, "malformed xml body");
     }
     result
 }
@@ -234,7 +234,7 @@ where
     }
     let result = deserialize_xml(&bytes).map(Some);
     if result.is_err() {
-        debug!(?bytes, "malformed xml body");
+        error!(?bytes, "malformed xml body");
     }
     result
 }
