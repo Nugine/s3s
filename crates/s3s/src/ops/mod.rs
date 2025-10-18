@@ -145,11 +145,15 @@ fn extract_headers(headers: &HeaderMap<HeaderValue>) -> S3Result<OrderedHeaders<
     OrderedHeaders::from_headers(headers).map_err(|source| invalid_request!(source, "invalid headers"))
 }
 
-fn extract_mime(hs: &OrderedHeaders<'_>) -> S3Result<Option<Mime>> {
-    let Some(content_type) = hs.get_unique(crate::header::CONTENT_TYPE) else { return Ok(None) };
+fn extract_mime(hs: &OrderedHeaders<'_>) -> Option<Mime> {
+    let content_type = hs.get_unique(crate::header::CONTENT_TYPE)?;
     match content_type.parse::<Mime>() {
-        Ok(x) => Ok(Some(x)),
-        Err(e) => Err(invalid_request!(e, "invalid content type")),
+        Ok(x) => Some(x),
+        Err(_e) => {
+            // AWS S3 and MinIO default to application/octet-stream for invalid content-type
+            debug!("invalid content-type header, defaulting to application/octet-stream");
+            Some(mime::APPLICATION_OCTET_STREAM)
+        }
     }
 }
 
@@ -297,7 +301,7 @@ async fn prepare(req: &mut Request, ccx: &CallContext<'_>) -> S3Result<Prepare> 
         content_length = extract_content_length(req);
 
         let hs = extract_headers(&req.headers)?;
-        let mime = extract_mime(&hs)?;
+        let mime = extract_mime(&hs);
         let decoded_content_length = extract_decoded_content_length(&hs)?;
 
         let body_changed;

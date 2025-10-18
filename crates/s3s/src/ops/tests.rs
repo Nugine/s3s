@@ -62,3 +62,37 @@ fn error_custom_headers() {
         )
     );
 }
+
+#[test]
+fn extract_mime_handles_invalid_content_type() {
+    use crate::http::OrderedHeaders;
+
+    // Test empty content-type
+    let mut headers = HeaderMap::new();
+    headers.insert(crate::header::CONTENT_TYPE, "".parse().unwrap());
+    let ordered_headers = OrderedHeaders::from_headers(&headers).unwrap();
+    let mime = extract_mime(&ordered_headers);
+    // Should default to application/octet-stream
+    assert_eq!(mime, Some(mime::APPLICATION_OCTET_STREAM));
+
+    // Test content-type without slash (e.g., "text")
+    let mut headers = HeaderMap::new();
+    headers.insert(crate::header::CONTENT_TYPE, "text".parse().unwrap());
+    let ordered_headers = OrderedHeaders::from_headers(&headers).unwrap();
+    let mime = extract_mime(&ordered_headers);
+    // Should default to application/octet-stream
+    assert_eq!(mime, Some(mime::APPLICATION_OCTET_STREAM));
+
+    // Test valid content-type
+    let mut headers = HeaderMap::new();
+    headers.insert(crate::header::CONTENT_TYPE, "text/plain".parse().unwrap());
+    let ordered_headers = OrderedHeaders::from_headers(&headers).unwrap();
+    let mime = extract_mime(&ordered_headers);
+    assert_eq!(mime, Some("text/plain".parse::<Mime>().unwrap()));
+
+    // Test missing content-type
+    let headers = HeaderMap::new();
+    let ordered_headers = OrderedHeaders::from_headers(&headers).unwrap();
+    let mime = extract_mime(&ordered_headers);
+    assert_eq!(mime, None);
+}
